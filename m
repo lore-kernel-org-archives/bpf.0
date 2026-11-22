@@ -1,84 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.53
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795376607;
-	b=0UBAkySq0GRkO15N/OPP6hOUfsfENTQl6xl4BfIam8R67cQmpBzEq8XhN0dsAdTh/5XI
-	 wzc5nzfqvYS1PIvQ3m6u4rnuIJGja2FZzSXEBynvXZol4X0cuiVYkNVUeSBJz2an6bB5N
-	 HdBorUYqkyJtOEMf08597O6HcBsqnH5i0CzNqwWPsTFZojHclLBo4XpfmvmHFiiGJIIoh
-	 q1H8zMfWp6FebTycOE+2cIMnZ/q3CqFHLhRQXqdmGbZEoCvILVsSzyVK5Xs5E40J3pwGm
-	 R/DXRBeI3Gylev3vjZ+bHeIvj6Cp6X7fBr+nA3jagDUbhBmcQBderC4/rGIIidsTnSw==
+	t=1795376611;
+	b=B2VE8sqaAbIhgFpJIEG9kyJjV1wobc+Qv42dACccvuxlHb4vP9LvTEEhp9YF7Z0kUiel
+	 pdOXklCWiBB7KObo53wVXL+4WISPx67m7gD1q90DFgGo9kud+bc5VkiwVtZGVxj4esGK7
+	 1tdh7TD5UBUsx+mCP35bJz7RWjXFr+ikoyq7tw3GJvYQKiwkwRSTTBOrEL6Z7AUWlN1Io
+	 VimYB3gHUx0qYA0bFELUSSkJAZmnsa5HC77mBikQWmlz0VipoD6LnGWDpCxTsjVN6N0x2
+	 9pWW3pKPrSpwKc3fZEU26hw7W8ac+rY7421EtKZpXb2bzBdcUExvdcvr7e80vLJHlPg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795376607;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795376611;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=SacHS26F4wxER6qI4ojBTAAYYFLzdB/Bos5NQBqEPVo=;
-	b=DaeE5b/u3QOkNzWaNvfp/ZEk9CE6j+Ponm5h8w+d5kkENLgWMs1l4EIrOpL8KpMh/tSu
-	 RQdzWRFrcw6zDA9csn9glHnDQKMSIPb432s2d0kxy49IcwuyT2w2qZR4reJgkSjP7gFcr
-	 ZIV7jlc40SlDAxn54X2Ja/OmlHohn3ks4SqXSvlqWH8neiM+0PF1I2ilQoLUNjRf2p5By
-	 jlHQJmNo1r0mCB825XQJU+LP6UfaMUf4Pnn8JOo53jeZGcBXVSjSk6DvIFnH6zwLbCgWN
-	 He/wOwOXhfMoOLh1wiqTHGHQMAAfWDXD7ijX524r7SEVci4d5pMwu4BJmbPmlAyQTIA==
+	bh=Kymp+J2o3UsNdNweR6Jcb6B6Bh4mLi4upsmCFa3PCvE=;
+	b=hTeDXTi0BbYDsUVHk5Jsnfr/DGZNhvYIBLwsy7DGka/audMQpuY1ebAYbhKA4z0OPVHx
+	 BzVHk/MLOXXHit46rTt0/OkjilhSBn0KClvvULFSnsJfq1cnbPmgQRpPGvXyyTFYcuMG+
+	 0VRt8sRPxo6i760bwNAUcPB5a3YHUltGlyTcUJWt0axryv1KZFJJiDYEWNV4lZ3XmOELR
+	 XvARgkqYSnKPXY4HZuHyqUwSWHGll7pX+JQd8IAZ3BvHjMl+n8e64VXkSZwXG9jEJiaQ2
+	 d8p2Y8ZQifGb5GxzAPZi5bmT1MQWfo3RdSADRn9NULq9MUTsQwHfZ1bsr5ALwE+5Wtg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=lukasstockner.de;
 	spf=pass smtp.mailfrom=lukasstockner.de;
-	dkim=pass header.d=lukasstockner-de.20260707.gappssmtp.com header.i=@lukasstockner-de.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=bL9mmmLE;
-	arc=none smtp.remote-ip=209.85.128.41
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	dkim=pass header.d=lukasstockner-de.20260707.gappssmtp.com header.i=@lukasstockner-de.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=VKnLIlqh;
+	arc=none smtp.remote-ip=209.85.128.53
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61A9A606A31A
-	for <bpf@vger.kernel.org>; Sun, 22 Nov 2026 19:43:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 61A9A606A31A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D17B9606A31A
+	for <bpf@vger.kernel.org>; Sun, 22 Nov 2026 19:43:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D17B9606A31A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lukasstockner.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lukasstockner.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=lukasstockner-de.20260707.gappssmtp.com header.i=@lukasstockner-de.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=bL9mmmLE
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4ac95761c85so19132775e9.2
-        for <bpf@vger.kernel.org>; Sun, 22 Nov 2026 11:43:27 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=lukasstockner-de.20260707.gappssmtp.com header.i=@lukasstockner-de.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=VKnLIlqh
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4b467581b98so23569015e9.0
+        for <bpf@vger.kernel.org>; Sun, 22 Nov 2026 11:43:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=lukasstockner-de.20260707.gappssmtp.com; s=20260707; t=1795376606; x=1795981406; darn=vger.kernel.org;
+        d=lukasstockner-de.20260707.gappssmtp.com; s=20260707; t=1795376609; x=1795981409; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=SacHS26F4wxER6qI4ojBTAAYYFLzdB/Bos5NQBqEPVo=;
-        b=bL9mmmLEihbEIIB3vU84AxI0a4I0k1uHKc9wG2v4PxQcYjU0AvrS1iIQtLFPZ6GnXy
-         BpggiqJx8aVrCabzThfnP62oKTd5dMQovc6rf1PsNhmFkBcK4QIuA7lim9ygunFOdkAo
-         02MS69daynKEaZxrd2vX27XarXMD/Rzw51yNMcR48JbmNwuKx2DHZxeyH3hJHI8nV6xv
-         rzE7bLn3WRoa7xsmUOfN3ZE1eznKfvfmY9YVfZq+1kfGrt9DTtyPUxJgE0CrL2keTlW0
-         Up+h49KGVBVomr40vgtmrJgZC+K1VtLJYMxUf/p+KfPS6PS4UEu5nEPZgk81OCAArhEn
-         1uhw==
+        bh=Kymp+J2o3UsNdNweR6Jcb6B6Bh4mLi4upsmCFa3PCvE=;
+        b=VKnLIlqhRlYX5lXFJpZsvXei+/LaIsGcsL+oBuaCGsebodV6KLhcT6YMWd1BWBhZmk
+         lcN49Ah6qzNMHWV/rrIBDbteEeRoNssPiJlXG/udKLlxgFe7Y1sVfrq9q/M6XCFOciHO
+         7wm2rMI7i+6b8aZw0eWax67CRdl9y+6YuXQAKvfMddnMy8M6mSgvitrPWi0/VMonv5uH
+         aRtibrnYdbY70/DlFE0EI76V1M21InjIYhZYsQM4NZg1bgzF6GBwgQQJEPZA9/A6rZfB
+         2xb6+82BmXL8nJMmcPQm9n1g2wy48/98m1BpXiv58Bg50rqzl/8MPhUQzlIiz7ltrGky
+         Caig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795376606; x=1795981406;
+        d=1e100.net; s=20260707; t=1795376609; x=1795981409;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=SacHS26F4wxER6qI4ojBTAAYYFLzdB/Bos5NQBqEPVo=;
-        b=Cl3ig6ouebblnP7eDKcODREmJpZNx7toEPYTnPuWMAbKNHZFOQ9niWyIO9sm17ksxA
-         tp7mSHhUF4h4DhsloFtINzk8GHeU3QSlfe13bUArYzG/mM0BD6D6AUdwZwqd+P+o79Oj
-         3puApl/x1i2h1WjW5H7joYQjMd/P9+Lca1dChX+xd5hTWMhAWwO6j/9zhKjdY4K0iizk
-         eVhfGrBjNQ1mDAnMvXmPKfWm0zwpwsSBC/mGSfpVTosMS2U6TvV5bfJWk7H2yWJaJ5tu
-         RuH5jTk0VejtLfIbiV6x2058uOze/nAN5X7MlEhMPo34Ky+Tz4vZsWrd9lIJXhAr0aYQ
-         3D5Q==
-X-Forwarded-Encrypted: i=1; AL+hErEHADTNBgKNgoQH5RzJYX4q/+7AWBTcB8tAh0Hg/3InV1krL6QHa9ol2VClXEMVdoS3JVE=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+T6llq4ApSBlJOsdREyk9LKtOiiEFU3wSWohoWag/naztm9Mi2
-	2yO1nWpsmjBF3BeRI3Us92RYza2uKxNKHQ5LIo4D8pEt25m5O+moVy9jgl+5czjHYlY=
-X-Gm-Gg: AZFdTZcY1WbLKQsdWpa00/jrdgXbstlvk46lB9DG9cWki8iZJ8ie5bxhOppEVJ6gjHk
-	EEoRzXpow4715xBri+6Xlvj1W2TC+zPKJeEaK8a07o5zbQHbjojBIHF5MjNaRBsW30ziHQIKxdS
-	SSLF7WwK/GgYSBt/I148DhDOG/AnDTS/K2TEBBWickfWR46QvwW5mrMl2ge+m5I5ZFtid3b6uz3
-	lPS0HDdWVkn1uQk6uTuQKgp0vPUPX/9pAn5o6w+bOt2C81mHIcstPim8FWNUH8VMGolKluABFE7
-	PcICFHaaBccG+QJZVC74pGNhaw48gS8hvDCpu+JV5scWNex8l1CGKuXuymdyJq2LfAOycYH5LCm
-	896qFyqGBqGQwmT/u4cJGPvGmASX/mGufBZwUJFCqc/7Ceou5nMV4xttOaJhABeulbMqmyvBMEX
-	TxAY1ozM62NHZW+sv2LWOvHhQ/0oM+0iWBF+PnbLVikGM2D94coI2ZHg8+glfZzpJZ4yd6w/wzb
-	w83xuZy4N309jBd+n5lHdOJuybVyZpR0hP4QBlmTfLUnYyYdg4WhDNdzqT/ZS5QRr8d0Fvqb3KW
-	9XiKVVHPYfKhH8cri9vITY98ukY6EWllDsU3fKFmAe+cNdzyoddKEijqkz18TfTmg0D0DT2PpZt
-	B
-X-Received: by 2002:a05:600c:820d:b0:4a1:dfaf:f465 with SMTP id 5b1f17b1804b1-4bb887c2ca3mr208489695e9.4.1795376605748;
-        Sun, 22 Nov 2026 11:43:25 -0800 (PST)
+        bh=Kymp+J2o3UsNdNweR6Jcb6B6Bh4mLi4upsmCFa3PCvE=;
+        b=t1t00qfQLIarXzD3UF2aChaUWDMUeTbXAUjtZleEnmtxxtnTUf6rrkvwYBg/xJj6fj
+         A7wxv1lG0J/BcqCRvWh87ejGuIm+HO6Mc6KWUErIpeigCZHXM3cGY+TPMIsEGutQ0Vy0
+         IWqjRSiyAs76XAaBcbW7D8NvqdwSseSo4nxloATZHNrZsKHWw89ciS9UvwvvDZOxRv+x
+         5PBAbO/BBYfhaF/XOI2bQraXsmJxcGnLO+oU1/pyZa9t36snySSia8cVBzjYJ/B1YFoY
+         TdfHiJnNrIGK8KWClNz5owNQnAB5EwAtBBlUU0SLCsLyn/TQRSdNQL2SpaPJ+pDQFLGM
+         NJMg==
+X-Forwarded-Encrypted: i=1; AL+hErHvj1oyM2xmvkU6LB4VVlNxXeCcfpaCTdlFNc66fi9ZwT+xTmZHqKpJqb9CT8b2b41kmyg=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+0g/vpBzs7gAepmCizE/1Nlo+q5WwCx+7vbFZxGsPEjUKyfBn9
+	kp823T94DJYCTRcCTYus9shWQzA0eacfpdFlxt4jf8tuWwo/hXh7vT2YA2ctvNpbGZM=
+X-Gm-Gg: AZFdTZeDUHt7y1VHPIg0q/35Ma4qEipmTnd2SUV/bJJ4ampqkhPg/OmBAOlvZXmOMck
+	UdEk5vJ+eaPCo139Ws30s/hKHO7yUuyGXOHyTT5QUNTTrWDQGjK8wZUoU3zfd1jHWIYs+GFNHka
+	0b6QvBTvttQ+q3GizxYLB0E07x+zk/WU0TfCdJwBk2IGUnQcqB4/8aZnVg5gvVNvo80kGVc9Y1a
+	7lUqN6q6UoxW4FDA2g3A+/BB/gN1jkWsgwKQghvGF7rNSu4w8q5OmalcIuzZ3+q44/GaGDHKeZS
+	YWUGKhuUkDhYYQbqZfsCjqK7b6MdVH9dooefxwKYrY+1VnMBzmLM8CVlue8t4zXkn7pVyrbfhPX
+	Up3pA5vvKUV4uXidjVfK1GfXfU+Zfpjcpe90KaPBADGWJysG+79iolnVAe4Zzbbxyh1yQgzYojO
+	ykPPHn+B0jyhEKcfZ/wf044xBFUhsyM+2uJVMY01PGfSfHA2lwuDvaqhZ6rav2MEIWgGdAtBaV2
+	yy9NXw6YPfdvNErbxltHsWXd+ty5DTLhR4J5mdLJxQIFLuBNvc6xlfWXb5Z2lPJGZ7KWkQEoulC
+	uPI6/VySML5RnN7gMLb6yf/DI9ri+pQSCCvkD/wleBkHyFvwBzsTGUIb8inUsGDcAegr5Y6tHQJ
+	sng==
+X-Received: by 2002:a05:600c:a08b:b0:4bb:6651:9eda with SMTP id 5b1f17b1804b1-4bb88922ca4mr188621625e9.14.1795376609171;
+        Sun, 22 Nov 2026 11:43:29 -0800 (PST)
 Received: from lukas-laptop (195-200-20-154.mclarenap.oninferno.net. [195.200.20.154])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb88442995sm293917125e9.2.2026.11.22.11.43.23
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb88442995sm293917125e9.2.2026.11.22.11.43.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 22 Nov 2026 11:43:25 -0800 (PST)
+        Sun, 22 Nov 2026 11:43:28 -0800 (PST)
 From: Lukas Stockner <lukas@lukasstockner.de>
 To: Hari Bathini <hbathini@linux.ibm.com>,
 	Christophe Leroy <chleroy@kernel.org>,
@@ -91,9 +91,9 @@ Cc: Naveen N Rao <naveen@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Lukas Stockner <lukas@lukasstockner.de>
-Subject: [PATCH 3/4] powerpc32/bpf: mark all argument registers seen in function calls
-Date: Sun, 22 Nov 2026 20:42:04 +0100
-Message-ID: <20261122194205.218543-4-lukas@lukasstockner.de>
+Subject: [PATCH 4/4] powerpc32/bpf: don't fold MOV into instructions that use dst_reg
+Date: Sun, 22 Nov 2026 20:42:05 +0100
+Message-ID: <20261122194205.218543-5-lukas@lukasstockner.de>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261122194205.218543-1-lukas@lukasstockner.de>
 References: <20261122194205.218543-1-lukas@lukasstockner.de>
@@ -108,71 +108,42 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The JIT code tracks which registers are used and remaps based on that,
-but currently does not account for the fact that function calls implicitly
-use registers because the called function will treat them as arguments.
+The PPC32 eBPF JIT folds MOVs followed by an ALU operation to the same
+destination into 3-operand PPC instructions by dropping the MOV and
+reusing its source as the second operand for the second instruction.
 
-Therefore, if a function merely passes through one of its arguments
-to another function call, it will incorrectly be considered unused and may
-be overwritten with another register's contents.
+That is wrong when the second instruction also uses the destination
+register as its source, since the MOV that would have assigned it
+is dropped, so the folded instruction will end up using the previous
+content of the register.
 
-In practice, this is unlikely to affect main programs as they only get
-one argument (the context, which they are very likely to touch somehow
-in addition to passing it on), so they'll have to touch other registers
-if they want to pass them as arguments. Subprograms, however, are much
-likelier to hit this.
+For example, "r2 = r1; r2 += r2" gets folded to "r2 = r1 + r2", while
+the correct result would be 2 * r1.
 
-Similarly, tail calls pass R1 to the callee, so mark it used as well.
+In particular, this also happens for zero-extension MOVs inserted by the
+verifier, where "r2 = r1; w2 = w2" becomes just "w2 = w2", so the actual
+assignment is skipped.
 
-Fixes: 51c66ad849a7 ("powerpc/bpf: Implement extended BPF on PPC32")
-Fixes: a8936569a07b ("powerpc/bpf: Always reallocate BPF_REG_5, BPF_REG_AX and TMP_REG when possible")
+Fixes: 19daf0aef84f ("powerpc/bpf/32: perform three operands ALU operations")
 Signed-off-by: Lukas Stockner <lukas@lukasstockner.de>
 ---
- arch/powerpc/net/bpf_jit_comp32.c | 17 ++++++++++++++++-
- 1 file changed, 16 insertions(+), 1 deletion(-)
+ arch/powerpc/net/bpf_jit_comp32.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/arch/powerpc/net/bpf_jit_comp32.c b/arch/powerpc/net/bpf_jit_comp32.c
-index 9f55dd4bdfd6..7414e350d2d4 100644
+index 7414e350d2d4..3ba50d6696a2 100644
 --- a/arch/powerpc/net/bpf_jit_comp32.c
 +++ b/arch/powerpc/net/bpf_jit_comp32.c
-@@ -339,7 +339,7 @@ int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, u32 *fimage, struct code
- {
- 	const struct bpf_insn *insn = fp->insnsi;
- 	int flen = fp->len;
--	int i, ret;
-+	int i, ret, max_arg;
- 
- 	/* Start of epilogue code - will only be valid 2nd pass onwards */
- 	u32 exit_addr = addrs[flen];
-@@ -1183,6 +1183,18 @@ int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, u32 *fimage, struct code
- 			if (ret < 0)
- 				return ret;
- 
-+			/*
-+			 * We don't know which arguments the called function will use,
-+			 * so if this is a subprogram, assume the worst case where it
-+			 * uses all of them. Regular programs only get one argument,
-+			 * so any others would have been explicitly set.
-+			 */
-+			max_arg = ctx->is_subprog ? BPF_REG_5 : BPF_REG_1;
-+			for (int reg = BPF_REG_1; reg <= max_arg; ++reg) {
-+				bpf_set_seen_register(ctx, bpf_to_ppc(reg) - 1);
-+				bpf_set_seen_register(ctx, bpf_to_ppc(reg));
-+			}
-+
- 			if (bpf_is_seen_register(ctx, bpf_to_ppc(BPF_REG_5))) {
- 				EMIT(PPC_RAW_STW(bpf_to_ppc(BPF_REG_5) - 1, _R1, 8));
- 				EMIT(PPC_RAW_STW(bpf_to_ppc(BPF_REG_5), _R1, 12));
-@@ -1412,6 +1424,9 @@ int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, u32 *fimage, struct code
- 		 * Tail call
- 		 */
- 		case BPF_JMP | BPF_TAIL_CALL:
-+			bpf_set_seen_register(ctx, bpf_to_ppc(BPF_REG_1) - 1);
-+			bpf_set_seen_register(ctx, bpf_to_ppc(BPF_REG_1));
-+
- 			ctx->seen |= SEEN_TAILCALL;
- 			ret = bpf_jit_emit_tail_call(image, ctx, addrs[i + 1]);
- 			if (ret < 0)
+@@ -367,7 +367,8 @@ int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, u32 *fimage, struct code
+ 		if (i && (BPF_CLASS(code) == BPF_ALU64 || BPF_CLASS(code) == BPF_ALU) &&
+ 		    (BPF_CLASS(prevcode) == BPF_ALU64 || BPF_CLASS(prevcode) == BPF_ALU) &&
+ 		    BPF_OP(prevcode) == BPF_MOV && BPF_SRC(prevcode) == BPF_X &&
+-		    insn[i - 1].dst_reg == insn[i].dst_reg && insn[i - 1].imm != 1) {
++		    insn[i - 1].dst_reg == insn[i].dst_reg && insn[i - 1].imm != 1 &&
++		    !(BPF_SRC(code) == BPF_X && insn[i].src_reg == insn[i].dst_reg)) {
+ 			src2_reg = bpf_to_ppc(insn[i - 1].src_reg);
+ 			src2_reg_h = src2_reg - 1;
+ 			ctx->idx = addrs[i - 1] / 4;
 -- 
 2.56.0
 
