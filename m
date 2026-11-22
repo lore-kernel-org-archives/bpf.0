@@ -1,49 +1,63 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=194.13.80.246
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795385654;
-	b=bvuDq6rws1AzbtT0HOJz3jsQO/gvQ7xeeKE4t+qqkAqjz8IJAPyZMB9SFJ1nRrs5EqqF
-	 6ob28U3RTMz6Df69PsLlE+1u9chm5p6ESk28thBkwN4koqSturvBZvvIqKMah2WycLQoy
-	 C9WcDxccjNWjxTtgC/KbV7qzlxsUN2I31BdzZfJqC7/0HWmy9Rw1W7eD22scdGCymfUq0
-	 j9i2x08TMZrLZF3IdJDB9/g1zhg1sfUZo1nC+5wpg+LGVo1wrT6Ms1ahGB2W1RcVkWWiS
-	 nWOZR+bDvCMTYRur0Cd3Z0RbkOXrXQEGPwVv9rRuuhuhAmZprkT2CMDi1qktQAhLA9Q==
+	t=1795388283;
+	b=MKtmG6+7xjdNfI5LJp4ueniWC9V7CsyPgbCAELAg0pAlyYL8ybPwJVQt1bZbXV6qG5Bu
+	 BudIIqPvZE5YaSGQgUaAUz/pjzHRD4uQQmpLtRMQZTI7UOns5xhHmH71iC186ah//69K+
+	 HCQ23YuczEE/2Jfy4AGj6Rz1e9ys/qGUvyBsflH8X3nARtl/fM6fcoUb4WIklFbcyIivI
+	 JuqscZXKB9lqO76zmnkNhCuuYtDOCRQBvqkmeD8+FXew+SKI7etQi9b7cjFe4HPfWoHRj
+	 t4P6P13eo+XFLbTmqCCBQ22P3474Pr832m57k89UD3HqUsATLqFvNk8gl0W4hA2U/aw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795385654;
-	h=DMARC-Filter:Received:DKIM-Signature:MIME-Version:Date:From:To:Cc:
-	 Subject:In-Reply-To:References:Message-ID:X-Sender:Content-Type:
-	 Content-Transfer-Encoding:X-Last-TLS-Session-Version;
-	bh=jvCxwlOVxvnKYhMHTmlKe3u7SgksgRLz0kN7w/QcZLA=;
-	b=gKUJykB5NgK9aCbTuWHtLxCWep84fU7/1xJxyAJjZFiXZGI6SK8YZPSAMkH60uZmmpLm
-	 gmTZ48fKaJJZLwUKhS8YgbAxtZewLt6ZBtNx6fsnhBz2zFCSq5x0qfB6NhPhhqEIPfwbh
-	 ccelq+dfNFmvLW9bekMywK84GM7m0wLG2iHrxr4l7PCoL67H3MLc9zZ/Ls47ADhEuDotN
-	 /I5mH9jOaSjbuCWN/qIRsVEiFn6RY1ns1QOVrURMTYmbTYHFtqJUeDGXWL/MuEQmrDYoX
-	 uuYdCAXbGqKc91x1ynzhdsZ7UyclLj0rGgh/u869noMySY+vxFraYsED5a9s2KxLiSg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795388283;
+	h=Received:DKIM-Signature:From:To:Cc:In-Reply-To:References:Subject:
+	 Message-Id:Date:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	 X-Mailer;
+	bh=lposm0Vw+zeu8H+uijuR6PyW060ISkjLm9T0I+VfGj0=;
+	b=jLeups3bbNOW5qTs4lJ77H7eQlWFPWMqpMKULi6I9fXQPibOYxE3F+1Itsz7Q9OvvmUw
+	 5HtkjbWcyNGK4jI4YM90wAilRqauGimZ3hI7laUoKRbTYWLwDy555FnMAZhPycp1Pe+71
+	 JdFxQpUwMbfAlRJfHJ7WCxJRyAqRf8mdmj6r5XZxaX4PcGxmgUfzAgDl51H3UP70Mz3/d
+	 yhA3D3T2Pdk5mWqvnhP5Heb7b+/l9UeqDDtepAReN/bJ/XCDjTdpyvLadwCN1Bk455p5u
+	 S1g7C6BZDZ8y0xAzfhrNguGMIutqPzHtPheNIqdhJWDyiDco5IBdGlrD/mTx8wL8LKw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=tipi-net.de;
-	spf=pass smtp.mailfrom=tipi-net.de;
-	dkim=pass header.d=tipi-net.de header.i=@tipi-net.de header.a=rsa-sha256 header.s=dkim header.b=PlUv11zu;
-	arc=none smtp.remote-ip=194.13.80.246
-Received: from mail.tipi-net.de (mail.tipi-net.de [194.13.80.246])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=FJD2zOz9;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C70B4606A31A;
-	Sun, 22 Nov 2026 22:14:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C70B4606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tipi-net.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tipi-net.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90B78606A31A;
+	Sun, 22 Nov 2026 22:58:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=tipi-net.de header.i=@tipi-net.de header.a=rsa-sha256 header.s=dkim header.b=PlUv11zu
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 660FCA1583;
-	Sun, 22 Nov 2026 23:14:05 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tipi-net.de; s=dkim;
-	t=1795385649; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=jvCxwlOVxvnKYhMHTmlKe3u7SgksgRLz0kN7w/QcZLA=;
-	b=PlUv11zuZmjCQ9XkkO0TWMYVaLHEBdR/ZEwNEQwGvaTjoK2mf3tmATDiyebZKtUBELRIbr
-	C78c7ckRSlxFK2m+88dWVkS63z4qDLMgW/Pm15Jw9IsbWwzPCNWZCw0V1ghfzATIcrV7pI
-	mzoHTGvMTV20Z/ktP0eVnAIyP0osVNs5UreK4vEkbC2bDd3qzcMWtsn0wcpl6Mqv/xOjMU
-	BxSsXhcvF6bmc2zN2h94JOjZDVVHRxJ6Bb5XFU+ZTU0+9R1yIqD9Q/NlBiNSe92L+O/ix2
-	Wd0OiBjCjSJSi1gn2oELSg2xWcUhpZ62fvwUxIUxOTDDeVTeqxPE5UosZMPyAw==
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=FJD2zOz9
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B17D1F000C4;
+	Sun, 22 Nov 2026 22:58:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795388282;
+	bh=lposm0Vw+zeu8H+uijuR6PyW060ISkjLm9T0I+VfGj0=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date;
+	b=FJD2zOz9LkjKdyZZMtpWyGUgDo33x6kMZtcfOKWEUpiN2J1tHQsS5rCMnlgVajlVS
+	 fkLrFXfUXEk0EVv0dIV5D9S6ghlY95yB0IhawJKVgGqx8slIsCLc8BuZBM1+hUT6GE
+	 63HfcTDJIzjlYUeUf59jTIDCOnFmz3QC7Gz1VltzOt6Wh0bIGcduCgATF8SM1rfzgR
+	 Pv041BDuShGSVXPmWlCeS3f0H60k9PqExfH34K3B/yBzMxKZ5B/J7Jb4RNNtoh4IU9
+	 HNBDGwIoaoMO3Ceyd+2lQrJrOzqtCFWbah/BPdilUqiudVXxoYMl64LAMlWmV7pdcj
+	 XTNXAuRWib6sg==
+From: Namhyung Kim <namhyung@kernel.org>
+To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+ Arnaldo Carvalho de Melo <acme@kernel.org>, Marco Elver <elver@google.com>, 
+ Ian Rogers <irogers@google.com>
+Cc: Bart Van Assche <bvanassche@acm.org>, Jiri Olsa <jolsa@kernel.org>, 
+ Adrian Hunter <adrian.hunter@intel.com>, 
+ James Clark <james.clark@linaro.org>, Weilin Wang <weilin.wang@intel.com>, 
+ Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <ndesaulniers@google.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ linux-perf-users@vger.kernel.org, llvm@lists.linux.dev, bpf@vger.kernel.org, 
+ linux-kernel@vger.kernel.org
+In-Reply-To: <20261121065813.4143649-1-irogers@google.com>
+References: <20261121065813.4143649-1-irogers@google.com>
+Subject: Re: [PATCH v15 00/23] tools/perf: Adopt kernel
+ compiler-context-analysis.h annotations
+Message-Id: <179538828133.1041165.5939897182403929791.b4-ty@b4>
+Date: Sun, 22 Nov 2026 14:58:01 -0800
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -53,62 +67,23 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Date: Sun, 22 Nov 2026 23:14:05 +0100
-From: Nicolai Buchwitz <nb@tipi-net.de>
-To: Sam Edwards <cfsworks@gmail.com>
-Cc: Anandu Padinhare <Anandu.Padinhare@electrifex.com>,
- maxime.chevallier@bootlin.com, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
- mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com, Alexei Starovoitov
- <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard
- Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, "Russell King (Oracle)"
- <rmk+kernel@armlinux.org.uk>, David Wu <david.wu@rock-chips.com>,
- stable@vger.kernel.org, netdev@vger.kernel.org,
- linux-stm32@st-md-mailman.stormreply.com,
- linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org
-Subject: Re: [PATCH net] net: stmmac: retry a failed RX refill from a timer
-In-Reply-To: <CAH5Ym4ijMNSAWZ8k3GmwOoLDBVTy32B1uhS_fE-dGhsPkgozeQ@mail.gmail.com>
-References: <MA0PR01MB921746F36D90C7080287ACC9FD782@MA0PR01MB9217.INDPRD01.PROD.OUTLOOK.COM>
- <9d8cdde77beedce76aaaa1c5a7a788dc@tipi-net.de>
- <CAH5Ym4h8-1mc+DX0Si7XROeGn9M72bQC+ooM05Y7ZmgTo+ON4w@mail.gmail.com>
- <CAH5Ym4jkX_tD58Gtd-mzruB+hqHK7s_9knNWh+gMqUjwuYyVPA@mail.gmail.com>
- <3303844cdf7c00c5369453eb91027c1b@tipi-net.de>
- <CAH5Ym4ijMNSAWZ8k3GmwOoLDBVTy32B1uhS_fE-dGhsPkgozeQ@mail.gmail.com>
-Message-ID: <8e7b5bd372934d85ff890a6da7ca93b8@tipi-net.de>
-X-Sender: nb@tipi-net.de
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Last-TLS-Session-Version: TLSv1.3
+X-Mailer: b4 0.15.2
 
-On 22.11.2026 22:34, Sam Edwards wrote:
+On Fri, 20 Nov 2026 22:57:49 -0800, Ian Rogers wrote:
+> The perf tool previously added Clang thread-safety annotations in
+> tools/perf/util/mutex.h (GUARDED_BY, LOCKABLE, EXCLUSIVE_LOCK_FUNCTION,
+> UNLOCK_FUNCTION, etc.). Since then, the Linux kernel has adopted a
+> unified set of static context analysis macros and attributes in
+> include/linux/compiler-context-analysis.h (context_lock_struct,
+> __guarded_by, __acquires, __releases, __must_hold, etc.).
+> 
 > [...]
 
->> Only if the ring is no bigger than the NAPI budget, right?
-> 
-> Right, but as pointed out in b6cb4541853c7 ("net: stmmac: avoid rx
-> queue overrun" -- the commit that introduced the "leave one behind"
-> behavior) the ring can be as small as 64 and that commit's author was
-> seeing budgets larger than that.
+Applied to perf-tools-next, thanks!
 
-Fair, a 64 entry ring is enough to hit it.
+Best regards
+Namhyung
 
-> 
-> Perhaps NAPI should only be told to stop polling if we either:
-> a) Reach the clean tail of the ring (so we *know* there are no further
-> packets for us)
-> b) Run out of memory and have to arm the retry timer
-> 
-> Thoughts?
 
-Agreed, simpler than refill in the loop. If stmmac_rx() stopped at
-dirty_rx and the refill worked, return the full budget so NAPI polls
-again.
-
-Anandu, could you fold that into v2?
-
-> [...]
-
-Regards
-Nicolai
