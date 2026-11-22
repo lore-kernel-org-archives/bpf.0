@@ -1,90 +1,45 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795378156;
-	b=K3wSG6WafK0E3SyA+tIzjlblVQ7JrOlsPg6bTJhNElEBV0bFLMpEJ6ZfSWhhlRpcxwlW
-	 dXnvWrkPy9Y5PtyUSjgFnFnpGGYhQ3c53PsyozIQIzk9ejRsJ7bKqUayN2yUREDxY+4vz
-	 TxVsxWRUB7pS9vLQLeEv9ccpg7fNII7G2Ad8TVvZswCZARs2Eg+ZAPvARQ+WTVLNIg6x4
-	 w8QCY9RfHul6dKfoukJHrOGnMZ4QxwDb8CN2BuyxbK1qftQmubbIGo4tR8PkQ7+R89uSh
-	 1aj895e7CNtZ3GUT+MwCBKxvW4ItUv6av7aR4w+CTExaCrqazxmoS677RY23RNduSMg==
+	t=1795378154;
+	b=j8RJbrUut7P8xT0KLO/r/PuhpFJdYLy+fbw+geZO9Rpx85Y+E9pGuQPPPhHlAO9n+Oya
+	 YglKLU5ttxFpd3PRk/Jw5IGFKOhRYq7YHKJCV4VBs+fwRjBUwuEIlUte6jnfaxmqBa9ob
+	 zJayQW7einm8uvyRcnXWu3u4gjWKa0UAD7WyQan4lBaIqPYXK795/f4fQPQs0/6R6eKYL
+	 p8Qf4bb6Uv5xur5HhHBbzpy6JeI2DK45kQP7ssIqF3laezyOOeZb5jHcCPKRVOZ5SNOz+
+	 Lq4n2F2iyd3JSRSkT6pNuFO0LqSj6hPIc57mx7RmcNBTKW4EvZ+HVG8ata9nTKOhmTw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795378156;
-	h=DMARC-Filter:Received:X-Virus-Scanned:Received:DKIM-Signature:
-	 Received:Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=mOEUES3n9WBz+Td5J2UDOLswgdajrwsgPl86q0xc+mo=;
-	b=wrg4XPvi1Lqi2pw+9dAPOsRIOAazgzW3HFGHmv3d4Dm7FMm2c4xq6c+KcsO8ylzTs0K9
-	 Wv0w5WaREONOIfWoEWFD+kyEO5gWaQ4j8WD1OxcyADH+IbRVvfORRvF2O1hRiiKjqJoaE
-	 5XRjvQdSOrHxcewXNfZajRhBPosOfmU1/OyxvDFgXL0ttl3hGebYhpjPbehH9GWi5ccIk
-	 yJthOT8TC5dNTd5ZD5WK/KkcxLz6XtTGOrS3T3G1b+FiZA+1tF+v7/tfncZIvbbCatDcy
-	 pWj7yySN5N+7o4IkYEqbWIIEHaqQ0YsXeaaBej+9Ewj+GSQFhnS9DKokcKTQxaYsbCQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795378154;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=qgAd/VA0V0SFS6QRkanen1M9m5R72JoHXnNt9l1b0f0=;
+	b=01bUJTZCyZOmddzhEUYHlkrkQBwLrXX9tjPasyOUeuvVNiKPxsgWwAOIplYlfSggY5Qn
+	 6wxHRuOzfx4MzSFzqjYF/DHvWxNe1HlKsSnHkNndHNXBe2GGls8RSUOkYyxsua69gXWOC
+	 XRehfN2/9GuF/srkCs5glov8YjStx/a8RmaNScWiOXbmm5/E9yySlYk57aiazn4tHaW2I
+	 pIYIpHeWbJLLDnCjaqE5cO3mghV9gbAzHwoJlMKHzrKXaVCQzfC6Utx/Cp9SHzaj1ce88
+	 LlplUVM2mzYtapdl+rj4tRMaPLl2geRBULUBnTnJLvFdSBDiVYzu9pmoqAVlJKE5wgw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=alien8.de;
-	spf=pass smtp.mailfrom=alien8.de;
-	dkim=pass header.d=alien8.de header.i=@alien8.de header.a=rsa-sha256 header.s=alien8 header.b=UUkf8cLT;
-	arc=none smtp.remote-ip=65.109.113.108
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="P28TG/jf";
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5145F606A680;
-	Sun, 22 Nov 2026 20:09:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5145F606A680
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A859E606A31A;
+	Sun, 22 Nov 2026 20:09:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.a=rsa-sha256 header.s=alien8 header.b=UUkf8cLT
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 99DA440E01E1;
-	Sun, 22 Nov 2026 20:09:13 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id WDR8YvqfB9hL; Sun, 22 Nov 2026 20:09:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1795378150; bh=mOEUES3n9WBz+Td5J2UDOLswgdajrwsgPl86q0xc+mo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=UUkf8cLTX8lQXqdd2QA8oqcZ2DG1R/hpaxXJ4+FLRZTrqhEkoQsNKMUI6rbL4PLsi
-	 uB8iNuqOK2fpoYZKyyc+EKPRXm7JSuDVuDA83d0KiTTFwoDzml7Cv3quKIIGssllLI
-	 DBEYh/pIgvwuyoH/uwJ1rqgX4tqPgRzk5V75V3Q25LKzqS8MDQVbFFXdYlHaUicZbr
-	 YCVPvsFY28sJDG7QRth9yBanZCyrfBufyst7CxLjD2Gzgg7moq67rp+tAabZNkX7Lo
-	 BS7s128qXP5n/zWr1qIxpJ7JuSG95gLDm5bs/4Z3MbjrIpEfLQUK/8wPJYGH/zOKeR
-	 33C8hZ7jm2+C0MIDihkEE1MqVS6EEEnpjeLThZBRXe6eMaigdRDD712iKFqFC1aXkl
-	 2ENuO5SZFcftngaqeeLNjAVG/JsCeKvKffcmNjWbh1g4AnS1yvBX5q+kaKBb5iztLV
-	 dSBP4FseoZiqN4AI+xMtHEtCLbbwYt+tYuDueS+J2PLw3J6yFgNke87R0303d2Ih/s
-	 C4wmdn4McfRupBgrBeFU+tfznQj47fYjr0ODf/oIEjYZArL+kB7ARXvqUwc9sl1nDj
-	 g5TgbS2PK033jY63jDrWkKRDEyq6gi1TPyCryCqrmb+1eWcMTjJIsxGF6GQuLlvwIK
-	 ac9iFFbEXDKawosAXrtZFHdc=
-Received: from stx.tnic (unknown [IPv6:2600:1700:38ca:c00::2b])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 7C2DE40E015B;
-	Sun, 22 Nov 2026 20:08:51 +0000 (UTC)
-Date: Sun, 22 Nov 2026 12:08:48 -0800
-From: Borislav Petkov <bp@alien8.de>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: bpf@vger.kernel.org, Puranjay Mohan <puranjay@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	kkd@meta.com, kernel-team@meta.com, x86@kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next v1 1/3] x86/mm: Resolve BPF exception fixups for
- user address faults under SMAP
-Message-ID: <20261122200848.GBawNL0FcQoK918YDI@fat_crate.local>
-References: <20261009024925.3169077-1-memxor@gmail.com>
- <20261009024925.3169077-2-memxor@gmail.com>
- <20261009041346.GHashp-hYpLl-o-l3M@fat_crate.local>
- <DM0ESVBT9553.2S1RWK1W7M8WW@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=P28TG/jf
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0F891F01568;
+	Sun, 22 Nov 2026 20:09:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795378154;
+	bh=qgAd/VA0V0SFS6QRkanen1M9m5R72JoHXnNt9l1b0f0=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=P28TG/jfj557Y7MNEKVfg8PB17IIaPG8EaC4Ckjlz91mj3R99wSOaJlPtXNmt8Rjb
+	 QUjgXZGIUX5ijXTicGbgnAkNvSfvrerDwEo0ccVCxYsOyP6YALLBbmtkxCFGLPmjFD
+	 pDRZvJawql5AxieBhsba3ay0Ylbms82auYGDyB8KgQPP9vPfPuzc8pA4A79Eve+SRh
+	 0zxbXKi/4chaRfYvPCYuW9WS+HHgIaqWUeEdEbVQZyi8onJatTBgKPxGqwdrdPGa7+
+	 JPlP/KrqNBrHfel0Y0JV06vSuN1GW8oWBKgLQUki/1mbgZHRq+tN9aFty3QtWaqoDB
+	 t6Fr3eSQU+EiA==
+Content-Type: multipart/mixed; boundary="===============1507986254413833181=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -94,32 +49,60 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <DM0ESVBT9553.2S1RWK1W7M8WW@gmail.com>
+Message-Id: <6d2f2a9724b36a8a1329286865eb8e8502d9e7541d523a21602fd3cb0315fedf@mail.kernel.org>
+In-Reply-To: <20261122193539.3334213-12-jarkko@kernel.org>
+References: <20261122193539.3334213-12-jarkko@kernel.org>
+Subject: Re: [RFC PATCH v7 11/26] userland: Track init lifecycle via copy_process() and pid_namespace
+From: bot+bpf-ci@kernel.org
+To: jarkko@kernel.org,linux-fsdevel@vger.kernel.org
+Cc: jarkko@kernel.org,bpf@vger.kernel.org,containers@lists.linux.dev,linux-api@vger.kernel.org,linux-arch@vger.kernel.org,linux-doc@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-mm@kvack.org,linux-security-module@vger.kernel.org,aleksa@amutable.com,alex@amutable.com,viro@zeniv.linux.org.uk,luto@amacapital.net,arnd@arndb.de,brauner@kernel.org,dhowells@redhat.com,ebiggers@kernel.org,giuseppe@scrivano.org,hughd@google.com,jack@suse.cz,jlayton@kernel.org,corbet@lwn.net,josef@toxicpanda.com,kees@kernel.org,kpsingh@kernel.org,lennart@poettering.net,neal@gompa.dev,oleg@redhat.com,paul@paul-moore.com,ptikhomirov@virtuozzo.com,sergeh@kernel.org,skhan@linuxfoundation.org,zygmunt.krynicki@canonical.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Sun, 22 Nov 2026 20:09:10 +0000 (UTC)
 
-On Fri, Oct 09, 2026 at 05:23:13PM +0200, Kumar Kartikeya Dwivedi wrote:
-> The advantage is losing significant amount of code size in JITed programs and
-> the associated runtime overhead (you can see the numbers in the cover letter).
-> 
-> Do note that we can make it more generic, we can follow up and optimize
-> copy_from_kernel_nofault() with cpu_feature_enabled(X86_FEATURE_SMAP) as well.
-> But I didn't want to go there just yet. I am happy to work on a follow up if so
-> desired.
+--===============1507986254413833181==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-So we basically disable SMAP around bpf programs when they are about to
-accesss potentially stale memory and the only line of defense is for
-is_bpf_text_address() to really DTRT.
+> userland: Track init lifecycle via copy_process() and pid_namespace
 
-And once we open the floodgates here, I'm sure you bpf folks will find another
-creative way to flip the kernel on its head.
+TL;DR: Nits only: userland_copy() has an unused tsk argument, and the
+rcu_read_lock()/unlock() pair around task_uid() in userland_exit() may be
+redundant.
 
-And all that just to save some bytes.
+> diff --git a/kernel/userland.c b/kernel/userland.c
+> --- a/kernel/userland.c
+> +++ b/kernel/userland.c
 
-Sorry, this is simply not worth the risk from where I am standing.
+[ ... ]
 
--- 
-Regards/Gruss,
-    Boris.
+> +void userland_copy(struct task_struct *tsk, struct pid *pid, struct userland *c)
+> +{
+> +	if (likely(!c || !is_child_reaper(pid)))
+> +		return;
+> +
 
-https://people.kernel.org/tglx/notes-about-netiquette
+This isn't a bug, but is the tsk argument of userland_copy() needed?  It
+is not referenced in the body, which uses only pid and c.  Could the
+prototype take just the pid and the userland?
+
+[ ... ]
+
+> +void userland_exit(struct pid_namespace *pid_ns, struct task_struct *tsk)
+> +{
+[ ... ]
+> +	leader = tsk->group_leader;
+> +	rcu_read_lock();
+> +	uid = task_uid(leader);
+> +	rcu_read_unlock();
+
+This isn't a bug, but since task_uid() already takes rcu_read_lock()
+itself, could the surrounding rcu_read_lock()/rcu_read_unlock() pair be
+dropped?
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/45063222848
+--===============1507986254413833181==--
