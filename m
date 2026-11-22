@@ -1,44 +1,44 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795376186;
-	b=wmA3VIcBckCuCHj4fOJOoQwYhruyYCv3WWGk7BkJ/z4lXqBw70b251k0yAVWVnxrzYIg
-	 ROg7x/TPfAb4yELUdPuctC04T9tPml1yfYjoR7aMr/r8HuofMZd8cOw2bgd9z/5a+AbHg
-	 cTFdTaoR92kpUwE/UVb/eGTcbdhQNllpdeaozfOI9wu6eTgHnGzHNyVELrB/P6jKEISZA
-	 a1hETkQgHVLWCIZvonJs1WPocKRatpDZNoY98UiGXv4HwbyrOcn0YoAkSLYaHYhBwPXf2
-	 AdMxVJJPSv9hMb+M38q1s1F74y0p2MXiogetPgdpQGo2zGFbhewrxbxURDl9gkc9a7w==
+	t=1795376199;
+	b=IN9dVxTrqmPddojmmaFSBORIi2vPsxaEKUuNKtWJbZXX6MgVsp6oMHqpSOnBGwbjKx84
+	 4en4n/wPx9TcGuwR+HeIBZdDAMTrSJtbs3sf9+l6pQwLJuvISHx5qfKgSz0Gt34M7KCnK
+	 2yujx7yIyu/FJEfnhFaF4ahO8Dj18WheajhjpIbb0V6tXJuyh5MNRoqSlQNLEOUFImpKz
+	 Q8Mn4kzBDILOuugFxQxrfFtpIkCyp7AduaY3FhRlCc6UkObDoQN+Dw0Tnm2SYBhozywDD
+	 AYgeeB9Uk+0AnviU9FFBQ2ViJuy0nHWkmO1MAx5khBiW2M44fpo37+OrmLJi6vJpwAw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795376186;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795376199;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
 	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=0eNIDEAoRmujXA6Ky0SIP9NpYpxjc1cr18CdGUMXyVQ=;
-	b=Q3WJYxetxwILlyd0jg1IvqvVLAhcTrPHjIOhp0LjBp/0GK/IY7nygdw6r/aD2aTOy0HX
-	 94hj5za9jPWLbLnAk8Y9EAljIeIaxdxxtaep47E97+H4xC8tW1SGMuHPdzwLKvndOXaUv
-	 NU0eecIK0vRhRw8lcLgn2uVdF6JbIKqaiYV66Jk0FdmWGFftkfbwrTuBU6RE0dd00iRmA
-	 +2KORYl9fESdxFqX+Yd341mopxpkDpo5+kdr8TDKyM8h7gJ0y/9RLyIdH6oqKdOy4Cj+u
-	 iahst2HXJwcC0h1Z/z4qcfkCqtf1Csk9vW8NVh44VybDf+sUxERGJVhFIFyLOsHBGoA==
+	bh=YbRTDchIsz6xcCBmI8LhY6NC9NG/SzViBPWKNz/ygpo=;
+	b=bZUW4RGxd3yVRWlya2Hgv14RvRW7LJFfOAz5bJPTDKSEfXFFs/SPoX9/od6VE8KLDWqO
+	 0+ctRu994L+k3PEtNJAccwTDXTWhjXUuLQtuBaDJAHlExwliDYYYh1ybSLdBPc94y42GQ
+	 Zfzi4Pw0HkU/b+G+oIKcoFcnMDJPWhGchs18o9FGjxPqE1YQZNsFAc3TuNY1qtswBFd+a
+	 EA/QGHcZF9IKquO5l2G+Q1kd4sefW7WzqDgt/KEP2ByseeQqha38OX5GB4Pd8tfnwrMm5
+	 JvKQf1L2K15/d24a/K6Xrtz0aodOrYng9Rs4HdQw05mviG7mvjgiAsd4Pceubz/V3AA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TLFFyAyi;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CG6CfgoO;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id B74F0606A336;
-	Sun, 22 Nov 2026 19:36:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id B8B89606A6B5;
+	Sun, 22 Nov 2026 19:36:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TLFFyAyi
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id A05D51F000D8;
-	Sun, 22 Nov 2026 19:36:25 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CG6CfgoO
+Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 790321F00A01;
+	Sun, 22 Nov 2026 19:36:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795376186;
-	bh=0eNIDEAoRmujXA6Ky0SIP9NpYpxjc1cr18CdGUMXyVQ=;
+	s=k20260515; t=1795376199;
+	bh=YbRTDchIsz6xcCBmI8LhY6NC9NG/SzViBPWKNz/ygpo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=TLFFyAyiMhK9+SAYJuBfJZEQtt1h6fQt9grxzJAP4rpI7obSf62cNKQZAYTyL0HB9
-	 WnZKPuysbmFsbZdrAi0HCcEiJTOHTn9/3diENvg9DThAEXCv9O0YxoJPZTOxR/rFzA
-	 JgPHvjFAV+em3yt5633CMfEMJp2ZDdsjP0EGo5+FIuwrnoqIxGM7iNlM0FXfBLWsai
-	 GIk7KAamRhim5UvhKQJcs00/KagMUt8t3KJei22Llu3GK0UvsD/ojToL/meIiw3s/S
-	 NLcrLcfad3jY5fLiLZRUaibhLbHQLck+9QX8PepsyP25w6vInK+Pb2C9ylTrIPVqDP
-	 XCeD8oj9N9j+A==
+	b=CG6CfgoOYB1ykMnFVIQA0eyNbZL7c4vTkkFjT9pExp0M3QXg7D4zdq3w1sclLPgVq
+	 v6GwXd0nxYHutNTZB6HGmpV/+OX73AimUAxExG7MjtuOCGoUXB9N3zjmzMRwpdFDdx
+	 dCdEROaBeimYhLAOA1YltC41CjAlimHm/dakNnZRdrEWBPFmtPW4AkIF+zJfIjIHGG
+	 EGs++cNh42bvFH9IC59uuOPQ33drP6C5iAv5LMllE97DfQwhpVMbtaPngkZXJoHrkz
+	 TdX6U7kwnoRm40yTMUhPbV1gJs6Kq3aLa/e1x5MQ8CAA+fj6p3lm5F9OnZf3ZRlYGE
+	 l0cyVa5uM5glg==
 From: Jarkko Sakkinen <jarkko@kernel.org>
 To: linux-fsdevel@vger.kernel.org
 Cc: Jarkko Sakkinen <jarkko@kernel.org>,
@@ -75,9 +75,9 @@ Cc: Jarkko Sakkinen <jarkko@kernel.org>,
 	Serge Hallyn <sergeh@kernel.org>,
 	Shuah Khan <skhan@linuxfoundation.org>,
 	Zygmunt Krynicki <zygmunt.krynicki@canonical.com>
-Subject: [RFC PATCH v7 07/26] mount: Support MOVE_MOUNT_CLONE with MOVE_MOUNT_T_MNTNS
-Date: Sun, 22 Nov 2026 21:35:20 +0200
-Message-ID: <20261122193539.3334213-8-jarkko@kernel.org>
+Subject: [RFC PATCH v7 10/26] userland: Add core infrastructure
+Date: Sun, 22 Nov 2026 21:35:23 +0200
+Message-ID: <20261122193539.3334213-11-jarkko@kernel.org>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20261122193539.3334213-1-jarkko@kernel.org>
 References: <20261122193539.3334213-1-jarkko@kernel.org>
@@ -92,212 +92,286 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Unprivileged container managers cannot use open_tree(OPEN_TREE_CLONE) in
-the host mount namespace because it requires may_mount() against the
-caller's current mount namespace rather than the destination namespace.
+Linux namespaces can be created and entered individually, but userspace
+orchestrators lack a single control object that binds a full detached
+namespace set and an init process lifecycle behind a pollable file
+descriptor. Because this object manages process lifecycle, wait and
+signal delivery, VFS mount delegation, and LSM state rather than
+representing an nsfs namespace entity, model it as a distinct userland
+abstraction.
 
-Add MOVE_MOUNT_CLONE for use with MOVE_MOUNT_T_MNTNS so move_mount() can
-recursively loopback-clone a path from the caller's mount namespace
-directly into the target mount namespace file descriptor. Authorize the
-operation against CAP_SYS_ADMIN in target_mnt_ns->user_ns, apply
-CL_SLAVE | CL_COPY_UNBINDABLE when crossing user namespace boundaries,
-and lock cross-user-namespace cloned subtrees with MNT_LOCKED inside
-attach_recursive_mnt().
+Add struct userland, its lifecycle states, reference counting, uAPI
+flags, and anonymous inode file operations under CONFIG_USERLAND. Drop
+active and passive namespace references on final release, send SIGKILL
+to the userland init thread group on close when USERLAND_KILL_ON_CLOSE
+is set, and report EPOLLHUP from poll() once the userland reaches
+USERLAND_DEAD.
 
+Co-developed-by: David Howells <dhowells@redhat.com>
+Signed-off-by: David Howells <dhowells@redhat.com>
 Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 ---
- fs/namespace.c             | 91 +++++++++++++++++++++++++++++---------
- include/uapi/linux/mount.h |  3 +-
- 2 files changed, 73 insertions(+), 21 deletions(-)
+ include/linux/userland.h      | 80 +++++++++++++++++++++++++++++
+ include/uapi/linux/userland.h | 25 ++++++++++
+ init/Kconfig                  | 10 ++++
+ kernel/Makefile               |  2 +
+ kernel/userland.c             | 94 +++++++++++++++++++++++++++++++++++
+ 5 files changed, 211 insertions(+)
+ create mode 100644 include/linux/userland.h
+ create mode 100644 include/uapi/linux/userland.h
+ create mode 100644 kernel/userland.c
 
-diff --git a/fs/namespace.c b/fs/namespace.c
-index 93dd11da7e73..b2c89ad2393e 100644
---- a/fs/namespace.c
-+++ b/fs/namespace.c
-@@ -2573,6 +2573,7 @@ enum mnt_tree_flags_t {
- 	MNT_TREE_PROPAGATION = BIT(1),
- 	MNT_TREE_MNTNS = BIT(2),
- 	MNT_TREE_MNTNS_INIT = BIT(3),
-+	MNT_TREE_CLONE = BIT(4),
- };
- 
- /**
-@@ -3805,31 +3806,28 @@ static int do_move_mount(const struct path *old_path,
- {
- 	struct mount *old = real_mount(old_path->mnt);
- 	struct user_namespace *src_user_ns = NULL;
-+	struct mount *cloned = NULL;
- 	struct mnt_namespace *dest_mnt_ns;
- 	int err;
- 	bool beneath = flags & MNT_TREE_BENEATH;
- 
--	if (!path_mounted(old_path))
-+	if (!(flags & MNT_TREE_CLONE) && !path_mounted(old_path))
- 		return -EINVAL;
- 
- 	if (d_is_dir(new_path->dentry) != d_is_dir(old_path->dentry))
- 		return -EINVAL;
- 
-+	if ((flags & MNT_TREE_CLONE) &&
-+	    mnt_ns_loop_target(old_path->dentry, target_mnt_ns))
-+		return -EINVAL;
+diff --git a/include/linux/userland.h b/include/linux/userland.h
+new file mode 100644
+index 000000000000..9b9fefed63ac
+--- /dev/null
++++ b/include/linux/userland.h
+@@ -0,0 +1,80 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Copyright (C) 2017-2019 Red Hat, Inc. All Rights Reserved.
++ * Copyright (C) 2026 Opinsys Oy
++ */
 +
- 	LOCK_MOUNT_MAYBE_BENEATH(mp, new_path, beneath);
- 	if (IS_ERR(mp.parent))
- 		return PTR_ERR(mp.parent);
- 
- 	if (flags & MNT_TREE_MNTNS) {
--		u64 seq;
--
--		if (!anon_ns_root(old) || old->mnt_ns == mp.parent->mnt_ns ||
--		    mp.parent->mnt_ns != target_mnt_ns)
--			return -EINVAL;
--		seq = old->mnt_ns->seq_origin;
--		if (seq && seq != target_mnt_ns->ns.ns_id &&
--		    seq != current->nsproxy->mnt_ns->ns.ns_id)
-+		if (mp.parent->mnt_ns != target_mnt_ns)
- 			return -EINVAL;
--		src_user_ns = old->mnt_ns->user_ns;
- 		if (flags & MNT_TREE_MNTNS_INIT) {
- 			if (mp.parent != target_mnt_ns->root)
- 				return -EBUSY;
-@@ -3842,6 +3840,36 @@ static int do_move_mount(const struct path *old_path,
- 			if (m == target_mnt_ns->root)
- 				return beneath ? -EINVAL : -EBUSY;
- 		}
-+		if (flags & MNT_TREE_CLONE) {
-+			unsigned int copy_flags;
++#ifndef _LINUX_USERLAND_H
++#define _LINUX_USERLAND_H
 +
-+			if (!check_mnt(old) || old->mnt_ns == target_mnt_ns ||
-+			    (old->mnt.mnt_sb->s_flags & SB_NOUSER))
-+				return -EINVAL;
-+			src_user_ns = old->mnt_ns->user_ns;
-+			copy_flags = (target_mnt_ns->user_ns != src_user_ns) ?
-+				     (CL_SLAVE | CL_COPY_UNBINDABLE) :
-+				     CL_COPY_MNT_NS_FILE;
-+			cloned = __do_loopback(old_path, true, copy_flags);
-+			if (IS_ERR(cloned))
-+				return PTR_ERR(cloned);
-+			old = cloned;
-+			if (d_is_symlink(old->mnt.mnt_root)) {
-+				err = -EINVAL;
-+				goto out_cloned;
-+			}
-+		} else {
-+			u64 seq;
++#include <linux/refcount.h>
++#include <linux/spinlock.h>
++#include <linux/wait.h>
 +
-+			if (!anon_ns_root(old) ||
-+			    old->mnt_ns == mp.parent->mnt_ns)
-+				return -EINVAL;
-+			seq = old->mnt_ns->seq_origin;
-+			if (seq && seq != target_mnt_ns->ns.ns_id &&
-+			    seq != current->nsproxy->mnt_ns->ns.ns_id)
-+				return -EINVAL;
-+			src_user_ns = old->mnt_ns->user_ns;
-+		}
- 	} else if (check_mnt(old)) {
- 		/* if the source is in our namespace... */
- 		/* ... it should be detachable from parent */
-@@ -3881,23 +3909,36 @@ static int do_move_mount(const struct path *old_path,
- 			over = mp.parent->overmount;
- 		err = can_move_mount_beneath(old, over, &mp);
- 		if (err)
--			return err;
-+			goto out_cloned;
- 	}
- 
- 	/*
- 	 * Don't move a mount tree containing unbindable mounts to a destination
- 	 * mount which is shared.
- 	 */
--	if (IS_MNT_SHARED(mp.parent) && tree_contains_unbindable(old))
--		return -EINVAL;
-+	if (IS_MNT_SHARED(mp.parent) && tree_contains_unbindable(old)) {
-+		err = -EINVAL;
-+		goto out_cloned;
-+	}
- 	dest_mnt_ns = is_anon_ns(mp.parent->mnt_ns) ?
- 		      current->nsproxy->mnt_ns : mp.parent->mnt_ns;
--	if (!check_for_nsfs_mounts(old, dest_mnt_ns))
--		return -ELOOP;
--	if (mount_is_ancestor(old, mp.parent))
--		return -ELOOP;
-+	if (!check_for_nsfs_mounts(old, dest_mnt_ns)) {
-+		err = -ELOOP;
-+		goto out_cloned;
-+	}
-+	if (mount_is_ancestor(old, mp.parent)) {
-+		err = -ELOOP;
-+		goto out_cloned;
-+	}
- 
--	return attach_recursive_mnt(old, &mp, src_user_ns);
-+	err = attach_recursive_mnt(old, &mp, src_user_ns);
-+out_cloned:
-+	if (err && cloned) {
-+		lock_mount_hash();
-+		umount_tree(cloned, UMOUNT_SYNC);
-+		unlock_mount_hash();
-+	}
-+	return err;
- }
- 
- static int do_move_mount_old(const struct path *path, const char *old_name)
-@@ -4823,8 +4864,8 @@ static int lookup_move_mount_from(int from_dfd,
- /**
-  * DOC: MOVE_MOUNT_T_MNTNS
-  *
-- * ``MOVE_MOUNT_T_MNTNS`` installs detached anonymous mount trees into a target
-- * mount namespace ``nsfs`` file descriptor supplied as ``to_dfd``:
-+ * ``MOVE_MOUNT_T_MNTNS`` installs mount trees into a target mount namespace
-+ * ``nsfs`` file descriptor supplied as ``to_dfd``:
-  *
-  * 1. ``to_pathname`` of ``"/"`` attaches the initial root mount onto the
-  *    ``nullfs`` root of an empty mount namespace at most once.
-@@ -4832,6 +4873,11 @@ static int lookup_move_mount_from(int from_dfd,
-  * 2. Relative ``to_pathname`` values resolve beneath the live root of the
-  *    target mount namespace.
-  *
-+ * 3. Combining ``MOVE_MOUNT_CLONE`` with ``MOVE_MOUNT_T_MNTNS`` recursively
-+ *    loopback-clones ``from_pathname`` from the caller's mount namespace into
-+ *    ``to_dfd`` without requiring ``OPEN_TREE_CLONE`` or ``may_mount()`` in
-+ *    the caller's own mount namespace.
++struct file;
++struct nsproxy;
++struct pid;
++struct user_namespace;
++
++/**
++ * enum userland_state - Userland lifecycle states
++ * @USERLAND_INIT:	Build phase after ``userland_open()`` before any
++ *			process has entered. ``USERLAND_SHARE_NSFD`` is
++ *			permitted, ID mappings may be configured on the owning
++ *			user namespace, and ``"/"`` must be mounted in the
++ *			mount namespace before entry.
++ * @USERLAND_FORKING:	Bootstrap phase while the first
++ *			``clone3(CLONE_INTO_USERLAND)`` call creates PID 1.
++ *			Concurrent callers wait killably; reverts to
++ *			%USERLAND_INIT if ``copy_process()`` fails, or advances
++ *			to %USERLAND_RUNNING once PID 1 is attached.
++ * @USERLAND_RUNNING:	Live phase while PID 1 is attached. Subsequent
++ *			``clone3(CLONE_INTO_USERLAND)`` calls join the PID
++ *			namespace until teardown begins,
++ *			``USERLAND_GET_NSFD(CLONE_NEWPID)`` and
++ *			``pidfd_send_signal()`` are enabled, and
++ *			``USERLAND_SHARE_NSFD`` returns ``-EBUSY``.
++ * @USERLAND_DEAD:	Terminal phase entered after PID 1 exits and the PID
++ *			namespace has killed and reaped all member processes.
++ *			``poll()`` reports ``EPOLLHUP`` and
++ *			``waitid(P_USERLAND, ...)`` reports PID 1's exit status
++ *			without consuming it.
 + *
-  * Capability is checked against ``CAP_SYS_ADMIN`` in the target mount
-  * namespace's owning user namespace, and source trees crossing user namespace
-  * boundaries are locked with ``MNT_LOCKED`` and locked mount flags.
-@@ -4933,12 +4979,17 @@ SYSCALL_DEFINE5(move_mount,
- 	if (flags & ~MOVE_MOUNT__MASK)
- 		return -EINVAL;
- 
-+	if ((flags & MOVE_MOUNT_CLONE) && !(flags & MOVE_MOUNT_T_MNTNS))
-+		return -EINVAL;
++ * State transitions advance from %USERLAND_INIT through %USERLAND_FORKING and
++ * %USERLAND_RUNNING to %USERLAND_DEAD, reverting from %USERLAND_FORKING to
++ * %USERLAND_INIT only if the initial bootstrap fork fails.
++ */
++enum userland_state {
++	USERLAND_INIT		= 0,
++	USERLAND_FORKING	= 1,
++	USERLAND_RUNNING	= 2,
++	USERLAND_DEAD		= 3,
++};
 +
- 	if ((flags & (MOVE_MOUNT_BENEATH | MOVE_MOUNT_SET_GROUP)) ==
- 	    (MOVE_MOUNT_BENEATH | MOVE_MOUNT_SET_GROUP))
- 		return -EINVAL;
++struct userland {
++	refcount_t		usage;
++	int			exit_code;
++	struct user_namespace	*user_ns;
++	struct nsproxy		*ns;
++	struct pid		*init_pid;
++	spinlock_t		lock;		/* Guards userland lifecycle state */
++	wait_queue_head_t	waitq;
++	unsigned int		flags;
++	enum userland_state	state;
++};
++
++#ifdef CONFIG_USERLAND
++void userland_put(struct userland *c);
++bool userland_is_file(struct file *file);
++#else
++static inline void userland_put(struct userland *c)
++{
++}
++
++static inline bool userland_is_file(struct file *file)
++{
++	return false;
++}
++#endif /* CONFIG_USERLAND */
++
++#endif /* _LINUX_USERLAND_H */
+diff --git a/include/uapi/linux/userland.h b/include/uapi/linux/userland.h
+new file mode 100644
+index 000000000000..4a9031f81dda
+--- /dev/null
++++ b/include/uapi/linux/userland.h
+@@ -0,0 +1,25 @@
++/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
++/*
++ * Copyright (C) 2017-2019 Red Hat, Inc. All Rights Reserved.
++ * Copyright (C) 2026 Opinsys Oy
++ */
++
++#ifndef _UAPI_LINUX_USERLAND_H
++#define _UAPI_LINUX_USERLAND_H
++
++/**
++ * enum userland_flags - Flags for userland_open()
++ * @USERLAND_KILL_ON_CLOSE: Send %SIGKILL to userland init on final fd release.
++ * @USERLAND_CLOSE_ON_EXEC: Set %O_CLOEXEC on the returned control fd.
++ * @USERLAND_ALL_FLAGS: Mask of all valid flags accepted by userland_open().
++ *
++ * Every userland created by userland_open() allocates a full set of
++ * detached namespaces owned by a fresh user namespace.
++ */
++enum userland_flags {
++	USERLAND_KILL_ON_CLOSE	= 0x00000001,
++	USERLAND_CLOSE_ON_EXEC	= 0x00000002,
++	USERLAND_ALL_FLAGS	= 0x00000003,
++};
++
++#endif /* _UAPI_LINUX_USERLAND_H */
+diff --git a/init/Kconfig b/init/Kconfig
+index c8a7cfa60a6e..0c5fada1ba88 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -1283,6 +1283,16 @@ config NET_NS
  
- 	if (flags & MOVE_MOUNT_SET_GROUP)	mflags |= MNT_TREE_PROPAGATION;
- 	if (flags & MOVE_MOUNT_BENEATH)		mflags |= MNT_TREE_BENEATH;
-+	if (flags & MOVE_MOUNT_CLONE)
-+		mflags |= MNT_TREE_CLONE;
+ endif # NAMESPACES
  
- 	if (unlikely(flags & MOVE_MOUNT_T_MNTNS)) {
- 		if (flags & (MOVE_MOUNT_T_EMPTY_PATH | MOVE_MOUNT_SET_GROUP))
-diff --git a/include/uapi/linux/mount.h b/include/uapi/linux/mount.h
-index 7d413418426a..cb4f7175db02 100644
---- a/include/uapi/linux/mount.h
-+++ b/include/uapi/linux/mount.h
-@@ -78,7 +78,8 @@
- #define MOVE_MOUNT_T_MNTNS		0x00000080 /* Resolve to_dfd as mntns fd */
- #define MOVE_MOUNT_SET_GROUP		0x00000100 /* Set sharing group instead */
- #define MOVE_MOUNT_BENEATH		0x00000200 /* Mount beneath top mount */
--#define MOVE_MOUNT__MASK		0x000003f7
-+#define MOVE_MOUNT_CLONE		0x00000400 /* Recursively clone from path */
-+#define MOVE_MOUNT__MASK		0x000007f7
++config USERLAND
++	bool "Userland support"
++	depends on NAMESPACES && USER_NS && PID_NS && UTS_NS && IPC_NS && NET_NS && CGROUPS
++	help
++	  Allow user space to open and manage isolated userlands and their init
++	  process lifecycle through an anonymous-inode control file descriptor
++	  via userland_open(), waitid(P_USERLAND), pidfd_send_signal(),
++	  USERLAND_GET_NSFD, USERLAND_SHARE_NSFD, FSCONFIG_SET_USERLAND, and
++	  clone3() with CLONE_INTO_USERLAND.
++
+ config CHECKPOINT_RESTORE
+ 	bool "Checkpoint/restore support"
+ 	depends on PROC_FS
+diff --git a/kernel/Makefile b/kernel/Makefile
+index 4ff92e24680c..80eb26639776 100644
+--- a/kernel/Makefile
++++ b/kernel/Makefile
+@@ -152,6 +152,8 @@ KCOV_INSTRUMENT_kstack_erase.o := n
  
- /*
-  * fsopen() flags.
+ obj-$(CONFIG_SCF_TORTURE_TEST) += scftorture.o
+ 
++obj-$(CONFIG_USERLAND) += userland.o
++
+ $(obj)/configs.o: $(obj)/config_data.gz
+ 
+ # .config is small, so it is compressed with gzip rather than the image compressor.
+diff --git a/kernel/userland.c b/kernel/userland.c
+new file mode 100644
+index 000000000000..7be0c4b5385b
+--- /dev/null
++++ b/kernel/userland.c
+@@ -0,0 +1,94 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (C) 2017-2019 Red Hat, Inc. All Rights Reserved.
++ * Copyright (C) 2026 Opinsys Oy
++ */
++
++/**
++ * DOC: Overview
++ *
++ * A userland is an anonymous-inode control object opened by ``userland_open()``
++ * that binds a detached namespace set, an initially empty mount namespace, an
++ * owning user namespace, and an init process lifecycle.
++ */
++#include <linux/poll.h>
++#include <linux/wait.h>
++#include <uapi/linux/wait.h>
++#include <linux/file.h>
++#include <linux/fs.h>
++#include <linux/anon_inodes.h>
++#include <linux/userland.h>
++#include <linux/sched/signal.h>
++#include <linux/sched/task.h>
++#include <linux/slab.h>
++#include <linux/syscalls.h>
++#include <linux/uaccess.h>
++#include <linux/mnt_namespace.h>
++#include <linux/nsproxy.h>
++#include <linux/ns_common.h>
++#include <linux/nsfs.h>
++#include <linux/pid.h>
++#include <linux/pid_namespace.h>
++#include <linux/time_namespace.h>
++#include <linux/user_namespace.h>
++#include <linux/idr.h>
++#include <uapi/linux/userland.h>
++
++void userland_put(struct userland *c)
++{
++	if (!c || !refcount_dec_and_test(&c->usage))
++		return;
++
++	if (c->ns)
++		put_nsproxy(c->ns);
++	if (c->init_pid)
++		put_pid(c->init_pid);
++	if (c->user_ns) {
++		ns_ref_active_put(c->user_ns);
++		put_user_ns(c->user_ns);
++	}
++	kfree(c);
++}
++
++static __poll_t userland_poll(struct file *file, poll_table *wait)
++{
++	struct userland *userland = file->private_data;
++	__poll_t mask = 0;
++
++	poll_wait(file, &userland->waitq, wait);
++
++	if (READ_ONCE(userland->state) == USERLAND_DEAD)
++		mask |= EPOLLHUP;
++
++	return mask;
++}
++
++static int userland_release(struct inode *inode, struct file *file)
++{
++	struct userland *userland = file->private_data;
++
++	if (userland->flags & USERLAND_KILL_ON_CLOSE) {
++		struct pid *pid = NULL;
++
++		scoped_guard(spinlock, &userland->lock) {
++			if (userland->state == USERLAND_RUNNING)
++				pid = get_pid(userland->init_pid);
++		}
++		if (pid) {
++			kill_pid(pid, SIGKILL, true);
++			put_pid(pid);
++		}
++	}
++	userland_put(userland);
++	return 0;
++}
++
++static const struct file_operations userland_fops = {
++	.poll		= userland_poll,
++	.release	= userland_release,
++};
++
++bool userland_is_file(struct file *file)
++{
++	return file->f_op == &userland_fops;
++}
 -- 
 2.47.3
 
