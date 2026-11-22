@@ -1,49 +1,68 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795304658;
-	b=VkSHfX+G5mWm6NIvYkkMT+0qDuuDh1ubzjkgNM4eNVEx1iAL8AT+UIAC3SrXA8eCQPOl
-	 nNrTruxLwm8OSQP6E9oD2GYMl/ks6joKhSzO/Am5Axb+jAIySYqhYt1C6DnC8eedtjrCk
-	 26LxrK1QbP3HwPOwJBj4l9uVMlrCFTj1+QpHCbgUX2ilRxZXojjLlF6b2ExGVa4dKJXPH
-	 +n3oXzxa70ysmh9/1j/rgRfS1hSEnbB49+mUyZ9ZqcZ/DtymKhhyYIjnKrI5C27zgjKVi
-	 hwzGmGDVgAlh3xbUJ5TeHdxqAIlZ9YrzqW1z/Y9h/Gxt+IBNfGRt/Q7lX54oqlgE6xw==
+	t=1795309278;
+	b=1Qxdcelnd72ZYAEaFMD9BLZzFjBYR3F/X00HevZb1J7MvPxegAHhMAlFF5UF/xsIhdmn
+	 gVw3eEPBzEudlxsr019BK/kujeJw5yWR0YV5yBlRQpg+a48DybsoDkB8WKJjMz8PUk8oh
+	 95b1WXu0v10etTFkfT0rJqFoTqZqiUAB/g6FTFVU8L1Cfpka1FPgdgr3WfOgPb4mZl72T
+	 0plDrLeBThb+0DCEF3F2nOQQpiUN2u8dTXsUfzkiQzO9YUj5viU5a5efSaFkJHuUEHT9d
+	 nvORImSwYsy9SXMmkNBsTGBlg2e79uI7WilyLSPkpoY0A8P8PHyWly+nT5nsosVjCXw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795304658;
-	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
-	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc;
-	bh=df/k3ajSIskGLBKWipJ3E1vtkpO+CMqpP4zKb98vN2M=;
-	b=Lk1V2KfkHsgFDRULwSc0qvEP0/1dkRtdb5J6xICKGc5uQcLKVo3dmloy7STDE6HtmDP5
-	 KTZQLSLDD9FTMzGN8TIGx8v5HQvQuZi1omRfCz4q2clWjFYveoly0DR0eXHv/N+7sw/WO
-	 xepU2GNfzg9Ggdo+twTVJqSziHbrcMSumLF+/TBD7IN34OnBAEn794NfclEWi4ZiLdy9E
-	 mmWq06hXR80zo9GAqgCRFsfNwsza1uDJOQiLIliFKZUp9KiYGxxorCpcFOQ4AYpweA0Vu
-	 GSb/aDpo2M+Ms7PzYCPuFrqiOU9sTF9YbhW2yr8BFZ0+JY9DDu4H5wmz5XAxT4xPZAw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795309278;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=/4I+mO5uLZShMj+Us0JKP+cnbfvpvxCJyIdSkhVTXVc=;
+	b=tYhSnUnw63EQTqg56rgx3F2rnOHHn/HbhqkcjJYsIUB+bstyAOeq6Hy6sPwRxy2WHnGj
+	 bh3XNSKadDmo+IfD/MZ9eW4TPETB+Ca5w41XxPU74qQ2GML2jzYxy+r/vyGpPDWdLFR/d
+	 pebgkN7szb6+5OVpg1jLMDsmBhKOpDe6+2ZR7XNifDe8SjyIvG+JKxkajyw60YGX+xUS6
+	 wSJ+vgrr44xhYpyMa77wzRVwjwtRIWWvJQchiILpVNSRoMkBcZX2wW21L1PLd/SxmT0/A
+	 TAiY6BIAY4i3GPNyp4Q6hBCBgb4gq+6IszZW6vPdKPx/Idpq3lOk3fSJZO8UB70oDcg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UlncGxVZ;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RyRKjL2P;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22C3A606A32A
-	for <bpf@vger.kernel.org>; Sat, 21 Nov 2026 23:44:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E765606A32A;
+	Sun, 22 Nov 2026 01:01:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UlncGxVZ
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE6CD1F000C4;
-	Sat, 21 Nov 2026 23:44:17 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RyRKjL2P
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7894D1F000C4;
+	Sun, 22 Nov 2026 01:01:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795304657;
-	bh=df/k3ajSIskGLBKWipJ3E1vtkpO+CMqpP4zKb98vN2M=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=UlncGxVZbOEycDuRsH37gTFTVRVWpwp0QQ58s417VIAHbFcQAY9wZG32He/mGkRUC
-	 b6U7b04cfpww0nZvx/CeVuZW4n0wT8j5d0BxLRsyML0M8zMeDGhcsoNCaVWhEEA7uZ
-	 VSPDrhEa1thXysKyxOHQJIbKMYPB6wLj4Fevn/Uqj2S4mEVjeMzmGhSXIZaG6mZf22
-	 PtHNnlD412BOSVGQTMJIH+Dz69VQPy7ZQ+ConN/oheYzAzVoDeefPF/pUuTWzGJtBI
-	 sQKmqtjKh1GBxBu8jdGcuGaSIBUI0gI9z3KeMi5F1tAuwNw3nRjEYEy7Bx3/1Fq3Jk
-	 k9aLMS2KB4nDg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B4361391B08F;
-	Sat, 21 Nov 2026 23:44:17 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20260515; t=1795309278;
+	bh=/4I+mO5uLZShMj+Us0JKP+cnbfvpvxCJyIdSkhVTXVc=;
+	h=From:To:Cc:Subject:Date;
+	b=RyRKjL2PPyit7kFoUJKFBHri9Ez99gpMtKV+3fy5h2Wrq9AcY/7rO33TGXJU8No+M
+	 vyEQcHJ7uDIFXDyA4fPHeuzyxhhzaxXP9OzeZ24sG0kOKY4hmAaXF/PxIdw4Xw4LQO
+	 1lOMUEt8xRmEM/LG2nE+kIw69jLh2K4GsWzuQxd3IOXdaPlBGPqEkHCSvD5oSsSHaX
+	 +cRqdFMz4TNFh36ll4dv2YM5hUyn6aKPI0dZFnDTQGU2c6zgjXq7GtGBBrm3G6W9J5
+	 dXWnrJuIRMbOQceVLo+wIrNKb9jv3ykG2UymZMNjsCiuxCUKNO7z8XAZSFxMwx1bkX
+	 uyftLYjUAnVQA==
+From: Jakub Kicinski <kuba@kernel.org>
+To: davem@davemloft.net
+Cc: netdev@vger.kernel.org,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	andrew+netdev@lunn.ch,
+	horms@kernel.org,
+	michael.chan@broadcom.com,
+	manishc@marvell.com,
+	joshwash@google.com,
+	hramamurthy@google.com,
+	tariqt@nvidia.com,
+	saeedm@nvidia.com,
+	daniel@iogearbox.net,
+	hawk@kernel.org,
+	sdf@fomichev.me,
+	willemb@google.com,
+	przemyslaw.kitszel@intel.com,
+	bpf@vger.kernel.org,
+	Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH net-next v2 0/9] net: make core auto-disable HW-GRO and LRO when XDP gets attached
+Date: Sat, 21 Nov 2026 17:01:03 -0800
+Message-ID: <20261122010112.1471146-1-kuba@kernel.org>
+X-Mailer: git-send-email 2.56.1
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -54,56 +73,63 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v2 0/7] bpf: Fixes for the verifier passes
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <179530465627.1212208.13881178207842835566.git-patchwork-notify@kernel.org>
-Date: Sat, 21 Nov 2026 23:44:16 +0000
-References: <20261121221344.3958866-1-alexei.starovoitov@gmail.com>
-In-Reply-To: <20261121221344.3958866-1-alexei.starovoitov@gmail.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- eddyz87@gmail.com, memxor@gmail.com
 
-Hello:
+XDP has no understanding of GSO frames. GSO frame looks to XDP
+like a large packet. Pushing / popping headers cannot be reflected
+in GSO metadata. XDP redirect is completely blind to GSO since
+struct xdp_frame carries no GSO fields.
 
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+For those reasons most (read: all well behaved?) drivers disable
+LRO and HW GRO when XDP is attached.
 
-On Sat, 21 Nov 2026 22:13:37 +0000 you wrote:
-> From: Alexei Starovoitov <ast@kernel.org>
-> 
-> Fixes for the series "bpf: Verify in passes, with equations in the state".
-> None of the bugs makes the verifier accept an unsafe program.
-> 
-> Patch 1: the build fails without CONFIG_NET.
-> Patches 2, 3 and 5: the path-sensitive run finds a failing path that the
-> program does not have. It cuts the budget, and a valid program is rejected.
-> Patch 4: the log shows only the last basic block, not the path to the error.
-> Patch 6: after a failed allocation a load gets -E2BIG in place of -ENOMEM.
-> Patch 7: nfp can refuse to attach a valid offloaded program.
-> 
-> [...]
+This series lifts the auto-clearing of HW-GRO and LRO from drivers
+up to netdev core. This gives us uniform behavior - previously some
+drivers would reject XDP attach w/ HW-GRO and others would auto-
+-clear the HW-GRO features.
 
-Here is the summary with links:
-  - [bpf-next,v2,1/7] bpf: Fix the build without CONFIG_NET
-    https://git.kernel.org/bpf/bpf-next/c/625e1bdc1db8
-  - [bpf-next,v2,2/7] bpf: Do not skip trips if the bound moves
-    https://git.kernel.org/bpf/bpf-next/c/d7db96e1c61b
-  - [bpf-next,v2,3/7] bpf: Mark a skip of trips as a guess if a 32-bit value wraps
-    https://git.kernel.org/bpf/bpf-next/c/e247bf610bee
-  - [bpf-next,v2,4/7] bpf: Do not lose the failing path if only an equation differs
-    https://git.kernel.org/bpf/bpf-next/c/e42c915f6a9f
-  - [bpf-next,v2,5/7] bpf: Drop a path of a path-sensitive run that is out of frames
-    https://git.kernel.org/bpf/bpf-next/c/5f2775434dc2
-  - [bpf-next,v2,6/7] bpf: Return -ENOMEM if the next partition has no memory
-    https://git.kernel.org/bpf/bpf-next/c/9ec090cadfe0
-  - [bpf-next,v2,7/7] bpf: Replay an offloaded program with the precision of the good pass
-    https://git.kernel.org/bpf/bpf-next/c/695ce5ca70fc
+More importantly (for me) after this series the HW-GRO/LRO features
+should consistently remain in wanted_features, and get re-enabled
+after XDP is detached. I started looking at this because XDP tests
+in NIPA unintentionally clear HW-GRO, which in turn makes devmem
+tests fail / skip on mlx5.
 
-You are awesome, thank you!
+Note that XDP generic is its own can of worms this series doesn't
+try to address. There are multiple paths (xdpgeneric, tun, veth...)
+which YOLO skbs into XDP without worrying about GSO state.
+And HW-GRO disabling w/ XDP generic is not propagated down to lowers.
+
+v2:
+ - new patch 2, convert gro_stats.py to the shared set_ethtool_feat()
+ - mlx5: drop the netdev_update_features() call from mlx5e_xdp_set(),
+   key XDP features off tcp-data-split
+ - qede: keep clearing NETIF_F_GRO_HW in qede_alloc_mem_rxq()
+v1: https://lore.kernel.org/20261118232315.3593731-1-kuba@kernel.org
+
+Jakub Kicinski (9):
+  net: stop making HW-GRO depend on SW GRO
+  selftests: drv-net: gro_stats: use the shared set_ethtool_feat()
+  selftests: drv-net: drop the generic XDP hack from the HW GRO setup
+  net: state the "XDP excludes HW-GRO" rule in the core
+  net: state the "XDP excludes LRO" rule in the core
+  eth: mlx5e: drop the now-dead HW-GRO and LRO vs XDP handling
+  eth: bnxt_en: don't clear HW-GRO and LRO for XDP in ndo_fix_features
+  eth: qede: drop the now-dead HW-GRO vs XDP handling
+  eth: gve: drop the now-dead HW-GRO vs XDP interlock
+
+ .../networking/net_cachelines/net_device.rst  |   1 +
+ include/linux/netdev_features.h   |   6 +
+ include/linux/netdevice.h |   6 +
+ .../net/ethernet/broadcom/bnx2x/bnx2x_cmn.c   |   2 +-
+ drivers/net/ethernet/broadcom/bnxt/bnxt.c |   5 +-
+ drivers/net/ethernet/google/gve/gve_main.c|  12 --
+ .../ethernet/mellanox/mlx5/core/en_ethtool.c  |   8 +-
+ .../net/ethernet/mellanox/mlx5/core/en_main.c |  40 +------
+ .../net/ethernet/qlogic/qede/qede_filter.c|  12 +-
+ net/core/dev.c| 107 ++++++++++++++----
+ .../testing/selftests/drivers/net/gro_lib.py  |  21 +---
+ .../selftests/drivers/net/hw/gro_stats.py |  54 +--------
+ 12 files changed, 118 insertions(+), 156 deletions(-)
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.56.1
 
