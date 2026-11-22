@@ -1,44 +1,44 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795377764;
-	b=bf0fE/YQI/jXrk24RwGY4mFQWh9IYwQf5mRvci55hWz1fGM1BNKvupGo4/x3KAUHBJ4F
-	 g98sq1nFsQTb5gNWE+LSsx8DJLJRwILfLWLtVXbNb/zsUbEkIzWlNJSwkv/NOgnyXAHNi
-	 XoHRy0sP/S9q6BG4NvB43spE95vPJBe7pxlW2KBeHHrK09QEIGS1rRFMhbnWpCfa+L4LF
-	 lGI2FxPvRWyw6lyixq41bR1BOie3VwJ1sq6ATIcGAPICA0cWoJAYuIWCkL5DfkC+QVewx
-	 vvvdhuvlz4ce13dqkCLUCEFjH6uv/VSFvgjR9dL8XP0Z7h8x56XDx8D3D2KKRfeCAzw==
+	t=1795377774;
+	b=eGs8OmoIo44jxf0vo3pHkH/pOFc4OPe3B7ydRXIjoi83Qm9+2NTFnABR7DAN7XJu6Lqt
+	 HeTZ7X3Yz56hmm24zNzIfaaricju44NVPYoFBr4nxDm3HPqkk7kSMwuTrjWgGp/yxA7ip
+	 2Wx2Wsa77awWVKig4V5OHmaOYzyNoW/Y1g9CdacbHBdUIoeyva0AcRaDRLbaAsawcxigF
+	 R6+9c+K9LulWfrfhvADYHNLbw3BKq+p+2wziM2J03wE+shjPh7qNHsZVGxO487uSEymK3
+	 HpVUtTJjwmEKR6Ltx4Sqw+ayCy8WDXowx4+PCDquys/pYSqEybkQOG3UdCSH1vQuEog==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795377764;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795377774;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=pMkwsGeFmNym3OzbToToZ481ja3lbFgl1IDUYm8MblA=;
-	b=mHlw4tslzOFeWUgXxLHmv6KFAqdYC2Tcdtj0Per7+3tRknBdYMLyW3uo4ub87ZRNXTYu
-	 hM4vYa7WB8itwqbwQXCOHd1veFJcV5Efdml5TEruoUz5wB3C40Rasr4rXcAMAhclNp9Ki
-	 K+YPrupHr8vf6Z7Gxp3BQZMCnhLwFSVG5hGOBWjL2ELYIBLy/uezdFGBeNs+tcEPkYnm1
-	 cUpywkOC5bS9QERWIRPhuHXGs2IAn9tFY0EmGCtC08/zy/yUvk49Sv26xyP3Ivzm2PFht
-	 BKcQjuvX2Knw8sGYiFPlxMf8V+RBwAnaN/BbmdOcQG0LS7hKphClJVTV98UZNhCq2ew==
+	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
+	bh=TB65jF6hw4RUhMI0oPmDv3OgO9hqAG9YZvDlgjcfX2s=;
+	b=vdhtD+kKz1ljlZtPhgjacvNv/dV4121AxvUTKVHR20c2za2gK6Rg8+EXdhSTO8LMV0rm
+	 B+ew0aPUtamrOZ2gzkwHEG08kfGbjEX4ewNVopCFk/s3N6BMWEEcfA7+htl610XYg5r5R
+	 68QTKSj6QqT3brpHg3URUJ4OfmWU5U+VLy9wfhE8q6niVrbXyVkmAqp7dA4bKTewOyyby
+	 pHPMJJ8Niq2OD/Neucsnqu142PwE0MnssCiZi/7BcNbo4UxFeBBVOaa+gCeQSwKxnE9tx
+	 GAZVe/Z9099lamG9Uu1E3l/vi/fT+dB+LZzLsVETqzssDNxm+4U+xV4je4xXSOi+e8Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="Zun7/Dpl";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EPMlWs93;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83C13606A31A;
-	Sun, 22 Nov 2026 20:02:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16C16606A31A;
+	Sun, 22 Nov 2026 20:02:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Zun7/Dpl
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C16A71F000C6;
-	Sun, 22 Nov 2026 20:02:41 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EPMlWs93
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66AE01F000CA;
+	Sun, 22 Nov 2026 20:02:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795377764;
-	bh=pMkwsGeFmNym3OzbToToZ481ja3lbFgl1IDUYm8MblA=;
-	h=From:To:Cc:Subject:Date;
-	b=Zun7/DplCWSw5lqUOySkd3OYY0S9kspejLyppqLyiqnZjmlI9jjG3l6T6V8JUbvVZ
-	 +3bhtyWFJNYmVZ8Zy6zgDzxSL1WyJ2SSdfnZCgn7RKOxPa71gVeT6ri8FsLWuCqmkt
-	 80XxN/JTLOxcVzr5Mkn+gQtewEaaxIZoEaCgNP6bXYpKrhNeQAG3Y1EwnMxlq3xMBo
-	 9psWdnGQ+eui9Wp9HDUaiccxXGkfrw4WkSA866CEoEAY1rTtzYlMVb30ujsgClQDG7
-	 QNZE86tq782mZ1sf8slLdi7SZupZV4LLywjVJIKtxnBteJwodKQeyd8TxnnxwXYlZG
-	 JLb+jgP1+9kEA==
+	s=k20260515; t=1795377773;
+	bh=TB65jF6hw4RUhMI0oPmDv3OgO9hqAG9YZvDlgjcfX2s=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=EPMlWs93prKb6gB3fOKf9Xhfe2DQS8LfJZBA6bCubisAuKnYnKvpgLoP/DCzqgyU7
+	 b7P8BVRiJp+gluSHMdTIxnrShOmHIpuDoYEVQSUD1TtpG+j0Zlc1mM/5HnHQbBfZpm
+	 GOhuWi8XvAbC+QwpwDoaCm9q9KkhxHt1lBpkRrkmnKlkdQEufPzliP7k+tKMdn1xo9
+	 16wX2jRNoP6V6GVDv7NB+MND810L3HcIXmxk6L3w88qLtbCVAOTFONMU7qqNTk+ZGv
+	 sZP1aDh4NhMWEuihBqXIFx9k9/OpswWfxkDxpw83e9py1sIwHwOMGDjYOyvukkLLQM
+	 I5ayjpx4yhK6g==
 From: Jiri Olsa <jolsa@kernel.org>
 To: Masami Hiramatsu <mhiramat@kernel.org>,
 	Naveen N Rao <naveen@kernel.org>,
@@ -50,10 +50,12 @@ Cc: Peter Zijlstra <peterz@infradead.org>,
 	linux-trace-kernel@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	bpf@vger.kernel.org
-Subject: [PATCHv2 0/2] kprobes: Reduce registration lookup costs
-Date: Sun, 22 Nov 2026 21:02:37 +0100
-Message-ID: <20261122200239.1481088-1-jolsa@kernel.org>
+Subject: [PATCHv2 1/2] kprobes: Increase the kprobe hash table size
+Date: Sun, 22 Nov 2026 21:02:38 +0100
+Message-ID: <20261122200239.1481088-2-jolsa@kernel.org>
 X-Mailer: git-send-email 2.56.1
+In-Reply-To: <20261122200239.1481088-1-jolsa@kernel.org>
+References: <20261122200239.1481088-1-jolsa@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -65,45 +67,75 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-hi,
-this is a smaller follow up to the v1 series [1]. This version does
-only partial fixes of what v1 addressed. Instead of the rbtree and
-iterators, it makes the existing per-address lookups cheaper:
+The kprobe hash table has 64 buckets, so with many probes registered
+each get_kprobe() call walks a long chain. With 20000 probes that is
+more than 300 entries per bucket on average, and every entry is a
+separate struct kprobe, so the walk is mostly cache misses.
 
-  - increase the kprobe hash table from 64 to 4096 buckets, so the
-    get_kprobe() calls done for every byte or decoded instruction
-    around the new probe walk short chains instead of 300+ entries
-    per bucket with 20000 probes
+get_kprobe() is not called just once per registered probe. On x86 the
+registration path calls it for each address it has to check around
+the new probe: get_optimized_kprobe(), __recover_probed_insn(),
+__recover_optprobed_insn() and arch_check_optimized_kprobe() all do
+one lookup per byte or per decoded instruction, and most of these
+lookups miss, which means walking the whole chain. It is also called
+from the breakpoint and ftrace handlers on every probe hit.
 
-  - use ftrace_location_range() in x86 __recover_probed_insn(), so we
-    skip the symbol lookup ftrace_location() does for every decoded
-    instruction that is not an ftrace location
+Increase KPROBE_HASH_BITS from 6 to 12, which gives 4096 buckets and
+cuts the chains to about 5 entries for 20000 probes and about 12
+entries for 50000 probes.
 
-Registering kprobes with the kprobe_many_example sample module [2] from
-v1 in a KVM guest goes from 4.71s to 1.30s for 20000 probes and from
-29.99s to 3.64s for 50000 probes with the hash table change, and the
-ftrace change brings 20587 probes from 4.02s to 3.70s. Please check the
-changelogs for more details, the first patch has numbers for different
-hash table sizes.
+Time to register the probes with the kprobe_many_example sample
+module [1] (insmod with nr_functions=20000 and nr_functions=50000)
+in a KVM guest, mean of 5 runs, for different KPROBE_HASH_BITS
+values. The table memory is the size of the static kprobe_table on
+64-bit:
 
-v2 changes:
-  - dropped the static_call/jump_label indexes and the kprobe rbtree
-    and iterators [will be addressed later]
-  - added hash table size increase and the ftrace_location_range
-    change for __recover_probed_insn
+  bits   buckets   table memory   20000 probes   50000 probes
+     6        64          512 B         4.71 s        29.99 s
+     8       256           2 KB         2.05 s         9.90 s
+    10      1024           8 KB         1.39 s         4.63 s
+    12      4096          32 KB         1.30 s         3.64 s
+    14     16384         128 KB         1.28 s         3.41 s
+    16     65536         512 KB         1.28 s         3.38 s
 
-thanks,
-jirka
+With 12 bits the registration of 20000 probes is 3.6 times faster
+and the registration of 50000 probes is 8.2 times faster than with
+the current 6 bits. 12 bits is where the curve flattens: compared
+to 10 bits it is still 21% faster for 50000 probes (6% for 20000),
+while going further to 16 bits gains only 1.5% for 20000 probes and
+7% for 50000 probes, for a table 16 times bigger (512KB vs 32KB).
 
+The cost is the size of the static table, which grows from 64 to
+4096 hlist heads, that is from 512 bytes to 32KB on 64-bit. The
+functions that walk the whole table (module notifier, arming or
+optimizing all probes, the debugfs list) are slow paths that take
+kprobe_mutex and now scan 4096 buckets.
 
-[1] https://lore.kernel.org/bpf/20261109194916.1089703-1-jolsa@kernel.org/                                                       
-[2] https://lore.kernel.org/bpf/20261109195827.1091410-1-jolsa@kernel.org/           
+The sample module was posted as the last patch of the kprobes
+lookup cost series [1] only to demonstrate the testing, it is not
+merged and is not going to be.
+
+[1] https://lore.kernel.org/bpf/20261109195827.1091410-1-jolsa@kernel.org/
+
+Suggested-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
-Jiri Olsa (2):
-      kprobes: Increase the kprobe hash table size
-      x86/kprobes: Use ftrace_location_range in __recover_probed_insn
+ kernel/kprobes.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- arch/x86/kernel/kprobes/core.c | 6 +++++-
- include/linux/ftrace.h         | 4 ++++
- kernel/kprobes.c               | 2 +-
- 3 files changed, 10 insertions(+), 2 deletions(-)
+diff --git a/kernel/kprobes.c b/kernel/kprobes.c
+index f14f7ff45961..47ce0bfb7298 100644
+--- a/kernel/kprobes.c
++++ b/kernel/kprobes.c
+@@ -50,7 +50,7 @@
+ #include <asm/errno.h>
+ #include <linux/uaccess.h>
+ 
+-#define KPROBE_HASH_BITS 6
++#define KPROBE_HASH_BITS 12
+ #define KPROBE_TABLE_SIZE (1 << KPROBE_HASH_BITS)
+ 
+ #if !defined(CONFIG_OPTPROBES) || !defined(CONFIG_SYSCTL)
+-- 
+2.56.1
+
