@@ -1,50 +1,51 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.168
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.185
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795320858;
-	b=4nlegT0KM/FNmmc9efr9sh3yzbYLSosZQjk3SnxpZ8JOx1scBYgOE5UlwnhDqFlHoA7D
-	 qIeViXGp9EMCxcW+8qxjJpWMKTESbKvL1fMuFl+f52UEBHtXHpauw3LS5q4A2d1UMS/ni
-	 CSiEp2t0NpK+3iVqJqGOeVmqQjo1ZQwSliOCjVEGLPnDHMeSEUtqpDeHkDjcsf46MR1GS
-	 aC39ApMB96bay9KMBrCOmokFSGJDcRZAdOs0dpQhWz0DwWNF14OGNndfmm16AvETfmP17
-	 3mXi03FeeQ1gIi3588T4Ob/Wyc/CCaaYF3TLJOjYYMofXleWjswsIRQtRSNao9VMgPg==
+	t=1795320875;
+	b=gD7lfLBba7ih0g1j5NC7ufRrzCNS+P4mFxx3QN9kF+maXzFsUgK/xFbn0/ztmDWr/wQq
+	 V8fMRZpXCUbcuqFSMFA9JrpaK7L+yMC8PpZTxEHyHkUqf3Ht2YeH641+T9sV+gxavIjQL
+	 k8dWdmXRhY3mdpXPUSqlqJxIBZpxn9pbsIZdZ9XKIUnTzCKlW+2KMHRCqsAspKx2cviAq
+	 5DaTYgckCc2001E7cyQAFAjKePe/OfttT9zU1DkAe8PNfX5voYIJycF+ms3yWbSSwPhCb
+	 Rv6WynDA9KQKCUU++nKGzTLhfkVffqeUWhz+/u9/fp86/alqpp5xKC+ptnrFcJ4ZOzw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795320858;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795320875;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=ovhfiZCiK2Bm+u0ZTIh1E/1dbAZEVus4SnOMTgCTbrg=;
-	b=4LBrkRZVRy0pTLL7a1ZJZGIJUv6/fEXylny396d8Vu4yaz1mLV/bKe7C/azxpByckpVw
-	 6kR+RXXvWGta+s9VYeIFEv/CJYAUAmCIhGIEV/g80IVExdZtaQZ0UYS9cZyjjIDqy80JL
-	 ZrjwFcnQ7kuu9GbmJLNG/uzHH/uxVvcDjj/B90GflzB8qJj7pERWKwMNTe5DQYOIf+Dyi
-	 p9ayUy81QN/rYLhZC/jEEzcWp/IVgTBXTIeJgtlVXiciM+N/+Y6JKA8ff/kWnsslygCmh
-	 zNrNLBy55MgZ7gPvOtYSavJ8hAJjCnWIUPSF4Oa1H3w9qeC1Vs1L/tC7I3fjvqZ8tfA==
+	 X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=Lb38nMxOfAlLbtezAc3dRCaDpF4QbPhXFYzRnbMlPHM=;
+	b=BvUZgoj6ErEYCoYBnGi88BgNETYHXZxJTtSPSjU6wikQqOcbETYyoV7B7kF3Pqbkm46q
+	 RKehF7CJfIm65AevLTp/VqdQKBVpawM+/ZtaVbb5keU3QnS8edGjUCVkUL7uo63ErDR0O
+	 dN8y4VdSE3V+9btaDWdPqkpWJEQEvD7i8ewph2TeV1UXJy5wz5vEnpQP6y5QOh2Hc3P+W
+	 4DMqBX5xLBnZwPEwsW6LQQ1bhTPzTu+kXa3xXQpJZhm8O21TMV4F0zK8O7rXaOdGjvg8D
+	 aL7WMF57CbPABea8jyKX3E8iX2eeaQ3FdMUPG+cfJYwkX+zo835/G3n2GUPTkvvld+w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="qmRc/TEC";
-	arc=none smtp.remote-ip=91.218.175.168
-Received: from mta0.migadu.com (out-168.mta0.migadu.com [91.218.175.168])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=SQznjq0P;
+	arc=none smtp.remote-ip=95.215.58.185
+Received: from mta1.migadu.com (out-185.mta1.migadu.com [95.215.58.185])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E471606A32A
-	for <bpf@vger.kernel.org>; Sun, 22 Nov 2026 04:14:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4E471606A32A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B9D0606A320
+	for <bpf@vger.kernel.org>; Sun, 22 Nov 2026 04:14:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6B9D0606A320
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=qmRc/TEC
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=SQznjq0P
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=H3duOZOezSAvkuuzvi1NeX54BSSVFIMmojI8WBcgCT8=;
+DKIM-Signature: a=rsa-sha256; bh=JwIXtkgmQnvWYqCsXOrCGYCDMk1uEahCPH3Tnd+gNFQ=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1795320855; v=1; x=1795925655;
- b=qmRc/TECqXbMJE0Yq15LydImnMtjR6cZ8pjNiHoiHlRnjtWns1iRhcKRFHS7P1TohoJWbMEi
- oJBpjGe+UgiogqHN9SvgwFB6N8dSPAs+IUSl4NYR+thjyHTBQV/AmbklxDdaZgKx0SmdoroZBgF
- pbo2Ic/6NwL83kDIgEXHWcXU=
+ t=1795320872; v=1; x=1795925672;
+ b=SQznjq0PzjWacY5RI7IZkMLtQnykYNY8Tvxkbs3v6aYyOkRT1jWsxRVQ9cyGg4KgacMJPzkT
+ DcCXJ0tUqRPByE3VDe86g6IJDnYIAfbYRYQEbXTE9FiR7wq5yHZNdQ7gRxaVoRhsn0PebYt746L
+ j/VRHVpxmDZSqaR6/g4mBTPo=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 8150b656d19c1e71;
-	Sun, 22 Nov 2026 04:14:15 +0000
-X-Mizu-Trace-ID: 8150b656d19c1e71
+Received: by smtp.migadu.com with ESMTPS id 1dac3f365d5e8237;
+	Sun, 22 Nov 2026 04:14:32 +0000
+X-Mizu-Trace-ID: 1dac3f365d5e8237
 X-Migadu-Flow: FLOW_OUT
 From: Jiayuan Chen <jiayuan.chen@linux.dev>
 To: bpf@vger.kernel.org
@@ -54,30 +55,32 @@ Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
 	Jakub Kicinski <kuba@kernel.org>,
 	Paolo Abeni <pabeni@redhat.com>,
 	Simon Horman <horms@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
 	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
 	Martin KaFai Lau <martin.lau@linux.dev>,
 	Song Liu <song@kernel.org>,
 	Yonghong Song <yonghong.song@linux.dev>,
 	Jiri Olsa <jolsa@kernel.org>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
 	Shuah Khan <shuah@kernel.org>,
+	Xuanqiang Luo <luoxuanqiang@kylinos.cn>,
 	Fernando Fernandez Mancera <fmancera@suse.de>,
 	Junseo Lim <zirajs7@gmail.com>,
-	Xuanqiang Luo <luoxuanqiang@kylinos.cn>,
 	Leon Hwang <leon.hwang@linux.dev>,
 	Yuqiang Sun <izaiahsun@gmail.com>,
 	Peter Oskolkov <posk@google.com>,
 	netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf 1/2] bpf: lwt: fix NULL deref in IPv6 reroute
-Date: Sun, 22 Nov 2026 12:13:45 +0800
-Message-ID: <20261122041401.189733-1-jiayuan.chen@linux.dev>
+Subject: [PATCH bpf 2/2] selftests/bpf: test lwt_xmit reroute of an IPv4-in-IPv6 encap
+Date: Sun, 22 Nov 2026 12:13:46 +0800
+Message-ID: <20261122041401.189733-2-jiayuan.chen@linux.dev>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20261122041401.189733-1-jiayuan.chen@linux.dev>
+References: <20261122041401.189733-1-jiayuan.chen@linux.dev>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -89,64 +92,108 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-After an lwt prog pushed an IPv6 header, bpf_lwt_xmit_reroute() hands
-skb->sk to ip6_dst_lookup_flow(). When the flow has no source address,
-the lookup reads inet6_sk(sk)->srcprefs, and inet6_sk() is NULL for
-example when:
+Add a test where an lwt_xmit prog pushes an IPv6 header with a ::
+source on an IPv4 packet and reroutes. On an unfixed kernel this
+dereferences inet6_sk() of the IPv4 socket and crashes; here reaching
+the end is the pass.
 
- - skb->sk is a request_sock, e.g. for a SYN-ACK.
- - skb->sk is an IPv4 socket, the IPv6 header was pushed on an IPv4
-   packet.
-
-KASAN: null-ptr-deref in range [0x0000000000000040-0x0000000000000047]
-RIP: 0010:ip6_route_output_flags+0x279/0x4c0
-Call Trace:
- <TASK>
- ip6_dst_lookup_tail.constprop.0+0x26e/0x1050
- ip6_dst_lookup_flow+0x101/0x1e0
- bpf_lwt_xmit_reroute+0xc18/0x18b0
- bpf_xmit+0x28f/0x400
- lwtunnel_xmit+0x2a7/0x620
- ip_finish_output2+0xa67/0x1f80
- __ip_finish_output+0x510/0x7e0
- ip_finish_output+0x2f/0x320
- ip_output+0x171/0x3e0
- ip_push_pending_frames+0x200/0x260
- raw_sendmsg+0x114c/0x3680
- inet_sendmsg+0xdf/0x100
- __sys_sendto+0x3ef/0x500
- __x64_sys_sendto+0xe0/0x1b0
- x64_sys_call+0x1375/0x27e0
- do_syscall_64+0xe7/0x630
- entry_SYSCALL_64_after_hwframe+0x76/0x7e
- </TASK>
-
-Pass the full socket, and no socket if it is not an IPv6 one while the
-flow has no source address.
-
-Fixes: 3bd0b15281af ("bpf: add handling of BPF_LWT_REROUTE to lwt_bpf.c")
 Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 ---
- net/core/lwt_bpf.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ .../selftests/bpf/prog_tests/lwt_reroute.c    | 20 ++++++++++++++--
+ .../selftests/bpf/progs/test_lwt_reroute.c    | 24 +++++++++++++++++++
+ 2 files changed, 42 insertions(+), 2 deletions(-)
 
-diff --git a/net/core/lwt_bpf.c b/net/core/lwt_bpf.c
-index 72c86ff2a847..33f710d92106 100644
---- a/net/core/lwt_bpf.c
-+++ b/net/core/lwt_bpf.c
-@@ -278,7 +278,11 @@ static int bpf_lwt_xmit_reroute(struct sk_buff *skb)
- 		fl6.daddr = iph6->daddr;
- 		fl6.saddr = iph6->saddr;
+diff --git a/tools/testing/selftests/bpf/prog_tests/lwt_reroute.c b/tools/testing/selftests/bpf/prog_tests/lwt_reroute.c
+index 6c50c0f63f43..01387c0f1b19 100644
+--- a/tools/testing/selftests/bpf/prog_tests/lwt_reroute.c
++++ b/tools/testing/selftests/bpf/prog_tests/lwt_reroute.c
+@@ -18,8 +18,8 @@
+  *
+  *    ip route add 10.0.0.0/24 encap bpf xmit <obj> sec "<section_N>" dev link_err
+  *
+- *  Here <obj> is statically defined to test_lwt_reroute.bpf.o, and it contains
+- *  a single test program entry. This program sets packet mark by last byte of
++ *  Here <obj> is statically defined to test_lwt_reroute.bpf.o.
++ *  The lwt_xmit program sets packet mark by last byte of
+  *  the IPv4 daddr. For example, a packet going to 1.2.3.4 will receive a skb
+  *  mark 4. A packet will only be marked once, and IP x.x.x.0 will be skipped
+  *  to avoid route loop. We didn't use generated BPF skeleton since the
+@@ -42,6 +42,7 @@
+  * --------------------------------
+  *  1. Reroute to a running tun device
+  *  2. Reroute to a device where qdisc drop
++ *  3. Reroute an IPv4 packet with a pushed IPv6 header
+  *
+  *  For case 1, ping packets should be received by the tun device.
+  *
+@@ -241,11 +242,26 @@ static void test_lwt_reroute_qdisc_dropped(void)
+ 		close(tun_fd);
+ }
  
--		dst = ip6_dst_lookup_flow(net, skb->sk, &fl6, NULL);
-+		if (ipv6_addr_any(&fl6.saddr) &&
-+		    sk && sk->sk_family != AF_INET6)
-+			sk = NULL;
++static void test_lwt_reroute_push6(void)
++{
++	SYS(out, "ip link add link_err type dummy");
++	SYS(out, "ip link set lo up");
++	SYS(out, "ip addr add dev lo " LOCAL_SRC "/32");
++	SYS(out, "ip link set link_err up");
++	SYS(out, "ip route add %s dev link_err encap bpf xmit obj %s sec push6_zerosrc",
++	    TEST_CIDR, BPF_OBJECT);
 +
-+		dst = ip6_dst_lookup_flow(net, sk, &fl6, NULL);
- 		if (IS_ERR(dst)) {
- 			err = PTR_ERR(dst);
- 			goto err;
++	ping_once("10.0.0.2");
++out:
++	return;
++}
++
+ static void *test_lwt_reroute_run(void *arg)
+ {
+ 	netns_delete();
+ 	RUN_TEST(lwt_reroute_normal_xmit);
+ 	RUN_TEST(lwt_reroute_qdisc_dropped);
++	RUN_TEST(lwt_reroute_push6);
+ 	return NULL;
+ }
+ 
+diff --git a/tools/testing/selftests/bpf/progs/test_lwt_reroute.c b/tools/testing/selftests/bpf/progs/test_lwt_reroute.c
+index 1dc64351929c..c969962926e6 100644
+--- a/tools/testing/selftests/bpf/progs/test_lwt_reroute.c
++++ b/tools/testing/selftests/bpf/progs/test_lwt_reroute.c
+@@ -4,7 +4,9 @@
+ #include <bpf/bpf_endian.h>
+ #include <bpf/bpf_helpers.h>
+ #include <linux/if_ether.h>
++#include <linux/in.h>
+ #include <linux/ip.h>
++#include <linux/ipv6.h>
+ 
+ /* This function extracts the last byte of the daddr, and uses it
+  * as output dev index.
+@@ -33,4 +35,26 @@ int test_lwt_reroute(struct __sk_buff *skb)
+ 	return BPF_LWT_REROUTE;
+ }
+ 
++SEC("push6_zerosrc")
++int test_lwt_reroute_push6(struct __sk_buff *skb)
++{
++	struct ipv6hdr h = {};
++
++	h.version = 6;
++	h.payload_len = bpf_htons(skb->len);
++	h.nexthdr = IPPROTO_IPIP;
++	h.hop_limit = 64;
++	/* 2001:db8::3, a fake address */
++	h.daddr.s6_addr[0] = 0x20;
++	h.daddr.s6_addr[1] = 0x01;
++	h.daddr.s6_addr[2] = 0x0d;
++	h.daddr.s6_addr[3] = 0xb8;
++	h.daddr.s6_addr[15] = 0x03;
++
++	if (bpf_lwt_push_encap(skb, BPF_LWT_ENCAP_IP, &h, sizeof(h)))
++		return BPF_DROP;
++
++	return BPF_LWT_REROUTE;
++}
++
+ char _license[] SEC("license") = "GPL";
 -- 
 2.43.0
 
