@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795366985;
-	b=yWXPARUbnaiMShrBK3jg9A1GMszP+C6sZgzB68XWIWcQn9nQejauVS7G2sneFS1FAbS/
-	 QpmiDNjkPIeylt3sQas7hGz4tSNl7rvBSQQXarlf1gFY4IkaCT92PNKAZf/YjZnYXA57k
-	 LsrqFjcPkNsMTdXj4rwsFHFqAsuMZwxMEscRzlUjBgwIRJTQAk5Kp29DiZGvDPBGvvJB8
-	 IkbfnS/K0/cYg2CeEoHna9SttXyayV83Fqo4o1T0oiDViCptazW9PAoGjkWnouBV4RJ5e
-	 lepCdp03gvYg8+WYrEVDoatE3m+oNPKS2oIW19pJ8AAFg6wHCVszAPGjfv1Sa3jl4yA==
+	t=1795366988;
+	b=Xp5yt23u4YQmSS6zgLgA/Qp8zJdtZuI4gvhNp6M4W5kl4O0nO10mLgb5Uu2goVCAHK6Y
+	 tc8PbcoDL8Ox1adCJTowOYofG2EJL27Egm5/jrs6SMjNCBkxO3TERS9LbOXvCqS9VTg68
+	 bshVBgmhMofBidLl7kzCkP8+8hRi+NGeGhv21LkLqzaeDmqHtSD3mx5QJw2BfPdG3O7o5
+	 3cMK9sqSthfjdoJA7c7Ee2pGC1qjrK5ylV3LOWFN/P9ogV1hAgqw72hI/zzaXw5syPgiw
+	 tjsC5s4Am+BlT2AMQF9AeXlR2JVqBHbhw39zWlRGU3AzdX11/7NMmYHRQq9YNm6KXwA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795366985;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795366988;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=1U39VImRUhp4ZBzFGdbAkw/lcqCBqDe+o06gGUsa4/o=;
-	b=SEZ2F75eSLsnXzRVIVvetowglLlHDWgrWLcSkOvzPC735pWcOE/79OHkJyZWz+zG2eXm
-	 /o+xSJhtRzeD7wO2ug1/ndn6Ak0de6YTUdUMlK6tuubzd1HLmAQqK+hF78Hlk/AfEIVPp
-	 87NEk3T4cdaXRvUsEMvZvaN7ObDI++MEqLjAEBG1NAKwYfYzHJdprauatF5+19KDRL0Jv
-	 7ujYsE31d8Wkf64coCgooFxyCf8Yu4srEAntxcIvKL043YTzWf04LyQbFaM7+HEFLb+Hu
-	 W/Q4aNe32jTDsXfKi0okS7J6ccfKdIdXPyn5lQ26Y9codR94QviFNd+hciEouu81c8A==
+	bh=tKhzkg2IcBGze+CxoAN70ZFX+EAkROqVI34Vr2dBnmk=;
+	b=q17h2E/BMvlrPqAYZMXEcMC4qDi2hiLKe8hvkz8grnARHAJpdbr/VrmSkw91FJj28nJG
+	 tTJVYeldMTRqds5L1e5AaOXz/5Uya9TKoZRgf1COL4nivGbF1wxLaGJtU5nE2M5dNGYjc
+	 UAHvRmpZcyOQruIpiaDxVjBmnOMDi2Tw4b7YG8OMuozESqj4RTYZKQi7kpcVVEdTZN9sI
+	 XmxgNqW+w8rRBAEcT4aVocnJCVw+lbKRdDjzUZtxaRC1P3GBcUIvdYb//GbkL41J1fHTn
+	 f+4QglafFpEaM7fa/iigkF71roG6+Y7zCI0heG3J79y1L2nfjSF+LSjKH+NRzbOnZOg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Je6sYNZ7;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="bry/fTFW";
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8074B606A330;
-	Sun, 22 Nov 2026 17:03:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB2B9606A320;
+	Sun, 22 Nov 2026 17:03:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Je6sYNZ7
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 000BE1F000E1;
-	Sun, 22 Nov 2026 17:03:03 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bry/fTFW
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 232791F000D1;
+	Sun, 22 Nov 2026 17:03:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795366984;
-	bh=1U39VImRUhp4ZBzFGdbAkw/lcqCBqDe+o06gGUsa4/o=;
+	s=k20260515; t=1795366987;
+	bh=tKhzkg2IcBGze+CxoAN70ZFX+EAkROqVI34Vr2dBnmk=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=Je6sYNZ7Mn1hfGA9wyZY1iCO0nfMe5juzivmGgGrbj/GgFZDIVIRBO/amJC0MgTLi
-	 I8u8AdjCkWztpOGOT8oibjMVEYa4+M4bofxoe8ZoJiZ2WssyQTlZfxWlMn1cZGZ62H
-	 t7qL0284Sq1fj0/47a3Sm1rWhdK9GkI6EVKvaDu1KNNOCHrdwE0fXJr4vK5yoIYEKI
-	 WXLsmw+DzEaDgnYrQleN5vQoFtBUaTL3Huezkl95h7QA5wvGh98hhhxtQAaPd09sw8
-	 Ol8RXNFep06chNqKewrhwZb9qfUVtzRv8jQiLF68Up9xMHRnHykzlCev/EEx16/2oZ
-	 i9BIDbdI9PZHQ==
-Subject: Re: [PATCH net-next 3/8] net: state the "XDP excludes HW-GRO" rule in
- the core
+	b=bry/fTFW2Rhimg2R7W5IzW3K3pdl+kgU1/Fe4HuB02G9o+7RzOck+ndo08OHnCynd
+	 xYoCKSy95o6fPwXgD7yQDFGVaiLP9X2Wg7s4gIy019PaGvcErHNCTw1sxTDLimCniK
+	 pGV7luUH41OYgp4CM+Hs2FaWZthbioDiX51E9ej+TzOP9U6jBks3ii0ptnIO+/uX2A
+	 r416FidpBl+VSsuKrpdoxWguuA0I6pEh7HI131qFmWUXGkMtCtXSjsgpK0rkWDBved
+	 zMUSMQNp8Mx+nKwtfeAqiAObXzbBT/9i3aHJzFCuoC7P+WGJKtm8dPVWSG4ngjHDUu
+	 krWJ5I7d9W0og==
+Subject:
+ Re: [PATCH net-next 4/8] net: state the "XDP excludes LRO" rule in the core
 From: netdev-bot+sashiko@kernel.org
 To: kuba@kernel.org
 Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
@@ -50,10 +50,10 @@ Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
  hramamurthy@google.com, tariqt@nvidia.com, saeedm@nvidia.com,
  daniel@iogearbox.net, hawk@kernel.org, sdf@fomichev.me, willemb@google.com,
  przemyslaw.kitszel@intel.com, bpf@vger.kernel.org
-Date: Sun, 22 Nov 2026 17:03:03 +0000
-Message-ID: <179536698358.3135.1764700076873359155@kernel.org>
-In-Reply-To: <20261118232315.3593731-4-kuba@kernel.org>
-References: <20261118232315.3593731-4-kuba@kernel.org>
+Date: Sun, 22 Nov 2026 17:03:05 +0000
+Message-ID: <179536698568.3135.6742683441314879200@kernel.org>
+In-Reply-To: <20261118232315.3593731-5-kuba@kernel.org>
+References: <20261118232315.3593731-5-kuba@kernel.org>
 X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -67,10 +67,10 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 3 potential
+Thank you for your contribution! Sashiko AI review found 4 potential
 issue(s) to consider.
 
-Critical: 0 · High: 0 · Medium: 2 · Low: 1
+Critical: 0 · High: 0 · Medium: 1 · Low: 3
 
 If you believe none of the issues are legitimate, please reply to each
 issue of Medium severity or higher and explain why the AI is wrong.
@@ -78,170 +78,194 @@ If any of them are legitimate and you plan to respin, please let patchwork
 know by including "pw-bot: cr" as a separate line at the end of your reply
 (one such reply per series is enough).
 
-- [Medium] Generic (SKB-mode) XDP attach now fails on devices where
-  NETIF_F_GRO_HW is fixed on, i.e. present in dev->features but missing…
-- [Medium] dev_xdp_attach() now sets dev->xdp_pending = 1 and calls
-  dev_xdp_clear_rx_agg() before dev_xdp_install() runs its validation.
-- [Low] The commit fixes concrete user-visible bugs but carries no Fixes:
-  tag.
+- [Medium] A failed XDP attach now permanently turns LRO off on the
+  lowers of an upper device such as a bond.
+- [Low] The netvsc documentation still tells users to disable LRO by hand
+  before attaching XDP: "XDP program cannot run with LRO (RSC) enabled,…
+- [Low] The atlantic driver still encodes the old rule that LRO conflicts
+  only with single-buffer XDP.
+- [Low] The comment above the XDP feature clearing in
+  __netdev_update_features() (net/core/dev.c:11439-11441) still covers…
 
 --
 
-net: state the "XDP excludes HW-GRO" rule in the core
+net: state the "XDP excludes LRO" rule in the core
 
-This commit moves the "XDP excludes HW-GRO" policy into the core. While an
-XDP program is attached or pending, __netdev_update_features() now clears
-NETIF_F_GRO_HW. The XDP attach paths call a new helper,
-dev_xdp_clear_rx_agg(), which refuses the attach if HW-GRO cannot be
-turned off, and the warn-only dev_disable_gro_hw() is removed.
+This commit adds NETIF_F_XDP_DISABLES (GRO_HW | LRO). With it, the core
+clears LRO next to HW-GRO when an XDP program is attached, and refuses the
+attach if the driver keeps LRO on. It also drops netif_disable_lro() from
+generic_xdp_install(), so LRO comes back on the device after detach.
 
-> The device also lost the bit from wanted_features for good, so HW-GRO
-> never came back after detach - on mlx5 that took header-data split
-> with it, and with it devmem and io_uring zero-copy Rx.
->
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> diff --git a/include/linux/netdev_features.h b/include/linux/netdev_features.h
+> index 8eb6b80336065..62a05df8ee686 100644
+> --- a/include/linux/netdev_features.h
+> +++ b/include/linux/netdev_features.h
+> @@ -234,6 +234,12 @@ static inline int find_next_netdev_feature(u64 feature, unsigned long start)
+>   */
+>  #define NETIF_F_UPPER_DISABLES	NETIF_F_LRO
+>  
+> +/*
+> + * Receive offloads which coalesce frames. XDP has to see the frames as the
+> + * wire delivered them, so these are disabled while a program is attached.
+> + */
+> +#define NETIF_F_XDP_DISABLES	(NETIF_F_GRO_HW | NETIF_F_LRO)
 
 [Severity: Low]
-Should this carry a Fixes: tag? Two things combine to cause the splat and
-the permanent loss of NETIF_F_GRO_HW from wanted_features:
+The commit message says atlantic now loses LRO under multi-buffer programs
+too. Should the atlantic driver be updated to match? It still has the
+single-buffer-only rule:
 
-  - the HDS-forces-GRO_HW logic in mlx5e_fix_features()
-  - the warn-and-continue behavior of dev_disable_gro_hw()
+drivers/net/ethernet/aquantia/atlantic/aq_main.c:aq_ndev_fix_features() {
+    ...
+	prog = READ_ONCE(aq_nic->xdp_prog);
+	if (prog && !prog->aux->xdp_has_frags &&
+	    aq_nic->xdp_prog && features & NETIF_F_LRO) {
+		netdev_err(ndev, "LRO is not supported with single buffer XDP, disabling\n");
+		features &= ~NETIF_F_LRO;
+	}
+    ...
+}
 
-The mlx5 logic was added by:
+__netdev_update_features() now removes LRO before ndo_fix_features()
+whenever dev_xdp_prog_count() is non-zero. That makes this branch dead.
 
-  Fixes: 46bcce5dfd33 ("net/mlx5e: Support ethtool tcp-data-split settings")
+aq_xdp_setup() also still writes ndev->features directly:
 
-Without a tag, stable and backport tooling can't tell which kernels are
-affected. If the series is meant only for net-next, this can be ignored.
+		if (prog && ndev->features & NETIF_F_LRO) {
+			netdev_err(ndev,
+				   "LRO is not supported with single buffer XDP, disabling\n");
+			ndev->features &= ~NETIF_F_LRO;
+		}
 
+This check can no longer be true, because the core cleared LRO with
+xdp_pending set before ndo_bpf runs.
+
+Later patches in the series remove similar handling from mlx5, bnxt, qede
+and gve. Nothing in the series touches drivers/net/ethernet/aquantia/.
+
+[Severity: Low]
+Documentation/networking/device_drivers/ethernet/microsoft/netvsc.rst
+still says:
+
+  XDP program cannot run with LRO (RSC) enabled, so you need to disable LRO
+  before running XDP::
+
+	ethtool -K eth0 lro off
+
+Should this text be updated? netvsc puts NETIF_F_LRO in hw_features when
+the host supports RSC. So dev_xdp_clear_rx_agg() now clears LRO before
+netvsc_bpf()->netvsc_xdp_set() runs. The "XDP: not support LRO" refusal in
+netvsc_xdp_set() can no longer be reached from the core attach paths.
+
+The document also doesn't say that LRO now comes back when the program is
+detached.
+
+> +
+>  /* changeable features with no special hardware requirements */
+>  #define NETIF_F_SOFT_FEATURES	(NETIF_F_GSO | NETIF_F_GRO)
+>  
 > diff --git a/net/core/dev.c b/net/core/dev.c
-> index d88af07aea290..c0bb5eb9fdea0 100644
+> index c0bb5eb9fdea0..2b9c7aac09693 100644
 > --- a/net/core/dev.c
 > +++ b/net/core/dev.c
 
 [ ... ]
 
-> @@ -10612,6 +10594,32 @@ static void dev_xdp_set_prog(struct net_device *dev, enum bpf_xdp_mode mode,
->  	dev->xdp_state[mode].prog = prog;
->  }
->  
-> +/* Try to clear HW-GRO before the driver reconfigures for XDP.
-> + * Driver may add features back in via ndo_fix_features(), due to feature
-> + * dependencies. In that case we can't run XDP at all.
-> + */
-> +static int dev_xdp_clear_rx_agg(struct net_device *dev,
-> +				struct netlink_ext_ack *extack)
-> +{
-> +	if (!(dev->features & NETIF_F_GRO_HW))
-> +		return 0;
-> +	if (!(dev->hw_features & NETIF_F_GRO_HW)) {
-> +		NL_SET_ERR_MSG(extack,
-> +			       "unable to disable HW-GRO, fixed on");
-> +		return -EOPNOTSUPP;
-> +	}
-
-[Severity: Medium]
-Does this stop generic XDP from attaching to virtio_net devices where
-GRO_HW is fixed on?
-
-virtnet_probe() adds GRO_HW to dev->features whenever GUEST_TSO4/6 is
-negotiated. It only adds it to hw_features when CTRL_GUEST_OFFLOADS is
-negotiated, and that needs the optional ctrl vq:
-
-drivers/net/virtio_net.c:virtnet_probe() {
-    ...
-	if (virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_TSO4) ||
-	    virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_TSO6))
-		dev->features |= NETIF_F_GRO_HW;
-    ...
-	if (virtio_has_feature(vdev, VIRTIO_NET_F_CTRL_GUEST_OFFLOADS) &&
-	    (vi->guest_offloads_capable & GUEST_OFFLOAD_GRO_HW_MASK))
-		dev->hw_features |= NETIF_F_GRO_HW;
-    ...
-}
-
-Before this patch, generic_xdp_install()->dev_disable_gro_hw() printed
-the "failed to disable GRO_HW!" warning and then attached the program
-anyway. Now dev_xdp_attach()->dev_xdp_clear_rx_agg() returns -EOPNOTSUPP
-before dev_xdp_install() is reached.
-
-virtnet_xdp_set() already refuses native XDP on these setups:
-
-drivers/net/virtio_net.c:virtnet_xdp_set() {
-    ...
-		NL_SET_ERR_MSG_MOD(extack, "Can't set XDP while host is implementing GRO_HW/CSUM, disable GRO_HW/CSUM first");
-		return -EOPNOTSUPP;
-    ...
-}
-
-So xdpgeneric was the only option left, for example for loaders that fall
-back from native to SKB mode.
-
-The refusal matches the new rule. Even so, could the commit message say
-that generic XDP attaches which used to succeed are now rejected? The
-check is still there at the end of the series, where it also covers LRO.
+> @@ -10594,26 +10593,35 @@ static void dev_xdp_set_prog(struct net_device *dev, enum bpf_xdp_mode mode,
 
 [ ... ]
 
-> @@ -10875,19 +10900,36 @@ static int dev_xdp_attach(struct net_device *dev, struct netlink_ext_ack *extack
->  			return -EOPNOTSUPP;
->  		}
->  
-> +		if (new_prog) {
-> +			dev->xdp_pending = 1;
-> +			err = dev_xdp_clear_rx_agg(dev, extack);
-> +			if (err)
-> +				goto err_clear_pending;
-> +		}
+>  static int dev_xdp_clear_rx_agg(struct net_device *dev,
+>  				struct netlink_ext_ack *extack)
+>  {
+> -	if (!(dev->features & NETIF_F_GRO_HW))
+> +	netdev_features_t agg = dev->features & NETIF_F_XDP_DISABLES;
 > +
->  		err = dev_xdp_install(dev, mode, bpf_op, extack, flags, new_prog);
->  		if (err)
-> -			return err;
-> +			goto err_clear_pending;
+> +	if (!agg)
+>  		return 0;
+> -	if (!(dev->hw_features & NETIF_F_GRO_HW)) {
+> -		NL_SET_ERR_MSG(extack,
+> -			       "unable to disable HW-GRO, fixed on");
+> +	if (agg & ~dev->hw_features) {
+> +		NL_SET_ERR_MSG_FMT(extack, "unable to disable %s, fixed on",
+> +				   dev_xdp_rx_agg_name(agg & ~dev->hw_features));
+>  		return -EOPNOTSUPP;
 >  	}
+>  
+>  	netdev_update_features(dev);
 
 [Severity: Medium]
-Is it intended that the hardware gets reconfigured here before
-dev_xdp_install() has validated the request?
+Now that LRO is in NETIF_F_XDP_DISABLES, can a rejected XDP attach leave
+LRO off for good on the lowers of an upper device such as a bond?
 
-dev_xdp_clear_rx_agg() calls netdev_update_features(), which ends up in
-ndo_set_features(). These checks in dev_xdp_install() only run after
-that:
+dev_xdp_attach() sets xdp_pending and calls dev_xdp_clear_rx_agg() before
+anything has had a chance to reject the program. Two sets of checks run
+after it:
 
-  - native and generic XDP active at the same time
-  - an offloaded program without HW_MODE
-  - a device-bound program on the wrong device or in SKB mode
-  - a BPF_XDP_DEVMAP or BPF_XDP_CPUMAP attach type
-  - tcp-data-split enabled with a non-frags program
-  - a bound memory provider
+  - the checks in dev_xdp_install(): BPF_XDP_DEVMAP/CPUMAP attach type,
+    device-bound mismatch, tcp-data-split, memory provider
+  - the driver's ndo_bpf
 
-The core used to reject such requests without touching the device. Now
-it turns HW-GRO off first, the request fails, and err_clear_pending calls
-netdev_update_features() again to turn HW-GRO back on.
+A bond has LRO in hw_features and in features by default. LRO is also in
+NETIF_F_UPPER_DISABLES. So this netdev_update_features() call reaches the
+following for every slave:
 
-On bnxt, a GRO_HW change toggles BNXT_FLAG_TPA, so
-bnxt_set_features() calls bnxt_reinit_features():
+__netdev_update_features(bond)
+  netdev_sync_lower_features(bond, slave, features)
+    lower->wanted_features &= ~feature;
+    __netdev_update_features(lower);
 
-drivers/net/ethernet/broadcom/bnxt/bnxt.c:bnxt_reinit_features() {
-	bnxt_close_nic(bp, irq_re_init, link_re_init);
-	bp->flags = flags;
-	if (update_tpa)
-		bnxt_set_ring_params(bp);
-	return bnxt_open_nic(bp, irq_re_init, link_re_init);
-}
+bond_xdp_set() can then reject the program. One example:
 
-One rejected attach therefore costs two full close/open cycles of the
-NIC, memory provider queues included.
+	if (!bond_xdp_check(bond, BOND_MODE(bond))) {
+		BOND_NL_ERR(dev, extack,
+			    "No native XDP support for the current bonding mode");
+		return -EOPNOTSUPP;
+	}
 
-If either bnxt_open_nic() call fails, __netdev_update_features() only
-logs "set_features() failed". Could that leave the device with its rings
-freed while it is still IFF_UP?
+Another is the "Slave device does not support XDP" error. In both cases
+dev_xdp_attach() only does this:
 
-netif_xdp_propagate() already runs its hds and memory provider checks
-before it calls dev_xdp_clear_rx_agg(). Could dev_xdp_attach() also run
-the dev_xdp_install() pre-checks before clearing rx aggregation? The
-ordering is the same at the end of the series.
+err_clear_pending:
+	dev->xdp_pending = 0;
+	netdev_update_features(dev);
+
+The bond gets LRO back from its own wanted_features. Nothing in net/core,
+bonding or team puts LRO back into the slaves' wanted_features, and each
+slave has already gone through an ndo_set_features() reconfiguration.
+
+netif_xdp_propagate() clears and rolls back the same way when the lower
+has lowers of its own.
+
+Before this patch, GRO_HW was not in NETIF_F_UPPER_DISABLES.
+netif_disable_lro() only ran from generic_xdp_install(), after all of the
+dev_xdp_install() checks had passed.
+
+The commit message covers slaves losing LRO after a successful attach and
+detach, but not after a failed attach. Should that case be mentioned too,
+or could clearing LRO on the lowers wait until the attach is known to
+succeed?
+
+[ ... ]
+
+> @@ -11431,9 +11439,9 @@ int __netdev_update_features(struct net_device *dev)
+>  	/* GRO_HW may be added back in via ndo_fix_features e.g. if driver needs
+>  	 * it to honor the HDS config, clear it before the fix features call.
+>  	 */
+> -	if ((features & NETIF_F_GRO_HW) && dev_xdp_prog_count(dev)) {
+> -		netdev_dbg(dev, "Dropping HW-GRO feature since XDP is attached.\n");
+> -		features &= ~NETIF_F_GRO_HW;
+> +	if ((features & NETIF_F_XDP_DISABLES) && dev_xdp_prog_count(dev)) {
+> +		netdev_dbg(dev, "Dropping HW-GRO and LRO features since XDP is attached.\n");
+> +		features &= ~NETIF_F_XDP_DISABLES;
+>  	}
+
+[Severity: Low]
+This isn't a bug, but the comment above still only mentions GRO_HW. The
+code under it now clears all of NETIF_F_XDP_DISABLES (GRO_HW and LRO).
+This patch updated the matching comments in dev_xdp_clear_rx_agg(),
+netif_xdp_propagate() and dev_xdp_attach(). Should this one be updated as
+well?
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261118232315.3593731-1-kuba%40kernel.org
