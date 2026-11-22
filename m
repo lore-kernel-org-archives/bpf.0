@@ -1,102 +1,58 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.171.202.116
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795376611;
-	b=B2VE8sqaAbIhgFpJIEG9kyJjV1wobc+Qv42dACccvuxlHb4vP9LvTEEhp9YF7Z0kUiel
-	 pdOXklCWiBB7KObo53wVXL+4WISPx67m7gD1q90DFgGo9kud+bc5VkiwVtZGVxj4esGK7
-	 1tdh7TD5UBUsx+mCP35bJz7RWjXFr+ikoyq7tw3GJvYQKiwkwRSTTBOrEL6Z7AUWlN1Io
-	 VimYB3gHUx0qYA0bFELUSSkJAZmnsa5HC77mBikQWmlz0VipoD6LnGWDpCxTsjVN6N0x2
-	 9pWW3pKPrSpwKc3fZEU26hw7W8ac+rY7421EtKZpXb2bzBdcUExvdcvr7e80vLJHlPg==
+	t=1795376773;
+	b=jC+YLocWyHpLafNKaTFco3XQ8IJHCdzXaC4bdRFw0FEDKVv4Xi0JNJZfzA8i0aKSTjoh
+	 WjGX8Nr5PFyUjr3aon9qGFzI4LcVvje0S70V/W8mCV6Wl/QbPz1sL4b8ALhofYDrc/Hvd
+	 92x5nM9TTWOxOT5jSzoPwiINaXHDscsQ4u+cY8lPdJUVWA39kD0ikKvATFoAA5SBO07xN
+	 lMv0jLudRlrgK/xQcJGxOtDlFw2VIcwC/X9+JrBfBbMP6mCfytuGzEHoHEn5CEXnSjpN9
+	 dSuxMa6rzZIJ84LQ3wvX8TcvkLBYNiApsYx4hU9frUR+SZyvpU/IbSezprWJ8j4/C6Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795376611;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=Kymp+J2o3UsNdNweR6Jcb6B6Bh4mLi4upsmCFa3PCvE=;
-	b=hTeDXTi0BbYDsUVHk5Jsnfr/DGZNhvYIBLwsy7DGka/audMQpuY1ebAYbhKA4z0OPVHx
-	 BzVHk/MLOXXHit46rTt0/OkjilhSBn0KClvvULFSnsJfq1cnbPmgQRpPGvXyyTFYcuMG+
-	 0VRt8sRPxo6i760bwNAUcPB5a3YHUltGlyTcUJWt0axryv1KZFJJiDYEWNV4lZ3XmOELR
-	 XvARgkqYSnKPXY4HZuHyqUwSWHGll7pX+JQd8IAZ3BvHjMl+n8e64VXkSZwXG9jEJiaQ2
-	 d8p2Y8ZQifGb5GxzAPZi5bmT1MQWfo3RdSADRn9NULq9MUTsQwHfZ1bsr5ALwE+5Wtg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795376773;
+	h=DMARC-Filter:Received:Received:Received:DKIM-Signature:Message-ID:
+	 Date:MIME-Version:User-Agent:Subject:To:Cc:References:From:
+	 Content-Language:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+	 X-Last-TLS-Session-Version;
+	bh=dbGXM1I9Jh83hjJSiKGDRAEmUJNnFhvU9Kb1A5Z3ub8=;
+	b=I/UgkBQACyRIRNkC5+EBn0ayKsDYyIAwD73EWuIWAAnzoX3EKghen/TZ4uifYZWLPKT5
+	 0srccBE56h3qecdDv+WueFqVB2cqhThV/eoEY1gbgHXzA4x0ud8q00rl6ApSggYk/zz53
+	 TVhn/csrXcHZEHf95FJBtSsZAT0hIWJDIzvaiT5g1WUEKuURrCFJN7rSveCqo/Vb2zvs2
+	 sOsi5TrGPU9Rv4dBlgVfDnUInGjv0Zch6btqKT3NQxFtgkgIjrW3+RN5ew++R1oJcD6AZ
+	 M7QTJKCNhUeSNKMRyl1ZePljwCvxrgj4Oe/Akkjhe5VkOP8Y8yhUYnMsBIkNaoOWyHw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=lukasstockner.de;
-	spf=pass smtp.mailfrom=lukasstockner.de;
-	dkim=pass header.d=lukasstockner-de.20260707.gappssmtp.com header.i=@lukasstockner-de.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=VKnLIlqh;
-	arc=none smtp.remote-ip=209.85.128.53
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=bootlin.com;
+	spf=pass smtp.mailfrom=bootlin.com;
+	dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=W0QWdRuz;
+	arc=none smtp.remote-ip=185.171.202.116
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D17B9606A31A
-	for <bpf@vger.kernel.org>; Sun, 22 Nov 2026 19:43:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D17B9606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lukasstockner.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lukasstockner.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AFCA606A31D;
+	Sun, 22 Nov 2026 19:46:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1AFCA606A31D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=lukasstockner-de.20260707.gappssmtp.com header.i=@lukasstockner-de.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=VKnLIlqh
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4b467581b98so23569015e9.0
-        for <bpf@vger.kernel.org>; Sun, 22 Nov 2026 11:43:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=lukasstockner-de.20260707.gappssmtp.com; s=20260707; t=1795376609; x=1795981409; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=Kymp+J2o3UsNdNweR6Jcb6B6Bh4mLi4upsmCFa3PCvE=;
-        b=VKnLIlqhRlYX5lXFJpZsvXei+/LaIsGcsL+oBuaCGsebodV6KLhcT6YMWd1BWBhZmk
-         lcN49Ah6qzNMHWV/rrIBDbteEeRoNssPiJlXG/udKLlxgFe7Y1sVfrq9q/M6XCFOciHO
-         7wm2rMI7i+6b8aZw0eWax67CRdl9y+6YuXQAKvfMddnMy8M6mSgvitrPWi0/VMonv5uH
-         aRtibrnYdbY70/DlFE0EI76V1M21InjIYhZYsQM4NZg1bgzF6GBwgQQJEPZA9/A6rZfB
-         2xb6+82BmXL8nJMmcPQm9n1g2wy48/98m1BpXiv58Bg50rqzl/8MPhUQzlIiz7ltrGky
-         Caig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795376609; x=1795981409;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Kymp+J2o3UsNdNweR6Jcb6B6Bh4mLi4upsmCFa3PCvE=;
-        b=t1t00qfQLIarXzD3UF2aChaUWDMUeTbXAUjtZleEnmtxxtnTUf6rrkvwYBg/xJj6fj
-         A7wxv1lG0J/BcqCRvWh87ejGuIm+HO6Mc6KWUErIpeigCZHXM3cGY+TPMIsEGutQ0Vy0
-         IWqjRSiyAs76XAaBcbW7D8NvqdwSseSo4nxloATZHNrZsKHWw89ciS9UvwvvDZOxRv+x
-         5PBAbO/BBYfhaF/XOI2bQraXsmJxcGnLO+oU1/pyZa9t36snySSia8cVBzjYJ/B1YFoY
-         TdfHiJnNrIGK8KWClNz5owNQnAB5EwAtBBlUU0SLCsLyn/TQRSdNQL2SpaPJ+pDQFLGM
-         NJMg==
-X-Forwarded-Encrypted: i=1; AL+hErHvj1oyM2xmvkU6LB4VVlNxXeCcfpaCTdlFNc66fi9ZwT+xTmZHqKpJqb9CT8b2b41kmyg=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+0g/vpBzs7gAepmCizE/1Nlo+q5WwCx+7vbFZxGsPEjUKyfBn9
-	kp823T94DJYCTRcCTYus9shWQzA0eacfpdFlxt4jf8tuWwo/hXh7vT2YA2ctvNpbGZM=
-X-Gm-Gg: AZFdTZeDUHt7y1VHPIg0q/35Ma4qEipmTnd2SUV/bJJ4ampqkhPg/OmBAOlvZXmOMck
-	UdEk5vJ+eaPCo139Ws30s/hKHO7yUuyGXOHyTT5QUNTTrWDQGjK8wZUoU3zfd1jHWIYs+GFNHka
-	0b6QvBTvttQ+q3GizxYLB0E07x+zk/WU0TfCdJwBk2IGUnQcqB4/8aZnVg5gvVNvo80kGVc9Y1a
-	7lUqN6q6UoxW4FDA2g3A+/BB/gN1jkWsgwKQghvGF7rNSu4w8q5OmalcIuzZ3+q44/GaGDHKeZS
-	YWUGKhuUkDhYYQbqZfsCjqK7b6MdVH9dooefxwKYrY+1VnMBzmLM8CVlue8t4zXkn7pVyrbfhPX
-	Up3pA5vvKUV4uXidjVfK1GfXfU+Zfpjcpe90KaPBADGWJysG+79iolnVAe4Zzbbxyh1yQgzYojO
-	ykPPHn+B0jyhEKcfZ/wf044xBFUhsyM+2uJVMY01PGfSfHA2lwuDvaqhZ6rav2MEIWgGdAtBaV2
-	yy9NXw6YPfdvNErbxltHsWXd+ty5DTLhR4J5mdLJxQIFLuBNvc6xlfWXb5Z2lPJGZ7KWkQEoulC
-	uPI6/VySML5RnN7gMLb6yf/DI9ri+pQSCCvkD/wleBkHyFvwBzsTGUIb8inUsGDcAegr5Y6tHQJ
-	sng==
-X-Received: by 2002:a05:600c:a08b:b0:4bb:6651:9eda with SMTP id 5b1f17b1804b1-4bb88922ca4mr188621625e9.14.1795376609171;
-        Sun, 22 Nov 2026 11:43:29 -0800 (PST)
-Received: from lukas-laptop (195-200-20-154.mclarenap.oninferno.net. [195.200.20.154])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb88442995sm293917125e9.2.2026.11.22.11.43.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 22 Nov 2026 11:43:28 -0800 (PST)
-From: Lukas Stockner <lukas@lukasstockner.de>
-To: Hari Bathini <hbathini@linux.ibm.com>,
-	Christophe Leroy <chleroy@kernel.org>,
-	bpf@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org
-Cc: Naveen N Rao <naveen@kernel.org>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Lukas Stockner <lukas@lukasstockner.de>
-Subject: [PATCH 4/4] powerpc32/bpf: don't fold MOV into instructions that use dst_reg
-Date: Sun, 22 Nov 2026 20:42:05 +0100
-Message-ID: <20261122194205.218543-5-lukas@lukasstockner.de>
-X-Mailer: git-send-email 2.56.0
-In-Reply-To: <20261122194205.218543-1-lukas@lukasstockner.de>
-References: <20261122194205.218543-1-lukas@lukasstockner.de>
+	dkim=pass (2048-bit key, unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=W0QWdRuz
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-04.galae.net (Postfix) with ESMTPS id B0E63C69140;
+	Sun, 22 Nov 2026 19:46:14 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id C804660512;
+	Sun, 22 Nov 2026 19:46:07 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 8D16411E6033E;
+	Sun, 22 Nov 2026 20:45:48 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1795376765; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:content-language:in-reply-to:references;
+	bh=dbGXM1I9Jh83hjJSiKGDRAEmUJNnFhvU9Kb1A5Z3ub8=;
+	b=W0QWdRuzMqLYXnJk4odzdLYtZXZMIYtQYMT8IB7ANLCF8YMMTiCNE0IPROF+gKZ70cEG4k
+	LroyuHKdGOnJfOQsjOnHbeOH8d4V1ynY9uiW0G5q1sSQCz5un+v8sXg+3OaviQuacPA34d
+	PrT7yCOYJ/uYoSxmBVvu3UUbV0vNlVtZbyekIUzxcJrRsPN//WHz3OKjK3ZKsuqFCWPzzG
+	3kN5bcJZi1xEdWUvTD9Gf4zzyDNq8wXU2qsHXOCwyCPvgTBbcFIUsc9xoQmEUjX4va3MeU
+	qS4ialWhY1rtVmFR9sdwvGf4abv2UckG+1S4KdJnDLuszg9EvrF1W9oC6iiaLw==
+Message-ID: <9997f4e9-9453-4511-af3e-4be664a09281@bootlin.com>
+Date: Sun, 22 Nov 2026 20:45:47 +0100
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -106,44 +62,72 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v12 1/4] net: xdp: add
+ __xdp_build_skb_from_buff() helper
+To: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>,
+ Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+ Alexandre Torgue <alexandre.torgue@foss.st.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, Jose Abreu <Jose.Abreu@synopsys.com>,
+ Ong Boon Leong <boon.leong.ong@intel.com>, Simon Horman <horms@kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>, peilinhe2020@163.com,
+ Peilin He <he.peilin@zte.com.cn>
+Cc: netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ bpf@vger.kernel.org
+References: <20261121-stmmac-rx-mb-v12-0-3ae2f3bce174@oss.qualcomm.com>
+ <20261121-stmmac-rx-mb-v12-1-3ae2f3bce174@oss.qualcomm.com>
+From: Maxime Chevallier <maxime.chevallier@bootlin.com>
+Content-Language: en-US
+In-Reply-To: <20261121-stmmac-rx-mb-v12-1-3ae2f3bce174@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Last-TLS-Session-Version: TLSv1.3
 
-The PPC32 eBPF JIT folds MOVs followed by an ALU operation to the same
-destination into 3-operand PPC instructions by dropping the MOV and
-reusing its source as the second operand for the second instruction.
+Hi Lorenzo,
 
-That is wrong when the second instruction also uses the destination
-register as its source, since the MOV that would have assigned it
-is dropped, so the folded instruction will end up using the previous
-content of the register.
+On 11/21/26 18:28, Lorenzo Bianconi wrote:
+> xdp_build_skb_from_buff() always calls eth_type_trans() on the skb it
+> builds, which pulls the Ethernet header and advances skb->data. Drivers
+> that still need to process the L2 header before protocol parsing
+> therefore cannot use the helper.
+> 
+> stmmac is such a driver: its software VLAN path (stmmac_rx_vlan()) reads
+> the VLAN tag at skb->data and shifts the MAC addresses over it, so it has
+> to run before eth_type_trans().
+> 
+> Split the implementation into __xdp_build_skb_from_buff(), which builds
+> the skb (including the recycle mark, the Rx queue index and the frags
+> info) but leaves skb->dev, skb->protocol, skb->pkt_type and the mac
+> header unset, so the caller must initialize them, usually by calling
+> eth_type_trans(). Make xdp_build_skb_from_buff() a static inline wrapper
+> that still calls eth_type_trans() as before, preserving the behavior of
+> existing in-tree users. A follow-up patch will let stmmac use it.
 
-For example, "r2 = r1; r2 += r2" gets folded to "r2 = r1 + r2", while
-the correct result would be 2 * r1.
+I've been questionning why we even do that in stmmac in the first place
+actually. This pretends to offload, but it's just to deal with the tag
+in the driver instead of later down the road.
 
-In particular, this also happens for zero-extension MOVs inserted by the
-verifier, where "r2 = r1; w2 = w2" becomes just "w2 = w2", so the actual
-assignment is skipped.
+The original idea was for GRO back when it didn't handle vlan tags, but
+this isn't necessary anymore.
 
-Fixes: 19daf0aef84f ("powerpc/bpf/32: perform three operands ALU operations")
-Signed-off-by: Lukas Stockner <lukas@lukasstockner.de>
----
- arch/powerpc/net/bpf_jit_comp32.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+There was a series in-flight to remove stmmac_rx_vlan altogether, but it
+seems to have stalled [1]:
 
-diff --git a/arch/powerpc/net/bpf_jit_comp32.c b/arch/powerpc/net/bpf_jit_comp32.c
-index 7414e350d2d4..3ba50d6696a2 100644
---- a/arch/powerpc/net/bpf_jit_comp32.c
-+++ b/arch/powerpc/net/bpf_jit_comp32.c
-@@ -367,7 +367,8 @@ int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, u32 *fimage, struct code
- 		if (i && (BPF_CLASS(code) == BPF_ALU64 || BPF_CLASS(code) == BPF_ALU) &&
- 		    (BPF_CLASS(prevcode) == BPF_ALU64 || BPF_CLASS(prevcode) == BPF_ALU) &&
- 		    BPF_OP(prevcode) == BPF_MOV && BPF_SRC(prevcode) == BPF_X &&
--		    insn[i - 1].dst_reg == insn[i].dst_reg && insn[i - 1].imm != 1) {
-+		    insn[i - 1].dst_reg == insn[i].dst_reg && insn[i - 1].imm != 1 &&
-+		    !(BPF_SRC(code) == BPF_X && insn[i].src_reg == insn[i].dst_reg)) {
- 			src2_reg = bpf_to_ppc(insn[i - 1].src_reg);
- 			src2_reg_h = src2_reg - 1;
- 			ctx->idx = addrs[i - 1] / 4;
--- 
-2.56.0
+[1]: https://lore.kernel.org/all/20260914150612.9798-3-peilinhe2020@163.com/
+
+Peilin He, do you have any plans to continue this ? If not, it may be good
+to pick this up instead of working around this.
+
+Maxime
 
