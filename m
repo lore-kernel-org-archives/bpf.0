@@ -1,44 +1,44 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795309283;
-	b=G0vw8cPqHo0JxsvOelWUenV3VtLOfuA7sdhy2LU/EUk9mjFuDTPadCN3SSLr5MBw1Yvu
-	 NKGGLZyljcL+uTW4sDEmmOY8m4q/8zG3EV1VfPazUAbWYi3WDVnbSIQeMH4ZlgZlTXSRq
-	 93GkVhQ2wwacDRJ2Ifw//ziXMNSU6xVIbUhTobqA0vXLpB7BDBs0nRaNzhoiK6l3E8uzT
-	 Wdfk9vM3muZJSazVhUyyTWHQFq6Yuf/iaUrr88PP/EZXjyGKxGIoqFjlvIb94iAQhQX3g
-	 LHQsI49lT8xpdgqasoVi6AxIHKCFjLz1tvvA5SwhA9H65eJvb+yCmADs8xTGib9Pptg==
+	t=1795309280;
+	b=YjMuI1myV6h/d+jBxr20DOoK/2LqQ/OHQNPbY5T6R7p77RSXRYF90aUYhliy6+UJFLJF
+	 kl5TfOix1Vg+b46hFwfB9Zua+Wx8wm0uUO+tw2UZWWB0JNuNY/iBMtk4bnNCYNep0xX6E
+	 uKAaPDSd0EkLCg7lTbl/p+FHUY/d2HbYIARtF6DoI39Tcxti+Xbj+s7VaLwhK0G3XkiBz
+	 bw+VTVgfqr818BhkeesMCmknoriBAVVR/UZN4A94RPEAiYRPYueIQrb8SNhspo30MDccb
+	 Sq+DgF5Unw5LBtrAM52Vxhhbki7Vv2spZo3/6WS5XvR7t89F6Na3mp0WVaiXu164TEg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795309283;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795309280;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
 	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=+tP7aLEqgrF6Dk34MyWOjGQHbDw+6X3cY1fgK9v3OcA=;
-	b=mxBmHQmuvhYVBvhKGhk46S5GN4sumpet/3cX0jIdKdgBZ0s39sgzwKgh64dZOvZSbW6Q
-	 xlau/xwv8ENEJ/VykJvrmJtIUXuL18OYH7abft1QPk5H3/bzigZ2uAa+vX8S+XmJVJhDf
-	 1X25hyeVQEWJjARy+CWyuGMYOhXcccFTncCBnwYwYWPVWNxn7/CJ+MrAGq4eyc6kC6dFP
-	 ia67zRb4qNYef21L2jJd475OGBcVEy+emtyi98JmQUY/AYAHR5kd7BtE6hE1tOPU/3Umr
-	 bxuNk9K/BSKznC6QjYDYWoLASnHlI4CwzWtS5XZ1bHuRI+4eiFbmYxP1kDIrHlBx2bg==
+	bh=0KfEfmTKYVapY/XxDnS3jkDJG9L03MCRk+3zIwQKZXo=;
+	b=VR4RfNVK3TnMFDksc88kwV8et5SzoGtEfzsIIDJAO5V7YMylTxO7XkfQ/b2KXCvC3yuh
+	 ndNegwqk8QcCiiKWwvu74tF0Brk7RzCXfsj8MR7eKgoKmJe4yn4AWPGTYop4vDRQHuCoB
+	 cmZ6f5CAPS1sBHaR1SubNzO/b2Dg4YLzn74nR9KcXMSn0u5AunP2Tiq68rfr2RJJHLwHT
+	 TsRgLIBcywE5+oGr8wAQUZekJVe344/x2kIW2dEhunAblStRp0odQxVHoAdStEec9ALLL
+	 IKJD3Cdf4JjqLlyZBy0CTrlZQkYHjoliqWYNJTPzK2/pPcoYQXzskhRea7hxTvn9lpg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ISUqcG6e;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cmWY0SP9;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F570606A690;
-	Sun, 22 Nov 2026 01:01:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B913606A32A;
+	Sun, 22 Nov 2026 01:01:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ISUqcG6e
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 984C71F000C0;
-	Sun, 22 Nov 2026 01:01:22 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cmWY0SP9
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67CFF1F000CF;
+	Sun, 22 Nov 2026 01:01:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795309283;
-	bh=+tP7aLEqgrF6Dk34MyWOjGQHbDw+6X3cY1fgK9v3OcA=;
+	s=k20260515; t=1795309279;
+	bh=0KfEfmTKYVapY/XxDnS3jkDJG9L03MCRk+3zIwQKZXo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=ISUqcG6eRgkVab+M2uBYKVpli3cBKQFb7+UDNgU87QYDF2YNfkpzuqDfP/ZFaD8lB
-	 Mr8a7dmdF7Ywy9E9oqn/I/YmNZYUIEtO47lo1jHAVjHORtcyjupCSyR9WNYrxvzfch
-	 mI9IPRIK4NwMTyYs4gYoagssI83QZMdTsGty605NR8qHTIjdzx/n7v3C75dGRcPEae
-	 xOv3sD8M1G960VSa9/sZtD3AT8a2/JYzJtx7GssFwri8PIMU5ywFxupkHYj04WqU20
-	 zGz/RrH8xSSfZ9QcsINQHB0GXlKaf5nWE7DAhheJH2Rf+QoUKmOaFqE1Pg4NZ9RTIk
-	 fCS1LxvtkMSeQ==
+	b=cmWY0SP9KiOxy/Bua7M6XpPutN+Uv6pJDy4rFt5j0qMmEF8MfL1D7D5rIDHAbV0Bp
+	 gC8VYItDZ6ihV8WTmMqbatcKnMDxDkk1gW3F0Q1nHPAcCaAsL01MZPxFH7NsC8IFQU
+	 tdkhsScyf1RP+URtxZ1JWYukplwLxVqUWnrYQ4PrRfuCgeoXSMzT+GgKR5U8SW2mbX
+	 f/M9ois8HcTOYFCiHQ5Rqdzn2Qi9qIoC5tl7DtrjMpP+Msq1sa919UudZkyrBLhXO2
+	 OzbZayhe2XIAayoUJICg6rQUxk04ylPGyPLsmF4cqQpub+DjdiAksoh5kLcxS6Yq8+
+	 /f82x4wPns5vg==
 From: Jakub Kicinski <kuba@kernel.org>
 To: davem@davemloft.net
 Cc: netdev@vger.kernel.org,
@@ -59,9 +59,9 @@ Cc: netdev@vger.kernel.org,
 	przemyslaw.kitszel@intel.com,
 	bpf@vger.kernel.org,
 	Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net-next v2 8/9] eth: qede: drop the now-dead HW-GRO vs XDP handling
-Date: Sat, 21 Nov 2026 17:01:11 -0800
-Message-ID: <20261122010112.1471146-9-kuba@kernel.org>
+Subject: [PATCH net-next v2 3/9] selftests: drv-net: drop the generic XDP hack from the HW GRO setup
+Date: Sat, 21 Nov 2026 17:01:06 -0800
+Message-ID: <20261122010112.1471146-4-kuba@kernel.org>
 X-Mailer: git-send-email 2.56.1
 In-Reply-To: <20261122010112.1471146-1-kuba@kernel.org>
 References: <20261122010112.1471146-1-kuba@kernel.org>
@@ -76,59 +76,90 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The core clears HW-GRO before ndo_bpf runs and keeps it off for as long
-as a program is attached, which makes two bits of qede dead:
+The HW GRO tests want SW GRO out of the way so that what they observe
+can only have come from the device. On drivers which keyed HW GRO off
+NETIF_F_GRO that was not expressible with ethtool alone, so the setup
+fell back to attaching a generic XDP program, which suppresses SW GRO
+as a side effect.
 
- - the xdp_prog check in qede_fix_features();
- - qede_set_features() skipping the reload when a program is attached,
-   HW-GRO can't change while edev->xdp_prog is set any more.
-
-qede_alloc_mem_rxq() clearing NETIF_F_GRO_HW from dev->features directly
-has to stay. Firmware recovery re-runs qede_init_ndev(), which rewrites
-dev->features with HW-GRO on, and nothing recomputes them. The direct
-write no longer leaves HW-GRO off after the program is removed, the core
-recomputes the features on detach.
+Those drivers no longer tie the two features together, so ask for the
+feature combination directly.
 
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 ---
 v2:
- - keep clearing NETIF_F_GRO_HW in qede_alloc_mem_rxq(), FW recovery
-   needs it
-v1: https://lore.kernel.org/20261118232315.3593731-8-kuba@kernel.org
+ - drop check=False in gro_stats.py too, now that it uses the shared
+   helper (Willem)
+v1: https://lore.kernel.org/20261118232315.3593731-3-kuba@kernel.org
 ---
- drivers/net/ethernet/qlogic/qede/qede_filter.c | 11 ++---------
- 1 file changed, 2 insertions(+), 9 deletions(-)
+ .../testing/selftests/drivers/net/gro_lib.py  | 21 +------------------
+ .../selftests/drivers/net/hw/gro_stats.py     | 21 +------------------
+ 2 files changed, 2 insertions(+), 40 deletions(-)
 
-diff --git a/drivers/net/ethernet/qlogic/qede/qede_filter.c b/drivers/net/ethernet/qlogic/qede/qede_filter.c
-index d0e203167e35..9c68579c5b33 100644
---- a/drivers/net/ethernet/qlogic/qede/qede_filter.c
-+++ b/drivers/net/ethernet/qlogic/qede/qede_filter.c
-@@ -915,7 +915,7 @@ netdev_features_t qede_fix_features(struct net_device *dev,
- {
- 	struct qede_dev *edev = netdev_priv(dev);
+diff --git a/tools/testing/selftests/drivers/net/gro_lib.py b/tools/testing/selftests/drivers/net/gro_lib.py
+index 875a715b2ae1..6eff19db3541 100644
+--- a/tools/testing/selftests/drivers/net/gro_lib.py
++++ b/tools/testing/selftests/drivers/net/gro_lib.py
+@@ -263,26 +263,7 @@ def _run_gro_bin(cfg, test_name, protocol=None, num_flows=None,
+         set_ethtool_feat(cfg.ifname, cfg.feat,
+                          {"generic-receive-offload": False,
+                           "rx-gro-hw": True,
+-                          "large-receive-offload": False},
+-                          check=False)
+-
+-        # Some NICs treat HW GRO as a GRO sub-feature so disabling GRO
+-        # will also clear HW GRO. Use a hack of installing XDP generic
+-        # to skip SW GRO, even when enabled.
+-        feat = ethtool(f"-k {cfg.ifname}", json=True)[0]
+-        if not feat["rx-gro-hw"]["active"]:
+-            ksft_pr("Driver clears HW GRO and SW GRO is cleared, using generic XDP workaround")
+-            prog = cfg.net_lib_dir / "xdp_dummy.bpf.o"
+-            ip(f"link set dev {cfg.ifname} xdpgeneric obj {prog} sec xdp")
+-            defer(ip, f"link set dev {cfg.ifname} xdpgeneric off")
+-
+-            # Attaching XDP may change features, fetch the latest state
+-            feat = ethtool(f"-k {cfg.ifname}", json=True)[0]
+-
+-            set_ethtool_feat(cfg.ifname, feat,
+-                             {"generic-receive-offload": True,
+-                              "rx-gro-hw": True,
+-                              "large-receive-offload": False})
++                          "large-receive-offload": False})
+     elif mode == "lro":
+         # netdevsim advertises LRO for feature inheritance testing with
+         # bonding/team tests but it doesn't actually perform the offload
+diff --git a/tools/testing/selftests/drivers/net/hw/gro_stats.py b/tools/testing/selftests/drivers/net/hw/gro_stats.py
+index a413e6fed210..2cccab12f68c 100755
+--- a/tools/testing/selftests/drivers/net/hw/gro_stats.py
++++ b/tools/testing/selftests/drivers/net/hw/gro_stats.py
+@@ -145,26 +145,7 @@ def _run_gro_test(cfg, test_name, num_flows=None, ignore_fail=False,
+     set_ethtool_feat(cfg.ifname, feat,
+                      {"generic-receive-offload": False,
+                       "rx-gro-hw": True,
+-                      "large-receive-offload": False},
+-                     check=False)
+-
+-    # Some NICs treat HW GRO as a GRO sub-feature so disabling GRO
+-    # will also clear HW GRO. Use a hack of installing XDP generic
+-    # to skip SW GRO, even when enabled.
+-    feat = ethtool(f"-k {cfg.ifname}", json=True)[0]
+-    if not feat["rx-gro-hw"]["active"]:
+-        ksft_pr("Driver clears HW GRO when SW GRO is cleared, using generic XDP workaround")
+-        prog = cfg.net_lib_dir / "xdp_dummy.bpf.o"
+-        ip(f"link set dev {cfg.ifname} xdpgeneric obj {prog} sec xdp")
+-        defer(ip, f"link set dev {cfg.ifname} xdpgeneric off")
+-
+-        # Attaching XDP may change features, fetch the latest state
+-        feat = ethtool(f"-k {cfg.ifname}", json=True)[0]
+-
+-        set_ethtool_feat(cfg.ifname, feat,
+-                         {"generic-receive-offload": True,
+-                          "rx-gro-hw": True,
+-                          "large-receive-offload": False})
++                      "large-receive-offload": False})
  
--	if (edev->xdp_prog || edev->ndev->mtu > PAGE_SIZE)
-+	if (edev->ndev->mtu > PAGE_SIZE)
- 		features &= ~NETIF_F_GRO_HW;
  
- 	return features;
-@@ -936,15 +936,8 @@ int qede_set_features(struct net_device *dev, netdev_features_t features)
- 		args.u.features = features;
- 		args.func = &qede_set_features_reload;
- 
--		/* Make sure that we definitely need to reload.
--		 * In case of an eBPF attached program, there will be no FW
--		 * aggregations, so no need to actually reload.
--		 */
- 		__qede_lock(edev);
--		if (edev->xdp_prog)
--			args.func(edev, &args);
--		else
--			qede_reload(edev, &args, true);
-+		qede_reload(edev, &args, true);
- 		__qede_unlock(edev);
- 
- 		return 1;
+ def _check_gro_stats(cfg, test_queue, stats_before,
 -- 
 2.56.1
 
