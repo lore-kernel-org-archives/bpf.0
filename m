@@ -1,100 +1,49 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.225.138
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795384812;
-	b=dRdJCZP5bYjpWS/PNU5JpUo8vOyrLUeIbyuSo9q++hptcjykzpQgfGmMqHkR+kfG5/97
-	 +QajsnS5wia+1F16xMsgcfBSRfcTWBH46ADjtFNMBu0K40U1pyhD4KASXdqq5Vjzr5qMe
-	 b+SFdnb0ucNicIoexPG9w1UXcqEOTIGD+hGUr7Rnw3IFU3GGdYDW/ZwpEeL+rkCEaJqau
-	 X0yKa73IOvg1Gk80ygqIbOjs+kJhb+BZXeRfdCFAxZ0VVdiVLaN1R+cECxkMFiGQeXdCN
-	 mSclMaRatJ30Pzb/u3txVyJSa2H+/KmziqFEPguoGDvAUJ3lFhy14s8sOYZJDuw1FAg==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795384812;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:References:
-	 In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:
-	 Content-Type;
-	bh=ObBx2wLZ1lWaJ7WR4wKxB7SLrTibQ+FBYE6OiDtedCw=;
-	b=EiXvxXrsdeNT8SgpgS8XnF/uDp9SNUJ61BJ+M4r6RLqfA843RHF2XLLhjoldwW+SRaHR
-	 u7u5Aqt/IPA3X77HsNZvU0NCef9A8+dvewd5G9qUqapoj0BcLpIq6QRROEz3cuGWVOKW6
-	 F+u3EaqaQd8nbXnw4UO+tMq+ao1tXog2fUbDrTPVYsd2p3AQU3k+GGS/sper4PszWmXO8
-	 WvQAEoGpqoI7QrrHpLDAeUOyB3tBfWwT7weDRZHi4qHKYdbwRsFDAI2Nxkz6XnRBKjmIV
-	 0jjBc8bBh7Ic6ePaFHxAvl2OIApR3FGRxctlCr/okpdh14YHRijvoLIw4ZrXemw2lbw==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=UhqDne6S;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.225.138
-Received: from mail-wm2-f10.google.com (mail-wm2-f10.google.com [74.125.225.138])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=194.13.80.246
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795385654;
+	b=bvuDq6rws1AzbtT0HOJz3jsQO/gvQ7xeeKE4t+qqkAqjz8IJAPyZMB9SFJ1nRrs5EqqF
+	 6ob28U3RTMz6Df69PsLlE+1u9chm5p6ESk28thBkwN4koqSturvBZvvIqKMah2WycLQoy
+	 C9WcDxccjNWjxTtgC/KbV7qzlxsUN2I31BdzZfJqC7/0HWmy9Rw1W7eD22scdGCymfUq0
+	 j9i2x08TMZrLZF3IdJDB9/g1zhg1sfUZo1nC+5wpg+LGVo1wrT6Ms1ahGB2W1RcVkWWiS
+	 nWOZR+bDvCMTYRur0Cd3Z0RbkOXrXQEGPwVv9rRuuhuhAmZprkT2CMDi1qktQAhLA9Q==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795385654;
+	h=DMARC-Filter:Received:DKIM-Signature:MIME-Version:Date:From:To:Cc:
+	 Subject:In-Reply-To:References:Message-ID:X-Sender:Content-Type:
+	 Content-Transfer-Encoding:X-Last-TLS-Session-Version;
+	bh=jvCxwlOVxvnKYhMHTmlKe3u7SgksgRLz0kN7w/QcZLA=;
+	b=gKUJykB5NgK9aCbTuWHtLxCWep84fU7/1xJxyAJjZFiXZGI6SK8YZPSAMkH60uZmmpLm
+	 gmTZ48fKaJJZLwUKhS8YgbAxtZewLt6ZBtNx6fsnhBz2zFCSq5x0qfB6NhPhhqEIPfwbh
+	 ccelq+dfNFmvLW9bekMywK84GM7m0wLG2iHrxr4l7PCoL67H3MLc9zZ/Ls47ADhEuDotN
+	 /I5mH9jOaSjbuCWN/qIRsVEiFn6RY1ns1QOVrURMTYmbTYHFtqJUeDGXWL/MuEQmrDYoX
+	 uuYdCAXbGqKc91x1ynzhdsZ7UyclLj0rGgh/u869noMySY+vxFraYsED5a9s2KxLiSg==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=none header.from=tipi-net.de;
+	spf=pass smtp.mailfrom=tipi-net.de;
+	dkim=pass header.d=tipi-net.de header.i=@tipi-net.de header.a=rsa-sha256 header.s=dkim header.b=PlUv11zu;
+	arc=none smtp.remote-ip=194.13.80.246
+Received: from mail.tipi-net.de (mail.tipi-net.de [194.13.80.246])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65E99606A320
-	for <bpf@vger.kernel.org>; Sun, 22 Nov 2026 22:00:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 65E99606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C70B4606A31A;
+	Sun, 22 Nov 2026 22:14:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C70B4606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tipi-net.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tipi-net.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=UhqDne6S
-Received: by mail-wm2-f10.google.com with SMTP id 5b1f17b1804b1-4b76ade741cso5036875e9.0
-        for <bpf@vger.kernel.org>; Sun, 22 Nov 2026 14:00:12 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795384811; cv=none;
-        d=google.com; s=arc-20260327;
-        b=LZi7tMcRi5a5FT/g8Q6oy/nqbxJsHSEY/7/h4TF/jBWPjYLH9INyF4owZ3TG7o25aD
-         1o/0FkE+WPkjd70zB+Pak7fu14wozOddlvJujwW7HAi6C68ozuthjP0FTIqGococTpuS
-         8I77ISywxktWijlaqg3sh25XFlNxxawiTxC3va/MUKznqyw5PJgrazcjDkjgzMf43SZw
-         zmzaFobvltFlCI3VXT1x7TZEwbBiT8VwmxinhFxSFp+/rHJxor9i0/wY2i2di2bO8WCh
-         yRGdBP6du6Svb32j5AyjSLskU4dT5TtZ6ffiYlV8LaNyVYN+G/gjP46H1T7RclHkd/1+
-         x7JA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=ObBx2wLZ1lWaJ7WR4wKxB7SLrTibQ+FBYE6OiDtedCw=;
-        fh=egDHTYiRlWEhjX79I8tyYfgSLjlZiSst1N6eRvPbXzA=;
-        b=cD2d52hwtD6nvzLHBlVUuTi+px80wR7XXtGY9bykZxRJDuSSKtF73DLSHQFz2S7/Ns
-         77TuD9zicsAdE+vkaokRt5UuCGruTTKG/ZhU1SzpB1vydShr4CLSk0yKnFpDtfZrdhPO
-         otoJONPuHTKXI+6QA6xkTv4RYmwhzALRXLPogkwQrNS0nwH6mvqQLN+uOPfhSAcvLT+d
-         S/8K43dFSzh9R+fTQHXEO1gu2egIy2Wl5AxBNGNqjoFz+2Uzhaq3fHGWdl4L9O70BMK0
-         g06ODoR8K9eWrqwFRCWvBbpeeZzVyaxiHhZLO2bkStlOcL9PKkjf2yqfS0IOlU1neTC0
-         02Aw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795384811; x=1795989611; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=ObBx2wLZ1lWaJ7WR4wKxB7SLrTibQ+FBYE6OiDtedCw=;
-        b=UhqDne6Sjsmz/gFJDlnpTGiRkCQk7BhFefRCnayt5PM04MlSS93kPtBgfQ2UCDmZi5
-         isOVkQBBPnKJ91kg0nJWpdhTZ8YIN0NDPkmjMeAadLTbF08E26JM2nWuflnhhz26pxBg
-         i2Ksvqa9V/9hcb0DX3Loi3pPBm/OekYrVixGrUO5cEvJv0OKvkCnVTBYpJW3xtTuQThN
-         VIH0fLy/7hAhmoviSLEE2nhwpQOdGtG0j2DRLwatgx6/DYBZlIyOPPJ03iKtmFbYe4Dm
-         QpKy+5BnlSHJDEhZ4BNBe8zBD/zrECWw/g6VA04eIftthBnPKcTGBlnOWomMPYDnO9sU
-         9V6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795384811; x=1795989611;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=ObBx2wLZ1lWaJ7WR4wKxB7SLrTibQ+FBYE6OiDtedCw=;
-        b=ywlqWjxNCDUlLQpNuPdfkQA2Zi7vrWZ90Bk0KnCTyJop1kJ1jvNwuTVGbcq0vgaetp
-         9Uu5l07YdoZPUJntqUX3lKfUpuZ3t60Wrbpbiidcx5YSDlB+Q08W+2fVToie1c+M5NlO
-         b8ylOEFPQ/OcGYud8H6rc0JdBM5x3qXUIn/b2rj8F0ygm4eIeZ9PVzupiYnO0FH/X8MU
-         tfx4rTPOLco3Cz+utFnpGGCFcKbf/QzC/rkN6t7lWWoRcl4DY6olaVtqnDq1b5D0zKlG
-         kKyeTYdrL25EXv1WSmMB37lPGs74cseHzpNtOjvEaT74daar2f7bty5RADXW9EZMw6Hy
-         YOmQ==
-X-Gm-Message-State: APuU4Z8p4Inlu4hJhm86YsOGciM3aIbL48IIn2zwezJ5S35FrvElAIWk
-	1zdVTVxuR5q67/TrcZmDTAvB3kakkzK6jcwoKsm7RkS/tuF+UU9qHeJV75civ8AZJ9RgQgRLqeZ
-	PKx6L/nxTpVH56HhVHWzJFz6bXv1LTGRoe0aPlp0=
-X-Gm-Gg: AZFdTZf+7DFFPbKkEk9S5kCRee4dv4GBqSTzKMOxxhsy9gWnaR0lx/mfudP6FMOcej+
-	ewLPGUPlyrmJTcOhsWoAEa8LpSzb34q57bmWSVBPvfNdFClIj9sLMO5v03+/tcFnqmWS2n5X1C1
-	J3r1bnEg0Pa6/QeGcfCfEW89vIBHuQfV2vr1EI0gOxnh/u/2kLLeF07vSMyB8VlehfqoZxllhqv
-	3KS/t25sL+dwXUSsJ/KNqdfiNxM78w98OA1iv0oufj/+F/zTTJueN4vbGipNYzzfyOIem8ZosxJ
-	YiaYDTtC6SuMC98qwpFNcTSDfXrXTm88HocCoW3A7khwY2Vevbuw3gfdvix2Kq9QhTvVYOykGKv
-	n7LP9dnNIwRt7HZf8erE9kCbUDBasDJwkqG17bxn/iqGgmSXU7wXycE4DNQpsxd0k/yRH+Spf12
-	/Bmtm/cdvwEMjbanMIKyFsuTHPV7kSl0aYP9Dhzldura67b64LMtzOceDzlOkAD6Vuy87KR2dVs
-	cLgwYKeKrSWVDKaMVRunpNg3TIGu4cKlTWJvjY=
-X-Received: by 2002:a05:600c:8b11:b0:4a1:dda8:eb73 with SMTP id
- 5b1f17b1804b1-4bb8881c630mr214065435e9.27.1795384810518; Sun, 22 Nov 2026
- 14:00:10 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=tipi-net.de header.i=@tipi-net.de header.a=rsa-sha256 header.s=dkim header.b=PlUv11zu
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 660FCA1583;
+	Sun, 22 Nov 2026 23:14:05 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tipi-net.de; s=dkim;
+	t=1795385649; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=jvCxwlOVxvnKYhMHTmlKe3u7SgksgRLz0kN7w/QcZLA=;
+	b=PlUv11zuZmjCQ9XkkO0TWMYVaLHEBdR/ZEwNEQwGvaTjoK2mf3tmATDiyebZKtUBELRIbr
+	C78c7ckRSlxFK2m+88dWVkS63z4qDLMgW/Pm15Jw9IsbWwzPCNWZCw0V1ghfzATIcrV7pI
+	mzoHTGvMTV20Z/ktP0eVnAIyP0osVNs5UreK4vEkbC2bDd3qzcMWtsn0wcpl6Mqv/xOjMU
+	BxSsXhcvF6bmc2zN2h94JOjZDVVHRxJ6Bb5XFU+ZTU0+9R1yIqD9Q/NlBiNSe92L+O/ix2
+	Wd0OiBjCjSJSi1gn2oELSg2xWcUhpZ62fvwUxIUxOTDDeVTeqxPE5UosZMPyAw==
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -104,64 +53,62 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261009024925.3169077-1-memxor@gmail.com> <20261009024925.3169077-2-memxor@gmail.com>
- <20261009041346.GHashp-hYpLl-o-l3M@fat_crate.local> <DM0ESVBT9553.2S1RWK1W7M8WW@gmail.com>
- <20261122200848.GBawNL0FcQoK918YDI@fat_crate.local>
-In-Reply-To: <20261122200848.GBawNL0FcQoK918YDI@fat_crate.local>
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Sun, 22 Nov 2026 22:59:33 +0100
-X-Gm-Features: Aa3M54qKKhsUFTei5EMS4AX7nLbtFO46YTvZfgyv2aoJQjyCxd2fcTrkMQbysJA
-Message-ID: <CAP01T746W=8FFiJJUM3H-Qv09uRO6-XEi9B-8pjSgtpAPBx4EA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v1 1/3] x86/mm: Resolve BPF exception fixups for
- user address faults under SMAP
-To: Borislav Petkov <bp@alien8.de>
-Cc: bpf@vger.kernel.org, Puranjay Mohan <puranjay@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, Andy Lutomirski <luto@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
-	kkd@meta.com, kernel-team@meta.com, x86@kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Date: Sun, 22 Nov 2026 23:14:05 +0100
+From: Nicolai Buchwitz <nb@tipi-net.de>
+To: Sam Edwards <cfsworks@gmail.com>
+Cc: Anandu Padinhare <Anandu.Padinhare@electrifex.com>,
+ maxime.chevallier@bootlin.com, andrew+netdev@lunn.ch, davem@davemloft.net,
+ edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
+ mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com, Alexei Starovoitov
+ <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard
+ Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, "Russell King (Oracle)"
+ <rmk+kernel@armlinux.org.uk>, David Wu <david.wu@rock-chips.com>,
+ stable@vger.kernel.org, netdev@vger.kernel.org,
+ linux-stm32@st-md-mailman.stormreply.com,
+ linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org
+Subject: Re: [PATCH net] net: stmmac: retry a failed RX refill from a timer
+In-Reply-To: <CAH5Ym4ijMNSAWZ8k3GmwOoLDBVTy32B1uhS_fE-dGhsPkgozeQ@mail.gmail.com>
+References: <MA0PR01MB921746F36D90C7080287ACC9FD782@MA0PR01MB9217.INDPRD01.PROD.OUTLOOK.COM>
+ <9d8cdde77beedce76aaaa1c5a7a788dc@tipi-net.de>
+ <CAH5Ym4h8-1mc+DX0Si7XROeGn9M72bQC+ooM05Y7ZmgTo+ON4w@mail.gmail.com>
+ <CAH5Ym4jkX_tD58Gtd-mzruB+hqHK7s_9knNWh+gMqUjwuYyVPA@mail.gmail.com>
+ <3303844cdf7c00c5369453eb91027c1b@tipi-net.de>
+ <CAH5Ym4ijMNSAWZ8k3GmwOoLDBVTy32B1uhS_fE-dGhsPkgozeQ@mail.gmail.com>
+Message-ID: <8e7b5bd372934d85ff890a6da7ca93b8@tipi-net.de>
+X-Sender: nb@tipi-net.de
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Last-TLS-Session-Version: TLSv1.3
 
-Hello, Boris.
+On 22.11.2026 22:34, Sam Edwards wrote:
+> [...]
 
-On Sun, 22 Nov 2026 at 21:09, Borislav Petkov <bp@alien8.de> wrote:
->
-> On Fri, Oct 09, 2026 at 05:23:13PM +0200, Kumar Kartikeya Dwivedi wrote:
-> > The advantage is losing significant amount of code size in JITed programs and
-> > the associated runtime overhead (you can see the numbers in the cover letter).
-> >
-> > Do note that we can make it more generic, we can follow up and optimize
-> > copy_from_kernel_nofault() with cpu_feature_enabled(X86_FEATURE_SMAP) as well.
-> > But I didn't want to go there just yet. I am happy to work on a follow up if so
-> > desired.
->
-> So we basically disable SMAP around bpf programs when they are about to
-> accesss potentially stale memory and the only line of defense is for
-> is_bpf_text_address() to really DTRT.
->
-> And once we open the floodgates here, I'm sure you bpf folks will find another
-> creative way to flip the kernel on its head.
->
-> And all that just to save some bytes.
->
-> Sorry, this is simply not worth the risk from where I am standing.
+>> Only if the ring is no bigger than the NAPI budget, right?
+> 
+> Right, but as pointed out in b6cb4541853c7 ("net: stmmac: avoid rx
+> queue overrun" -- the commit that introduced the "leave one behind"
+> behavior) the ring can be as small as 64 and that commit's author was
+> seeing budgets larger than that.
 
-But wouldn't this be strictly contained to BPF programs? I am also
-fine putting this behavior behind a CONFIG_BPF_SYSCALL guard. The
-kernel will panic in this path otherwise. We just want it to handle
-the exception when the fault comes from BPF.
+Fair, a 64 entry ring is enough to hit it.
 
-So I am not sure I see how this risks making things worse for anyone
-else. It's not about saving some bytes, if you look at the cover
-letter, we reduce significant amount of code and associated overhead
-from programs running in hot paths.
+> 
+> Perhaps NAPI should only be told to stop polling if we either:
+> a) Reach the clean tail of the ring (so we *know* there are no further
+> packets for us)
+> b) Run out of memory and have to arm the retry timer
+> 
+> Thoughts?
 
->
-> --
-> Regards/Gruss,
->     Boris.
->
-> https://people.kernel.org/tglx/notes-about-netiquette
+Agreed, simpler than refill in the loop. If stmmac_rx() stopped at
+dirty_rx and the refill worked, return the full budget so NAPI polls
+again.
+
+Anandu, could you fold that into v2?
+
+> [...]
+
+Regards
+Nicolai
