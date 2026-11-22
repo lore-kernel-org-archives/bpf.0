@@ -1,96 +1,79 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.176
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795350885;
-	b=c5RH6/2jGXh2tmAeSgpxdEyFTW8Igm2Sb9VTOVpFK41kHcX/ZuUKUqG34wl4TUgBM1PK
-	 /NqNPC58daqx1B+iBS5JPVk9vcVEusO6Xh84b1QhmhOfGPCTH7CeZbWLRpjUiTHBzFWzc
-	 wN6GSQq79afsDYXgcGUF42L99bRZ41pKPzv7UtDaT+m7t2A/g8y3gdOuu+l1aGBFYtbLR
-	 cgRr9jIawjbnc+17su3ENsghHPtdvNXzgL8Yj4wwbrg2YoE9d6iteHfGS37AEfr5Pmoq5
-	 nzp/lzg1roy5hjZ9usPz5resCqNrcDrunRJ252lTXyaa8WC9Di2CfOnVnWx5aw3s60Q==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795350885;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=jZ+9Hq7+WF35Ttn4sUCu8cTqno+NpMWFIKoNlp9zeYA=;
-	b=iIjaDmvus02XkawSNwOcGKOPSv6uGGfK/1pUWLwy5jq716nTBE2NKKmikwH539MZ1d6b
-	 b3AXCVsNsMMDQd+wlGNPcl3BCgfO4Uu/i+5lowms/GWZF1X2xyADjNj/ubLjlC8GTycAL
-	 DckBET9P7mqzQ5wjN58LwdOx255B1nKdCSzLaMAZrm9xTpUBOWBSfxjbvKEzf+KyrYWUh
-	 iXGJcGfjlwlTq7fbVxhSraYvE2tc7B2tIhPI2bOoM8wVX0jwXejb3t6WEb87wzSWGQUBg
-	 PIN5MXrBDnXB0FqwOxn8q0NmgyTJh3WrHeit4KVWOX1XIoo3pZSeLdN4ZTb/nv9uN7w==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xKwikFDd;
-	arc=none smtp.remote-ip=74.125.82.176
-Received: from mail-dy1-f176.google.com (mail-dy1-f176.google.com [74.125.82.176])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795350976;
+	b=LS+vFVY85G4NGs59/9Ypla8zLCWkBQ8R0w6G8ajfJNanojN68NKQD9+bjAzd8fb1NEy0
+	 XODC/TojldWJZtSQrZqc5XHX5XOh9+w3wNtWLCE4JS6zRfITXld0WfbwgU9O5CHQIMnJ0
+	 OplS7ue7yPtrfbU2gDtcbFjxZwIGhqGDrkkrgGzSRHHGgI1gwGB5PVTqmEUrHaaOsipka
+	 56IlcukzCrEPM5k/t5GUU6FH/Jx76fOf5u1ZiYJw0LYaTnR9ChG+F0OH6QdQdui1HOA5r
+	 IR0vgk8E12+A8QmyFH7PNC2GnT35nVR5pkcllIgdMU3ItxdQq8tNG0+GAeY3o5o9DGA==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795350976;
+	h=Received:DKIM-Signature:Received:From:Subject:Date:Message-Id:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding:X-B4-Tracking:
+	 X-Change-ID:To:Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:
+	 X-Endpoint-Received:X-Original-From:Reply-To;
+	bh=D1MuXXQSfxhAunCSCh6B0Ouy7me/RMME2XCu8g9bTPk=;
+	b=JTN/lox5/bWr2ji1jfuK+EvEw2daGFSQ4NAM949AavdIylc0AJ6LMY17gEVAsPJUIxe4
+	 U+yHRiz0OQ6uyEAN8WtGJYJ9sGPe8FJpiU+gu3LCz5ULDSLmifISKunzvX/uapWJp8+dd
+	 dxL5oiv3UUiuTTT2PECu7L726ayfdmkUod9QYeBmMLtEmpZYA1ZX+4tbhTRn7S0LMFQGN
+	 mrOPUycvch1/fVxGoIf0+iC7n0QYuR1ZG7dQukZrpB9J9nO45TiYppbzh+/BOVdYDMRZD
+	 95Y2QXKVsWukOjfaxHYS2jck0wkzeeiHnDqMSomNz3WvN5+YdKrd6FWItzA6IM62vHg==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DErrCV2Z;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BE10606A334;
+	Sun, 22 Nov 2026 12:36:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DErrCV2Z
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
+ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
+	t=1795350975;
+	b=TlUf0tkslfILivUUVgJnATx4YaImhYK8Sdw+RjfoywYicJV7xHSg1f6PiWzk9eldwEye
+	 64wkyX+SXwoE9YrENcy/wWGSPLy7dsyq6ohoqkrm8kweOMjGm0y4F+c+uAwovCIYcsgg/
+	 UDx57bHwlu5p3Zsd2I4HMg+zgsqLnQNBIkaGedUUDDMmLPHrmXjmBqQJJH1RbFc6+tZIe
+	 A67wW9gNYYCUUkc00Osh0bbSgUbjk5WcwCTrXKZpMm9jUbaUsm+FURZkORloug+xI5sbC
+	 QqUdRV+OwMDXvwIh3MhvBsF9h7DfNi0OVk9NHhDXlzzAJ2sJbAei4JJOpdsN5vZKKZQ==
+ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1795350975;
+	h=DKIM-Signature:Received:From:Subject:Date:Message-Id:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:X-B4-Tracking:X-Change-ID:To:
+	 Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To;
+	bh=D1MuXXQSfxhAunCSCh6B0Ouy7me/RMME2XCu8g9bTPk=;
+	b=LNhLiN2mleLAvbItwQgSTFlU8IsTKxjpRqXv2HDWIbPRgOGfygX5OeCR9oeO3E03eq4P
+	 LdWks5fGQmet5nz0i5AEE1YKI757whhXCMFyQfEe26fFzQFUTIfvMOMEl7XmnZajYp7OZ
+	 V8mLCOOpEUFNa4hXaaSljObL59tl8Nw5g4HmjJPdKJABDxJDdy8TsjmEtYVc5FnlBJ8ds
+	 RyZxgom0tI4nR0CYduV/DNWjimWnauQlBjQdtNmEdOtUca3LztGrJmp15Tf4D7iUQ4QDK
+	 2I9Y0x4mLaDIccccaMEkCweYmB0IeZYMIZSOravp+SzjJO0apXabCZJAT2KI9kSqZ9Q==
+ARC-Authentication-Results: i=1; smtp.kernel.org; 
+	arc=none smtp.remote-ip=100.80.115.77
+Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EF36606A681
-	for <bpf@vger.kernel.org>; Sun, 22 Nov 2026 12:34:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3EF36606A681
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xKwikFDd
-Received: by mail-dy1-f176.google.com with SMTP id 5a478bee46e88-38644aedba1so3216413eec.0
-        for <bpf@vger.kernel.org>; Sun, 22 Nov 2026 04:34:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795350884; x=1795955684; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=jZ+9Hq7+WF35Ttn4sUCu8cTqno+NpMWFIKoNlp9zeYA=;
-        b=xKwikFDdX4OBdEgRODyFtJGV+zd3rDqJUoJO0jhEeGn51IQrIrJVSwAWne+IkxvJb8
-         LGGKUptn3PPNw/Yvs7ngoxneVPDOBhUSvG5ZL6sg+2rzl7u7OlyUYLWeWfyNsirg1WLO
-         oWGtMr4oFSa73ih2y5qcpUUmV85XXq/Bgv/MAOE8tlh85gT3OVALKKFRFbW2/Ifa7vHT
-         DEms7ePeMIHS+XOZ30gQs7MzPX/uVoFMTnxdtsxcmA4SEzP6zaJd9rZKma+QzKewffX5
-         Jsruy2izLQeViQaFMdHHv3qecUgXnsMGhKYKEiE7hrtHdTcgUyq0f8B2GAxUwoK3+8hW
-         OfoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795350884; x=1795955684;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=jZ+9Hq7+WF35Ttn4sUCu8cTqno+NpMWFIKoNlp9zeYA=;
-        b=WkR/mg1zZIqibGkcAeG+XTyJI0jmwxNggjVz8vlv7rT5/dEP9jBoiEEM+0v5SvvKHz
-         9lzyXVC1GnMov2y85bdNxAQyennXGq7/11W+PtXa2jQqO1ZrfJ9jSsTIATUbfPVTpAcU
-         Ys8jwH/6NMF3MPTrF6d7VSzWNr/1FSqW6g0OTNeT5iqaSwvTyQBi9sO8qUCoRS60lCeM
-         OiffQCJe3OcuLbGg9uQDp/KHBWbYoIAaqNRcYvXGrPVwU5xZSFNQKeQIO3p5Ka74dge6
-         v3BdIAXX+5qYsq+KvvMqLkXwwd7mZaFLCWi1OIaGuwbUj4c6C4CDWJC3lI5b15Q4xZI4
-         7UGQ==
-X-Gm-Message-State: APuU4Z8LAJqVuVHziXs31Yr6orWFuRalh8BtkKiF4E7HxgYeEgI+pQq3
-	JGsFcNhI00XgUOc7kxRvkZ1VZcBFT2TBTOkU2ParzSk5mtq9VJGv6t4k6C6yKDHN7p4=
-X-Gm-Gg: AZFdTZc84ZlnYet6iTgUevHgZo7g5YXBNycraylNW8dYqzoGJfaromxNQ7+et5Uyzve
-	lKJXOVzWnFoFkpUgkXF9N43elcf9K7CG2dEPYNlvO0QTpMZ2RXkAzodttjxxeuxGOAzMZjnz+n2
-	2aNDruytcEljoQE770abVKyi+cpp+Nkv+ED/kuF46wXaD/O9gKhZufthdU484dUZ4j9gWiSzLhb
-	wajONabPD+TU8bC5lvhXggW2U3Rk7TsEVzNMfVSvNbdr54CgjMzn8B0jIiMIG2UEf+77t1Re9Vf
-	ml/VcJ39wj8d2llQRPkwdMo/iyrBus8amqbawxaHjOANRMRlKG3kYXj8ADL8lDsbjwC7r2HeuNI
-	UUzlun9PHw5s6QPwgJJnpdLHw1/z3OyzAD04CcfqTEaZGbO8rdMZTJ3yulq7kpE54q7UXJxjEWq
-	By+EM5hMMHkbrxi+t3yigw/JDldhhxTtg4HdSAPKYTF+1vwubCxxHInJB9KzQHaTVg9EfwUoe+5
-	F6+aZLGCcKR+UzQYcqWLSSa64r//VCHJoUpDNqgvnDphwfbhLnO8EG537tIbLi4H/draoxBmUYu
-	b2MTjSkXrrxIuTUOq0O3WDBJefaxwWnmuQKC6A9jYDOMhcC/OZBjWvLrWs1OlrHAKw==
-X-Received: by 2002:a05:693c:8641:20b0:383:50b7:1d78 with SMTP id 5a478bee46e88-38571223ee7mr9754733eec.40.1795350884211;
-        Sun, 22 Nov 2026 04:34:44 -0800 (PST)
-Received: from boogieman ([182.66.218.119])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-385666e99fdsm33372330eec.5.2026.11.22.04.34.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 22 Nov 2026 04:34:43 -0800 (PST)
-From: Abhishek Khade <abhishekkhade69@gmail.com>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	memxor@gmail.com,
-	linux-kernel@vger.kernel.org,
-	Abhishek Khade <abhishekkhade69@gmail.com>
-Subject: [RFC PATCH bpf-next v2 2/2] selftests/bpf: Add selftests for bpf_memmem and bpf_dynptr_memmem kfuncs
-Date: Sun, 22 Nov 2026 18:04:27 +0530
-Message-ID: <20261122123427.287521-3-abhishekkhade69@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20261122123427.287521-1-abhishekkhade69@gmail.com>
-References: <20261122123427.287521-1-abhishekkhade69@gmail.com>
+	by smtp.kernel.org (Postfix) with ESMTPS id 8EF031F000C0;
+	Sun, 22 Nov 2026 12:36:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795350975;
+	bh=D1MuXXQSfxhAunCSCh6B0Ouy7me/RMME2XCu8g9bTPk=;
+	h=From:Subject:Date:To:Cc:Reply-To;
+	b=DErrCV2Z5RTpLrsTGHncZJXKIme+4NdUsuvpEOF5547jjRVV7JbeFlEBvdYYHbEyt
+	 /VLlYIbFyB/evb9wrE8GiQJlL9aDhIekndjm++T5tTQGUO+PgXd8uH+dyRTDtTptJt
+	 dQkCsGa8qoXnnCqBgqfMYAhIO9tSRsnrE7Qkhtyn43NL4uLXBO0YTqJlzlOdRCxpu8
+	 VkuyJCklx6x+Tq8fs+QCKwrIO78uHQiwf2kGNjjdKan56OR3CFabD2mC//rRpiO2T0
+	 alnuRrfobf3Y9aIBaYBxornkE0o1eKmMxbvY7ZjK8+16oGFaH6JdNiOAddn8arF2hx
+	 QfZ3h0/plgdDQ==
+Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
+	by lkml.kernel.org (Postfix) with ESMTP id E157F4C035;
+	Sun, 22 Nov 2026 12:36:11 +0000 (UTC)
+From: YanXin Li via B4 Relay <devnull+fadouse.pm.me@kernel.org>
+Subject: [PATCH bpf v4 0/2] bpf: bound arena allocations to the user VMA
+Date: Sun, 22 Nov 2026 20:35:35 +0800
+Message-Id: <20261122-b4-03-bpf-arena-vmalloc-oob-v4-8090cdc58ff8-v4-0-d542d1233623@pm.me>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -100,317 +83,76 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAJfhAmsC/yWN0W7CMAxFfwX5edZSx2SBX0E8OIk9MnUtSqDah
+ Pj3tePxHl2d84CurWqH4+4BTZfa6zytg992kC8yfSrWsm4gR2EYiDAxOo/paihNJ8HlW8Zxzjj
+ PCRfG6A4ul7yPZhGNNB3ULJQUYTVem1r9+a+dYFXA+QX7PX1pvm2d7ZakK6YmU75sqOkov7jB9
+ 8w8ODYfmIp8kBsCO6ZAXjl6ij6IWilR4fn8AyNqmCDaAAAA
+X-Change-ID: 20261122-b4-03-bpf-arena-vmalloc-oob-v4-8090cdc58ff8-f2eb9eff6db8
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>, bpf@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, stable@vger.kernel.org
+X-Mailer: b4 0.16.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1795350970; l=1694;
+ i=fadouse@pm.me; s=b4-relay-20261122; h=from:subject:message-id;
+ bh=e0ZiUtyczM9A0TUsQiCpAJ4gxT0Nz/VbMD25/XSK4E8=;
+ b=Jztxt8PhcyvKwjpW2x7GxAqcM0Y5UxoLrt7ySghXScqL8VYGr4htosk7yZLSWZU/61JkjLdj1
+ Oz50foA8PhqAutsLos5oDBzuKgar6YQVPy5fg1ecUq3lKrbr/rAyZ6v
+X-Developer-Key: i=fadouse@pm.me; a=ed25519;
+ pk=b4DyzHJDRd8853IHUSKPA5wwzChj8eF4MTnZuyPz1PQ=
+X-Endpoint-Received: by B4 Relay for fadouse@pm.me/b4-relay-20261122 with
+ auth_id=1597
+X-Original-From: YanXin Li <fadouse@pm.me>
+Reply-To: fadouse@pm.me
 
-Add automated BPF selftests validating in-kernel binary byte sequence
-matching for bpf_memmem() and bpf_dynptr_memmem().
+When map_extra is omitted, a short first mmap() can leave free arena
+pages beyond the user VMA. Automatic allocation can select those pages;
+near a 4 GiB boundary, the kernel mapping can extend past the arena's
+vmalloc reservation. Patch 1 confines the range tree to the VMA, and
+patch 2 adds a regression selftest.
 
-Covered test cases:
-1. Binary pattern match across embedded null bytes (0x00).
-2. Match at buffer start (offset 0).
-3. Match at buffer end (haystack_sz - needle_sz).
-4. Single-byte needle fastpath.
-5. Non-matching pattern returning -ENOENT.
-6. Multiple candidate occurrences returning the first match.
-7. Overlapping candidate prefixes returning the correct match.
-8. Exact match where needle equals haystack.
-9. Needles larger than haystack returning -EINVAL.
-10. Empty needle returning -EINVAL.
-11. Invalid flags returning -EINVAL.
-12. Oversized haystack (> 2 MB) returning -E2BIG.
-13. Exact 2 MB boundary full scan.
-14. Zero-length haystack returning -EINVAL.
-15. Dynamic pointer (bpf_dynptr) searching across embedded nulls,
-    start, end, not found, size boundary, and error cases.
-
-Signed-off-by: Abhishek Khade <abhishekkhade69@gmail.com>
 ---
- .../selftests/bpf/prog_tests/memmem_kfunc.c   |   9 +
- .../selftests/bpf/progs/memmem_kfunc.c        | 259 ++++++++++++++++++
- 2 files changed, 268 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/memmem_kfunc.c
- create mode 100644 tools/testing/selftests/bpf/progs/memmem_kfunc.c
+Changes in v4:
+- Check the first allocation in the selftest and remove the incorrect
+  offset-zero NULL comment. Patch 1 is unchanged.
+- Link to v3: https://lore.kernel.org/r/20261122-b4-03-bpf-arena-vmalloc-oob-v3-da2dc21683c6-v3-0-1f94ae9a884a@pm.me
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/memmem_kfunc.c b/tools/testing/selftests/bpf/prog_tests/memmem_kfunc.c
-new file mode 100644
-index 000000000..d27c9a2a2
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/memmem_kfunc.c
-@@ -0,0 +1,9 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Abhishek Khade */
-+#include <test_progs.h>
-+#include "memmem_kfunc.skel.h"
-+
-+void test_memmem_kfunc(void)
-+{
-+	RUN_TESTS(memmem_kfunc);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/memmem_kfunc.c b/tools/testing/selftests/bpf/progs/memmem_kfunc.c
-new file mode 100644
-index 000000000..8abd06e97
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/memmem_kfunc.c
-@@ -0,0 +1,259 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Abhishek Khade */
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
-+#include "errno.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+/* kfunc prototypes */
-+long bpf_memmem(const void *haystack, u32 haystack__sz,
-+		const void *needle, u32 needle__sz,
-+		u64 flags) __ksym;
-+
-+long bpf_dynptr_memmem(const struct bpf_dynptr *haystack,
-+		       const void *needle, u32 needle__sz,
-+		       u64 flags) __ksym;
-+
-+static char bin_data[] = {
-+	0x16, 0x03, 0x01, 0x00, 0x02, 0xaa, 0xbb, 0x00, 0xff, 0x00, 0x55
-+};
-+
-+static char needle_null[] = { 0x00, 0xff, 0x00 };
-+static char needle_start[] = { 0x16, 0x03, 0x01 };
-+static char needle_end[] = { 0x00, 0x55 };
-+static char needle_single[] = { 0xaa };
-+static char needle_notfound[] = { 0xde, 0xad };
-+static char needle_repeat[] = { 0xaa, 0xbb, 0x00, 0xaa, 0xbb };
-+static char needle_sub_repeat[] = { 0xaa, 0xbb };
-+static char overlap_haystack[] = { 0xaa, 0xaa, 0xaa, 0xbb };
-+static char overlap_needle[] = { 0xaa, 0xaa, 0xbb };
-+static char oversized_buf[2 * 1024 * 1024 + 1];
-+
-+/* 1. Flat memory buffer tests */
-+
-+SEC("syscall")
-+__success __retval(7)
-+int test_memmem_embedded_null(void *ctx)
-+{
-+	return bpf_memmem(bin_data, sizeof(bin_data),
-+			  needle_null, sizeof(needle_null), 0);
-+}
-+
-+SEC("syscall")
-+__success __retval(0)
-+int test_memmem_start(void *ctx)
-+{
-+	return bpf_memmem(bin_data, sizeof(bin_data),
-+			  needle_start, sizeof(needle_start), 0);
-+}
-+
-+SEC("syscall")
-+__success __retval(9)
-+int test_memmem_end(void *ctx)
-+{
-+	return bpf_memmem(bin_data, sizeof(bin_data),
-+			  needle_end, sizeof(needle_end), 0);
-+}
-+
-+SEC("syscall")
-+__success __retval(5)
-+int test_memmem_single_byte(void *ctx)
-+{
-+	return bpf_memmem(bin_data, sizeof(bin_data),
-+			  needle_single, sizeof(needle_single), 0);
-+}
-+
-+SEC("syscall")
-+__success __retval(-ENOENT)
-+int test_memmem_not_found(void *ctx)
-+{
-+	return bpf_memmem(bin_data, sizeof(bin_data),
-+			  needle_notfound, sizeof(needle_notfound), 0);
-+}
-+
-+SEC("syscall")
-+__success __retval(0)
-+int test_memmem_first_occurrence(void *ctx)
-+{
-+	return bpf_memmem(needle_repeat, sizeof(needle_repeat),
-+			  needle_sub_repeat, sizeof(needle_sub_repeat), 0);
-+}
-+
-+SEC("syscall")
-+__success __retval(1)
-+int test_memmem_overlapping_prefix(void *ctx)
-+{
-+	return bpf_memmem(overlap_haystack, sizeof(overlap_haystack),
-+			  overlap_needle, sizeof(overlap_needle), 0);
-+}
-+
-+SEC("syscall")
-+__success __retval(0)
-+int test_memmem_exact_match(void *ctx)
-+{
-+	return bpf_memmem(needle_start, sizeof(needle_start),
-+			  needle_start, sizeof(needle_start), 0);
-+}
-+
-+SEC("syscall")
-+__success __retval(-EINVAL)
-+int test_memmem_needle_too_large(void *ctx)
-+{
-+	return bpf_memmem(needle_start, sizeof(needle_start),
-+			  bin_data, sizeof(bin_data), 0);
-+}
-+
-+SEC("syscall")
-+__success __retval(-EINVAL)
-+int test_memmem_empty_needle(void *ctx)
-+{
-+	return bpf_memmem(bin_data, sizeof(bin_data),
-+			  needle_start, 0, 0);
-+}
-+
-+SEC("syscall")
-+__success __retval(-EINVAL)
-+int test_memmem_invalid_flags(void *ctx)
-+{
-+	return bpf_memmem(bin_data, sizeof(bin_data),
-+			  needle_start, sizeof(needle_start), 1);
-+}
-+
-+SEC("syscall")
-+__success __retval(-E2BIG)
-+int test_memmem_oversized_haystack(void *ctx)
-+{
-+	return bpf_memmem(oversized_buf, sizeof(oversized_buf),
-+			  needle_single, sizeof(needle_single), 0);
-+}
-+
-+SEC("syscall")
-+__success __retval(-ENOENT)
-+int test_memmem_exact_2mb(void *ctx)
-+{
-+	return bpf_memmem(oversized_buf, 2 * 1024 * 1024,
-+			  needle_single, sizeof(needle_single), 0);
-+}
-+
-+SEC("syscall")
-+__success __retval(-EINVAL)
-+int test_memmem_zero_len_haystack(void *ctx)
-+{
-+	return bpf_memmem(bin_data, 0,
-+			  needle_single, sizeof(needle_single), 0);
-+}
-+
-+/* 2. Dynamic pointer (bpf_dynptr) tests */
-+
-+SEC("syscall")
-+__success __retval(7)
-+int test_dynptr_memmem_embedded_null(void *ctx)
-+{
-+	struct bpf_dynptr ptr;
-+
-+	bpf_dynptr_from_mem((void *)bin_data, sizeof(bin_data), 0, &ptr);
-+	return bpf_dynptr_memmem(&ptr, needle_null, sizeof(needle_null), 0);
-+}
-+
-+SEC("syscall")
-+__success __retval(0)
-+int test_dynptr_memmem_start(void *ctx)
-+{
-+	struct bpf_dynptr ptr;
-+
-+	bpf_dynptr_from_mem((void *)bin_data, sizeof(bin_data), 0, &ptr);
-+	return bpf_dynptr_memmem(&ptr, needle_start, sizeof(needle_start), 0);
-+}
-+
-+SEC("syscall")
-+__success __retval(9)
-+int test_dynptr_memmem_end(void *ctx)
-+{
-+	struct bpf_dynptr ptr;
-+
-+	bpf_dynptr_from_mem((void *)bin_data, sizeof(bin_data), 0, &ptr);
-+	return bpf_dynptr_memmem(&ptr, needle_end, sizeof(needle_end), 0);
-+}
-+
-+SEC("syscall")
-+__success __retval(0)
-+int test_dynptr_memmem_exact_match(void *ctx)
-+{
-+	struct bpf_dynptr ptr;
-+
-+	bpf_dynptr_from_mem((void *)needle_start, sizeof(needle_start), 0, &ptr);
-+	return bpf_dynptr_memmem(&ptr, needle_start, sizeof(needle_start), 0);
-+}
-+
-+SEC("syscall")
-+__success __retval(-EINVAL)
-+int test_dynptr_memmem_needle_too_large(void *ctx)
-+{
-+	struct bpf_dynptr ptr;
-+
-+	bpf_dynptr_from_mem((void *)needle_start, sizeof(needle_start), 0, &ptr);
-+	return bpf_dynptr_memmem(&ptr, bin_data, sizeof(bin_data), 0);
-+}
-+
-+SEC("syscall")
-+__success __retval(-ENOENT)
-+int test_dynptr_memmem_not_found(void *ctx)
-+{
-+	struct bpf_dynptr ptr;
-+
-+	bpf_dynptr_from_mem((void *)bin_data, sizeof(bin_data), 0, &ptr);
-+	return bpf_dynptr_memmem(&ptr, needle_notfound, sizeof(needle_notfound), 0);
-+}
-+
-+SEC("syscall")
-+__success __retval(-EINVAL)
-+int test_dynptr_memmem_empty_needle(void *ctx)
-+{
-+	struct bpf_dynptr ptr;
-+
-+	bpf_dynptr_from_mem((void *)bin_data, sizeof(bin_data), 0, &ptr);
-+	return bpf_dynptr_memmem(&ptr, needle_start, 0, 0);
-+}
-+
-+SEC("syscall")
-+__success __retval(-EINVAL)
-+int test_dynptr_memmem_invalid_flags(void *ctx)
-+{
-+	struct bpf_dynptr ptr;
-+
-+	bpf_dynptr_from_mem((void *)bin_data, sizeof(bin_data), 0, &ptr);
-+	return bpf_dynptr_memmem(&ptr, needle_start, sizeof(needle_start), 1);
-+}
-+
-+SEC("syscall")
-+__success __retval(-E2BIG)
-+int test_dynptr_memmem_oversized_haystack(void *ctx)
-+{
-+	struct bpf_dynptr ptr;
-+
-+	bpf_dynptr_from_mem((void *)oversized_buf, sizeof(oversized_buf), 0, &ptr);
-+	return bpf_dynptr_memmem(&ptr, needle_single, sizeof(needle_single), 0);
-+}
-+
-+SEC("syscall")
-+__success __retval(-ENOENT)
-+int test_dynptr_memmem_exact_2mb(void *ctx)
-+{
-+	struct bpf_dynptr ptr;
-+
-+	bpf_dynptr_from_mem((void *)oversized_buf, 2 * 1024 * 1024, 0, &ptr);
-+	return bpf_dynptr_memmem(&ptr, needle_single, sizeof(needle_single), 0);
-+}
-+
-+SEC("syscall")
-+__success __retval(-EINVAL)
-+int test_dynptr_memmem_zero_len_haystack(void *ctx)
-+{
-+	struct bpf_dynptr ptr;
-+
-+	bpf_dynptr_from_mem((void *)bin_data, 0, 0, &ptr);
-+	return bpf_dynptr_memmem(&ptr, needle_single, sizeof(needle_single), 0);
-+}
--- 
-2.53.0
+To: Alexei Starovoitov <ast@kernel.org>
+To: Daniel Borkmann <daniel@iogearbox.net>
+To: Andrii Nakryiko <andrii@kernel.org>
+To: Eduard Zingerman <eddyz87@gmail.com>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Song Liu <song@kernel.org>
+Cc: Yonghong Song <yonghong.song@linux.dev>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: Emil Tsalapatis <emil@etsalapatis.com>
+Cc: Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: bpf@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+
+---
+YanXin Li (2):
+      bpf: bound arena allocations to the user VMA
+      selftests/bpf: test arena allocation after a short mmap
+
+ kernel/bpf/arena.c                                 | 25 ++++++++++
+ .../testing/selftests/bpf/prog_tests/arena_mmap.c  | 53 ++++++++++++++++++++++
+ .../testing/selftests/bpf/progs/arena_mmap_alloc.c | 33 ++++++++++++++
+ 3 files changed, 111 insertions(+)
+---
+base-commit: c44104f3642da720164042623e4832836aefdd8e
+change-id: 20261122-b4-03-bpf-arena-vmalloc-oob-v4-8090cdc58ff8-f2eb9eff6db8
+
+Best regards,
+--  
+YanXin Li <fadouse@pm.me>
+
 
