@@ -1,45 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.70.43.16
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795313660;
-	b=VEkihWfpkCa+ZQUrTwd/M6NqbfSPH9X9s5Gp4NLmx3tiJIQJ04spxCZ/Q64k8bo3wFkO
-	 iN+Z4BdSOUTwE+/bUHLaRoZLFoL2+1zKX8rGXnBq/L4YBzT5duGJE1gsFQ3UlazEeu9SA
-	 VbdgDBIKcEjOBcnbmjyVTbmOOtx169Yxr7Hcr2LSmi3NTLk90XaUq/LvYxpNOAsRM6bpE
-	 PoMHIDEY2tQmy4ByQisa8d/8MaSq3rWPCgtCBPiAEMm3DMjxn370bmovrDJrhlbVSRcqR
-	 797lkBcgZg5r/qQ5u/KxSBJdT4Atbbts0fo/iYafxftcXbvqlGP1T//UERxjgF/za5Q==
+	t=1795317045;
+	b=BADciFVrKWSLsmbtvnbi9WSkYsnqSEgjzojfCbhMR23jqPihkx6iYgK/P0DaVyBfCg9/
+	 YdJOq8+9wp5Si2PetMhe7eAENBYwgJsLhTTpXFKOJQfFcZ/hl5ZaybnQpxRcS5a2pSkr/
+	 iYW4LRw493lziI3FpaFTkWXSg/5ToYWIg14rmzh86eLRCfJo2KEBCc3TQXUY/wo9g7PdE
+	 9bQa4PMacovaRSk4ezSwUxxS1pDJhx1uL5/ICb+vd3iehzXgjY2CdM77IDS+qLq2rVHsr
+	 FjX4QyDTVUvNZHRKUazyRAmL62Pknv7hcqLsR/SabH2lyvyTRSeigw8txPGI24ZCMxw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795313660;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=h5VA1YE3lZnMuc4pgcwx05FrLM8HqoJ1Sdgg4XfYCTc=;
-	b=0pxUXSYS/a+jr6132xQWid6fslWnrTiSDkR1IJfs8/4g6ZwX/s9RRLmUE3TF/jFoHVPT
-	 Jv/ddEUf3h2av0JHqt6llyCbrAf/NsShdRe+6WiVsMZM+RkC4nrSyJi9jQr5wvx65JCQx
-	 vgjFBEl7cBEDNPWUhN/cx4K5S3yj3QaBc8bacxLAYAm0TBmE7WTQDjGPo2qd2YJKK1efY
-	 KTWdi6J+EzjfqzOSYhKdl7yc+K3jqZv4j69VwlVMt76Ul8ffoJyZCAJr/dY+FXAu8gnmC
-	 aunBt14RscXrFFdmUy1fByUbJ3TqTpNwPTIHaAUAHfHyOpLE8QYVIYByGWBXMxOiUYA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795317045;
+	h=DMARC-Filter:DKIM-Signature:Date:To:From:Cc:Subject:Message-ID:
+	 Feedback-ID:X-Pm-Message-ID:MIME-Version:Content-Type;
+	bh=DiArSuxRSivacURgYK5MkN1Yt77C4B03HaAp7xcytKE=;
+	b=od+c8/MLNxIxwXnSoCjgfx8eg+QegZWdN0ytWcW/I7YkCNcyA5KL4mYOgj0fybeT6K92
+	 KmtpIyoks2ZHlPNFlYNLjZF2XKgW1kGCCfE+7Ao8hhM94vWLb6pLDQLO0g2PZ8H360je+
+	 78xEMvo3N7ccKLxiDhD6dUs6XdQIRgAK79angFWqXtxth1CXZRPTAox98NA1b3v8aML54
+	 DljZI8EeRd+vh26rI/WdKph4BznhWrdBsE5sU6KWHlfTAK9aiJBpRJmB8YJlIF8zqVllY
+	 JeAcC1xyM8srOkgCWfes8RVKYC523iaRZ0T7d368YP2oY3x7+0yLSHoNBeS5HKq4TKQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=FeZXY1bn;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=pm.me;
+	spf=pass smtp.mailfrom=pm.me;
+	dkim=pass header.d=pm.me header.i=@pm.me header.a=rsa-sha256 header.s=protonmail3 header.b=E27uGIe3;
+	arc=none smtp.remote-ip=185.70.43.16
+Received: from mail-4316.protonmail.ch (mail-4316.protonmail.ch [185.70.43.16])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6029F606A332;
-	Sun, 22 Nov 2026 02:14:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99E78606A32C;
+	Sun, 22 Nov 2026 03:10:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 99E78606A32C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=FeZXY1bn
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 585771F000CA;
-	Sun, 22 Nov 2026 02:14:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795313660;
-	bh=h5VA1YE3lZnMuc4pgcwx05FrLM8HqoJ1Sdgg4XfYCTc=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=FeZXY1bnXRjfWfDhdd9xvxA2C1PvOyxAVG/K78D8Kl9qL79GS5Qc997rcaK+Aa0DZ
-	 jl7mxVscPW7m/j4p3AR8o7Pgfv7EdqDS7MMMUdCmSkdniwuxKXU0nZ1MvJtABdS0To
-	 MGbUtZ0CeNa6NIJe+6hVKxEcz0iQdZ5UtGu4oMb0/TY1/v48944cY4nucneJ6g6kNI
-	 rwBf2H2sqlK4Eqycd2/wLe9kB2+F3DlVJHlbuudR+Wj4FMYMVYloWJ2vmPZtPUaCsz
-	 JYGGcRSqFRIHgjga3nhOPl0vDkmiDNg/9CgrfDzA44h72yk+os9ZejeY4N1M/xJOfN
-	 H4vWAxohEgGEA==
-Content-Type: multipart/mixed; boundary="===============3579480507848251298=="
+	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.a=rsa-sha256 header.s=protonmail3 header.b=E27uGIe3
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
+	s=protonmail3; t=1795317042; x=1795576242;
+	bh=DiArSuxRSivacURgYK5MkN1Yt77C4B03HaAp7xcytKE=;
+	h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
+	 Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
+	b=E27uGIe3Tf4/dpVCuB48b39mRE1bzSqpSvFSrsKvj0IJ5eQ/UJ+uRpXUSnqiWMC35
+	 DPW1RISdPcf4dVV0PYe5rqCcLRfF7d6e/xyqSZ06FmbgQVQeNwkrywCsexyzUSlqJt
+	 cQHJIc+efQS1AiGSc0gnYR9nqtyxbDlWoK+vLoCtcPQxyB7EnOMsSIy/2jBx9Sip6P
+	 OPdHM6FswO95GXmEZyGp6/l9asMn2HOhH+k7R3kCpibu1dEIYzWinXNW9Zk9TscO+6
+	 x/f5IPTrnkj/gSLc2ptRxfB01DGm8D0AbQX8ovNnHqOnCVczdHLrASRWeX5ZPolnb1
+	 BZA5UWBBJtJlQ==
+Date: Sun, 22 Nov 2026 03:10:35 +0000
+To: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>
+From: YanXin Li <fadouse@pm.me>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, bpf@vger.kernel.org, linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: [PATCH bpf] bpf: bound arena allocations to the user VMA
+Message-ID: <20261122031025.9771-1-fadouse@pm.me>
+Feedback-ID: 173252840:user:proton
+X-Pm-Message-ID: 2e36b302af08c03e0e2b4c68ce61bb904147f183
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,203 +60,240 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <a20bfb0569b8af98b16097472118dd35c85fc9c1e258860871b01bfa9c6c9384@mail.kernel.org>
-In-Reply-To: <20261122011809.2667684-26-jarkko@kernel.org>
-References: <20261122011809.2667684-26-jarkko@kernel.org>
-Subject: Re: [RFC PATCH v6 25/26] selftests/userland: Add userland test suite
-From: bot+bpf-ci@kernel.org
-To: jarkko@kernel.org,linux-fsdevel@vger.kernel.org
-Cc: jarkko@kernel.org,bpf@vger.kernel.org,containers@lists.linux.dev,linux-api@vger.kernel.org,linux-arch@vger.kernel.org,linux-doc@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-mm@kvack.org,linux-security-module@vger.kernel.org,aleksa@amutable.com,alex@amutable.com,viro@zeniv.linux.org.uk,luto@amacapital.net,arnd@arndb.de,brauner@kernel.org,dhowells@redhat.com,giuseppe@scrivano.org,hughd@google.com,jack@suse.cz,jlayton@kernel.org,corbet@lwn.net,josef@toxicpanda.com,kees@kernel.org,kpsingh@kernel.org,lennart@poettering.net,neal@gompa.dev,oleg@redhat.com,paul@paul-moore.com,ptikhomirov@virtuozzo.com,sergeh@kernel.org,skhan@linuxfoundation.org,zygmunt.krynicki@canonical.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Sun, 22 Nov 2026 02:14:16 +0000 (UTC)
+Content-Type: multipart/signed; protocol="application/pgp-signature"; micalg=pgp-sha256; boundary="------1492baab12ff4501d634dbfa736361d7a3b2c06d5052aea3d963a85e09afe94f"; charset=utf-8
 
---===============3579480507848251298==
-Content-Type: text/plain; charset="us-ascii"
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------1492baab12ff4501d634dbfa736361d7a3b2c06d5052aea3d963a85e09afe94f
+Content-Type: multipart/mixed;
+ boundary=656e3c67ab831e1680d881cd91b1e9d6f848d20c836203c4d510f971e408
+From: YanXin Li <fadouse@pm.me>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: [PATCH bpf] bpf: bound arena allocations to the user VMA
+Date: Sun, 22 Nov 2026 11:10:25 +0800
+Message-ID: <20261122031025.9771-1-fadouse@pm.me>
+X-Mailer: git-send-email 2.54.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
 
-> selftests/userland: Add userland test suite
+--656e3c67ab831e1680d881cd91b1e9d6f848d20c836203c4d510f971e408
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-TL;DR:
-- Selftest may fail on out-of-tree builds: ksft.py helper isn't installed
-  (TEST_INCLUDES)
-- Plain i386 userspace on x86_64 may get x32 syscall numbers and wrongly skip
-- Time-namespace case may fail without TIME_NS; a socket recv may hang on
-  failure
+bpf_arena_alloc_pages() hands out page ranges from the arena's range
+tree, which is initialized to max_entries pages, while the kernel
+mapping of those pages is built at kern_vm_start + (u32)user_addr.
+The fixed-address path and bpf_arena_free_pages() both assume that a
+returned range stays inside the user VMA, so that its lower 32 bits
+do not wrap past the end of the arena's 4 GiB kernel vm area:
 
-> diff --git a/tools/testing/selftests/userland/Makefile b/tools/testing/selftests/userland/Makefile
-> new file mode 100644
-> index 000000000000..baf26c6780bb
-> --- /dev/null
-> +++ b/tools/testing/selftests/userland/Makefile
-> @@ -0,0 +1,5 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +include ../lib.mk
-> +
-> +TEST_PROGS := test_smoke.sh
-> +TEST_FILES := userland_cells.py userland_test.py
-
-Will this suite run under an out-of-tree build such as
-"make O=/tmp/kselftest kselftest"?
-
-With O= set, the run_tests recipe in lib.mk copies only $(TEST_PROGS) and
-$(TEST_FILES) into $(OUTPUT), and INSTALL_INCLUDES copies nothing because
-TEST_INCLUDES is not set.
-
-test_smoke.sh then execs userland_test.py from the copied location, and
-KtapRunner._load_ksft() looks for the helper relative to that file:
-
-    ksft_dir = str(Path(__file__).resolve().parents[1] / "kselftest")
+    long page_cnt_max = (user_vm_end - user_vm_start) >> PAGE_SHIFT;
     ...
-    return importlib.import_module("ksft")
+    if (uaddr) {
+            ...
+            if (pgoff > page_cnt_max - page_cnt)
+                    return 0;   /* bound only on the fixed-address path */
+    }
+    ret = arena_adjust_tree(arena, uaddr, page_cnt, &pgoff);
+    ...
+    uaddr32 = (u32)(user_vm_start + pgoff * PAGE_SIZE);
 
-Nothing in that flow creates <dir>/kselftest/kselftest, so
-import_module() raises ModuleNotFoundError and run_one() records
-"not ok ... selftests: userland: test_smoke.sh # exit=1" even on a kernel
-with CONFIG_USERLAND=y.
+When map_extra is not given, arena_map_alloc() does not know the user
+address and accepts any mmap() length up to max_entries pages, and
+arena_get_unmapped_area() only requires that the mapping does not cross
+a 
+4 GiB boundary.  A process can therefore mmap() a VMA that ends
+exactly at a 4 GiB boundary while max_entries is much larger: for
+max_entries = 2^20 and a 288-page VMA at 0xffee0000, the range tree
+still holds free pages past the VMA, and arena_adjust_tree() hands
+them out on the uaddr == 0 path with no bound on pgoff + page_cnt
+against page_cnt_max.  A program that first allocates 287 pages and
+then asks for 288 more receives pgoff = 287, uaddr32 = 0xfffff000,
+and arena_alloc_pages() maps 288 pages at kern_vm_start + 0xfffff000:
+one page inside the VMA, then the arena's upper guard pages, and then
+258 pages into the vmalloc area past the end of the arena's own
+vmap area - installing PTEs into address space the arena does not own
+and returning a "success" pointer to the caller.
 
-Would adding the helper to TEST_INCLUDES keep the layout that
-_load_ksft() expects?
+The damage cannot be undone: arena_free_pages() clips every free to
+the VMA, so the pages mapped past kern_vm_start + 4 GiB are never
+freed, arena_map_free() only walks the arena's own area, and 
+the stale
+PTEs and leaked pages survive the destruction of the map.  A second
+arena whose kernel area happens to follow the first one receives
+PTEs for pages it does not own; its user-visible arena_vm_fault()
+finds them with vmalloc_to_page() and maps another map's pages into
+its own user VMA.  When the walk instead reaches an already-mapped
+foreign PTE, apply_range_set_cb() reports
 
-    TEST_INCLUDES := ../kselftest/ksft.py
+    WARNING: kernel/bpf/arena.c:190 at apply_range_set_cb+0x4d9/0x830
 
-net/packetdrill/Makefile does this for ../../kselftest/ktap_helpers.sh.
+after failing to install into the neighbour's page.  Any program that
+may use an arena map (CAP_BPF, or an arena delegated through a BPF
+token from a user namespace) can reach this; no race is needed.
 
-[ ... ]
+Fix this on both sides.  On the first mmap() of a map created without
+map_extra, mark [vma_pages, max_entries) as allocated in the range
+tree, because nothing outside the VMA can ever be freed or mapped
+without wrapping; no program can allocate before user_vm_start is
+set, and the same mmap() path already serializes on a
+rena->lock.  And
+reject pgoff ranges past the VMA in arena_adjust_tree() with -ERANGE,
+mirroring the existing page_cnt_max check of the fixed-address path,
+so that even a stale tree entry cannot hand out an unwrappable range.
 
-> diff --git a/tools/testing/selftests/userland/userland_cells.py b/tools/testing/selftests/userland/userland_cells.py
-> new file mode 100644
-> --- /dev/null
-> +++ b/tools/testing/selftests/userland/userland_cells.py
+After the change, the wrapped 288-page allocation described above is
+rejected and returns NULL to the program, while allocations inside the
+VMA keep working.  Z3 SMT checking over all VMA sizes, max_entries and
+page counts confirms the mapped range cannot pass the end of the
+kernel vm area anymore.  A test case and full validation logs are
+available on request.
 
-[ ... ]
+The vulnerable code is present in upstream mainline v7.4-rc3.  Runtime
+verification and fix validation were performed in an x86-64 QEMU/KVM
+guest running v7.4-rc3 with Generic KASAN, UBSAN, lockdep, and
+DEBUG_OBJECTS.
 
-> +        elif mach == "x86_64" and ptr_size == 4:
-> +            base = 0x40000000
-> +            arch_legacy = {
-> +                "pivot_root": base + 155,
-> +                "umount2": base + 166,
-> +                "waitid": base + 529,
-> +                "execveat": base + 545,
-> +            }
-
-Does this branch also catch plain i386 userspace running on an x86_64
-kernel?
-
-platform.machine() comes from uname(), and a 32-bit task only sees the
-compat machine string when it runs with PER_LINUX32:
-
-    #define override_architecture(name) \
-            (personality(current->personality) == PER_LINUX32 && \
-             copy_to_user(name->machine, COMPAT_UTS_MACHINE, ...
-
-So an i386 Docker image or chroot entered without linux32 reports
-mach == "x86_64" with ptr_size == 4, and gets the x32 numbering.  The
-test then calls userland_open as 0x40000000 + 474 instead of 474, and
-do_syscall_32_irqs_on() returns -ENOSYS for nr >= IA32_NR_syscalls.
-
-ENOSYS is in SKIP_ERRNOS, so probe_pre_idmap_mkdir() reports
-"userland_open() unavailable" and the suite exits KSFT_SKIP.  The compat
-entry paths of userland_open, userns_set_idmap, clone3, fsconfig and
-waitid(P_USERLAND) are then never exercised in the configuration that
-needs them.
-
-The function already tells these cases apart on other architectures.
-Would gating this branch on "x32" in multiarch, and sending the remaining
-x86_64/ptr_size == 4 case to the i386 numbers (217/52/284/358), work?
-
-[ ... ]
-
-> diff --git a/tools/testing/selftests/userland/userland_test.py b/tools/testing/selftests/userland/userland_test.py
-> new file mode 100755
-> --- /dev/null
-> +++ b/tools/testing/selftests/userland/userland_test.py
-
-[ ... ]
-
-> +    def test_get_nsfd(self) -> None:
-> +        try:
-> +            rns = Userland()
-> +        except OSError as exc:
-> +            if exc.errno in SKIP_ERRNOS:
-> +                self.skipTest(f"userland_open() unavailable: {exc}")
-> +            raise
-> +        with rns:
-> +            for case in NS_TYPE_CASES:
-> +                with self.subTest(ns=case.name):
-> +                    with self.closing_fd(rns.get_nsfd(case.nstype)) as nsfd:
-
-A subsystem pattern flags this as potentially concerning: test_get_nsfd()
-requires USERLAND_GET_NSFD to succeed for every entry in NS_TYPE_CASES,
-including NsTypeCase("time", CloneFlag.NEWTIME).
-
-CONFIG_USERLAND does not depend on TIME_NS, and userland_get_nsfd()
-handles that configuration explicitly:
-
-    case CLONE_NEWTIME:
-    #ifdef CONFIG_TIME_NS
-            ns = to_ns_common(userland->ns->time_ns);
-            break;
-    #else
-            return -EOPNOTSUPP;
-    #endif
-
-On a CONFIG_USERLAND=y, CONFIG_TIME_NS=n kernel, the OSError(EOPNOTSUPP)
-is raised inside subTest(ns="time"), the test is marked failed, and
-KtapRunner.main() exits KSFT_FAIL.  The selftest config fragment sets
-CONFIG_TIME_NS=y, so a run that follows it does not hit this.
-
-Should the time case be skipped on EOPNOTSUPP?  test_share_nsfd() already
-handles a missing time namespace with "if not os.path.exists(ns_path):
-continue".
-
-[ ... ]
-
-> +        def check_dead_ancestor_pidns() -> None:
-> +            self.enter_userns_if_unpriv()
-> +            s_p, s_c = socket.socketpair(socket.AF_UNIX, socket.SOCK_DGRAM)
-> +            p1 = os.fork()
-> +            if p1 == 0:
-> +                s_p.close()
-> +                try:
-> +                    os.unshare(CloneFlag.NEWPID)
-> +                    p2 = os.fork()
-> +                    if p2 == 0:
-> +                        with Userland() as nested_u:
-> +                            socket.send_fds(s_c, [b"U"], [nested_u.fd])
-> +                        os._exit(0)
-> +                    os._exit(self.reap_exit_code(p2))
-> +                finally:
-> +                    s_c.close()
-> +            s_c.close()
-> +            try:
-> +                _, recv_u, _, _ = socket.recv_fds(s_p, 1, 1)
-> +            finally:
-> +                s_p.close()
-
-Can this recv_fds() block forever?
-
-If p1's os.unshare(CloneFlag.NEWPID) fails, or p2's Userland() or
-send_fds() fails, nothing is ever sent.  Closing the other end of an
-AF_UNIX SOCK_DGRAM socketpair does not wake the reader, because
-unix_release_sock() only sets the peer's sk_shutdown for SOCK_STREAM and
-SOCK_SEQPACKET.
-
-p1 and p2 are forks of the run_forked() child, so their exceptions end in
-_exit(1) after writing a fail payload, while the run_forked() child stays
-blocked in recv_fds() and keeps the pipe's write end open.  The parent
-then blocks in pipe.read_all(), so a failure turns into a hang.  Under
-run_kselftest.sh the 45s default timeout kills it, and the tests that sort
-after test_clone_flags_and_pidns_ancestry never run.
-
-create_userland_as_uid() in the same file guards the same fd-passing
-pattern with select.select([s_parent], [], [], 5.0).  Would the same
-timeout, or a SOCK_SEQPACKET socketpair, turn this into a normal test
-failure?
-
-
+Fixes: 317460317a02 ("bpf: Introduce bpf_arena.")
+Cc: stable@vger.kernel.org
+Signed-off-by: YanXin Li <fadouse@pm.me>
 ---
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+ kernel/bpf/arena.c | 44 +++++++++++++++++++++
++++++++++++++++++++++--
+ 1 file changed, 42 insertions(+), 2 deletions(-)
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/44972669664
---===============3579480507848251298==--
+diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
+index ec2bda1a6eb..8adc2d589c7 100644
+--- a/kernel/bpf/arena.c
++++ b/kernel/bpf/arena.c
+@@ -694,6 +694,34 @@ static int arena_map_mmap(struct bpf_map *map, struct vm_area_struct *vma)
+ 	if (remember_vma(arena, vma))
+ 		return -ENOMEM;
+ 
++	if (!arena->user_vm_start && vma_pages(vma) < map->max_entries) {
++		/*
++		 * The range tree spans max_entries pages, but the user VMA
++		 * set below is smaller and its lower 32 bits do not wrap
++		 * past the 32-bit boundary.  Mark the pages past the VMA as
++		 * allocated so that bpf_arena_alloc_pages() can never hand
++		 * out a range that would be mapped past the end of the
++		 * arena's kernel vm area and could never be freed.
++		 */
++		unsigned long flags;
++		int ret = -EBUSY;
++
++		if (!raw_res_spin_lock_irqsave(&arena->spinlock, flags)) {
++			ret = range_tree_clear(&arena->rt, vma_pages(vma),
+
++					       map->max_entries - vma_pages(vma));
++			raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
++			WARN_ON_ONCE(ret);
++		}
++		if (ret) {
++			struct vma_list *vml = vma->vm_private_data;
++
++			list_del(&vml->head);
++			vma->vm_private_data = NULL;
++			kfree(vml);
++			return ret;
++		}
++	}
++
+ 	arena->user_vm_start = vma->vm_start;
+ 	arena->user_vm_end = vma->vm_end;
+ 	/*
+@@ -743,7 +771,8 @@ static u64 clear_lo32(u64 val)
+ 	return val & ~(u64)~0U;
+ }
+ 
+-static int arena_adjust_tree(struct bpf_arena *arena, long uaddr, long page_cnt, long *pgoff)
++static int arena_adjust_tree(struct bpf_arena *arena, long uaddr, long page_cnt,
++			     long page_cnt_max, long *pgoff)
+ {
+ 	int ret;
+ 
+@@ -759,6 +788,17 @@ static int arena_adjust_tree(struct bpf_arena *arena, long uaddr, long page_cnt,
+ 	if (ret < 0)
+ 		return ret;
+ 
++	/*
++	 * The range tree spans max_entries pages, but when map_extra was
++	 * not given at arena creation time the user VMA, and he
+nce the
++	 * range whose lower 32 bits do not wrap past the 32-bit boundary,
++	 * can be smaller.  A pgoff past the VMA would wrap uaddr32 past
++	 * the 32-bit boundary, be mapped past the end of the arena's
++	 * kernel vm area, and could never be freed, so reject it.
++	 */
++	if (ret > page_cnt_max - page_cnt)
++		return -ERANGE;
++
+ 	*pgoff = ret;
+ 
+ 	return range_tree_clear(&arena->rt, *pgoff, page_cnt);
+@@ -812,7 +852,7 @@ static long arena_alloc_pages(struct bpf_arena *arena, long uaddr, long page_cnt
+ 	if (raw_res_spin_lock_irqsave(&arena->spinlock, flags))
+ 		goto out_free_pages;
+ 
+-	ret = arena_adjust_tree(arena, uaddr, page_cnt, &pgoff);
++	ret = arena_adjust_tree(arena, uaddr, page_cnt, page_cnt_max, &pgoff);
+ 	if (ret) {
+ 		raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
+ 		goto out_free_pages;
+-- 
+2.43.0
+
+
+--656e3c67ab831e1680d881cd91b1e9d6f848d20c836203c4d510f971e408
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="publickey - fadouse@pm.me -
+ 0x99485AA3.asc"; name="publickey - fadouse@pm.me - 0x99485AA3.asc"
+Content-Type: application/pgp-keys; filename="publickey - fadouse@pm.me -
+ 0x99485AA3.asc"; name="publickey - fadouse@pm.me - 0x99485AA3.asc"
+
+LS0tLS1CRUdJTiBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tCkNvbW1lbnQ6IGh0dHBzOi8vZ29w
+ZW5wZ3Aub3JnClZlcnNpb246IEdvcGVuUEdQIDIuMTAuMAoKeGpNRWFVdU9NUllKS3dZQkJBSGFS
+dzhCQVFkQXRuWWxTekhUTEhBMkl6dU5FMUF5OEpyS1VDeDZoUCsvdGM0TApEWENucmV6TkhXWmha
+RzkxYzJWQWNHMHViV1VnUEdaaFpHOTFjMlZBY0cwdWJXVSt3c0FSQkJNV0NnQ0RCWUpwClM0NHhB
+d3NKQndrUXVaMWd0K1htMlhSRkZBQUFBQUFBSEFBZ2MyRnNkRUJ1YjNSaGRHbHZibk11YjNCbGJu
+Qm4KY0dwekxtOXlaem0wQnAzZUVYUldrbklnQ2xXd3ZkeFptbzFYblZiNkZrYWpYVFZNMUIvakF4
+VUtDQVFXQUFJQgpBaGtCQXBzREFoNEJGaUVFbVVoYW8zWi9BbkJJNExCWXVaMWd0K1htMlhRQUFM
+cTJBUUQ3OEs2cGVkU1gzbGROCnlxZDNPSDF1TWpPM3Y3TFlNaE8rbDdjblNMV3JFQUQrT0NTcTEx
+U2VhS29ic1ZHckxlalRNc21Nc1BCOGpueGYKaWQzaENOK3Bld1RPT0FScFM0NHhFZ29yQmdFRUFa
+ZFZBUVVCQVFkQXdYZHpWSXFFSC94OEhaalIvUE90MkFpRgpiRW02WXFYWDJqMnYyaUtEc1FNREFR
+Z0h3cjRFR0JZS0FIQUZnbWxMampFSkVMbWRZTGZsNXRsMFJSUUFBQUFBCkFCd0FJSE5oYkhSQWJt
+OTBZWFJwYjI1ekxtOXdaVzV3WjNCcWN5NXZjbWRkS05RWURGV2NFVmQzeE9IZVFwNnMKeW43OU5G
+cE5xa0h6K2l6cElMQm5VZ0tiREJZaEJKbElXcU4yZndKd1NPQ3dXTG1kWUxmbDV0bDBBQUR6UWdE
+LwpjSUowODlKa25vZ1RzNnZ2UVorSjNMUklEYUk5K1FtK1Q1cU9tTms0eVhFQkFMUElsSkNTOGFo
+NWRCWVphOUwrCkhxamJEbWVTZ0RvNTh1U3graVd3KzZVTAo9TXVzVAotLS0tLUVORCBQR1AgUFVC
+TElDIEtFWSBCTE9DSy0tLS0t
+--656e3c67ab831e1680d881cd91b1e9d6f848d20c836203c4d510f971e408--
+
+--------1492baab12ff4501d634dbfa736361d7a3b2c06d5052aea3d963a85e09afe94f
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+wqsEARYIAF0FgmsCXSgJELmdYLfl5tl0NRQAAAAAABwAEHNhbHRAbm90YXRp
+b25zLm9wZW5wZ3Bqcy5vcmdXARVfR3IxIbvoorGXW6J4FiEEmUhao3Z/AnBI
+4LBYuZ1gt+Xm2XQAADmcAQCoKhG7tW75E3QfLn1oKUDXQutQjGtuOEWB9KAG
+YFULowEAr+079WJWHq2lIASOrIvyhBNVPkU4XLlGbefhFVo4wQw=
+=n1VV
+-----END PGP SIGNATURE-----
+
+
+--------1492baab12ff4501d634dbfa736361d7a3b2c06d5052aea3d963a85e09afe94f--
+
