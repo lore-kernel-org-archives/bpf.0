@@ -1,62 +1,49 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=194.13.80.246
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795366992;
-	b=yvrWWNui4ptb10uj2ZAynl68m7JNJlt3p4pMclKDuLERE1Ghfl+YQTMNBbPl34BxeMk3
-	 g/DO1eRq2xV4C9I9OWa53FqgkjxCW7Vpbct3wuqv7g1GW08zrUrt/Qo+W7WIP6GPoRxvb
-	 opNd6/vRAaFGSEv4PtmFiyCdEgudokl0JeJVQ8jYd9LRMPHwGdLMvRD3VxqpJUy0swuD4
-	 X/vIzqLug0QTfwMHXGQogTmLxILija0iJpld+zxIANZh++v/F6KJdv7yQMnkMoxz83I+e
-	 e1duzHcz5hzEE4/4uFqnBgQiwbNHIC2sCfVLypA2GNFJrHxZDTS7w70WRHBop1q2atQ==
+	t=1795370479;
+	b=LxUNrS2zTIa8F2m6yn2UC4xYeKcvVlslUhuajQujVc6LfeBElpHahiP4JOgFwmQmhVPN
+	 elKJO62us/ZD7n55/WbMkRY0buxVk07xsHvg2HzyNjraO9uJFf0tElKajQ5MroCqW0Qlm
+	 y17hVO9DCceAGRAxEQujoGvVHErqkWlK+LdsMkxi2Jd02iaN+2xMGyOtUBJxgDpJIdSSs
+	 OxSEIsauC6z2/JEvzQSbTd9tFI7H4dgpnontHT854sWmJhK1qHETQzf/7ZfwSdUmpPUhe
+	 bw4SZ0SFZ32/mefacwz7dZgv1Nol4WR8vnJtCx0It+/LeXqz4a1gVjMCHYB8w44B/9g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795366992;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=gMafmWOv8TBm4c4ZfyWe/8aXJfH25fVK6a/gc7SwN9k=;
-	b=5UQWj6EJvFp4nyNDTcqMWsFqkkHcQKsHEyBnwmya1x9KU2coJpk4M8+WBF3R1g0u8Tsb
-	 yQXcZrg25NJoPo2smJZ3Ne1YUXzwNRb6Gfk85ibtaTiVyAw97dK7TOmDGExJqEr82whWS
-	 8IfG11An7BzDmMMk5znmTWbPkslSjCmkSjP9yq7AdkurNL/gkavlLJ0u3cSlEkQksa8d2
-	 XBWksWzD6ITnB2i+uwBhFQKh/vbfi8e+oB3VSsi7rf41xW1ONlWC4tiSHOoJil52WmPEi
-	 9UMLjmya0Y4yyaqXOM6LEztchi8BQPZulG7ezc4XArm7YrA0AFe1s/PUny7kN+buJwg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795370479;
+	h=DMARC-Filter:Received:DKIM-Signature:MIME-Version:Date:From:To:Cc:
+	 Subject:In-Reply-To:References:Message-ID:X-Sender:Content-Type:
+	 Content-Transfer-Encoding:X-Last-TLS-Session-Version;
+	bh=Z60uyFtNx0VkzpRcWhKH9sXU8xECnZhyM4KOZOe5aGc=;
+	b=AJZBmfyxJxuu1K49bzUbQ5qvBjkmHPm2zD9Lfzs3TatFvJy7kFaB3CM8YoR58u5RDIL/
+	 GTvARYSupYPPqLFq3sb/kTJyJ7xe+L5gFZT+jZjJjpWdD35rO7l7yGR2ChLoULPIcBoXZ
+	 WHSWvwmCVC7NiEL28WdDY46W7IHKc9RQbaD7zHnxKcAhENrkz3NC2UHuj9lcv8cwL8+9M
+	 XNFkRqRmqWAlnLBdW2acqCzK22xp47wCLkhlzxaGsk0ctt+flyl3wk1W661wK8uoWaO8Z
+	 bKOnuJTpVwShp784ZIBdhNr12rW7//QLHRWgwKmhYV/m8YisifsOqsTpmGpHKEDRvuQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="e/RQ1fY6";
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=none header.from=tipi-net.de;
+	spf=pass smtp.mailfrom=tipi-net.de;
+	dkim=pass header.d=tipi-net.de header.i=@tipi-net.de header.a=rsa-sha256 header.s=dkim header.b="CTNMY+A/";
+	arc=none smtp.remote-ip=194.13.80.246
+Received: from mail.tipi-net.de (mail.tipi-net.de [194.13.80.246])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F127D606A32C;
-	Sun, 22 Nov 2026 17:03:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31E60606A32C;
+	Sun, 22 Nov 2026 18:01:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 31E60606A32C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tipi-net.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tipi-net.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=e/RQ1fY6
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5ACF41F000D2;
-	Sun, 22 Nov 2026 17:03:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795366991;
-	bh=gMafmWOv8TBm4c4ZfyWe/8aXJfH25fVK6a/gc7SwN9k=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=e/RQ1fY6BIYSH55Asf/BChFs2qCcohDUR4wdgq3Oa7+1t5DBQjvnnL8s7JfR8coPe
-	 pqY8SuRWS4GG27uaF+nRjMcVhI5PQnNJJbxp3UzVRB5F57bkSIZZvb2BXCNG9JU5BN
-	 ckbOubnEmhF/YMbhgxBSJAAG5FfSLjhjfDZj8xihQtRg/Gs++jURC+ySUYyjBp3mVP
-	 /dfZXxUV5OAv/st5uKSTgp+XnOAM8m7Q9RRcjyrow18vj9Js0c3hEiddbVAXtZNXql
-	 rzh3APoaiVUWZABXyclTa3zQBx5j3biqoGce9CMenotpwTbad4v+zlFMqHtSBRA+Te
-	 94zDfrNDAr+0A==
-Subject:
- Re: [PATCH net-next 7/8] eth: qede: drop the now-dead HW-GRO vs XDP handling
-From: netdev-bot+sashiko@kernel.org
-To: kuba@kernel.org
-Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
- pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
- michael.chan@broadcom.com, manishc@marvell.com, joshwash@google.com,
- hramamurthy@google.com, tariqt@nvidia.com, saeedm@nvidia.com,
- daniel@iogearbox.net, hawk@kernel.org, sdf@fomichev.me, willemb@google.com,
- przemyslaw.kitszel@intel.com, bpf@vger.kernel.org
-Date: Sun, 22 Nov 2026 17:03:09 +0000
-Message-ID: <179536698993.3135.14058741842243697942@kernel.org>
-In-Reply-To: <20261118232315.3593731-8-kuba@kernel.org>
-References: <20261118232315.3593731-8-kuba@kernel.org>
-X-sashiko-severity: High
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=tipi-net.de header.i=@tipi-net.de header.a=rsa-sha256 header.s=dkim header.b=CTNMY+A/
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id E227CA03D9;
+	Sun, 22 Nov 2026 19:01:11 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tipi-net.de; s=dkim;
+	t=1795370475; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=Z60uyFtNx0VkzpRcWhKH9sXU8xECnZhyM4KOZOe5aGc=;
+	b=CTNMY+A/tNuJm6+ioyIbJFdxpOdWp+hvte3qKpCKloOoUBx7Np3NnT8y1pHHD7gJBI5TA0
+	92+uWojbeS7No/UvGcNnMK4+2FVIREH1yImWGjnpCMmK2gqr6yyzREWJ0qxaIz9Xbaut9c
+	qtCHtNEocCPO/7qCwxwFbvrnsZc0VPEvgWfInKbBQLKGdOHUQTwhsGlKM2uio6wv5UjHHv
+	A6xFHbjV6kYoFPzk22yGQ5vfdezNSmjYrrg6BYofd4xm6eWb0CW6m1My2JACuv6Licd/AA
+	PT9VlLcPqRn++GBUTp5d9ep1oUxm+Y0vYJRAP/HPiJVdWin1IoOsEwnsRcGnow==
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -66,103 +53,48 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Date: Sun, 22 Nov 2026 19:01:11 +0100
+From: Nicolai Buchwitz <nb@tipi-net.de>
+To: Anandu Padinhare <Anandu.Padinhare@electrifex.com>
+Cc: maxime.chevallier@bootlin.com, andrew+netdev@lunn.ch,
+ davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org,
+ pabeni@redhat.com, mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend
+ <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, Sam
+ Edwards <cfsworks@gmail.com>, "Russell King (Oracle)"
+ <rmk+kernel@armlinux.org.uk>, David Wu <david.wu@rock-chips.com>,
+ stable@vger.kernel.org, netdev@vger.kernel.org,
+ linux-stm32@st-md-mailman.stormreply.com,
+ linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org
+Subject: Re: [PATCH net] net: stmmac: retry a failed RX refill from a timer
+In-Reply-To: <MA0PR01MB921746F36D90C7080287ACC9FD782@MA0PR01MB9217.INDPRD01.PROD.OUTLOOK.COM>
+References: <MA0PR01MB921746F36D90C7080287ACC9FD782@MA0PR01MB9217.INDPRD01.PROD.OUTLOOK.COM>
+Message-ID: <9d8cdde77beedce76aaaa1c5a7a788dc@tipi-net.de>
+X-Sender: nb@tipi-net.de
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Last-TLS-Session-Version: TLSv1.3
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue(s) to consider.
+Hi Anandu
 
-Critical: 0 · High: 1 · Medium: 0 · Low: 0
+On 20.11.2026 08:49, Anandu Padinhare wrote:
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+> [...]
 
-- [High] The commit message says the `edev->ndev->features &=
-  ~NETIF_F_GRO_HW` line in the XDP branch of qede_alloc_mem_rxq() is…
+> @@ -6164,6 +6205,8 @@ static int stmmac_napi_poll_rx(struct napi_struct 
+> *napi, int budget)
+>  	u64_stats_update_end(&rxq_stats->napi_syncp);
+> 
+>  	work_done = stmmac_rx(priv, budget, chan);
+> +	if (unlikely(stmmac_rx_refill_needed(priv, chan)))
+> +		stmmac_rx_refill_timer_arm(ch);
 
---
+After a successful retry, doesn't this leave the last received frame in
+the ring until the next RX irq? Could the poll refill first?
 
-eth: qede: drop the now-dead HW-GRO vs XDP handling
+> [...]
 
-This commit removes the qede driver's own handling of the HW-GRO vs XDP
-interaction. It relies on the core to clear NETIF_F_GRO_HW before
-ndo_bpf runs and to keep it off while a program is attached. It drops
-the xdp_prog check in qede_fix_features(), the reload skip in
-qede_set_features(), and the direct dev->features write in
-qede_alloc_mem_rxq().
-
-> diff --git a/drivers/net/ethernet/qlogic/qede/qede_main.c b/drivers/net/ethernet/qlogic/qede/qede_main.c
-> index 7ed17faced542..b24baf0e808e1 100644
-> --- a/drivers/net/ethernet/qlogic/qede/qede_main.c
-> +++ b/drivers/net/ethernet/qlogic/qede/qede_main.c
-> @@ -1571,7 +1571,6 @@ static int qede_alloc_mem_rxq(struct qede_dev *edev, struct qede_rx_queue *rxq)
->  		rxq->rx_buf_seg_size = roundup_pow_of_two(size);
->  	} else {
->  		rxq->rx_buf_seg_size = PAGE_SIZE;
-> -		edev->ndev->features &= ~NETIF_F_GRO_HW;
->  	}
-
-[Severity: High]
-
-Is this line really dead? The commit message says:
-
-  the feature is already off by the time the reload for the program
-  allocates the rings;
-
-That is true for the ndo_bpf path. The firmware error recovery path,
-though, seems to reach this else branch with GRO_HW set in dev->features
-while edev->xdp_prog is still attached:
-
-qede_sp_task()
-  qede_recovery_handler()
-    qede_unload(edev, QEDE_UNLOAD_RECOVERY, true)
-    __qede_remove(edev->pdev, QEDE_REMOVE_RECOVERY)
-    __qede_probe(..., QEDE_PROBE_RECOVERY)
-      qede_init_ndev()
-    qede_load(edev, QEDE_LOAD_RECOVERY, true)
-      ...
-        qede_alloc_mem_rxq()
-
-In recovery mode, edev and edev->xdp_prog are kept. However,
-qede_init_ndev() writes dev->features directly:
-
-	hw_features = NETIF_F_GRO | NETIF_F_GRO_HW | NETIF_F_SG |
-	...
-	ndev->features = hw_features | NETIF_F_RXHASH | NETIF_F_RXCSUM |
-
-Nothing on this path calls netdev_update_features(), so the core never
-gets a chance to strip GRO_HW again.
-
-With the clear gone, the end of qede_alloc_mem_rxq() then computes:
-
-	edev->gro_disable = !(edev->ndev->features & NETIF_F_GRO_HW);
-	if (!edev->gro_disable)
-		qede_set_tpa_param(rxq);
-
-qede_start_queues() then sets start.gro_enable = !edev->gro_disable,
-so TPA is enabled in firmware while XDP is attached.
-
-In qede_rx_process_cqe(), TPA CQEs return before the XDP hook runs:
-
-	/* Handle TPA cqes */
-	if (cqe_type != ETH_RX_CQE_TYPE_REGULAR)
-		return qede_rx_process_tpa_cqe(edev, fp, rxq, cqe, cqe_type);
-	...
-	/* Run eBPF program if one is attached */
-	if (xdp_prog)
-
-After a recovery with XDP attached and the interface up, would
-aggregated TCP traffic skip the attached program, so its XDP_DROP or
-XDP_REDIRECT decisions are never applied? dev->features would also show
-HW-GRO as on. This would last until something unrelated calls
-netdev_update_features().
-
-Would it be better to keep an XDP-aware check when computing
-gro_disable, for example edev->xdp_prog || !(features & NETIF_F_GRO_HW)?
-Other options would be to stop qede_init_ndev() from overwriting
-dev->features on the recovery probe, or to call netdev_update_features()
-once recovery completes.
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261118232315.3593731-1-kuba%40kernel.org
+Regards,
+Nicolai
