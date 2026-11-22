@@ -1,61 +1,74 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795377783;
-	b=cdW5xfCgw+EIsNYBrMpilselaWGF7aDPYanp6Usdm5I2t4/24+JSzkZes1FaFQga9P9N
-	 RSw3fZdaiUXYZpDLrkmNCWpPsCIhq8Zl1Kklkr+XnE6cyV4Vh2yS691h6IAZArPDr73ah
-	 N9McvCMf4UtneQHqDPlo/5DiJ/yUIGNKY6EnZaBQ3lfYpza6UrVQUpx/AZfon28IZBLE8
-	 zD9LoCjTm8tJqMkNNHQKLrbi5Q0lXVa599SxQ6INVTiuQ47oFFUr462BNxuOlofh9Al0+
-	 q6ylQ/PrBnhj+x7ETF4r/wNPAm0d+AsisCsqQ+5JeB7ZGUCyS+279ykjjps113Z+27A==
+	t=1795377895;
+	b=IJ+lnhVmvjpsyRGRw7HBizcK2TU7rvs6lwsryjQU7eyLy8lgVj78hnIenOR1n5n1QKow
+	 Eh6Z33n8xmXtKb3UW0afTFfTaMlXE9s+tSDkZfz4HvsFUcli6YZL1vnZraTv5cKfOmpEr
+	 0JRB9hnDIbba4hW7vU+oVw2B4OKeFkYCO/XoOwBhahLPrgbdOxvjxqzvbJbf40VqE+EWO
+	 cTm29s2EMgUSl+B+8efDxy5NpoaclPfByvFX431G/i3GSuhayK1PZr/4uNqmSAamf8bVm
+	 r7JwdW7L1sjYaYsG03DXPZ+UJuXlVJME3Dn8QO50Zf4gXhJOVPl9WfuoLjvfNGs/Dtg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795377783;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=Dzt/jndt9xmik8tYb6MvTyuT1iTXCpduY31R4yi2Vtg=;
-	b=Rr0811C56FPumknGPFD15wPbwBmU7HdsjyfErEdotkZBJPOvcBPEL99x94BWAt8fXrT8
-	 6BIXz+Tv+FSFckR0aPv4TYGYp+AAez9d2mEJD8ULKAywvLqGn/Zbw+V8haApGVpTeOrzE
-	 gmKSJ3Fx3haxg5S4XLLm4Vm9XCjEwdygMiSXn8ao903+qvQz9OpXGb1Pv3bg7l7RiOjT5
-	 7UXBIq2YXOxWL9+bPHkY1QsVnOVs8r7PfEKUHo5yrREQhKBAjO7CFuW+zO0A5C6oTlHgW
-	 jz2QWGhLmayCmnGTIqzSADXyyTTGO7Y429mhxUf3K+Z3ufdYIDWoN+ZkCkp6ykobCnw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795377895;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:In-Reply-To:References:
+	 Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
+	bh=hJntkLl71ehP6K4tL5AJK+8IdOlj65eqs2ikaDPPzO0=;
+	b=TBY7syHWhEQ+86TwRHbcq3qx/QTBqFUbrQh3aUmVn9wTOnGwnCGuq6xn7P48ZrVYOU9x
+	 2Oip5AUBv30vk16gfOyVc0At0BWko6AEIk0W5k2upjETlew8a095d1NW9MBhQL32a+eyH
+	 bRS1/EjmdGjDnbZLX7SG996EE6Ardc4M1I+Yc8UrRj3rW15mNVH8uPGUZDwAkwM4eBwhh
+	 Udmc0SMY6klMXphDMAYoMc/+j7rJfxYhL6e//h/qxq6DE38ctwGLhIYTfpJmN5LKGXeQ+
+	 zDwQ53/bdH6If34EykpD6m4yIUx1XcWOHilIABYIvaKTqGL/VPluEx3/d3CdBKNWEbQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IHTq8wpN;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="mdA+kf/S";
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B50E3606A31D;
-	Sun, 22 Nov 2026 20:03:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDCBA606A31A;
+	Sun, 22 Nov 2026 20:04:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IHTq8wpN
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0D241F000C4;
-	Sun, 22 Nov 2026 20:03:00 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mdA+kf/S
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9432E1F000C0;
+	Sun, 22 Nov 2026 20:04:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795377783;
-	bh=Dzt/jndt9xmik8tYb6MvTyuT1iTXCpduY31R4yi2Vtg=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=IHTq8wpNk/k/21qlhZ/N43qyz6hwV/v1Xj+E6EJlNxy0piqOu5p5GgeteupJFRnTI
-	 tnr82ROPensnWuIdXQabD1iSJxZcd6HziJjNVyq/HqIXGWYeEBU1KHyuW8c/MOjM/8
-	 ytZDQRjlab12cd9KZ2q+60vHOr6pd6O+otVtXVzxKiTovDOoir4ap429PVdPQUIaDn
-	 HKL9iGye4wGtZZZw4KBjSDwSiL9CQFp+UgpDWMd4ZmENNKpCOSs9MKEhZJIfscHFy4
-	 AdjP5M+pE/8UfhcOMj7nZG+kWyk+go3ibFoURJwOGfdJp5p2GDib59BVpRyc3WjuX+
-	 GW9b5XSoaB2hQ==
-From: Jiri Olsa <jolsa@kernel.org>
-To: Masami Hiramatsu <mhiramat@kernel.org>,
-	Naveen N Rao <naveen@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>
-Cc: Peter Zijlstra <peterz@infradead.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	x86@kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: [PATCHv2 2/2] x86/kprobes: Use ftrace_location_range in __recover_probed_insn
-Date: Sun, 22 Nov 2026 21:02:39 +0100
-Message-ID: <20261122200239.1481088-3-jolsa@kernel.org>
-X-Mailer: git-send-email 2.56.1
-In-Reply-To: <20261122200239.1481088-1-jolsa@kernel.org>
-References: <20261122200239.1481088-1-jolsa@kernel.org>
+	s=k20260515; t=1795377894;
+	bh=hJntkLl71ehP6K4tL5AJK+8IdOlj65eqs2ikaDPPzO0=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date;
+	b=mdA+kf/Syjy/2odxsfIDtxP+QqK8rJkhgh9MluIlvMlSNePU9ORNlUaOC6ZNf89ot
+	 w9gZ6ij63UjNyb96TM9jmUw5CTrGIvROYIJkj1puZdEoM7GOanC/PwRdFYo3DJ/Fc0
+	 0crTg3TnveG6qm/L3qAvP0vKnSjI4s9q4y7pUDWVdHPVAwFrLcSo37CNbwSaMOadrP
+	 Rnu/YgZTzbKHt1APZWDu6rbkFgORoZCDeR61CAYUlNxRCafVaW3oVmfn5JWv5VAa7F
+	 Psiwpr1hhe5ORuqzlBVfn2cu0i4Fnpjp+gYDf2t1DMuJ+/ziyPprWI9x4eo7q3o1Qs
+	 2EcsrMyDazBJA==
+From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To: Stanislav Fomichev <sdf.kernel@gmail.com>
+Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+ <pabeni@redhat.com>, Jonathan Corbet <corbet@lwn.net>, Alexander Duyck
+ <alexanderduyck@fb.com>, Andrew Lunn <andrew+netdev@lunn.ch>, Alexei
+ Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Jesper Dangaard Brouer
+ <hawk@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Magnus Karlsson
+ <magnus.karlsson@intel.com>, Maciej Fijalkowski
+ <maciej.fijalkowski@intel.com>, Pavel Begunkov <asml.silence@gmail.com>,
+ netdev@vger.kernel.org, bpf@vger.kernel.org, Simon Horman
+ <horms@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap
+ <rdunlap@infradead.org>, kernel-team@meta.com, John Fastabend
+ <john.fastabend@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song
+ Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa
+ <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai
+ <ihor.solodrai@linux.dev>, Weiming Shi <bestswngs@gmail.com>, Nikolay
+ Aleksandrov <razor@blackwall.org>, David Wei <dw@davidwei.uk>, Bobby
+ Eshleman <bobbyeshleman@meta.com>, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ io-uring@vger.kernel.org, Mina Almasry <almasrymina@google.com>
+Subject: Re: [PATCH net-next 1/7] bpf: Keep XDP helpers within readable data
+In-Reply-To: <av-SmgwQhAKI5u5P@devvm16445.scu0.facebook.com>
+References: <20261117164700.2157816-1-bjorn@kernel.org>
+ <20261117164700.2157816-2-bjorn@kernel.org>
+ <av-SmgwQhAKI5u5P@devvm16445.scu0.facebook.com>
+Date: Sun, 22 Nov 2026 21:04:51 +0100
+Message-ID: <87wlq41vks.fsf@all.your.base.are.belong.to.us>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -65,72 +78,32 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-The __recover_probed_insn function is called for every instruction
-decoded on the way to the probed address and it uses ftrace_location
-to find out whether the instruction is the ftrace location.
+Stanislav Fomichev <sdf.kernel@gmail.com> writes:
 
-When the address is not ftrace location, ftrace_location does also
-the symbol lookup to map the sym+0 address to its ftrace location.
-But __recover_probed_insn only checks if the returned location is
-the address itself, and that can't be the result of the mapping
-after the lookup of the address failed, so the symbol lookup is
-done for nothing for almost every decoded instruction.
+> On 11/17, Bj=C3=B6rn T=C3=B6pel wrote:
+>> Devmem and io_uring zero-copy RX put payload in fragments that the
+>> kernel cannot read. XDP helpers must not treat these fragments as
+>> normal pages.
+>>=20
+>> Reject operations that read or write these fragments. Access to the
+>
+> [..]
+>
+>> linear part still works. Tail trimming does not read the payload;
+>> clear the unreadable flag after it removes every fragment.
+>
+> I guess this is technically true, but why allow it at all? Easier/safer
+> to reject tail trimming as well?
 
-Using ftrace_location_range for the address instead, which does
-just the lookup of the address.
+One, maybe convoluted, use-case would be TCP RST: discard the unreadable
+payload, rewrite/checksum the headers, then XDP_TX. Can't do XDP_TX with
+unreadable frags... I can't see any DROP/PASS cases FWIW.
 
-Adding the missing ftrace_location_range stub for the config
-without dynamic ftrace.
+We can add it later if anyone cares. I'll remove it in the next rev!
 
-Registering 20587 kprobes (as disabled) with the kprobe_many_example
-sample module [1] in qemu with 8 CPUs goes from 4.02s to 3.70s.
 
-The sample module was posted as the last patch of the kprobes
-lookup cost series [1] only to demonstrate the testing, it is not
-merged and is not going to be.
-
-[1] https://lore.kernel.org/bpf/20261109195827.1091410-1-jolsa@kernel.org/
-
-Signed-off-by: Jiri Olsa <jolsa@kernel.org>
----
- arch/x86/kernel/kprobes/core.c | 6 +++++-
- include/linux/ftrace.h         | 4 ++++
- 2 files changed, 9 insertions(+), 1 deletion(-)
-
-diff --git a/arch/x86/kernel/kprobes/core.c b/arch/x86/kernel/kprobes/core.c
-index 133ff20caccd..34d71907e6d1 100644
---- a/arch/x86/kernel/kprobes/core.c
-+++ b/arch/x86/kernel/kprobes/core.c
-@@ -207,7 +207,11 @@ __recover_probed_insn(kprobe_opcode_t *buf, unsigned long addr)
- 	bool faddr;
- 
- 	kp = get_kprobe((void *)addr);
--	faddr = ftrace_location(addr) == addr;
-+	/*
-+	 * Only the exact ftrace location matters, so skip the symbol
-+	 * lookup ftrace_location() does to map sym+0 to its location.
-+	 */
-+	faddr = ftrace_location_range(addr, addr) == addr;
- 	/*
- 	 * Use the current code if it is not modified by Kprobe
- 	 * and it cannot be modified by ftrace.
-diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
-index 1c2056a1a68b..255751899682 100644
---- a/include/linux/ftrace.h
-+++ b/include/linux/ftrace.h
-@@ -1075,6 +1075,10 @@ static inline unsigned long ftrace_location(unsigned long ip)
- {
- 	return 0;
- }
-+static inline unsigned long ftrace_location_range(unsigned long start, unsigned long end)
-+{
-+	return 0;
-+}
- 
- /*
-  * Again users of functions that have ftrace_ops may not
--- 
-2.56.1
-
+Thanks!
+Bj=C3=B6rn
