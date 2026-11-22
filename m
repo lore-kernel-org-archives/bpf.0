@@ -1,74 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795378001;
-	b=WXkgGGXwBWYtmSU4BXe98bMErn/87HIXWpBHXHvZdEH5ERv/HQSwfOLigbRJRZXd2jb2
-	 c5sQrmbMbwuKdn2yCMHLVt9aYz5rQOb9dGe3ZjbdI284G87zBcfsiTx71UlbEZRE7j6YH
-	 hFCliY7em3FPbx9BGDfi4C0l13DidsLXeipZYQ6Zm8OSQT/U5iBtgjtQ55mT95zPNGaWn
-	 EUBG0n2fxV5s0deLNKRQQ+B9lxC2BL30Vhcbu90Pf91/RF8Dvpyj2ou6CEj9AfaxBIChZ
-	 TRfo1bNcwzpR7oUgDfQ5/fqCEdHoURjBHnEtM4V8BbxAQVEtu+WKFAhJo1FjD0yxegQ==
+	t=1795378149;
+	b=eq3/dEcfB/WsPgkhcsTF1/vIV7T8QWupXUtcTA2qv3ass6kd7njzffKsQGK3nNApA20X
+	 t0GgVTRqyB9Ciitrd3HMpKn6nZ7cs6Dq38oWJST5WyCbgNmXCxrpAf8XFV22vGt/1v8AC
+	 3u0kwc744BeKPoVOU6ejNrHZN1OBF2MEx5Zvskp9tNm8Be/pfzcItSc9I0O37opIVbKtM
+	 JU63tRES9lcmlI7B3M481M6KzmqHT01/kL4QfWRmVxvNrhiWpyjLdd65dtrBKSMpUFKYl
+	 DlgMsdIX4hPuHVXt7mOwgyYaiztQ47KOjiZiKtrizcZVwpknm9mtES/BKe7NWhbFzxg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795378001;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:In-Reply-To:References:
-	 Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=4nZXt2cwakB2qfoko96Emq2FYBKfcAcG/kqO1hX2/v0=;
-	b=Xwk/RrAEQ2ubdiD6C8uVzOkr1v8I46QS6IKVKPOrGxCMUmn6/62Rech7chAH468z8fDp
-	 WBwyILss0LEE6L/LwKyHWgxJQ3K7S4Z4HYvOjhghLP+3cHPFQJReudoqPJjyt+mXC9igX
-	 PIf8qzpFre+OcVA5Huq0aenABaroWD3qHpIk8JDbJuIuzNEDLhELaurj1JOLls66tBH9z
-	 SxaJADKUmqyty+N7z0c6KSoKWxDAXBcaaQKlel6BmzXBBCntOIGfNbD/DAvjNQjLDKESO
-	 CS7z9PL3xO4S5IdXv1S2+sF9OwHn9BMdY1nupE1qg+qaNCjNYNgNtbrRxfdMOZuSEKA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795378149;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=NJy4CQsDbbyrrux6ubIkfBdJ2n5S01Da1nbXLZiKzpo=;
+	b=FD8r74YwPSQF3FHsTnr8Y0A493EBUnVeNB3DplHvVEKtRigJVmDybiwxzKQw6gg2KGd5
+	 5LdfAWKq7BSTU7MtqprUyZeSpK9bKCDIPSmqIdbw+SRggQJ3/OFl27+aWTmIxQS10DRZ8
+	 kp3yn+eKh3wmlruO2SaSeeWFzSbJh/oYQK5t1vprfsRFuDx6fj/Wji8LBuGEblC9T+RKj
+	 0dzaVrw1OOHyhBXT4/XclvhOT9tqhZ3odxMI60kaZ359oSyIXkn5fFDuHjrc0zwrSOEHB
+	 DXYIYUpmW8dwpY2zsPHZJuLhE34eNikkVDezmRpg/IvawBjhx/5sVWsEkIkM3UEYlGQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kpJzzCRY;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=FIlPxmeZ;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACB1C606A31A;
-	Sun, 22 Nov 2026 20:06:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 739E9606A33A;
+	Sun, 22 Nov 2026 20:09:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kpJzzCRY
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 360911F000CF;
-	Sun, 22 Nov 2026 20:06:40 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=FIlPxmeZ
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C4051F000C0;
+	Sun, 22 Nov 2026 20:09:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795378001;
-	bh=4nZXt2cwakB2qfoko96Emq2FYBKfcAcG/kqO1hX2/v0=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=kpJzzCRYkLXVPm+/+a1xii8POsvyUm6bHBOkcPkJoOOF0FQWpmGqNNb53QxFHMzre
-	 xVdgY9fbS2afsmFm15TstV+GmIbjG7xvGdYlYrivJhrOgmqQHABi4C9p5o+42AefBc
-	 wBbT1PUcaX6hM9is8vuebEz4tQzDlZElrgT+yird32s8uPqsejXNj33r7A5Hb0v5IX
-	 pfBXGkz6kCcKCf8amkKitieeMD2jpSeW/CdbtmBl7AnzQ8xDNO+jb7d/bb/DIFcEy1
-	 i0XGYRS1nfffSW4+b1KiKimnQoj5gjcOXwU7BAIfsKJBmmUsBUOf1WSs185L/CGh39
-	 QljeTkIVxTOlA==
-From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To: Stanislav Fomichev <sdf.kernel@gmail.com>
-Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
- <pabeni@redhat.com>, Jonathan Corbet <corbet@lwn.net>, Alexander Duyck
- <alexanderduyck@fb.com>, Andrew Lunn <andrew+netdev@lunn.ch>, Alexei
- Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Jesper Dangaard Brouer
- <hawk@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Magnus Karlsson
- <magnus.karlsson@intel.com>, Maciej Fijalkowski
- <maciej.fijalkowski@intel.com>, Pavel Begunkov <asml.silence@gmail.com>,
- netdev@vger.kernel.org, bpf@vger.kernel.org, Simon Horman
- <horms@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap
- <rdunlap@infradead.org>, kernel-team@meta.com, John Fastabend
- <john.fastabend@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song
- Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa
- <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai
- <ihor.solodrai@linux.dev>, Weiming Shi <bestswngs@gmail.com>, Nikolay
- Aleksandrov <razor@blackwall.org>, David Wei <dw@davidwei.uk>, Bobby
- Eshleman <bobbyeshleman@meta.com>, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- io-uring@vger.kernel.org, Mina Almasry <almasrymina@google.com>
-Subject: Re: [PATCH net-next 3/7] net: Admit native XDP on provider queues
-In-Reply-To: <av-TQztlq185q6VW@devvm16445.scu0.facebook.com>
-References: <20261117164700.2157816-1-bjorn@kernel.org>
- <20261117164700.2157816-4-bjorn@kernel.org>
- <av-TQztlq185q6VW@devvm16445.scu0.facebook.com>
-Date: Sun, 22 Nov 2026 21:06:38 +0100
-Message-ID: <87qzgc1vht.fsf@all.your.base.are.belong.to.us>
+	s=k20260515; t=1795378148;
+	bh=NJy4CQsDbbyrrux6ubIkfBdJ2n5S01Da1nbXLZiKzpo=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=FIlPxmeZXnL8jfb5igUreGcXeqBZ5IAPhfnC7/RLkwm2fVCUhGtqYHP5GbDuKZpgf
+	 Rs8od4A00WVlmjWBGKGo1JI6rWCj5nnH1+0NbFWV3AkaIsmYJrE12X6iTuN/k1eFTU
+	 qHOpyuR+Nwcq5ZCDMRP2gPk/h2EmJ/v9lcQ3KUTC29USZykod1aZwlrO8DAi15a4hD
+	 zy5bQ3zQMmT/1KHgei8EgDoFnJTGd80G72XxB2rHkKNj7Sn4cPe3Z8gnlDNJs0gwsh
+	 vuixGezimNtBC0ibmSBuA8VN6JWScZv4O78XVT3q/w0OUhL/QoblIvZBsuRCzQUuQ9
+	 hDDVSB3o1NU7w==
+Content-Type: multipart/mixed; boundary="===============0817330899429733780=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -78,27 +49,66 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Message-Id: <777039b970038567305cede50f71dfed0a1a4a5616d06298ec2c7c6298cbcd9e@mail.kernel.org>
+In-Reply-To: <20261122193539.3334213-25-jarkko@kernel.org>
+References: <20261122193539.3334213-25-jarkko@kernel.org>
+Subject: Re: [RFC PATCH v7 24/26] docs: Document userland uAPI
+From: bot+bpf-ci@kernel.org
+To: jarkko@kernel.org,linux-fsdevel@vger.kernel.org
+Cc: jarkko@kernel.org,bpf@vger.kernel.org,containers@lists.linux.dev,linux-api@vger.kernel.org,linux-arch@vger.kernel.org,linux-doc@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-mm@kvack.org,linux-security-module@vger.kernel.org,aleksa@amutable.com,alex@amutable.com,viro@zeniv.linux.org.uk,luto@amacapital.net,arnd@arndb.de,brauner@kernel.org,dhowells@redhat.com,ebiggers@kernel.org,giuseppe@scrivano.org,hughd@google.com,jack@suse.cz,jlayton@kernel.org,corbet@lwn.net,josef@toxicpanda.com,kees@kernel.org,kpsingh@kernel.org,lennart@poettering.net,neal@gompa.dev,oleg@redhat.com,paul@paul-moore.com,ptikhomirov@virtuozzo.com,sergeh@kernel.org,skhan@linuxfoundation.org,zygmunt.krynicki@canonical.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Sun, 22 Nov 2026 20:09:04 +0000 (UTC)
 
-Stanislav Fomichev <sdf.kernel@gmail.com> writes:
+--===============0817330899429733780==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-> On 11/17, Bj=C3=B6rn T=C3=B6pel wrote:
->> diff --git a/include/net/netdev_queues.h b/include/net/netdev_queues.h
->> index c5335e935b7d..4f6702b284b4 100644
->> --- a/include/net/netdev_queues.h
->> +++ b/include/net/netdev_queues.h
+> docs: Document userland uAPI
 
->> @@ -229,6 +234,7 @@ struct netdev_queue_mgmt_ops {
->>  				    struct netlink_ext_ack *extack);
->>=20=20
->>  	unsigned int supported_params;
->> +	bool xdp_unreadable;
->
-> Any reason this is not a new QCFG_ in supported_params ?
+TL;DR: Docs nit: the sys_userns_set_idmap() kernel-doc @size text may render
+with stray raw backticks around PAGE_SIZE; rewording the source comment would
+avoid it.
 
-It is a driver capability rather than a per-queue setting, but I guess
-that doesn't mandate a separate field. I'll use a flag bit.
+> diff --git a/Documentation/userspace-api/userland.rst b/Documentation/userspace-api/userland.rst
+> new file mode 100644
+> index 000000000000..e32ea3501472
+> --- /dev/null
+> +++ b/Documentation/userspace-api/userland.rst
+
+[ ... ]
+
+> +User namespace ID mapping
+> +=========================
+> +
+> +.. kernel-doc:: include/uapi/linux/nsfs.h
+> +   :identifiers: userns_idmap_extent userns_flags userns_idmap
+> +
+> +.. kernel-doc:: kernel/user_namespace.c
+> +   :identifiers: sys_userns_set_idmap
+
+Will the kernel-doc for sys_userns_set_idmap() render correctly here?
+
+The @size description in kernel/user_namespace.c reads:
+
+  @size: Size of @map structure in bytes (%USERNS_IDMAP_SIZE_VER0..%PAGE_SIZE)
+
+and kernel-doc turns this into:
+
+  Size of **map** structure in bytes (``USERNS_IDMAP_SIZE_VER0``..``PAGE_SIZE``)
+
+Because the second inline literal follows a '.', docutils does not
+treat the opening double backtick as a start-string, so the built page
+would show raw backticks around PAGE_SIZE.  Sphinx does not warn about
+this.
+
+Would rewording the source comment avoid it, for example
+"(%USERNS_IDMAP_SIZE_VER0 to %PAGE_SIZE)" or "between
+%USERNS_IDMAP_SIZE_VER0 and %PAGE_SIZE"?
 
 
-Bj=C3=B6rn
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/45063222848
+--===============0817330899429733780==--
