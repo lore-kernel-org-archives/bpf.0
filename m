@@ -1,57 +1,57 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795372090;
-	b=nFHLjLJ+EPAD0MbW/9d9X6/IBzBuqqTbyK5tzgbTIXrseh9cGlsAFzgFYrj56/Kuqkid
-	 0UVHkTORk8ehe69/wCub7AygJTm5egMp2kWVBG+UTtsZhOyZadlFRnuo0YbBz4gfD+4rA
-	 kQFNrB0I/6LcRpToCbaz6R1Wvbs9Kj9y1plZAV0+hy4TmR6CGXqkK1l1c+z8WP96lXueO
-	 75YS5fT+VRK1Uvzd8ax9O01plKwu5XT4+PjOFR2LMMYTji3NTCkm+CNgIkiP1EMEEzdXh
-	 MbFIbAlXrcDYuyJqiDUbw4HbEOgO10vXiHeK0PKlYbUH023DupyctJPHUq1HHI0t7fw==
+	t=1795372091;
+	b=SzncnV9KzPHayp2N6zkpNqRdQ6DSTrN0FdJ30fCw5Jiko07yInLUp42zlAuGKDi8fFGN
+	 5z06nAKI2Xem9rjF2vTlYjPg9VdQsrkYoJ+YasKZFxEaOGUrTG1tumohzCESR1vQa3q4z
+	 G9snl4It1WEKCmp+xHvBLHvR3n0+SLCu3NO8VB0DttaMV5V2ll3kFf5KRJSVuRS8SSZv+
+	 zVKLEK+Kw9NJd9embv1lkr2XQGEJI47typ8MUSTRNP0bgd3rowAXcln80Tp1rF6iu4F1m
+	 KWvkZDbUGXbZgxHn+Xm4cXOx6Z8tWg33+isPkgCz7XISP4D4jSRoX0OaHadZlM/SNGw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795372090;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795372091;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=GJsMjlQ3nUUhcoFT6m9wk8JiZI2pddu/XM5lEPyVZVc=;
-	b=n7ugcxUsh2CntrzKHvdxvxwwtQjKPj16eQqinZEsgrCufXkgRWNQCdygbFVWAPSJF+Hf
-	 PuksgEuyXscwHrGrv3GoMAqOu6W1rXY3rOopCQRw0u5gItyFR9bypMAzMUTUen/phjptA
-	 eqofRJgRWP2eNGCZQVhhmxQMDNe0sn6xeILIYN1H8UC2hqLACYRRoagP1M3kijumXO+S6
-	 2bNvuF0gncs4jtFKLLIrmGHiyDvg9YtUi/qjLvXOJ7sTrytSpN/81m/A3WDfFsU9rhh8K
-	 5oLzlz81n5qNvaHxz1JJ44WjZx2Vu2D0qnyrMmBVrrzjwggr/HgYGJyf79q02lSr3NA==
+	bh=Y4oTKIy2Os+THkNAlv+lYotxKoAHQctUcjcwZrJAY2U=;
+	b=yQvugAmV6yQej3ipXzDKoyC1J563XMOi4KOGAr3z3Ugq60r9gvh9d7yLOS8JjfrwqTxT
+	 Tf8vkGPl0KOeiiP3Jgl1lYMasqCzp6lH2X1p29XUfAfaRJSMJIJsxgiVQCpqqw4vMA9Vl
+	 UN9VijYBkajAgnsBIatAcWPIlKEotbhg7mHA/JgNYfm+4+aJEEUd4/pfIE7lDZiAmuRWG
+	 oaibf8hVp6cAKwWADLv/OkjL31B98sTdmAaJS7EKBEAZCHwq7ESvO2yIkyujM1hfPvRq7
+	 MRvh1+QuyZq+5m3IkNHZH7wP0maViTodjFSl0t47qYpqlnemznWOptzSWgP7otmNTfg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fqYIrXVj;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eSDaMrMf;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A4BB606A320
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21896606A333
 	for <bpf@vger.kernel.org>; Sun, 22 Nov 2026 18:28:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fqYIrXVj
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E227B1F000C6;
-	Sun, 22 Nov 2026 18:28:09 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eSDaMrMf
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E7381F000C6;
+	Sun, 22 Nov 2026 18:28:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
 	s=k20260515; t=1795372090;
-	bh=GJsMjlQ3nUUhcoFT6m9wk8JiZI2pddu/XM5lEPyVZVc=;
+	bh=Y4oTKIy2Os+THkNAlv+lYotxKoAHQctUcjcwZrJAY2U=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=fqYIrXVjS0Ti/iWxcNAZWb+4yw8MunhcpPmnHEuwgPOCbDyLcAqZip2hCJr7KhUEO
-	 IWtKbHi6NdvJ4ZYa9pYosqgQdJkx6r9saDBHKERUT4UjN9rEN3vMX4LKW9Wy+M42Vs
-	 df/KblEMKCio0lrAYVEasMCR2LwjfL7ndtDMKMx7I0alWXgzHuVa3zgPYm/FpRBlyM
-	 jPzdbnPGk754tEgrlKlKZ0EjBaPKRConuBwUjaYoobtIRdGU7Md7d8DT8+DLIoRwB7
-	 GOTo1I/TiXCtA+7fL5c2IqEzd+t5cfazCwgNg+GCiDAwYme4y32h9BPp7YcixNJWeu
-	 x937pyhg2s/0g==
-Message-ID: <sashiko-outbox-228180@kernel.org>
+	b=eSDaMrMfcQdp5WxXXuHiT3hmv4r2crKkiQXOcB4bUI+2N5On3IKa9K6f8CVArohiL
+	 4+CnP8+JV/otaK0CCqp57xGUh4UrVG3GQ8ynZsMFNIMk5T9t6BoWmrC82Rc9HYGOhE
+	 yJJ5gdV3qK18TGH9lmIGT1D8xjHWKN3a83E+iHjY877jhIJVSUE9/77EyS18H7fuVR
+	 O14cIIoOBf9whaM0IjEb7Wjw5e5ovRsDCXPuagiadh49Sc9ScSl5Jb1YAJMmaI/gCB
+	 o+ylIPb27R19R82fYgFfJk6P2Myg/mycgR8S2JfSUSKnBCe4G7MB+hP2HsDokfk401
+	 HOocHO2V6a1MA==
+Message-ID: <sashiko-outbox-228181@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v5 2/3] selftests: net: veth: propagate
- channel-check failures to exit status
+Subject: Re: [PATCH net-next v5 3/3] selftests: net: veth: propagate
+ bad-settings check failures to exit status
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Omokefe Emmanuel Onanaroghene" <emmaonana18@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20261121182217.4609-3-emmaonana18@gmail.com>
+In-Reply-To: <20261121182217.4609-4-emmaonana18@gmail.com>
 References: <20261121182217.4609-1-emmaonana18@gmail.com>
- <20261121182217.4609-3-emmaonana18@gmail.com>
+ <20261121182217.4609-4-emmaonana18@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sun, 22 Nov 2026 18:28:09 +0000
+Date: Sun, 22 Nov 2026 18:28:10 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -63,30 +63,33 @@ Precedence: list
 
 Thank you for your contribution! Sashiko AI review found 1 potential
 issue to consider:
-- [Low] selftests: net: veth: missing Fixes trailer for chk_channels()
-  fix
+- [Low] selftests: net: veth: missing Fixes: trailer for bad-settings
+  exit status fix
 --
 
-commit 5d20ccb90ecdb7366b108efa1d9fec12aee9201e
+commit 8ddb499da6652b523173fb5185c64f0e2151d257
 Author: Omokefe Emmanuel Onanaroghene <emmaonana18@gmail.com>
 
-> selftests: net: veth: propagate channel-check failures to exit status
+> selftests: net: veth: propagate bad-settings check failures to exit status
 >
-> chk_channels() reports mismatches with a "fail" line but never sets
-> ret, so the script exits 0 even when channel counts are wrong. Every
-> other check helper in the file (__chk_flag, chk_xdp_feature, chk_gro)
-> sets ret=3D1 on failure, and all chk_channels() call sites expect the
-> check to pass. Set ret=3D1 on mismatch.
+> Three more checks in veth.sh print "fail - set operation successful
+> ?!?" without setting ret: "bad setting: XDP with RX nr less than TX",
+> "bad setting: reducing RX nr below peer TX with XDP set", and "bad
+> setting: increasing peer TX nr above RX with XDP set". A kernel that
+> wrongly accepts any of these invalid operations would be reported yet
+> the script would still exit 0. Wrap each fail branch so it sets ret=3D1.
 >
-> Tested-by: Tianyi Gao <tianyi@cloudflare.com>
+> Reported-by: Tianyi Gao <tianyi@cloudflare.com>
+> Link: https://lore.kernel.org/all/CAG4wq-cd01i7YrcFPmma=3DBXUcwn_PK=3Dwne=
+KW=3DvyEBYzQ3Bn7QA@mail.gmail.com/
 > Signed-off-by: Omokefe Emmanuel Onanaroghene <emmaonana18@gmail.com>
 
 [Severity: Low]
-This fixes a bug in chk_channels() where channel count mismatches did not
-cause the script to fail.  Should this include a Fixes tag?
+This fixes the three negative channel checks added in 1ec2230fc721
+("selftests: net: veth: add tests for set_channel").  Should this include:
 
   Fixes: 1ec2230fc721 ("selftests: net: veth: add tests for set_channel")
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261121182217.4609=
--1-emmaonana18@gmail.com?part=3D2
+-1-emmaonana18@gmail.com?part=3D3
