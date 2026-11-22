@@ -1,58 +1,68 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.171.202.116
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795376773;
-	b=jC+YLocWyHpLafNKaTFco3XQ8IJHCdzXaC4bdRFw0FEDKVv4Xi0JNJZfzA8i0aKSTjoh
-	 WjGX8Nr5PFyUjr3aon9qGFzI4LcVvje0S70V/W8mCV6Wl/QbPz1sL4b8ALhofYDrc/Hvd
-	 92x5nM9TTWOxOT5jSzoPwiINaXHDscsQ4u+cY8lPdJUVWA39kD0ikKvATFoAA5SBO07xN
-	 lMv0jLudRlrgK/xQcJGxOtDlFw2VIcwC/X9+JrBfBbMP6mCfytuGzEHoHEn5CEXnSjpN9
-	 dSuxMa6rzZIJ84LQ3wvX8TcvkLBYNiApsYx4hU9frUR+SZyvpU/IbSezprWJ8j4/C6Q==
+	t=1795377153;
+	b=fvvDmxEMIZjzuGHYIjBD8sRlxbmkJ8hThvv4LE20TV05XcRdvcn4JM0l9flMzzmIlTQ8
+	 egL31prIqyj4SuOnPre6OynVflPDuT6O43sMeR3zQbBP8SC/hJpA7neUG3rzUct2HC5f4
+	 dEqTHAIUN/9l8lCjkH6OFtOLoJviLlGgVoS0JdIoEWsVxfIdHU0+LNsI8WXb32cFbKLCA
+	 2YDGlXQ6efu1dkAgnH+dFcUuMr+fhlwAIc5onR/SjkmmcKzzErH7/HjYOpcPgX4INNEMs
+	 1HOVoq8N71Qucr3musp89Xq/DKVHBsKgwtdJpWFyUzyTXlaAGiuMZp8m1hst82dat/w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795376773;
-	h=DMARC-Filter:Received:Received:Received:DKIM-Signature:Message-ID:
-	 Date:MIME-Version:User-Agent:Subject:To:Cc:References:From:
-	 Content-Language:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-	 X-Last-TLS-Session-Version;
-	bh=dbGXM1I9Jh83hjJSiKGDRAEmUJNnFhvU9Kb1A5Z3ub8=;
-	b=I/UgkBQACyRIRNkC5+EBn0ayKsDYyIAwD73EWuIWAAnzoX3EKghen/TZ4uifYZWLPKT5
-	 0srccBE56h3qecdDv+WueFqVB2cqhThV/eoEY1gbgHXzA4x0ud8q00rl6ApSggYk/zz53
-	 TVhn/csrXcHZEHf95FJBtSsZAT0hIWJDIzvaiT5g1WUEKuURrCFJN7rSveCqo/Vb2zvs2
-	 sOsi5TrGPU9Rv4dBlgVfDnUInGjv0Zch6btqKT3NQxFtgkgIjrW3+RN5ew++R1oJcD6AZ
-	 M7QTJKCNhUeSNKMRyl1ZePljwCvxrgj4Oe/Akkjhe5VkOP8Y8yhUYnMsBIkNaoOWyHw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795377153;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=oB53AiQQW9kpLqFTwPLdStd+pKNNCNgAcTj6vtNksiI=;
+	b=Gvszw7UYyyVe7VwHRB116j+OwTzVYoygDhykF8/5WmHLQIrGb59l5AeqKPQrWFEcv4Cl
+	 BOAL5Xm5j7eQmyCRAJQ+j9Pd/nX0Cr0A1oHSA0XTog9vP4EfoK6a9TQ9FYsfMN1q1srw+
+	 jmjajfOwYv5MKBBEfwTt5anra0FeoOe4q5Jg0KRu4wvK0fQFOfrLdg5lMt7yrjGlB6meR
+	 GglyHfzmq/dnKu+E2diHUFzDSB9S3h5S8jWYzuIjXfbUXYjyhL/2iPMm0qQWJtbA0Otnn
+	 VhIxA04+r/aj6vFF9EgWZoK6d/Dw77eZ2z6nbyYkkTMemTLNbuHlBlodMPAu3npde5w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=bootlin.com;
-	spf=pass smtp.mailfrom=bootlin.com;
-	dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=W0QWdRuz;
-	arc=none smtp.remote-ip=185.171.202.116
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UCCM8jza;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AFCA606A31D;
-	Sun, 22 Nov 2026 19:46:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1AFCA606A31D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4764F606A31A;
+	Sun, 22 Nov 2026 19:52:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=W0QWdRuz
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id B0E63C69140;
-	Sun, 22 Nov 2026 19:46:14 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id C804660512;
-	Sun, 22 Nov 2026 19:46:07 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 8D16411E6033E;
-	Sun, 22 Nov 2026 20:45:48 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1795376765; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:content-language:in-reply-to:references;
-	bh=dbGXM1I9Jh83hjJSiKGDRAEmUJNnFhvU9Kb1A5Z3ub8=;
-	b=W0QWdRuzMqLYXnJk4odzdLYtZXZMIYtQYMT8IB7ANLCF8YMMTiCNE0IPROF+gKZ70cEG4k
-	LroyuHKdGOnJfOQsjOnHbeOH8d4V1ynY9uiW0G5q1sSQCz5un+v8sXg+3OaviQuacPA34d
-	PrT7yCOYJ/uYoSxmBVvu3UUbV0vNlVtZbyekIUzxcJrRsPN//WHz3OKjK3ZKsuqFCWPzzG
-	3kN5bcJZi1xEdWUvTD9Gf4zzyDNq8wXU2qsHXOCwyCPvgTBbcFIUsc9xoQmEUjX4va3MeU
-	qS4ialWhY1rtVmFR9sdwvGf4abv2UckG+1S4KdJnDLuszg9EvrF1W9oC6iiaLw==
-Message-ID: <9997f4e9-9453-4511-af3e-4be664a09281@bootlin.com>
-Date: Sun, 22 Nov 2026 20:45:47 +0100
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UCCM8jza
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F9281F000C6;
+	Sun, 22 Nov 2026 19:52:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795377152;
+	bh=oB53AiQQW9kpLqFTwPLdStd+pKNNCNgAcTj6vtNksiI=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=UCCM8jzaKPGvBdMxxTt7G6+YtHW35kSK4nIHnILYexvOGzFiQGx7wbiJfTTEWQG2n
+	 4KGWp0aMiu0+j5BLZk8+0GX6Srq518ciVqilMGs/gk+icFQzeznUiasFeCVLQUpnZL
+	 rR2ynpIZQwyYi8sE9vCuAIhN+RGLJpZ3YU428BAav07mSf5NTBhAK4BbB46rW1LsUW
+	 9Yh2qozw48I4g5Hgnp2fS2+7Z7R82FlPhPUJVN7hmMUCDNWf+5jd97Mk3RgfJVu+EF
+	 4BbeRxuaY4QhSsgGPcQ5bsRRk0zibQsj8bqa330d+pn81fJW1luy4nPH/L65JCNn62
+	 TLb3aIg/lTI+A==
+Message-ID: <sashiko-outbox-228295@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [RFC PATCH v7 25/26] selftests/userland: Add userland test
+ suite
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Jarkko Sakkinen" <jarkko@kernel.org>
+Cc: bpf@vger.kernel.org, linux-mm@kvack.org, linux-security-module@vger.kernel.org, "Aleksa
+ Sarai" <aleksa@amutable.com>, "Alexander Mikhalitsyn" <alex@amutable.com>, "Alexander
+ Viro" <viro@zeniv.linux.org.uk>, "Andy Lutomirski" <luto@amacapital.net>, "Arnd
+ Bergmann" <arnd@arndb.de>, "Christian Brauner" <brauner@kernel.org>, "David
+ Howells" <dhowells@redhat.com>, "Eric Biggers" <ebiggers@kernel.org>, "Giuseppe
+ Scrivano" <giuseppe@scrivano.org>, "Hugh Dickins" <hughd@google.com>, "Jan
+ Kara" <jack@suse.cz>, "Jeff Layton" <jlayton@kernel.org>, "Jonathan Corbet" <corbet@lwn.net>, "Josef
+ Bacik" <josef@toxicpanda.com>, "Kees Cook" <kees@kernel.org>, "KP Singh" <kpsingh@kernel.org>, "Lennart
+ Poettering" <lennart@poettering.net>, "Neal Gompa" <neal@gompa.dev>, "Oleg
+ Nesterov" <oleg@redhat.com>, "Paul Moore" <paul@paul-moore.com>, "Pavel
+ Tikhomirov" <ptikhomirov@virtuozzo.com>, "Serge Hallyn" <sergeh@kernel.org>, "Shuah
+ Khan" <skhan@linuxfoundation.org>, "Zygmunt Krynicki" <zygmunt.krynicki@canonical.com>
+In-Reply-To: <20261122193539.3334213-26-jarkko@kernel.org>
+References: <20261122193539.3334213-1-jarkko@kernel.org>
+ <20261122193539.3334213-26-jarkko@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sun, 22 Nov 2026 19:52:31 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -61,73 +71,97 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v12 1/4] net: xdp: add
- __xdp_build_skb_from_buff() helper
-To: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>,
- Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, Jose Abreu <Jose.Abreu@synopsys.com>,
- Ong Boon Leong <boon.leong.ong@intel.com>, Simon Horman <horms@kernel.org>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>,
- Ihor Solodrai <ihor.solodrai@linux.dev>, peilinhe2020@163.com,
- Peilin He <he.peilin@zte.com.cn>
-Cc: netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- bpf@vger.kernel.org
-References: <20261121-stmmac-rx-mb-v12-0-3ae2f3bce174@oss.qualcomm.com>
- <20261121-stmmac-rx-mb-v12-1-3ae2f3bce174@oss.qualcomm.com>
-From: Maxime Chevallier <maxime.chevallier@bootlin.com>
-Content-Language: en-US
-In-Reply-To: <20261121-stmmac-rx-mb-v12-1-3ae2f3bce174@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Last-TLS-Session-Version: TLSv1.3
 
-Hi Lorenzo,
+Thank you for your contribution! Sashiko AI review found 3 potential
+issues to consider:
+- [Medium] selftests/userland: host /tmp mount leak in
+  check_child_src_slave_locking()
+- [Medium] selftests/userland: 64K-page E2BIG failure in
+  test_userns_set_idmap()
+- [Low] selftests/userland: Python 3.10+ parenthesized with-statements
+  in test
+--
 
-On 11/21/26 18:28, Lorenzo Bianconi wrote:
-> xdp_build_skb_from_buff() always calls eth_type_trans() on the skb it
-> builds, which pulls the Ethernet header and advances skb->data. Drivers
-> that still need to process the L2 header before protocol parsing
-> therefore cannot use the helper.
-> 
-> stmmac is such a driver: its software VLAN path (stmmac_rx_vlan()) reads
-> the VLAN tag at skb->data and shifts the MAC addresses over it, so it has
-> to run before eth_type_trans().
-> 
-> Split the implementation into __xdp_build_skb_from_buff(), which builds
-> the skb (including the recycle mark, the Rx queue index and the frags
-> info) but leaves skb->dev, skb->protocol, skb->pkt_type and the mac
-> header unset, so the caller must initialize them, usually by calling
-> eth_type_trans(). Make xdp_build_skb_from_buff() a static inline wrapper
-> that still calls eth_type_trans() as before, preserving the behavior of
-> existing in-tree users. A follow-up patch will let stmmac use it.
+commit cd1410a72fb4e8338db290b21743ad1e3c5bf460
+Author: Jarkko Sakkinen <jarkko@kernel.org>
 
-I've been questionning why we even do that in stmmac in the first place
-actually. This pretends to offload, but it's just to deal with the tag
-in the driver instead of later down the road.
+selftests/userland: Add userland test suite
 
-The original idea was for GRO back when it didn't handle vlan tags, but
-this isn't necessary anymore.
+This commit adds a kselftest suite for the userland control object,
+namespace sharing, mount-namespace configuration, waitid(P_USERLAND),
+pidfd_send_signal(), and userns_set_idmap().
 
-There was a series in-flight to remove stmmac_rx_vlan altogether, but it
-seems to have stalled [1]:
+> diff --git a/tools/testing/selftests/userland/userland_test.py b/tools/te=
+sting/selftests/userland/userland_test.py
+> new file mode 100755
+> index 0000000000000..2b43adbbb4291
+> --- /dev/null
+> +++ b/tools/testing/selftests/userland/userland_test.py
 
-[1]: https://lore.kernel.org/all/20260914150612.9798-3-peilinhe2020@163.com/
+[ ... ]
 
-Peilin He, do you have any plans to continue this ? If not, it may be good
-to pick this up instead of working around this.
+> +            with (
+> +                self.closing_fd(rns.get_nsfd(CloneFlag.NEWNS)) as mntns_=
+fd,
+> +                self.closing_fd(rns.make_mount("tmpfs")) as rootfd,
+> +            ):
 
-Maxime
+[Severity: Low]
+Will these parenthesized multi-item with-statements fail with a SyntaxError
+on Python 3.9?  Parenthesized context managers across multiple clauses
+require Python 3.10+, whereas Documentation/process/changes.rst specifies
+Python 3.9.x as the minimum supported version.
 
+[ ... ]
+
+> +            def check_child_src_slave_locking() -> None:
+> +                self.enter_userns_if_unpriv()
+> +                os.unshare(CloneFlag.NEWNS)
+> +                with self.closing_fd(self.make_plain_mount("tmpfs")) as =
+tfd:
+> +                    os.mkdir("sub", 0o755, dir_fd=3Dtfd)
+> +                    Sys.move_mount(
+> +                        tfd,
+> +                        "",
+> +                        Sys.AT_FDCWD,
+> +                        "/tmp",
+> +                        MoveMountFlag.F_EMPTY_PATH,
+> +                    )
+
+[Severity: Medium]
+Does check_child_src_slave_locking() leak a tmpfs mount over the host /tmp
+when the test runs as root?
+
+When os.geteuid() =3D=3D 0, enter_userns_if_unpriv() returns without unshar=
+ing
+CLONE_NEWUSER, so os.unshare(CloneFlag.NEWNS) keeps shared mount peer
+groups with the host mount namespace.  Mounting tfd onto /tmp before
+making mount propagation private propagates the tmpfs mount into the host
+mount namespace, and cleanup only detaches /tmp/sub, leaving the host /tmp
+masked after the test exits.  Calling Sys.set_mount_propagation("/") right
+after os.unshare(CloneFlag.NEWNS), as check_standalone_mntns() does, would
+prevent the mount from propagating to the host.
+
+[ ... ]
+
+> +            big_buf =3D ctypes.create_string_buffer(65536)
+> +            with self.assertRaises(OSError) as cm:
+> +                Sys.userns_set_idmap_raw(
+> +                    userns_fd, ctypes.addressof(big_buf), size=3D65536
+> +                )
+> +            self.assertEqual(cm.exception.errno, errno.E2BIG)
+
+[Severity: Medium]
+Does this E2BIG check fail on kernels configured with 64 KiB (or 256 KiB)
+base pages?
+
+userns_set_idmap() returns -E2BIG only when size > PAGE_SIZE.  When
+PAGE_SIZE >=3D 65536, size=3D65536 passes the PAGE_SIZE check and fails lat=
+er
+with EINVAL because the zeroed buffer has no extents.  Sizing the buffer
+with os.sysconf("SC_PAGE_SIZE") + 1 would exceed PAGE_SIZE on all page
+sizes.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261122193539.3334=
+213-1-jarkko@kernel.org?part=3D25
