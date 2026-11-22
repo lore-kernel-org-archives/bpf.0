@@ -1,78 +1,79 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
 	t=1795346952;
-	b=VE/p/BIujkUEc9e/y2ldDyHl9iuRliHQfJVj3740h6Tp9F7phaO6q2UGxo8dpfT9UUN1
-	 Plb8w3qtOMe/q/MJiUJIeAD+yW6Z0ANP5L9oFvAVqnDfkUqVlrZk6unvPb24oFWwmzEJS
-	 i9jVXIQudHSg/2GUVflewi1xDwZaGbW4nAE0MV90dlWqqLH4mMFaEjr0mc/vO0NDeDOgJ
-	 hxe6vinTFz+3mshkp/ZRT65k0Y9mxJEi4EOjESdWg08wxoxZsVyN8GVHljb3Zk1TGsE9h
-	 zGkhhTdcSrHyzrhDgPyLhq1OsKmnLhsxhnvZ+CF5XalAsUFswoEWRTGttmOnGtU6LPw==
+	b=hbsR0RbZHS+yRqC90q2OXKBAHngMbpAOWV2QWbnJaADNXc6FkJdsAw8Tu75gw6rTRmZP
+	 EILYY8iFQ4uMGLawC/XCfpbKe4AXuUH93rUsvopbEMLfLMEWukKLpcmI3WD6zsi89UpO2
+	 bD6De2iTPLNaX8ccKj6WwHq115lpVUlQTkBCvMscu+pk0s77ICIshWeSlmCAMGobALnWe
+	 JToirDg33UtAY5ClWD8X5MPPcpSqg/S1odMMpMTvc5J0UFjqUEuZjXGjxj3mperj5NDFD
+	 TjtaIDfXlEL4L65XiVqdkmdwPf+O0Wr23UryKZU1DTmdiGa5KkTDtPneNPVIGbQHIag==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1795346952;
 	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
 	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=H8i5YVhr8pMD+/XAphh5neD9o3f3Uxu0RhXm2n+uogo=;
-	b=FSZBR9GMuZgfxmiUsdILm/YIdySfAMwTUfRMl+y89N2CPvZxrdd3//j6qy5b8yicZk1j
-	 lprL3QSFit0RubKPQysLow34Vysl/eMsXtLIRSAAmrQb+ar22OwQRLMvqAMCdPZxvqJkH
-	 iR1UjY09ooYdbRtfpDdd/D67Xg/dV/9K4gN6HEDLugF7muCkqy7cyGwDiIs2J31xtMyzn
-	 J5ATWn/BCw6a1+lQnk8WAw1aBnt35BkFanFNSGrEF3hs74YqL8YfxJ5C4+7zxIht47o6c
-	 wac7U4cSzJxYl11e3b7HBxyBvk/bzK2T3Lg2kPxaOx4zJzFy6qeajsHFJs1mTShW38w==
+	bh=r2E3AjrzdjT8sbFS2JSKFrk/TFYMjueoTuzNBj2umHQ=;
+	b=1/B/rdfyqJ1OPkkyi5gIc1AEPjHhsnYgmER6giE9rZBFt43orLM7mbeyyY1aaN2kDCcs
+	 /uHy2EWDdHSVAZELCAjOPdU5Ztvzv0VLi1xUAf2Z+YuvpuubNVdm+P65AerJGvT17biRP
+	 v7bFPJI4sIFRJTta9A2ftfgwUqKmEKJ0jJgzQvi+y60+StFbJwS0VMal9c0ikKfuOtSWW
+	 zsZxEw/iHUi66yS1koXr8+hvVmBII0Q3CHfhHGFw3ZrVg+LID1aUo6e+nCh473ABZEnmY
+	 LjHzDVfxQUT2T+QXPPGQ8RaYTXHfYiGEJu5IUqCKIguvwjn2irWYcKZKYxPhKszywdA==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NnkyH8XR;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Csgf3uf3;
 	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EDF1606A333;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB50A606A339;
 	Sun, 22 Nov 2026 11:29:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NnkyH8XR
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Csgf3uf3
 Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
 ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
 	t=1795346952;
-	b=GWFcjJ1gF9KJnKJVkdNRDMZfYYHep4mQpG9lDZrVhrGStFpTiVM/OGF0N4x2q23fGeBs
-	 zenvg3kH+Khq+Aqe7ujf3QWiHhbQWFSMSD41BpZqArldKOL8iYWnJUXfiF+BG2oO9fpuD
-	 UbmLTilPTAju5rTN9bKk855u9XZXUkwbGfvZD/UzW6NLOc5UgyaVrp+1fTs2j9F5qtGZJ
-	 H/lU7x5eUL6KY7fWEtuzatPezjG68iQkWg1suBczZEE3PrtePOKoIiCx1EHfihUppsMdT
-	 h3eU0UsVxxE397bkoetVRpgaoEoxppIdhMer+Me1cBBOoLCycq6332CC2mz5ZptJAgg==
+	b=k+WlbJCxu9By9ILRdq6yCa/zXgd3mAh1GNlDFH+G6kRb9j4XgQcq5ZHFlP4zHFeSmv1x
+	 3jGjOIXV+zT1Tbgpa/S53hiB1VL5dRtQMwht71kCAKMlwl60C8C2+UiUtppgzTF6B3jmT
+	 wvxfCDIuVNMcXwtydap43bmAUKrfb2a3+0Ueq4legGsGkjaR8wMIE5lzJ07ZAa53uf3gn
+	 DQnzYopmVj7FuUCyDbNaQ7j9GVI4dh4cJRIHZv9fioijT0HVCWR9L99GgEc8ESSv4CzhI
+	 myzVtkJitQ+WjsmyHR4/FNQrBoD6/4F6ANvBzs9d9G9aTws4q7zkm//8Qjx6/W0c7sw==
 ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
 	c=relaxed/relaxed; t=1795346952;
 	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
 	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=H8i5YVhr8pMD+/XAphh5neD9o3f3Uxu0RhXm2n+uogo=;
-	b=a5QCVWVSwekQLhOv9fLp2GeazQcNtoaOymdSH0EIQmTljDmm2raTKtmZNc386FqVlvIQ
-	 CBmaPBGK2LJ8ImCjdIz7+W8xDCJx32Dpy4mIbmGyy/fuTcZYrO49EsGSRu02qsd7UvdOy
-	 hpRd+3L0nVJ1SC5ixSjtMDmcyQVzBWDasG0rrxxCcZNlWvMYTVYht9Cjocw+E9ouFPls/
-	 wvTxiI+J+qnyBqvhxiq11HSdTHkR8c1N5TxBrttGBDpxstir6cOd/xWeDHeh51gOmdq1l
-	 DhloLnYQd6zXmzp5zS4fdy7J8mqtfGe7f4Keqohu3/+HvUIUz2vW0ENuMH8IAL5Dw4g==
+	bh=r2E3AjrzdjT8sbFS2JSKFrk/TFYMjueoTuzNBj2umHQ=;
+	b=njijVfE9jY/85Wdv1zaF6tIDp0QeCq3U6b6Y81Hj/P5kTEO4wTQsLsE9YFrJYup+9182
+	 qSdo5gD62L/HVaEp9WW/+/a7DaXeNKlHoBMcnZZirhjekSfClyjzCA044JUyrNedH5ug4
+	 rt9ZvmWTk1HTdGG9yKBHms6wGuGVy2YwJrAQrpivEka+cEJTQjKtUEidwJzpEIhAqvJuF
+	 DBURnlTjXs0FAXDdDBFgip1GuemHJIe3SyqEErUcWJ2AZwEzERSMlZAX2lwCN4FYapY29
+	 t4hJehhWQZ+Y169RM35sQHg0SeV71XbhnB5g8+JomF22EXNbVeNEx4Qq3oirkFRtWUw==
 ARC-Authentication-Results: i=1; smtp.kernel.org; 
 	arc=none smtp.remote-ip=100.80.115.77
 Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 881061F000C4;
+	by smtp.kernel.org (Postfix) with ESMTPS id 9599A1F000CA;
 	Sun, 22 Nov 2026 11:29:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
 	s=k20260515; t=1795346952;
-	bh=H8i5YVhr8pMD+/XAphh5neD9o3f3Uxu0RhXm2n+uogo=;
+	bh=r2E3AjrzdjT8sbFS2JSKFrk/TFYMjueoTuzNBj2umHQ=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
-	b=NnkyH8XRfn0DDSUQpDeVIKUzM8V6GI1awSsnvdX1HKN8IMCVKADR/2GTJ3WhwzrV8
-	 5Ya90+kdS8GV+ie1tYrnceQX4any2rwmLQ40h850XQjYy1q+RF8j63j3YcnX6+GH1H
-	 Ln6AB6b1jcV0sPsd9o2VyskhQ4b+k5SLd86KOmTyNWI7aoSbEZw0CB+37n3qsf8+72
-	 guWBzlZe3X9Gl9SDBY7YaFDgiYpklr1eFrNl0ykplDMD2uX3MX9RaApzQKbtEWSP//
-	 dmd+Cwl3Bsx2rjf29tf6rMhY71rsGAeau3Eyhr6lAjvgS+NC80fTDbQyNR8L6wkO2u
-	 JdxyN0b2Q3Fzw==
+	b=Csgf3uf3kTLCf4A8G1EPsSE9A4ciJ2rjEFIJ1k6o2kC+aHnUWn5RSt7Z473+EIRXp
+	 68TR7wzZ1pY4RirEAZVzHpjqmUA+s13YSxHBjxE2Iin5Je+1Fnf9dr3H5K9H17nSrM
+	 Jd/YVQQbQTZ7CPVmbBypAMBcl62dupPHLJ6CIr0FDrLGL6S4aHhx0YPfkgI52hQszN
+	 YoOEnKBKuK0N3YbqKibq6O3mYlFl0Yh0jQbJa3wPEuaZfveq4jiUNvWGzFCl23JVPJ
+	 nhKpAaIbudDCmuGw2Cjkx6ci8xvUMBoGz1Hebc5qZE+uzII/W8BkWS02drJd3Y+yqH
+	 aVUxHrLVH6kUQ==
 Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id 0640D4BFF8;
+	by lkml.kernel.org (Postfix) with ESMTP id 1EE094C008;
 	Sun, 22 Nov 2026 11:29:11 +0000 (UTC)
 From: YanXin Li via B4 Relay <devnull+fadouse.pm.me@kernel.org>
-Date: Sun, 22 Nov 2026 19:28:35 +0800
-Subject: [PATCH bpf v3 1/2] bpf: bound arena allocations to the user VMA
+Date: Sun, 22 Nov 2026 19:28:36 +0800
+Subject: [PATCH bpf v3 2/2] selftests/bpf: test arena allocation after a
+ short mmap
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -83,7 +84,7 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261122-b4-03-bpf-arena-vmalloc-oob-v3-da2dc21683c6-v3-1-1f94ae9a884a@pm.me>
+Message-Id: <20261122-b4-03-bpf-arena-vmalloc-oob-v3-da2dc21683c6-v3-2-1f94ae9a884a@pm.me>
 References: <20261122-b4-03-bpf-arena-vmalloc-oob-v3-da2dc21683c6-v3-0-1f94ae9a884a@pm.me>
 In-Reply-To: <20261122-b4-03-bpf-arena-vmalloc-oob-v3-da2dc21683c6-v3-0-1f94ae9a884a@pm.me>
 To: Alexei Starovoitov <ast@kernel.org>, 
@@ -94,13 +95,13 @@ Cc: Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
  Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
  Emil Tsalapatis <emil@etsalapatis.com>, 
  Ihor Solodrai <ihor.solodrai@linux.dev>, bpf@vger.kernel.org, 
- linux-kernel@vger.kernel.org, stable@vger.kernel.org
+ linux-kernel@vger.kernel.org
 X-Mailer: b4 0.16.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1795346949; l=3854;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1795346949; l=4570;
  i=fadouse@pm.me; s=b4-relay-20261122; h=from:subject:message-id;
- bh=NydRQKFXTXjxJi7zfPj1uOAvJMlBbK7Axhfoiyd0aNI=;
- b=ICvOVnTu+6PlSvU1tj91ffU42/BhMVeXtS6aucqm6B/gDO/IrNG5ohBfrABi/Pc1Mw8ZFS9re
- WpIgiwWwludBTBuA9GZLIOAt+0hx2W2cXPEjlrYIqVQbsNebKWWwC6h
+ bh=WJ8aXCi1+iUyH4McpRDagd4qctth2VlhQkByhvjsEx4=;
+ b=d2jg2htmvcEYhnHVgmTFYiziolnJacK1EUNbDFp5ePWthNmxSwUK3aTzSNmvuP9/qR3hZqisr
+ 6AoBSizMJWND7MidFcTp26cBG38wFPvuFe5JFX9Tl431H7O57snQ7DJ
 X-Developer-Key: i=fadouse@pm.me; a=ed25519;
  pk=b4DyzHJDRd8853IHUSKPA5wwzChj8eF4MTnZuyPz1PQ=
 X-Endpoint-Received: by B4 Relay for fadouse@pm.me/b4-relay-20261122 with
@@ -111,91 +112,140 @@ Content-Transfer-Encoding: 7bit
 
 From: YanXin Li <fadouse@pm.me>
 
-An arena map initializes its free range tree to max_entries pages. When
-map_extra is zero, the first mmap() may cover fewer pages. Fixed-address
-allocations are bounded by the VMA size, but automatic allocations use
-range_tree_find() across the whole tree and can select a range beyond
-the VMA. arena_free_pages() clips frees to the VMA, so these pages
-cannot be released through the arena kfunc.
+Without map_extra, the first mmap of an arena can be shorter than the
+map's max_entries. Automatic allocations must stay within that VMA.
 
-With 4 KiB pages, set max_entries to 1 << 20 and mmap() a 288-page VMA
-at 0xffee0000, ending at the next 4 GiB boundary. A 287-page
-automatic allocation takes offsets [0, 287). A subsequent 288-page
-allocation starts at offset 287, so its kernel mapping starts at
-kern_vm_start + 0xfffff000. One page lies within the 4 GiB data band,
-eight lie in the arena's upper half-guard, and 279 lie beyond its
-requested vmalloc area. The first of those 279 is the vmalloc guard
-page. The remaining 278 lie beyond the full reservation. The current
-apply_to_page_range() path can install PTEs there. An unpatched local
-test returned a non-NULL pointer for this allocation. Another run
-triggered a WARNING in apply_range_set_cb() on a non-scratch PTE.
+Create an eight-page arena and mmap only four pages before loading a BPF
+program. Reuse the map FD so libbpf does not mmap the full arena. The
+program occupies offset zero and allocates two more pages, leaving one
+page within the VMA. A two-page request must fail, and a final one-page
+request must succeed. Before the preceding fix, the two-page request
+succeeds outside the VMA.
 
-Out-of-VMA offsets need not wrap the low 32 bits. For example, when
-the user VMA starts at a 4 GiB aligned address, they can still map
-inside the arena's kernel area. They remain invalid because the VMA
-does not cover them. The range-tree conversion replaced the bounded
-mtree_alloc_range() search with range_tree_find() over max_entries.
-The later switch from vm_area_map_pages() to apply_to_page_range()
-removed the vm_struct bounds check, allowing these selections to
-reach beyond the arena's vmalloc reservation.
+When JIT is disabled, arena map creation can succeed while loading a
+program that uses the map returns -EOPNOTSUPP. Skip the subtest in that
+case.
 
-On the first mmap() without map_extra, remove [vma_pages, max_entries)
-from the free range tree before publishing the VMA bounds. The VMA
-size is fixed after this mmap(), and the fault, reserve and free paths
-do not add offsets outside it. Automatic allocations consequently
-stay inside the VMA.
-
-This issue was found through LLM-assisted code audit and manual code
-inspection of kernel/bpf/arena.c, then checked with a Z3 SMT model and
-a custom BPF test in an x86-64 QEMU/KVM guest. The test kernel
-identified itself as 7.4.0-rc3-84074-gc44104f3642d. KASAN, UBSAN,
-lockdep and DEBUG_OBJECTS were enabled. After the patch, the
-288-page request returns NULL, the 287-page in-VMA request succeeds,
-and the test reports no kernel warnings.
-
-Fixes: b795379757eb ("bpf: Introduce range_tree data structure and use it in bpf arena")
-Cc: stable@vger.kernel.org
 Signed-off-by: YanXin Li <fadouse@pm.me>
 ---
- kernel/bpf/arena.c | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
+ .../testing/selftests/bpf/prog_tests/arena_mmap.c  | 53 ++++++++++++++++++++++
+ .../testing/selftests/bpf/progs/arena_mmap_alloc.c | 32 +++++++++++++
+ 2 files changed, 85 insertions(+)
 
-diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
-index ec2bda1a6eb..94321dec638 100644
---- a/kernel/bpf/arena.c
-+++ b/kernel/bpf/arena.c
-@@ -694,6 +694,31 @@ static int arena_map_mmap(struct bpf_map *map, struct vm_area_struct *vma)
- 	if (remember_vma(arena, vma))
- 		return -ENOMEM;
+diff --git a/tools/testing/selftests/bpf/prog_tests/arena_mmap.c b/tools/testing/selftests/bpf/prog_tests/arena_mmap.c
+index f55d950720f..ff1fe0a6f22 100644
+--- a/tools/testing/selftests/bpf/prog_tests/arena_mmap.c
++++ b/tools/testing/selftests/bpf/prog_tests/arena_mmap.c
+@@ -2,6 +2,7 @@
  
-+	if (!arena->user_vm_start && vma_pages(vma) < map->max_entries) {
-+		/*
-+		 * Without map_extra, the first mmap() can be shorter than
-+		 * max_entries.  Remove offsets outside the VMA from the free
-+		 * range tree so automatic allocations stay within the VMA.
-+		 */
-+		unsigned long flags;
-+		int ret = -EBUSY;
+ #include <test_progs.h>
+ #include <sys/mman.h>
++#include "arena_mmap_alloc.skel.h"
+ 
+ #define ARENA_PAGES 8
+ 
+@@ -34,6 +35,56 @@ static void test_refused(__u64 map_extra, __u64 addr, int pages, int flags, int
+ 	close(fd);
+ }
+ 
++static void test_short_mmap_alloc(void)
++{
++	LIBBPF_OPTS(bpf_map_create_opts, map_opts, .map_flags = BPF_F_MMAPABLE);
++	LIBBPF_OPTS(bpf_test_run_opts, run_opts);
++	struct arena_mmap_alloc *skel = NULL;
++	size_t size = 4 * getpagesize();
++	void *area;
++	int fd, err;
 +
-+		if (!raw_res_spin_lock_irqsave(&arena->spinlock, flags)) {
-+			ret = range_tree_clear(&arena->rt, vma_pages(vma),
-+					       map->max_entries - vma_pages(vma));
-+			raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
-+			WARN_ON_ONCE(ret);
-+		}
-+		if (ret) {
-+			struct vma_list *vml = vma->vm_private_data;
-+
-+			list_del(&vml->head);
-+			vma->vm_private_data = NULL;
-+			kfree(vml);
-+			return ret;
-+		}
++	fd = bpf_map_create(BPF_MAP_TYPE_ARENA, "arena", 0, 0,
++			    ARENA_PAGES, &map_opts);
++	if (fd == -EOPNOTSUPP) {
++		test__skip();
++		return;
 +	}
++	if (!ASSERT_GE(fd, 0, "bpf_map_create"))
++		return;
 +
- 	arena->user_vm_start = vma->vm_start;
- 	arena->user_vm_end = vma->vm_end;
- 	/*
++	/* The short mapping must be the first mmap() of this arena. */
++	area = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
++	if (!ASSERT_NEQ(area, MAP_FAILED, "short_mmap"))
++		goto out_close;
++
++	/* Reuse the map so libbpf does not mmap all ARENA_PAGES on load. */
++	skel = arena_mmap_alloc__open();
++	if (!ASSERT_OK_PTR(skel, "arena_mmap_alloc__open"))
++		goto out_unmap;
++	err = bpf_map__reuse_fd(skel->maps.arena, fd);
++	if (!ASSERT_OK(err, "reuse_arena_fd"))
++		goto out_destroy;
++	err = arena_mmap_alloc__load(skel);
++	if (err == -EOPNOTSUPP) {
++		test__skip();
++		goto out_destroy;
++	}
++	if (!ASSERT_OK(err, "arena_mmap_alloc__load"))
++		goto out_destroy;
++	err = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.alloc_beyond_vma),
++				     &run_opts);
++	if (ASSERT_OK(err, "alloc_beyond_vma"))
++		ASSERT_OK(run_opts.retval, "alloc_beyond_vma_retval");
++
++out_destroy:
++	arena_mmap_alloc__destroy(skel);
++out_unmap:
++	munmap(area, size);
++out_close:
++	close(fd);
++}
++
+ void serial_test_arena_mmap(void)
+ {
+ 	__u64 page = getpagesize(), last = -(ARENA_PAGES * page);
+@@ -50,4 +101,6 @@ void serial_test_arena_mmap(void)
+ 		test_refused(0, -page, ARENA_PAGES, MAP_FIXED, 0);
+ 	if (test__start_subtest("map_extra_last_pages"))
+ 		test_refused(last, last, ARENA_PAGES, MAP_FIXED, 0);
++	if (test__start_subtest("short_mmap_alloc"))
++		test_short_mmap_alloc();
+ }
+diff --git a/tools/testing/selftests/bpf/progs/arena_mmap_alloc.c b/tools/testing/selftests/bpf/progs/arena_mmap_alloc.c
+new file mode 100644
+index 00000000000..3854afbebc4
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/arena_mmap_alloc.c
+@@ -0,0 +1,32 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#define BPF_NO_KFUNC_PROTOTYPES
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_arena_common.h"
++
++struct {
++	__uint(type, BPF_MAP_TYPE_ARENA);
++	__uint(map_flags, BPF_F_MMAPABLE);
++	__uint(max_entries, 8);
++} arena SEC(".maps");
++
++SEC("syscall")
++int alloc_beyond_vma(void *ctx)
++{
++	void __arena *page;
++
++	/* A successful allocation at offset zero can return a NULL pointer. */
++	bpf_arena_alloc_pages(&arena, NULL, 1, NUMA_NO_NODE, 0);
++	page = bpf_arena_alloc_pages(&arena, NULL, 2, NUMA_NO_NODE, 0);
++	if (!page)
++		return 1;
++	/* Only one of the four mmap()ed pages remains available. */
++	page = bpf_arena_alloc_pages(&arena, NULL, 2, NUMA_NO_NODE, 0);
++	if (page)
++		return 2;
++	page = bpf_arena_alloc_pages(&arena, NULL, 1, NUMA_NO_NODE, 0);
++	return page ? 0 : 3;
++}
++
++char _license[] SEC("license") = "GPL";
 
 -- 
 Git-157)
