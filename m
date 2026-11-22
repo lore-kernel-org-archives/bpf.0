@@ -1,44 +1,44 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795309279;
-	b=wR35A1+VYtDRcSp4APCH+jUKdjcrQBJKpH1OlA6Of+gnjd/jsfrKkCldOhrrPdH3VSTk
-	 1ymM4p+WVmkZguwTdj5G3GzkVjoOyJu5gaRHXytR/Is485gKIBFn297cKdfw4ZwyzvmQs
-	 rXckbhI8+kr74wWZNh6SIMwtByYJr/nRVoWBnp+D5icEK+XwaonbbQDr0KRqkjgdgA7Iu
-	 5i1NV3bUTYWwAEmz+VHKC5VilPp6ReSGkJDnmUTxVNtl/ZUThMiq3W/WZS3RODAb9/v6N
-	 MztrUjxXfcJgSW6SuQWU+zxznC3Mk14UfmVFa922+7HAEW3/p6KwL4MGVbJbnujebBg==
+	t=1795309280;
+	b=vbg+ZOejhx1GMCB7wHNdvPM9cTburMXQa+N4YmQeEg6w8k7bsOrW/ahD1aigTpGXr0Hi
+	 Qvyy+MN04YDcH2vymyu4I6sMj1IWxwUQNhZhpMwwTUhJhSMQ9Y9oiHE5m66PF9tN95kys
+	 UxYGl/uTQ1hh+D1TTKVAPH6gFFcig6aep1wdStUGmAgeDoIyMev5mjzrM98P5vuhWdKTV
+	 m1jEsR/gYtKohdZlAA3lfKdFwzZzZMtJ1TakrQaLZwh1K7xIYFCT5LXwpNVbVC/5KNGb5
+	 bEfVLDyPVFAm+4pAPwb8hV/O0S2nrP18aY1D1kEEYJdK9rJjUMl0+XxjHcVHoUJH4Vg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795309279;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795309280;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
 	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=jMnRJm6MI0mjGv2h9+ky9jm0gmL/BN1SDUzApkKFpdg=;
-	b=VSbnRtRy/u1BLdL17qn2L2yOoBq1U0nDlR3IzzTZKNTMy2di2+2MdJ9BGY6AM2DYjrUo
-	 H4Og77U1gkrgCg+NH1WHivRSoKa3yf4DxGdwnS08WQFkDx2drfCQ4vtTlrvNjqTpFC7Cg
-	 tPJa5w8uIrjLiiVzoQ0nQxkscFGduc+Op46ef2bLq42lsfE6Q6jk0rcu4SbcMtPIc65Mq
-	 8nGs7C3R1TEahaqLqNGz34bhU+17Mb93tV7OD8UNylwmP/eSV+Qo2TtJmfFKAPmKUBMFk
-	 Tvh2AIppIjr5NyP85UQvtqc3lJqqSJ4pI3Tc/IlgwSKJIXfcAwmMFBLTSjvB1uUcXtQ==
+	bh=quVP7eFuOB6NCi/gMfUaz9aG5iZL2P/TFfQvezix6f0=;
+	b=eKD93FBbIh5NQ9OMr6ibgF9+jFDe8YMtIOFkNObruVsxMAdjGu1aG6J/mwbYgovJjyhA
+	 78dX71Kp2bwdAIblDd4ZQ4o+cYw1LdqEodx/LkKmJTmBfHnOgcPhRxZmx9WuTDiFVODfB
+	 7n4z0PHxdYjneEREJDXLTs+B5jX+nKvqdofcpOvhfi+ygdDcl+aulmDAgBoSKURhVhp+F
+	 mclIRyAmy/8qvOJvyN9x8ItwP0bN9J4BKJhEaQdRWTlrs838DNP8JF1qLgLbV/io/NXw3
+	 f/JETygCpGef+WYyNVdUvx33O3BvcrSP1FR1mXbdCQJd9PhN2PWtwURHG2/WGsVv1HQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="en/gmU+R";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YqAmX3sm;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99469606A684;
-	Sun, 22 Nov 2026 01:01:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD5D1606A68C;
+	Sun, 22 Nov 2026 01:01:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=en/gmU+R
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE8081F000C4;
-	Sun, 22 Nov 2026 01:01:18 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YqAmX3sm
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F7371F000D8;
+	Sun, 22 Nov 2026 01:01:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795309279;
-	bh=jMnRJm6MI0mjGv2h9+ky9jm0gmL/BN1SDUzApkKFpdg=;
+	s=k20260515; t=1795309280;
+	bh=quVP7eFuOB6NCi/gMfUaz9aG5iZL2P/TFfQvezix6f0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=en/gmU+RfKmUNC+SLqnUCNT4g62Bu3y+fghmFivWwrUs3S0CaBEtm7HSXdA3vEc+o
-	 vHyGIjUwCzUQEqBiPCv2vBZ9T4WYv03WhwjK9sH1NI0ULW39fOpHta3Aqp+J+rNfDf
-	 9eXSBWcbnMqX0WYBy/cG4yqQx24H/2xA4oyRo0wI6rVSRRWbe8/70YOHHvr61nadEK
-	 03TcyxeXz+13oQQ+Dykeek68IqBLMCjwDXmUDzkr0OsEt2glMXmfYhaftkktN4uKTt
-	 WrjcMn28QqG8uw+Hlf4doCVZNhWzefYQknnRKZKdCa6SsfmPG5zKWx0BLZ8QMOGsWE
-	 CGFpFYqkAocsQ==
+	b=YqAmX3smMMsbUMC+CDRI1AIv2gscCDdWBtyKKFtNs+kgRrITQFXTBwevU0FLgqxh5
+	 956/CmEHV2fx/mA2dj1e37OZwFkqLTGmB7Q+g4f1HU30K8YOrwC/drnszhNU6fpNB8
+	 6eZcCbngSK4n09d2m8YI7k7ONeOvWyiU4rlpfD5DaB3om3rv36dj5d+rPerVC5tgPH
+	 qf7UEKue4R519F92HCOHhjwhcICji5nD3nJbttAZmdAXDfgQilAtkK1Yg32Yvl27HS
+	 Wp8eGDZ3B2aOYdaDgQFuY7r+UslTWRVzEQzn376h5uz3vTX5kNVrH0OYpqT+XP3K3n
+	 tjZq128jiZNyA==
 From: Jakub Kicinski <kuba@kernel.org>
 To: davem@davemloft.net
 Cc: netdev@vger.kernel.org,
@@ -59,9 +59,9 @@ Cc: netdev@vger.kernel.org,
 	przemyslaw.kitszel@intel.com,
 	bpf@vger.kernel.org,
 	Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net-next v2 2/9] selftests: drv-net: gro_stats: use the shared set_ethtool_feat()
-Date: Sat, 21 Nov 2026 17:01:05 -0800
-Message-ID: <20261122010112.1471146-3-kuba@kernel.org>
+Subject: [PATCH net-next v2 4/9] net: state the "XDP excludes HW-GRO" rule in the core
+Date: Sat, 21 Nov 2026 17:01:07 -0800
+Message-ID: <20261122010112.1471146-5-kuba@kernel.org>
 X-Mailer: git-send-email 2.56.1
 In-Reply-To: <20261122010112.1471146-1-kuba@kernel.org>
 References: <20261122010112.1471146-1-kuba@kernel.org>
@@ -76,97 +76,268 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-gro_stats.py carries its own copy of set_ethtool_feat(), which never
-reads the features back. The only check whether HW GRO really ended up
-enabled is the one guarding the generic XDP workaround, which is about
-to go away. Use the shared helper, so that the test can ask for that
-check like gro_lib.py does.
+XDP has to see the frames as the wire delivered them, so HW-GRO must be
+off while a program is attached. Drivers currently open-code that policy,
+and they diverge: mlx5, gve and virtio_net refuse the attach, bnxt and
+qede clear the feature from ndo_fix_features(), and idpf does nothing
+at all and happily runs RSC under XDP.
 
-A fixed feature now results in an XFAIL rather than a SKIP, same as
-in gro_lib.py.
+Clear HW-GRO in __netdev_update_features(), and make sure XDP setup
+paths refresh the features.
+
+Take extra care to make sure the disablement actually works, some
+drivers add the feature back in ndo_fix_features, even when removed
+from wanted features (mlx5 does for header-data-split).
+
+This change also removes the warn-only check dev_disable_gro_hw()
+performed. On mlx5 with tcp-data-split on, attaching a multi-buf
+generic XDP program reached generic_xdp_install(), whose
+dev_disable_gro_hw() cleared wanted_features, recomputed, saw
+mlx5e_fix_features() put NETIF_F_GRO_HW straight back, and splatted:
+
+  ------------[ cut here ]------------
+  netdevice: eth0: failed to disable GRO_HW!
+  WARNING: net/core/dev.c:1880 at generic_xdp_install+0x135/0x190, CPU#53: ip/667
+  RIP: 0010:generic_xdp_install+0x17a/0x190
+  Call Trace:
+   <TASK>
+   dev_xdp_install+0x2aa/0x380
+   dev_xdp_attach+0x41f/0x460
+   dev_change_xdp_fd+0xbb/0x110
+   do_setlink+0xfb9/0x1030
+   rtnl_newlink+0x9f5/0xaf0
+   rtnetlink_rcv_msg+0x442/0x490
+   netlink_rcv_skb+0x16a/0x1a0
+   netlink_unicast+0x1fc/0x320
+   netlink_sendmsg+0x2d6/0x380
+
+and then attached anyway, leaving XDP looking at coalesced frames.
+The device also lost the bit from wanted_features for good, so HW-GRO
+never came back after detach - on mlx5 that took header-data split
+with it, and with it devmem and io_uring zero-copy Rx.
 
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 ---
-v2: new patch
+v2: no change
+v1: https://lore.kernel.org/20261118232315.3593731-4-kuba@kernel.org
 ---
- .../selftests/drivers/net/hw/gro_stats.py     | 45 +++++--------------
- 1 file changed, 10 insertions(+), 35 deletions(-)
+ .../networking/net_cachelines/net_device.rst  |  1 +
+ include/linux/netdevice.h                     |  6 ++
+ net/core/dev.c                                | 97 ++++++++++++++-----
+ 3 files changed, 81 insertions(+), 23 deletions(-)
 
-diff --git a/tools/testing/selftests/drivers/net/hw/gro_stats.py b/tools/testing/selftests/drivers/net/hw/gro_stats.py
-index 70e76e3888bd..a413e6fed210 100755
---- a/tools/testing/selftests/drivers/net/hw/gro_stats.py
-+++ b/tools/testing/selftests/drivers/net/hw/gro_stats.py
-@@ -13,7 +13,7 @@ from lib.py import ksft_run, ksft_exit, ksft_pr
- from lib.py import ksft_eq, ksft_ge, ksft_variants
- from lib.py import NetDrvEpEnv, NetdevFamily
- from lib.py import KsftSkipEx
--from lib.py import bkg, cmd, defer, ethtool, ip
-+from lib.py import bkg, cmd, defer, ethtool, ip, set_ethtool_feat
+diff --git a/Documentation/networking/net_cachelines/net_device.rst b/Documentation/networking/net_cachelines/net_device.rst
+index 7620d3fcb8dc..25cf02a184ec 100644
+--- a/Documentation/networking/net_cachelines/net_device.rst
++++ b/Documentation/networking/net_cachelines/net_device.rst
+@@ -169,6 +169,7 @@ unsigned_long:1                     see_all_hwtstamp_requests
+ unsigned_long:1                     change_proto_down
+ unsigned_long:1                     netns_immutable
+ unsigned_long:1                     fcoe_mtu
++unsigned_long:1                     xdp_pending
+ unsigned_long:1                     xdp_from_upper
+ struct list_head                    net_notifier_list
+ struct macsec_ops*                  macsec_ops
+diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+index 0325c6f2a7d1..049538b13e61 100644
+--- a/include/linux/netdevice.h
++++ b/include/linux/netdevice.h
+@@ -2531,6 +2531,12 @@ struct net_device {
+ 	unsigned long		change_proto_down:1;
+ 	unsigned long		netns_immutable:1;
+ 	unsigned long		fcoe_mtu:1;
++	/**
++	 * @xdp_pending: an XDP program is being installed, but is not in
++	 *	@xdp_state yet. Most users should access it implicitly via
++	 *	helpers like dev_xdp_prog_count(), rather than directly.
++	 */
++	unsigned long		xdp_pending:1;
+ 	/**
+ 	 * @xdp_from_upper: the program in @xdp_state was installed by an
+ 	 *	upper device with netif_xdp_propagate(); it belongs to the
+diff --git a/net/core/dev.c b/net/core/dev.c
+index 4ca8a9f5a7a5..5d38cdb6c326 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -1902,23 +1902,6 @@ void netif_disable_lro(struct net_device *dev)
+ 	}
+ }
  
- 
- # gro.c uses hardcoded DPORT=8000
-@@ -137,41 +137,16 @@ def _run_gro_test(cfg, test_name, num_flows=None, ignore_fail=False,
-             raise KsftSkipEx(f"Driver does not report '{stat}' via qstats")
- 
- 
--def _set_ethtool_feat(cfg, current, feats):
--    """Set ethtool features with defer to restore original state."""
--    s2n = {True: "on", False: "off"}
+-/**
+- *	dev_disable_gro_hw - disable HW Generic Receive Offload on a device
+- *	@dev: device
+- *
+- *	Disable HW Generic Receive Offload (GRO_HW) on a net device.  Must be
+- *	called under RTNL.  This is needed if Generic XDP is installed on
+- *	the device.
+- */
+-static void dev_disable_gro_hw(struct net_device *dev)
+-{
+-	dev->wanted_features &= ~NETIF_F_GRO_HW;
+-	netdev_update_features(dev);
 -
--    new = ["-K", cfg.ifname]
--    old = ["-K", cfg.ifname]
--    no_change = True
--    for name, state in feats.items():
--        new += [name, s2n[state]]
--        old += [name, s2n[current[name]["active"]]]
+-	if (unlikely(dev->features & NETIF_F_GRO_HW))
+-		netdev_WARN(dev, "failed to disable GRO_HW!\n");
+-}
 -
--        if current[name]["active"] != state:
--            no_change = False
--            if current[name]["fixed"]:
--                raise KsftSkipEx(f"Device does not support {name}")
--    if no_change:
--        return
--
--    eth_cmd = ethtool(" ".join(new))
--    defer(ethtool, " ".join(old))
--
--    # If ethtool printed something kernel must have modified some features
--    if eth_cmd.stdout:
--        ksft_pr(eth_cmd)
--
--
- def _setup_hw_gro(cfg):
-     """Enable HW GRO on the device, disabling SW GRO."""
-     feat = ethtool(f"-k {cfg.ifname}", json=True)[0]
+ const char *netdev_cmd_to_name(enum netdev_cmd cmd)
+ {
+ #define N(val) 						\
+@@ -6657,7 +6640,6 @@ static int generic_xdp_install(struct net_device *dev, struct netdev_bpf *xdp)
+ 		} else if (new && !old) {
+ 			static_branch_inc(&generic_xdp_needed_key);
+ 			netif_disable_lro(dev);
+-			dev_disable_gro_hw(dev);
+ 		}
+ 		break;
  
-     # Try to disable SW GRO and enable HW GRO
--    _set_ethtool_feat(cfg, feat,
--                      {"generic-receive-offload": False,
--                       "rx-gro-hw": True,
--                       "large-receive-offload": False})
-+    set_ethtool_feat(cfg.ifname, feat,
-+                     {"generic-receive-offload": False,
-+                      "rx-gro-hw": True,
-+                      "large-receive-offload": False},
-+                     check=False)
+@@ -10576,7 +10558,7 @@ u8 dev_xdp_prog_count(struct net_device *dev)
+ 	for (i = 0; i < __MAX_XDP_MODE; i++)
+ 		if (dev->xdp_state[i].prog || dev->xdp_state[i].link)
+ 			count++;
+-	return count;
++	return count ?: !!dev->xdp_pending;
+ }
+ EXPORT_SYMBOL_GPL(dev_xdp_prog_count);
  
-     # Some NICs treat HW GRO as a GRO sub-feature so disabling GRO
-     # will also clear HW GRO. Use a hack of installing XDP generic
-@@ -186,10 +161,10 @@ def _run_gro_test(cfg, test_name, num_flows=None, ignore_fail=False,
-         # Attaching XDP may change features, fetch the latest state
-         feat = ethtool(f"-k {cfg.ifname}", json=True)[0]
+@@ -10617,6 +10599,32 @@ static void dev_xdp_set_prog(struct net_device *dev, enum bpf_xdp_mode mode,
+ 	dev->xdp_state[mode].prog = prog;
+ }
  
--        _set_ethtool_feat(cfg, feat,
--                          {"generic-receive-offload": True,
--                           "rx-gro-hw": True,
--                           "large-receive-offload": False})
-+        set_ethtool_feat(cfg.ifname, feat,
-+                         {"generic-receive-offload": True,
-+                          "rx-gro-hw": True,
-+                          "large-receive-offload": False})
++/* Try to clear HW-GRO before the driver reconfigures for XDP.
++ * Driver may add features back in via ndo_fix_features(), due to feature
++ * dependencies. In that case we can't run XDP at all.
++ */
++static int dev_xdp_clear_rx_agg(struct net_device *dev,
++				struct netlink_ext_ack *extack)
++{
++	if (!(dev->features & NETIF_F_GRO_HW))
++		return 0;
++	if (!(dev->hw_features & NETIF_F_GRO_HW)) {
++		NL_SET_ERR_MSG(extack,
++			       "unable to disable HW-GRO, fixed on");
++		return -EOPNOTSUPP;
++	}
++
++	netdev_update_features(dev);
++
++	if (dev->features & NETIF_F_GRO_HW) {
++		NL_SET_ERR_MSG(extack,
++			       "unable to disable HW-GRO, required by another feature");
++		return -EBUSY;
++	}
++
++	return 0;
++}
++
+ int netif_xdp_propagate(struct net_device *dev, struct netdev_bpf *bpf)
+ {
+ 	struct bpf_prog *old_prog;
+@@ -10650,11 +10658,17 @@ int netif_xdp_propagate(struct net_device *dev, struct netdev_bpf *bpf)
+ 				       "unable to propagate XDP to device using memory provider");
+ 			return -EBUSY;
+ 		}
++
++		dev->xdp_pending = 1;
++
++		err = dev_xdp_clear_rx_agg(dev, bpf->extack);
++		if (err)
++			goto err_clear_pending;
+ 	}
  
+ 	err = dev->netdev_ops->ndo_bpf(dev, bpf);
+ 	if (err)
+-		return err;
++		goto err_clear_pending;
+ 	if (bpf->prog)
+ 		bpf_prog_inc(bpf->prog);
  
- def _check_gro_stats(cfg, test_queue, stats_before,
+@@ -10667,11 +10681,22 @@ int netif_xdp_propagate(struct net_device *dev, struct netdev_bpf *bpf)
+ 	old_prog = dev_xdp_prog(dev, XDP_MODE_DRV);
+ 	bpf_prog_change_xdp(old_prog, bpf->prog);
+ 	dev_xdp_set_prog(dev, XDP_MODE_DRV, bpf->prog);
++	dev->xdp_pending = 0;
+ 	dev->xdp_from_upper = !!bpf->prog;
+-	if (old_prog)
++
++	if (old_prog) {
+ 		bpf_prog_put(old_prog);
++		/* The last program is gone, HW-GRO may be available again */
++		if (!bpf->prog)
++			netdev_update_features(dev);
++	}
+ 
+ 	return 0;
++
++err_clear_pending:
++	dev->xdp_pending = 0;
++	netdev_update_features(dev);
++	return err;
+ }
+ EXPORT_SYMBOL_GPL(netif_xdp_propagate);
+ 
+@@ -10880,19 +10905,36 @@ static int dev_xdp_attach(struct net_device *dev, struct netlink_ext_ack *extack
+ 			return -EOPNOTSUPP;
+ 		}
+ 
++		if (new_prog) {
++			dev->xdp_pending = 1;
++			err = dev_xdp_clear_rx_agg(dev, extack);
++			if (err)
++				goto err_clear_pending;
++		}
++
+ 		err = dev_xdp_install(dev, mode, bpf_op, extack, flags, new_prog);
+ 		if (err)
+-			return err;
++			goto err_clear_pending;
+ 	}
+ 
+ 	if (link)
+ 		dev_xdp_set_link(dev, mode, link);
+ 	else
+ 		dev_xdp_set_prog(dev, mode, new_prog);
+-	if (cur_prog)
++	dev->xdp_pending = 0;
++	if (cur_prog) {
+ 		bpf_prog_put(cur_prog);
++		/* The last program is gone, HW-GRO may be available again */
++		if (!new_prog)
++			netdev_update_features(dev);
++	}
+ 
+ 	return 0;
++
++err_clear_pending:
++	dev->xdp_pending = 0;
++	netdev_update_features(dev);
++	return err;
+ }
+ 
+ static int dev_xdp_attach_link(struct net_device *dev,
+@@ -10918,6 +10960,7 @@ static int dev_xdp_detach_link(struct net_device *dev,
+ 	bpf_op = dev_xdp_bpf_op(dev, mode);
+ 	WARN_ON(dev_xdp_install(dev, mode, bpf_op, NULL, 0, NULL));
+ 	dev_xdp_set_link(dev, mode, NULL);
++	netdev_update_features(dev);
+ 	return 0;
+ }
+ 
+@@ -11390,6 +11433,14 @@ int __netdev_update_features(struct net_device *dev)
+ 
+ 	features = netdev_get_wanted_features(dev);
+ 
++	/* GRO_HW may be added back in via ndo_fix_features e.g. if driver needs
++	 * it to honor the HDS config, clear it before the fix features call.
++	 */
++	if ((features & NETIF_F_GRO_HW) && dev_xdp_prog_count(dev)) {
++		netdev_dbg(dev, "Dropping HW-GRO feature since XDP is attached.\n");
++		features &= ~NETIF_F_GRO_HW;
++	}
++
+ 	if (dev->netdev_ops->ndo_fix_features)
+ 		features = dev->netdev_ops->ndo_fix_features(dev, features);
+ 
 -- 
 2.56.1
 
