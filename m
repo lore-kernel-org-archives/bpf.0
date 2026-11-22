@@ -1,97 +1,45 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795323336;
-	b=hGUN0BXYT0xEuYexsjcbbYUmVBGmCTEhWuFyu1cwGle1NeVP/ba5Bo2JB+9bGq05zOWd
-	 3668o1CnGEbwiBNtz8q2d9/ZHKfgKKpXbfsP4WVdOjTXhPPLxtoU9Dj6HYlMRVziM13hn
-	 pkgihKCR7d7GEugKXNHLo1wD39s0+NWqZnMygWoaWEa2tVzDp9j8PjHzwAx8RJlOtvlqm
-	 KlA5+jSiCbPrCHwA+lYRbdDPV+SJcCzMYZfF9tUlDNYTRZn3KYUXW9vQluhh5Ft2AL31j
-	 Ov0W3IOgn6dL1v3qAjsmzkXChR9dxld+fzLolJEPVfiRGfPTxrzrvnq8qQ9eaxhOkpA==
+	t=1795325201;
+	b=bWL47eD4fei/BwzxISNwFtbcBxTp9fM7qQ5rKyxYaqQrGosUNjPpc9wVZZFpnN/6B+C8
+	 D+hTnKmujb8xPZHzWMS4FjRbqYw9zrTgT138lSlktZNw8ryRZm+wGI+Ox/2kGB2YElG8u
+	 seTM2NYyRbS4vQGPHLd/8hOx8nn3GfcxjOoQTzGWsR9Xqy/7KZvJLg7iUYYKFm2gTM9qA
+	 RuuO2gW/SZWwWlvOueDG1gNYaOJhfAM4OqjLvGzL+De++JNp8b5cyIRG7iDl22ClHL6am
+	 s2aXUNuAx6U9ZK0X3xdnxEcUUEc6GElmz+J9SS1upmGyb+tYKHSvevaqhPfycn6n97w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795323336;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:Received:
-	 Received:Received:Received:Received:From:To:Cc:Subject:Date:
-	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:X-TM-AS-GCONF:X-Proofpoint-Reinject:
-	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-ORIG-GUID:
-	 X-Authority-Analysis:X-Proofpoint-GUID:X-Proofpoint-Spam-Info:
-	 X-Proofpoint-Virus-Version:X-Proofpoint-Spam-Details;
-	bh=UvD1XDHgV8kuPqdqxMhrx+KjEmgtr8uUpTTEddqRnLw=;
-	b=NZJhEHNZod/IGQkCwt4H5d3tLhpYVQqWbDvXSDzfguWEvRvxqzXXzA0Thd1oQPLlmQrQ
-	 SYD/+P+StNOqtC+rfeKiO3cE6tcKS7xayXYDCb4/0ntRJwdlOezWNyI7Zbrr9Q3AfAEVo
-	 XnOVmE4tjSvQlUlE5mQ5G1KgFSzzjiPeoRpUyPpSiwQ4X9nwVhuES6XcyotEj2iCDoPfG
-	 BaADYzXXYuOrgmxleiDVsiYCeMELNiO7ZVOFczkbWTpmUvV7UfMmSUzxyW0yi57PfnqiB
-	 ogfsBylfgzsUN6KYGD68TJRZqgSP1GdHbq37pwoz1qdkpN0cJeiJfF6unhMcqUAB5Sw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795325201;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=WSnfBOApNbDPGY48k9YGggczifS4bUOcX4lLr98nel0=;
+	b=btQ3QaIx6FsRi/7GBQRlFpzdHRmOGE7oQ6UGTelZhethz4xj4mSo/TDliH8strh5ztfb
+	 Vj1Fd4vC7aw6gJkWFiIZTbSmmE9jd04zqnpICWSOKR3tYm+rJEFIVLzaq4GwKtoYXzIKi
+	 ZXHP4jy8Gl5cstoe6aEqWrrRHhCwstEoVlZ/cSC6WQ8va14uSUXJ7fIcGj7I8Cobpzz6Z
+	 mu9ExhnS86xT3U6bBcByuU8eP2e3RdGH6o/t+U7fBbUcK83x8bVTYX6v6wt3FpzV0JXvd
+	 nNUuMYCGlGvD3VSSvAT6aO8xErXk/TrIIRpX2fNQFJXeWkkN5r/FnYKnB/3rFfc6aog==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.ibm.com;
-	spf=pass smtp.mailfrom=linux.ibm.com;
-	dkim=pass header.d=ibm.com header.i=@ibm.com header.a=rsa-sha256 header.s=pp1 header.b=llFjUWwy;
-	arc=none smtp.remote-ip=148.163.156.1
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HJItbHDv;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A181F606A334;
-	Sun, 22 Nov 2026 04:55:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A181F606A334
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF3FB606A320;
+	Sun, 22 Nov 2026 05:26:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.a=rsa-sha256 header.s=pp1 header.b=llFjUWwy
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6AM44s6H3865827;
-	Sun, 22 Nov 2026 04:55:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=UvD1XD
-	HgV8kuPqdqxMhrx+KjEmgtr8uUpTTEddqRnLw=; b=llFjUWwyUso7jldJJZUIL0
-	/OY4MdUBFGvwNPCujYeX3oiulb88Zci1l2IcBvNadzNdfU1Wythyn6JIq6+/SLdp
-	hB7p3VAOHyizuA3GAEBWu+xm91vq2CovL9a2yBBISfJkXgf1IuUTmWRbMwzaHdZs
-	QnH7mb3tjm85iiUDtrWK6lprPvM6nVABbA9rTmh0DeKEVJin3KRFGL8GdvD07Ghe
-	efqVL6ZDWR3FwulYp82Ufs4cJYlLZNH7YTgDYr7dTV+lwzCMJGpISaoU/EYrIWuy
-	Zgck8ipiNZNDHX0sPI8bASUXFd80V7aTNkIHPrzNivXPNCQspd3optPiqk0ZdcRQ
-	==
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4j34f9w0rh-1
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Sun, 22 Nov 2026 04:55:06 +0000 (GMT)
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.18.1.11/8.18.1.11) with ESMTP id 6AM3o6Hj3197290;
-	Sun, 22 Nov 2026 04:55:05 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4j3p0v8q21-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sun, 22 Nov 2026 04:55:05 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6AM4t0Cg41746726
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Sun, 22 Nov 2026 04:55:00 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 1630420043;
-	Sun, 22 Nov 2026 04:55:00 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 10E8020040;
-	Sun, 22 Nov 2026 04:54:55 +0000 (GMT)
-Received: from Linuxdev.ibmuc.com (unknown [9.43.90.96])
-	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Sun, 22 Nov 2026 04:54:54 +0000 (GMT)
-From: Madhavan Srinivasan <maddy@linux.ibm.com>
-To: Hari Bathini <hbathini@linux.ibm.com>,
-        "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
-        Karl Mehltretter <kmehltretter@gmail.com>
-Cc: Naveen N Rao <naveen@kernel.org>, Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Abhishek Dubey <adubey@linux.ibm.com>,
-        Dan Carpenter <error27@gmail.com>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] powerpc32/bpf: return false from bpf_jit_supports_fsession() on ppc32
-Date: Sun, 22 Nov 2026 10:24:53 +0530
-Message-ID: <179532322374.92012.15207416512757152590.b4-ty@linux.ibm.com>
-X-Mailer: git-send-email 2.56.1
-In-Reply-To: <20261003184226.76740-1-kmehltretter@gmail.com>
-References: <20261003184226.76740-1-kmehltretter@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HJItbHDv
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF2751F000C0;
+	Sun, 22 Nov 2026 05:26:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795325200;
+	bh=WSnfBOApNbDPGY48k9YGggczifS4bUOcX4lLr98nel0=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=HJItbHDvxHdHNGEPigBjrg7fcjQSOd8PgOf7vuO+6yBqH4tB7RipP96RU6pFQozl3
+	 pGEPRYhoDmFS+ppu5C1unEChsx7GLJg8aVuE9t7wSdsWl/7aULMhVeFeCXQ6SbIjNM
+	 qX8RCByQKeyixmKo0d+RciosMXerwxInMCuL60HHJi4obdjmmM4XJJ7OY9YbU44IwD
+	 5Mwqje+QOCJTnjYV09Ul58Y3+SctZQdKbcflU8NvdeWKtGpJMQybuuW0S7zDvobBtY
+	 0GdLVXMU0a3mnktHlL8d8E13Z0ZqZLGPs7hR3JNU+TURzE7b6d5cVTfPkHL9G12Nc1
+	 KdAd8v4L3MrwQ==
+Content-Type: multipart/mixed; boundary="===============8672382131251748710=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -101,51 +49,107 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTIyMDAxOCBTYWx0ZWRfX9KN2WSs3Va9x
- GViowpso6oJ4aXbvqp0b4l5uyaOltxXA5df4u5lC7OPeFudxHjAsvjx+BeQu/1vqyE4CLLFikbd
- pMf0oSNIn21dgKxXNnjOeeeYptUDrhzj0qSvXozQZ0gmUT9CDcKlnmEN9Z4pF0Kd8NK0aC6H+ti
- rmppxIHJd2HU40H/Sc1fBwc8MjCGzN2APf+wT9IBnZvW9RA4o2DCLK27AIINrmATpWQJcg3GPio
- j6LSnbGb8vM072A+bWaxdxFf6h2ZjIJ/E3roLmF0knUmmyNo0x3/bBib47W29tIJYilPOFWxerO
- 6VYJPPs3pVI2Sjch4hBgwHJSk9QovGYpQFMSgAz7fMng5Feo0+LQteLfR5aurkYT0ac0boznvOB
- f/W4YJf2i6JXyhhVOCzN4t5JydFbQHZbRUDb59hFr3yM8awAqnY5qLqE2yftIsLpvLmarGB+BS1
- bXLtKwijGK9yf5PMC8w==
-X-Proofpoint-ORIG-GUID: 1vYIMNPZlezeldqXvJxX8mwR6TJIFKvO
-X-Authority-Analysis: v=2.4 cv=U6QHnuru c=1 sm=1 tr=0 ts=6b0275ab cx=c_pps
- a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
- a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=iQ6ETzBq9ecOQQE5vZCe:22 a=VwQbUJbxAAAA:8
- a=-keKQWBAqDuMZrUa_q0A:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-GUID: jyYgcqtUMLmTuvrWiIxRUIKcvIr99gG9
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMTIyMDAxOCBTYWx0ZWRfXwBXDYCy5uSUc
- 3WWHKs+HhQ2JorG5XZjg7RE8XdhZALhOVj8LYDB9viQ5fsR026oCK/OPodDGjeduB4+uIuILNrI
- wfQSiRGWjsoHntTOqhEJ5YknsJBk2bQ=
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
- definitions=2026-11-22_01,2026-11-19_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 lowpriorityscore=0 spamscore=0 impostorscore=0
- clxscore=1011 bulkscore=0 suspectscore=0 adultscore=0 phishscore=0
- malwarescore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2611040001
- definitions=main-2611220018
+Message-Id: <86a108a3441c8160bcf73fe92b8ff79dd6562d3313c80e65489607f3d737d50b@mail.kernel.org>
+In-Reply-To: <20261122-b4-03-bpf-arena-vmalloc-oob-v2-5f6209c1a20e-v2-1-b2a9906e9676@pm.me>
+References: <20261122-b4-03-bpf-arena-vmalloc-oob-v2-5f6209c1a20e-v2-1-b2a9906e9676@pm.me>
+Subject: Re: [PATCH bpf v2] bpf: bound arena allocations to the user VMA
+From: bot+bpf-ci@kernel.org
+To: fadouse@pm.me,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com
+Cc: martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,stable@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Sun, 22 Nov 2026 05:26:38 +0000 (UTC)
 
-On Sat, 03 Oct 2026 20:42:26 +0200, Karl Mehltretter wrote:
-> bpf_jit_supports_fsession() returns bool. Commit 92258b5bf1ec
-> ("powerpc32/bpf: Add fsession support") made it return -EOPNOTSUPP on
-> ppc32 until fsession is validated there. The negative value converts to
-> true, so the verifier does not reject fsession programs on ppc32. Such a
-> program loads, and only attaching it fails because
-> __arch_prepare_bpf_trampoline() returns -EOPNOTSUPP on ppc32.
-> 
-> [...]
+--===============8672382131251748710==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Applied to powerpc/fixes.
+> bpf: bound arena allocations to the user VMA
 
-[1/1] powerpc32/bpf: return false from bpf_jit_supports_fsession() on ppc32
-      https://git.kernel.org/powerpc/c/ba4564fc66ae796f5070925b803e8f3039423ffb
+TL;DR: Commit message page counts don't add up and its "can never be mapped
+without wrapping" claim is questionable; the new -ERANGE check in
+arena_adjust_tree() looks unreachable and its comment seems inaccurate.
 
-cheers
+> A program that first allocates 287 pages and
+> then asks for 288 more receives pgoff = 287, uaddr32 = 0xfffff000,
+> and arena_alloc_pages() maps 288 pages at kern_vm_start + 0xfffff000:
+> one page inside the VMA, then the arena's upper guard pages, and then
+> 258 pages into the vmalloc area past the end of the arena's own
+> vmap area - installing PTEs into address space the arena does not own
+> and returning a "success" pointer to the caller.
+[ ... ]
+> Fix this on both sides.  On the first mmap() of a map created without
+> map_extra, mark [vma_pages, max_entries) as allocated in the range
+> tree, because nothing outside the VMA can ever be freed or mapped
+> without wrapping;
+
+The page counts do not seem to add up here.  GUARD_SZ is
+round_up(1 << 16, PAGE_SIZE << 1), so kern_vm_start is offset by 32 KiB
+into the area and the upper guard above kern_vm_start + 4 GiB is 32 KiB,
+which is 8 pages with 4 KiB pages.
+
+Mapping 288 pages at kern_vm_start + 0xfffff000 would then be 1 page in
+the 4 GiB band and 8 upper guard pages, leaving 279 pages past the end of
+the arena's vm area, and 1 + 8 + 258 is 267, not 288.  Could the numbers
+be corrected?
+
+Also, is "nothing outside the VMA can ever be freed or mapped without
+wrapping" accurate?  Pages outside the VMA can never be freed because
+arena_free_pages() clips to user_vm_end, but they only wrap when the VMA
+ends close to a 4 GiB boundary.  For a 4 GiB aligned user_vm_start,
+uaddr32 = pgoff * PAGE_SIZE stays inside the arena's own kernel area.
+
+> diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
+> --- a/kernel/bpf/arena.c
+> +++ b/kernel/bpf/arena.c
+
+[ ... ]
+
+> @@ -758,8 +787,19 @@ static int arena_adjust_tree(struct bpf_arena *arena, long uaddr, long page_cnt,
+>  	ret = range_tree_find(&arena->rt, page_cnt);
+>  	if (ret < 0)
+>  		return ret;
+>
+> +	/*
+> +	 * The range tree spans max_entries pages, but when map_extra was
+> +	 * not given at arena creation time the user VMA, and hence the
+> +	 * range whose lower 32 bits do not wrap past the 32-bit boundary,
+> +	 * can be smaller.  A pgoff past the VMA would wrap uaddr32 past
+> +	 * the 32-bit boundary, be mapped past the end of the arena's
+> +	 * kernel vm area, and could never be freed, so reject it.
+> +	 */
+> +	if (ret > page_cnt_max - page_cnt)
+> +		return -ERANGE;
+> +
+>  	*pgoff = ret;
+
+This isn't a bug, but does this comment match the code after this patch?
+
+The comment says "The range tree spans max_entries pages", but
+arena_map_mmap() now clips the tree on the first mmap():
+
+    ret = range_tree_clear(&arena->rt, vma_pages(vma),
+                           map->max_entries - vma_pages(vma));
+
+Since page_cnt_max is 0 until user_vm_start/user_vm_end are stored, and
+arena_alloc_pages() returns early when page_cnt > page_cnt_max, the tree
+already spans at most page_cnt_max pages whenever arena_adjust_tree()
+runs.  That would make the -ERANGE branch unreachable today, with the
+clip in arena_map_mmap() being what enforces the bound.
+
+The claim that "a pgoff past the VMA would wrap uaddr32" also only holds
+when the VMA ends near a 4 GiB boundary.  For a VMA starting at a 4 GiB
+aligned address, uaddr32 = pgoff * PAGE_SIZE < 4 GiB for every pgoff <
+max_entries, so those pages land inside the arena's own kernel area.
+
+Could the comment say that the mmap-side clip enforces the bound and that
+this check is only a backstop, and drop the universal "would wrap" claim?
+Alternatively, could the check be removed if the clip alone is the
+intended invariant?
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/44987264909
+--===============8672382131251748710==--
