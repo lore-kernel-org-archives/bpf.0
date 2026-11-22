@@ -1,44 +1,44 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795377895;
-	b=IJ+lnhVmvjpsyRGRw7HBizcK2TU7rvs6lwsryjQU7eyLy8lgVj78hnIenOR1n5n1QKow
-	 Eh6Z33n8xmXtKb3UW0afTFfTaMlXE9s+tSDkZfz4HvsFUcli6YZL1vnZraTv5cKfOmpEr
-	 0JRB9hnDIbba4hW7vU+oVw2B4OKeFkYCO/XoOwBhahLPrgbdOxvjxqzvbJbf40VqE+EWO
-	 cTm29s2EMgUSl+B+8efDxy5NpoaclPfByvFX431G/i3GSuhayK1PZr/4uNqmSAamf8bVm
-	 r7JwdW7L1sjYaYsG03DXPZ+UJuXlVJME3Dn8QO50Zf4gXhJOVPl9WfuoLjvfNGs/Dtg==
+	t=1795378001;
+	b=WXkgGGXwBWYtmSU4BXe98bMErn/87HIXWpBHXHvZdEH5ERv/HQSwfOLigbRJRZXd2jb2
+	 c5sQrmbMbwuKdn2yCMHLVt9aYz5rQOb9dGe3ZjbdI284G87zBcfsiTx71UlbEZRE7j6YH
+	 hFCliY7em3FPbx9BGDfi4C0l13DidsLXeipZYQ6Zm8OSQT/U5iBtgjtQ55mT95zPNGaWn
+	 EUBG0n2fxV5s0deLNKRQQ+B9lxC2BL30Vhcbu90Pf91/RF8Dvpyj2ou6CEj9AfaxBIChZ
+	 TRfo1bNcwzpR7oUgDfQ5/fqCEdHoURjBHnEtM4V8BbxAQVEtu+WKFAhJo1FjD0yxegQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795377895;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795378001;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:In-Reply-To:References:
 	 Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=hJntkLl71ehP6K4tL5AJK+8IdOlj65eqs2ikaDPPzO0=;
-	b=TBY7syHWhEQ+86TwRHbcq3qx/QTBqFUbrQh3aUmVn9wTOnGwnCGuq6xn7P48ZrVYOU9x
-	 2Oip5AUBv30vk16gfOyVc0At0BWko6AEIk0W5k2upjETlew8a095d1NW9MBhQL32a+eyH
-	 bRS1/EjmdGjDnbZLX7SG996EE6Ardc4M1I+Yc8UrRj3rW15mNVH8uPGUZDwAkwM4eBwhh
-	 Udmc0SMY6klMXphDMAYoMc/+j7rJfxYhL6e//h/qxq6DE38ctwGLhIYTfpJmN5LKGXeQ+
-	 zDwQ53/bdH6If34EykpD6m4yIUx1XcWOHilIABYIvaKTqGL/VPluEx3/d3CdBKNWEbQ==
+	bh=4nZXt2cwakB2qfoko96Emq2FYBKfcAcG/kqO1hX2/v0=;
+	b=Xwk/RrAEQ2ubdiD6C8uVzOkr1v8I46QS6IKVKPOrGxCMUmn6/62Rech7chAH468z8fDp
+	 WBwyILss0LEE6L/LwKyHWgxJQ3K7S4Z4HYvOjhghLP+3cHPFQJReudoqPJjyt+mXC9igX
+	 PIf8qzpFre+OcVA5Huq0aenABaroWD3qHpIk8JDbJuIuzNEDLhELaurj1JOLls66tBH9z
+	 SxaJADKUmqyty+N7z0c6KSoKWxDAXBcaaQKlel6BmzXBBCntOIGfNbD/DAvjNQjLDKESO
+	 CS7z9PL3xO4S5IdXv1S2+sF9OwHn9BMdY1nupE1qg+qaNCjNYNgNtbrRxfdMOZuSEKA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="mdA+kf/S";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kpJzzCRY;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDCBA606A31A;
-	Sun, 22 Nov 2026 20:04:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACB1C606A31A;
+	Sun, 22 Nov 2026 20:06:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mdA+kf/S
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9432E1F000C0;
-	Sun, 22 Nov 2026 20:04:53 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kpJzzCRY
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 360911F000CF;
+	Sun, 22 Nov 2026 20:06:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795377894;
-	bh=hJntkLl71ehP6K4tL5AJK+8IdOlj65eqs2ikaDPPzO0=;
+	s=k20260515; t=1795378001;
+	bh=4nZXt2cwakB2qfoko96Emq2FYBKfcAcG/kqO1hX2/v0=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=mdA+kf/Syjy/2odxsfIDtxP+QqK8rJkhgh9MluIlvMlSNePU9ORNlUaOC6ZNf89ot
-	 w9gZ6ij63UjNyb96TM9jmUw5CTrGIvROYIJkj1puZdEoM7GOanC/PwRdFYo3DJ/Fc0
-	 0crTg3TnveG6qm/L3qAvP0vKnSjI4s9q4y7pUDWVdHPVAwFrLcSo37CNbwSaMOadrP
-	 Rnu/YgZTzbKHt1APZWDu6rbkFgORoZCDeR61CAYUlNxRCafVaW3oVmfn5JWv5VAa7F
-	 Psiwpr1hhe5ORuqzlBVfn2cu0i4Fnpjp+gYDf2t1DMuJ+/ziyPprWI9x4eo7q3o1Qs
-	 2EcsrMyDazBJA==
+	b=kpJzzCRYkLXVPm+/+a1xii8POsvyUm6bHBOkcPkJoOOF0FQWpmGqNNb53QxFHMzre
+	 xVdgY9fbS2afsmFm15TstV+GmIbjG7xvGdYlYrivJhrOgmqQHABi4C9p5o+42AefBc
+	 wBbT1PUcaX6hM9is8vuebEz4tQzDlZElrgT+yird32s8uPqsejXNj33r7A5Hb0v5IX
+	 pfBXGkz6kCcKCf8amkKitieeMD2jpSeW/CdbtmBl7AnzQ8xDNO+jb7d/bb/DIFcEy1
+	 i0XGYRS1nfffSW4+b1KiKimnQoj5gjcOXwU7BAIfsKJBmmUsBUOf1WSs185L/CGh39
+	 QljeTkIVxTOlA==
 From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
 To: Stanislav Fomichev <sdf.kernel@gmail.com>
 Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
@@ -62,13 +62,13 @@ Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
  Eshleman <bobbyeshleman@meta.com>, linux-doc@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
  io-uring@vger.kernel.org, Mina Almasry <almasrymina@google.com>
-Subject: Re: [PATCH net-next 1/7] bpf: Keep XDP helpers within readable data
-In-Reply-To: <av-SmgwQhAKI5u5P@devvm16445.scu0.facebook.com>
+Subject: Re: [PATCH net-next 3/7] net: Admit native XDP on provider queues
+In-Reply-To: <av-TQztlq185q6VW@devvm16445.scu0.facebook.com>
 References: <20261117164700.2157816-1-bjorn@kernel.org>
- <20261117164700.2157816-2-bjorn@kernel.org>
- <av-SmgwQhAKI5u5P@devvm16445.scu0.facebook.com>
-Date: Sun, 22 Nov 2026 21:04:51 +0100
-Message-ID: <87wlq41vks.fsf@all.your.base.are.belong.to.us>
+ <20261117164700.2157816-4-bjorn@kernel.org>
+ <av-TQztlq185q6VW@devvm16445.scu0.facebook.com>
+Date: Sun, 22 Nov 2026 21:06:38 +0100
+Message-ID: <87qzgc1vht.fsf@all.your.base.are.belong.to.us>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -84,26 +84,21 @@ Content-Transfer-Encoding: quoted-printable
 Stanislav Fomichev <sdf.kernel@gmail.com> writes:
 
 > On 11/17, Bj=C3=B6rn T=C3=B6pel wrote:
->> Devmem and io_uring zero-copy RX put payload in fragments that the
->> kernel cannot read. XDP helpers must not treat these fragments as
->> normal pages.
->>=20
->> Reject operations that read or write these fragments. Access to the
+>> diff --git a/include/net/netdev_queues.h b/include/net/netdev_queues.h
+>> index c5335e935b7d..4f6702b284b4 100644
+>> --- a/include/net/netdev_queues.h
+>> +++ b/include/net/netdev_queues.h
+
+>> @@ -229,6 +234,7 @@ struct netdev_queue_mgmt_ops {
+>>  				    struct netlink_ext_ack *extack);
+>>=20=20
+>>  	unsigned int supported_params;
+>> +	bool xdp_unreadable;
 >
-> [..]
->
->> linear part still works. Tail trimming does not read the payload;
->> clear the unreadable flag after it removes every fragment.
->
-> I guess this is technically true, but why allow it at all? Easier/safer
-> to reject tail trimming as well?
+> Any reason this is not a new QCFG_ in supported_params ?
 
-One, maybe convoluted, use-case would be TCP RST: discard the unreadable
-payload, rewrite/checksum the headers, then XDP_TX. Can't do XDP_TX with
-unreadable frags... I can't see any DROP/PASS cases FWIW.
-
-We can add it later if anyone cares. I'll remove it in the next rev!
+It is a driver capability rather than a per-queue setting, but I guess
+that doesn't mandate a separate field. I'll use a flag bit.
 
 
-Thanks!
 Bj=C3=B6rn
