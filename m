@@ -1,86 +1,70 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=68.232.154.123
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795444383;
-	b=XZYhfDl9wOXAuhJT8yw7fbLJaJUzslJXN6wXmVqqcuaRkCfhz6w/5AfUsQsgVG4zBILn
-	 FH1L2vT7nk526Vb8HW5rUjmcgQoAcZ6ufdker44a2mheJ+SVW28xf3j5LIN3YV4VkbvJ1
-	 2KczNUi1LQBaC3QRV8tP4pRYAE4wHuA3+MXBMhaI8sBNDzN9NZqVbYjVPj9zhQEhBvJWT
-	 Uk7G+6SPgskAishNyv8hPWhQvl8o+o9qcJCTDjbSfRf+PIledx3JHqYSKTCIultynoWGd
-	 aD1J1//rm8XvY+0kRiC/9gzqd8EmCKqvzEd3Bx76P6Cc4KR8rrsjz2Hosd2+P1d3Llw==
+	t=1795445685;
+	b=VqEcOQ8vOKqEukqTYB4/tRRtri/+ZJeFlysiwkOJ+iqiXNs8CJqd7J++5/88gu1AHoza
+	 6EAP1aKETyD0/Vj114M/U4gJR9gjOZWPpd2wpvtQmc3vkjYcwBZei+exthONk1Kgqx4qg
+	 qfpPQKiZghSn/NhhdxPL/p4I1tZVeW8I3+ROVodJThIThomKXehHN75v5YU8NttCTV04o
+	 CC31WMY4JpVHlsUJH5hOVY8EJ5kNv7RfK2Zwd2mh8xear134Z7MkkcBNM6q+r2j80EjLt
+	 6yo9dhsuC/ieZVlykVDmO1sKO/56JhByPVdOQdUg3v/EbnsJHeSRswrIpeQDvw25ZgA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795444383;
-	h=DMARC-Filter:Date:DKIM-Signature:DKIM-Signature:From:To:Cc:Subject:
-	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
-	 In-Reply-To;
-	bh=k633DNog7kHsc3DkibIR1k/YpXw7SywtAhFVDY+BYIk=;
-	b=zn6WBtR3fbem5HEaknUmbSBw8xRac2aTxmxS1rJLf1PKRM3dZRHuk5LZNO6Kv4GwWW5q
-	 CPC/kYxq4+ONkcXRrbmSfeVgJoWK8N8tmFrhcpgUiFKvJkOKuPvT4UT2mUlMdlKPbqBsW
-	 SN3NdV7QcwrN/XxD+wm0UWK1y0K9mI6WFRTFAUjw+US2AUcXbql4L/uGp6Ce/pXMFWyGY
-	 4mvu1o0qlQxp9Odtef3k8ipo/6Gc01X8J2yJd9T8gAb5tPLNRCDcw6K4nnp666AwWePVg
-	 gzOr9cwf2UdNLzJkhl4yuMezcMw6NS2cgbh2LBHSFy/JwtAQH2YxuqQwfrzCcUEImng==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795445685;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-Amp-Result:Received:Received:Received:From:Date:
+	 Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	 Message-ID:X-B4-Tracking:X-Change-ID:To:CC:X-Mailer;
+	bh=0nEfM8+R7e/4HgQIycbOLgNGhqmmppbJ+3L3DiB3oqk=;
+	b=Q75kX/IJkqskU5aEI4M7ffgwDwMXRCDljREPs9ZjTD4pRZuvB6+s71zJF0+ppKJh554T
+	 WwZoys/RsjpWDOBJcr4+fFjUm/LOcuZpYmgVXExKvHwFnDqsPDZfB4vA8IxF5dya4gT/B
+	 BnaR5vR7FWoAeX2xQGdOwv478uQzV7KWBd+B3UTwPwBDjJsYt3Ghz6J+Gd65aMP7sYFX8
+	 PD6XMz3TrVEqACS2fDXzKODnPm8td+72M7s3tWf7c+sanii79rq0xL22JwoVkkveaHDOC
+	 cruQmE4R092BJrRbFkSAxS24ytUgvsgmIuYT0i+mpTIQfvckmlwB4WSYYJejJ28tTnQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linutronix.de;
-	spf=pass smtp.mailfrom=linutronix.de;
-	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=rsa-sha256 header.s=2020 header.b=ZxtcbYaU;
-	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=ed25519-sha256 header.s=2020e header.b=9m7Ugj8n;
-	arc=none smtp.remote-ip=193.142.43.55
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	dmarc=pass header.from=microchip.com;
+	spf=pass smtp.mailfrom=microchip.com;
+	dkim=pass header.d=microchip.com header.i=@microchip.com header.a=rsa-sha256 header.s=mchp header.b=i3JlD3d6;
+	arc=none smtp.remote-ip=68.232.154.123
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68A24606A31A;
-	Mon, 23 Nov 2026 14:33:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 68A24606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2793D606B436;
+	Mon, 23 Nov 2026 14:54:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2793D606B436
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.a=rsa-sha256 header.s=2020 header.b=ZxtcbYaU;
-	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=ed25519-sha256 header.s=2020e header.b=9m7Ugj8n
-Date: Mon, 23 Nov 2026 15:32:58 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1795444380;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=k633DNog7kHsc3DkibIR1k/YpXw7SywtAhFVDY+BYIk=;
-	b=ZxtcbYaUCdJCiwN819LIpdx/24DZbqjBfdQLHv34aaGA3g6B99AUapDeSMVBiZcLKI3T/3
-	zvh2H+xflYd9shEF1DUmaoB4pE9tq4NHxRLw1TL+3pyq4dAwkQOodC3IJ9pcaVfam/nZ3b
-	0qRLEUc4B/bPPfvHx9jaW4JMKc0izaPU7RPEumvkTfxbIK9k9jscgM/Bjex0Z9Ek5LfhFW
-	454ibkUJW/nJ5A6c7mDBnQmuH7fMxghGAi5sWAAPImLLNK5rzrSGiEKP2/GZjuuX/ryNKS
-	+49/kTIbVt0lPKuGZKVyLVapuH4rqCR+iXqoePOK0d9F8hnQ5Ma/c4nuOtY++Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1795444380;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=k633DNog7kHsc3DkibIR1k/YpXw7SywtAhFVDY+BYIk=;
-	b=9m7Ugj8nI5t0iqfjMRoRoinvgwt82fY/F0wRU3yw60HfzxIXFwcVx1R9IMTqDI5BsG8Ath
-	nAsai9NTuok7EuCg==
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Karl Mehltretter <kmehltretter@gmail.com>, bpf@vger.kernel.org,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Shuah Khan <shuah@kernel.org>, Tejun Heo <tj@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Waiman Long <longman@redhat.com>,
-	Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Puranjay Mohan <puranjay@kernel.org>, cgroups@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-rt-devel@lists.linux.dev
-Subject: Re: [PATCH bpf-next] selftests/bpf: Disable preemption around
- css_rstat_updated()
-Message-ID: <20261123143258.N1ETiMUU@linutronix.de>
-References: <20261121082843.44614-1-kmehltretter@gmail.com>
- <DN26CP5BB6O7.23ALW6CZUBYSD@gmail.com>
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.a=rsa-sha256 header.s=mchp header.b=i3JlD3d6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1795445685; x=1826981685;
+  h=from:date:subject:mime-version:content-transfer-encoding:
+   message-id:to:cc;
+  bh=BwIwJT8osuJvaJRaDW0YhIQ8yt7vHP664rCa55wPAJw=;
+  b=i3JlD3d6S7+9usTAgLrjIVH2Bn5dyWHPEKch+VKtwtc/nuz9FyEEf6pZ
+   7BNXeeS+cw7Npdmj/eMBFS6MRqcugZk78d4X/G70AoI0BcyWyM8JqhiSs
+   Z9lH1CxdfNwsPsU0Hl19KBf22oaX97YoCvpzj/cBjL2erwU/m0FG+NNDr
+   lc2yNkTv17gr5FogaZjUn84UA/4Q+bbNIZ2QXd7K7VV0hmi7XvBzJC71h
+   LUV+YMbUrUbsUy29eK2q/3r92QO77Eau5zbDbwGfjQ6sIiIFb7LZKCtsQ
+   YkjpeJr4+IgtVTS0zCDOURV9Qq//0ALdCkPj9vFOXcaTsCUVpi7lQy0lz
+   Q==;
+X-CSE-ConnectionGUID: ccBHRNLNSoiNMgtx35Fx/w==
+X-CSE-MsgGUID: y04x1CvDS4etSRviHy7STA==
+X-IronPort-AV: E=Sophos;i="6.27,229,1787036400"; 
+   d="scan'208";a="65954576"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 23 Nov 2026 07:54:44 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.58; Mon, 23 Nov 2026 07:54:43 -0700
+Received: from DEN-DL-M70577.microsemi.net (10.10.85.11) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2507.58 via Frontend Transport; Mon, 23 Nov 2026 07:54:40 -0700
+From: Daniel Machon <daniel.machon@microchip.com>
+Date: Mon, 23 Nov 2026 15:54:36 +0100
+Subject: [PATCH net] net: lan966x: return an error for XDP frames that are
+ not queued
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -90,32 +74,76 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <DN26CP5BB6O7.23ALW6CZUBYSD@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-ID: <20261123-lan966x-xdp-xmit-errors-v1-1-f25b6661167d@microchip.com>
+X-B4-Tracking: v=1; b=H4sIAKtTBGsC/x3MQQqEMBAF0atIr21IIkScqwwuHPPVBo3SkSEg3
+ t3g8i2qLkpQQaJPdZHiL0n2WGDrisZliDNYQjE547y1ruF1iJ33mXM4OG9yMlR3TYzQmh+msTU
+ BVOpDMUl+z1+KOKm/7we62SqnbgAAAA==
+X-Change-ID: 20261123-lan966x-xdp-xmit-errors-ed70befc70de
+To: Horatiu Vultur <horatiu.vultur@microchip.com>,
+	<UNGLinuxDriver@microchip.com>, Andrew Lunn <andrew+netdev@lunn.ch>, "David
+ S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, "Jakub
+ Kicinski" <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, "Alexei
+ Starovoitov" <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+	"Jesper Dangaard Brouer" <hawk@kernel.org>, John Fastabend
+	<john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>
+CC: <netdev@vger.kernel.org>, <bpf@vger.kernel.org>
+X-Mailer: b4 0.14.3
 
-On 2026-11-23 00:47:15 [+0000], Alexei Starovoitov wrote:
-> On Sat, Nov 21, 2026 at 12:28 AM Karl Mehltretter <kmehltretter@gmail.com> wrote:
-> > trace_cgroup_path_lock. On PREEMPT_RT this leaves preemption and
-> > interrupts enabled. On non-RT it masks interrupts, satisfying the
-> > assertion.
-> 
-> let's fix the kfunc instead
-> 
-> diff --git a/kernel/cgroup/rstat.c b/kernel/cgroup/rstat.c
-> index de816a4..d72fe72 100644
-> --- a/kernel/cgroup/rstat.c
-> +++ b/kernel/cgroup/rstat.c
-> @@ -131,6 +131,7 @@ __bpf_kfunc void css_rstat_updated(struct cgroup_subsys_state *css, int cpu)
->  	if (unlikely(cpu < 0 || cpu >= nr_cpu_ids || !cpu_possible(cpu)))
->  		return;
->  
-> +	guard(preempt)();
->  	__css_rstat_updated(css, cpu);
+lan966x_xdp_xmit() counts a frame as transmitted when
+lan966x_fdma_xmit_xdpf() returns 0, and its caller only returns the
+frames that were not counted.
 
-This looks like the only call site which did not disable preemption on
-its own (the other are either NMI or have get_cpu()).
+Before this patch, lan966x_fdma_xmit_xdpf() returns NETDEV_TX_OK, which
+is 0, when an xdp_frame has less headroom than the IFH or when its DMA
+mapping fails, without queueing the frame. The frame is then counted as
+transmitted and never freed. An xdp_frame can have less headroom than
+the IFH when an XDP program grows the head of a frame with
+bpf_xdp_adjust_head() before redirecting it to a lan966x port.
 
->  }
+Return -EINVAL and -ENOMEM in these cases, so that lan966x_xdp_xmit()
+stops and the frames that were not queued are returned to the caller.
 
-Sebastian
+Found by an AI code review agent. Reproduced on a lan9668 board with an
+XDP program that grows the head of each frame and redirects it to
+another lan966x port. With the fix the frames are returned to the
+caller.
+
+Fixes: a825b611c7c1 ("net: lan966x: Add support for XDP_REDIRECT")
+Signed-off-by: Daniel Machon <daniel.machon@microchip.com>
+---
+ drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
+index 1fbe910c5ec38..f1b6638d5668d 100644
+--- a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
++++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
+@@ -636,7 +636,7 @@ int lan966x_fdma_xmit_xdpf(struct lan966x_port *port, void *ptr, u32 len)
+ 		xdpf = ptr;
+ 
+ 		if (xdpf->headroom < IFH_LEN_BYTES) {
+-			ret = NETDEV_TX_OK;
++			ret = -EINVAL;
+ 			goto out;
+ 		}
+ 
+@@ -650,7 +650,7 @@ int lan966x_fdma_xmit_xdpf(struct lan966x_port *port, void *ptr, u32 len)
+ 					  xdpf->len + IFH_LEN_BYTES,
+ 					  DMA_TO_DEVICE);
+ 		if (dma_mapping_error(lan966x->dma_dev, dma_addr)) {
+-			ret = NETDEV_TX_OK;
++			ret = -ENOMEM;
+ 			goto out;
+ 		}
+ 
+
+---
+base-commit: af6737b9066832a2017c281159950ba92385ce00
+change-id: 20261123-lan966x-xdp-xmit-errors-ed70befc70de
+
+Best regards,
+-- 
+Daniel Machon <daniel.machon@microchip.com>
+
