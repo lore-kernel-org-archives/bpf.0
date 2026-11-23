@@ -1,99 +1,102 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.181
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.176
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795416691;
-	b=0N935ZpVCR02B7cP1jyTd3UwOdnbLpEHUYr+saGLJbIlmsHfv4ibeUA7HYCK7Pfko+zJ
-	 QO3mXtZJe0b6ftp8tU8pmsFbmOlK3KUMCo1QYjKD4XJzfIUO6b8YQ4zic+7Y30j87v1lA
-	 xb+Mtal1uGkKmka+of4M6TCJjWT/q39OSAMbh+D150dqi46kbBNz3mZNDwyaanagag8rB
-	 eiyl2xv0PaLpFYLUmfsoAwk1+NZNdL17dRR/jDrqu6qxe4aOaoKgFrUyenN+O0UVoXEIt
-	 xzZsKe6PujsM0IhT5/90E7ymCHbZAJXLU9pSIyMG4dEiXkCQHQy29xQZSKJ4HoMSj4A==
+	t=1795417096;
+	b=B/YjLcWkHZEOZvwDJfqN04FHe0ULTsiJmpwDoyClm8gefFM0hQfO5tuyBfBzTcEsgRPV
+	 f+iPamRQHXI60JDFQ/QIajRHkXw13oYpqqgNnPffcbRSHslhx+zfGfN1TlgWVfXAi+EaE
+	 ++dYNVdZ1q2eu4eLs+9TI/fgXyed5uFYWIRgNkdHwVy41lSo7CDpyEjsvPeDU4gCln/+E
+	 gJ3EGds4W8gpJhF6cP9wAHRIehwpRmcivQrXyRe7c0vjIFI+eufOq6+bwr3utKzcHw8qR
+	 9jEdSlsHZBsiP+T7Bys9eYT5tUfo/HHaTHX8vck6ymGk0+i0mg3cSOIFCPdu1qOOv1A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795416691;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795417096;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:Subject:From:To:Cc:In-Reply-To:
-	 References:Content-Transfer-Encoding:MIME-Version;
-	bh=K+6B0gWoSrUledv2HKRXi0gyYw6VTPkEWeocJbaGXVY=;
-	b=0yBn3ms+oL+w+5ybcag20gCxZml7sU1FJP6WbQhLwPlO0gJaw/nPOPhRZQ1nBnbV6K/9
-	 xGHrs+44eIN15Tt8cvvkxDfnXMKYk0KrV0IkeYCaZPfz3m4pYgvraw3yPppSfWSxdtXx6
-	 MKBPLCT16U8Iar7QyaWVZf2ySO7Xp/vei96rdqy11JdVl6hnwLo7PLL89D7xlRAtRuG9C
-	 pm2LiOBdpu2yw5zcSTUeWaAv5tvaMOGRgmpjRchW7iAk043T7FxY+zoRfarWIOYNGb9/l
-	 w0plNbE3/5if8pRnVbgEKs0FN55g7XZAt6XlwsgWVoFnKIrGM+F6nUE9zNCbXEeL3pg==
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Content-Type:Date:
+	 Message-Id:Cc:Subject:From:To:In-Reply-To:References:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=jRq81+OU1jcNW3QFiLfuhhBTEnv6dBf2fhUpIK5Uj6U=;
+	b=3L/cSOyb6y+yXbD6vHmdbug1HKECB3kQKsoHdw7JpupJojbXU3n0iV4thougeYARmOo2
+	 XYyqyKVzi1RaqdZdFI6w5HpqiFMgdYWd9plePS9lUbOJ9e/6/EuZxE272b4FvjTOtAj9a
+	 p0vAEGXkgMqxbdv1v5gj/53dVWbgvfsk2X3Az2IIVaZavomqrHUwNYprWwAwzeoyQl8SE
+	 kgMgINqTvlB/9ptc5xvpa4zP6Pp5GAkgxyPgROin9zrXUuThgx8RNJAgsH0eyqdj2BIN7
+	 nXZtzQLALOnvLrHUOoK35ZwAUWULfAxCAlzZpvvxVvu+4KzSgU95mJLNB41GuwbxHWw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=QjRNna0B;
-	arc=none smtp.remote-ip=209.85.215.181
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=XNbOmbCq;
+	arc=none smtp.remote-ip=209.85.210.176
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88BD5606A31E
-	for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 06:51:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 88BD5606A31E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96BBA606A31E
+	for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 06:58:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 96BBA606A31E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=QjRNna0B
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-cc147d86bebso1501066a12.0
-        for <bpf@vger.kernel.org>; Sun, 22 Nov 2026 22:51:31 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=XNbOmbCq
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-8a070755c8cso1326206b3a.0
+        for <bpf@vger.kernel.org>; Sun, 22 Nov 2026 22:58:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795416691; x=1796021491; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
-         :from:subject:message-id:date:content-type:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=K+6B0gWoSrUledv2HKRXi0gyYw6VTPkEWeocJbaGXVY=;
-        b=QjRNna0BnzrMShDrBLER9RcS7SXIBigrkI1n4Bk+l9+Xh89Juvw5yv3CkkklTVfoVU
-         grvTUapDfWPJyLD3z3a1Tp7UTWcEAtCYjcs0xV0M4CrwroRQ+LsaogwFtkii8F27sbtX
-         aoG8Rlv2K5euod4K8q0y17aE/6KUeAc6Kt7IjZb8mvyyU7RLDoPAN4wf3MjfY2Yef+SG
-         TA5VFEIytF2KB2JCbtt6svywVI4l8wHPVqTo5X8iIbi6Snsv1zkPdeREwAVG3Q1NJP4k
-         HH6p2v2pT7DkSJ6AKpOitvVxgiHI9cOXbw02i5qukjv/n8Jqw5+LkOFvn+RvTl9kkNo3
-         /tkQ==
+        d=gmail.com; s=20260707; t=1795417095; x=1796021895; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=jRq81+OU1jcNW3QFiLfuhhBTEnv6dBf2fhUpIK5Uj6U=;
+        b=XNbOmbCqkAF+hYMweAKFcFLcBVdACFhf0hQIGU2zoHp7NC0s5YNLPZdVniUmih4u2M
+         s2xkTdVMmMjYSMMubg6LXJRtY22AN9Ng+00EkzOKdbIQE438mVdN2cJ0JVG7DdISDtA2
+         4NnkLSg7l/F7qaXNqla6T+s3zCt2h7lT1zuOarCUTl0PV6Q+VA7/wUuiuHlJ9zWiks0B
+         l0yMxSxZ/fS5s2G2tRlhGCDnmKXY8OCaZFBLKP5Ol1VYHVsIjPnS0TpSnexCLpKGpmnc
+         s7Xv1iqDoWExOuvgdVEhnIjuuOTl63Y4Uqmh3G5hQ6jHJLUpYbcHkMJTk6/vwYD/C1sB
+         xRGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795416691; x=1796021491;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
-         :from:subject:message-id:date:content-type:x-gm-gg
+        d=1e100.net; s=20260707; t=1795417095; x=1796021895;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=K+6B0gWoSrUledv2HKRXi0gyYw6VTPkEWeocJbaGXVY=;
-        b=jm5Fhf6YQpotsPd7MzRfYPQGx54j+eUEmVzGvP5EylYYUiCRNr/ssIjcplrnVuB99X
-         NKwK1X6FC9Iy8fWWa7Gg9Fbf373EPuBZF01qyoeegDw5Z+2F2dm9+w7hZPbq4wkOI9u0
-         lsO4nC6VrbgPbZT6MxSLzAflyaj8byPLNC/3amq7/ikHeic4HcE9LRVNcd/Ms4TDfw3m
-         qn8H+oSgdgwbmpJVjWvc/Ak5hJSMI37FJ33YrqToY19lpOkecLb3JKapm5Vr+Wqhih50
-         Nb06RZ8hFOxzBvok4RVsIzoB/f/r+Kef6kuSwsbviNTlJ7dOtuYIxePUEHZtB+98PMM2
-         TIPA==
-X-Forwarded-Encrypted: i=1; AL+hErE0hOQ1nbSALiLIt6jhieRcGAi5uGxf/5MZ0erJX0DaX1IYCUslD2c3kosusPd3MmjrMC8=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/z+RkQS3G4o/wSx4wokyMtiRb4fzyEMTvAZnHwlYptIRT9xkKc
-	TGdTuQwC6kGivrXtAmw3cs+8qAQZNUjqxFZwCdHIwjbH7jCI4PA04OFi
-X-Gm-Gg: AZFdTZdDMwpHtpMR17h8OkP4UssLPfE5G9A9eR/hGHsXpuw1kjVVZ6Jz0bSnKJwPtQ+
-	naOinwDvuqYfADLsGtcC5yOslZm0sbywTHdnzN/vbP+BtQ5hrBRM/qwth1OxaDGTlGk6APfNPeH
-	ReZrnHAf9Ewztc9B2BDvmhnUaBCTOepUiCizxuS+dmX3EktThTeVUAWyUUERzt70khaheCWwAJk
-	i0J47k5ujZRgmd6xLOXBBc/wEFPJ8Jisp5KGIw5pwhjwJICgzUBwr3cxFTvFUhJRZE/AB43vC/P
-	L++gfjtsBjF7yu+A00Mu4SC3XzRPdT0SufG/IVJgG1Yrux+2B4AYRQFImCYSdObeKEXYPsqKhLk
-	H6oe5gvGK1/nGMuxwlAYECvuf9RycFmIXgqXZb+rDSCytP4PkBbPyk+BPhSnTyLVOjPQcqM0YSV
-	4rjW5TGyTkmy01oY3eJinJGQUe1GjwhbR/Fx9iemE4VcIWaMqHJCJhCt6ZPkT9Qhflpc+ODfOhl
-	NFGUNeGaoyzuwvVM3eFufGZk0RI/4DVigaVKa0qQMHggsfjK2rD1CP0ZarHRyzqatyq2dYVni2w
-	9RvnfI+xVmMTzZ4GbNUCMd5mSs2LeB8P9WH9/PpVSh+hZq7n9NO8iCOXybWByjtnoCKYl5sclZh
-	tILNzn4H3uS6RrHvAZCIvivhBfkZqBnDulQ==
-X-Received: by 2002:a05:6a21:3995:b0:3e2:8c2f:4b80 with SMTP id adf61e73a8af0-4014db586d6mr7642491637.25.1795416690430;
-        Sun, 22 Nov 2026 22:51:30 -0800 (PST)
-Received: from localhost ([153.61.198.252])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8c87344184fsm5152236b3a.35.2026.11.22.22.51.29
+        bh=jRq81+OU1jcNW3QFiLfuhhBTEnv6dBf2fhUpIK5Uj6U=;
+        b=swdLvv1v2CYCWdmPG9Gu04A+BB7iiXor8RpvYzPJjgsRkpbnIznDdPu64d6+4KbHIb
+         Qt69AMYgsfuLbUclW8rP5NRZZqRuUrvoF6z1ZWIxocwnEA7WJdSdZeQMqduAeyCImbdH
+         gc9GltB1VhyPSMkiORisDpGmw8f0yzd7TudLX300rSLef0wUCFkAfOda2VF8DcheG0hY
+         ZtRjhwALbr49aeBLpF9/iACctyD82pe8SWiKNG4dtJUE4HveW2chMzmmuYrCb3J3MSEq
+         pXj8EumX+ZHuTRr81rrID0e9FxmPqBk/gTiIIGq7Xczqs0+L8yZEwY5xTtiO+llh47ch
+         X+3w==
+X-Gm-Message-State: APuU4Z+Z1wLwhquJpN2Sh8yE8aCHvdc0LxGVvPSXyDrO1j84ACZuZHSL
+	u9XJi1VMg2tM5rq7WeqRbVwsU+OPBATg56Iga3tyvxMp+S1MBIN54efw
+X-Gm-Gg: AZFdTZd4RZcJDEtamGdw+H7qkKHgpFAvjiBaOP/WxD50oR78RuNXcOyT3K2LSsOtCei
+	gnlpfNZHFOYPUEkdaXuDdXfxJhbA+CsIqkW11xQixVh3tM6BbbdAwek5pH8hQ3oECuJagGbyfL6
+	WXgh0Htl/5KsXpOdOgiZS6LIQRB4jUgaI/+x7Li8QMWOcqeu9RO/Pu0znC1dvx0DDgPi8pp122P
+	N/Y7Zr/zllafy2AJq0NJotYmJp8zgPUTz4v8Di5Ck9EONkeA9lEceiPAHk22U7Iq7/HOaCBxTS5
+	zzFAfQVDwo84vhfDEcQnXyDwm7jTSRAZsL6+HMlxYP7yzNI9Rm5DzfBfGai3dtTeS+a7AsSBuVf
+	In/txCas+rFF8T+UrP3EWeMYejxz25mkS20c9885vQiX31WPpSObjMEHWEDy7MRXw4JKTANa79q
+	gw44IhcvqveZdyyHv+8Kf0f/j9VsIxar6pNPsU6JTnKGiwyljN911T9qEEZfUUbCURhT1qwuLN6
+	a2Fzp0T5aJGR8brQSC61R48j+4wsp6STlguGqcsGih4E89NaFazpH7YFiS3EXBflOiCXOBx5ytD
+	s4wBXupVrrt9Tu76UlF8kij/qXTbn14oEnn+ZL39OocOFf7kzQsLpygAFA1H0EtduVj8Nb+x0/M
+	wK4sZ26sFUPdXBliVXwoMTkuujnSP0goN2w==
+X-Received: by 2002:a05:6a20:b40a:b0:3eb:b31f:3558 with SMTP id adf61e73a8af0-4014bc4a481mr9510489637.32.1795417094602;
+        Sun, 22 Nov 2026 22:58:14 -0800 (PST)
+Received: from localhost ([153.61.198.241])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8c908a56acfsm4327684b3a.23.2026.11.22.22.58.13
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 22 Nov 2026 22:51:30 -0800 (PST)
+        Sun, 22 Nov 2026 22:58:14 -0800 (PST)
 Content-Type: text/plain; charset=UTF-8
-Date: Mon, 23 Nov 2026 06:51:29 +0000
-Message-Id: <DN2E3KPRKZL5.3PSJD3I9JFARH@gmail.com>
-Subject: Re: [PATCH net-next] net: gro: skip the checksum of fraglist GRO
- packets
+Date: Mon, 23 Nov 2026 06:58:13 +0000
+Message-Id: <DN2E8Q9V38IF.3O738M7NGLSAL@gmail.com>
+Cc: <bpf@vger.kernel.org>, "Puranjay Mohan" <puranjay@kernel.org>, "Andrii
+ Nakryiko" <andrii@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>,
+ "Eduard Zingerman" <eddyz87@gmail.com>, "Emil Tsalapatis"
+ <emil@etsalapatis.com>, "Ihor Solodrai" <ihor.solodrai@linux.dev>, "Dave
+ Hansen" <dave.hansen@linux.intel.com>, "Andy Lutomirski" <luto@kernel.org>,
+ "Peter Zijlstra" <peterz@infradead.org>, "Thomas Gleixner"
+ <tglx@kernel.org>, "Ingo Molnar" <mingo@redhat.com>, <kkd@meta.com>,
+ <kernel-team@meta.com>, <x86@kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH bpf-next v1 1/3] x86/mm: Resolve BPF exception fixups
+ for user address faults under SMAP
 From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Rosen Penev" <rosenp@gmail.com>, <netdev@vger.kernel.org>
-Cc: "David S. Miller" <davem@davemloft.net>, "Eric Dumazet"
- <edumazet@kernel.org>, "Jakub Kicinski" <kuba@kernel.org>, "Paolo Abeni"
- <pabeni@redhat.com>, "Willem de Bruijn" <willemb@google.com>, "Simon
- Horman" <horms@kernel.org>, "Neal Cardwell" <ncardwell@google.com>,
- "Kuniyuki Iwashima" <kuniyu@google.com>, <bpf@vger.kernel.org>
-In-Reply-To: <20261123042735.139550-1-rosenp@gmail.com>
-References: <20261123042735.139550-1-rosenp@gmail.com>
+To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Borislav Petkov"
+ <bp@alien8.de>
+In-Reply-To: <CAP01T75Qps8bKFZAU2gN-3UJTB1aWw46NG5c-sm6K028rSc9sA@mail.gmail.com>
+References: <20261009024925.3169077-1-memxor@gmail.com> <20261009024925.3169077-2-memxor@gmail.com> <20261009041346.GHashp-hYpLl-o-l3M@fat_crate.local> <DM0ESVBT9553.2S1RWK1W7M8WW@gmail.com> <20261122200848.GBawNL0FcQoK918YDI@fat_crate.local> <CAP01T746W=8FFiJJUM3H-Qv09uRO6-XEi9B-8pjSgtpAPBx4EA@mail.gmail.com> <20261123003036.GCawOJLKK1iX47XTDm@fat_crate.local> <CAP01T77EgbuyhP=zU9L1hwYL6rHaSbrqQZGJR_+9AQgSWLe7Nw@mail.gmail.com> <20261123025529.GDawOrIQcDOPhgWwF6@fat_crate.local> <CAP01T75Qps8bKFZAU2gN-3UJTB1aWw46NG5c-sm6K028rSc9sA@mail.gmail.com>
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -105,47 +108,51 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-On Sun, Nov 22, 2026 at 08:27 PM Rosen Penev <rosenp@gmail.com> wrote:
-> Make __skb_checksum_complete() verify each packet against its own
-> headers instead, and mark the skb CHECKSUM_UNNECESSARY when they all
-> match. This covers whatever asks for the checksum later: conntrack with
-> nf_conntrack_checksum enabled, and local delivery, which happens for
+On Sun, Nov 22, 2026 at 07:56 PM Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
+> On Mon, 23 Nov 2026 at 03:55, Borislav Petkov <bp@alien8.de> wrote:
 
-It doesn't. This breaks tc progs.
-Today the skb is CHECKSUM_UNNECESSARY when a tc ingress prog runs.
-With the patch valid packets fail skb_flist_csum_ok() after the prog:
+>> "the only line of defense is for is_bpf_text_address() to really DTRT."
 
-  helper                  what skb_flist_tcp_csum_ok() gets
-  ----------------------  -------------------------------------------
-  bpf_skb_pull_data()     2 packets, mss 536, thlen 20, all pulled:
-                          len = 1092 bytes, th->check covers 556
-  bpf_skb_change_proto()  6 to 4: ipv6 = false, frag_list has IPv6
-                          headers, iph->ihl = 0
+Boris,
+SMAP stays on. The SMAP branch in do_user_addr_fault() runs only with
+AC clear, after the CPU refused the load.
+A wrong answer from is_bpf_text_address() can hide an oops,
+but it cannot expose user memory, so your concerns are unsound.
 
-TCP drops the skb and conntrack marks it invalid.
-CLAT has no IPv6 socket, so GRO always picks fraglist for it.
+> In fact, for kernel address faults, we already invoke it for exception
+> handling. This change would simply extend that to user address faults,
+> optionally for BPF code; otherwise, we panic as usual.
 
-> A fraglist skb whose geometry was changed after GRO, by NAT or
-> bpf_skb_pull_data(), is segmented by skb_segment(), which computes new
-> checksums. Such a packet is now forwarded with a valid checksum even if
-> it was corrupted before it arrived; the packet boundaries needed to
-> check it are gone by then.
+Not quite. See:
 
-That's silent data corruption. It's not an option.
-tcp4_gso_segment() also takes that path on SKB_GSO_DODGY.
-bpf_skb_adjust_room() and bpf_skb_change_proto() set it on every GSO skb.
-Willem's series adds skb->encapsulation, like seg6 encap or ESP offload:
-https://lore.kernel.org/bpf/20261120044733.222627-3-willemdebruijn.kernel@gmail.com/
+  fixup_exception(regs)
+    search_exception_tables(regs->ip)
+      search_bpf_extables(ip)
+        bpf_prog_ksym_find(ip)    progs only, no trampolines
+        search_extable(ip)        exact match of the insn
 
-> At the full MSS the router already forwards at line rate in each
-> direction, and csum_partial(), which took 27% of the cycles, drops out
-> of the profile.
+Here is the alternative
 
-So there is no throughput win at full MSS.
-With the default nf_conntrack_checksum the work only moves to conntrack.
-Paolo suggests to remove fraglist GSO. This adds another state to it:
-https://lore.kernel.org/bpf/ce3e6832-ca9f-4e91-8302-b5bd7cf2f178@redhat.com/
+diff --git a/arch/x86/mm/fault.c b/arch/x86/mm/fault.c
+index aa88370..9fe8705 100644
+--- a/arch/x86/mm/fault.c
++++ b/arch/x86/mm/fault.c
+@@ -1263,7 +1263,16 @@ void do_user_addr_fault(struct pt_regs *regs,
+ 		     !(error_code & X86_PF_USER) &&
+ 		     !(regs->flags & X86_EFLAGS_AC))) {
+ 		/*
+-		 * No extable entry here.  This was a kernel access to an
++		 * The CPU refused the access. If the BPF JIT marked this load
++		 * as one that may fault, skip it and zero the destination.
++		 */
++		if (!user_mode(regs) && !(error_code & X86_PF_WRITE) &&
++		    ex_get_fixup_type(regs->ip) == EX_TYPE_BPF &&
++		    fixup_exception(regs, X86_TRAP_PF, error_code, address))
++			return;
++
++		/*
++		 * No other fixups here.  This was a kernel access to an
+ 		 * invalid pointer.  get_kernel_nofault() will not get here.
+ 		 */
+ 		page_fault_oops(regs, error_code, address);
 
-Nack.
-
-pw-bot: cr
