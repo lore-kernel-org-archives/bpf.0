@@ -1,51 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795408757;
-	b=UUymPs7h1ISIJDo7gZIdVABPHdR9d+36SfO5HjHUS5KxTmI/sX7oIigX+fqaoM5ZZA0y
-	 50G+YEzznd45MRv0GIiMqKMkQopTkwoIRUBcxb7GXZ+3pQI72UC8MEnUXeLNebGByDunD
-	 zh7KPSmrFHUKywhKWjUqyCO102IcrZ8btLUQuD6dXdbF8XNYvLqIXSnBSmJm96hJVHzzR
-	 8ZtEpNQUoOn8b5VDpEVqrusbmJAWffjtgkgw8WvJ+4TF7dITL/F21U14RZ+LusXeiw8nX
-	 146Bm8K5Jln1eBW9Z9g4kS9ahHu2lT0GPItLTOkZHY7wigTe3EVGA7y3RvTmSAV1qVA==
+	t=1795408948;
+	b=QmsGJ+IudcMMTLUMDLz+Owz/dnEA0oQcP4P+OASpcKXpoSVQTGS6IgTbYPEq7c1rMFQX
+	 /6OHCSsvBNMmF3+G4VMLvV3KrTb6O641yFkWC2h7uawOb0DRc+f43kXBgWpONQuCwmrdz
+	 GZVzijbsjp9kOTczq0HCrNtgvug9zLOgZzV81GdSh6ieRBs/eX6pUsoHrk0S25MdKFsAe
+	 Hzi4laFGPEB6ZiFIMoYHvc3UHaxfyEjRQkiGNxCLd8YmisvmXEgQp0qE8hUMe1UiLc5jx
+	 5pR3T4+Ix+Q7I0Tgm++DsJvwNFVZeOJIAMy8spXjkyv5WBLpADM+gOZFc3AOr7h1CbA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795408757;
-	h=DMARC-Filter:Received:Received:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding:X-CM-TRANSID:X-CM-SenderInfo:
-	 X-Coremail-Antispam;
-	bh=bV7AmIeoif0Xb99TtDOmDQ1HklCx/hLF6DDVzUDafnE=;
-	b=uUTHlS6rQtsrt7Yto9K+mltEX9wlfBBi7Q5bHTTekGNhbVjIboRv8UY/JPNdEwhcgyED
-	 xQS88fa7VWeErLHctYJUziLsBFrEXbzSQHtGkzxelMOhcTSMnhoy/t+/C7nWQjR73dAQE
-	 aeV0sLVN+62B+s2GzMO6Ql05pT92JAj2Fj6IANJKI+RL+BMwLRG5ka21X0pPU6t7xlffz
-	 V4arsaeRv21BDqBetYzYJDamWAusDHFmahwlNyWAVat56+o9/gcocQ3HyFpBhG49j8GzO
-	 90Irn8Tlu6LEggSc/Op6AicyCypnMgNLSbbWe0kNGsgnGHTR1QLTwk8RnDWz0cX97fw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795408948;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=uxVlwqKlVbK1HsMsQ6Ohi2P0jyFg7ofnLfMfsB1aXAM=;
+	b=ZRDm0VfZpvgBYCen3Mc8TMXAy4sAn0selrXMM8sFTTplCpi4BccP/6iRj/6PyqCjcAZz
+	 fppMofe6hn/e5YzuTPl2y8AZLKWGcSUAs31OyevduhpLmLZvizo0CAKhO7opcti5Y4B98
+	 hDUew53r8D+Al8rAMjCLn84Li0Mep1nHTSzXdvq1RCfQiV0RwfEC6YgN2jlwnVTRtRCKZ
+	 9GArsI8XqXsz043DT1cnvZEXOZh93/5WumdS6NFHJ24/xfpY16qWSSFTld4J8S2zspd/E
+	 fUNgyV3oD0J2q0xu3PByOLWD4QeGM89txFJdecqxHLNVefzNv0idgqHT17PsyINGqIw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=loongson.cn;
-	spf=pass smtp.mailfrom=loongson.cn;
-	arc=none smtp.remote-ip=114.242.206.163
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6561E606A331;
-	Mon, 23 Nov 2026 04:39:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6561E606A331
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [123.138.236.242])
-	by gateway (Coremail) with SMTP id _____8DxjdBywwNrGh0iAA--.4072S3;
-	Mon, 23 Nov 2026 12:39:14 +0800 (CST)
-Received: from linux.localdomain (unknown [123.138.236.242])
-	by front1 (Coremail) with SMTP id qMiowJCxPs9rwwNra8s2AA--.43419S6;
-	Mon, 23 Nov 2026 12:39:14 +0800 (CST)
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-To: Huacai Chen <chenhuacai@kernel.org>,
-	Hengqi Chen <hengqi.chen@gmail.com>
-Cc: loongarch@lists.linux.dev,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v1 4/4] LoongArch: BPF: Add support for indirect calls
-Date: Mon, 23 Nov 2026 12:39:07 +0800
-Message-ID: <20261123043907.20225-5-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20261123043907.20225-1-yangtiezhu@loongson.cn>
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=j7Su1GhJ;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9AF3606A31A
+	for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 04:42:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=j7Su1GhJ
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CF4A1F000CA;
+	Mon, 23 Nov 2026 04:42:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795408948;
+	bh=uxVlwqKlVbK1HsMsQ6Ohi2P0jyFg7ofnLfMfsB1aXAM=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=j7Su1GhJ6L6m/Jz/3OT68+JHdf1NWWpQzqHrQBWPrw0DHA3XpmOirX41ubMR+Pkp2
+	 Iiv730UsBxOJluAFAIJmhLpjFJZza7N9bD/u7nfht+os66EXxtt/iieLdMuRaEhqbh
+	 KLUOUR1wBS5r/Rub8uWWLFUSSO9lDRzT+yVNiI8x0ahjs5oH2KbrE1JvyaxHNfx1pg
+	 4yEFXYAyYOn5GjwwcybDJZrcShLRAqbP0wcYDy6Dk+Njyuqo8n2YpHRPXn6rzFGbTj
+	 4lirhOp2Maj+W1eAauGYmHcqWU8G882X8Yl+9AicJpykDDzSbRZkZdRWh+GWJJRmkj
+	 l3D1R2Zj8Gh6A==
+Message-ID: <sashiko-outbox-228668@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v1 1/4] LoongArch: BPF: Optimize BPF_CALL control flow
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Tiezhu Yang" <yangtiezhu@loongson.cn>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20261123043907.20225-2-yangtiezhu@loongson.cn>
 References: <20261123043907.20225-1-yangtiezhu@loongson.cn>
+ <20261123043907.20225-2-yangtiezhu@loongson.cn>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 23 Nov 2026 04:42:27 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -54,68 +59,80 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJCxPs9rwwNra8s2AA--.43419S6
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoW7Ary3JF13tryUGF4UJr48KrX_yoW8GFy3p3
-	yDAr4fArZ5WryfKFnrJa1xuw13KFs5Wry2qF1jv3yFkanxZr1fXF1rK34YvF98Jw4rXw4x
-	XrZ0krnxua1DJacCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUk2b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r126r13M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-	xVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
-	1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q6rW5McIj6I8E87Iv
-	67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2
-	Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s02
-	6x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0x
-	vE2Ix0cI8IcVAFwI0_Gr0_Xr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE
-	42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6x
-	kF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUco7KUUUUU
 
-In order to implement JIT support for the indirect call instruction
-(BPF_JMP | BPF_CALL | BPF_X), load REG_TCC from the stack (just like
-a direct bpf2bpf call) first, and emit a jirl instruction to jump to
-the target subprog address held in dst while saving PC+4 into return
-address.
+Thank you for your contribution! Sashiko AI review found no new issues
+in this patch, but noticed 1 related pre-existing issue it does not
+introduce:
+- [High] LoongArch: BPF: unshifted and unaligned offset for
+  stptrw/stptrd in build_insn() [1]
+--
 
-This is similar to commit 1cec0b70fdc6 ("riscv, bpf: Support indirect
-calls to bpf subprogs (callx)").
+commit 0dc0cb0459b2a4e50da067a04e5643e5c6bf634c
+Author: Tiezhu Yang <yangtiezhu@loongson.cn>
 
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- arch/loongarch/net/bpf_jit.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+LoongArch: BPF: Optimize BPF_CALL control flow
 
-diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
-index 52da39dce4f6..567729921d6d 100644
---- a/arch/loongarch/net/bpf_jit.c
-+++ b/arch/loongarch/net/bpf_jit.c
-@@ -1258,6 +1258,13 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
- 
- 		break;
- 
-+	/* indirect call to a bpf subprog via the address in dst */
-+	case BPF_JMP | BPF_CALL | BPF_X:
-+		tcc_ptr_off = BPF_TAIL_CALL_CNT_PTR_STACK_OFF(ctx->stack_size);
-+		emit_insn(ctx, ldd, REG_TCC, LOONGARCH_GPR_SP, tcc_ptr_off);
-+		emit_insn(ctx, jirl, LOONGARCH_GPR_RA, dst, 0);
-+		break;
-+
- 	/* tail call */
- 	case BPF_JMP | BPF_TAIL_CALL:
- 		if (emit_bpf_tail_call(ctx, i) < 0)
-@@ -2559,3 +2566,8 @@ bool bpf_jit_inlines_helper_call(s32 imm)
- 		return false;
- 	}
- }
-+
-+bool bpf_jit_supports_callx(void)
-+{
-+	return true;
-+}
--- 
-2.42.0
+This commit separates BPF_PSEUDO_CALL handling in build_insn() so that it
+emits the jump and breaks early, avoiding a redundant check at the end of
+the BPF_CALL case.
 
+> diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
+> index 15af1abb5cb69..b26b75f62fb31 100644
+> --- a/arch/loongarch/net/bpf_jit.c
+> +++ b/arch/loongarch/net/bpf_jit.c
+> @@ -1219,6 +1219,9 @@ static int build_insn(const struct bpf_insn *insn, =
+struct jit_ctx *ctx, bool ext
+>  		if (insn->src_reg =3D=3D BPF_PSEUDO_CALL) {
+>  			tcc_ptr_off =3D BPF_TAIL_CALL_CNT_PTR_STACK_OFF(ctx->stack_size);
+>  			emit_insn(ctx, ldd, REG_TCC, LOONGARCH_GPR_SP, tcc_ptr_off);
+> +			move_addr(ctx, t1, func_addr);
+> +			emit_insn(ctx, jirl, LOONGARCH_GPR_RA, t1, 0);
+> +			break;
+>  		}
+> =20
+>  		if (insn->src_reg =3D=3D BPF_PSEUDO_KFUNC_CALL) {
+> @@ -1245,8 +1248,7 @@ static int build_insn(const struct bpf_insn *insn, =
+struct jit_ctx *ctx, bool ext
+>  		 * convention with the argument and return value in BPF_REG_AX,
+>  		 * so skip moving the C return value into BPF_REG_0.
+>  		 */
+> -		if (insn->src_reg !=3D BPF_PSEUDO_CALL &&
+> -		    func_addr !=3D (u64)arch_bpf_timed_may_goto)
+> +		if (func_addr !=3D (u64)arch_bpf_timed_may_goto)
+>  			move_reg(ctx, regmap[BPF_REG_0], LOONGARCH_GPR_A0);
+> =20
+>  		break;
+
+[Severity: High]
+This problem wasn't introduced by this patch, but can emit_insn() for
+stptrw and stptrd in build_insn() corrupt memory outside the target buffer
+[1]?
+
+Later in build_insn(), the BPF_ST and BPF_STX cases emit stptrw and stptrd
+when off is outside the 12-bit signed immediate range [-2048, 2047] but
+within the 14-bit signed range [-8192, 8191]:
+
+arch/loongarch/net/bpf_jit.c:build_insn() {
+    ...
+		case BPF_W:
+			if (is_signed_imm12(off)) {
+				emit_insn(ctx, stw, src, dst, off);
+			} else if (is_signed_imm14(off)) {
+				emit_insn(ctx, stptrw, src, dst, off);
+			} else {
+    ...
+}
+
+In LoongArch, stptr.w and stptr.d require a 4-byte-aligned offset encoded
+as a word-scaled 14-bit signed immediate (si14 << 2), whereas
+emit_stptrw() and emit_stptrd() write their immediate argument directly
+into insn->reg2i14_format.immediate without shifting.  Passing the byte
+offset off directly causes the store to write to dst + (off << 2) instead
+of dst + off, corrupting kernel memory up to 24 KB beyond a verifier-
+checked map value or arena buffer.
+
+[1] https://sashiko.dev/#/bug/linux-9c06f20c-c232-47f5-ae96-11fb3889acdc
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261123043907.2022=
+5-1-yangtiezhu@loongson.cn?part=3D1
