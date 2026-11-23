@@ -1,60 +1,59 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795397631;
-	b=Y8RU824p4DRK4KHVK3M8wW7LCXldwflxxmao6IZGW3wQDwcuSNURNNsTYP0X4FHSK42u
-	 j9nlrts0bvaWtgYKbUAewaK/XEFbiLNy3671ElrZxetdRC7yYbMrTLOd4RyyB537SyVkY
-	 YqUmmpokZrRkH3yLJ4lLU2oysyFCPo6RmCt16nvDxdZ1hfHyLUslFIOn6mRZK2wTpHpvW
-	 GTpBzq/CkQ4G61fmlRLCJw6goRWbQuz6doKq5stIhNArhe/qQYcgNGh48A+DBuX/ASRiq
-	 G18QBMBBPLNlMn/sUbJJL4rkSDThRJxk0Y5jF1szyx2JNZPLJnXN3aRT/mZsvpc+vfQ==
+	t=1795400021;
+	b=KQmmSbU4V7/++l9KIUR+qPY1CLHl3bq5k6a3dV+BXZvx9d4vhTyGsAad+CKHOCHFZ9xX
+	 kpTgU2Cq0KrcNkxjzvd1wIGAVarx2ptsEkkPyP3kNrwi9ac523EAuLqSUR1DUc0lKnNny
+	 1RcOX4S3Fs1a5pGlImmIl94H9BXiFx4kIgOR80WYdrkwsNecZyWr258PEEtxqQiOnVbYp
+	 DjsU+El5hOpRiERFw9yyvsz0lxoVyRFKVCba+L2qhOF3OWyuPVXxb0EMOfhrUNSFEIT2L
+	 4lwNw+hu5N3wZlWpNoj4g8o/PnCFZ3M6GiRDU2iZ5DyulOTm/rdBwExSlkkaTwr1SOw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795397631;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795400021;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=mt8mJUZhq4KTZ3utexyMaCQYzKL+gpqFc3XekMPH/vs=;
-	b=tOnXXq6D4p0JcW2z0baHcxVSjWbA7+LpCGAqMJ28+N/MKrOxsAVEJwMbPylvgqoUXYJS
-	 aFua33wkrUmRNl10sxFT1J8Iq22W1z9Lfc7dFqW81SixlS55BWpICNBL7pL6w43ZGig2S
-	 rxkmj9nPJnTohepnrX5UDROU0BqdhvJ2/4SYD9dnOj9RpNbNU6QHB6HQ7nbs7aBt428wj
-	 EcT2dZIeFZGt2BLDht23vlIG2VmqNjfSsgVgcXXCqisWkX8Pn9Y5yC5aQi7QvYsiYhRVC
-	 ggs4AozoYn3MWqWJ7woVcrLyt/B72Q1c3fuwOsJLWxtGu+81rHCSjgva7NgS9oH0TbA==
+	bh=w0qcFHuhOxRFhzy+XALtHsGtZc6YwmNn3t9p0bTe8Ek=;
+	b=KxihsPMJU1PrqviMQS6w6tfHSoMw2lqvm5fIFqz15ydluDgXdhR2fft0KYussOt3n0OR
+	 k25KoBzr7U2YtsMYihG7+E1H5S3TQxlxqarK2IoVCdJjd/fmsMl1nOW+3SBQ4Yh3x1fD3
+	 WMDshIrF6CvG2FAIxl/Z6e5pP5tgvtZId865aIXO56wvyRG2eZ6lyJfZ+bhC5COQJuNSi
+	 oZpe60AEVGzFRNWjP9oriXfEILIfa5nEt8dp5y7ICZLl1VSThf9ziFhRzPlfElJZ41xFZ
+	 RegmK3aU3sNvsD+A/3aMBOt1jFgBOCFJ5kQfGl9bwhMcBrGrZkjGNMEtT/CXKehzzMQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Tfv53e5C;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cRPPexqY;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D404606A31A;
-	Mon, 23 Nov 2026 01:33:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E30EC606A33C;
+	Mon, 23 Nov 2026 02:13:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Tfv53e5C
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 902601F000C4;
-	Mon, 23 Nov 2026 01:33:49 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cRPPexqY
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F8481F000C6;
+	Mon, 23 Nov 2026 02:13:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795397630;
-	bh=mt8mJUZhq4KTZ3utexyMaCQYzKL+gpqFc3XekMPH/vs=;
+	s=k20260515; t=1795400019;
+	bh=w0qcFHuhOxRFhzy+XALtHsGtZc6YwmNn3t9p0bTe8Ek=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=Tfv53e5CQYha7nbvfhAnyzZTn6wsYR/I5Ua2iD3gdMsysxiJ05SUrj5HboAXMDdtQ
-	 pY4dO6GcbmUO1zAggkALjC1TyH1FSzqsWZ34yejXQ7K2hAV4VZAjTBWDZf56vBRJPM
-	 p6X89wss2xsCCNdvju/VzLmP7DW2BCfxXxZwLtkfoIKSqEDZL5U6UA7/FtS6HG2Um1
-	 o/MS2soDde27BNYFQRCQHtB9MHe6zx5/q8DEeCoBIv1SpVpGyISORgUe9nEPR5/JnV
-	 x0i58uHAxfmNX7rMCOD7eVdCTjIf3qKXTNb7FM8MHKiFwViek7MrWiEeG/CYMcTXGU
-	 iV0aibwmKiVsA==
-Subject: Re: [PATCH net-next v2 5/9] net: state the "XDP excludes LRO" rule in
- the core
+	b=cRPPexqYtX4gt98SVt8GN3oQ0ogmZgyPAGRoQo3ek9jc/awTUFDn2vFTuhR10E8sN
+	 h9iS/vYQKqZ6sdWCbaI6Ex7NQKmvjT3n6S1V4hLqQwxTnOPU6pEGKb5E7P77byfb7H
+	 3KNPtRgBO1MAdtWsqJfsUHe6dlAEmCZNDSdc8AZl7Eo8xsMhVYlIjYijZEDt9LFLOo
+	 pWMDMbzFGkxv2ppepByqp9p03A5RBN9NZGOkklK4pxSCCfOBKJji/+md9n037KG0zt
+	 Ty+7jPmIEvPdKiXRDJ5CKziZtsnwMMEAMorMghAlV7egPP6yZXmLBnYu7fOe9d9qoi
+	 tovYqz40/H8xQ==
+Subject: Re: [PATCH net v2] tls: fix send() returning success after the TCP
+ send failed
 From: netdev-bot+sashiko@kernel.org
-To: kuba@kernel.org
-Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
- pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
- michael.chan@broadcom.com, manishc@marvell.com, joshwash@google.com,
- hramamurthy@google.com, tariqt@nvidia.com, saeedm@nvidia.com,
- daniel@iogearbox.net, hawk@kernel.org, sdf@fomichev.me, willemb@google.com,
- przemyslaw.kitszel@intel.com, bpf@vger.kernel.org, nktgrg@google.com
-Date: Mon, 23 Nov 2026 01:33:49 +0000
-Message-ID: <179539762917.3135.17061480086535171425@kernel.org>
-In-Reply-To: <20261122010112.1471146-6-kuba@kernel.org>
-References: <20261122010112.1471146-6-kuba@kernel.org>
-X-sashiko-severity: Medium
+To: hengyul@cs.unc.edu
+Cc: john.fastabend@gmail.com, kuba@kernel.org, sd@queasysnail.net,
+ davem@davemloft.net, edumazet@kernel.org, pabeni@redhat.com, horms@kernel.org,
+ bcodding@redhat.com, ben.coddington@hammerspace.com,
+ rjethwani@purestorage.com, netdev@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Date: Mon, 23 Nov 2026 02:13:38 +0000
+Message-ID: <179540001873.3135.1838308128939252702@kernel.org>
+In-Reply-To: <20261119141106.840038-1-hengyul@cs.unc.edu>
+References: <20261119141106.840038-1-hengyul@cs.unc.edu>
+X-sashiko-severity: High
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
@@ -67,10 +66,10 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 3 potential
+Thank you for your contribution! Sashiko AI review found 1 potential
 issue(s) to consider.
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 2
+Critical: 0 · High: 1 · Medium: 0 · Low: 0
 
 If you believe none of the issues are legitimate, please reply to each
 issue of Medium severity or higher and explain why the AI is wrong.
@@ -78,152 +77,115 @@ If any of them are legitimate and you plan to respin, please let patchwork
 know by including "pw-bot: cr" as a separate line at the end of your reply
 (one such reply per series is enough).
 
-- [Medium] On a stacked device, an XDP attach that fails now turns LRO
-  off on every lower device, and it stays off.
-- [Low] The netvsc driver documentation is now out of date.
-- [Low] The comment above the XDP feature-clearing block in
-  __netdev_update_features() (net/core/dev.c:11444-11446) still covers…
+- [High] With async encryption, send() still returns success when the TCP
+  send fails during that same call.
 
 --
 
-net: state the "XDP excludes LRO" rule in the core
+tls: fix send() returning success after the TCP send failed
 
-This patch adds NETIF_F_XDP_DISABLES (GRO_HW | LRO). The core now clears
-LRO next to HW-GRO before an XDP program is attached, and refuses the
-attach if the driver keeps LRO on. It also drops netif_disable_lro() from
-generic_xdp_install(), so LRO comes back on the device itself after the
-detach.
+The patch adds an abort_err field to struct tls_sw_context_tx. It is set
+when tls_tx_records() aborts the connection after a failed TCP send. The
+field is checked in tls_tx_records(), tls_push_record() and the
+tls_sw_sendmsg_locked() loop, and bpf_exec_tx_verdict() uses it to tell
+that the record was not sent and to take it out of copied.
 
-> diff --git a/net/core/dev.c b/net/core/dev.c
-> index 5d38cdb6c3260..308501d384b6f 100644
-> --- a/net/core/dev.c
-> +++ b/net/core/dev.c
-
-[ ... ]
-
-> @@ -10599,26 +10598,35 @@ static void dev_xdp_set_prog(struct net_device *dev, enum bpf_xdp_mode mode,
+> diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
+> index 226e0f176fdc8..795cbfe5fb2a1 100644
+> --- a/net/tls/tls_sw.c
+> +++ b/net/tls/tls_sw.c
 
 [ ... ]
 
->  static int dev_xdp_clear_rx_agg(struct net_device *dev,
->  				struct netlink_ext_ack *extack)
+> @@ -708,13 +717,15 @@ static int tls_push_record(struct sock *sk, int flags,
+>  static int bpf_exec_tx_verdict(struct sk_msg *msg, struct sock *sk,
+>  			       u8 record_type, ssize_t *copied, int flags)
 >  {
-> -	if (!(dev->features & NETIF_F_GRO_HW))
-> +	netdev_features_t agg = dev->features & NETIF_F_XDP_DISABLES;
-> +
-> +	if (!agg)
->  		return 0;
-> -	if (!(dev->hw_features & NETIF_F_GRO_HW)) {
-> -		NL_SET_ERR_MSG(extack,
-> -			       "unable to disable HW-GRO, fixed on");
-> +	if (agg & ~dev->hw_features) {
-> +		NL_SET_ERR_MSG_FMT(extack, "unable to disable %s, fixed on",
-> +				   dev_xdp_rx_agg_name(agg & ~dev->hw_features));
->  		return -EOPNOTSUPP;
+> +	struct tls_sw_context_tx *ctx = tls_sw_ctx_tx(tls_get_ctx(sk));
+>  	int err;
+>
+>  	err = tls_push_record(sk, flags, record_type);
+> -	if (err && err != -EINPROGRESS && sk->sk_err == EBADMSG) {
+> +	if (err && err != -EINPROGRESS &&
+> +	    (ctx->abort_err || sk->sk_err == EBADMSG)) {
+>  		*copied -= sk_msg_free(sk, msg);
+>  		tls_free_open_rec(sk);
+> -		err = -sk->sk_err;
+> +		err = ctx->abort_err ?: -EBADMSG;
 >  	}
->  
->  	netdev_update_features(dev);
+>  	return err;
+>  }
 
-[Severity: Medium]
+[Severity: High]
+When encryption completes asynchronously, can send() still return success
+after the TCP send fails in that same call?
 
-Can a refused XDP attach on a bond now leave LRO off on the slaves for
-good?
+With an async AEAD, or on the MAY_BACKLOG -EBUSY path that ends up as
+-EINPROGRESS, tls_push_record() returns before it reaches
+tls_tx_records():
 
-dev_xdp_attach() calls dev_xdp_clear_rx_agg() before dev_xdp_install() runs
-its checks and before the driver's bpf_op is called:
+    rc = tls_do_encryption(sk, tls_ctx, ctx, req, ...);
+    if (rc < 0) {
+        if (rc != -EINPROGRESS)
+            tls_err_abort(sk, -EBADMSG);
+        ctx->async_capable = 1;
+        return rc;
+    }
 
-net/core/dev.c:dev_xdp_attach() {
-    ...
-		if (new_prog) {
-			dev->xdp_pending = 1;
-			err = dev_xdp_clear_rx_agg(dev, extack);
-			if (err)
-				goto err_clear_pending;
-		}
+That makes err == -EINPROGRESS here, so the new branch is skipped and
+nothing is subtracted from *copied.
 
-		err = dev_xdp_install(dev, mode, bpf_op, extack, flags, new_prog);
-		if (err)
-			goto err_clear_pending;
-    ...
-}
+The record then goes to TCP later in the same sendmsg() call, from the
+send_end block of tls_sw_sendmsg_locked():
 
-LRO is now in NETIF_F_XDP_DISABLES. So for a bond with LRO on, this
-netdev_update_features(bond) call drops LRO. LRO is also in
-NETIF_F_UPPER_DISABLES, so netdev_sync_lower_features() then does this on
-each slave that has LRO on:
+    /* Transmit if any encryptions have completed */
+    if (test_and_clear_bit(BIT_TX_SCHEDULED, &ctx->tx_bitmask)) {
+        cancel_delayed_work(&ctx->tx_work.work);
+        tls_tx_records(sk, msg->msg_flags);
+    }
 
-			lower->wanted_features &= ~feature;
-			__netdev_update_features(lower);
+end:
+    ret = sk_stream_error(sk, msg->msg_flags, ret);
+    return copied > 0 ? copied : ret;
 
-Now suppose the attach fails afterwards, for example in bond_xdp_set() when
-the bonding mode doesn't support XDP:
+Say tcp_sendmsg_locked() fails there with -EPIPE after shutdown(SHUT_WR)
+or a reset. tls_tx_records() sets ctx->abort_err, but its return value
+is dropped. ret is still 0 and copied is positive, so the caller is told
+that the record was sent.
 
-	if (!bond_xdp_check(bond, BOND_MODE(bond))) {
-		BOND_NL_ERR(dev, extack,
-			    "No native XDP support for the current bonding mode");
-		return -EOPNOTSUPP;
-	}
+The two in-loop "Transmit if any encryptions have completed" blocks, on
+the zerocopy and copy paths, follow the same pattern. The next iteration
+hits the new abort_err check and jumps to send_end, but copied still
+counts the failed records.
 
-The err_clear_pending path calls netdev_update_features() on the bond
-only. The bond gets LRO back from its own wanted_features. But
-netdev_sync_lower_features() only ever clears bits, so the slaves keep LRO
-off.
+Take the reproducer from the commit message on a system where gcm(aes)
+completes asynchronously. The first send has async_capable == 0 and
+eor == true, so it takes the zerocopy path. Then:
 
-The attach can also fail at this point if a slave lacks ndo_bpf or
-ndo_xdp_xmit. A dev_xdp_install() check can reject it too, for example a
-BPF_XDP_DEVMAP or BPF_XDP_CPUMAP program.
+tls_sw_sendmsg_locked()
+  bpf_exec_tx_verdict() returns -EINPROGRESS, num_async++
+  send_end: tls_encrypt_async_wait() returns 0
+  tls_tx_records()
+    tls_push_sg()
+      tcp_sendmsg_locked() returns -EPIPE
+  return copied
 
-Before this patch, a failed native attach never touched LRO. In generic
-mode, netif_disable_lro() was only called from generic_xdp_install(), and
-that runs after all of the checks in dev_xdp_install().
+So it looks like send() would still print 5. Later sends do now fail with
+EPIPE because of the new check at the top of the loop.
 
-The commit message explains that slaves stay LRO-off after a detach. It
-doesn't say the same happens after a refused attach. Is that intended?
+tx_work_handler() also ignores the result of tls_tx_records(). There,
+though, the send that queued the record has usually returned already.
 
-On a single device, a refused attach now also turns LRO off and back on
-through ndo_set_features. On ixgbe and vmxnet3 that is a full
-reconfiguration, for an attach that simple checks would reject. Could the
-checks in dev_xdp_install() run before the aggregation features are
-cleared?
+The commit message says "Do not count the record as sent" and "The send()
+above then fails with EPIPE". Should the tls_tx_records() error from the
+send_end and in-loop transmits be propagated, or ctx->abort_err be checked
+after them, so that the failed records are not counted in copied?
+
+This first-send behaviour on the async path also existed before
+b341ca51d267. Since this patch targets this class of bug, would it make
+sense to cover the async path too?
 
 [ ... ]
-
-> @@ -11436,9 +11444,9 @@ int __netdev_update_features(struct net_device *dev)
->  	/* GRO_HW may be added back in via ndo_fix_features e.g. if driver needs
->  	 * it to honor the HDS config, clear it before the fix features call.
->  	 */
-
-[Severity: Low]
-
-This isn't a bug, but this comment still mentions only GRO_HW, while the
-code below now clears NETIF_F_XDP_DISABLES, which is GRO_HW and LRO. The
-patch updates the other comments and the netdev_dbg() string. Should this
-comment be updated as well?
-
-> -	if ((features & NETIF_F_GRO_HW) && dev_xdp_prog_count(dev)) {
-> -		netdev_dbg(dev, "Dropping HW-GRO feature since XDP is attached.\n");
-> -		features &= ~NETIF_F_GRO_HW;
-> +	if ((features & NETIF_F_XDP_DISABLES) && dev_xdp_prog_count(dev)) {
-> +		netdev_dbg(dev, "Dropping HW-GRO and LRO features since XDP is attached.\n");
-> +		features &= ~NETIF_F_XDP_DISABLES;
->  	}
-
-[Severity: Low]
-
-Should Documentation/networking/device_drivers/ethernet/microsoft/netvsc.rst
-be updated along with this? It still says:
-
-  XDP program cannot run with LRO (RSC) enabled, so you need to disable LRO
-  before running XDP::
-
-	ethtool -K eth0 lro off
-
-With this change the core clears LRO before ndo_bpf is called. So
-netvsc_set_features() turns RSC off first, and the "XDP: not support LRO"
-refusal in netvsc_xdp_set() can no longer trigger on attach.
-
-Following the doc by hand also clears LRO from wanted_features. LRO then
-doesn't come back after the detach, as it would when the core handles it.
 
 -- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261122010112.1471146-1-kuba%40kernel.org
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261119141106.840038-1-hengyul%40cs.unc.edu
