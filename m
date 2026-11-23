@@ -1,83 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.231.138
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.231.136
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795468428;
-	b=BDWSRCDWka+j4cKaIpgngWCN3JC7YKFVmVCdWv34+eF6+bfQLMDdBTbCsbFazQn3/Cls
-	 QM19Z39PA6VE9tf1kLdQNQHIJL+GUmhnfakAcfBEL+G3F8rpMjTIsWWp1ZXRh+qBqHbkt
-	 2CPpbJTJhFKAlpOonQC06c1/e1ZZSRQpW9+vJj2grO8G8fTTZo0/A1TT6wNQTqGoDvEbv
-	 8s9gi/08zwpqmO4sy7ZppX3UOku4IV/ugKim4RiCx6xR6RM6o5U3OfH+HjCp8yytSsrlA
-	 qe2BcMCLM8y7grlmX1/XR9w+zpAmNPt4Bx0oFkxPrg5Iv2xS8LqZFnNU+2EI5ehoSOw==
+	t=1795468431;
+	b=lQwS/xEZinUkOm6Lqc6q7tfvd/MnzfRygogkE1Lnfpa0QPEDsP8vprhuXGjR1ZnLwknx
+	 CO12Oh5/raxUuO7DUgfIFNyfkXIRqqSbQnAmKc3sJTx0iA1EZfzXoPkTqOvKMuDG7vrz8
+	 On5OYM0tG/f+B8O4FJD/TPzvim06sML5iesnv9nuBJF9HuU3yqQOuptq9oL0gVCyy7GTM
+	 5NOrDcxa3wGfuikp1ATOHKVFYji4yfUXK9M+6NUwav7H/pKvs3bnZinEVDHssrsDj8f1H
+	 b6ruW6k1dE9d60e3ZQ3FAYh4KVTk172gtHPbPKnwB33O/Esqay7im+VL0vVzeGLNLeA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795468428;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795468431;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 X-Developer-Signature:X-Developer-Key:Content-Transfer-Encoding;
-	bh=gSGAJaqvsTNHXVHAOnsjRO6dcAnOkcqwflrmLLnTBSg=;
-	b=oev3rSuI8wiCpWTniXom5r4uB1P+GBjzR/hQMqpGG2ddkdHXyLvGDZB2KhA79cAT1na9
-	 7lzCJFLj9Gja2gN7dLSYgUzYyse5y8YNNsX9BsmGHLQDzzSgBIfV3KLd0FthiBB1Wxi9Y
-	 t2toWpDlgUx91R5LpS/zVxH4GC0qbEenlNLqL2ZjRuhELdg+mgUCH6uTTnP1v7i4Tw39E
-	 1ZgneCbJ5To8HVr4merDvAAwipAwrNHufbDW74smP7UCQkJHYZGNT2ojqSE4P4rgq/L48
-	 ll0j2ZQSeFL0ypGoom9ibjnaYxqhk7RvpG/dLCFNVqWtLtLW+gzwnc/apAN5+1gBtCA==
+	bh=iZ2GVaGZzacxETrJfASACa38iYdC+h6Us+/jvUQYA/o=;
+	b=uUUNDoP/DRlEkO1J1r5MSC3353/7j9ItAi+coDl3X3NkuCqhu1WgX4pyALvqY3wb3wbD
+	 6xmV5j3Ioc7FwkjXKCn1fn9ktNdt0g/6xT9mHS4gOLiIIYSnKZjK5a8ZHHcHao3EpeBha
+	 dXumNNIXimZsagoDIt0SB0DmJ9BE3NH4rqxpLiqjCLG2qwRGIBujGEyny/gxvdWrJ7HSY
+	 BoBI13ao6S1Q8benkRxnXD0tbLomiSas48+hXDeIp38fs0qQMWNO9FmWocog6WguL2zRS
+	 4gjwBVAHvEoRp83bsIEIgwp5daTLCj0LVM/yLcsFfwLjUaMpnUpQyFQzEAfO3aRbQvg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=zvqvFpVl;
-	arc=none smtp.remote-ip=74.125.231.138
-Received: from mail-oo2-f10.google.com (mail-oo2-f10.google.com [74.125.231.138])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=P1GmPaXq;
+	arc=none smtp.remote-ip=74.125.231.136
+Received: from mail-oo2-f8.google.com (mail-oo2-f8.google.com [74.125.231.136])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0055606A321
-	for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 21:13:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F0055606A321
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92A56606A31E
+	for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 21:13:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 92A56606A31E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=zvqvFpVl
-Received: by mail-oo2-f10.google.com with SMTP id 46e09a7af769-862aa241d77so1184337a34.0
-        for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 13:13:47 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=P1GmPaXq
+Received: by mail-oo2-f8.google.com with SMTP id 46e09a7af769-860f8b7b943so1499102a34.0
+        for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 13:13:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795468427; x=1796073227; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1795468431; x=1796073231; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=gSGAJaqvsTNHXVHAOnsjRO6dcAnOkcqwflrmLLnTBSg=;
-        b=zvqvFpVlLqC3QB+48aSZvpSJihZhOqPG5zoYL4kbeFmROf+wReCJXnkahzFo9txii0
-         IsVz/TjV9CMriE55SJZz2keACdkIlYwQhVoOO9PoIaWIBgWFRj+QvpN11mli4DCaZ1Kh
-         qP1bpE5x7l781uL5jgxBmg4RVTFEdzd9aoOWe+kuMM2UyTYdd1jTg9T/z0+JadKZyYG5
-         HFS3QSIZYozyjcoOs7wcLshMBhUcUJCmV3rDRz5NUh58rq3QylUkS7oTyVjEckk+KTBG
-         wtZNW4MJfHe2lVGVZ48+6XmMEfAU36ApRoM4UQ0y4h/VsO+Nhb1JibXGuGbegqi//OE1
-         PSxA==
+        bh=iZ2GVaGZzacxETrJfASACa38iYdC+h6Us+/jvUQYA/o=;
+        b=P1GmPaXqi1sFaZmyDjUCiBBeLaa+2IJ6Wv66jw3+FAsNwyzPfMbT8y5ZxkBTiVNXHZ
+         8EAV+jBNK96qpEZp49lexblW7VZ+sr+2fboRcegdrV8PLJwDkH4H1S6QiIWPl4YOfrSV
+         8xO4YT5PEQesoJW/ZYyTYDJuGrCjxC1ULC+F3C15yw/BUyUMwf0asY3LvKd2+9AECA1E
+         74bKcTP07v02N3L1QuBJtdx/sGxXds+6KrGwFv8uyMK6YB+vtHO9VrKQOqFUeL576YAn
+         vTimYjqOwE9lRUmCS0foi7Kih+oBMrGDLEbyD4NRNQqy7T9EnVP/U6IH+c32MJSg+807
+         aaFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795468427; x=1796073227;
+        d=1e100.net; s=20260707; t=1795468431; x=1796073231;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=gSGAJaqvsTNHXVHAOnsjRO6dcAnOkcqwflrmLLnTBSg=;
-        b=vBryw52x1xXM/RswfzK8w9YrhVVdDCA8aAFQrGK2nC83qzbecTugRDo+QYh4BWz6nh
-         +sNxa2WkvjQrt2JBCzaTybeRrDRpM3oVziBtAMIZ2evSCF6ududRGE7576qDS3Ft6LJ/
-         eTmR100sC3cKHkY+4msrkcvnuZtNQLobsS5VyDQMP+H4NoZ4QdG5Ra1abTTVAl3r39Yc
-         JpSFFXRYClm2Crf+AOwT4t9UoxOW6F2VsQ3e2ss0ft/Gln2EZLsH5q3FGTfeTwsNZbKx
-         2T/0q19giJcIeKl7y+0HO+VFOS+drVlJ8DnjeVrelgQPC54i6mUyfbyJN7cLjyqt2qeG
-         +WYg==
-X-Gm-Message-State: APuU4Z8Fgfyz4uRFxIHQJTbZTj/jOPGrjhGUOYV66vA9ZSZoPSGHXp9/
-	gfpSTKGBb0q8RixXDyxsYCVsJdZlpDbPhgPB2GjyHhOnXKOY41x+PVdQnbObAHno0qQ=
-X-Gm-Gg: AZFdTZeccIbIfgFHxr/3WkQUfZfySRNbLzOgCHxLarmLraXeBjMOzMMhi4bDHtzxtZJ
-	phozdeZVwQkGsPk4QB33muHXGUkSevCPT3IcpnRIZLsvjFMa6ohdoSErHbxhTjQOEoJ/9wZFG6T
-	FpriHRS/opynVD286aZGf8gWa+GPvljnLddHpJxQ/eaAjFx2y/D0zmN8PJT0a70zGLKSUJsqS9d
-	vP4njDGKJRsDWWhd1wIi2LbZ8/cRI+sFDBBof4aZh/D2yM30nGgS3q4aGaR//qUTHYK5t6DBuMx
-	sXnYvHBswYrd7spunojA/S2uBAboj/Zp1XZauYV0jGx6YAFR442bLqKU7H+C7694NAYilmvdGuH
-	0IoVnw8+3APF2x864RVrC4tJbyRzpNKWivyVwfbgTnny1HFzDXLtRv8GpiYPKKT43fltcOqbhH0
-	LYZkI0sp44VNiLl/TRzxXf6WE1AbP1TQQHJnHJFpxMwO8OMwuwCQAJ2kXPDNDb1Pgf/CPn7WiIf
-	cj3pFAgly8NP3PH+8aDZlnA2b8VjjkzX7ehs2dS5tJT8p3XmeVtQgNwjSgrLqp2CuJmsxMwETsn
-	KXfP/GiXNH1PJrD632nWChS+syJ0z7nUE3cChxsJ6sDNPWy8mBUPKfJ6ND31vDQtkNy9guiE+OF
-	qiqxAGfiZzBvuvlhy5BeLhZV196mKB0wVRCSP
-X-Received: by 2002:a05:6830:2309:b0:7f6:ec23:7956 with SMTP id 46e09a7af769-863152f7039mr14476449a34.2.1795468426709;
-        Mon, 23 Nov 2026 13:13:46 -0800 (PST)
-Received: from localhost ([2a03:2880:10ff:41::])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-863168bdc75sm10372602a34.8.2026.11.23.13.13.45
+        bh=iZ2GVaGZzacxETrJfASACa38iYdC+h6Us+/jvUQYA/o=;
+        b=XdV1qJZu/6CtLiFe/9Rqe2YPwUJge2AXf549iVzpLy5XDPvscd3omFZLaZY6LgVoDj
+         VS5xr5VV0E5J5ADovXld14YoaXx1tTnh67pLWJFR5CZ0NeU5+qUugQZr0lSc95ewwnEe
+         l2XrVee1xa9QlhKQWTevyX+RbLTajHqLTKWTzkP6B4Mx1VdgGC7pP3ry9KZc8eEWfak6
+         e6+I5g80yabrt09XOvpat0doJp2CV8Qq+oeyxLR3ZSi5erBGmtxbfZ71pSV5Zuh1jM17
+         JbGID7MEfq0UW0SJTTANZeIrxjQvjNoI/UokKuFt4tBEjryHVgihON9FBTfgf8/xjbzX
+         ypfw==
+X-Gm-Message-State: APuU4Z8HXR2/CFTjhuHWKOjlhsrltixLXmSI2G0WtSOevD/MtztpWeiJ
+	TOwkGDR99HDrB6EDTXpzpbZtMppt8F8pwRfr6ePC2AaE6TE5AwtOMkKvZ5j+Bc4GcNs=
+X-Gm-Gg: AZFdTZdWCNqf7heTPuK8vm73clby5WAL65YU4Nr+rpw1lSGdybjx5ag9A0qGnz524nN
+	PfIWVM2qhmBJfelLxKFXRNRpQkzqCNBwc7YxKHH1T5/ksTttkQhA0HA0D1crUKps+oRDfK4A5Gx
+	fBbueqxe5XURjm0yFkzXsxsEM3RTWysFGNr5ib/5NXJhlZpQSpXgqnccwqD2YR3W/NfVXKHzqCy
+	SJ18R8AA6/U4/OnxZmKEI8lrTTmkp7AZFP6bXKtCS1A1EL9zwRnNsdymhxN6fTN7QKnTM1ucex+
+	iB06YATOGwohhw4pmZq0prSwVJRYNVvkQOI+Z2WM7ch5f15xggd2RBVCNYmqG/2XPntPGi0WPND
+	IAMrHMmInXsAe89PBmZIQUF38u91cRnJ5bdeL5mi44BVrlKZ4BK17nVAvZYxRWR8bVQWuRAn5Q6
+	xE6TQHnjmlhzDqHOpP2NYG4EoYnS1HqqtA7CcqIQqb+5JukdiV7n2Sth5WEODB4pQnr6kEWBaSt
+	4aqGeeS3Zq6DwvdblFV26HM+xchZztI1DldOs7W8Mb2+Mm2jIG7cJC1/mk4eBTpt3aL0m5qUrXo
+	mJycTNqcK34mPaLfK0x4aFIrFC1Ws3Y68SAYYXzma8GZz5KuvdC0/dwnIwnUwwg0e7dwlqGVa+1
+	+HtLVQhGJyAlW4bRNQNCUsgw6zgDCQox6nSE=
+X-Received: by 2002:a05:6830:2709:b0:862:b748:25c2 with SMTP id 46e09a7af769-863159a6f90mr12675843a34.23.1795468430525;
+        Mon, 23 Nov 2026 13:13:50 -0800 (PST)
+Received: from localhost ([2a03:2880:10ff:7::])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-86322db2d1asm7906271a34.4.2026.11.23.13.13.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Nov 2026 13:13:45 -0800 (PST)
+        Mon, 23 Nov 2026 13:13:49 -0800 (PST)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Xu Kuohai <xukuohai@huawei.com>,
@@ -90,9 +90,9 @@ Cc: Xu Kuohai <xukuohai@huawei.com>,
 	Ihor Solodrai <ihor.solodrai@linux.dev>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 03/10] bpf, docs: Document the overwrite mode of BPF ring buffer
-Date: Mon, 23 Nov 2026 22:13:26 +0100
-Message-ID: <b9243eaf40e91eb71994fce04d45ca91f1740c86.1795467315.git.memxor@gmail.com>
+Subject: [PATCH bpf-next v1 04/10] libbpf: Account for the overwrite position in ring__avail_data_size()
+Date: Mon, 23 Nov 2026 22:13:27 +0100
+Message-ID: <853ef5deb34f53b2007ab47699c889b730d87805.1795467315.git.memxor@gmail.com>
 X-Mailer: git-send-email 2.53.1
 In-Reply-To: <cover.1795467315.git.memxor@gmail.com>
 References: <cover.1795467315.git.memxor@gmail.com>
@@ -105,83 +105,73 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3984; h=from:subject:message-id; bh=nYWK0J1dXr+XTkwrFT4zwddgJsgpIsmHK0+uB0Hzs/U=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIZtlhYlVSvsqu0M+EuL5dlz2OvvjCu10BA+YBR37fPmn3upP Dsc7SlkYxLgYZMUUWUr+72MyPlH5O9B2GTfMHFYmkCEMXJwCMJEv7IwMXzuPcXzcJNPAUMAZNvlxSe qDDTLFhx0TJ4YxXPeNWHt5PcP/6mfLSjmTfE8cM/qR8SDzwJk3qupnliQKHTizwq6q1ZuTFwA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2301; h=from:subject:message-id; bh=mdYdeHuh/3Oqx/sLdjTM1Vdp3NSvNdYR+561S8Cm0zE=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIZtlhUnFcndr/kM5C/sT4ra4ei2J8z14Yck8tdR1B5cFrjqw intxRykLgxgXg6yYIkvJ/31MxicqfwfaLuOGmcPKBDKEgYtTACZy7wwjw82bWz/PPfOzlq/815t7vw IXNDycJKPvNFXqikrFp/D/BtsY/oedCFRt2jihOzrYLva4z9aOg3MtrIV0F2cbyV7Lb8xT4wUA
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-Describe what BPF_F_RB_OVERWRITE does, where the overwrite position is in
-the producer page, and how a consumer has to read records that the producer
-can overwrite at any time. Consumers that don't use libbpf need this. Also
-list BPF_RB_OVERWRITE_POS for bpf_ringbuf_query().
+In overwrite mode the kernel overwrites the oldest records when the ring
+buffer is full, and keeps the position of the oldest record that is still
+there in overwrite_pos. The records between consumer_pos and overwrite_pos
+are gone, but ring__avail_data_size() still counts them.
+
+Read overwrite_pos, which is the third unsigned long in the producer page,
+and return min(producer_pos - consumer_pos, producer_pos - overwrite_pos),
+like ringbuf_avail_data_sz() does in the kernel.
+
+A 32-bit libbpf can't tell whether the kernel is 64-bit, in which case
+overwrite_pos is at a different offset, so it keeps returning producer_pos -
+consumer_pos.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- Documentation/bpf/ringbuf.rst | 44 +++++++++++++++++++++++++++++++++--
- 1 file changed, 42 insertions(+), 2 deletions(-)
+ tools/lib/bpf/ringbuf.c | 17 +++++++++++++++--
+ 1 file changed, 15 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/bpf/ringbuf.rst b/Documentation/bpf/ringbuf.rst
-index a99cd05d79d4..9715d4335d5b 100644
---- a/Documentation/bpf/ringbuf.rst
-+++ b/Documentation/bpf/ringbuf.rst
-@@ -120,12 +120,14 @@ reference-tracking logic, similar to socket ref-tracking. It is thus
- impossible to reserve a record, but forget to submit (or discard) it.
+diff --git a/tools/lib/bpf/ringbuf.c b/tools/lib/bpf/ringbuf.c
+index 78fcb3df243f..271c6b9b130d 100644
+--- a/tools/lib/bpf/ringbuf.c
++++ b/tools/lib/bpf/ringbuf.c
+@@ -28,6 +28,7 @@ struct ring {
+ 	void *data;
+ 	unsigned long *consumer_pos;
+ 	unsigned long *producer_pos;
++	unsigned long *overwrite_pos;
+ 	unsigned long mask;
+ 	int map_fd;
+ 	bool overwrite;
+@@ -150,6 +151,13 @@ int ring_buffer__add(struct ring_buffer *rb, int map_fd,
+ 	}
+ 	r->producer_pos = tmp;
+ 	r->data = tmp + rb->page_size;
++	/*
++	 * overwrite_pos comes after producer_pos and pending_pos. Its offset
++	 * depends on the size of the kernel's unsigned long, which 32-bit libbpf
++	 * can't know.
++	 */
++	if (r->overwrite && sizeof(unsigned long) == sizeof(__u64))
++		r->overwrite_pos = r->producer_pos + 2;
  
- ``bpf_ringbuf_query()`` helper allows to query various properties of ring
--buffer.  Currently 4 are supported:
-+buffer.  Currently 5 are supported:
+ 	e = &rb->events[rb->ring_cnt];
+ 	memset(e, 0, sizeof(*e));
+@@ -426,11 +434,16 @@ unsigned long ring__producer_pos(const struct ring *r)
  
- - ``BPF_RB_AVAIL_DATA`` returns amount of unconsumed data in ring buffer;
- - ``BPF_RB_RING_SIZE`` returns the size of ring buffer;
- - ``BPF_RB_CONS_POS``/``BPF_RB_PROD_POS`` returns current logical position
--  of consumer/producer, respectively.
-+  of consumer/producer, respectively;
-+- ``BPF_RB_OVERWRITE_POS`` returns the logical position of the oldest record
-+  that is not overwritten yet (see `Overwrite mode`_).
+ size_t ring__avail_data_size(const struct ring *r)
+ {
+-	unsigned long cons_pos, prod_pos;
++	unsigned long cons_pos, prod_pos, over_pos;
  
- Returned values are momentarily snapshots of ring buffer state and could be
- off by the time helper returns, so this should be used only for
-@@ -204,3 +206,41 @@ buffer. For extreme cases, when BPF program wants more manual control of
- notifications, commit/discard/output helpers accept ``BPF_RB_NO_WAKEUP`` and
- ``BPF_RB_FORCE_WAKEUP`` flags, which give full control over notifications of
- data availability, but require extra caution and diligence in using this API.
+ 	cons_pos = ring__consumer_pos(r);
+ 	prod_pos = ring__producer_pos(r);
+-	return prod_pos - cons_pos;
++	if (!r->overwrite_pos)
++		return prod_pos - cons_pos;
 +
-+Overwrite mode
-+--------------
-+
-+In a ring buffer created with the ``BPF_F_RB_OVERWRITE`` map flag, reservations
-+don't fail when the ring buffer is full. The producer overwrites the oldest
-+records instead, so the ring buffer always holds the most recent data.
-+
-+The read-only page mapped before the data area holds three ``unsigned long``
-+counters in this order: producer position, pending position (used only by
-+producers), and overwrite position. The overwrite position is the position of
-+the oldest record that is not overwritten yet. The producer updates it before
-+the producer position, and it is always less than a ring buffer size behind the
-+producer position.
-+
-+The producer doesn't wait for the consumer, so a record can be overwritten
-+while it is being read. The consumer has to read first and check afterwards:
-+
-+1. Read the overwrite position and then the producer position. Start at the
-+   consumer position, or at the overwrite position if the producer position is
-+   a ring buffer size or more ahead of the consumer position. If the start is
-+   the producer position, there is nothing to read.
-+2. Read the record header and do the check in step 4. Use the length and flags
-+   of the header only if it passes.
-+3. Read or copy the record data, without using it yet.
-+4. Issue a read barrier and read the producer position again. If it is less
-+   than a ring buffer size ahead of the record's position, everything read
-+   from the record is valid. Otherwise the record may have been overwritten:
-+   drop what was read and start again from step 1.
-+
-+Records are overwritten in order, so when several records are read in a row it
-+is enough to do the check in step 4 for the first one, after reading the last
-+one.
-+
-+Positions wrap around, so compare them by subtracting one from the other. The
-+check in step 4 can't notice a producer position that wrapped all the way
-+around since the consumer stored the position it starts from. With a 32-bit
-+``unsigned long`` that takes only 4 GiB of records.
++	/* records before overwrite_pos are gone */
++	over_pos = smp_load_acquire(r->overwrite_pos);
++	return min(prod_pos - cons_pos, prod_pos - over_pos);
+ }
+ 
+ size_t ring__size(const struct ring *r)
 -- 
 2.53.1-Meta
 
