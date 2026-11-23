@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795406369;
-	b=1jFPXJuqFMAC0d+g8cQR/tPn3Lz98V7Obd7u5Po5GEQWVYUtbgqF2Ms32uzFOQHuNlZT
-	 2R1AYnDj34t/9Du0BMc0CQr94YubeuKxNUC4Ge6YqmUcl83AKN9uwSZpjuGuuggCDmEFC
-	 JhS7thZsFQRhOhl/fvZArAzvR92IxdGXBQJRtVGYp/aHZvekg4z+JI3qZJYcW9aBq8C+H
-	 wFqxhcfb6qBXAISx3ZEn24PssYKZ78mp9NUZam3jCVCXKP6s5PvkKvCh7c8wesykOU0md
-	 6MoDAzhRbaLiz+9NqSLpI7EZSaZWmTZhPzt0DMJzycH0Te/hFBWaInZWiZQKEQUAwZw==
+	t=1795406374;
+	b=k91wUcZ/ba0gCDKvx3Knozo89c9agrYFHkkkZomwEQTmfCgYHMmZfGHEr2g9ISffSfLg
+	 goSW+/6m726cVyEUQL8zbo8ONBDroSKBD6yfl7HHvjs+1LInIR/nvNHms75SUY1/txSfI
+	 evYeFaDEupEZQ4NU7pT/2pZYlJmbJuz24skl+MqSjBO3z/AVEhD1bzk11Gb6Z78If6iQD
+	 MxfZ2MwYCr2Je6KaKKT3TTwpf22G/nR4EVqz67uycb21E1d9Q2G7HtnVdnvCJh+LzIZxp
+	 7WtBIl8mwhXtAFUXnIXVsdMe4VOUHQm8blqGs1b4kJlqF2yvMBw2i5+nK/BpRzN/5ug==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795406369;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795406374;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=h/OFAzdpxrl003vwQjCZSPpInQ04oC6dMNVi1B39uzE=;
-	b=eZLka0ixtR3K8d1aS4LyjThqW1AOH9Gugok6zDwvwad4RHPhXs0KH4NlDZgSM4DL4t8n
-	 3ZmVrdy6ukbjsy+HkH8hqZd0vk0SZ4t4JVvm3LTiGGzJ2MXwC8ZbnQSvHRaQqRdig450N
-	 gp0lQELYi9KJixLXNqzFcV47W1fvnuwgY1Jg7yVmvFvJT0vNzgipXnlo9a/kx0BDaylFL
-	 IUB8cq2mI25qD+oVjnwZWbt1nfzwrTuifbRdUBQXvLOFXOdcWxvMGrd52WuZMON91ew8v
-	 EM5KNqWR7mCau+SardpHzS/04OQqO3YSLW1VwxpOCUz3uNpJe4UtSA7EAQx7Gd0gs1g==
+	bh=TLNeYzMTFS5ZNlIeCfy/ozLmrHSL3J7TLfyS9DGwmQo=;
+	b=5YEmTneEjtOsDpku3iy6b7CWWeiCTuCX6DHBipK/vz1WtLXrDHVwARLg1SmaKGgc5SjF
+	 +cLCuf9FM40hHfO8xzbnsw2KWTHqhWl1TRUJmsnLLiTQvTTWhxG3Xc+N4/cCmSu+BOcp7
+	 hxsVlicLaBZMLLfw/wGqZpxo4R/JTaiSyq8RTGCgODVjeErYH4KezZelJTuMD84LbTxU6
+	 Pynyfsmr6X1YvTGqRSw4finz4EqPiv6Z3MpL4VOySB3kaSg8o9UewTOxNd8+oQi/tboTg
+	 AH1dRcp17wOkGQ2l8qHHHZgbJwjIbWUfzgTVsKChHDv0BQljqXeFG7GbAhlb6nUhicA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="P9nonK/D";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NzMe3U0u;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFB9C606A31A;
-	Mon, 23 Nov 2026 03:59:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7866E606A320;
+	Mon, 23 Nov 2026 03:59:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=P9nonK/D
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2523B1F000CA;
-	Mon, 23 Nov 2026 03:59:26 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NzMe3U0u
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BB9E1F000D2;
+	Mon, 23 Nov 2026 03:59:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795406369;
-	bh=h/OFAzdpxrl003vwQjCZSPpInQ04oC6dMNVi1B39uzE=;
+	s=k20260515; t=1795406373;
+	bh=TLNeYzMTFS5ZNlIeCfy/ozLmrHSL3J7TLfyS9DGwmQo=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=P9nonK/DKTt9rPNOhwE0lkc/2wnEDWJrqk/1fnJCD69UP9qi0DoDwLFhs6U+FQyHo
-	 Zxv8TglY91xCyjkeIaKgozLcTp+Yz2PpeUHTUVKe86jI5dIAF3MahUo3Hp+bJnMX+b
-	 En4BTmVSZlMYVoWDO+izrMFE0LLynZxY1Bh1TwKQu35tWkIKfta/Lywvpoph6p4i0n
-	 TryRcREA12nkx+i0KpWTOzHjgeCK/QDzMhVpX2/tFcc0qs6eEKGiKGYd7W8sERq+Gs
-	 gTjm35Xw/qP5umUm9KsqG+GWhdF3E4y06w3d4NL5oejlCRxMZpXRUt7/G8CNtJyvJK
-	 F5afNo8Ixkt7w==
-Subject:
- Re: [PATCH net-next v2 10/11] netlink: specs: rt-link: add veth attributes
+	b=NzMe3U0uXuC6dlBq8ybVW7eKe0CC2vQIF2UEOcfkUizYMxfKYcKZTrzpwc5TurIAj
+	 FLxY26mWzQp5qIDgUS35s7nqFfEfFEM0retZNPR5IkmEfZ7DWr5af/+qLIuEuhdCp0
+	 fkbfrpkEMxH0tAwgqY5YC3lUQXIqCCRAuHgfS5D7tkUfemmWFf80U/AASUsRBYGtam
+	 ypBO6rGzdxijszeJ0ocvRYfeD4fWyO1mhTUeYSC1kb8O8Ukqd4mXvIgmvAsp71Om3h
+	 TQA8nmvxEUARHgyIMpT3PZhITPvC/CB+iU2spu6E6Wsw4Pfv5Kaknfhd1m+5SguY/6
+	 sIyta505Y0toA==
+Subject: Re: [PATCH net-next v2 11/11] selftests: net: tx_extra_headroom: test
+ the veth attribute
 From: netdev-bot+sashiko@kernel.org
 To: tianyi@cloudflare.com
 Cc: netdev@vger.kernel.org, kuba@kernel.org, pabeni@redhat.com,
@@ -67,10 +67,10 @@ Cc: netdev@vger.kernel.org, kuba@kernel.org, pabeni@redhat.com,
  runyu.xiao@seu.edu.cn, song@kernel.org, linux@leemhuis.info,
  wang.zhan@smartx.com, yonghong.song@linux.dev, n0ps1edzz@gmail.com,
  tianyi.gao@linux.dev
-Date: Mon, 23 Nov 2026 03:59:25 +0000
-Message-ID: <179540636572.3135.16989356517509282876@kernel.org>
-In-Reply-To: <20261119013830.36935-11-tianyi@cloudflare.com>
-References: <20261119013830.36935-11-tianyi@cloudflare.com>
+Date: Mon, 23 Nov 2026 03:59:30 +0000
+Message-ID: <179540637021.3135.10262265795396660128@kernel.org>
+In-Reply-To: <20261119013830.36935-12-tianyi@cloudflare.com>
+References: <20261119013830.36935-12-tianyi@cloudflare.com>
 X-sashiko-severity: Low
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -90,73 +90,87 @@ you want to address the nit picks below when you respin.
 
 Low priority / nit picks for your consideration:
 
-- [Low] In Documentation/netlink/specs/rt-link.yaml, the new `tx-extra-
-  headroom` attribute in the `linkinfo-veth-attrs` attribute set (added…
+- [Low] In tools/testing/selftests/net/tx_extra_headroom.py,
+  test_veth_info() never checks the value that…
 
 --
 
-netlink: specs: rt-link: add veth attributes
+selftests: net: tx_extra_headroom: test the veth attribute
 
-This adds a linkinfo-veth-attrs attribute set to rt-link.yaml, so YNL can
-set and read the veth attributes, including tx-extra-headroom. It also
-renames the guard in include/uapi/linux/veth.h to _UAPI__NET_VETH_H_, so
-that YNL's get_hdr_inc can pick up the source tree header.
+This adds a test that uses YNL to create a veth pair with
+VETH_INFO_TX_EXTRA_HEADROOM set to 64, and moves the peer to another
+netns. It checks that both ends report 64 over netlink, and that the
+sending end's tx_extra_headroom is 64, or 64 + 256 with XDP on the peer.
+A second test checks that a value above 512 is rejected with ERANGE.
 
-> diff --git a/Documentation/netlink/specs/rt-link.yaml b/Documentation/netlink/specs/rt-link.yaml
-> index 81b58633911d6..36dece2517789 100644
-> --- a/Documentation/netlink/specs/rt-link.yaml
-> +++ b/Documentation/netlink/specs/rt-link.yaml
-> @@ -2368,6 +2368,17 @@ attribute-sets:
->          name: mode
->          type: u8
->          enum: ovpn-mode
-> +  -
-> +    name: linkinfo-veth-attrs
-> +    name-prefix: veth-info-
-> +    header: linux/veth.h
-> +    attributes:
-> +      -
-> +        name: peer
-> +        type: binary
-> +      -
-> +        name: tx-extra-headroom
-> +        type: uint
+> diff --git a/tools/testing/selftests/net/tx_extra_headroom.py b/tools/testing/selftests/net/tx_extra_headroom.py
+> index 122a1a1b5ca94..a4e4195179fab 100755
+> --- a/tools/testing/selftests/net/tx_extra_headroom.py
+> +++ b/tools/testing/selftests/net/tx_extra_headroom.py
+
+[ ... ]
+
+> @@ -353,6 +380,30 @@ def test_tag_max() -> None:
+>      ksft_eq(bss["tx_extra_headroom"], TX_EXTRA_HEADROOM_MAX)
+>
+>
+> +def test_veth_info() -> None:
+> +    """Check that VETH_INFO_TX_EXTRA_HEADROOM adds to tx_extra_headroom."""
+> +    with NetNS() as send_ns, NetNS() as peer_ns, NetNSEnter(str(send_ns)):
+> +        _setup_veth(peer_ns, tx_extra_headroom=64)
+> +        ksft_eq(_veth_tx_extra_headroom("veth0"), 64)
+> +        with NetNSEnter(str(peer_ns)):
+> +            ksft_eq(_veth_tx_extra_headroom("veth1"), 64)
+> +        map_id = _load_progs()
+> +        _attach_tcx("veth0", "egress", "record")
+> +        _send_udp4()
+> +        ksft_eq(_read_bss(map_id)["tx_extra_headroom"], 64)
 
 [Severity: Low]
-Should this attribute carry a checks block that matches the kernel policy?
+Does this check cover the value that veth_newlink() sets on the device
+when it is created?
 
-The kernel caps the value in veth_policy in drivers/net/veth.c:
+The record program at tcx egress of veth0 reads
+kskb->dev->tx_extra_headroom. Attaching it goes through
+tcx_prog_attach(), and for egress that recomputes the value for veth0
+and its peer:
 
-	[VETH_INFO_TX_EXTRA_HEADROOM] =
-		NLA_POLICY_MAX(NLA_UINT, NETDEV_TX_EXTRA_HEADROOM_MAX),
+kernel/bpf/tcx.c:tcx_prog_attach() {
+    ...
+		bpf_mprog_commit(entry);
+		if (!ingress)
+			netdev_update_tx_extra_headroom(dev);
+    ...
+}
 
-include/linux/netdevice.h defines the limit:
+The value is not recalculated anywhere between creation and this attach.
+Moving veth1 to another netns, adding addresses, bringing the links up
+and _load_progs() all leave it alone. So this ksft_eq() would still pass
+if the creation-time call in veth_newlink() were removed or broken:
 
-	#define NETDEV_TX_EXTRA_HEADROOM_MAX	512
+drivers/net/veth.c:veth_newlink() {
+    ...
+	netdev_update_tx_extra_headroom(dev);
+    ...
+}
 
-As written, the spec allows any 64-bit value. The kernel rejects anything
-above 512 with -ERANGE.
+The two _veth_tx_extra_headroom() checks only read
+priv->tx_extra_headroom through veth_fill_info(), not
+dev->tx_extra_headroom. The peer's dev->tx_extra_headroom is never
+checked.
 
-NETDEV_TX_EXTRA_HEADROOM_MAX is not part of uAPI, so the spec can't refer
-to it by name. Other attributes in this spec already state kernel limits
-as literals, for example txqlen:
+The use case in "veth: add VETH_INFO_TX_EXTRA_HEADROOM" is a CNI plugin
+that sets the headroom at creation, with no tcx egress program on the
+veth. That use case relies only on the creation-time path.
 
-        name: txqlen
-        type: u32
-        checks:
-          max: 32767
+Only egress attach recalculates the value. Could a record program at
+tcx ingress of veth1 be used to read the creation-time value? If not,
+could the commit message mention this limitation?
 
-Would something like this work here?
-
-        name: tx-extra-headroom
-        type: uint
-        checks:
-          max: 512
-
-The selftest later in the series (tx_extra_headroom.py) hardcodes
-TX_EXTRA_HEADROOM_MAX = 512 with a comment naming
-NETDEV_TX_EXTRA_HEADROOM_MAX. The spec still lists only type: uint at the
-end of the series.
+> +        _attach_xdp(peer_ns)
+> +        _send_udp4()
+> +        ksft_eq(_read_bss(map_id)["tx_extra_headroom"],
+> +                64 + XDP_PACKET_HEADROOM)
 
 [ ... ]
 
