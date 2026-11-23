@@ -1,83 +1,69 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.251
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.19
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795447791;
-	b=UP7us1xGvZyijZFG6qijRKJxUIaigvPNoLyHKJvtZ+4PXZxAgC8zDg1VzH9Tm743xRkE
-	 dxORub1ggUcmx6fR0CNi1hWvKWlpAS27C2/Vi1zGSFmJUviAytKknrAsUh+D35ZkmoT9v
-	 MY5HyQQ/Gd1wWyZtzeox6lo5Du+/2LGtHlCmbc8+nL/28sLyaJdsXdFgaosfPU7kMwlGV
-	 OBAXbd3ppVqNEt6Fmqc7FD1Fkn+IvYUbwq0CmoeEXjNZKCzoMAl+TGNIJ53ziw7af6cmh
-	 nMu3D7QmpvmCc+kk29gQHX764gjIklbqMgWw8DHXB8j3crcc++KkwqgyClgtDcxdAcw==
+	t=1795448213;
+	b=cQEIWFurU3AvQbHqyFIHTbkQji6wSD9v82NnLRyPMY8C40T1o8zYRHDuCisNAXw8hRew
+	 qqUfTTEVkOzqZ+U/mc4zNEdpbcv7JhMqlh0NUliqqxugYyzGHMV9dOl1ZL16iLld1AiAW
+	 48CuV2xWgWQJePuUQyg9LaEVkQvnoUVBvvhd3C8vV4jKP16Gu/I04laDyNNxAtFGff1Bp
+	 WlWgc6zqjXPK5eihpT3MXnJoot3+mMsRO7A1npkPRZYvsGbqv2ce7bbKq8r30Z72psWty
+	 ryaDNbm6fb6f8l0wayIuYEQvjP/xIhpWpcqwOOCyOitCAhunY3Vr/EAr3T49HcbGUZg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795447791;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:In-Reply-To:References:MIME-Version:
+	a=rsa-sha256; c=relaxed/relaxed; t=1795448213;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Message-ID:Date:
+	 MIME-Version:User-Agent:Subject:To:Cc:References:From:
+	 Content-Language:Autocrypt:In-Reply-To:Content-Type:
 	 Content-Transfer-Encoding;
-	bh=ci9vDSWyHxSq9FnZq3Zk79d2N7kH1vKnpPKWHcUFCWk=;
-	b=jOokiCG0bA/4xB6lTUeHhgsZBZvNJTOtMgRlNPdhHYotowjSh7RrcgXR3mM35H6y4c1H
-	 puPCYPMkVgNq+3cDmOtKJKrXbQ+PMhxDOppwmbP3hK2pjbAoMNHT5bRYgbvNbb/gwWcPH
-	 I0PiME9uMRJhXa+n6Chb3d9eyFz/AgFoefZa08k7Eemir0vOO16nsBL5wg6kY9VyrO8HO
-	 Hu+o0Yd9JGm2rMgfQ6c+zPRoTY347BPkp0zMv4CWSiHCiUGcbdp1h4mcWlbMUv0wcyw9e
-	 qlQT6P3OTACyDdlTM2IKbl/OFtAWbbNUhLF+9NB5e2Lf5jUrtvpDln/QPg3k1C0bAgw==
+	bh=K78eNE+fhVap56bP9RFkcQMuU33yDbFo/P1LLieR5cU=;
+	b=a3cF7xmSybCcaGCXiOJaZHFgr4pxdkPa+TAwUGxYlaIsNg3hAOXBtK3dWQUDjE6lZ2b6
+	 N9myVw30Tyzrvkad0hqQTNsYw0NYEcM+Qz4j5Fh3PJLT9m0rPhStEaYCzh5XwZeLmcmrf
+	 NtRJEcNNb7798iheYGGHubUk3wfjKrYdU9eyH47rCbjGfPuC+tbAb9LWGqtZeE4DFRlkG
+	 ixLgR6EYRO9ZcBtmNqRFCqAndyxwQfExa7kLPK/78V21ULp0AGLGqRMHgBY8o6zHe64ZV
+	 uYvOHJAeDDRpqu1xDdj0EpWzicbtXbt2JKi4WkF5vTXIN8r8xpX5i9fAfYPkIYA+imQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=wsET+Okn;
-	arc=none smtp.remote-ip=91.218.175.251
-Received: from mta0.migadu.com (out-251.mta0.migadu.com [91.218.175.251])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=cnjKZUuP;
+	arc=none smtp.remote-ip=198.175.65.19
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C45DB606A31A
-	for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 15:29:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C45DB606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08E7F606A321;
+	Mon, 23 Nov 2026 15:36:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 08E7F606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=wsET+Okn
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=uLmLi4eG+xNd/B9EvuWggXquRDTQtxE2MGsM+EpVXzc=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1795447789; v=1; x=1796052589;
- b=wsET+OknC/RODWBmlT7TNCFLM7cky+S3cJ2mE0YvWo25GKwi5RVkcir9BVINysQyFW/6HeaZ
- IZywkZVNWvuxWRrULsUAFn9M7BCYCUPexszoVwdTDAli4+Lx2ltRLqyinxPt+WqbElmeM1Evbv9
- gOhbv6qfXV+Qjn/6ICjei9zw=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 36ad89595fa028df;
-	Mon, 23 Nov 2026 15:29:49 +0000
-X-Mizu-Trace-ID: 36ad89595fa028df
-X-Migadu-Flow: FLOW_OUT
-From: Leon Hwang <leon.hwang@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Matt Bobrowski <matt@bobrowski.net>,
-	Shuah Khan <shuah@kernel.org>,
-	Leon Hwang <leon.hwang@linux.dev>,
-	linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	netdev@vger.kernel.org
-Subject: [PATCH bpf-next v3 9/9] selftests/bpf: Verify cgroup prog link_create logs
-Date: Mon, 23 Nov 2026 23:27:43 +0800
-Message-ID: <20261123152743.19629-10-leon.hwang@linux.dev>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20261123152743.19629-1-leon.hwang@linux.dev>
-References: <20261123152743.19629-1-leon.hwang@linux.dev>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=cnjKZUuP
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1795448213; x=1826984213;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=5+EebavlsM89qcdx9Zi7c0Ia7LpQq33PUSBbXwYCd3I=;
+  b=cnjKZUuPIuDK4vNZ1KRz9vPG9ZbJ/RWY5+stD8unhJieKcrjrxWxmHgr
+   GM/6UQz9K/lqMAw/dzMAhGWmlrk7QAubgeN6jJfj7Ck9s+JOJk5FszhHz
+   txiE+WAUGYtg9mvUw58O+ttC5NwOIHhWRNSECnbDZTCTBPQWSNtjlPzQx
+   TEYRMCf2TiteakZzH6TiBcUFaCUg8LMBpC1uJBHnitIBWMMb2hZRHTLi2
+   CWyDu32qlyHD85Jnk284QhdixdQ7wKIW1c4XFdiYAPP9ltxpparQJXVCw
+   CXMoyb5NgnzAZ2Gm/bwQ19eiHg0hLc9WDNW8PYYe6+hxfpLyOqQiBkikJ
+   g==;
+X-CSE-ConnectionGUID: xK1iYR2zT2qEFtPoEbnrBA==
+X-CSE-MsgGUID: dWEP7F4HRq+JkW8Cs9EUWQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11975"; a="4302222"
+X-IronPort-AV: E=Sophos;i="6.27,229,1787036400"; 
+   d="scan'208";a="4302222"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2026 07:36:53 -0800
+X-CSE-ConnectionGUID: YXfgXrbRS6a6e/EcM251Ag==
+X-CSE-MsgGUID: Nw2kEeu0T/a3pTpqiTbc0A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,229,1787036400"; 
+   d="scan'208";a="11412355"
+Received: from smithj1-mobl2.amr.corp.intel.com (HELO [10.125.109.217]) ([10.125.109.217])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2026 07:36:52 -0800
+Message-ID: <a08e55c4-26dd-4502-9cca-b063387a0e06@intel.com>
+Date: Mon, 23 Nov 2026 07:36:51 -0800
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -87,353 +73,96 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v1 1/3] x86/mm: Resolve BPF exception fixups for
+ user address faults under SMAP
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, Borislav Petkov <bp@alien8.de>
+Cc: bpf@vger.kernel.org, Puranjay Mohan <puranjay@kernel.org>,
+ Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman
+ <eddyz87@gmail.com>, Emil Tsalapatis <emil@etsalapatis.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>,
+ Dave Hansen <dave.hansen@linux.intel.com>, Andy Lutomirski
+ <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
+ Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+ kkd@meta.com, kernel-team@meta.com, x86@kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20261009024925.3169077-1-memxor@gmail.com>
+ <20261009024925.3169077-2-memxor@gmail.com>
+ <20261009041346.GHashp-hYpLl-o-l3M@fat_crate.local>
+ <DM0ESVBT9553.2S1RWK1W7M8WW@gmail.com>
+From: Dave Hansen <dave.hansen@intel.com>
+Content-Language: en-US
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+In-Reply-To: <DM0ESVBT9553.2S1RWK1W7M8WW@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Check the error code, log message, and reported log size for unsupported
-flags, invalid target FDs, and relative attachment errors. Cover missing
-or conflicting ordering flags, a missing BPF_F_LINK flag, invalid link FDs
-and IDs, preorder mismatches, and anchors outside the target cgroup.
+On 10/9/26 08:23, Kumar Kartikeya Dwivedi wrote:
+>   SEC("fentry/tcp_retransmit_skb") <- attaches to the entry of tcp_retransmit_skb()
+>   int BPF_PROG(retrans, struct sock *sk)
+>   {
+>           struct file *f = sk->sk_socket->file;
+> 
+> This program was written for doing a TCP related investigation. The first load
+> of sk is fine, but sk_socket can be NULL (orphaned socket) or stale, so the
+> second load becomes a mov with an extable entry. Below is the JITed sequence.
 
-Also cover revision mismatches, conflicting attachment flags, cgroup
-hierarchy restrictions, and the per-cgroup program limit.
+In every other part of the kernel, dereferencing a NULL pointer would be
+called a bug. Isn't this just plain buggy code?
 
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
----
- .../selftests/bpf/prog_tests/cgroup_link.c    | 324 ++++++++++++++++++
- 1 file changed, 324 insertions(+)
+I assume the BPF program wants to tolerate these situations because it
+can't fully participate in the synchronization mechanisms that the data
+structure actually needs. So, it makes what (in the normal kernel) is a
+buggy access.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_link.c b/tools/testing/selftests/bpf/prog_tests/cgroup_link.c
-index 15093a69510e..5a27d3a6a26c 100644
---- a/tools/testing/selftests/bpf/prog_tests/cgroup_link.c
-+++ b/tools/testing/selftests/bpf/prog_tests/cgroup_link.c
-@@ -253,3 +253,327 @@ void serial_test_cgroup_link(void)
- 	}
- 	cleanup_cgroup_environment();
- }
-+
-+static void check_cgroup_link_create_log(int prog_fd, int target_fd,
-+					 struct bpf_link_create_opts *opts,
-+					 int err_exp, const char *msg)
-+{
-+	char log_buf[128] = {};
-+	LIBBPF_OPTS(bpf_log_opts, log_opts,
-+		    .buf = log_buf,
-+		    .size = sizeof(log_buf),
-+		    .level = 1,
-+	);
-+	int fd;
-+
-+	opts->log_opts = &log_opts;
-+	fd = bpf_link_create(prog_fd, target_fd, BPF_CGROUP_INET_EGRESS, opts);
-+	if (!ASSERT_LT(fd, 0, "bpf_link_create")) {
-+		close(fd);
-+		return;
-+	}
-+
-+	ASSERT_EQ(fd, err_exp, "err");
-+	ASSERT_STREQ(log_buf, msg, "log_buf");
-+	ASSERT_EQ(log_opts.true_size, strlen(msg) + 1, "log_size");
-+}
-+
-+static void test_cgroup_link_create_log(int target_fd, __u32 flags, int err_exp, const char *msg)
-+{
-+	LIBBPF_OPTS(bpf_link_create_opts, opts,
-+		    .flags = flags,
-+	);
-+	struct test_cgroup_link *skel;
-+
-+	skel = test_cgroup_link__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "test_cgroup_link__open_and_load"))
-+		return;
-+
-+	check_cgroup_link_create_log(bpf_program__fd(skel->progs.egress), target_fd, &opts,
-+				     err_exp, msg);
-+
-+	test_cgroup_link__destroy(skel);
-+}
-+
-+static void test_log_invalid_flags(void)
-+{
-+	const char *msg = "Invalid flags.\n";
-+
-+	test_cgroup_link_create_log(-1, BPF_F_ALLOW_OVERRIDE, -EINVAL, msg);
-+}
-+
-+static void test_log_invalid_target_fd(void)
-+{
-+	const char *msg = "Invalid target_fd.\n";
-+
-+	test_cgroup_link_create_log(-1, 0, -EBADF, msg);
-+}
-+
-+static void test_log_cgroup_attach(struct bpf_link_create_opts *opts,
-+				   int err_exp, const char *msg)
-+{
-+	struct test_cgroup_link *skel;
-+	int cg;
-+
-+	cg = test__join_cgroup("/cgroup_link_log_attach");
-+	if (!ASSERT_GE(cg, 0, "join_cgroup"))
-+		return;
-+
-+	skel = test_cgroup_link__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "test_cgroup_link__open_and_load"))
-+		goto out;
-+
-+	check_cgroup_link_create_log(bpf_program__fd(skel->progs.egress), cg, opts, err_exp, msg);
-+	test_cgroup_link__destroy(skel);
-+
-+out:
-+	close(cg);
-+}
-+
-+static void test_log_relative_without_order(void)
-+{
-+	const char *msg = "Specify exactly one of BPF_F_BEFORE or BPF_F_AFTER.\n";
-+	LIBBPF_OPTS(bpf_link_create_opts, opts,
-+		    .flags = BPF_F_LINK,
-+	);
-+
-+	test_log_cgroup_attach(&opts, -EINVAL, msg);
-+}
-+
-+static void test_log_relative_both_orders(void)
-+{
-+	const char *msg = "Specify exactly one of BPF_F_BEFORE or BPF_F_AFTER.\n";
-+	LIBBPF_OPTS(bpf_link_create_opts, opts,
-+		    .flags = BPF_F_LINK | BPF_F_BEFORE | BPF_F_AFTER,
-+	);
-+
-+	test_log_cgroup_attach(&opts, -EINVAL, msg);
-+}
-+
-+static void test_log_relative_type_mismatch(void)
-+{
-+	const char *msg = "BPF_F_LINK is required for relative link attachment.\n";
-+	LIBBPF_OPTS(bpf_link_create_opts, opts,
-+		    .flags = BPF_F_BEFORE,
-+		    .cgroup.relative_fd = -1,
-+	);
-+
-+	test_log_cgroup_attach(&opts, -EINVAL, msg);
-+}
-+
-+static void test_log_invalid_relative_link_fd(void)
-+{
-+	const char *msg = "Invalid relative link FD.\n";
-+	LIBBPF_OPTS(bpf_link_create_opts, opts,
-+		    .flags = BPF_F_LINK | BPF_F_BEFORE,
-+		    .cgroup.relative_fd = -1,
-+	);
-+
-+	test_log_cgroup_attach(&opts, -EBADF, msg);
-+}
-+
-+static void test_log_invalid_relative_link_id(void)
-+{
-+	const char *msg = "Invalid relative link ID.\n";
-+	/* Link ID zero cannot identify a link. */
-+	LIBBPF_OPTS(bpf_link_create_opts, opts,
-+		    .flags = BPF_F_LINK | BPF_F_ID | BPF_F_BEFORE,
-+	);
-+
-+	test_log_cgroup_attach(&opts, -ENOENT, msg);
-+}
-+
-+static void test_log_relative_anchor(__u32 flags, bool other_cgroup, int err_exp, const char *msg)
-+{
-+	int cg, other_cg = -1, anchor_fd = -1, prog_fd;
-+	LIBBPF_OPTS(bpf_link_create_opts, opts,
-+		    .flags = flags,
-+	);
-+	struct test_cgroup_link *skel;
-+
-+	cg = test__join_cgroup("/cgroup_link_log_relative");
-+	if (!ASSERT_GE(cg, 0, "join_cgroup"))
-+		return;
-+
-+	if (other_cgroup) {
-+		other_cg = test__join_cgroup("/cgroup_link_log_other");
-+		if (!ASSERT_GE(other_cg, 0, "join_cgroup other"))
-+			goto cleanup;
-+	}
-+
-+	skel = test_cgroup_link__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "test_cgroup_link__open_and_load"))
-+		goto cleanup;
-+
-+	prog_fd = bpf_program__fd(skel->progs.egress);
-+	anchor_fd = bpf_link_create(prog_fd, cg, BPF_CGROUP_INET_EGRESS, NULL);
-+	if (!ASSERT_GE(anchor_fd, 0, "bpf_link_create"))
-+		goto destroy;
-+
-+	if (flags & BPF_F_LINK)
-+		opts.cgroup.relative_fd = anchor_fd;
-+	check_cgroup_link_create_log(prog_fd, other_cgroup ? other_cg : cg, &opts, err_exp, msg);
-+
-+	close(anchor_fd);
-+
-+destroy:
-+	test_cgroup_link__destroy(skel);
-+cleanup:
-+	if (other_cg >= 0)
-+		close(other_cg);
-+	close(cg);
-+}
-+
-+static void test_log_both_orders(void)
-+{
-+	const char *msg = "BPF_F_BEFORE and BPF_F_AFTER are mutually exclusive.\n";
-+
-+	test_log_relative_anchor(BPF_F_BEFORE | BPF_F_AFTER, false, -EINVAL, msg);
-+}
-+
-+static void test_log_relative_preorder_mismatch(void)
-+{
-+	const char *msg = "Relative attachment BPF_F_PREORDER mismatch.\n";
-+
-+	test_log_relative_anchor(BPF_F_LINK | BPF_F_BEFORE | BPF_F_PREORDER, false, -EINVAL, msg);
-+}
-+
-+static void test_log_relative_not_in_cgroup(void)
-+{
-+	const char *msg = "Relative attachment not found in target cgroup.\n";
-+
-+	test_log_relative_anchor(BPF_F_LINK | BPF_F_BEFORE, true, -ENOENT, msg);
-+}
-+
-+static void test_log_revision_mismatch(void)
-+{
-+	const char *msg = "Cgroup revision mismatch: expected 2, actual 1.\n";
-+	LIBBPF_OPTS(bpf_link_create_opts, opts,
-+		    .cgroup.expected_revision = 2,
-+	);
-+
-+	test_log_cgroup_attach(&opts, -ESTALE, msg);
-+}
-+
-+static void test_log_exclusive_attach(bool child, const char *msg)
-+{
-+	LIBBPF_OPTS(bpf_link_create_opts, opts);
-+	int cg, child_cg = -1, prog_fd, err;
-+	struct test_cgroup_link *skel;
-+
-+	cg = test__join_cgroup("/cgroup_link_log_exclusive");
-+	if (!ASSERT_GE(cg, 0, "join_cgroup"))
-+		return;
-+
-+	if (child) {
-+		child_cg = test__join_cgroup("/cgroup_link_log_exclusive/child");
-+		if (!ASSERT_GE(child_cg, 0, "join_child_cgroup"))
-+			goto cleanup;
-+	}
-+
-+	skel = test_cgroup_link__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "test_cgroup_link__open_and_load"))
-+		goto cleanup;
-+
-+	prog_fd = bpf_program__fd(skel->progs.egress);
-+
-+	err = bpf_prog_attach(prog_fd, cg, BPF_CGROUP_INET_EGRESS, 0);
-+	if (!ASSERT_OK(err, "bpf_prog_attach"))
-+		goto destroy;
-+
-+	check_cgroup_link_create_log(prog_fd, child ? child_cg : cg, &opts, -EPERM, msg);
-+
-+	err = bpf_prog_detach2(prog_fd, cg, BPF_CGROUP_INET_EGRESS);
-+	ASSERT_OK(err, "bpf_prog_detach2");
-+
-+destroy:
-+	test_cgroup_link__destroy(skel);
-+cleanup:
-+	if (child_cg >= 0)
-+		close(child_cg);
-+	close(cg);
-+}
-+
-+static void test_log_attachment_flags_conflict(void)
-+{
-+	const char *msg = "Attachment flags conflict with existing flags.\n";
-+
-+	test_log_exclusive_attach(false, msg);
-+}
-+
-+static void test_log_hierarchy_disallows_attach(void)
-+{
-+	const char *msg = "Cgroup hierarchy does not allow attachment.\n";
-+
-+	test_log_exclusive_attach(true, msg);
-+}
-+
-+#define BPF_CGROUP_MAX_PROGS 64
-+
-+static void test_log_too_many_programs(void)
-+{
-+	const char *msg = "Too many programs attached to cgroup (limit 64).\n";
-+	LIBBPF_OPTS(bpf_link_create_opts, opts);
-+	int cg, prog_fd, err, i, nr_links = 0;
-+	int link_fds[BPF_CGROUP_MAX_PROGS];
-+	struct test_cgroup_link *skel;
-+
-+	cg = test__join_cgroup("/cgroup_link_log_limit");
-+	if (!ASSERT_GE(cg, 0, "join_cgroup"))
-+		return;
-+
-+	skel = test_cgroup_link__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "test_cgroup_link__open_and_load"))
-+		goto cleanup;
-+
-+	prog_fd = bpf_program__fd(skel->progs.egress);
-+
-+	for (i = 0; i < ARRAY_SIZE(link_fds); i++) {
-+		err = bpf_link_create(prog_fd, cg, BPF_CGROUP_INET_EGRESS, NULL);
-+		if (!ASSERT_GE(err, 0, "bpf_link_create"))
-+			goto destroy;
-+
-+		link_fds[nr_links++] = err;
-+	}
-+
-+	check_cgroup_link_create_log(prog_fd, cg, &opts, -E2BIG, msg);
-+
-+destroy:
-+	for (i = 0; i < nr_links; i++)
-+		close(link_fds[i]);
-+	test_cgroup_link__destroy(skel);
-+cleanup:
-+	close(cg);
-+}
-+
-+void test_cgroup_link_log(void)
-+{
-+	if (test__start_subtest("invalid_flags"))
-+		test_log_invalid_flags();
-+	if (test__start_subtest("invalid_target_fd"))
-+		test_log_invalid_target_fd();
-+	if (test__start_subtest("relative_without_order"))
-+		test_log_relative_without_order();
-+	if (test__start_subtest("relative_both_orders"))
-+		test_log_relative_both_orders();
-+	if (test__start_subtest("relative_type_mismatch"))
-+		test_log_relative_type_mismatch();
-+	if (test__start_subtest("invalid_relative_link_fd"))
-+		test_log_invalid_relative_link_fd();
-+	if (test__start_subtest("invalid_relative_link_id"))
-+		test_log_invalid_relative_link_id();
-+	if (test__start_subtest("both_orders"))
-+		test_log_both_orders();
-+	if (test__start_subtest("relative_preorder_mismatch"))
-+		test_log_relative_preorder_mismatch();
-+	if (test__start_subtest("relative_not_in_cgroup"))
-+		test_log_relative_not_in_cgroup();
-+	if (test__start_subtest("revision_mismatch"))
-+		test_log_revision_mismatch();
-+	if (test__start_subtest("attachment_flags_conflict"))
-+		test_log_attachment_flags_conflict();
-+	if (test__start_subtest("hierarchy_disallows_attach"))
-+		test_log_hierarchy_disallows_attach();
-+	if (test__start_subtest("too_many_programs"))
-+		test_log_too_many_programs();
-+}
--- 
-2.55.0
+The rest of the story is trying to fix that up.
 
+But I don't quite know how this can be done "safely" in a way that the
+fixups end up with good data or NULL. If SMAP isn't in play, can't this
+just go reading garbage from userspace?
+
+Also, can you talk a bit about the code generation on the BPF side here?
+Are the instructions covered by the exception table handler all pure MOV's?
