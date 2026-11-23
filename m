@@ -1,97 +1,80 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.177
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795393520;
-	b=nGM7appIFeR9ODFJnxshSii5US1MUnLDxZko+lewLH0n3SN4Nwi7WDFjeW6fgNDKeFpu
-	 aTOwetzDGGA6jWFnoM+ZLUy1Tbh1WtPtuzmrOmnwxEoXmyF7Y2ZHEJK2CJSz0RcW4MNrD
-	 2bM1SUa113feG5/WBW2pTzLVWN8LwWqRE/DjZnQ/DKDxx3hbAvwc5xQD6FpOGWH8BWlrn
-	 wZb8j0wvvbm+IW9VCBDz7y2nU+7Rm8AGtYZMOy+hPElzS0up9VQDeZqrGL8rDvilywDYr
-	 SsIheY/9qwDNM+qdUjf/b7mB3nQ2gPgOYaRz3JaLDLptZdoQetYV/WoHuLBsdFhdmOQ==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795393520;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
-	 References:Content-Transfer-Encoding:MIME-Version;
-	bh=XTLw64RKSVxV+BjWRGwSN+nuKYoaYqbBJ+SYVqTuiGE=;
-	b=K/7Gvggu37SnhtL0A7CNQHgbfNs67xni9eOZMVorTdrWD2W/0MPNIDYCRJnvf6QRkTka
-	 k056lpXAdfaBFEGW2rqOVpNO//hl9DafXPrKsm1x72RAY66utMVQ4aR+DTMGOnfzTNm0D
-	 iZl8a/O0qsWTTNdsmwXrF+aUKvP820SoVJioG6k4PoOcS/zD/Gw1ZL4Te+2yG1IJ3lu14
-	 hbuPBxxLHVJZMhatjsn+jOBft2g926FqJL/HYyU71ciJSJ61MtWwu7n64mTQTKe6yB2uT
-	 bXmp00Lg4xrfKX174Rj01fZi6QxpwdSvyHWHyiz7/20qpNZ4znMcG+4yvdnvgqSy2IQ==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=gjd7c7pK;
-	arc=none smtp.remote-ip=209.85.210.177
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795393516;
+	b=xgCRToRUsdefwXlOsaHXzQCLOsBTnsGERc73mFAVgHZi84NTT0903YzCoTTV1bigpV31
+	 TB3b3FY22QFG/+/M7teIU7VhU5cZTPbgzRwD9lgJoKy4teoxoqN/WBn/ZAUmCOEKG3qGu
+	 2ZjBZ1/FVHBQODdhYAa34KcyNC7bdntJuWJwIsY27vvjHvmTsRSIpl+NNWwWb3+JFJZJa
+	 y/YcOe7n0cO105k4IuLIOmpyzLQnYrZ2vPQql0uTXNcWaJ7sx+B8uWjvxysJZ40A1DfxX
+	 QZMp9Ur/0UGi8mROzTGix/FcwtjUo2YBjD3GPF7JuIhWLugboS+Ul6WEiIAzRlCnq7g==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795393516;
+	h=Received:DKIM-Signature:Received:From:Subject:Date:Message-Id:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding:X-B4-Tracking:
+	 X-Change-ID:To:Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:
+	 X-Endpoint-Received:X-Original-From:Reply-To;
+	bh=mNi3Pj05CGsYEOdmgVQU43MsXqlDog8eO7vY1bFFNz8=;
+	b=H3J0IBkF5b9kFJsk+54owKeOzfzkGbTgFeyMaeCbl70FAlUb9R1OUoN6aKiP4vol6eus
+	 KD2QBAIeOP9YxiZBuqbG5mu9/YlAg2tTYoCmSgZH04NQCdGwBIxkt1AWdjc0zm2rLiOkp
+	 znQdCFyMBCAiFQO+lDwImkIYMhuPVL44epqe/Y7+P60WhnQIgJeZTlItBbFer+1Hetgh2
+	 9rubSKEfxyHnkdlM1Sz1kHDAYzTEKe5AdUjMW0TrMfq0mk2SIiyOFhjWlXj3yZ0f7ruHB
+	 gq+3/qsXLZQUAQEjyu+4PwXcBzAXf46c7kzdHA04xhq4jjptPAXOmZfg9xj+B80/XcA==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=moerukM7;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 744D1606A31A;
+	Mon, 23 Nov 2026 00:25:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=moerukM7
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
+ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
+	t=1795393516;
+	b=vtWm/x6N/8x0ZfaclbI4bNeGNxTadQb70U3zfg0f3/pB5GDJ42pZ+BQKOPwOccfOLT/o
+	 f4DuVchgAvSETj/JnubuWhVE7ZV3bV5f4AWyVaEDBuM32jewelycdNN15q3+hXlCPKoN6
+	 sz2lGAYPpyWk6ENActxbFpGFwagKT2UtttxZGG2ZSzn6NS7oNciibw+i+aOVUhbVTfiGK
+	 jvodzJbia3ZkwcWfbbbnU9L02oSyGfaXsGRHYjZqYt1HqJ6BtUXxvHlkdRUhII2QjAnfB
+	 N3xTHBh8BCkRA2zs6fMCwvIlbrSuImE8L9xtL3pMEabR8vp8M5r9xG5NADHuSch5vNQ==
+ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1795393516;
+	h=DKIM-Signature:Received:From:Subject:Date:Message-Id:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:X-B4-Tracking:X-Change-ID:To:
+	 Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To;
+	bh=mNi3Pj05CGsYEOdmgVQU43MsXqlDog8eO7vY1bFFNz8=;
+	b=UMN0zonV17BlvBrW2r93vG59hPibKG8PV6iRYcu7FIofbW4j+IdF2DuFByce3QfBb6P5
+	 +c3nYhUP0M2GIs97DmYHJzejCItDoSF4cGZEyyUMXfcTqn28MKpsNqdLXTXGjN3iZyKxu
+	 Ia6e60hObol4ltisV8U5mt+zg8/9jBKqy34trMKZxq9c5o9hM7/yPpKRLw3A+LOVZChw3
+	 IBzX+OhDNph6BsHhBqLDzq9iMfPDvgV0cL7+SnTNzV5SDtG4aFx3xJGHeNXgEgkL71VIi
+	 1HJf+kZfv+7jfg08KR0EmNwrryYr9HZKOypsbgSzfOn9P+hYXid2QH+kBjbzXcnUuaQ==
+ARC-Authentication-Results: i=1; smtp.kernel.org; 
+	arc=none smtp.remote-ip=100.80.115.77
+Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CCBC606A33E
-	for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 00:25:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1CCBC606A33E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=gjd7c7pK
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-8c4cc85a315so2053311b3a.0
-        for <bpf@vger.kernel.org>; Sun, 22 Nov 2026 16:25:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795393519; x=1795998319; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=XTLw64RKSVxV+BjWRGwSN+nuKYoaYqbBJ+SYVqTuiGE=;
-        b=gjd7c7pK4i3+nh6JtJY7RitKRtT9u9eef/h67zxj1VLMnHlKg/uCK00l8HlLHEX7Fx
-         E9aPCM1rhFesA2Mmc6m5O/x2oojCVsitL1rE+wlgXrVIfx+os0oei5h/klrzN25WO4Cx
-         9DFu0J7ZEtLPkXWdAiup8SMxO3EXx+nwYOwkEdev3SIIIjwoAoUx71TpDlNvm9L3bB05
-         xrMB8uwk9GsFcUr/Mca9xTjQd6yizLS/VNsN4d6e8f0w7INL/Wt0kigT2W05Gm1vdnmm
-         UpfobRECY/WPDQQLshE8/mi5ZpkfEYfyRzcWqfOWxaw+eeuy0NRPsx+vmdm1wNfnrS4V
-         6kaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795393519; x=1795998319;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=XTLw64RKSVxV+BjWRGwSN+nuKYoaYqbBJ+SYVqTuiGE=;
-        b=Vaa3Ly1GVA8wDOlm91QUn1NtB0neKngvoNb3Yjn37s7v6pTFVfgh7Tm8kgOXMvdwZx
-         RxzlmhfpvSEYEO6YBNg1zVlPJquRfENYpHaTJZ+c6AAFf4ZyfvUHyA3wKtAkjWiJrVH7
-         APe8c8Ztk4oePAT7qHt4VPKsPSfstNWNJ2tAiPbZJPUFVYSn+4usRFUekgMSV3F6K5S3
-         r5bNiCL3LrBrc+4+RqV7TRDVGMoPBOKL4hRtz2EpgPu9rTMmTAruXk0hGPfCPazeVZsx
-         n/Kf5ZaPgcycAdK5b95o95/nbWpnyQAhbnBcoRcxnTKkJtbpHkD79N6JgqJ1nZXKMb+G
-         9j5w==
-X-Forwarded-Encrypted: i=1; AL+hErGjdimG5s4CJYR9j6DLj3mu0yL8WI/fQXnxhUhVB7OdxRhGG+dqBkZ/S84gePAgcOrBs/Y=@vger.kernel.org
-X-Gm-Message-State: APuU4Z87rR8haqEZDPYJU7kK06WUYNXUrU0bGJ77U1dTAR+UEyB78p3v
-	n00EuvFBetfsOdlIkgmDv4mi0+3Clu2jtC9QnS6WbJM8lclWwWH7FPj8
-X-Gm-Gg: AZFdTZcJ9V++UCMkrpmphQpoHAsbwvHfJ9s8R1GWGrSpzgLPjs/c3J/OOM+WTYnY41W
-	8aH9xhHwfuo0esA0LpJxX+iYDXqTg6MLGq+eOhb7Zf00O5HvpYUn4gccW+/Evw4Pj3LwUBGoTAo
-	K8wuo1jfoBCpQqACD8WPqf5GWdWL6eM2tHUMDRAcCclwqFhDNIwVKnQIoUcDOpE3tlBUSuWNQYc
-	VOWYvXG01e0wqOn3pO3JHYnYEgI6Ybbvf7mkBkIBIPcJq5UbEOqn+bElPuoghVc6sGU+AwglIOx
-	LFaQyszVx4Nl+qDalpuGuCeifPggoF9SlaMwF53E5AundpiPcx4NS/zdscZBM/SHARgFCQ04SAy
-	2L29EJ69pzRc5I1zzuZtd8xoeOhkzXz49k53/yuzRSgnEml97EDATUEckfZLHRAtPErLK/HEzeD
-	WUNfX/ybhWB1okVjMhMvnvUkVxJoJ1i70kYUGXpVUlkE5QwUPU3iKZ25FjVVcacVZy1Vtpu5+KJ
-	4ZXAsx8pLEjolMEcqh0Qecmx2Q94MP67NRkT/yrCNZqUx6VW/AIDl9XUL3xG4qW2m6lylCCwpsI
-	uGix0LYBN/0RqcJV+/FORhaxc1z54JkgZM2KelEMbr3qdQ0CyeeH4/drCXOC2XqaETSv8JAHJww
-	rGh1oJxz6QIRap2q6/gWSwWPPc0Q83djYRQ==
-X-Received: by 2002:a05:6a00:94e3:b0:89f:e64f:c34a with SMTP id d2e1a72fcca58-8c87ce33aecmr9086268b3a.46.1795393519113;
-        Sun, 22 Nov 2026 16:25:19 -0800 (PST)
-Received: from localhost ([153.61.198.254])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8c87285b60csm4568106b3a.9.2026.11.22.16.25.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 22 Nov 2026 16:25:18 -0800 (PST)
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 23 Nov 2026 00:25:18 +0000
-Message-Id: <DN25VVZI22A9.1KXUP775JTIJB@gmail.com>
-Cc: <linux-kernel@vger.kernel.org>, <daniel@iogearbox.net>,
- <andrii@kernel.org>
-Subject: Re: [PATCH bpf-next v3 1/2] bpf: Add bpf_memmem and
- bpf_dynptr_memmem kfuncs
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Abhishek Khade" <abhishekkhade69@gmail.com>, <bpf@vger.kernel.org>
-In-Reply-To: <20261122143815.330528-2-abhishekkhade69@gmail.com>
-References: <20261122143815.330528-1-abhishekkhade69@gmail.com> <20261122143815.330528-2-abhishekkhade69@gmail.com>
-Content-Transfer-Encoding: 8bit
+	by smtp.kernel.org (Postfix) with ESMTPS id 403661F000CA;
+	Mon, 23 Nov 2026 00:25:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795393516;
+	bh=mNi3Pj05CGsYEOdmgVQU43MsXqlDog8eO7vY1bFFNz8=;
+	h=From:Subject:Date:To:Cc:Reply-To;
+	b=moerukM74iTxFpwzAPQ0DwYsOpTGrqhe7usGkqMA1+B0GIs9fF3jIfiLL89HMi1qC
+	 onwART7oMOBdPUqHR30Lg4MOpk7bk4Jvkcfo1J2/BXq1gd7P2aWmA80uxxJQB/lX8T
+	 d3COi4xWlyV1/3d3GiiWa4ieeGUIjZ3lDB/1iBkCWt0r/7dXR9V0yLfzlaVltNqqBa
+	 xH+6q7ZvdyUkFLIR8O6bslTJBLoif9u7Ww2hC9fKEhlcst7EgucexbU0SR7xEjptRI
+	 eMPtfUmcru78Igybd78bzKRoKw67TndpMPdixYd4eSzsNFFHSi4ZC1itN4YK7mJ9hs
+	 wwNHuncvQdL3Q==
+Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
+	by lkml.kernel.org (Postfix) with ESMTP id 942A64C251;
+	Mon, 23 Nov 2026 00:25:12 +0000 (UTC)
+From: Mani Tofigh via B4 Relay <devnull+mt4022.columbia.edu@kernel.org>
+Subject: [PATCH bpf v2 0/4] bpf: Don't spin on rhtab bucket locks with IRQs
+ disabled
+Date: Sun, 22 Nov 2026 19:25:11 -0500
+Message-Id: <20261122-bpf-rhtab-irqs-disabled-v2-0-207aedcc2215@columbia.edu>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -101,106 +84,81 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/4WNTQ6CMBCFr0Jm7Zi2kgquvIdh0Z9BxiBgC0RDu
+ LsFD+DyvXzvewtECkwRLtkCgWaO3HcpqEMGrjHdnZB9yqCE0lKKE9qhxtCMxiKHV0TP0diWPLp
+ c59qVJGpSkNZDoJrfu/kGaQTVr4yTfZAbN+eGNRzHPnz2/1nu8N+rWaLEsjjnvtRGFIW7ur6dn
+ pbNkfwE1bquX8j9x9XYAAAA
+X-Change-ID: 20261103-bpf-rhtab-irqs-disabled-c4646c9e0fe2
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Mykyta Yatsenko <yatsenko@meta.com>, 
+ Herbert Xu <herbert@gondor.apana.org.au>, 
+ Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>
+Cc: Thomas Graf <tgraf@suug.ch>, Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>, bpf@vger.kernel.org, 
+ linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, tz2294@columbia.edu, 
+ Mani Tofigh <mt4022@columbia.edu>
+X-Mailer: b4 0.16.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1795393512; l=1885;
+ i=mt4022@columbia.edu; s=20261026; h=from:subject:message-id;
+ bh=Cdk7sFLE8Ms1z4MWODP6tHICAcN6MvIKq/Q+cx9TxjA=;
+ b=QyYqJhTCgCxEks59roKvMT4SIBstHsjhnIxEryfr9INyqeC5lbUDBSQ6oPuQ4tjfrpB4lRR+z
+ oVc1iV/TsnpBD7LzTsVaP0lWipwJWgMeQj752iWKnKn9mJvarl6D5mf
+X-Developer-Key: i=mt4022@columbia.edu; a=ed25519;
+ pk=gljCMQDuxyKPmd5y37CRpEJGSPXDV1MyAnHBhCgXl0I=
+X-Endpoint-Received: by B4 Relay for mt4022@columbia.edu/20261026 with
+ auth_id=1322
+X-Original-From: Mani Tofigh <mt4022@columbia.edu>
+Reply-To: mt4022@columbia.edu
 
-On Sun, Nov 22, 2026 at 06:38 AM Abhishek Khade <abhishekkhade69@gmail.com> wrote:
+A BPF program with IRQs disabled can run inside a bucket lock's critical
+section on its own CPU, e.g., a kprobe on the hash function the resize
+worker calls with the lock held.  An insert or delete of that bucket
+then spins forever, and a lookup can retry forever.
 
-TLDR: nack
+v2 follows Alexei's trylock design (patch 1) and Mykyta's lookup change
+(patch 2), turns it on for rhtab (patch 3) and adds a selftest (patch
+4).  The kvmalloc(GFP_ATOMIC) in rhashtable_insert_rehash() is left for
+a follow-up.
 
-> 1. Writing a loop using bpf_loop() or open-coded iterators: Even with
->    verifier inlining, this executes 1 subprogram call per byte and
+Reproducer: https://github.com/manitofigh/files/blob/main/linux-repros/rhashlock.c
 
-No. That's true only for bpf_loop().
-bpf_for() has no call per byte since
-commit e93347704878 ("bpf: Inline bpf_iter_num_next() kfunc").
-Plain C loops load too. See progs/plain_c_*.c in selftests.
+---
+Changes in v2:
+- Trylock the bucket lock with IRQs disabled instead of failing every
+  insert and delete (Alexei)
+- Drop bpf_disable_instrumentation() from rhtab (Alexei)
+- Don't retry lookups with IRQs disabled (Mykyta)
+- Add a selftest
+- Link to v1: https://patch.msgid.link/20261103-bpf-rhtab-irqs-disabled-v1-1-9874d96a088c@columbia.edu
 
->    cannot leverage 64-bit word-at-a-time SIMD scanning, making it
->    significantly slower than kernel-internal scanning.
+---
+Mani Tofigh (4):
+      rhashtable: Add trylock_irqsoff for callers that can't spin
+      rhashtable: Don't retry trylock_irqsoff lookups with IRQs disabled
+      bpf: Don't spin on rhtab bucket locks with IRQs disabled
+      selftests/bpf: Test rhtab deletes from inside a resize
 
-It can. Leon measured a bpf prog that scans a word at a time.
-2048 bytes took 4557 ns in that prog and 7389 ns in bpf_strnstr():
-https://lore.kernel.org/bpf/20260728145727.45153-1-leon.hwang@linux.dev/
-Andrii's answer there applies here: such code stays in the prog.
-This series has no numbers and names no user.
+ include/linux/rhashtable-types.h                 |  3 ++
+ include/linux/rhashtable.h                       | 45 ++++++++++++++++++++++--
+ kernel/bpf/hashtab.c                             | 17 ++-------
+ lib/rhashtable.c                                 |  9 +++--
+ tools/testing/selftests/bpf/prog_tests/rhash.c   | 34 ++++++++++++++++++
+ tools/testing/selftests/bpf/progs/rhash_resize.c | 34 ++++++++++++++++++
+ 6 files changed, 122 insertions(+), 20 deletions(-)
+---
+base-commit: 84afebd853437e44cb71f718be11d90e4c1a59dd
+change-id: 20261103-bpf-rhtab-irqs-disabled-c4646c9e0fe2
 
-> +			while (n_idx < needle_sz && n[n_idx] == h[h_idx + n_idx])
-> +				n_idx++;
+Best regards,
+--  
+Mani Tofigh <mt4022@columbia.edu>
 
-This is one byte at a time.
-memchr() runs only for a 1 byte needle. On x86-64 it's a byte loop too.
 
-> +	data = __bpf_dynptr_data(ptr, size);
-> +	if (!data)
-> +		return -EINVAL;
-
-This fails for the use cases from the commit log.
-bpf_dynptr_slice() gets a NULL buffer and the full size:
-
-  dynptr          callee                   fails on
-  --------------  -----------------------  ----------------------
-  non-linear skb  skb_pointer_if_linear()  len > skb_headlen()
-  xdp with frags  bpf_xdp_pointer()        len > data_end - data
-  file            bpf_file_fetch_bytes()   !buf
-
-A filter that drops on ret >= 0 passes all such packets.
-bpf_memmem() doesn't help. The verifier rejects data_end - data
-as haystack__sz. See check_mem_size_reg().
-
-No need for new kfuncs. The prog can do it in linear time, with frags.
-This one takes needles up to 64 bytes.
-dynptr_run() in prog_tests/plain_c.c feeds it an xdp buff with a frag.
-clang builds plain_c_dynptr_success.c with this, I didn't load or run it:
-
-diff --git a/tools/testing/selftests/bpf/progs/plain_c_dynptr_success.c b/tools/testing/selftests/bpf/progs/plain_c_dynptr_success.c
-index 2c1c4f7..1a47cb5 100644
---- a/tools/testing/selftests/bpf/progs/plain_c_dynptr_success.c
-+++ b/tools/testing/selftests/bpf/progs/plain_c_dynptr_success.c
-@@ -173,3 +173,46 @@ int test_dynptr_memset_xdp_chunks(struct xdp_md *xdp)
- out:
- 	return XDP_DROP;
- }
-+
-+static const __u8 needle[] = { 0xde, 0x00, 0xad, 0x00, 0xbe, 0x00, 0xef };
-+static __u64 mask[256]; /* bit i of mask[c] is set if needle[i] == c */
-+
-+/* shift-and: bit i of 'state' is set if the last bytes are needle[0..i] */
-+static long dynptr_memmem(struct bpf_dynptr *ptr, __u32 needle_sz)
-+{
-+	__u64 size = bpf_dynptr_size(ptr), off, len, i, state = 0;
-+	__u8 buf[256];
-+
-+	for (off = 0; off < size; off += len) {
-+		len = min_t(__u64, sizeof(buf), size - off);
-+		if (bpf_dynptr_read(buf, len, ptr, off, 0))
-+			return -EFAULT;
-+		for (i = 0; i < len; i++) {
-+			state = (state << 1 | 1) & mask[buf[i]];
-+			if (state >> (needle_sz - 1))
-+				return off + i + 1 - needle_sz;
-+		}
-+	}
-+	return -ENOENT;
-+}
-+
-+SEC("?xdp")
-+__success
-+int test_dynptr_memmem_xdp(struct xdp_md *xdp)
-+{
-+	void *data_end = (void *)(long)xdp->data_end;
-+	void *data = (void *)(long)xdp->data;
-+	__u32 off = data_end - data - 3;
-+	struct bpf_dynptr ptr;
-+	int i;
-+
-+	for (i = 0; i < sizeof(needle); i++)
-+		mask[needle[i]] |= 1ULL << i;
-+
-+	/* the needle starts in the linear part and ends in the frag */
-+	bpf_dynptr_from_xdp(xdp, 0, &ptr);
-+	err = bpf_dynptr_write(&ptr, off, (void *)needle, sizeof(needle), 0);
-+	if (!err && dynptr_memmem(&ptr, sizeof(needle)) != off)
-+		err = 1;
-+	return XDP_DROP;
-+}
-
-pw-bot: cr
