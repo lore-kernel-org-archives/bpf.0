@@ -1,65 +1,96 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=128.30.2.78
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.225.137
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795463822;
-	b=txaI9soYd80lQbdHr2ec2ddKsmReaInMb0+X6RVaMQ7a5/Whtt0goR9WLRi61CPexEPw
-	 FI5oPDDNDyx6A7u902N1r1txugjGi1CzM7vajn10IpzONR4eduPTzDioYH+lWTi1Pho2e
-	 m9DwXJlqTpeonHPMhBdF6fxkKr//cFAyVJB3EZrw6hzjWLvHcl5EqM1slji7yer0UjPZF
-	 ZW0u6RHM2EmysssTGdInlP8qGGA8dElvm4VX5CjxK7XTgQy1jSVFG+7oMlkhcTYa1DU2R
-	 rvtcwzx+1ksz15HQx6BCUq9UosQKyb6B9hGiIAySF4IyvDrCK5fz3r+giyS39HATn4g==
+	t=1795463904;
+	b=moTar/Ui66bNg+hufj81eiDl7JkL6p7ImI1kDaw7InhFSILgwxsRzFchoIalQqAd9xfw
+	 CEGQi59FhOa8inZrqbnz0KHhDFnubVEGdEmbxX/UJM1Ccj9RvRBkgpUjT5TDcMd3UNQT1
+	 w0OHRPISCVSNbNK1ov0QARYXSDe4M+NK9yxkp99kzgjInv8QIPfVPixrnoPDOWZtRKoCE
+	 OA+ePVlfFl9Rogfa760pZ5nczmBEWgCWcY//7MhLiY0u3f5N+WLQ74ZyCAUlVg/noaOr2
+	 mWiW0Qlde/MDFpEMmdwWHrZC039Wl0lgY+9bQqbpyDIHhnkJU9LGu2FZwxKF7xfVXTQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795463822;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:To:cc:From:Reply-To:
-	 Subject:MIME-Version:Content-Type:Date:Message-ID;
-	bh=gL/q1hOlHUU9eJtG0oeQF4G94S2zh6dlEpg6/FnmiqE=;
-	b=lkBfdWWpcCUMkP51zrUUFFeZTo5oa/d5Q1Yck3pPRgo1VkLCCU3OZsFhpclnYnnhjnBo
-	 EUqSTbyj0gjsiwUQX5H7BUy43/FOPz0p0PDCFdK64x3qnC7sUQycGo/cIuOF6BsToWpbx
-	 Jbh4YNqwR1Qnq1B9FqXu39xgfUEn8adbs80x8yVwRBTjFUQLCZt8eemHpB84V2hx0RVs7
-	 lmzDupJolXLh8zdmAeJpENCxGjdx6JOm1VJ0Nkhe0J4XX20Mc9DM+vZ+X4gbFJqumfJxW
-	 ozWacN2p3mOoIo3QE/NpxbUusKKq3arZ2ZoJ78ZJkvCxmZhep8MBItt5/hACmvF5ATw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795463904;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:MIME-Version:X-Developer-Signature:
+	 X-Developer-Key:Content-Transfer-Encoding;
+	bh=M/BEC6dc0+bno6k47W7drSlFR0Eiv0IfyeVbx1uXu3g=;
+	b=SScS5uymW5yqJKWmJAHEtrH9p5uSVtYTwOK2gnLtda1wHTxLZvSVN10HSjOmY/lERMaY
+	 8Uv4EWkZ1niIDSsM39UHsdW489uZzGnY0jil00AI2bHpZHcdrl8D1WDaevcRrMxEh8NgP
+	 6N0P6X5X+DidUJKig9iB9k1le7VB8SQSheo2a/igLFFgoe/lhGL9MCKnEDkrkWC3QUAMs
+	 p25sYDKx196hU3AjjtkhR/4/ZjuWV+WkMGudyXBzIelqwnJB+IgcavgvJOHEU4WhDKd53
+	 2Gwe/M5k2RKP+WKRskBxKNdt1YxxRhXF6WB7nyRql2703zNh0j/G2OS7VXC0uhVi8Xg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=csail.mit.edu;
-	spf=pass smtp.mailfrom=csail.mit.edu;
-	dkim=pass header.d=outgoing.csail.mit.edu header.i=@outgoing.csail.mit.edu header.a=rsa-sha256 header.s=test20231205 header.b=JqKe5LOn;
-	arc=none smtp.remote-ip=128.30.2.78
-Received: from outgoing2021.csail.mit.edu (outgoing2021.csail.mit.edu [128.30.2.78])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=WKYEqKTe;
+	arc=none smtp.remote-ip=74.125.225.137
+Received: from mail-wm2-f9.google.com (mail-wm2-f9.google.com [74.125.225.137])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DC2E606A31F
-	for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 19:57:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7DC2E606A31F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=csail.mit.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csail.mit.edu
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5686B606A321
+	for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 19:58:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5686B606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=outgoing.csail.mit.edu header.i=@outgoing.csail.mit.edu header.a=rsa-sha256 header.s=test20231205 header.b=JqKe5LOn
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=outgoing.csail.mit.edu; s=test20231205; h=Message-ID:Date:Content-Type:
-	MIME-Version:Subject:Reply-To:From:cc:To:Sender:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=gL/q1hOlHUU9eJtG0oeQF4G94S2zh6dlEpg6/FnmiqE=; t=1795463821; x=1796327821; 
-	b=JqKe5LOnli2OINwNv2LfCR5GgRSXn6qY4liStqwiTsP5pWqfnVTZsQqK+DoALazFHerntMCYhjH
-	c0+0wJ11prf9n9ERCBQq0HdMMYWSaI//ryWLEn1z/0R2nU8gEKzTH2sUZFRKiu4ywXyeXczO5Wf57
-	v/xUOt+3orDwQd9MUoXpmgIoTwdPAuQUABQ/+2wAfVPNQVSKMj8d+s0KL0ZJAOYmUJnLNhp//E0wA
-	6jveemzr/UE8eHeNOkdu2J1oDd1fnlO/dtYKAb5LtZ0BXc14pxlxW6S6bz3dwxHabA8rCU7IsIsdH
-	ba3UwE8SGPoaG3Lerp26hUP8OfXnNMdj0aiw==;
-Received: from 30-11-166.wireless.csail.mit.edu ([128.30.11.166])
-	by outgoing2021.csail.mit.edu with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.95)
-	(envelope-from <rtm@csail.mit.edu>)
-	id 1xVa9i-006gc4-5A;
-	Mon, 23 Nov 2026 14:56:50 -0500
-Received: from 30-11-166.wireless.csail.mit.edu (localhost [127.0.0.1])
-	by 30-11-166.wireless.csail.mit.edu (Postfix) with ESMTP id D16413FBF5AC;
-	Mon, 23 Nov 2026 14:56:49 -0500 (EST)
-To: Alexei Starovoitov <ast@kernel.org>,
-    Daniel Borkmann <daniel@iogearbox.net>,
-    John Fastabend <john.fastabend@gmail.com>
-cc: bpf@vger.kernel.org
-From: rtm@csail.mit.edu
-Reply-To: rtm@csail.mit.edu
-Subject: ebpf program can cause verifier crash in check_return_code()
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=WKYEqKTe
+Received: by mail-wm2-f9.google.com with SMTP id 5b1f17b1804b1-4b4e4d13850so12922215e9.1
+        for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 11:58:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795463901; x=1796068701; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=M/BEC6dc0+bno6k47W7drSlFR0Eiv0IfyeVbx1uXu3g=;
+        b=WKYEqKTeS/jCz+JpwQrPFQA7pwCkO2giLQ1ZA8MCSuzX8SJW1vSBvyvWec6Dq5ojDg
+         7wBTrxW1p7SKV8lB3hcBNh/YpbrFUygX0GcYpwv0sOl0DeLUE/DqomtLiej15pnFgrFT
+         Wq2T72zZ7lIW6vaQ/GRxIE8HDuj+JTu2fMOdMgJ0xjtwFz73nqFyweDto5giQT4fVGXy
+         sNKw0ZymaiBqArw+bOz+Rc7BbAb8I8tA0rDhEwImXuSs7FH1P+W8Ir3B7sC83D+qte6X
+         ELonqnfSbHtI27No8IyK0VYA4FQ6iVwpCiHVb2p7gWpwJ2yoCRsx/Nk5O3hFbZn2xKE9
+         WLFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795463901; x=1796068701;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=M/BEC6dc0+bno6k47W7drSlFR0Eiv0IfyeVbx1uXu3g=;
+        b=MgXtcM7oPhscGFgvmbUbfIscbf4Kmp5RlLXYjuCDhzZD/VEpvaDNbo1C05GRDzS3ky
+         lVurY7Kyz9YG9I36Mw947uDm18qX05jAwct0T7uuwpXmxTtJm+qWY9SjjPYH3ki/ckl2
+         ZN/tL6NDR8FA1L5awhcmQt5CRI0+XV95JmqSjOeeWFHsQvz9MKRm8ycFFdGAmzowhybm
+         goHyWPqjt/G6S8rxx5wXwCQ+32rgFIPoP+6hkameatqfI3tnGA05HUJPkgcWLxSs31Sv
+         ssRxJ3CNuizEpKlxgS0Dpc+ZYnBkR7lO4/mCYuPY7zJwYaeJIl0R1bzwhofBuouc6cJe
+         LjfQ==
+X-Gm-Message-State: APuU4Z/hdWwMkwp8PafpMXzyF89qViZGz0yxg0oVFXKYdp8STJtKPKJU
+	+vxEf/P5ZGdujWNS/C7QDnHyPHAudjTR0DssNH81ljIiJvQ2S823hD3Zg72pVjPRARU=
+X-Gm-Gg: AZFdTZdUce1cS9AAHHGpUgXXiMq53wDUu+0yIzwa5UrJzhFrH5pwawK1+7yh2U2cwqV
+	DKEYXy9/rPUKvNF3qiN5ENV9kNIvgTz/0OHkFhJ5srZ6GGG27ShjxTeMfcejyn5wIaRj+UFIqg4
+	4htqXc2iq9F7FNNpDsG77knfcJkdm2C6K+/wrAkZkRn61uqHXzrA0EMtd0U7Xar0pCU5AJUI38Q
+	Cs3Dyg1WyQKZ4oODsMiJm6vuhxBvgBqKBt4hxXTRg5Cp8MX9k68QIVNSnb+52BnwZHxXX1Iakwd
+	ES+esMgloC7O2GA2UN9omnmZKhNIs1LnfeqdzXHkeD9xCBdFDvzcptdB/hAux/KSOpm1WM33Wio
+	g/Zi2m6G+VEXsGONqg73jtMB1SNsbBnUO8tRkzo2O1HFdKEO+7LKwj2NOHU2YcZlsosLTnduiHx
+	FVTgVDwrMlQkfFniK+hsCBGfwZNbFLH/udaZxhuTKXvdlglkIy9+uXPoZ6pNn63A1HKAu68b2zd
+	+BuzzMUS3RdyMFEmDLzHEy7vLIZxrwW9pdXtSZwvjlT/kgtioA5K9JBCZSbGR5jr8vrOuGBWBiV
+	4NgetYhObvUzaM3pWSDPDIQ4vP1ON7r5nYYwcgP5MkVpiryj08qg0LB/avshvuWZf2eiqBni0RJ
+	djjZ3oLCNots+1cD+A8QertRjFNJgkyaPP3Hj9ElrjCcRymlKemPkXzKEmh59VzmTZe1K
+X-Received: by 2002:a05:600c:a087:b0:4a2:5267:3cd4 with SMTP id 5b1f17b1804b1-4bb887c9fbamr267778105e9.3.1795463900472;
+        Mon, 23 Nov 2026 11:58:20 -0800 (PST)
+Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb853368d3sm380263525e9.1.2026.11.23.11.58.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Nov 2026 11:58:19 -0800 (PST)
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	kkd@meta.com,
+	kernel-team@meta.com
+Subject: [PATCH bpf v2] bpf: net_sched: Let bpf_kfree_skb() run with irqs off
+Date: Mon, 23 Nov 2026 20:58:19 +0100
+Message-ID: <a2d4276cbf11b1254aa7997874a6539d20f296cf.1795463894.git.memxor@gmail.com>
+X-Mailer: git-send-email 2.53.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -69,167 +100,60 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="=-=-="
-Date: Mon, 23 Nov 2026 14:56:49 -0500
-Message-ID: <43917.1795463809@30-11-166.wireless.csail.mit.edu>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1999; i=memxor@gmail.com; h=from:subject:message-id; bh=d0FMlGrAxmPPst5D+uhc0aolGXjC9RkA4xjY4SGoeYQ=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIZtl1jWb/ClPdhzUn83xQV40QWTV4qmqXUIFgU2Nj7628 Z93jvjWUcrCIMbFICumyFLyfx+T8YnK34G2y7hh5rAygQxh4OIUgImkpDEyvNPNPGTaXvLeiMEr rbwwZsv9N2EJ8vEPpzJyaP584HB3LyPDxmrBpOT98lzfr858IG/cvFFjVuaDHwZH78pFLrl2t9e MFQA=
+X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
+Content-Transfer-Encoding: 8bit
 
---=-=-=
-Content-Type: text/plain
+From: Alexei Starovoitov <ast@kernel.org>
 
-I've attached a demo struct_ops / io_uring program that causes the ebpf
-verifier to dereference a bad pointer. The disassembled instructions are
-below. I believe what's happening is:
+bpf_kfree_skb() is also the destructor of an skb kptr. A destructor runs
+wherever an object or a map value with such a field is freed. That can be
+with irqs off, for example:
 
-  * instruction 6 is a call to bpf_io_uring_get_region(), causing the
-    verifier to set r0's reg->type to PTR_TO_MEM|PTR_MAYBE_NULL, with
-    reg->mem_size set to the call's 3rd argument (64 in the demo).
+ - bpf_list_add() drops the new node when @prev is not in the list, while
+   the program holds the bpf_spin_lock of the list, which keeps irqs off.
+   The drop frees a node that has no other reference, with its fields.
 
-  * the conditional jump at instruction 7 goes to the exit.
+ - bpf_local_storage_map_free() frees the fields of each value under the
+   lock of its bucket, which bpf_selem_unlink_nofail() takes with
+   raw_res_spin_lock_irqsave(). A qdisc program can keep an skb in task
+   storage.
 
-  * the verifier's check_return_code() executes this without a check
-    of r0's reg->type:
+Currently bpf_kfree_skb() calls kfree_skb(), which is not made for that.
+The destructor of the skb may enable softirqs, or take a lock that sleeps
+on PREEMPT_RT.
 
-        if (prog_type == BPF_PROG_TYPE_STRUCT_OPS) {
-                /* Allow a struct_ops program to return a referenced kptr if it
-                 * matches the operator's return type and is in its unmodified
-                 * form. A scalar zero (i.e., a null pointer) is also allowed.
-                 */
-                reg_type = reg->btf ? btf_type_by_id(reg->btf, reg->btf_id) : NULL;
+Use dev_kfree_skb_any(). With irqs on it is kfree_skb(). With irqs off the
+skb goes to the completion queue of the cpu, and NET_TX_SOFTIRQ frees it.
 
-  * reg->btf shares a slot in the bpf_reg_state union with mem_size, so
-    reg->btf is 64, and check_return_code() calls btf_type_by_id(64, ...),
-    which crashes.
+Fixes: 870c28588afa ("bpf: net_sched: Add basic bpf qdisc kfuncs")
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+---
+ net/sched/bpf_qdisc.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-The attached demo code is suitable for libbpf-bootstrap/examples/c; here
-are the bpf instructions (you may need to fiddle with instruction 7's
-jump offset; +19 works on one of my setups, while +16 is required on
-another):
+diff --git a/net/sched/bpf_qdisc.c b/net/sched/bpf_qdisc.c
+index 5691c13781a8..e041383a848f 100644
+--- a/net/sched/bpf_qdisc.c
++++ b/net/sched/bpf_qdisc.c
+@@ -196,10 +196,13 @@ __bpf_kfunc u32 bpf_skb_get_hash(struct sk_buff *skb)
+ 
+ /* bpf_kfree_skb - Release an skb's reference and drop it immediately.
+  * @skb: The skb whose reference to be released and dropped.
++ *
++ * Also the destructor of an skb kptr, which runs wherever an object or a map
++ * value with such a field is freed: under a bpf_spin_lock too, with irqs off.
+  */
+ __bpf_kfunc void bpf_kfree_skb(struct sk_buff *skb)
+ {
+-	kfree_skb(skb);
++	dev_kfree_skb_any(skb);
+ }
+ 
+ __bpf_kfunc void bpf_kfree_skb_dtor(void *skb)
 
-io3.bpf.o: file format elf64-bpf
-Disassembly of section struct_ops.s/loop_step:
-0000000000000000 <my_loop_step>:
-       0:       79 18 08 00 00 00 00 00 r8 = *(u64 *)(r1 + 0x8)
-       1:       79 17 00 00 00 00 00 00 r7 = *(u64 *)(r1 + 0x0)
-       2:       b7 06 00 00 00 00 00 00 r6 = 0x0
-       3:       bf 71 00 00 00 00 00 00 r1 = r7
-       4:       b7 02 00 00 00 00 00 00 r2 = 0x0
-       5:       b7 03 00 00 40 00 00 00 r3 = 0x40
-       6:       85 10 00 00 ff ff ff ff call -0x1
-       7:       c6 06 13 00 00 00 00 40 if w6 s< 0x40000000 goto +0x13 <my_loop_step+0xd8>
-       8:       84 02 00 00 00 00 00 00 w2 = -w2
-       9:       89 50 00 00 00 00 00 00 r0 = *(s16 *)(r5 + 0x0)
-      10:       85 10 00 00 ff ff ff ff call -0x1
-      11:       b7 09 00 00 01 00 00 00 r9 = 0x1
-      12:       bf 71 00 00 00 00 00 00 r1 = r7
-      13:       b7 02 00 00 01 00 00 00 r2 = 0x1
-      14:       85 10 00 00 ff ff ff ff call -0x1
-      15:       67 00 00 00 20 00 00 00 r0 <<= 0x20
-      16:       c7 00 00 00 20 00 00 00 r0 s>>= 0x20
-      17:       6d 09 03 00 00 00 00 00 if r9 s> r0 goto +0x3 <my_loop_step+0xa8>
-      18:       b7 01 00 00 01 00 00 00 r1 = 0x1
-      19:       63 18 00 00 00 00 00 00 *(u32 *)(r8 + 0x0) = r1
-      20:       05 00 05 00 00 00 00 00 goto +0x5 <my_loop_step+0xd0>
-      21:       18 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 r1 = 0x0 ll
-      23:       b7 02 00 00 07 00 00 00 r2 = 0x7
-      24:       85 00 00 00 06 00 00 00 call 0x6
-      25:       b7 06 00 00 01 00 00 00 r6 = 0x1
-      26:       bf 60 00 00 00 00 00 00 r0 = r6
-      27:       95 00 00 00 00 00 00 00 exit
+base-commit: 84afebd853437e44cb71f718be11d90e4c1a59dd
+-- 
+2.53.0
 
-The crash backtrace:
-
-Unable to handle kernel access to user memory without uaccess routines at virtual address 00000000000000e8
-Current io3 pgtable: 4K pagesize, 39-bit VAs, pgdp=0x0000000084ca3000
-[00000000000000e8] pgd=0000000000000000, p4d=0000000000000000, pud=0000000000000000
-Oops [#1]
-Modules linked in:
-CPU: 0 UID: 0 PID: 70 Comm: io3 Not tainted 7.4.0-rc3-00441-g539a78300c41-dirty #843 PREEMPTLAZY 
-Hardware name: riscv-virtio,qemu (DT)
-epc : btf_type_by_id+0x6/0x40
- ra : check_return_code+0x22e/0x448
-status: 0000000200000120 badaddr: 00000000000000e8 cause: 000000000000000d
-[<ffffffff80222746>] btf_type_by_id+0x6/0x40
-[<ffffffff801c4ddc>] check_return_code+0x22e/0x448
-[<ffffffff801dd3f0>] do_check_common+0x2474/0x2af4
-[<ffffffff801e0d7c>] bpf_check+0x28f0/0x2b2c
-[<ffffffff801b5806>] bpf_prog_load+0x4bc/0x95a
-[<ffffffff801b7fda>] __sys_bpf+0x181c/0x25d6
-[<ffffffff801b8fc6>] __riscv_sys_bpf+0x1e/0x26
-[<ffffffff80b88fbe>] do_trap_ecall_u+0x14a/0x324
-[<ffffffff80b97788>] handle_exception+0x168/0x174
-
-Robert Morris
-rtm@mit.edu
-
-
---=-=-=
-Content-Type: application/octet-stream
-Content-Disposition: attachment; filename=io3.bpf.c
-Content-Transfer-Encoding: base64
-
-Ci8vCi8vIHRvIGJlIHJ1bmluIGxpYmJwZi1ib290c3RyYXAvZXhhbXBsZXMvYwovLwoKI2luY2x1
-ZGUgInZtbGludXguaCIKI2luY2x1ZGUgPGJwZi9icGZfaGVscGVycy5oPgojaW5jbHVkZSA8YnBm
-L2JwZl90cmFjaW5nLmg+CgpzdHJ1Y3QgaW91X2xvb3BfcGFyYW1zIHsKCV9fdTMyCQkJY3Ffd2Fp
-dF9pZHg7Cn07CgpzdHJ1Y3QgaW91X2N0eCB7IH07CgpleHRlcm4gaW50IGJwZl9pb191cmluZ19z
-dWJtaXRfc3FlcyhzdHJ1Y3QgaW91X2N0eCAqbG9vcF9jdHgsIF9fdTMyIG5yKSBfX2tzeW07CmV4
-dGVybiBfX3U4ICpicGZfaW9fdXJpbmdfZ2V0X3JlZ2lvbihzdHJ1Y3QgaW91X2N0eCAqbG9vcF9j
-dHgsIF9fdTMyIHJlZ2lvbl9pZCwKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-IGNvbnN0IHNpemVfdCByZHdyX2J1Zl9zaXplKSBfX2tzeW07CgplbnVtIHsKICBJT1VfUkVHSU9O
-X01FTSA9IDAsCiAgSU9VX1JFR0lPTl9DUSAgPSAxLAogIElPVV9SRUdJT05fU1EgID0gMiwKfTsK
-CmVudW0gewogIElPVV9MT09QX0NPTlRJTlVFID0gMCwKICBJT1VfTE9PUF9TVE9QICAgICA9IDEs
-Cn07CgpTRUMoInN0cnVjdF9vcHMucy9sb29wX3N0ZXAiKQppbnQgQlBGX1BST0cobXlfbG9vcF9z
-dGVwLCBzdHJ1Y3QgaW91X2N0eCAqbG9vcF9jdHgsIHN0cnVjdCBpb3VfbG9vcF9wYXJhbXMgKmxw
-KQp7CgogIF9fdTggKm1lbSA9IGJwZl9pb191cmluZ19nZXRfcmVnaW9uKGxvb3BfY3R4LCBJT1Vf
-UkVHSU9OX01FTSwgNjQpOwogIGlmICghbWVtKXsKICB9CgogIHJlZ2lzdGVyIHZvbGF0aWxlIHZv
-aWQgKnIxIGFzbSgicjEiKTsKICByZWdpc3RlciB2b2xhdGlsZSB2b2lkICpyMiBhc20oInIyIik7
-CiAgcmVnaXN0ZXIgdm9sYXRpbGUgdm9pZCAqcjMgYXNtKCJyMyIpOwoKICBhc20gdm9sYXRpbGUo
-ImlmIHc2IHM8IDB4NDAwMDAwMDAgZ290byArMTkiKTsKICBhc20gdm9sYXRpbGUoIncyID0gLXcy
-Iik7CiAgYXNtIHZvbGF0aWxlKCJyMCA9ICooczE2ICopKHI1ICsgMCkiKTsKCiAgc3RydWN0IGlv
-X3VyaW5nX3NxZSAqc3FlcyA9CiAgICAoc3RydWN0IGlvX3VyaW5nX3NxZSAqKWJwZl9pb191cmlu
-Z19nZXRfcmVnaW9uKHIxLAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAobG9uZylyMiwKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgKGxvbmcpcjMpOwoKICBpZiAoIXNxZXMpewogIH0KCiAgaW50IHN1Ym1p
-dHRlZCA9IGJwZl9pb191cmluZ19zdWJtaXRfc3Flcyhsb29wX2N0eCwgMSk7CiAgaWYgKHN1Ym1p
-dHRlZCA8IDApewogIH0KCiAgaWYgKHN1Ym1pdHRlZCA+IDApIHsKICAgIGxwLT5jcV93YWl0X2lk
-eCA9IDE7IC8qIFdhaXQgZm9yIGF0IGxlYXN0IDEgQ1FFIGJlZm9yZSBuZXh0IHN0ZXAgKi8KICAg
-IHJldHVybiBJT1VfTE9PUF9DT05USU5VRTsKICB9CgogIGJwZl9wcmludGsoImlvMyAjMiIpOwoK
-ICAvKiBSZXR1cm4gY29udHJvbCB0byB1c2Vyc3BhY2UgaW9fdXJpbmdfZW50ZXIoKSAqLwogIHJl
-dHVybiBJT1VfTE9PUF9TVE9QOwp9CgpzdHJ1Y3QgaW9fdXJpbmdfYnBmX29wcyB7CglpbnQgKCps
-b29wX3N0ZXApKHN0cnVjdCBpb3VfY3R4ICosIHN0cnVjdCBpb3VfbG9vcF9wYXJhbXMgKmxwKTsK
-CglfX3UzMiByaW5nX2ZkOwoJdm9pZCAqcHJpdjsKfTsKClNFQygiLnN0cnVjdF9vcHMubGluayIp
-CnN0cnVjdCBpb191cmluZ19icGZfb3BzIG15X3VyaW5nX29wcyA9IHsKICAubG9vcF9zdGVwID0g
-KHZvaWQgKilteV9sb29wX3N0ZXAsCiAgLyogLnJpbmdfZmQgaXMgcG9wdWxhdGVkIGZyb20gdXNl
-cnNwYWNlIGJlZm9yZSBsb2FkaW5nL2F0dGFjaGluZyAqLwp9OwoKY2hhciBfbGljZW5zZVtdIFNF
-QygibGljZW5zZSIpID0gIkdQTCI7Cg==
---=-=-=
-Content-Type: application/octet-stream
-Content-Disposition: attachment; filename=io3.c
-Content-Transfer-Encoding: base64
-
-Ly8KLy8gdG8gYmUgcnVuIGluIGxpYmJwZi1ib290c3RyYXAvZXhhbXBsZXMvYwovLwoKI2luY2x1
-ZGUgPHN0ZGlvLmg+CiNpbmNsdWRlIDxzdGRsaWIuaD4KI2luY2x1ZGUgPHVuaXN0ZC5oPgojaW5j
-bHVkZSA8bGlidXJpbmcuaD4KI2luY2x1ZGUgPGJwZi9saWJicGYuaD4KI2luY2x1ZGUgImlvMy5z
-a2VsLmgiCgppbnQgbWFpbih2b2lkKQp7CiAgc3RydWN0IGlvX3VyaW5nIHJpbmc7CiAgc3RydWN0
-IGlvX3VyaW5nX3BhcmFtcyBwYXJhbXMgPSB7CiAgICAuZmxhZ3MgPSBJT1JJTkdfU0VUVVBfU0lO
-R0xFX0lTU1VFUiB8IElPUklOR19TRVRVUF9ERUZFUl9UQVNLUlVOLAogIH07CiAgc3RydWN0IGlv
-M19icGYgKnNrZWw7CiAgc3RydWN0IGJwZl9saW5rICpsaW5rOwogIGludCBlcnI7CgogIHN5c3Rl
-bSgiZWNobyAxID4gL3Byb2Mvc3lzL25ldC9jb3JlL2JwZl9qaXRfZW5hYmxlIik7CgogIGVyciA9
-IGlvX3VyaW5nX3F1ZXVlX2luaXRfcGFyYW1zKDMyLCAmcmluZywgJnBhcmFtcyk7CiAgaWYgKGVy
-ciA8IDApIHsKICAgIGZwcmludGYoc3RkZXJyLCAiaW9fdXJpbmdfcXVldWVfaW5pdF9wYXJhbXMg
-ZmFpbGVkOiAlZFxuIiwgZXJyKTsKICAgIHJldHVybiAxOwogIH0KCiAgc2tlbCA9IGlvM19icGZf
-X29wZW4oKTsKICBpZiAoIXNrZWwpIHsKICAgIGZwcmludGYoc3RkZXJyLCAiRmFpbGVkIHRvIG9w
-ZW4gQlBGIHNrZWxldG9uXG4iKTsKICAgIGdvdG8gb3V0X3Jpbmc7CiAgfQoKICBza2VsLT5zdHJ1
-Y3Rfb3BzLm15X3VyaW5nX29wcy0+cmluZ19mZCA9IHJpbmcucmluZ19mZDsKCiAgZXJyID0gaW8z
-X2JwZl9fbG9hZChza2VsKTsKICBpZiAoZXJyKSB7CiAgICBmcHJpbnRmKHN0ZGVyciwgIkZhaWxl
-ZCB0byBsb2FkIEJQRiBza2VsZXRvbjogJWRcbiIsIGVycik7CiAgICBnb3RvIG91dF9za2VsOwog
-IH0KCiAgbGluayA9IGJwZl9tYXBfX2F0dGFjaF9zdHJ1Y3Rfb3BzKHNrZWwtPm1hcHMubXlfdXJp
-bmdfb3BzKTsKICBpZiAoIWxpbmspIHsKICAgIGZwcmludGYoc3RkZXJyLCAiRmFpbGVkIHRvIGF0
-dGFjaCBzdHJ1Y3Rfb3BzXG4iKTsKICAgIGdvdG8gb3V0X3NrZWw7CiAgfQoKICBzdHJ1Y3QgaW9f
-dXJpbmdfc3FlICpzcWUgPSBpb191cmluZ19nZXRfc3FlKCZyaW5nKTsKICBpb191cmluZ19wcmVw
-X25vcChzcWUpOwogIGlvX3VyaW5nX3N1Ym1pdF9hbmRfd2FpdCgmcmluZywgMSk7CgogIHN0cnVj
-dCBpb191cmluZ19jcWUgKmNxZTsKICBpZiAoaW9fdXJpbmdfcGVla19jcWUoJnJpbmcsICZjcWUp
-ID09IDApIHsKICAgIHByaW50ZigiQ29tcGxldGVkIENRRSByZXM6ICVkXG4iLCBjcWUtPnJlcyk7
-CiAgICBpb191cmluZ19jcWVfc2VlbigmcmluZywgY3FlKTsKICB9CgogIGJwZl9saW5rX19kZXN0
-cm95KGxpbmspOwogb3V0X3NrZWw6CiAgaW8zX2JwZl9fZGVzdHJveShza2VsKTsKIG91dF9yaW5n
-OgogIGlvX3VyaW5nX3F1ZXVlX2V4aXQoJnJpbmcpOwogIHJldHVybiAwOwp9Cg==
---=-=-=--
