@@ -1,103 +1,121 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.176
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=103.168.172.137
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795417096;
-	b=B/YjLcWkHZEOZvwDJfqN04FHe0ULTsiJmpwDoyClm8gefFM0hQfO5tuyBfBzTcEsgRPV
-	 f+iPamRQHXI60JDFQ/QIajRHkXw13oYpqqgNnPffcbRSHslhx+zfGfN1TlgWVfXAi+EaE
-	 ++dYNVdZ1q2eu4eLs+9TI/fgXyed5uFYWIRgNkdHwVy41lSo7CDpyEjsvPeDU4gCln/+E
-	 gJ3EGds4W8gpJhF6cP9wAHRIehwpRmcivQrXyRe7c0vjIFI+eufOq6+bwr3utKzcHw8qR
-	 9jEdSlsHZBsiP+T7Bys9eYT5tUfo/HHaTHX8vck6ymGk0+i0mg3cSOIFCPdu1qOOv1A==
+	t=1795417299;
+	b=DZqY3EbaHMYjpjaScDJq/QzXDsZqgvz8xPUHGsGKpG+KIA1Nb9aTr2AYFCQyjGJ5pNHn
+	 ghb3MwqI+usF25jssKUs+nKQYKBX9Fd4m+vEIKMhGLRuI5e3QTAWU8nXo6ltmz3zOwL1x
+	 6Z++j4NYeglOFzNhi81IyGn4ySyizekqFEUPPQgZfE6PkYu7n3z/MpqO8fAOIJ3oNuEAl
+	 xANKv4Xz9NzlZKiXzPVx3LZA1i+G2I49MXaP04owah9x0N2fwRDDAqJJPfNga8FUGdQ+0
+	 yWghDZchf/qHkNgqKKsX8nwl1EO6ko1AqpKamBtkaJFLNKnAU+zUuKmbpScbCWdHe/Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795417096;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Content-Type:Date:
-	 Message-Id:Cc:Subject:From:To:In-Reply-To:References:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=jRq81+OU1jcNW3QFiLfuhhBTEnv6dBf2fhUpIK5Uj6U=;
-	b=3L/cSOyb6y+yXbD6vHmdbug1HKECB3kQKsoHdw7JpupJojbXU3n0iV4thougeYARmOo2
-	 XYyqyKVzi1RaqdZdFI6w5HpqiFMgdYWd9plePS9lUbOJ9e/6/EuZxE272b4FvjTOtAj9a
-	 p0vAEGXkgMqxbdv1v5gj/53dVWbgvfsk2X3Az2IIVaZavomqrHUwNYprWwAwzeoyQl8SE
-	 kgMgINqTvlB/9ptc5xvpa4zP6Pp5GAkgxyPgROin9zrXUuThgx8RNJAgsH0eyqdj2BIN7
-	 nXZtzQLALOnvLrHUOoK35ZwAUWULfAxCAlzZpvvxVvu+4KzSgU95mJLNB41GuwbxHWw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795417299;
+	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
+	 X-DKIM2-Info:DKIM2-Signature:X-DKIM2-Info:Message-Instance:
+	 X-ME-Sender:X-ME-Received:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:
+	 Received:Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To;
+	bh=PQaIU9jrGjv/IX920EaZ+vwMDt6FU3NtgK/Ci8DsQtE=;
+	b=AFo5TpB+6vXsUab3mMiE8BBLOs5d8jl9JddwaKo0rGWUzps3zioO/wjOBWymUq1eSPfD
+	 XnytjsN9OVhf1BiqyG1zGIBBysCFXnVwU7C+t1m3KYJN3X/HOD7cLDGhHqD1NUKpzJqh1
+	 A3PJpG6Dn49wt52Voj8LHTDcGd9K/lJEk84MjkJ8xhp7Zn8jWHdJkXx6FIsf7nkbcyRH9
+	 BZsIqy5BnhcoDAcMY99XS7DNurteG4ouYHffXS/7RAxflQ/vDb7GQ2eHqvWWPW8qPVufd
+	 ZdTfOGUhAVRp20shEKOmDU9arjE2dOnECh6fKXQWNGxOBPpwdgTJxlNuQUDa0o8tIYQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=XNbOmbCq;
-	arc=none smtp.remote-ip=209.85.210.176
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=kroah.com;
+	spf=pass smtp.mailfrom=kroah.com;
+	dkim=pass header.d=kroah.com header.i=@kroah.com header.a=rsa-sha256 header.s=fm3 header.b=PZGvQW09;
+	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b="Sc/41PEo";
+	arc=none smtp.remote-ip=103.168.172.137
+Received: from flow-a2-smtp.messagingengine.com (flow-a2-smtp.messagingengine.com [103.168.172.137])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96BBA606A31E
-	for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 06:58:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 96BBA606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E5CA606A321
+	for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 07:01:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0E5CA606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kroah.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=XNbOmbCq
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-8a070755c8cso1326206b3a.0
-        for <bpf@vger.kernel.org>; Sun, 22 Nov 2026 22:58:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795417095; x=1796021895; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=jRq81+OU1jcNW3QFiLfuhhBTEnv6dBf2fhUpIK5Uj6U=;
-        b=XNbOmbCqkAF+hYMweAKFcFLcBVdACFhf0hQIGU2zoHp7NC0s5YNLPZdVniUmih4u2M
-         s2xkTdVMmMjYSMMubg6LXJRtY22AN9Ng+00EkzOKdbIQE438mVdN2cJ0JVG7DdISDtA2
-         4NnkLSg7l/F7qaXNqla6T+s3zCt2h7lT1zuOarCUTl0PV6Q+VA7/wUuiuHlJ9zWiks0B
-         l0yMxSxZ/fS5s2G2tRlhGCDnmKXY8OCaZFBLKP5Ol1VYHVsIjPnS0TpSnexCLpKGpmnc
-         s7Xv1iqDoWExOuvgdVEhnIjuuOTl63Y4Uqmh3G5hQ6jHJLUpYbcHkMJTk6/vwYD/C1sB
-         xRGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795417095; x=1796021895;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=jRq81+OU1jcNW3QFiLfuhhBTEnv6dBf2fhUpIK5Uj6U=;
-        b=swdLvv1v2CYCWdmPG9Gu04A+BB7iiXor8RpvYzPJjgsRkpbnIznDdPu64d6+4KbHIb
-         Qt69AMYgsfuLbUclW8rP5NRZZqRuUrvoF6z1ZWIxocwnEA7WJdSdZeQMqduAeyCImbdH
-         gc9GltB1VhyPSMkiORisDpGmw8f0yzd7TudLX300rSLef0wUCFkAfOda2VF8DcheG0hY
-         ZtRjhwALbr49aeBLpF9/iACctyD82pe8SWiKNG4dtJUE4HveW2chMzmmuYrCb3J3MSEq
-         pXj8EumX+ZHuTRr81rrID0e9FxmPqBk/gTiIIGq7Xczqs0+L8yZEwY5xTtiO+llh47ch
-         X+3w==
-X-Gm-Message-State: APuU4Z+Z1wLwhquJpN2Sh8yE8aCHvdc0LxGVvPSXyDrO1j84ACZuZHSL
-	u9XJi1VMg2tM5rq7WeqRbVwsU+OPBATg56Iga3tyvxMp+S1MBIN54efw
-X-Gm-Gg: AZFdTZd4RZcJDEtamGdw+H7qkKHgpFAvjiBaOP/WxD50oR78RuNXcOyT3K2LSsOtCei
-	gnlpfNZHFOYPUEkdaXuDdXfxJhbA+CsIqkW11xQixVh3tM6BbbdAwek5pH8hQ3oECuJagGbyfL6
-	WXgh0Htl/5KsXpOdOgiZS6LIQRB4jUgaI/+x7Li8QMWOcqeu9RO/Pu0znC1dvx0DDgPi8pp122P
-	N/Y7Zr/zllafy2AJq0NJotYmJp8zgPUTz4v8Di5Ck9EONkeA9lEceiPAHk22U7Iq7/HOaCBxTS5
-	zzFAfQVDwo84vhfDEcQnXyDwm7jTSRAZsL6+HMlxYP7yzNI9Rm5DzfBfGai3dtTeS+a7AsSBuVf
-	In/txCas+rFF8T+UrP3EWeMYejxz25mkS20c9885vQiX31WPpSObjMEHWEDy7MRXw4JKTANa79q
-	gw44IhcvqveZdyyHv+8Kf0f/j9VsIxar6pNPsU6JTnKGiwyljN911T9qEEZfUUbCURhT1qwuLN6
-	a2Fzp0T5aJGR8brQSC61R48j+4wsp6STlguGqcsGih4E89NaFazpH7YFiS3EXBflOiCXOBx5ytD
-	s4wBXupVrrt9Tu76UlF8kij/qXTbn14oEnn+ZL39OocOFf7kzQsLpygAFA1H0EtduVj8Nb+x0/M
-	wK4sZ26sFUPdXBliVXwoMTkuujnSP0goN2w==
-X-Received: by 2002:a05:6a20:b40a:b0:3eb:b31f:3558 with SMTP id adf61e73a8af0-4014bc4a481mr9510489637.32.1795417094602;
-        Sun, 22 Nov 2026 22:58:14 -0800 (PST)
-Received: from localhost ([153.61.198.241])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8c908a56acfsm4327684b3a.23.2026.11.22.22.58.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 22 Nov 2026 22:58:14 -0800 (PST)
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 23 Nov 2026 06:58:13 +0000
-Message-Id: <DN2E8Q9V38IF.3O738M7NGLSAL@gmail.com>
-Cc: <bpf@vger.kernel.org>, "Puranjay Mohan" <puranjay@kernel.org>, "Andrii
- Nakryiko" <andrii@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>,
- "Eduard Zingerman" <eddyz87@gmail.com>, "Emil Tsalapatis"
- <emil@etsalapatis.com>, "Ihor Solodrai" <ihor.solodrai@linux.dev>, "Dave
- Hansen" <dave.hansen@linux.intel.com>, "Andy Lutomirski" <luto@kernel.org>,
- "Peter Zijlstra" <peterz@infradead.org>, "Thomas Gleixner"
- <tglx@kernel.org>, "Ingo Molnar" <mingo@redhat.com>, <kkd@meta.com>,
- <kernel-team@meta.com>, <x86@kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v1 1/3] x86/mm: Resolve BPF exception fixups
- for user address faults under SMAP
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Borislav Petkov"
- <bp@alien8.de>
-In-Reply-To: <CAP01T75Qps8bKFZAU2gN-3UJTB1aWw46NG5c-sm6K028rSc9sA@mail.gmail.com>
-References: <20261009024925.3169077-1-memxor@gmail.com> <20261009024925.3169077-2-memxor@gmail.com> <20261009041346.GHashp-hYpLl-o-l3M@fat_crate.local> <DM0ESVBT9553.2S1RWK1W7M8WW@gmail.com> <20261122200848.GBawNL0FcQoK918YDI@fat_crate.local> <CAP01T746W=8FFiJJUM3H-Qv09uRO6-XEi9B-8pjSgtpAPBx4EA@mail.gmail.com> <20261123003036.GCawOJLKK1iX47XTDm@fat_crate.local> <CAP01T77EgbuyhP=zU9L1hwYL6rHaSbrqQZGJR_+9AQgSWLe7Nw@mail.gmail.com> <20261123025529.GDawOrIQcDOPhgWwF6@fat_crate.local> <CAP01T75Qps8bKFZAU2gN-3UJTB1aWw46NG5c-sm6K028rSc9sA@mail.gmail.com>
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key, unprotected) header.d=kroah.com header.i=@kroah.com header.a=rsa-sha256 header.s=fm3 header.b=PZGvQW09;
+	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b=Sc/41PEo
+Received: from phl-compute-02.internal (phl-compute-02.internal [10.202.2.42])
+	by mailflow.phl.internal (Postfix) with ESMTP id D39961380398
+	for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 02:01:36 -0500 (EST)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-02.internal (MEProxy); Mon, 23 Nov 2026 02:01:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm3; t=1795417296; x=1795424496; bh=PQaIU9jrGj
+	v/IX920EaZ+vwMDt6FU3NtgK/Ci8DsQtE=; b=PZGvQW0962OyMG5BJwRrDEtmu9
+	DxzJInKMx6H3ZTUoF3vb5HOh9hIvMIHbTKvgTX674ldd5vJHhF2oG9fAf52k7FDS
+	3O2fA5bY4TsmpfRnthlqubgu2BbE5xwdtA346Euao9f8ChmUKq1f41aLhdFQ+wCG
+	s4XxirvJ6fi4+ozKk9tD/S1nVBIogBNAND09ynrBhNuEB6llbh5IHhfpmLpct+ay
+	ULyywCbgywV/CRE6wLxLptIChSIWFQlcq6eMd/nsv4d/ZR1prY+uGM94ndkR76fB
+	gue0avqsxE+BR1dLNdeji1Ww8av6nfyzhPmIetMP1gMB7LBRZVU34b35XXfA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+	1795417296; x=1795424496; bh=PQaIU9jrGjv/IX920EaZ+vwMDt6FU3NtgK/
+	Ci8DsQtE=; b=Sc/41PEoRKOWhtuAgJA3fFw2JJQWUOcWIWAKrXolQyRXiGkUvuh
+	WccGRA4zqLkKbp83RobU5Ap1oMLk7HTIQhYGeOUR7Xm07v0fzaLd0cu/joOytQ/E
+	kMr1kij/3feor6jjIltXNomRMg8BhYB+DDAfnVYy4y0OM1kgS9gI4Xo0c9UYg//v
+	XBrVt+ib0i6J0gXHDmxvONBo6pDTSQ4xlfGOH/xdzHX2foOr5FSNLxAJX9XexMaO
+	vaOutHhxqPagY9cYuVQUbK6FFsWnarIeQR6zR0f0leGDZ5FbywDWo3o5DsIBntau
+	TWPLWn0xU9fZpZSDF51Q4JMAgGrhklt63lQ==
+X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-09;
+	repo=github.com/dkim2wg/interop; date=2026-11-03; sw=lmtpprox;
+	action=sign d=kroah.com a=rsa-sha256;
+DKIM2-Signature: i=1; m=1; t=1795417296; d=kroah.com;
+	mf=PGdyZWdAa3JvYWguY29tPg==; rt=PGJwZkB2Z2VyLmtlcm5lbC5vcmc+;
+	s=fm3:rsa-sha256:eWMAFQU2aU8iib/5EXhr0o4Tce51OmYfKyO9QSErq5uWQq0
+	AUNCYcu6hd740dKpqD0pnGQeNDGlfligy45h1IUSkoDZpb8XDWFTrsjyHuTSFZHP
+	Uzejo4NlWY8cL7v5K5D573E18xoQNJw1ICeZrtcE6cUPV3wRjzOADqFsT8g8ZY+b
+	ndjtbCCjTyMdqevuecZGxSQg2FGxlIg6aZJrbVvwg9u6dxvpvr24QRuKovIQmAX0
+	NMVuTQyWRpmF5G0DWDk3M96OwKg1i2Amu+Vp967b67cevhY9V/wJ3Q8V3FgSvd5K
+	MlVyslk7cQEl+PCuHEOx8W8MGJrXu3Jc7x4iv1g==;
+X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-09;
+	repo=github.com/dkim2wg/interop; date=2026-11-03; sw=lmtpprox;
+	action=mi-m=1; hc=12;
+	hn=cc,content-disposition,content-type,date,feedback-id,from,
+	in-reply-to,message-id,mime-version,references,subject,to;
+Message-Instance: m=1; h=sha256:VAdcf7p/xf9lxpcqIoRZEf2GByXwU0QzE50CpNp2b3o=:KP8em782QFBhNPcrfc4hjVjWWapiSXNBTFzw3UUOr9c=;
+X-ME-Sender: <xms:z-QDa0z_PHMAW-heXRGqUy2KGJ1y2Imkn6RRuWfmo8bq5EjnwRpBPw>
+    <xme:z-QDa4cXvN0O0Rg2ObS5CW25jCKyexGaDeXGIpXV4DkpFUPZzoHETLYcDQ-T2ftkA
+    AGeAsMNsih9QEEEOV_34-WbkBGLDnnCMncnH_JnuEPCCSrdrc0>
+X-ME-Received: <xmr:z-QDa4-zkHx7Evo-YD2Z0gUazpnTPmlc4N_1yqRdZeqysauTw0pqybVOjfFuv8LeVzSLXpcWw-dZkHE8zETsb7gFtv4MJe5Mefv9UOEh8Uw>
+X-ME-Proxy-Cause: dmFkZTFyV2tzmNnMG6GVBnClF3a5MYEONstRqY1OpQbaDJwJqBfAWH//7vc37ygX/vlCeR
+    aMDvp4KuBt/yGakYvtjFbCPhvferKFkBz2KEKfRa9mw335MuvaNEliE3r+H9UOHwi0fCT5
+    Iid9UUTXzJNvTw3SFuLP8qFdvif5sEvxb50PKBkU9sqwVCegl2jj8LLSORfmBpC6+xOI2y
+    +5fvP5RqM1OffM14pPDyADlYjVrW++Jay9M6fHOYD6aa5C82lpJ4okll5eX83J0MjgGVNs
+    2DC69Xz1O72y8L+b8KA7YrG4xRJANCqBqkk/mzZmEFMpgtcryaKJMVTs6neV35rB70lYCK
+    EB0Usa8u9qnybAreq0+5RWnGq/isjiXmBOJCli6iBZTIdiYVANM6dC64lEPGav9988wmsZ
+    IDRR5o7xGg7LBp4munwoRu71Ie7uqGnQytHkJdcRWxZ+QIX0HBUfrFrDGpv4jmTzLFMCMf
+    +uQ9dvVGjDyT2JMUzBMmxFaeDRcpi19y6O6an1GgOvR9/hEA3VoTR1+piCEqCJLZbr1r0d
+    Cp2V4Fd8xSYRC97CMEXcz3Lpp3bA9GtDCpaQbztP7im2m7Bz3ITns7DAbVBQ5tpzfjOSa1
+    HnLfQnpwPUXmNM0DLwmsI1dS289VnP3gy8/9V4ibav/SlLUuXup2X7bSt7UA
+X-ME-Proxy: <xmx:z-QDa-HkQuveQbNZhAt2uXLqoK8x7OE21fLMZ81Cv_z2lTZeSKt0Dw>
+    <xmx:z-QDa6COazf6ibVpdhfCQCD3j6iRpKlf-q6vziLcr56TD9ZnGA5tyQ>
+    <xmx:z-QDa8L8ORgVroRLQzv-WgpCwh3KiBBixwllPrhcZhVSAQ4FNV4WAQ>
+    <xmx:z-QDa4w2O-WvaOoPFaBoaUFX5j3dXyv3FkmUgD_I-azye3sVz_SdjQ>
+    <xmx:0OQDawV5JUDOdAoWXTCYKTbUk033HLb4cAH78l6C0kVWheUieZZ_kNBk>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 23 Nov 2026 02:01:34 -0500 (EST)
+Date: Mon, 23 Nov 2026 08:01:33 +0100
+From: Greg KH <greg@kroah.com>
+To: Dominique Martinet <asmadeus@codewreck.org>
+Cc: stable@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>,
+	andrii@kernel.org, eddyz87@gmail.com, ast@kernel.org,
+	ihor.solodrai@linux.dev, daniel@iogearbox.net, memxor@gmail.com,
+	martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+	jolsa@kernel.org, emil@etsalapatis.com, dwarves@vger.kernel.org,
+	bpf@vger.kernel.org, Alan Maguire <almagui@kernel.org>
+Subject: Re: [PATCH 5.10-6.18 v2] libbpf: fix cross-endian build with newer
+ libbpf
+Message-ID: <2026112357-corncob-exclude-7266@gregkh>
+References: <20261116233301.1531563-1-asmadeus@codewreck.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -107,52 +125,32 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261116233301.1531563-1-asmadeus@codewreck.org>
 
-On Sun, Nov 22, 2026 at 07:56 PM Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
-> On Mon, 23 Nov 2026 at 03:55, Borislav Petkov <bp@alien8.de> wrote:
+On Tue, Nov 17, 2026 at 08:33:01AM +0900, Dominique Martinet wrote:
+> commit 087f3964f4b3 ("libbpf: Support layout section handling in BTF")
+> added extra data to the BTF header.
+> 
+> This extra data is ignored in the native case, but when building with
+> different endianness the bswap code in old libbpf would check for strict
+> size equality, leading to build failures such as this when BTF data is
+> generated with a newer version of libbpf (through pahole)
+>     BTFIDS  vmlinux.unstripped
+>   libbpf: Can't load BTF with non-native endianness due to unsupported header length 32
+>   FAILED: load BTF from vmlinux.unstripped: Operation not supported
+>   make[2]: *** [../scripts/Makefile.vmlinux:72: vmlinux.unstripped] Error 255
+> 
+> Newer libbpf versions also properly ignore trailing data in the bswap
+> case, but the patch is too intrusive to backport, so take the header 
+> length comparison fix from it instead.
 
->> "the only line of defense is for is_bpf_text_address() to really DTRT."
+Why not always just use the libbpf version from newer kernels?
 
-Boris,
-SMAP stays on. The SMAP branch in do_user_addr_fault() runs only with
-AC clear, after the CPU refused the load.
-A wrong answer from is_bpf_text_address() can hide an oops,
-but it cannot expose user memory, so your concerns are unsound.
+And why not backport the full series, one-off are almost always more
+work over time.
 
-> In fact, for kernel address faults, we already invoke it for exception
-> handling. This change would simply extend that to user address faults,
-> optionally for BPF code; otherwise, we panic as usual.
+thanks,
 
-Not quite. See:
-
-  fixup_exception(regs)
-    search_exception_tables(regs->ip)
-      search_bpf_extables(ip)
-        bpf_prog_ksym_find(ip)    progs only, no trampolines
-        search_extable(ip)        exact match of the insn
-
-Here is the alternative
-
-diff --git a/arch/x86/mm/fault.c b/arch/x86/mm/fault.c
-index aa88370..9fe8705 100644
---- a/arch/x86/mm/fault.c
-+++ b/arch/x86/mm/fault.c
-@@ -1263,7 +1263,16 @@ void do_user_addr_fault(struct pt_regs *regs,
- 		     !(error_code & X86_PF_USER) &&
- 		     !(regs->flags & X86_EFLAGS_AC))) {
- 		/*
--		 * No extable entry here.  This was a kernel access to an
-+		 * The CPU refused the access. If the BPF JIT marked this load
-+		 * as one that may fault, skip it and zero the destination.
-+		 */
-+		if (!user_mode(regs) && !(error_code & X86_PF_WRITE) &&
-+		    ex_get_fixup_type(regs->ip) == EX_TYPE_BPF &&
-+		    fixup_exception(regs, X86_TRAP_PF, error_code, address))
-+			return;
-+
-+		/*
-+		 * No other fixups here.  This was a kernel access to an
- 		 * invalid pointer.  get_kernel_nofault() will not get here.
- 		 */
- 		page_fault_oops(regs, error_code, address);
-
+greg k-h
