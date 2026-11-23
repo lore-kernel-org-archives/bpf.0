@@ -1,62 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=113.46.200.219
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795420036;
-	b=hduAFfuBPWvztsiabPQtDEpcMNkGtnyYDOKf7UOh0O5jo/LiF40w9YPMmZ/GH/e9RgfB
-	 TAL9/E4c0adYn/kraOBaZRXqRvpFwq4fVTSkuXfITL+HpweXe5N9DwgEUbw5QFh4XZ4B8
-	 caXfhtXV07rUy6JkEI2jrXZY1kOs0UUieHw9hckkMHLDVtbMh2/ZzV0KNJhT/LCynXjpE
-	 qcuBCKhEIMTi+H2Nypd2If6FLyltIL3B+yGWshua3nrUhUwrGsNRz8heIm8JWUa6KCHL6
-	 4lTiF2VpRjvM+rxbQcmeVIIBM27V9n1GQWeCqqAGQWugBrM9iekFsWaGCWTyU7PM66Q==
+	t=1795421863;
+	b=KRUWKBxlKr8QLgFXmO9t5zRtvK2TKgsYasgjSC/WIHhoyb9+fFu7+OOjY2kwwSc/8e/7
+	 J/Oo2+oqzTxbj7x01WRm0L9dkyA478qBLdZ81Efd5kXAH54g7fdZStzDqTBfpxPnFL4nr
+	 AxLorsgEClgwG2tbT2cxgm7U16gftyWrz7Y/uiwRH3mcJGVyHwDgPieiZeA4Ebb1SurQb
+	 9f676ObgsHSuBcNn3UM8PK0OMCmKWd7VBkKOftMAH0oZUqnpjRP9qxAqzCp5ZRUxpmwq/
+	 uQv/76Hssv9zAp6iLURK3wAlp3KVNVW+EDbvFP2b6vF/EL8HfHENsm+a6ONevChPhTw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795420036;
-	h=DMARC-Filter:dkim-signature:Received:Received:Received:Received:
-	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:CC:References:
-	 Content-Language:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:X-Originating-IP:X-ClientProxiedBy;
-	bh=Dr1iKVrv9/eBqSO8/xSdTONwVVAExyf79+TG9olwstM=;
-	b=jW+6GHPOE/i7MzIkzHsFAEct3GZLjMj2Ux5SNYPrv+IIeumTfqcXOIeJGLsew0bLMxpX
-	 PhWThlHOyHhoANsbK0jtYJS6JxCmOmfiIiggM2yNm6PIUMB0xd0H1gOGV41DHxEbU6D/k
-	 pBvGg67PiLjMEi5I9a0ih739h6Vl9aRa7G4Atr7m5q4V2xT2D8L3G5Kcv7MQWX3+UcCTK
-	 0sSKIrF/027ZO63vIVx+7gAbrTpBN+g36tdXS+YN30HsRxF5eUZMGHIeCi1J91HOIXeE3
-	 YX+1pmaX7BRVBjM4OWySPRc5rRcoq6xNr9Rrfu2FWUAk+L1xzTFexIXt6ZfuIbDXuGg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795421863;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=S91HlseoKLlB3tt74lQ0JB+Tg3mHUrQyeQ+NM4I9HJo=;
+	b=5VRDBalbm1qkgmWG8PRcyKy8bfhxiuWc18nO6bZSS1ZASzN4CB3n/KtVQgA5wvAO5TAG
+	 UGl+YJo1dSJht0EUI2j2+PjDUYPRspsnMVCWGFIywhBOFdThoBl4bvML83XTOswZeRtOU
+	 1T7APX/IMOyo+kA9TDBa88KYGZxW89dXc7jtlo4LjbEjl8JIrrBF+9k+rJi13DIRa1kT7
+	 yPQ4Dk0QhHEhx4Udir0LLZ5h62ZJNq0qMHIld9/lobnNOxfizEPBI5HhF3JeCdUc7Qiwi
+	 6ap0nifrubqTiXgu86lv673LD4QPQ1WS7yrH6SweT0PQu95l0QNz7W1VKBFuyeWmCtg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=huawei.com;
-	spf=pass smtp.mailfrom=huawei.com;
-	dkim=pass header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=OdeLPQi7;
-	arc=none smtp.remote-ip=113.46.200.219
-Received: from canpmsgout04.his.huawei.com (canpmsgout04.his.huawei.com [113.46.200.219])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=oTD9onrx;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5B08606A31A;
-	Mon, 23 Nov 2026 07:47:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A5B08606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 864A1606A330
+	for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 08:17:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=OdeLPQi7
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=Dr1iKVrv9/eBqSO8/xSdTONwVVAExyf79+TG9olwstM=;
-	b=OdeLPQi7av4eFetgOW7gmJ2uA8HEKWdiGvd9Q4UyaU+RgjE8O6Bn7GlEaKy3v/fPucetd+0hJ
-	xx1KNV9uQthppb7212n3GNLBh4tWNY4LyDh84y6zB5CESKbopZMJRW7VTvtuEZ6HAl3YJ5k9FTk
-	zF113MK7P+qTA3m3BS6qRUY=
-Received: from mail.maildlp.com (unknown [172.19.162.144])
-	by canpmsgout04.his.huawei.com (SkyGuard) with ESMTPS id 4jXyh04vw2z1prKb;
-	Mon, 23 Nov 2026 15:46:56 +0800 (CST)
-Received: from dggpemr200003.china.huawei.com (unknown [7.185.36.25])
-	by mail.maildlp.com (Postfix) with ESMTPS id 817C34056D;
-	Mon, 23 Nov 2026 15:47:12 +0800 (CST)
-Received: from whupemq100006.china.huawei.com (7.152.184.206) by
- dggpemr200003.china.huawei.com (7.185.36.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.46; Mon, 23 Nov 2026 15:47:12 +0800
-Received: from [10.67.110.154] (10.67.110.154) by
- whupemq100006.china.huawei.com (7.152.184.206) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.56; Mon, 23 Nov 2026 15:47:10 +0800
-Message-ID: <6f594d21-f5c5-4224-b4ff-04ba3183a414@huawei.com>
-Date: Mon, 23 Nov 2026 15:46:56 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=oTD9onrx
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CEB01F000D2;
+	Mon, 23 Nov 2026 08:17:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795421862;
+	bh=S91HlseoKLlB3tt74lQ0JB+Tg3mHUrQyeQ+NM4I9HJo=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=oTD9onrxDck9tcI4/5WslVLOKxFr2Ighnvs/ZhxiyUy30gK6t8ILCX4m2H64Oq5z3
+	 pWEjhR354F8FIG/FJROKoHFoWjuXLI844MKhEqLQQS2B7QcP7o5T00pQCl0arYFItB
+	 EA+T1+o4t1aT1eyPjlKse6+pLa2Db98kq05boU5X4yHL2emoP/tcC3QZa+qve2qn9D
+	 xc9X4pJkuFGZbx5J+5a35VKQQOED4eca1EDAI7MxjVDFcxtegOCVPO82M/h4NUcEpu
+	 LnCgjCSWn8dMiksZLisQ4ac4qnd4gT0JBk9CkSNDRu/FZhfJBf2k6iy50cnsO/NT1f
+	 qwLK3tSMs6mLg==
+Message-ID: <sashiko-outbox-228894@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net] net: reuseport: honour SO_LOCK_FILTER in
+ SO_DETACH_REUSEPORT_BPF
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Suyuan Wang" <shyckless@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20261122-reuseport-lock-filter-v1-1-a3e5324c8d55@gmail.com>
+References: <20261122-reuseport-lock-filter-v1-1-a3e5324c8d55@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 23 Nov 2026 08:17:41 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -65,123 +59,80 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 bpf-next 0/3] riscv: bpf: Add BPF private stack support
-To: <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>
-CC: Chen Pei <cp0613@linux.alibaba.com>, <memxor@gmail.com>,
-	<bjorn@kernel.org>, <puranjay@kernel.org>, <alexei.starovoitov@gmail.com>,
-	<eddyz87@gmail.com>, <martin.lau@linux.dev>, <song@kernel.org>,
-	<yonghong.song@linux.dev>, <jolsa@kernel.org>, <emil@etsalapatis.com>,
-	<ihor.solodrai@linux.dev>, <pjw@kernel.org>, <palmer@dabbelt.com>,
-	<aou@eecs.berkeley.edu>, <alex@ghiti.fr>, <luke.r.nels@gmail.com>,
-	<xi.wang@gmail.com>, <shuah@kernel.org>, <rgbi3307@gmail.com>,
-	<guoren@kernel.org>, <bpf@vger.kernel.org>,
-	<linux-riscv@lists.infradead.org>, <linux-kselftest@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
-References: <20261106181558.1564-1-cp0613@linux.alibaba.com>
-Content-Language: en-US
-From: Pu Lehui <pulehui@huawei.com>
-In-Reply-To: <20261106181558.1564-1-cp0613@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems200002.china.huawei.com (7.221.188.68) To
- whupemq100006.china.huawei.com (7.152.184.206)
 
-Hi Alexei, Daniel, Andrii,
+Thank you for your contribution! Sashiko AI review found no new issues
+in this patch, but noticed 1 related pre-existing issue it does not
+introduce:
+- [Critical] net: null pointer dereference in reuseport_attach_prog()
+  [1]
+--
 
-Gentle ping on this series -- it looks good to me and bpf selftests pass 
-on RV64. Some upcoming patches will conflict with these changes, so it 
-would be helpful to get this applied first.
+commit da8d8e1657f8b3054e3eb3aca8885a9515a8a782
+Author: Suyuan Wang <stevewong@hust.edu.cn>
 
-Thanks,
-Lehui
+net: reuseport: honour SO_LOCK_FILTER in SO_DETACH_REUSEPORT_BPF
 
-On 2026/11/7 2:15, Chen Pei wrote:
-> This series adds private-stack support to the RV64 BPF JIT.
-> 
-> The verifier rejects a struct_ops program that requests a private stack
-> with -EACCES when the JIT does not report
-> bpf_jit_supports_private_stack(), and sched_ext requests one for its
-> dispatch callback, so no sched_ext scheduler can load on riscv64 today.
-> 
-> Allocation, the guard value and the lifetime handling follow arm64,
-> x86-64 and powerpc64; the 16 byte two-copy guard layout follows arm64
-> and powerpc64, since x86-64 uses an 8 byte guard with a single copy.
-> What is specific to riscv64 is where the pointers end up:
-> 
->   - Every BPF stack access goes through BPF_REG_FP (S5), so pointing S5
->     at the top of the per-CPU area and leaving SP on the kernel stack is
->     all the JIT has to do. S5 is callee-saved and each subprog derives
->     its own, so bpf2bpf calls need no extra save and restore.
->   - The outgoing stack argument area stays in the kernel frame: callers
->     write it relative to SP while callees read it relative to RV_REG_FP.
->     Unlike x86-64, no register here is shared with the private-stack
->     frame pointer, so no verifier-side exclusion is needed and stack
->     arguments keep working together with a private stack. arm64 already
->     does the same, and patch 3 tests that combination.
->   - The per-CPU lookup is emitted after the tail call entry point. A
->     program using a private stack can still be entered as a tail call
->     target, at RV_TAILCALL_OFFSET, so it has to set up its own S5 there;
->     and since that offset is a constant added to the target's bpf_func,
->     everything in front of it must be the same size in every program.
-> 
-> The base address is materialized with absolute moves, as on arm64,
-> x86-64 and powerpc64, which reach the per-CPU offset through gs:, TPIDR
-> or r13; riscv64 has no such register, so the address of __per_cpu_offset
-> is loaded too. Patch 1 has the detail, including why emit_imm() is a
-> choice there and why the prologue length stays fixed across passes.
-> 
-> RV32 does not declare support and keeps the existing behaviour; the
-> prologue signature is unchanged, so bpf_jit_comp32.c needs no edit.
-> 
-> Changes since v2:
->   - Patch 1: PRIV_STACK_GUARD_VAL moved to bpf_jit.h.
->   - Patch 3: The test redone as two asm programs in
->     progs/verifier_stack_arg.c.
-> 
-> Changes since v1:
->   - Patch 1 commit message: guard layout credited to arm64 and powerpc64,
->     value alone to x86-64; __per_cpu_offset described as a choice.
->   - Patch 3: test_private_stack_runtime() renamed to
->     serial_test_private_stack_runtime(), and the stack argument skip
->     prints a reason.
-> 
-> Testing
-> =======
-> QEMU virt rv64, an 8 vCPU SMP kernel and a 1 vCPU UP kernel, both built
-> on the base commit below, source tree clean at the head of this series,
-> selftests built from these patches. There are no private-stack related
-> failures, and the private-stack suites logged no BUG, WARNING, unknown
-> opcode or guard corruption. On UP, kfunc_call/subprog,
-> kfunc_call/subprog_lskel and scx_simple are not run: all three fail on
-> the unpatched base as well.
-> 
->   - verifier_private_stack, struct_ops_private_stack.
->   - tailcalls, stack_arg, subprogs, fentry_fexit, kfunc_call,
->     percpu_alloc, async_stack_depth, arena_atomics, arena_ldsx.
->   - verifier_stack_arg, stack_arg_precision.
->   - may_goto_priv_stack, may_goto_far, verifier_may_goto_1,
->     verifier_may_goto_2.
->   - scx_simple.
->   - sched_ext runner sweep on SMP: 40 cases, 39 pass. enable_cmask fails
->     because its ops.enable() takes a struct scx_cmask __arena pointer and
->     riscv64 does not implement bpf_jit_supports_arena_args().
->   - patch 3's test again on x86-64 and arm64, so all three
->     architectures it is gated on have run it.
-> 
-> Chen Pei (3):
->    riscv: bpf: Add BPF private stack support
->    selftests/bpf: Enable private stack tests for riscv64
->    selftests/bpf: Test a private stack together with stack arguments
-> 
->   arch/riscv/net/bpf_jit.h                      |  2 +
->   arch/riscv/net/bpf_jit_comp64.c               | 42 +++++++++-
->   arch/riscv/net/bpf_jit_core.c                 | 82 +++++++++++++++++--
->   .../bpf/prog_tests/struct_ops_private_stack.c |  3 +-
->   .../bpf/progs/verifier_private_stack.c        | 41 +++++++++-
->   .../selftests/bpf/progs/verifier_stack_arg.c  | 49 +++++++++++
->   6 files changed, 205 insertions(+), 14 deletions(-)
-> 
-> 
-> base-commit: a3c8813409f13779fec225468aba7d4067a66468
+This commit checks SOCK_FILTER_LOCKED in reuseport_detach_prog() and returns
+-EPERM so an unprivileged holder of a filter-locked socket cannot remove the
+reuseport BPF program via SO_DETACH_REUSEPORT_BPF.
+
+> diff --git a/net/core/sock_reuseport.c b/net/core/sock_reuseport.c
+> index b9e5648fa4c51..cdff61161a70a 100644
+> --- a/net/core/sock_reuseport.c
+> +++ b/net/core/sock_reuseport.c
+> @@ -727,6 +727,9 @@ int reuseport_detach_prog(struct sock *sk)
+>  	struct sock_reuseport *reuse;
+>  	struct bpf_prog *old_prog;
+> =20
+> +	if (sock_flag(sk, SOCK_FILTER_LOCKED))
+> +		return -EPERM;
+> +
+>  	old_prog =3D NULL;
+>  	spin_lock_bh(&reuseport_lock);
+>  	reuse =3D rcu_dereference_protected(sk->sk_reuseport_cb,
+
+[Severity: Critical]
+This problem wasn't introduced by this patch, but can reuseport_attach_prog=
+()
+right above hit a NULL pointer dereference on reuse->prog [1]?
+
+Unlike reuseport_detach_prog(), which re-checks reuse after acquiring
+reuseport_lock, reuseport_attach_prog() checks sk->sk_reuseport_cb outside
+the lock on a hashed socket and then dereferences reuse->prog without
+re-checking reuse:
+
+net/core/sock_reuseport.c:reuseport_attach_prog() {
+	...
+	} else if (!rcu_access_pointer(sk->sk_reuseport_cb)) {
+		/* The socket wasn't bound with SO_REUSEPORT */
+		return -EINVAL;
+	}
+
+	spin_lock_bh(&reuseport_lock);
+	reuse =3D rcu_dereference_protected(sk->sk_reuseport_cb,
+					  lockdep_is_held(&reuseport_lock));
+	old_prog =3D rcu_dereference_protected(reuse->prog,
+					     lockdep_is_held(&reuseport_lock));
+	...
+}
+
+If the socket is closed but still hashed and a concurrent reuseport_grow()
+evicts it from the reuseport group before reuseport_lock is taken,
+sk->sk_reuseport_cb is cleared to NULL:
+
+CPU0                              CPU1
+                                  reuseport_attach_prog()
+                                    rcu_access_pointer(sk->sk_reuseport_cb)
+reuseport_grow()
+  rcu_assign_pointer(
+    sk->sk_reuseport_cb, NULL)
+                                    spin_lock_bh(&reuseport_lock)
+                                    reuse =3D rcu_dereference_protected(...)
+                                    reuse->prog  <-- NULL pointer dereferen=
+ce
+
+[1] https://sashiko.dev/#/bug/linux-08c15fbe-8ad8-46d6-a3d8-bd898520f1ab
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261122-reuseport-=
+lock-filter-v1-1-a3e5324c8d55@gmail.com?part=3D1
