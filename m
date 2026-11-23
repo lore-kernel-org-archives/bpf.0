@@ -1,54 +1,96 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.99
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.45
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795471747;
-	b=GVHjF3jlsNt5Uio18MXgWLK55Ccr8R96egP21rJtHYbqePIBzgAFOOWANe/Xpysuzl/c
-	 FkwuS/JCAZBcaDPdzjIyVs9whMQ2coeZAG8QUljHlW2G77lTXfJgNPaIXcWZ6G/enO9Sj
-	 qYX3X1EDO541i+QUwB6zAMBSij9jEayBsVMZfKUnEbyZ7hh0KY0fMIMQYhorBgNdSnjXb
-	 9BDcOS9VO8KARCJZ8EHSMiesa1HC4JQRV+dutRSFPB+odOiQuGXXHBbzRzLsycDtEzC6h
-	 HbtDWg25N+NZKlVNEO/KGCHSHYumyJ4oRB1jAsgGt+qL1+0DSev5TstKGy0mNNCTqLQ==
+	t=1795471792;
+	b=SxCca6Yj79bQNVqNyo71l9VUCffh0ZtEeQ7hWJonZXcGcRKuSztMrbp0vsFrraDcIgTE
+	 Bw8tArxjJk9635udJYsfW1eWTgXqne1OuwQtyuF5e/J/1FmdTx6E47srBASa74gZN+IAl
+	 bsEU0XOcxm/YP0n4+jFR1oLuuJ5W05e11zImWZX/9tKFZypxGx5lZ8utwdvo1PUia9zI7
+	 yUodVJb+JETdfwmea+IrmOivMVsqW5wSXuA5vry7fd4kgQ/NmyFp+c8oGZKQajJ3vIRdY
+	 +nlIikKF+XpaalgSMJBG9z82eIhVJATrXwh0lvV5lad00/w9B3WkCtnto3pRf+XiUKw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795471747;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=akDVLKNEH5roNSoTOQSgPtNTXnTOrr6QFFjX87kdXME=;
-	b=nSShr8hLaRbo5UZ/sF+IF/8YYCop4qbQ4Sw8P5onGZduLBRfadeIsRR77dL15OQkXqD9
-	 yyXG3Yo/UrvSvyqm9VFkrAYi0C8K9Xa4VpuStXkAOvFHUrJVkYUnx6iunu0V2IfpAhfzm
-	 mih2xG4LEfNWbDG5PNOf86cAL3KKr6MdaMuIAgHm7VCIzrHM0LJF67953NsYV+nXs2R17
-	 mCcmIPh5U3pc9wxEgw9VLprefmyLFciKXZRKFo3/Ezdct9CWRUDlwvNhCE1WXjSbKPCUd
-	 sghVdIZtP3BhemKP87huqirCMt7NN5wV0sdOyFlctUSVA0H62sxcqEFPB7CZjq9/4Zw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795471792;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:X-Google-Original-From:Date:To:Cc:Subject:Message-ID:References:
+	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=Vz58Cre/aXSIBNc6xkRmR7HEG/rtQyKHMhQgyqCK6QY=;
+	b=AAdQ2pcT7hdvhuPvO+NYoVpXbKIa39mYbTV7SPiwyx3Iruo8LS+/BZSxbBZrJtWrEmN/
+	 uwYfxpz5gwErIz3q6W/UmCQnXuYKmJNstmTK9klPz2uZ4kICjez5GDY/lLeRAJ3TAN44V
+	 lFpqhos5eGRzf8WHgrtXCH8QhKLSnT6M6y/cMVA2iA7qwchVXQwwon4L0KMgiJHY3zG8B
+	 j21KLwe2UoGPWRW4y/4UehzdBT7kbZrbnaSpGsDSW5QGvKltK/1sPjHZkE3t7J0rhahvM
+	 +OIFFIJekZxeUqKmXfuIuLqQly5QnoclG6TdZEzZOi7XUkPLcdVwuZQVr2M9FzH5iCA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=DqLpADDe;
-	arc=none smtp.remote-ip=95.215.58.99
-Received: from mta1.migadu.com (out-99.mta1.migadu.com [95.215.58.99])
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=HLTOpMWJ;
+	arc=none smtp.remote-ip=209.85.128.45
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A3B2606A321
-	for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 22:09:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7A3B2606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC1D8606A681
+	for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 22:09:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AC1D8606A681
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=DqLpADDe
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=aVThDRCCqprqCUkmmvOsqth/G39nsyp+mIVjDwzH4L8=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1795471743; v=1; x=1796076543;
- b=DqLpADDe7BeDvtXGtvIQT3ltRHqXdMz32i3Ftbi0alpqG/ksxqUuTeMb2+gcAOTSmHtejAbZ
- O9IxHzb9cfEPqZVW8e1Kwu+jOeZESgd5Avt1k/BLGiml0Wnv9aKCpioIEAoFUjP+25Fq8UgQSwV
- onGjSoiEQKS/e3rbMo2riT7I=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 79eb02bd2ef7840f;
-	Mon, 23 Nov 2026 22:09:02 +0000
-X-Mizu-Trace-ID: 79eb02bd2ef7840f
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <a189a17f-8544-43ed-8eff-116191c41a62@linux.dev>
-Date: Mon, 23 Nov 2026 14:08:59 -0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=HLTOpMWJ
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4a5b2be99a8so32830395e9.2
+        for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 14:09:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795471789; x=1796076589; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:date:from:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=Vz58Cre/aXSIBNc6xkRmR7HEG/rtQyKHMhQgyqCK6QY=;
+        b=HLTOpMWJk38/ystWWFTF7kDJo03Nx/0EQqU7gU1AzYiAhqkOfXtEz0J7jRtoau8Gi1
+         emkvpoMxiOH5a+Cw5eXud4Pkrow26A61n1gKW0ki1KbbdozKJX7EYAy1AqP76FccnU62
+         tWqcvQSeVuS2T7LwXn4cbQTh8wqaAIsBGvEchHB9chtzRZSUA9jqPDSRWQJYRQVwSHPV
+         QTJt/JLh4o4RBM5t2mlFIVsCmCRNlzWTHZw4gR1GOalV97ggx14xwaHr269HbkXb4tiJ
+         FV+xs3dSiuDx244qqYRhVgkUifkcmB+/hUL/2JTRMVHltcQr3tpwIldPSjOBtvUdVQeR
+         LnFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795471789; x=1796076589;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:date:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Vz58Cre/aXSIBNc6xkRmR7HEG/rtQyKHMhQgyqCK6QY=;
+        b=Qlj62BohEHYJaCs3KxXWkpmHCPX7jhgsIHdtdz5cOYy6aZh7HwLpJYnjnBp1dSxnRQ
+         qv3bB7wGd2ylqo39DYuHaIeZK3UAh7qPno2LiQEYNWS0yPVuf18R3I3ETvccuj/t8nUN
+         Tn7iqLemnTVLGSYjvFU+npv0UOmPOcErQWnGVXkOeNL5nklnlImP6PtlkkWh+n6zl5Ua
+         IepynWxLFNzjnpcemleaSPuTF0ftDURrpcyiNI1eplJQ2+WUEn9ALCSsye15alPY1+BK
+         0C8yFT6X58qNr5P8F6+rgUo4xn4liaTHhfodfEF3Y4fe2e1T/ydxPtLS89zUbE4nODOx
+         rTAw==
+X-Forwarded-Encrypted: i=1; AL+hErEeKrRu/bNGXeBFlhhLOcbA6rATMgz6sgAX4ZPPO3GZd9QOsReNZQD7bXoB1huEOXcQ/co=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+FLfQ6j3q7ZKS2wGBHi1QpVlAzBESX9pOI2iRHhJajuThtyEX1
+	sHvb80R0hbXJsm/tOEleEY9x39A0m57Tk5OCBssIInYhPHOwIz+vFVbh
+X-Gm-Gg: AZFdTZcpbwioGc3L9nV2taH/npI01n682TyGqNad1uSHYuQvO6FTxHYtE6i1JZKHYro
+	8zZO1lmN02y5gBx2JOjpNzxvgU6WbCHbSi9Klc63V4RhfjStqftaVboSfjaHAmLqQCdNaAkR+0c
+	/x3yN37dWM0eqe69W9NunzzhnibteMTwgbN4H43gYSnqpsDtG8lJvESXj4h2keIKrqI7q/mfCt/
+	zcAI/MfZFt3pr1r7W375dHSN6zJGnuAxmlVWW0u8BG3ocsGVK9Ct+LJFFZlT9CqY8pVouDaPJtE
+	Bem8qCW1LUbUzOh2zD/ClzjJ3qjTVVwG5kYssyWExnkoQqHu8i7yW52PSbLkkk0cImo0IYXjGrv
+	h+WAm/YJtWXYNxoMNAwg6hit5BLXHCe8qkDBlHVOrJ4exaqjG3am0LLl2Ekwt0N2Ew300FFdbFg
+	/8JVjaMWxlUKgytqvM5NFzZGwMm3qBG8VsSGikK3KdVUTUuYwv5tiwt/VoSU9njUHs66QhCbfOA
+	+HRBEREdeDxI9W+lnZ5xyjrEeKoMNlTPBWQEKSXP0e3Ynn2gnOFHoRqB67bV/YCf58Ii7eA/rLm
+	sYvzfSKT7Zoxz+lO
+X-Received: by 2002:a05:600d:82d3:b0:49f:e701:51c8 with SMTP id 5b1f17b1804b1-4bb8880f0ebmr292245375e9.9.1795471789043;
+        Mon, 23 Nov 2026 14:09:49 -0800 (PST)
+Received: from krava ([176.74.159.170])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb85399d52sm372260275e9.6.2026.11.23.14.09.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Nov 2026 14:09:48 -0800 (PST)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Mon, 23 Nov 2026 23:09:46 +0100
+To: sashiko-reviews@lists.linux.dev
+Cc: Leon Hwang <leon.hwang@linux.dev>, bpf@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next v3 1/9] bpf: Add log support for tracing
+ link_create
+Message-ID: <awS5qgoIeSAheK-w@krava>
+References: <20261123152743.19629-1-leon.hwang@linux.dev>
+ <20261123152743.19629-2-leon.hwang@linux.dev>
+ <sashiko-outbox-229589@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -58,147 +100,69 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v5 0/3] libbpf: Fix CO-RE relocations of unsigned
- 32-bit enum values
-To: Eduard Zingerman <eddyz87@gmail.com>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com,
- vineet.gupta@linux.dev
-References: <20261120214957.868409-1-yonghong.song@linux.dev>
- <fc517c55e7060cf7c0da6e797a602488cea403fd.camel@gmail.com>
- <8fdf1b51-7368-46e0-80f9-744b15845ad0@linux.dev>
- <d678f6992169065c5f1e67b89d39ad6a463923c8.camel@gmail.com>
-Content-Language: en-GB
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <d678f6992169065c5f1e67b89d39ad6a463923c8.camel@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <sashiko-outbox-229589@kernel.org>
 
+On Mon, Nov 23, 2026 at 03:38:47PM +0000, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential
+> issue to consider:
+> - [Low] bpf: non-UAPI field name tgt_fd logged in
+>   bpf_tracing_prog_attach()
+> --
+> 
+> commit 476f541041ef9d87251f0598129c4def280d1320
+> Author: Leon Hwang <leon.hwang@linux.dev>
+> 
+> bpf: Add log support for tracing link_create
+> 
+> This commit adds verifier log reporting to tracing BPF_LINK_CREATE for
+> attach parameter validation, reattachment checks, and target compatibility
+> checks in bpf_check_attach_target().
+> 
+> > diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> > index ec8e787929112..80504011403f6 100644
+> > --- a/kernel/bpf/syscall.c
+> > +++ b/kernel/bpf/syscall.c
+> > @@ -3677,7 +3677,8 @@ static int bpf_tracing_prog_attach(struct bpf_prog *prog,
+> >  				   int tgt_prog_fd,
+> >  				   u32 btf_id,
+> >  				   u64 bpf_cookie,
+> > -				   enum bpf_attach_type attach_type)
+> > +				   enum bpf_attach_type attach_type,
+> > +				   struct bpf_verifier_log *log)
+> >  {
+> >  	struct bpf_link_primer link_primer;
+> >  	struct bpf_prog *tgt_prog = NULL;
+> > @@ -3714,6 +3715,7 @@ static int bpf_tracing_prog_attach(struct bpf_prog *prog,
+> >  	}
+> >  
+> >  	if (!!tgt_prog_fd != !!btf_id) {
+> > +		bpf_log(log, "target_fd and target_btf_id must be both set or both unset.\n");
+> >  		err = -EINVAL;
+> >  		goto out_put_prog;
+> >  	}
+> > @@ -3726,12 +3728,14 @@ static int bpf_tracing_prog_attach(struct bpf_prog *prog,
+> >  		 * attach_tracing_prog flag is set.
+> >  		 */
+> >  		if (prog->type != BPF_PROG_TYPE_EXT) {
+> > +			bpf_log(log, "target_fd is only allowed for freplace prog.\n");
+> >  			err = -EINVAL;
+> >  			goto out_put_prog;
+> >  		}
+> >  
+> >  		tgt_prog = bpf_prog_get(tgt_prog_fd);
+> >  		if (IS_ERR(tgt_prog)) {
+> > +			bpf_log(log, "Invalid tgt_fd.\n");
+> 
+> [Severity: Low]
+> As reported by Alexei Starovoitov on v2 [1], should this log "Invalid
+> target_fd.\n" to match the link_create.target_fd UAPI field name used by
+> the other log messages in bpf_tracing_prog_attach()?
 
+with this fixed, the tracing_multi changes lgtm
 
-On 11/23/26 11:46 AM, Eduard Zingerman wrote:
-> On Mon, 2026-11-23 at 10:01 -0800, Yonghong Song wrote:
->> On 11/23/26 9:45 AM, Eduard Zingerman wrote:
->>> On Fri, 2026-11-20 at 13:49 -0800, Yonghong Song wrote:
->>>> For a BPF_CORE_ENUMVAL_VALUE relocation, libbpf sign-extends the value
->>>> of a 32-bit enumerator even if the enum is unsigned. A value in
->>>> [0x80000000, 0xffffffff], e.g., DCACHE_PRIVATE of enum dentry_flags,
->>>> then doesn't match the zero-extended value clang emits, and the whole
->>>> object is refused. And a target value in that range is patched
->>>> sign-extended.
->>>>
->>>> Patch 1 zero-extends the 32-bit values of unsigned enums, i.e., with
->>>> the kflag 0, which is the form clang emits. The kernel builds the same
->>>> relo_core.c, so it gets the fix too.
->>>>
->>>> GCC emits every 32-bit enum value sign-extended, since its
->>>> __builtin_preserve_enum_value() returns int. So with the change above
->>>> alone, GCC objects that load today would be refused. Patch 1 therefore
->>>> also accepts the sign-extended form of an unsigned value, and patches
->>>> the target value in the same form.
->>> Hi Yonghong,
->>>
->>> I checked LLVM and GCC definitions for __builtin_preserve_enum_value().
->>> LLVM:
->>>
->>>     clang/include/clang/Basic/BuiltinsBPF.td:
->>>
->>>     def PreserveEnumValue : TargetBuiltin {
->>>       let Spellings = ["__builtin_preserve_enum_value"];
->>>       let Attributes = [CustomTypeChecking];
->>>       let Prototype = "long int(...)";
->>>     }
->>>
->>>     ---
->>>
->>>     gcc/config/bpf/bpf.cc:
->>>
->>>       def_builtin ("__builtin_preserve_enum_value",
->>>                    BPF_BUILTIN_PRESERVE_ENUM_VALUE,
->>>                    build_function_type_list (integer_type_node, ptr_type_node,
->>>                                              integer_type_node, integer_type_node,
->>>                                              0));
->>>     gcc/tree.cc:
->>>
->>>       integer_type_node = make_signed_type (INT_TYPE_SIZE);
->>>
->>>
->>> Meaning that the two indeed disagree. Given that GCC version can't
->>> express 64-bit values, it appears that GCC side definition needs an
->>> update. Would this allow to avoid GCC-specific workaround in libbpf?
->> Yes, I am aware of this issue. See
->>      https://lore.kernel.org/bpf/a4aec2b1-f754-48ed-a7d7-ef07bed43eb8@linux.dev/
->>
->> I even suggested a solution:
->>
->> diff --git a/gcc/config/bpf/bpf.cc b/gcc/config/bpf/bpf.cc index
->> 3ef93938222..45d5337bab6 100644 --- a/gcc/config/bpf/bpf.cc +++
->> b/gcc/config/bpf/bpf.cc @@ -1048,7 +1048,7 @@ bpf_init_builtins (void)                                           integer_type_node, 0));
->>       def_builtin ("__builtin_preserve_enum_value",
->>                   BPF_BUILTIN_PRESERVE_ENUM_VALUE,
->> - build_function_type_list (integer_type_node, ptr_type_node, +
->> build_function_type_list (ullt, ptr_type_node,                                           integer_type_node, integer_type_node,
->>                                             0));
->>
->> diff --git a/gcc/config/bpf/core-builtins.cc
->> b/gcc/config/bpf/core-builtins.cc index a5c973cd385..289d3e67d78 100644
->> --- a/gcc/config/bpf/core-builtins.cc +++
->> b/gcc/config/bpf/core-builtins.cc @@ -877,8 +877,12 @@
->> pack_enum_value_fail:     else
->>         {
->>           ret.reloc_data.expr = tmp;
->> + /* Extend the enumerator to 64 bits according to its own signedness, +
->> as clang does, instead of expanding it as a sign-extended SImode +
->> CONST_INT. */         if (kind == BPF_RELO_ENUMVAL_VALUE)
->> - ret.reloc_data.default_value = enum_value; +
->> ret.reloc_data.default_value + = fold_convert
->> (long_long_unsigned_type_node, enum_value);         else
->>            ret.reloc_data.default_value = integer_one_node;
->>         }
->>
->> Vineet Gupta will take a look.
->>
->> Discussed with Alexei earlier, the suggestion is to proceed as is for now.
->> It is not clear when gcc will implement this.
->>
-> Had a discussion with Andrii on this topic with the following conclusions:
-> - pahole 1.24 is 4 years old, it should be acceptable to bump minimal
->    pahole version to get reliable signed/unsigned enum information.
-> - such a bump simplifies the fix, effectively moving it to:
->
->    static int bpf_core_calc_enumval_relo(const struct bpf_core_relo *relo,
-> 				      const struct bpf_core_spec *spec,
-> 				      __u64 *val)
->    {
-> 	const struct btf_type *t;
->
-> 	switch (relo->kind) {
-> 	case BPF_CORE_ENUMVAL_EXISTS:
-> 		*val = spec ? 1 : 0;
-> 		break;
-> 	case BPF_CORE_ENUMVAL_VALUE:
-> 		if (!spec)
-> 			return -EUCLEAN; /* request instruction poisoning */
-> 		t = btf_type_by_id(spec->btf, spec->spec[0].type_id);
-> 		if (btf_is_enum(t))
-> 			*val = btf_enum(t)[spec->spec[0].idx].val; // <------- take care of a sign flag here.
-> 		else
-> 			*val = btf_enum64_value(btf_enum64(t) + spec->spec[0].idx);
-> 		break;
-> 	default:
-> 		return -EOPNOTSUPP;
-> 	}
->
-> 	return 0;
->    }
->
-> - we don't want to workaround GCC bug on the libbpf side, let's assume
->    that __builtin_preserve_enum_value() always return long.
->
-> Wdyt?
+Acked-by: Jiri Olsa <jolsa@kernel.org>
 
-Sounds good. I will have two patch set then. One is to bump kernel pahole version,
-and another is to fix libbpf.
-
-
+thanks,
+jirka
