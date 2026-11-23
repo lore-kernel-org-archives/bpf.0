@@ -1,51 +1,67 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.80
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795411288;
-	b=reKgLDn+ni2VII9vRrH90u7Yw/rxPMjiKwnTuc2VVxozF4aG2SWMSewgYebGJo4osx0v
-	 qRDd9OMSOn+vM/OU2bgNT62nMVZluG+MjOmXgm3UJW/8+TlOjJAeT7ladIo6lULbv34tC
-	 oY1WmcgmD68NlNjKtV1YHgfLi5UmbkfUKiK9Ecpi+dGsZj/7uEgNk9SBExVxwO4J6mVc2
-	 RRjXayPcMfmnDRN+iSnwXWEbcQ6iJkaj0rNv5X1uaHC6qWSjo3hFJD1sloYF7KvFdbFev
-	 zt2WJj9frPh7UKTdxhxT/0fZE9S22GXJIWip5If/nMKmg9eEyNnWsPRLkxNyNVY3cNQ==
+	t=1795411342;
+	b=jVFJBh8D8SzIK/oHFaUmAqbem19S1B3UuTL7SKtW8zSfGY9fdO2XpbxB0z1hU/nYDL5W
+	 BXmP3Ny5XqnXnGG5mjcUC00kpLI3O146FjDsLkPfwEbRn4fSZJo0gkZ3STSVWUZz3rFzB
+	 9h5aXLQxb9KGIjSPe4VnLWsAtTKHQGvCIKYxdf/oPPJMTpGPhqTBqyJ3CqJrGxfOkRPv8
+	 M4ekL4tQ8cGo/JRt4hQjCcRRrMdNxs04ClMfqpJU4xZjyGiDyqTNu85uoojaBjUb/KbAX
+	 lGtuCDEpMcUdiP3r4oAmdCrcF96SCFVfp8rspnOTkPpbkW8G9CdoPpi4UHqp9komLzQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795411288;
-	h=DMARC-Filter:Received:Received:Subject:To:Cc:References:From:
-	 Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:Content-Type:
-	 Content-Language:Content-Transfer-Encoding:X-CM-TRANSID:
-	 X-CM-SenderInfo:X-Coremail-Antispam;
-	bh=MhKPy4hLEktud7DPzU2544Zryh9tYQQv+5VGX65PXXk=;
-	b=hxVg+J+/nA3nZzG9H5CiFK6LcUzRBM5Fd3gOxd0G7ij9Fj4BjXJ+RSSURrixZFwoRQOb
-	 8rnPhWdQDlkYBfwtszJITGZMh8cdrlxymykhHyJh4S4IlzjdCpsq8ghqcmi4JZmicTnHh
-	 1FXbS66ZODbW6z6pFBw9pxnf9D2MDmb1ES58HAV+nLgJUW+KOmNHROTD3JTXAekeDAYvg
-	 rUJbmHV0/ItrDPe8BcwxFTRGS5uYnzkYNbyOL6oRj2JkcwgRZujkR39A1xVaS8ztI12jU
-	 yIw0OTSIwqAfvQgN6uj1bRr54QGDA5SF3JNLSihzYctV5ShIcfytc8YjsZXIG8omNag==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795411342;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=iy36ClD91OuaesY/Ay9KrdFH02xOa7KlfGzGZS847ZU=;
+	b=WEADHkIfbZn0CY1j2/uo9qljw7CRTfUoxllrmTY0u7AK2YvORk4vaVDVehe57ciJjKps
+	 UdvnfPvAJPTriMH58/e5hBST/CDTWmbHspPIT2ySciHSXWtTFkyiQi4rTzOVjsGUInjP+
+	 TzhGLtzIO/JyUyFTdDAemj/s0DmC4GYbtjPDdjvUfNIpHFZ1SvrbTUC9ifxdJXoumHcbN
+	 OTz53sBOtfnbnmRl9QeukhpKTARMRdtUvt/BjD/fU9oIvg7ju6sgWuE8QxoU4BgbOmH9q
+	 4p2PVT+9iFjPcRHOnOxFif7A58ragfZFeZtqZF+JPyP+Ye+8QLV2KSgfwzeXq9wqjDA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=loongson.cn;
-	spf=pass smtp.mailfrom=loongson.cn;
-	arc=none smtp.remote-ip=114.242.206.163
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B21B0606A68B
-	for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 05:21:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B21B0606A68B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [123.138.236.242])
-	by gateway (Coremail) with SMTP id _____8Cxf9NVzQNr_B8iAA--.31745S3;
-	Mon, 23 Nov 2026 13:21:25 +0800 (CST)
-Received: from [127.0.0.1] (unknown [123.138.236.242])
-	by front1 (Coremail) with SMTP id qMiowJBxpMxSzQNrps02AA--.17317S2;
-	Mon, 23 Nov 2026 13:21:23 +0800 (CST)
-Subject: Re: [PATCH bpf-next v1 1/3] selftests/bpf: Enable instruction array
- test for LoongArch
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20261123045008.23691-1-yangtiezhu@loongson.cn>
- <20261123045008.23691-2-yangtiezhu@loongson.cn>
- <sashiko-outbox-228693@kernel.org>
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <46ffa5b6-8914-eda6-a0ee-88b2d7ecba54@loongson.cn>
-Date: Mon, 23 Nov 2026 13:21:22 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="rorQCa/B";
+	arc=none smtp.remote-ip=91.218.175.80
+Received: from mta0.migadu.com (out-80.mta0.migadu.com [91.218.175.80])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D803606A31F
+	for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 05:22:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2D803606A31F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=rorQCa/B
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=D82Nd0c2N+O4K4PuYhgfhJVwNjk6bdjRGsOrqQiK2r4=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1795411339; v=1; x=1796016139;
+ b=rorQCa/BO2A211dkndlN3Z5a+4JYq5futjumyEheZuePk96gq4WCr5xxiiNzN0OOhnmMz6xT
+ ZYy/qBo+xlUR66fL2yeW3qkEcIsDDLIhN3QNJbE0KaQZEtKr3kVQkRYp3Ks+Ws7sc8Yb57Wk7p6
+ 1lORLH0C+OVV/3QD07YeWkuk=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by mta10.migadu.com with ESMTPS id d4f9441bda4b8cfe;
+	Mon, 23 Nov 2026 05:22:19 +0000
+X-Mizu-Trace-ID: d4f9441bda4b8cfe
+X-Migadu-Flow: FLOW_OUT
+Date: Mon, 23 Nov 2026 13:22:07 +0800
+From: Hangbin Liu <hangbin.liu@linux.dev>
+To: Omokefe Emmanuel Onanaroghene <emmaonana18@gmail.com>
+Cc: tianyi@cloudflare.com, kuba@kernel.org, netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org, davem@davemloft.net, edumazet@kernel.org,
+	pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
+	ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+	john.fastabend@gmail.com, sdf@fomichev.me,
+	skhan@linuxfoundation.org, kernel-team@cloudflare.com,
+	tianyi.gao@linux.dev
+Subject: Re: [PATCH net-next v5 3/3] selftests: net: veth: propagate
+ bad-settings check failures to exit status
+Message-ID: <20261123052207.GG10218@Liu-laptop>
+References: <20261121182217.4609-1-emmaonana18@gmail.com>
+ <20261121182217.4609-4-emmaonana18@gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -55,60 +71,82 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-In-Reply-To: <sashiko-outbox-228693@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:qMiowJBxpMxSzQNrps02AA--.17317S2
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoWrKrWkCF4fKFWDtFWrAw1UurX_yoW8JF15p3
-	srZF1UAr4rWrWrtrnrK34fWa1Sqr1fGFZ7KF4YgrW8CFZruw4rAFWYgw4qqan8Zw4rWw10
-	qFZ5C34vq3WkAFgCm3ZEXasCq-sJn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUvIb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-	xVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
-	1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv
-	67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07
-	AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02
-	F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jrv_JF
-	1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7Cj
-	xVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r
-	4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jb
-	_-PUUUUU=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261121182217.4609-4-emmaonana18@gmail.com>
 
-On 11/23/26 1:02 PM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential
-> issue to consider:
-
-...
-
-> [Severity: Medium]
-> Does enabling bpf_insn_array on LoongArch depend on a prerequisite JIT
-> patch that is not in the tree yet?
+Hi Omokefe,
+On Sat, Nov 21, 2026 at 07:22:17PM +0100, Omokefe Emmanuel Onanaroghene wrote:
+> Three more checks in veth.sh print "fail - set operation successful
+> ?!?" without setting ret: "bad setting: XDP with RX nr less than TX",
+> "bad setting: reducing RX nr below peer TX with XDP set", and "bad
+> setting: increasing peer TX nr above RX with XDP set". A kernel that
+> wrongly accepts any of these invalid operations would be reported yet
+> the script would still exit 0. Wrap each fail branch so it sets ret=1.
 > 
-> In arch/loongarch/net/bpf_jit.c, bpf_int_jit_compile() does not call
-> bpf_prog_update_insn_ptrs(), so insn_array->ips[] stays zeroed and
-> bpf_insn_array_ready() rejects program loading with -EFAULT.  In addition,
-> build_insn() only handles BPF_JMP | BPF_JA and BPF_JMP32 | BPF_JA, without
-> BPF_JMP | BPF_JA | BPF_X (gotox), so the gotox subtests fail to JIT with
-> -EINVAL (-ENOTSUPP).
+> Reported-by: Tianyi Gao <tianyi@cloudflare.com>
+> Link: https://lore.kernel.org/all/CAG4wq-cd01i7YrcFPmma=BXUcwn_PK=wneKW=vyEBYzQ3Bn7QA@mail.gmail.com/
+> Signed-off-by: Omokefe Emmanuel Onanaroghene <emmaonana18@gmail.com>
+> ---
+>  tools/testing/selftests/net/veth.sh | 26 +++++++++++++++++++-------
+>  1 file changed, 19 insertions(+), 7 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/net/veth.sh b/tools/testing/selftests/net/veth.sh
+> index 7a2bbed0263e7..6eeb123aaf885 100755
+> --- a/tools/testing/selftests/net/veth.sh
+> +++ b/tools/testing/selftests/net/veth.sh
+> @@ -474,9 +474,13 @@ if [ $CPUS -gt 1 ]; then
+>  	ip netns exec $NS_DST ethtool -L veth$DST rx 1 tx 2 2>/dev/null
+>  	ip netns exec $NS_SRC ethtool -L veth$SRC rx 1 tx 2 2>/dev/null
+>  	printf "%-60s" "bad setting: XDP with RX nr less than TX"
+> -	ip -n $NS_DST link set dev veth$DST xdp object ${BPF_FILE} \
+> -		section xdp 2>/dev/null &&\
+> -		echo "fail - set operation successful ?!?" || echo " ok "
+> +	if ip -n $NS_DST link set dev veth$DST xdp object ${BPF_FILE} \
+> +		section xdp 2>/dev/null; then
+> +		echo "fail - set operation successful ?!?"
+> +		ret=1
+> +	else
+> +		echo " ok "
+> +	fi
+>  
+>  	# the following tests will run with multiple channels active
+>  	ip netns exec $NS_SRC ethtool -L veth$SRC rx 2
+> @@ -484,16 +488,24 @@ if [ $CPUS -gt 1 ]; then
+>  	ip -n $NS_DST link set dev veth$DST xdp object ${BPF_FILE} \
+>  		section xdp 2>/dev/null
+>  	printf "%-60s" "bad setting: reducing RX nr below peer TX with XDP set"
+> -	ip netns exec $NS_DST ethtool -L veth$DST rx 1 2>/dev/null &&\
+> -		echo "fail - set operation successful ?!?" || echo " ok "
+> +	if ip netns exec $NS_DST ethtool -L veth$DST rx 1 2>/dev/null; then
+> +		echo "fail - set operation successful ?!?"
+> +		ret=1
+> +	else
+> +		echo " ok "
+> +	fi
+>  	CUR_RX=2
+>  	CUR_TX=2
+>  fi
+>  
+>  if [ $CPUS -gt 2 ]; then
+>  	printf "%-60s" "bad setting: increasing peer TX nr above RX with XDP set"
+> -	ip netns exec $NS_SRC ethtool -L veth$SRC tx 3 2>/dev/null &&\
+> -		echo "fail - set operation successful ?!?" || echo " ok "
+> +	if ip netns exec $NS_SRC ethtool -L veth$SRC tx 3 2>/dev/null; then
+> +		echo "fail - set operation successful ?!?"
+> +		ret=1
+> +	else
+> +		echo " ok "
+> +	fi
+>  	chk_channels "setting invalid channels nr" $DST 2 2
+>  fi
+>  
+> -- 
+> 2.43.0
+> 
 
-This series depends on the unmerged LoongArch JIT support series:
+This one and patch 2 are fixing the same issue in the same test. Why bother
+with two patches?
 
-LoongArch: BPF: Support instructions array, indirect jumps and calls
-https://lore.kernel.org/loongarch/20261123043907.20225-1-yangtiezhu@loongson.cn/T/#u
-
-> Also, HAVE_EBPF_JIT on LoongArch is only selected for 64BIT, while
-> defined(__loongarch__) matches 32-bit builds as well.
-
-I will update the guard to
-(defined(__loongarch__) && __loongarch_grlen == 64)
-in v2 (along with patch 3/3) to match 64-bit LoongArch specifically,
-similar to RISC-V.
-
-Thanks,
-Tiezhu
-
+Thanks
+Hangbin
