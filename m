@@ -1,45 +1,76 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795395502;
-	b=AYvxbdBqUz8MTbJRrHjJWB86kJt2ga+66c+xBqXaqepIHtGWIMbt5qst7JjkycJ6PN4L
-	 seA6QWYg9p+BgT00psGxWzyZIvI3v7kNb5a+CEyWqLXK4h4Uikhlj+vWU76zbjrEF14te
-	 ckahvs0DAaOSvdbYGns1R3mnfAJtCkHsMeNboMyxR9qYDmzv5m76wYk1+WuDVRJgGdCww
-	 mKY31V1HYsufWoIe1w+jWSifv0QFG6X1x4gk2SxtF3VVVim7hhmNwBxNc8giDtptBLqpz
-	 jhfs7+XKcYkQyFTQUHrR0nwhK1YTVG5H1yc442Gl2KLO2scEFv0TFLWBftA2/XG/kTA==
+	t=1795395601;
+	b=SVa4D6LO6kNA0K2asG5r1e+DoMf+OlikkmOu/kCiknvFtiMM0FsfGOAK1cAiXj6guEgC
+	 VsnO8qmeaswjMeLwWxu2HfhEYcqNAx8m3R9btwyQJCQkBtfqWkMFgyhy+TtCaRlADyXJn
+	 73ve1B3mZ5A3UvX5k71kgTL7OR2yydwNJTE1ouiPw0e8t0OJtU0r5WEq9dWYxYxXw2LHE
+	 BYzzG4E3xapCTZmPh9C4vH7yF7HEinto06ljVk2vUZjhT1WTyBS4YFYtepoYkyMJMFuRb
+	 aCjm6tKLPZFDzqbqDaOCkgJRqA8k9ZkRCG2/JYBcHe6nZuT0S9lylouezFVmdbnO6lg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795395502;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=hbouXR7A5A9JB/YPIb4FbPqutrjb1MEa6hNYonOAAzQ=;
-	b=qPUUWlw6/UHPy4LQ5sIgd/0NrX0L0Nj4rNbOZWXHncStC+N56cn5hvX6o9BpFQZCtrso
-	 VLvFlwYfk6ptYhv4KipyfpjkeO7MvRWKOInZaW1IGcebY1fDCudAIHAhGCjEjT3fufV/U
-	 rwwLqoG5qN7a591FMPFcAvC/Ky8EAomE4p57HZNLm703tmray/jrv2qr/xywo4XCotjch
-	 6ZcXL/WY34IUf9PKKEqYNigGexbRUN9Q+GlyEngXrQPwOyVicG8zA9Q3YLqckXC1N76t4
-	 +mzhRGKSQkkRLvJF/1xhzf1S/RCrT7n/W2pGA8vl5I1PForzo5z/gHVaROl9pWCcofA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795395601;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=IH6s3imrOjkSSzYR6/sWOdEeFGUNdEc0JcOzWkitMX4=;
+	b=za1UGW1WgloD1oFmUdvtKHmuJAP/tendyhrfjFMvd03ofzes4PFL+Y9kBZOhMSCWUiem
+	 Wg+Ni/9NGIa9JcKFQQj4D4SroJp52PQt6f6QKUM+FNZN6hg9pQKeif2AZLVK48otaXbv3
+	 Ev0JcT+aan1cLWfxcwUVpHc7EQJYcO7rzJRS7pDe5OLM2ROXMZAgdHQC1laRhV3QA6sMo
+	 mzlv8GzOa/y7+Q6ttz4klAdZEtOlxDG4wqS9XbuzlQjrMRPxrbCpiAyw2h037W+Imc/ej
+	 XuBQfkWeNHsJg7ZCFaMaCQCKpmdH/aqAPO9iQ42RXaRBvRW11JrNspheNvDUDSTITCg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NYpOkrDw;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iyho16XO;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A9E7606A335;
-	Mon, 23 Nov 2026 00:58:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id E6863606A693;
+	Mon, 23 Nov 2026 01:00:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NYpOkrDw
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C0271F000C6;
-	Mon, 23 Nov 2026 00:58:19 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iyho16XO
+Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 48E061F000E0;
+	Mon, 23 Nov 2026 00:59:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795395502;
-	bh=hbouXR7A5A9JB/YPIb4FbPqutrjb1MEa6hNYonOAAzQ=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=NYpOkrDwMmFcrk9uE09Oqzkjyh1DRlxlzO8GXgR+s5aqfn3C9QfCHZwzP/gUsSLPO
-	 P7aomuIMtDjrz13moeRxLVvL44B5ylMCovfrdykdUBG11TaYNrDt/MdKPHpxL4Q7t4
-	 QyhjrQtMLREM0y/ajr48Oi4gTFNl//I2hK/Jg8huIISIkvlASaxebdUstat6QpAHl2
-	 wlUqVvfcQhXW9cyDLnvGyLyD7kIedv6xv55t7cYQ0T0p/9h1P5xLONfSFREeVLfJe/
-	 shIB1vT6zYXT/LGDCPOLRUy7x91Ma5wZauLEOzfx5tEEF7Hdw9NYKnOrmKeFDrdvy3
-	 5EDnjkphtwe/A==
-Content-Type: multipart/mixed; boundary="===============5078455097996705914=="
+	s=k20260515; t=1795395600;
+	bh=IH6s3imrOjkSSzYR6/sWOdEeFGUNdEc0JcOzWkitMX4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=iyho16XOD66JQTO4jubhBZ0x5ppfRmDr3yr5LFUtdo1H0PSKcslH+DafW6vC8Cnkz
+	 DPsyD3bvouIDFeYEgKwGdpN/x9aZcvEM35W8B92UZaq+O0Ce9W9F5NdKyNliOOR8gx
+	 lAtWhb0jQMl38Fx9T01rCfo4aSLPmXHsFlJD+cX0T/6PozwKbSgIWKunHlXCgqZoo6
+	 eTyKYKU7VwfDLK3zD48tZrYgoFjQB95Bh9oATJp4kQjSeGHm1qTq0zgah8HiSlkFSg
+	 pfKe4QtlaYIeRD+rXH6/DNBqw1HpWFM/EnHiiQXg0y7lEwCuZlUww7ZIsj542/TaQr
+	 XDucFZ57yBeBg==
+Date: Mon, 23 Nov 2026 02:59:56 +0200
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: linux-fsdevel@vger.kernel.org, bpf@vger.kernel.org,
+	containers@lists.linux.dev, linux-api@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org, linux-security-module@vger.kernel.org,
+	Aleksa Sarai <aleksa@amutable.com>,
+	Alexander Mikhalitsyn <alex@amutable.com>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Andy Lutomirski <luto@amacapital.net>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Christian Brauner <brauner@kernel.org>,
+	David Howells <dhowells@redhat.com>,
+	Eric Biggers <ebiggers@kernel.org>,
+	Giuseppe Scrivano <giuseppe@scrivano.org>,
+	Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
+	Jeff Layton <jlayton@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Josef Bacik <josef@toxicpanda.com>, Kees Cook <kees@kernel.org>,
+	KP Singh <kpsingh@kernel.org>,
+	Lennart Poettering <lennart@poettering.net>,
+	Neal Gompa <neal@gompa.dev>, Oleg Nesterov <oleg@redhat.com>,
+	Paul Moore <paul@paul-moore.com>,
+	Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
+	Serge Hallyn <sergeh@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Zygmunt Krynicki <zygmunt.krynicki@canonical.com>
+Subject: Re: [RFC PATCH v7 00/26] userland: Userland containers
+Message-ID: <awOQDOel_72Xwjm7@kernel.org>
+References: <20261122193539.3334213-1-jarkko@kernel.org>
+ <DN25ST0D5K1J.1NI5236BF2BPY@gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,68 +80,42 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <9adaadb2bd9667d049d68e9e4ed3dc4cf6204174b365029bd8422aeb759c2d11@mail.kernel.org>
-In-Reply-To: <20261122-bpf-rhtab-irqs-disabled-v2-1-207aedcc2215@columbia.edu>
-References: <20261122-bpf-rhtab-irqs-disabled-v2-1-207aedcc2215@columbia.edu>
-Subject: Re: [PATCH bpf v2 1/4] rhashtable: Add trylock_irqsoff for callers that can't spin
-From: bot+bpf-ci@kernel.org
-To: mt4022@columbia.edu,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,yatsenko@meta.com,herbert@gondor.apana.org.au,akpm@linux-foundation.org,shuah@kernel.org
-Cc: tgraf@suug.ch,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,bpf@vger.kernel.org,linux-crypto@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,tz2294@columbia.edu,mt4022@columbia.edu,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Mon, 23 Nov 2026 00:58:19 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DN25ST0D5K1J.1NI5236BF2BPY@gmail.com>
 
---===============5078455097996705914==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Mon, Nov 23, 2026 at 12:21:16AM +0000, Alexei Starovoitov wrote:
+> On Sun, Nov 22, 2026 at 11:35 AM Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> > v6: https://lore.kernel.org/linux-fsdevel/20261122011809.2667684-1-jarkko@kernel.org/
+> 
+> v7 was sent 18 hours after v6. v6 got replies from the bots only.
+> v1 was +2559 lines. v7 is +5782.
+> All six findings of sashiko on v6 are still in v7.
+> None of the seven versions got a reply from the vfs or LSM maintainers.
 
-> rhashtable: Add trylock_irqsoff for callers that can't spin
+Apologies, I started testing this with bare metal as a result of
+hotplug, and things just started to roll out as I got a better touch on
+its use as a result.  The growth is by majority in kselftest. The
+feature has not really grown but API has shrunk along the way. Still,
+demonstrating that full detachment from syscall API is important,
+because it sets a bar for any approach trying to do this.
 
-TL;DR: Nits only: documentation gaps. The new -EBUSY return isn't in the
-remove kernel-doc, and the member doc omits UP always returning -EBUSY with
-IRQs off.
+I had no idea that e.g., that  quality would be even possible but
+one thing led to another this went a bit out of hands.
 
-> diff --git a/include/linux/rhashtable-types.h b/include/linux/rhashtable-types.h
-> --- a/include/linux/rhashtable-types.h
-> +++ b/include/linux/rhashtable-types.h
-> @@ -52,6 +52,8 @@ typedef int (*rht_obj_cmpfn_t)(struct rhashtable_compare_arg *arg,
->   * @min_size: Minimum size while shrinking
->   * @insecure_elasticity: Set to true to disable chain length checks
->   * @automatic_shrinking: Enable automatic shrinking of tables
-> + * @trylock_irqsoff: With irqs disabled insert and remove don't spin on
-> + *		     the bucket lock and return -EBUSY
+I also wanted this to as good form as possible before going on
+holiday, which I'll be starting tomorrow but this was not a
+motivative reason.
 
-This isn't a bug, but should this member doc also say that on UP without
-CONFIG_DEBUG_SPINLOCK these calls always return -EBUSY when IRQs are
-disabled?  Only the commit message mentions it.
+So yeah, again, apologies.
 
-[ ... ]
+> 
+> The way you're spamming people you're only reducing chances of anything going in.
 
-> diff --git a/include/linux/rhashtable.h b/include/linux/rhashtable.h
-> --- a/include/linux/rhashtable.h
-> +++ b/include/linux/rhashtable.h
+I personally think that "getting in" should not be a goal in the first
+place. I care more about that whaever gets in has a high bar of
+quality enough. It can be something different than this but
+when I read the LWN article about Cells I was alarmed enough
+so that I had to do this and prove my point.
 
-[ ... ]
-
-> @@ -1066,7 +1094,8 @@ static __always_inline int __rhashtable_remove_fast_one(
->  	if (!bkt)
->  		return -ENOENT;
->  	pprev = NULL;
-> -	flags = rht_lock(tbl, bkt);
-> +	if (!rht_lock_or_busy(tbl, bkt, params, &flags))
-> +		return -EBUSY;
-
-This isn't a bug, but rhashtable_remove_fast() and rhltable_remove() can now
-return -EBUSY through this path, and their kernel-doc still says:
-
- * Returns zero on success, -ENOENT if the entry could not be found.
-
-Should the Returns lines mention -EBUSY when params.trylock_irqsoff is set?
-
-[ ... ]
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/45090312341
---===============5078455097996705914==--
+Br, Jarkko
