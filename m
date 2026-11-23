@@ -1,100 +1,99 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.41
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795463169;
-	b=sxE7gAsWAQ4Q7rpqxIV+eMPipg4r9JwRnR9TjX7gnenStSD8LSRqV7KoKAl2p7fFbZ0O
-	 q6PwXBCsrW7M+R/UaxFX5p8EOiIxn3g25BmlYVS7R58mpa6QAD8vKteMZZpDerJk2Fqm4
-	 NKqYmt1iBFDNE4+8UCLFPZ95n3hC9L6+uT68s8YxNkcj6UAW2UkUJEBE5HTepmodoOR85
-	 Mrs+Z1GGoE6D6j0wVhJfkTJZMCfg0GOhYRXt2JR8eMkTYsWtZfhSrk5eJO6LGWHDJDvn9
-	 GHFJReQMFv44FXQOVKgNrYYRdyupeO5wrorTC5Lymv7TU0XsF2iLhd4H0nL7WBo8jRQ==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795463169;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:Content-Transfer-Encoding:User-Agent:MIME-Version;
-	bh=+oTeWEIZYvGUzs7OiSyKKI+4MzSKO59unTd0y8MRQwU=;
-	b=SiSybBSfwjGFcEGRseRJZY1UhIfMv/Jz6Ih6myfUU1I+qLjtvARDU1jBnYDfvRjMMwOE
-	 h8cfAv6BP1Ych+4CVBH4BVLp7vdCVpkK02zaFU/9slYdhLDv1Me2vzQ9PWqkoB53wX1rd
-	 PEXeAKJq+ZOY8IleUMe1OJ4Ze5rMQ8PSKrQBtIkup1+ofqv/Ed12qXWqzbIuBU1AEZEKJ
-	 hdnvL6aps7XN9avvSPWiVWcNmyqnlI0nMj6u9A2YPYF755A8y7d8gMY18CkNk+xDWVEsG
-	 sLklcQOTiz9FQPXb+qAmh4yx4QWn4t84ouDXRsRDv9lrO50vSWiIvwANcwVMifTUfUw==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=MFzc9cdS;
-	arc=none smtp.remote-ip=209.85.216.41
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.201.46
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795463166;
+	b=2wwlWNWiHT//ccLJT+XbBbA5w+MC3p/00zCPTA+rxkb8yFXJtz+TjzIu5qr68LNrGpes
+	 fSgTgLlc1n7JIazVYYM+Rk3/r22Qyg6ajKCSugyA105kWJxUeis+gwkuKN4v0Ve27wRLG
+	 ikGmazsgPx5OLJNeDiXYNciH5vcLatSnoJSw3g++sZHIfASROvUwOko037Ol5lav/X8UX
+	 JSrM9lEnt9U+Ke8Oa1Yc1ZrmQsM7B48Q4j1kfP3rc3Vkqpo/GUjmGGLki0Z+thMcQ9Jji
+	 lJHtegPaRTpbRjEbnswmhpD5W6kMJJD/09UM+Nf0tHZPA39c+KYR6VvvAu/18by7c9g==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795463166;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:Message-ID:Date:
+	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding:X-ClientProxiedBy:MIME-Version:
+	 X-MS-PublicTrafficType:X-MS-TrafficTypeDiagnostic:
+	 X-MS-Office365-Filtering-Correlation-Id:X-MS-Exchange-SenderADCheck:
+	 X-MS-Exchange-AntiSpam-Relay:X-Microsoft-Antispam:
+	 X-Microsoft-Antispam-Message-Info:X-Forefront-Antispam-Report:
+	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
+	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
+	 X-MS-Exchange-CrossTenant-Network-Message-Id:
+	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
+	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
+	 X-MS-Exchange-CrossTenant-FromEntityHeader:
+	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
+	 X-MS-Exchange-CrossTenant-UserPrincipalName:
+	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
+	bh=4O7Yh56fKh/q6/tnTMLnj/3/E0wZbOBEq8RccLPoCDk=;
+	b=5pYD/mvPZN/PDApa2Ys9qpkbSCY+/ZYJa/GL66WDAMJ3TzxzFJE8Xah/8v8QjqmfAIUa
+	 46Zdbx9LJVUrp8/zaUUAQrFqh1VrpJ+ikVAglfws/bFbj/hgybfP/6ZxgWK1WG6MRC14t
+	 H54Ghg/n/ZsYAftGbAEzRsgVNakD93UBHj1R5baqJ2nURYBrcGBq5pNu8Mz4mRn+leth5
+	 gC+E6peuykDJmvq5Y0UkKEXyUQpRw/OfBSBk+HvHLWUP88pmeKJZKbJbNveVJJsnurZp5
+	 8FFJYLUJNMOb2jtf6oMZ2851wJormyoZur2FTX0eGzmnwqfS2ASWjDghq+2faoJDgdg==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=nvidia.com;
+	spf=fail smtp.mailfrom=nvidia.com;
+	dkim=pass header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=s15NEf91;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.201.46
+Received: from PH7PR06CU001.outbound.protection.outlook.com (mail-westus3azon11010046.outbound.protection.outlook.com [52.101.201.46])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0622606A321
-	for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 19:46:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D0622606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DEFE606A31A;
+	Mon, 23 Nov 2026 19:46:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1DEFE606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=MFzc9cdS
-Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-3ae1da332bcso1840854a91.2
-        for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 11:46:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795463168; x=1796067968; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=+oTeWEIZYvGUzs7OiSyKKI+4MzSKO59unTd0y8MRQwU=;
-        b=MFzc9cdSeIc0xnvgDnyqVFhMq30gHLI7/3oyOhAJjhYeG6gz6DN2eJ4EyCT3haueLx
-         dU9Znxsvkq5EJVI80krRc5xWijRQZNLAJVMxAyFuppFn4v417RwHFl04eYmcBjwCpJuD
-         I3eQmog2RnPLzGHtM8mM7EcRmyzZkwklWoo5JBY6Jbiojq3cjkE913agY/dRu49M3FCx
-         momiJB5lfK+o8lGgyGnD8vBhEPZXi0rgAd8mQkP9XuMBLZsFZ96KJSj9uN8KM9rxrl64
-         jbbyAMoerKr/0AySbwvpolPu96gOJ2fcvgDLHmsBdyYXWbp8epfYjtZEgpAa9YyE7G3b
-         wkDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795463168; x=1796067968;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=+oTeWEIZYvGUzs7OiSyKKI+4MzSKO59unTd0y8MRQwU=;
-        b=RkjqK9iTJs3XEbtLuonOTHqDGcfMh4fWyELd3PKOYzDWip0jOj2I/8jNGJ0QJSbpMX
-         fBLrNsc9oGYLFxH50709/UCexHpB63zzGnY6USHLxgIAvvAAR4iNYyGo57nEXACl8DLD
-         aBxFSpPs2FM1A2fNiSWTYhE3vjxhlNObBsBUOsUSbJV5iWKUx0D+F29ZoxXWwLu7/5G1
-         MblEQvaGM+DZhheHH3ani8NGsTAtWA+zr6WF7bTcnnJh2ooqPzb8Pm/wFTBVlKxqwp1f
-         qI3eJsUBmS9j9MeTVRDroeiE6QWc5T8yYuS7mDLzeq9qMYyxjCq947Zrk6SoQSJ8s64J
-         y4IA==
-X-Forwarded-Encrypted: i=1; AL+hErGkE8ZQCk6IXuJ2egbWB3+UUABgeKW8h+VDDLxeDbiOK2f1ZyjuP9Stnuy8wR9piDYHswk=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9Tp/GY50q+ZE5XmZxNIk0MEOM249WtD1I8qNpwBZmVkstrYgVm
-	zMV9q8uGcFd3RZot1fhoSC8cbiMuTNzCGXn/+AIwp/HJXJYuWnzJTneF
-X-Gm-Gg: AZFdTZf/oAVj3M76WKYgGvL0PBW/9PBWsaC+ZkdC1TdM3turT5tXe1kSu20eNzBKpAY
-	PooWUezQWopaz7kypu3oeQSXgOiIHkDP7ZqAcKeidgTF9kIzexnex1cMeIyeA8Hn0xlNa3nsNPl
-	2lZo3FLyfrKWKfWe43sFwpLdfHzLSqLX+SwkhXRXjkRkwagBd6CI8oDByahWWEcGevG/7t96Wt8
-	IFLMGMjMFWodUz3B84OeJqbY9HUTcUBXlu93Y8LJ3EXP6L5auY0L9BxNFC4pq0efd7JDlWNbFmZ
-	P7DaYOecJ46YMJTj4cgzSUdjWds+lJmdMIT4IuBMiPYeI2D+yfkqGlimhOMFxPjr+Fg3RB1NADt
-	aij3k3MObTlTiS4N+hNxOhCG5TFWXCgYdSFLZmydTr7AbhnPeRYxB5GVMF/ci1LD+wTXTHRY1Wz
-	FJ++OSp5ijtvy9TGgLL5mPHnHJl5HkptMX4CeNrfWbD8hbrNXGDWuXU7xAXJ+DDgbooQJr9VCma
-	SfRyjF8DR+gRFV3uG1YhroR80qOSMLZoChqk8QnF++jv4g3V/7m/u/TWroM7P1gFICV55XkhoHB
-	XCbdReWuhtl/r11rxhDWif07NTrslcXxAn7PKW+bX6IOBRqCdAwdJbo2KA==
-X-Received: by 2002:a17:90b:4ec4:b0:3b3:bf8f:9ccb with SMTP id 98e67ed59e1d1-3b41c8ffa94mr9996644a91.18.1795463168019;
-        Mon, 23 Nov 2026 11:46:08 -0800 (PST)
-Received: from [192.168.0.226] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b4b3c71192sm2963167a91.5.2026.11.23.11.46.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Nov 2026 11:46:07 -0800 (PST)
-Message-ID: <d678f6992169065c5f1e67b89d39ad6a463923c8.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v5 0/3] libbpf: Fix CO-RE relocations of
- unsigned 32-bit enum values
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
- <andrii@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>,
- kernel-team@fb.com, vineet.gupta@linux.dev
-Date: Mon, 23 Nov 2026 12:46:06 -0700
-In-Reply-To: <8fdf1b51-7368-46e0-80f9-744b15845ad0@linux.dev>
-References: <20261120214957.868409-1-yonghong.song@linux.dev>
-	 <fc517c55e7060cf7c0da6e797a602488cea403fd.camel@gmail.com>
-	 <8fdf1b51-7368-46e0-80f9-744b15845ad0@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.2 (3.60.2-3.fc44) 
+	dkim=pass (2048-bit key, unprotected) header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=s15NEf91
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=e00IKdXZWR1AsIXgMaktZ1jbLyT9HnFAJklFyyeXQ8xjPwku7mM4ZdxbBL8UMDWLBvhIqDsrVxJ9RfS//nZsbQSVDQV+34kOeH8l4GkAGOA70ngdpxvA1dPm4ueDYpMEXP7xNwHNxNu5IV0AI2JK9hQLE18fTv4pjr7FgcNLLKzvB+B51xZ5f9iERq+HnAJxXmKgPABW3lghvzIkCQK9njH9pKE/fqwtsqu2IOudlgqb7YaMJRyXcIujRAnb8j+Z4EerTF57UTZg0L8IrNXUTzA9CXO0u72nmqFIRHEv76LGB91b+2f/BYqiRN/hUUVibAKiG4cYXsQJuE0Zo+h14Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4O7Yh56fKh/q6/tnTMLnj/3/E0wZbOBEq8RccLPoCDk=;
+ b=aTOwDwso9jKNhhrK85ZLRARXz2UHIvVx7wBX6fCKXTsxFk33JrfL0B7QbQFlAWRefo7eyxiIizTiYZ3a0tzTOsvItBFqtebT2sts5c/d9SV9xDVlF0JlM1V+jp2mtk0hoLBu0mMZXeGUMD/o9nui0BU3BIH2uiqjyc8vn2ILpt+N54dv1w9DGrZTmLnOpDRiuug36udrJ1kpOxN1hs6VEheHvLg5A1fYh4OBRdDfCIC/Rq3fXjjjfjNmPFomShpOuS41OtWmCcKmty59YcPcHCABY3FxCO2WuhIgVQCNXSWMvzmkm4CanpL4wonCrzyBLSnqb4bO7JuBeUDRglpw5A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4O7Yh56fKh/q6/tnTMLnj/3/E0wZbOBEq8RccLPoCDk=;
+ b=s15NEf91BZ5yKdybAh8Ast2EVOoYiEAOaA74PLhz/e7MsvDzBuKIXzcRlPZ1OCjdEr+lszDD9BCcoGgzKU5s5VtYdISQgHKN4LkP9rLx0rxfOU/FAW7h3ERxmL8vRmRNh6og6FkqKuzcceyinx7+XZQ48//s/w4RrPKZ156Cg/ETCTj8dl3L8El6mSev4IFWkOTDn+rngoefQ+UwrOZcpJZbdzp6hHnbbMMQ6TFMeWgOJDWFP3EqhmqgJ2+kqmHIUypAuFgCGvgMACQhkHVIyUoJkUJhuQgfCnUmFrjfXGxexKnyST9FWRhY+ZVECIAojBJXQKSW4dU/39oq1VpCGA==
+Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CHAPR12MB999248.namprd12.prod.outlook.com
+ (2603:10b6:610:2ff::22) by SA0PR12MB4352.namprd12.prod.outlook.com
+ (2603:10b6:806:9c::9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.639.12; Mon, 23 Nov
+ 2026 19:45:59 +0000
+Received: from CHAPR12MB999248.namprd12.prod.outlook.com
+ ([fe80::4972:8062:d74e:b205]) by CHAPR12MB999248.namprd12.prod.outlook.com
+ ([fe80::4972:8062:d74e:b205%6]) with mapi id 15.21.0639.010; Mon, 23 Nov 2026
+ 19:45:58 +0000
+Message-ID: <9e4c9d14-f653-4f49-a9ed-f423d2b96976@nvidia.com>
+Date: Mon, 23 Nov 2026 20:45:52 +0100
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v2 6/9] eth: mlx5e: drop the now-dead HW-GRO and
+ LRO vs XDP handling
+To: netdev-bot+sashiko@kernel.org, kuba@kernel.org
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+ pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
+ michael.chan@broadcom.com, manishc@marvell.com, joshwash@google.com,
+ hramamurthy@google.com, tariqt@nvidia.com, saeedm@nvidia.com,
+ daniel@iogearbox.net, hawk@kernel.org, sdf@fomichev.me, willemb@google.com,
+ przemyslaw.kitszel@intel.com, bpf@vger.kernel.org, nktgrg@google.com
+References: <20261122010112.1471146-7-kuba@kernel.org>
+ <179539763134.3135.16178645255065325636@kernel.org>
+Content-Language: en-US
+From: Dragos Tatulea <dtatulea@nvidia.com>
+In-Reply-To: <179539763134.3135.16178645255065325636@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: FR0P281CA0161.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:b3::8) To CHAPR12MB999248.namprd12.prod.outlook.com
+ (2603:10b6:610:2ff::22)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -104,138 +103,299 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CHAPR12MB999248:EE_|SA0PR12MB4352:EE_
+X-MS-Office365-Filtering-Correlation-Id: b4f748ac-c693-40ef-72a2-08df499a6590
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|1800799024|376014|7416014|23010399003|10067099003|4143699003|5023799004|11063799006|56012099006|261021135927099003|261021121427099003|261026140227099003|261022105027099003|261102123227099003|261028144727099003|261026121527099003|261022075727099003|261009223027099003|18002099003|22082099003|3023799007;
+X-Microsoft-Antispam-Message-Info:
+	TqClx0Jvkbz2TdRyIQE7CTN+EZyrGCrZPX8Uey1uotQWOixwnWlJqW2dvRGIMr8M67ZtBSCdmtds9KaxJsyI9jXgkq2ylq8o6xdb4YadQBxHiz9kyNJ+qlg5DHO7UWlU38bW4IFHyIyCKQ/Cxw7pI45reBdPVyJXuCRS+Wr8FDbTgymFzFIVZ3iK/3aTrNvuK3DKYld6lkVW5jWjm+6wEfuD8bEIbJlDWCnCcJIXoooAh+l6NRuSvXxu3hX6Zi8Zynk8acbh1q1ylHamjvBE9ze0n2WbW8ZPtWixHSSSTV4gVcJP7meB9Udsb2VIzYdKmWROqpxd2zMDJvriTksRp3gT9DX/LBEXjOUZVCyH5E4yu2tVgtVj1rWNUCxLAtZ8Bq5b54H2XC0YdA+I+nVck1w1PmTUww3+APuClH51D2Ttw89SFt9dje6JnDZluHA2WtErTwrS9KMRNx94nuM37utTpfS35oJ8nDfcxvKV7LQP9I24+/D8pAnEQ/5uWt6PGDm/Ar0gtIdmt04x00kpH4euMyFum1efh8ANzOOU/0PqePJa+TxFNC/mgBbEu9oXisjH+VwbolDnmTPKTybzlAwyZwHsqWXuvkfQ6QPl1qhBxma2D+iZi517TQqOOaHN2zfWRDcgjTCe+RFFKOSzrSbEDGeC7KUah0fajkcIJMw=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CHAPR12MB999248.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014)(23010399003)(10067099003)(4143699003)(5023799004)(11063799006)(56012099006)(261021135927099003)(261021121427099003)(261026140227099003)(261022105027099003)(261102123227099003)(261028144727099003)(261026121527099003)(261022075727099003)(261009223027099003)(18002099003)(22082099003)(3023799007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?WHdwS0pmdmVyMHMrZXRsM1RTcEpTOThoSHhWczRPdEpVbE5wRDFtSWtnS01X?=
+ =?utf-8?B?ODdRZ2tJOHBRTDlyNFhQenBUUVpvb0NUNk1Gd0tKeEVXVDh0UXdoaUNjOGF0?=
+ =?utf-8?B?YjE2eEVnS2FoSnJueEErWEUxdEZobm5hKzVxRW1oSy9rblY3Z2swY1pVRDA5?=
+ =?utf-8?B?dDc1Vm5oWStVRVIreWNzYktkZ2cwcU1BTW43eDF3K0lWUk9GNmxmTDkrY2Fh?=
+ =?utf-8?B?cTlPS081VGxCNXd5d3pEZ2x4aEgwMWhUVWtsN0QxaDlMT1M3SnhlRFNVUHY4?=
+ =?utf-8?B?SWptZWtIYTZyMVBhSkJXRXIvOTRUajh1ZTFUZkNCZ2R1QWIzZlhldmdNV2NE?=
+ =?utf-8?B?QXU1M05FRFdqSzVxRDhFb0JielpRNkRBM3QwT0ZTbnUwenFXdW01MThkYklm?=
+ =?utf-8?B?ekU2MVgxcGhabk1rL1JYVERPWXFjRXZzOW1lQWpiRjhFalZKWEtYQXZWd3F4?=
+ =?utf-8?B?NGdSNitEeEVpZ1ZpcGpQTjBjdWJmQXlzaWczTXczNDV0anAzcEdZbjZmZWZR?=
+ =?utf-8?B?bnhpQms4cEtCMzc0eWwzdXluTVVTL1p4OFZlcWdqaStET3JMT1RtVzNEVDRF?=
+ =?utf-8?B?NVFiYU5GZHdCZlZpZDU0Rml2ck9PdjZyU2NKbm9mV1VOTWRBNS93QlhXMVJE?=
+ =?utf-8?B?bTd2L0h5T1J1ZUlUUXlwZ0wvR1BKZ2hZMzJsS2hobHZxTi9TWWpyeTlkK1ZS?=
+ =?utf-8?B?dWhPSWNrTlVuUmUxanpCSzVkVmRoQkVGWXkrZ2ZuTFZDU0syUnNLODVpK1cz?=
+ =?utf-8?B?REZlZ01hSldYU29TVEJqaXUwVUF1N0xTM1gxeTgzdjAvc0hHMWNlT201NlBC?=
+ =?utf-8?B?dm5LdytuMnVVUExYUHRIWStPbkFQMkFiNDVXSkRMQVVvbkY3dXE2ZWMyWFJO?=
+ =?utf-8?B?RCtaTzVTejRvMFpkUVgwYU1jaU5hcWJ6VlBGTDhKWWdTN0d4Zm5Ud3ZEWnE2?=
+ =?utf-8?B?dUF5bWxvMWxFWHVvd3oxNTlqTEp5TFZBTHVhdGhXcFBNM0ZJVkpPbTZhd2Z2?=
+ =?utf-8?B?UHBoT2tRd2xpL3I1K3lrSm1IckJNbkgzdldlc1NNQWFOdS8za2o0bTN0WGNJ?=
+ =?utf-8?B?azJmcU1ST1lueXBqSkZSUFgwMnllKzdTbmwwcmM1b2EvUVkwWmJ1M2V0ZDAr?=
+ =?utf-8?B?MWdDK21BY0dTa3IrK010SWtDTUU0Wm1Xa1RmdzBhcXdXdUc3d0dyTmlDR21Y?=
+ =?utf-8?B?cHBiSVd3cXluNVdVZERDQ1ZNK2dsMDVLUEQzdjFlQ2M2djQ4THBtR0c2cFhj?=
+ =?utf-8?B?SXFWdFFUOUZIN0lGQzBrMFc1a2RoVUNneGZMWXlBSnpBZjdZVXBDZXRib3ZC?=
+ =?utf-8?B?VVYyYmhGdGQzRmsyNVV6ZGNtTkNRbEJUcU1aNEZMcG81clJ1dDY5TXlLeVVa?=
+ =?utf-8?B?QWFubWJjYmJPOU9rWjcyWlp2SVIraFFIa1AyMEpuMnRlZUdaT3Z0QmZxT21z?=
+ =?utf-8?B?Z3NMRWJTaGFzMXhzYWhsMXFyRVZrVmptaDhpTXNTQTdBaEU5cTNXNzAvdjFO?=
+ =?utf-8?B?dTZ6azd2OVhTL2VxdElnQlh5NkZQSHJ6WjlUZnZuRzFYN0ROSnAxbThKQWpv?=
+ =?utf-8?B?T1JWR0dmelUrN0JFdElxM2pKQWFlS1p6ZEQ5T2ZxNEpwdCtQMDJaL2IzODBN?=
+ =?utf-8?B?dmRBUU9TTS83WUwwNmZ4VUlIRFZZR0dnYmtZcnpxNEFNbFZpaEI4NmVGNjJ2?=
+ =?utf-8?B?ZmdwQ0ZxSTZsbE9Lam8xMzVVWUJYbE9XSjN2N1JibFNtZnNiN0JoOXA4cDNQ?=
+ =?utf-8?B?UCtrQ0kxNEFITmdVSVlJUXpRSWp0RzhJTlZJNXpraEh2eTV3T3BiQ05UN3FE?=
+ =?utf-8?B?MFlLSzFhNWpDdzFpUVl5UjJtaU01RFlpTUl3dC9zREdxUnJpVWQ4NmRLMmZr?=
+ =?utf-8?B?bUxUWmNJRi9ScXlGY1VIWmhybHZ3QWE1NkxWVmo3MEJhNVd0bk9ZaG54aHpP?=
+ =?utf-8?B?K2Z6WWJGSFhHSlNlOHZUd1BYdXB2NXFTajFMejZLYTF3T3lPZGFzOExvdk5v?=
+ =?utf-8?B?RDVzblpTeG0vYjh0NkVtajNmL1VQaTA2c3hHKzBSb0NFMlNjOWtucVAxalhz?=
+ =?utf-8?B?Tk1PaW40S3pBekF5RnVrMHpwVXZXK1ZkL3RyQ1lvbE5aSEM1TWM0bmR4ckhr?=
+ =?utf-8?B?WCtOUmN0R011YzdYUFNiL2RUKzZqMXZhY3VsOEFZb3ZPM0ZvL0g0M3BnT0tG?=
+ =?utf-8?B?dXI2bDVUTS9XYUlSUEZsUDhBblNISGs4aTBwanlTVDNoMUpiVUR2R3JSejlH?=
+ =?utf-8?B?enhyR2F2enFzcDhVSDY3YUM4UER1V3hZTWNTVlk3dWNTdkpNRFBTYUNXanVI?=
+ =?utf-8?B?enVzdnRwKzB0KzJDTm9mYzNYUGd1RHUyWHN6LzBHNGhQUFNFbDlvZz09?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b4f748ac-c693-40ef-72a2-08df499a6590
+X-MS-Exchange-CrossTenant-AuthSource: CHAPR12MB999248.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Nov 2026 19:45:58.8997
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: /2eYQvo2vRHNeuV/xZgFl0LqYo/giekyXyOego3PUYDLAtpTdKeOsOW5/HTaDBIebQhCDpJlbMp1fIWKOk1kmw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4352
 
-On Mon, 2026-11-23 at 10:01 -0800, Yonghong Song wrote:
->=20
-> On 11/23/26 9:45 AM, Eduard Zingerman wrote:
-> > On Fri, 2026-11-20 at 13:49 -0800, Yonghong Song wrote:
-> > > For a BPF_CORE_ENUMVAL_VALUE relocation, libbpf sign-extends the valu=
-e
-> > > of a 32-bit enumerator even if the enum is unsigned. A value in
-> > > [0x80000000, 0xffffffff], e.g., DCACHE_PRIVATE of enum dentry_flags,
-> > > then doesn't match the zero-extended value clang emits, and the whole
-> > > object is refused. And a target value in that range is patched
-> > > sign-extended.
-> > >=20
-> > > Patch 1 zero-extends the 32-bit values of unsigned enums, i.e., with
-> > > the kflag 0, which is the form clang emits. The kernel builds the sam=
-e
-> > > relo_core.c, so it gets the fix too.
-> > >=20
-> > > GCC emits every 32-bit enum value sign-extended, since its
-> > > __builtin_preserve_enum_value() returns int. So with the change above
-> > > alone, GCC objects that load today would be refused. Patch 1 therefor=
-e
-> > > also accepts the sign-extended form of an unsigned value, and patches
-> > > the target value in the same form.
-> > Hi Yonghong,
-> >=20
-> > I checked LLVM and GCC definitions for __builtin_preserve_enum_value().
-> > LLVM:
-> >=20
-> >    clang/include/clang/Basic/BuiltinsBPF.td:
-> >=20
-> >    def PreserveEnumValue : TargetBuiltin {
-> >      let Spellings =3D ["__builtin_preserve_enum_value"];
-> >      let Attributes =3D [CustomTypeChecking];
-> >      let Prototype =3D "long int(...)";
-> >    }
-> >=20
-> >    ---
-> >=20
-> >    gcc/config/bpf/bpf.cc:
-> >=20
-> >      def_builtin ("__builtin_preserve_enum_value",
-> >                   BPF_BUILTIN_PRESERVE_ENUM_VALUE,
-> >                   build_function_type_list (integer_type_node, ptr_type=
-_node,
-> >                                             integer_type_node, integer_=
-type_node,
-> >                                             0));
-> >    gcc/tree.cc:
-> >=20
-> >      integer_type_node =3D make_signed_type (INT_TYPE_SIZE);
-> >=20
-> >=20
-> > Meaning that the two indeed disagree. Given that GCC version can't
-> > express 64-bit values, it appears that GCC side definition needs an
-> > update. Would this allow to avoid GCC-specific workaround in libbpf?
->=20
-> Yes, I am aware of this issue. See
->     https://lore.kernel.org/bpf/a4aec2b1-f754-48ed-a7d7-ef07bed43eb8@linu=
-x.dev/
->=20
-> I even suggested a solution:
->=20
-> diff --git a/gcc/config/bpf/bpf.cc b/gcc/config/bpf/bpf.cc index=20
-> 3ef93938222..45d5337bab6 100644 --- a/gcc/config/bpf/bpf.cc +++=20
-> b/gcc/config/bpf/bpf.cc @@ -1048,7 +1048,7 @@ bpf_init_builtins (void)   =
-                                        integer_type_node, 0));
->      def_builtin ("__builtin_preserve_enum_value",
->                  BPF_BUILTIN_PRESERVE_ENUM_VALUE,
-> - build_function_type_list (integer_type_node, ptr_type_node, +=20
-> build_function_type_list (ullt, ptr_type_node,                           =
-                integer_type_node, integer_type_node,
->                                            0));
->=20
-> diff --git a/gcc/config/bpf/core-builtins.cc=20
-> b/gcc/config/bpf/core-builtins.cc index a5c973cd385..289d3e67d78 100644=
-=20
-> --- a/gcc/config/bpf/core-builtins.cc +++=20
-> b/gcc/config/bpf/core-builtins.cc @@ -877,8 +877,12 @@=20
-> pack_enum_value_fail:     else
->        {
->          ret.reloc_data.expr =3D tmp;
-> + /* Extend the enumerator to 64 bits according to its own signedness, +=
-=20
-> as clang does, instead of expanding it as a sign-extended SImode +=20
-> CONST_INT. */         if (kind =3D=3D BPF_RELO_ENUMVAL_VALUE)
-> - ret.reloc_data.default_value =3D enum_value; +=20
-> ret.reloc_data.default_value + =3D fold_convert=20
-> (long_long_unsigned_type_node, enum_value);         else
->           ret.reloc_data.default_value =3D integer_one_node;
->        }
->=20
-> Vineet Gupta will take a look.
->=20
-> Discussed with Alexei earlier, the suggestion is to proceed as is for now=
-.
-> It is not clear when gcc will implement this.
->=20
+On 23.11.26 02:33, netdev-bot+sashiko@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 3 potential
+> issue(s) to consider.
+> 
+> Critical: 0 · High: 1 · Medium: 2 · Low: 0
+> 
+> If you believe none of the issues are legitimate, please reply to each
+> issue of Medium severity or higher and explain why the AI is wrong.
+> If any of them are legitimate and you plan to respin, please let patchwork
+> know by including "pw-bot: cr" as a separate line at the end of your reply
+> (one such reply per series is enough).
+> 
+> - [High] The patch removes mlx5e's own HW-GRO/LRO vs XDP handling.
+> - [Medium] The patch keys the whole NETDEV_XDP_ACT_XSK set
+>   (BASIC|REDIRECT|XSK_ZEROCOPY, plus RX_SG) in mlx5e_set_xdp_feature()…
+> - [Medium] mlx5e_set_xdp_feature() now dereferences
+>   priv->netdev->cfg_pending->hds_config.
+> 
+> --
+> 
+> eth: mlx5e: drop the now-dead HW-GRO and LRO vs XDP handling
+> 
+> This patch removes the mlx5e driver-side refusal of an XDP attach while
+> HW-GRO or LRO is on. It also removes the XDP clause in mlx5e_fix_features()
+> and relies on the core to clear those features and keep them off while a
+> program is attached. XDP features are now advertised based on
+> tcp-data-split rather than packet merge, and mlx5e_set_ringparam()
+> refreshes them when hds changes.
+> 
+>> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+>> index 06a8a4be4be7c..08568137d044d 100644
+>> --- a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+>> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+>> @@ -4487,12 +4487,14 @@ static int mlx5e_handle_feature(struct net_device *netdev,
+>>  
+>>  void mlx5e_set_xdp_feature(struct mlx5e_priv *priv)
+>>  {
+>> +	struct netdev_config *cfg = priv->netdev->cfg_pending;
+> 
+> [Severity: Medium]
+> Is it safe to dereference netdev->cfg_pending here without the netdev
+> instance lock?
+> 
+> Two callers run mlx5e_set_xdp_feature() on a registered netdev with only
+> rtnl_lock held: mlx5e_nic_init() and mlx5e_build_rep_params(). Both follow
+> this pattern:
+> 
+> 	if (take_rtnl)
+> 		rtnl_lock();
+> 
+> 	/* update XDP supported features */
+> 	mlx5e_set_xdp_feature(priv);
+> 
+> 	if (take_rtnl)
+> 		rtnl_unlock();
+> 
+> Both callers are reachable from mlx5e_netdev_change_profile() during
+> eswitch mode changes.
+> 
+> ethnl_default_set_doit() allocates, swaps and frees cfg_pending while
+> holding only the instance lock. It does this for the commands mlx5e does
+> not opt in to rtnl, such as COALESCE_SET, PAUSE_SET, RSS_SET and
+> LINKMODES_SET:
+> 
+> 	ret = netdev_reconfig_start(dev);
+> 	...
+> out_free_cfg:
+> 	__netdev_free_config(dev->cfg_pending);
+> 	dev->cfg_pending = dev->cfg;
+> 
+> Could the following interleaving read freed memory?
+> 
+> CPU1 (COALESCE_SET, instance lock)
+>     dev->cfg_pending = P;               /* fresh copy */
+> 
+> CPU0 (profile change, rtnl only)
+>     cfg = netdev->cfg_pending;          /* P */
+> 
+> CPU1
+>     __netdev_free_config(P);
+>     dev->cfg_pending = dev->cfg;
+> 
+> CPU0
+>     cfg->hds_config                     /* reads freed P */
+> 
+> Reading dev->cfg instead doesn't look safe either. On a successful SET,
+> the old dev->cfg is swapped into the pending slot and then freed.
+> 
+> Would taking netdev_lock() after rtnl_lock() around these calls work here?
+> That is the same order mlx5e_nic_enable() uses.
+> 
+>>  	struct mlx5e_params *params = &priv->channels.params;
+>>  	struct net_device *netdev = priv->netdev;
+>>  	xdp_features_t val = 0;
+>>  
+>> +	/* XDP can't run with HW-GRO, and tcp-data-split keeps HW-GRO on */
+>>  	if (netdev->netdev_ops->ndo_bpf &&
+>> -	    params->packet_merge.type == MLX5E_PACKET_MERGE_NONE)
+>> +	    cfg->hds_config != ETHTOOL_TCP_DATA_SPLIT_ENABLED)
+>>  		val = NETDEV_XDP_ACT_BASIC | NETDEV_XDP_ACT_REDIRECT |
+>>  		      NETDEV_XDP_ACT_XSK_ZEROCOPY |
+>>  		      NETDEV_XDP_ACT_RX_SG;
+> 
+> [Severity: Medium]
+> Does keying these bits off hds_config also change how AF_XDP zero-copy
+> bind behaves?
+> 
+> Together, BASIC, REDIRECT and XSK_ZEROCOPY make up NETDEV_XDP_ACT_XSK, and
+> xp_assign_dev() checks that set before it allows a zero-copy bind:
+> 
+> net/xdp/xsk_buff_pool.c:xp_assign_dev() {
+> 	...
+> 	if ((netdev->xdp_features & NETDEV_XDP_ACT_XSK) != NETDEV_XDP_ACT_XSK) {
+> 		err = -EOPNOTSUPP;
+> 		goto err_unreg_pool;
+> 	}
+> 	...
+> }
+> 
+> Before this patch, a zero-copy bind on mlx5e with LRO or HW-GRO on was
+> refused, or fell back to copy mode. Now it reaches this path:
+> 
+> ndo_bpf(XDP_SETUP_XSK_POOL)
+>   mlx5e_xsk_setup_pool()
+>     mlx5e_xsk_enable_locked()
+> 
+> mlx5e_xsk_enable_locked() registers the pool and bumps priv->xsk.refcnt
+> without checking packet_merge.
+> 
+> Nothing on that path calls netdev_update_features(), and
+> dev_xdp_clear_rx_agg() only runs for XDP_SETUP_PROG. So the commit message
+> says "The AF_XDP check stays", but the priv->xsk.refcnt clause in
+> mlx5e_fix_features() is not applied at bind time. LRO or HW-GRO stays on
+> while an XSK pool is bound.
+> 
+> This also seems to open a sequence that was unreachable before:
+> 
+> 1. Bind a zero-copy XSK with HW-GRO on and tcp-data-split=auto.
+> 2. Set tcp-data-split=enabled. mlx5e_ethtool_set_tcp_data_split() accepts
+>    it because GRO_HW is still in dev->features.
+> 3. mlx5e_fix_features() clears GRO_HW in the XSK clause, then the HDS
+>    clause forces it back on.
+> 4. mlx5e_set_ringparam() calls mlx5e_set_xdp_feature(), which withdraws
+>    XSK_ZEROCOPY while a zero-copy pool is still bound.
+> 
+> The commit message only describes the XDP attach change ("used to fail
+> with -EINVAL and now succeeds"). Should the AF_XDP zero-copy bind change
+> be handled here, or at least described?
+> 
+> [ ... ]
+> 
+>> @@ -4604,17 +4606,6 @@ static netdev_features_t mlx5e_fix_features(struct net_device *netdev,
+>>  		}
+>>  	}
+>>  
+>> -	if (params->xdp_prog) {
+>> -		if (features & NETIF_F_LRO) {
+>> -			netdev_warn(netdev, "LRO is incompatible with XDP\n");
+>> -			features &= ~NETIF_F_LRO;
+>> -		}
+>> -		if (features & NETIF_F_GRO_HW) {
+>> -			netdev_warn(netdev, "HW GRO is incompatible with XDP\n");
+>> -			features &= ~NETIF_F_GRO_HW;
+>> -		}
+>> -	}
+>> -
+> 
+> [Severity: High]
+> On mlx5e, does the core really keep HW-GRO off for as long as a program is
+> attached?
+> 
+> __netdev_update_features() strips NETIF_F_XDP_DISABLES only before it calls
+> ndo_fix_features, and doesn't check again afterwards:
+> 
+> net/core/dev.c:__netdev_update_features() {
+> 	...
+> 	if ((features & NETIF_F_XDP_DISABLES) && dev_xdp_prog_count(dev)) {
+> 		netdev_dbg(dev, "Dropping HW-GRO and LRO features since XDP is attached.\n");
+> 		features &= ~NETIF_F_XDP_DISABLES;
+> 	}
+> 
+> 	if (dev->netdev_ops->ndo_fix_features)
+> 		features = dev->netdev_ops->ndo_fix_features(dev, features);
+> 	...
+> }
+> 
+> Later, mlx5e_fix_features() adds GRO_HW back unconditionally for HDS:
+> 
+> 	if (cfg && cfg->hds_config == ETHTOOL_TCP_DATA_SPLIT_ENABLED &&
+> 	    !(features & NETIF_F_GRO_HW)) {
+> 		...
+> 		features |= NETIF_F_GRO_HW;
+> 	}
+> 
+> Can this sequence leave SHAMPO active with an XDP program attached?
+> 
+> 1. Enable HW-GRO and tcp-data-split.
+> 2. Run ethtool -K <dev> rx-fcs on (or rx off). netdev_fix_features() drops
+>    GRO_HW after the driver hook, and set_feature_hw_gro(false) sets
+>    packet_merge to NONE. hds_config stays ENABLED.
+> 3. Attach a multi-buffer native XDP program. dev_xdp_install() only
+>    refuses hds for !xdp_has_frags, and dev_xdp_clear_rx_agg() sees no
+>    GRO_HW or LRO. mlx5e_xdp_set() now only calls
+>    mlx5e_params_validate_xdp().
+> 4. Run ethtool -K <dev> rx-fcs off. The core strips GRO_HW, then
+>    mlx5e_fix_features() forces it back for HDS, and netdev_fix_features()
+>    no longer drops it. mlx5e_set_features()->set_feature_hw_gro(true)
+>    then switches packet_merge to SHAMPO with params.xdp_prog set.
+> 
+> With SHAMPO, the RQs use mlx5e_handle_rx_cqe_mpwrq_shampo(). Header-split
+> packets go through mlx5e_skb_from_cqe_shampo(), which never runs
+> rq->xdp_prog, so that traffic would skip the attached program.
+> 
+> The removed xdp clause had the same ordering problem, because it ran
+> before the HDS clause. However, this patch removes the driver-side
+> handling on the basis of the core guarantee, and the gap still seems to
+> be there at the end of the series.
+> 
+> Is anything on this path meant to reject SHAMPO while an XDP program is
+> attached?
+> 
+> [ ... ]
+> 
+Most of these issues are coming from accessing hds_config in
+mlx5e_set_xdp_feature() which is called in several places.
 
-Had a discussion with Andrii on this topic with the following conclusions:
-- pahole 1.24 is 4 years old, it should be acceptable to bump minimal
-  pahole version to get reliable signed/unsigned enum information.
-- such a bump simplifies the fix, effectively moving it to:
+Why not drop the hds check in mlx5e_set_xdp_feature() for
+packet merge / hds and simply reject the XDP program installation
+in mlx5e_xdp_set() when netdev->cfg->hds_config == ETHTOOL_TCP_DATA_SPLIT_ENABLED?
 
-  static int bpf_core_calc_enumval_relo(const struct bpf_core_relo *relo,
-				      const struct bpf_core_spec *spec,
-				      __u64 *val)
-  {
-	const struct btf_type *t;
-
-	switch (relo->kind) {
-	case BPF_CORE_ENUMVAL_EXISTS:
-		*val =3D spec ? 1 : 0;
-		break;
-	case BPF_CORE_ENUMVAL_VALUE:
-		if (!spec)
-			return -EUCLEAN; /* request instruction poisoning */
-		t =3D btf_type_by_id(spec->btf, spec->spec[0].type_id);
-		if (btf_is_enum(t))
-			*val =3D btf_enum(t)[spec->spec[0].idx].val; // <------- take care of a =
-sign flag here.
-		else
-			*val =3D btf_enum64_value(btf_enum64(t) + spec->spec[0].idx);
-		break;
-	default:
-		return -EOPNOTSUPP;
-	}
-
-	return 0;
-  }
-
-- we don't want to workaround GCC bug on the libbpf side, let's assume
-  that __builtin_preserve_enum_value() always return long.
-
-Wdyt?
+Thanks,
+Dragos
