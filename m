@@ -1,100 +1,79 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.225.73
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795406247;
-	b=G4yE3OZ1SMiGe7Ml1mUcG6S5eZGkYm1IgpWiLRm06+GaM4WOfZSBqb2feVPD+0FYVVNv
-	 l3sDpOZwlQ6YcwiKCOJfvs1rXZB6FxRRVj5C2ewbt2fgncVB7Fq0PqTT53uLvTBpzUE0w
-	 6qKy3Co64NhpbLJQUQo1QQ/ELTFJtWT94oJwMzoN/PZOfjyf1AjQ1Lxaq+TJebaydTddK
-	 vvsXk5Y/HTu7MybDfhV2uyqYAnWzM93GIQG4NnwhoRUmcfJP0ZbnRECp8ifkseF4qHF9H
-	 I3cUaN5Xn+EaremrzcMf8OSy22/3QWh9RAbHgABGBedKyga13ad1+Rv3R/p7oS3hsKQ==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795406247;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:References:
-	 In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:
-	 Content-Type;
-	bh=7qRxvbmJ28nrk2rOHhxSyhx4jr06fpL9CDPWnKHiTxk=;
-	b=UkUFa0Tt5QHU9FXm+iGIn9xfHljxh5+wj0sTDkn8Hu/NNqGJUQTDzd73q7joMTJTTh1n
-	 bRNjiRMAspllPn5DiV3uPldfldfmWEe3139Bonqg0bSghzj23NlZiX8nifuhjAGFuov+X
-	 a4UOiYuU+zWlsCmYSAztG69RCCDGV3uCny2syDC1uKM1Kke5apCTnzbXQv4wrYrpA5IsJ
-	 uBmmT2azMbk7+YPh5K8YzE7Lj2DUQn3QlQ47tIOOEFVpnQ6Y1vpWvEfaksZ7KmNNUlPj6
-	 F7GbxtGJeBcAiXFP7zrt1zsXRhXedZZd/fGzBi59+6aD/fGLNbY0tBcoYU3jsaN91tg==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=QCWfvhjg;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.225.73
-Received: from mail-wr2-f9.google.com (mail-wr2-f9.google.com [74.125.225.73])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795406348;
+	b=TjY2u0R/u9EeQCEmhQlcvFwDr79MSpA/bkF6DqhcmfFDraAyWQcmFPJjM67sCt2r+qDi
+	 Kyy8RX96AlODIXCtxzNV77u4S0fKyfLFTiHtd/j8KxzOnWttS/SFHROElCJCHEpM0ysMj
+	 ZslJ9Lh+QYgABBrbLEqkbYmpLuSMZaxECajmDRaUHDrU6ddSojzcYGiV3r82RNDDEKFzN
+	 mS7pKEi2NKCLTYDD2otbELbXahlduXyo44F+is7FGuk656aPg+U4S61ETU5alx3+aeVET
+	 sBhUuUl0FtJMoA8TKmqOMx48U4eTzzGhiSsAta7zMOq97a/MFJC/IXFbVZBHnEBRAUQ==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795406348;
+	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
+	 In-Reply-To:References:X-sashiko-severity:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=40vOlkrsn5bcKQ9hugL/8J0cEKMjQf6aWMjTelXnSIM=;
+	b=SCpd7O1M7ANUn99JeYcGiIQAhiw46L6ffkGHOnlAOCh8+xN9KZLB8l0dhuNXsFMJuImg
+	 m298KyzLZvNJ3kaB0MQX2GlBiKUOBrPG19l9uZi66TN4Sx4t+9o2eJwDGaiF7ZGWLk4XU
+	 pjcskF1wAdjPj11xUswzJptO7aAa3ht7Q+tFQBakXWUFobqTRiiR/mH2Ad0TbDL5L5SCA
+	 XZkjnvycRBTkLb+XS/DIOJlRX1b0X9PPrrtNtAE6A3xunWH+Z+ZC7RDvYPBc20VVJjEqR
+	 0avsoSpLLPbnPpdXMikUWDlTC/rRUyWSdGEPPjAp0mY7cairw281trYxlmvZY9gaMSg==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HwpXlY9m;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2DC3606A31A
-	for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 03:57:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F2DC3606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96E86606A31E;
+	Mon, 23 Nov 2026 03:59:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=QCWfvhjg
-Received: by mail-wr2-f9.google.com with SMTP id ffacd0b85a97d-48fc51a37f3so500810f8f.0
-        for <bpf@vger.kernel.org>; Sun, 22 Nov 2026 19:57:26 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795406245; cv=none;
-        d=google.com; s=arc-20260327;
-        b=KisJDAlcGsKcPgOPw3PWiyM4d7rs74H8lMYgcBtY9Mt/GFGEsezYIIw5bIoS28DQFs
-         cD9csOHt8FqrSfq1McEIICoIXPMS0grax0n8yhDrqxljLVQwITO7uxll0sXOqpWXCJEy
-         6yT778MhrmNhpbpOHbGbNv3p9WBNWiB7nLyI3TjPXCW9MFDs9w2vXZ3ExeSsqdB2/LJn
-         hPrJXdoImTN8erNs7/q3CEhA8oVLN4RYyUVOxRMINUAfqHrV+tpqVdr+GnmV/+9wlVoG
-         RdZhj0JNpZpmLAS9TMb3Nq/QmTigGUwJNqbUwyRkYY0QK5ne21xJZLSpqMktxK3CmkRy
-         Il8g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=7qRxvbmJ28nrk2rOHhxSyhx4jr06fpL9CDPWnKHiTxk=;
-        fh=egDHTYiRlWEhjX79I8tyYfgSLjlZiSst1N6eRvPbXzA=;
-        b=nDFrK40VDrvG3csFq7fjcZTCn5cc9H8XlB5tpEqLjMx/1GqXaRT2q9zEelAO4PJcE+
-         xnoEhLUroSJ1hKQIPDi2u/gPv8ey0B3n+EzW3cAaZRotbZbYtS9ce5fj/U1Pw400p8gm
-         fpPfjr3F1jEs092PD3SbbtkqJYpjxVfLC/Y6hazLAVoV5dP/vTvzQzJp3AiiDrQkltKU
-         ut3LS/YN8x43dFDYGmN+UUfEMrcl6TZCVC069liGmd9xSDlt5Lls9EP3lTyKH7xR1lHD
-         TPT50ZreN5bju+YOg3HaVQ78/VFV3F3n/cZ1DFW1gFJrT+uzFmSHW7PjUy7ftL3gyFYq
-         vnpg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795406245; x=1796011045; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=7qRxvbmJ28nrk2rOHhxSyhx4jr06fpL9CDPWnKHiTxk=;
-        b=QCWfvhjg1m9QtL8T0G+h+zEd6lBaR/9OWJHUPxW4XfWPVxY9CDbMA4baszoRmDLzOS
-         9R9BH81IXYMM6Zj4mURHSPNHRUpBQQ0PsNrD1wNUeZebYRaJ9MR3VuXJhBLjeufojYVY
-         UGBVjb0eiBfVc951zq09FZcqJGhEohQq54iPOLWHR99LgnBlRuSVomsvKsfPetews4oX
-         qH7qgmJ/IZq+UPb8+BXDqubM+DiNHXTWHp1oSs7YN809G4An4Xb5c03lyzvIU4493SYV
-         PGoLX2+I0GPDO9XpTritwSGSBIkWpDPmAncXDayTEWnqoV89CvDhUUM6HEX8EbWxMflj
-         ochQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795406245; x=1796011045;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=7qRxvbmJ28nrk2rOHhxSyhx4jr06fpL9CDPWnKHiTxk=;
-        b=JOxMM9cz4SB/dWo0li54QgIvyBOhECqDv8l5HS+creYEOPR7dlNFDcAdMOrOLw5XE1
-         YtKlHpPqVmdU0zP+DETkJDJVMsehckILsXQCO7MEtgIn+BDjkZIiq2vXyGaNlLWsl3Jz
-         f/Z55zKGqze0OAwPD1D4g1v0504eajnbXlMHwPWkyyiBZHOKDOMPave2H4nxeykI+haZ
-         ab/8OBdpQBvFXz3PzHh+++yRqRsmB+z6XtZDlcIBseIBpudZfMSu6j7bZ/S7xrjuBZeN
-         /0H/1LnZvevJzynFkSGU0FOiTz54BZENYPj2UVFwH7/8+KYGcdvcHNhMykVAhcQf/Aic
-         ksZw==
-X-Gm-Message-State: APuU4Z+YEKj7FAdbF/T+uusl6ybc2eE0XUvQtPmrbFDiadSYDNcrEO2A
-	NW3SHQc+EgMzpHUMAFmouTk6c71aUtofTtshcEkwjOWuvjtzpbTMZwwyKt+mukgQLAxrjlFN6Vi
-	6S1pw0HsZ/fX1gZlXBe7ri+81RYiy2Q8=
-X-Gm-Gg: AZFdTZcVUw0vjn0c+xjMqxluMbKX2xTLsDNvWXkawIRMvN0TDENX0BWNUVNYev1IZCk
-	3DJokiy6kLs8J9dTb50VluQ67sQwaq+f3TztvBl3nt9SL6JiDobZcrvLYJGnJBMqbrjTAX82PXL
-	0zAxLXbRIQ0jJ7oO0OCku+L4rrkaJz2tJRzkFKtYEZrFw+TIUb+xRu9+Nq/5+uiVv6bbxRbGue3
-	lKnaps62+mNbxKYyKKB9lfhNAktZzLnYKasmH6SOh0Bda2G7Al0jPDHhKEnnRaIeqPclFcLfKzo
-	kYdTspXpv+edWQV6HB8ckGgyDhccWAYRyMCgK1cFT3KxFroHTjXNjFlao738KbfL/uqcbtKVBBX
-	83FnI5oRE0dLrYfkAMywG7/T3OQAB8GA7259xrXh4wFxXpqVWsKtmnxdZkuGNz/qYsNPsQkALyG
-	OcB+KoAfOI5bO7Mj4+xLIn31poAlAS69O5I0dn31UOBjUAvtwRQLKCMuEe2Vqn4UXScgfgvUDbi
-	f8G7F6klEhOB2Ng
-X-Received: by 2002:a05:6000:4a07:b0:4a7:14d0:9c4c with SMTP id
- ffacd0b85a97d-4abab02c4femr18518479f8f.6.1795406245121; Sun, 22 Nov 2026
- 19:57:25 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HwpXlY9m
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF5911F000C6;
+	Mon, 23 Nov 2026 03:59:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795406348;
+	bh=40vOlkrsn5bcKQ9hugL/8J0cEKMjQf6aWMjTelXnSIM=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=HwpXlY9m2MBcwL/YhwYMz6mfik0O2RI/E/w2eT2ygBowvuJAhkGJs7nnahQTnKTKP
+	 8Ee+z834dDifrLMV3MMs4l9E4kXfenECjvkRwGNuVxKwGHL31wZ1h/lwIDC7ZEqwg1
+	 NIWjlnqtgadvmpYubS9ucWnEiBUnYMYRn0obS8Apcm+UA/6crGIcJoBHE/+ZzojP6G
+	 F0JqFAh8SpfCI7Mij80dA/1DlL+7oFhD4PDf57ffUCTymAInDj2Y2WS/Idz2lf4ZKw
+	 DIdRTBvCz+EYWhCwRlCdQx7BFgnoMC11R4Sntu+VTZJirlUQvl7p9NcjFUdhw3fjib
+	 +P3Vz1CgAegyw==
+Subject:
+ Re: [PATCH net-next v2 02/11] net: reserve extra TX headroom for local egress
+From: netdev-bot+sashiko@kernel.org
+To: tianyi@cloudflare.com
+Cc: netdev@vger.kernel.org, kuba@kernel.org, pabeni@redhat.com,
+ edumazet@kernel.org, davem@davemloft.net, horms@kernel.org, dkeogh@amazon.com,
+ hawk@kernel.org, daniel@iogearbox.net, dwmw2@infradead.org,
+ dtatulea@nvidia.com, noren@nvidia.com, alasdair@mcwilliam.dev,
+ willemdebruijn.kernel@gmail.com, maciej.fijalkowski@intel.com,
+ sdf@fomichev.me, magnus.karlsson@intel.com, dsahern@kernel.org,
+ idosch@nvidia.com, ast@kernel.org, john.fastabend@gmail.com,
+ donald.hunter@gmail.com, andrew+netdev@lunn.ch, corbet@lwn.net,
+ skhan@linuxfoundation.org, shuah@kernel.org, rdunlap@infradead.org,
+ leitao@debian.org, ast@fiberby.net, danieller@nvidia.com, kuniyu@google.com,
+ bpf@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, kernel-team@cloudflare.com,
+ nh-open-source@amazon.com, stephen@networkplumber.org, gustavoars@kernel.org,
+ one-d-wide@protonmail.com, ameryhung@gmail.com, andrii@kernel.org,
+ aroulin@nvidia.com, anilkaushikwireless@gmail.com, demosthenes.ra@gmail.com,
+ eddyz87@gmail.com, emil@etsalapatis.com, hangbin.liu@linux.dev,
+ ihor.solodrai@linux.dev, jiayuan.chen@linux.dev, jolsa@kernel.org,
+ joe@dama.to, memxor@gmail.com, lirongqing@baidu.com, louis.scalbert@6wind.com,
+ mkl@pengutronix.de, martin.lau@linux.dev, mkarsten@uwaterloo.ca,
+ mattbobrowski@google.com, michael.bommarito@gmail.com, razor@blackwall.org,
+ runyu.xiao@seu.edu.cn, song@kernel.org, linux@leemhuis.info,
+ wang.zhan@smartx.com, yonghong.song@linux.dev, n0ps1edzz@gmail.com,
+ tianyi.gao@linux.dev
+Date: Mon, 23 Nov 2026 03:59:04 +0000
+Message-ID: <179540634443.3135.6612168607080086679@kernel.org>
+In-Reply-To: <20261119013830.36935-3-tianyi@cloudflare.com>
+References: <20261119013830.36935-3-tianyi@cloudflare.com>
+X-sashiko-severity: Low
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -104,61 +83,84 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261009024925.3169077-1-memxor@gmail.com> <20261009024925.3169077-2-memxor@gmail.com>
- <20261009041346.GHashp-hYpLl-o-l3M@fat_crate.local> <DM0ESVBT9553.2S1RWK1W7M8WW@gmail.com>
- <20261122200848.GBawNL0FcQoK918YDI@fat_crate.local> <CAP01T746W=8FFiJJUM3H-Qv09uRO6-XEi9B-8pjSgtpAPBx4EA@mail.gmail.com>
- <20261123003036.GCawOJLKK1iX47XTDm@fat_crate.local> <CAP01T77EgbuyhP=zU9L1hwYL6rHaSbrqQZGJR_+9AQgSWLe7Nw@mail.gmail.com>
- <20261123025529.GDawOrIQcDOPhgWwF6@fat_crate.local>
-In-Reply-To: <20261123025529.GDawOrIQcDOPhgWwF6@fat_crate.local>
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Mon, 23 Nov 2026 04:56:46 +0100
-X-Gm-Features: Aa3M54qn3A-QVn6NC3O24c8qZLQ9Y3TsEAAFoy_M2WjIHYuU1yPw-r9md-0eGAI
-Message-ID: <CAP01T75Qps8bKFZAU2gN-3UJTB1aWw46NG5c-sm6K028rSc9sA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v1 1/3] x86/mm: Resolve BPF exception fixups for
- user address faults under SMAP
-To: Borislav Petkov <bp@alien8.de>
-Cc: bpf@vger.kernel.org, Puranjay Mohan <puranjay@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, Andy Lutomirski <luto@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
-	kkd@meta.com, kernel-team@meta.com, x86@kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
 
-On Mon, 23 Nov 2026 at 03:55, Borislav Petkov <bp@alien8.de> wrote:
->
-> On Mon, Nov 23, 2026 at 01:59:32AM +0100, Kumar Kartikeya Dwivedi wrote:
-> > I also don't understand your security concern.
->
-> Was:
->
-> "the only line of defense is for is_bpf_text_address() to really DTRT."
->
-> not clear?
->
-> Do you want me to elaborate?
+Thank you for your contribution! Sashiko AI review found more severe
+issue(s) in other patches of this series. This mail is only an FYI, in case
+you want to address the nit picks below when you respin.
 
-Yes, please elaborate, because I am not sure why you think that is a
-huge problem.
+Low priority / nit picks for your consideration:
 
-You're treating that function as if it's an unknown, untrusted black
-box that can break anytime.
-It finds out whether the fault originated in a BPF program. What does
-DTRT mean apart from that?
-If it starts firing for normal kernel code, this would be the last
-place to break. That would be our bug to fix.
+- [Low] The documentation for tx_extra_headroom, added in commit "net:
+  add tx_extra_headroom and netdev_get_alloc_headroom()", says without…
 
-In fact, for kernel address faults, we already invoke it for exception
-handling. This change would simply extend that to user address faults,
-optionally for BPF code; otherwise, we panic as usual.
+--
 
-So I don't think it's a useful argument, except if it stems from "I
-don't trust anything BPF", which is not productive.
+net: reserve extra TX headroom for local egress
 
-I am happy to engage with any actual material concerns. So far I
-haven't seen any except you being constantly dismissive.
+This patch makes several allocation paths use the new
+netdev_get_alloc_headroom*() helpers instead of LL_RESERVED_SPACE() and
+LL_RESERVED_SPACE_EX(). The converted paths are the IPv4/IPv6
+append_data paths, the IPv4/IPv6 raw hdrincl paths, the three AF_PACKET
+transmit paths and AF_XDP copy mode, so their locally generated packets
+get dev->tx_extra_headroom when they are allocated. Paths that expand
+existing packets on demand, and the fragmentation paths, are left alone
+on purpose.
 
->
-> [...]
+> diff --git a/net/ipv4/ip_output.c b/net/ipv4/ip_output.c
+> index 5d6f5f5fc0ed2..dedea01c6adc6 100644
+> --- a/net/ipv4/ip_output.c
+> +++ b/net/ipv4/ip_output.c
+> @@ -988,7 +988,7 @@ static int __ip_append_data(struct sock *sk,
+>  	mtu = cork->gso_size ? IP_MAX_MTU : cork->fragsize;
+>  	paged = !!cork->gso_size;
+>  
+> -	hh_len = LL_RESERVED_SPACE(rt->dst.dev);
+> +	hh_len = netdev_get_alloc_headroom(rt->dst.dev);
+
+[Severity: Low]
+This isn't a bug, but does the documentation added earlier in the series
+promise more than this patch delivers?
+
+Documentation/networking/netdevices.rst says, with no exceptions:
+
+  tx_extra_headroom is extra headroom for locally generated packets. The
+  stack adds it when it allocates such a packet for the device, so that
+  headers pushed later, for example at TC egress, fit without a
+  reallocation.
+
+The comment above netdev_get_alloc_headroom_hlen() in
+include/linux/netdevice.h describes the same contract.
+
+This is the only patch in the series that converts allocation sites.
+Several places that allocate a locally generated packet for a specific
+device still reserve only LL_RESERVED_SPACE(dev) at the end of the
+series:
+
+  net/ipv4/arp.c:arp_create()
+  net/ipv4/igmp.c:igmpv3_newpack() and igmp_send_report()
+  net/ipv4/ipconfig.c:ic_bootp_send_if()
+  net/ipv6/mcast.c:mld_newpack() and igmp6_send()
+  net/ipv6/ndisc.c:ndisc_alloc_skb()
+
+For example:
+
+net/ipv6/ndisc.c:ndisc_alloc_skb() {
+    int hlen = LL_RESERVED_SPACE(dev);
+    int tlen = dev->needed_tailroom;
+    ...
+}
+
+So if tx_extra_headroom is set through the tcx decl tag or
+VETH_INFO_TX_EXTRA_HEADROOM, ARP, ND, IGMP and MLD packets will still be
+reallocated by bpf_skb_adjust_room(), or copied for XDP on the veth
+peer.
+
+Could the general sentence list the covered paths instead? A later
+paragraph in the same section already lists UDP, raw, AF_PACKET and
+AF_XDP copy mode for the XDP case. Another option would be to convert
+these allocation sites as well.
+
+[ ... ]
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261119013830.36935-1-tianyi%40cloudflare.com
