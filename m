@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795444039;
-	b=iN7ZhmEzkCYUyca0W41R16H/PUKct0ovUX0yJtE5SBF2cowBicI+zxbsaKmrLhTbu09G
-	 4/YbidvQIvJKTvX1UX18DtuAug+ng0LMXFnNN3JvZEv4r/Q19aUHdvY8LIsZ7BCNxBMp/
-	 N0qXLkcX4TGw163DIaOhAKei/DgJ5Bj1mjc9qik/NmvRHTj8+qz2XZo3DraZ4gHrrPKtQ
-	 guqQJdV7Rbpe6PD0YnU4+JPBHUeG85XTaDt4f0MbpO5gg4VhktrI6u3cqEE5KA8X4hrLC
-	 nwKO6zAIeZpBkRwLJe795jYQjYciAyvurZcAckUxGoryEFXwKAjrkDiCC3Ldi6q+2kQ==
+	t=1795444035;
+	b=H+8OliwTe7EjTPj5mUuRqjucDzXZVQhSUDeA7xOW+xq68CCoLZjPAclaiOb0k5xPOYiQ
+	 y5hwBCURTifuq07rl9pv9cMG0KBeOeFBwk76OzksR0ISyoDa9rBjkCczAE87cSVWKczNd
+	 6cpxMNt9l7T8N9yjTQneUY5HRBhcLXT4abWJuwDu7KrsHLJEzrwjuKcudaz3Wkc2Aqw6h
+	 ixuEeXKYbYF6MeWwQE59yoVtGMPSyeHVDYqAfZXHuT2tDTRwr032VD7TRqOj7LZSDZYm4
+	 B1FRFkYyIMUDY+shiBQCWufimrmQoxSZ9BzXjxuJ+6Oiot1kBCFHoVqsoPj2QWjS4Qg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795444039;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795444035;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=ROEpEZboGA+0DmWizHDH7PqObf+8q+vCxOx24LOVIhA=;
-	b=t4fNinYc2R9QykQI5+6VvnoK+ra9OZfipqcSjO22yENyW8mZaHRQM22eiRevAkzzX4wq
-	 TmQGem3ATA66Qr3AK9znAIZxJEMCnpDUIQvkjRh+vcUodK50OjhcQCmJFli5/WmEHjFbb
-	 +vgZ1TP3yBBtatMfcX6RnsdDATWqnXojR6Yt5CbmrLrhL9/IuJuZ/LRZo1vrJRi0AmXsz
-	 3VC6udVpYFD1nzXoBnjhp48kvNVk9m40BCdgjhFo96hb8c2U/WxbQbrkU+imfNJupMFhR
-	 f9HLHJW22fu/QzIcbceyiD2xsYrDhImw2o+PoNuONNOE3F6b/0EbH2Xlkoo6O5ywVDQ==
+	bh=KHB/XI4cKY1r8Bk1cluPtbj8UheyxZWHTnaL5PnDwJ0=;
+	b=HsF7JdEGU+30dywajDVmOQ8ij9lxn/hQvV/t6JmYX6yNBOKJQGCsVY6QqImoPDAQyDxc
+	 C90rZnSLezzmOimQawnpYssO7NqIWUoRz5/QzmVmEOFB7WvGMyq34/Ugm8kdrmbWf4ZZY
+	 SF66y8UIwQc39Gz29dKE9RlsLh5kLeSQs0mucILTZL1/+jUScwAH/elFr5IcwwEPQv8Qs
+	 D/rUQJtTVnekKmcAr3Bpjp4MQEHLFTT88gWwJ8V8czddpwe9oCQRMMjpih6WpOn6klGBl
+	 V/WAen3FJoq5tDzI02gasBAsJiiFIJ3wb3BTTUERnC+OHx9kkOLq0c7DZnuVmpNQWrw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bV4WYwaq;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CJELoYmX;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A71AB606A333;
-	Mon, 23 Nov 2026 14:27:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73305606A31E;
+	Mon, 23 Nov 2026 14:27:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bV4WYwaq
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 333491F000EB;
-	Mon, 23 Nov 2026 14:27:18 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CJELoYmX
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E29D91F000C6;
+	Mon, 23 Nov 2026 14:27:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795444039;
-	bh=ROEpEZboGA+0DmWizHDH7PqObf+8q+vCxOx24LOVIhA=;
+	s=k20260515; t=1795444035;
+	bh=KHB/XI4cKY1r8Bk1cluPtbj8UheyxZWHTnaL5PnDwJ0=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=bV4WYwaq2mVrJAwB3kOlIVtuHkCpXiuw3EOn+UuUtkKzPATQjlq/+wnc4XMxq3Hcj
-	 LHL4net5Lt93HGpuu7jRgaDEstYgHy/zDDHq19eFD7M/Y7/E/rv984kCV7lVB/BnNg
-	 +XIgsfYaIUoJ5o7f3TYrlKoUEHGyUF4LB69PHHKoaKwcxHGMBfV8lYhsGqYSfktMXu
-	 EXpPZwfiwWqPcYD+BnolkFfeSVBFhi7Zw9IABmNGijyxbf0LpomFxE23ao8KVdN8Os
-	 /9D+1MX//wskqsPQsFrYlwAb1WiFxVD3OaSB9SWRXKPZgXDttR+RdJBWX1I4wdXgnk
-	 nAQMnUuVHjVjw==
-Subject:
- Re: [PATCH net v3 4/4] igb: only allow runtime PM if the device can wake up
+	b=CJELoYmX/EDhq0BWS8Gj5oaSsjEeUFBwlcdk4dUw3JvbNG0GjW48yGzHkXMi7QdH5
+	 kIj2Q4irawJdO/wOls7zTG2BOXO3I6ZDxrvERilOJ/g0tofdr42tQIXt4DF9tviNf5
+	 BUywKElXkp22vw3BhFrWLFVZ/+WeROQ0tpt0iR/fGvJsWcAWQDTtmt4qp6MEwf6sCX
+	 uzfFJj4A+cp5DUjpcTDC7Sa+oCvnu3yVIxlb925PJR6VwwFC2MlQoHaP9rpTfkGb0R
+	 VT2pfoWu08nRUPcMo3TG+RzCAXmB7X5PAsOYdV/h4jOzvA22rtrDt2d3HQEEi+XsvB
+	 D2t7yKP7R9bBg==
+Subject: Re: [PATCH net v3 1/4] igb: don't disable rings that don't exist when
+ disabling an XSK pool
 From: netdev-bot+sashiko@kernel.org
 To: antonio@mandelbit.com
 Cc: intel-wired-lan@lists.osuosl.org, anthony.l.nguyen@intel.com,
@@ -52,11 +52,11 @@ Cc: intel-wired-lan@lists.osuosl.org, anthony.l.nguyen@intel.com,
  kurt@linutronix.de, maciej.fijalkowski@intel.com, hkallweit1@gmail.com,
  joe@dama.to, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  bpf@vger.kernel.org
-Date: Mon, 23 Nov 2026 14:27:17 +0000
-Message-ID: <179544403775.3135.15481956972342894724@kernel.org>
-In-Reply-To: <20261119140412.163202-5-antonio@mandelbit.com>
-References: <20261119140412.163202-5-antonio@mandelbit.com>
-X-sashiko-severity: Medium
+Date: Mon, 23 Nov 2026 14:27:13 +0000
+Message-ID: <179544403344.3135.6737096159492443262@kernel.org>
+In-Reply-To: <20261119140412.163202-2-antonio@mandelbit.com>
+References: <20261119140412.163202-2-antonio@mandelbit.com>
+X-sashiko-severity: High
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
@@ -69,10 +69,10 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 2 potential
+Thank you for your contribution! Sashiko AI review found 3 potential
 issue(s) to consider.
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 1
+Critical: 0 · High: 2 (2) · Medium: 0 · Low: 1
 
 If you believe none of the issues are legitimate, please reply to each
 issue of Medium severity or higher and explain why the AI is wrong.
@@ -80,148 +80,230 @@ If any of them are legitimate and you plan to respin, please let patchwork
 know by including "pw-bot: cr" as a separate line at the end of your reply
 (one such reply per series is enough).
 
-- [Medium] The fix checks wake capability only once, in igb_probe().
-- [Low] Possible runtime PM usage-count imbalance in
-  drivers/net/ethernet/intel/igb/igb_main.c.
+- [High] The fix only covers the RX side.
+- [High] The new guard `qid < adapter->num_rx_queues` in
+  igb_xsk_pool_disable() is not serialized against the code that writes…
+- [Low] Commit message accuracy (discarded by baseline).
+
+Pre-existing issues:
+- [High] This problem wasn't introduced by this patch, but `if_running`
+  in igb_xsk_pool_disable() (and in igb_xsk_pool_enable()) uses…
+- [High] This problem wasn't introduced by this patch, but the error
+  paths of igb_xsk_pool_disable() (igb_xsk.c:162-165) and…
 
 --
 
-igb: only allow runtime PM if the device can wake up
+igb: don't disable rings that don't exist when disabling an XSK pool
 
-This patch changes igb_probe() so it drops the probe-time runtime PM
-usage reference only when pci_dev_run_wake() reports that the device can
-signal a wake-up. igb_remove() takes the reference back under the same
-condition. The aim is to stop the NIC from runtime suspending into a
-state where it cannot notice the link coming back.
+The patch adds a qid < adapter->num_rx_queues bound to the if_running
+condition in igb_xsk_pool_disable(). With it, the function stops
+disabling and re-enabling rings the device doesn't have. The goal is to
+stop a NULL ring from reaching igb_txrx_ring_disable() when the stack
+knows about more queues than the device has.
 
-Closes: https://bugzilla.ipfire.org/show_bug.cgi?id=13562
+Link: https://lore.kernel.org/netdev/20261116153041.3002666-2-antonio@mandelbit.com/
 
-> diff --git a/drivers/net/ethernet/intel/igb/igb_main.c b/drivers/net/ethernet/intel/igb/igb_main.c
-> index 4617aba5759d2..36bd395e36dab 100644
-> --- a/drivers/net/ethernet/intel/igb/igb_main.c
-> +++ b/drivers/net/ethernet/intel/igb/igb_main.c
-> @@ -3654,7 +3654,11 @@ static int igb_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
->  
->  	dev_pm_set_driver_flags(&pdev->dev, DPM_FLAG_NO_DIRECT_COMPLETE);
->  
-> -	pm_runtime_put_noidle(&pdev->dev);
-> +	/* A device that can't wake up wouldn't notice the link coming back
-> +	 * while runtime suspended
-> +	 */
-> +	if (pci_dev_run_wake(pdev))
-> +		pm_runtime_put_noidle(&pdev->dev);
-
-[Severity: Medium]
-Is a check done only at probe time enough to keep the device out of a
-D-state it can't wake from?
-
-The PCI core recomputes both the target state and the wake enable on
-every runtime suspend, after igb_runtime_suspend() has run:
-
-pci_pm_runtime_suspend()
-  pci_finish_runtime_suspend()
-
-drivers/pci/pci.c:pci_finish_runtime_suspend() {
-    ...
-	target_state = pci_target_state(dev, device_can_wakeup(&dev->dev));
-	if (target_state == PCI_POWER_ERROR)
-		return -EIO;
-
-	__pci_enable_wake(dev, target_state, pci_dev_run_wake(dev));
-
-	error = pci_set_power_state(dev, target_state);
-    ...
-}
-
-If igb probes while d3cold_allowed is 0 or no_d3cold is set,
-acpi_pci_choose_state() caps the target at D3hot:
-
-	if (pdev->no_d3cold || !pdev->d3cold_allowed)
-		d_max = ACPI_STATE_D3_HOT;
-
-If the NIC has PME from D3hot, pci_dev_run_wake() is true there, so the
-usage reference gets dropped.
-
-Later, root can set d3cold_allowed back to 1 through sysfs, or
-pci_d3cold_enable() can clear no_d3cold. The target can then become
-D3cold. On a NIC whose PME_Support has no D3cold bit, pci_dev_run_wake()
-is now false, and the core would put the device into D3cold with wake
-disabled.
-
-Even then, igb_runtime_idle() still schedules a suspend whenever there is
-no link:
-
-	if (!igb_has_link(adapter))
-		pm_schedule_suspend(dev, MSEC_PER_SEC * 5);
-
-Could this bring back the behaviour the commit message describes, where
-the port stays down until it is resumed from user space? Would it make
-sense to also refuse runtime suspend in igb_runtime_idle() or
-igb_runtime_suspend() (for example by returning -EBUSY) when
-pci_dev_run_wake() is false at that point?
-
-I have only checked the code path here. I have not confirmed that real
-82576/i350 parts on D3cold-capable platforms lack PME from D3cold.
-
->  	return 0;
->  
->  err_register:
-> @@ -3876,7 +3880,8 @@ static void igb_remove(struct pci_dev *pdev)
->  	struct igb_adapter *adapter = netdev_priv(netdev);
->  	struct e1000_hw *hw = &adapter->hw;
->  
-> -	pm_runtime_get_noresume(&pdev->dev);
-> +	if (pci_dev_run_wake(pdev))
-> +		pm_runtime_get_noresume(&pdev->dev);
+> xsk_get_pool_from_qid() checks the queue id against the stack's real
+> queue counts, which can be higher than the number of rings the device
+> has, e.g. after igb falls back from MSI-X to MSI on resume.
 
 [Severity: Low]
-Can this pci_dev_run_wake() call give a different answer than the one in
-igb_probe()?
+This is minor. At this commit, a successful resume goes through
+__igb_open(netdev, true), which re-syncs the real queue counts:
 
-igb_probe() doesn't save its result. pci_dev_run_wake() recomputes it on
-every call from pci_pme_capable(dev, pci_target_state(dev, true)).
+    err = netif_set_real_num_tx_queues(adapter->netdev,
+                                       adapter->num_tx_queues);
 
-Several inputs to the target state can change at runtime:
+The MSI-X to MSI example only leaves stale counts after the later patch
+"igb: fix RTNL assertion when resuming from runtime suspend". That patch
+makes __igb_resume() call __igb_open(netdev, true, !rpm), which skips the
+re-sync on runtime resume until igb_rtnl_resume_task() runs.
 
-  - d3cold_allowed, which root can write through d3cold_allowed_store()
-  - no_d3cold
-  - PM_QOS_FLAG_NO_POWER_OFF in acpi_pm_device_sleep_state()
-  - acpi_target_system_state()
+The guard also covers the runtime-suspended-while-up state. There,
+igb_free_q_vectors() has set num_rx_queues = 0 while netif_running() is
+still true.
 
-On a NIC with PME from D3hot but not from D3cold, changing
-d3cold_allowed between probe and unbind is enough to flip the answer.
+Could the commit message and the new code comment mention that
+dependency, or use the runtime-suspended case as the example?
 
-pci_device_remove() relies on ->remove() undoing exactly what probe did:
+> diff --git a/drivers/net/ethernet/intel/igb/igb_xsk.c b/drivers/net/ethernet/intel/igb/igb_xsk.c
+> index ce4a7b58cad2f..8ed82bb1def9a 100644
+> --- a/drivers/net/ethernet/intel/igb/igb_xsk.c
+> +++ b/drivers/net/ethernet/intel/igb/igb_xsk.c
+> @@ -148,7 +148,12 @@ static int igb_xsk_pool_disable(struct igb_adapter *adapter, u16 qid)
+>  		return -EINVAL;
+>  
+>  	rx_ring = adapter->rx_ring[qid];
+> -	if_running = netif_running(adapter->netdev) && igb_xdp_is_enabled(adapter);
+> +	/* The stack can know more queues than the device has, e.g. after a
+> +	 * fallback to fewer queues on resume: skip the rings it doesn't have.
+> +	 */
+> +	if_running = netif_running(adapter->netdev) &&
+> +		     igb_xdp_is_enabled(adapter) &&
+> +		     qid < adapter->num_rx_queues;
 
-drivers/pci/pci-driver.c:pci_device_remove() {
+[Severity: High]
+Is checking only num_rx_queues enough here? igb_txrx_ring_disable() and
+igb_txrx_ring_enable() also use the TX ring:
+
+    struct igb_ring *tx_ring = adapter->tx_ring[qid];
     ...
-		pm_runtime_get_sync(dev);
-		pm_runtime_barrier(dev);
-		drv->remove(pci_dev);
-		pm_runtime_put_noidle(dev);
-    ...
-	pm_runtime_put_sync(dev);
-}
+    set_bit(IGB_RING_FLAG_TX_DISABLED, &tx_ring->flags);
 
-If probe saw false and remove sees true, one usage reference leaks. The
-device can then never runtime suspend again, even after rebinding with
-power/control set to auto.
+igb can run with fewer TX rings than RX rings. From
+igb_set_interrupt_capability():
 
-If probe saw true and remove sees false, the final pm_runtime_put_sync()
-drops one reference too many. With power/control set to auto, the usage
-count underflows and the kernel warns. With power/control set to on, the
-forbid reference is used up and the user's setting is lost.
+    adapter->num_rx_queues = adapter->rss_queues;
+    if (adapter->vfs_allocated_count)
+        adapter->num_tx_queues = 1;
+    else
+        adapter->num_tx_queues = adapter->rss_queues;
 
-Before this patch, the put_noidle/get_noresume pair was unconditional and
-couldn't mismatch. e1000e and r8169 re-evaluate pci_dev_run_wake() in the
-same way.
+igb_get_max_rss_queues() allows 2 RSS queues on an 82576 with VFs.
 
-Would it be safer to record the decision made in igb_probe(), for example
-as a flag in struct igb_adapter, and test that flag in igb_remove()?
+Here is a possible sequence:
 
->  #ifdef CONFIG_IGB_HWMON
->  	igb_sysfs_exit(adapter);
->  #endif
+1. With SR-IOV off (e.g. 4 queues), bind a zero-copy AF_XDP socket to
+   qid 1. igb_xsk_pool_enable() accepts it.
+
+2. Write to sriov_numvfs:
+   igb_pci_sriov_configure()->igb_enable_sriov()->igb_sriov_reinit().
+   igb_clear_interrupt_scheme() sets tx_ring[1] to NULL, and
+   igb_init_interrupt_scheme() allocates rx_ring[0..1] but only
+   tx_ring[0]. The pool registered at qid 1 stays in place.
+
+3. Close the socket:
+   xp_release_deferred()->xp_disable_drv_zc()->ndo_bpf()->
+   igb_xsk_pool_disable(adapter, 1).
+   xsk_get_pool_from_qid() returns the pool because
+   1 < real_num_rx_queues. The new guard passes because
+   1 < num_rx_queues. igb_txrx_ring_disable() then calls set_bit() on
+   NULL->flags with rtnl held.
+
+The commit message says this matches "as igb_xsk_pool_enable() and
+igb_xsk_wakeup() already check". However, igb_xsk_wakeup() bounds qid
+by the TX count:
+
+    if (qid >= adapter->num_tx_queues)
+        return -EINVAL;
+
+igb_xsk_pool_enable() also checks real_num_tx_queues. Should this guard
+require qid < adapter->num_tx_queues as well, or NULL-check both ring
+pointers? No later patch in the series touches igb_xsk_pool_disable().
+
+[Severity: High]
+Is this check serialized against the resume path that writes
+num_rx_queues and the ring arrays?
+
+igb_xsk_pool_disable() holds only rtnl. __igb_resume() calls
+igb_init_interrupt_scheme() without rtnl on runtime resume, and before
+rtnl_lock() on system resume. Inside it, igb_set_interrupt_capability()
+publishes num_rx_queues = rss_queues before igb_alloc_q_vector() fills
+tx_ring[] and rx_ring[].
+
+When the device is runtime-suspended with the interface up,
+igb_free_q_vectors() has set num_rx_queues = 0 and the rings are NULL,
+but netif_running() is still true. Runtime resume can start
+asynchronously, for example from a PME on link-up:
+
+CPU0 (XSK release, rtnl held)
+igb_xsk_pool_disable()
+    rx_ring = adapter->rx_ring[qid];      /* NULL */
+
+CPU1 (runtime resume)
+igb_init_interrupt_scheme()
+    igb_set_interrupt_capability()
+        adapter->num_rx_queues = adapter->rss_queues;
+
+CPU0
+    qid < adapter->num_rx_queues          /* now true */
+    igb_txrx_ring_disable()
+        tx_ring = adapter->tx_ring[qid];
+        set_bit(IGB_RING_FLAG_TX_DISABLED, &tx_ring->flags);
+
+If the rings are still NULL, this oopses. If they were just allocated,
+napi_disable() races with napi_enable() and ring setup on CPU1.
+igb_realloc_rx_buffer_info() is also called later with the stale local
+rx_ring, which is NULL.
+
+Can the NULL ring this patch is meant to prevent still reach
+igb_txrx_ring_disable() through this window? The missing serialization
+in __igb_resume() predates this patch, and later patches in the series
+keep it.
+
+>  	if (if_running)
+>  		igb_txrx_ring_disable(adapter, qid);
+
+[Severity: High]
+This isn't a bug introduced by this patch, but netif_running() plus a
+queue count bound doesn't show that the NAPI is enabled. Can
+igb_txrx_ring_disable() end up calling napi_disable() on a NAPI that
+was never enabled, or is already disabled?
+
+netif_napi_add() sets NAPI_STATE_SCHED and NAPI_STATE_NPSVC.
+napi_disable_locked() then waits on them with no timeout:
+
+    while (val & (NAPIF_STATE_SCHED | NAPIF_STATE_NPSVC)) {
+        usleep_range(20, 200);
+
+There are two ways to reach that state:
+
+- In __igb_resume(), igb_init_interrupt_scheme() succeeds but
+  __igb_open(netdev, true) fails before napi_enable(), for example in
+  igb_setup_all_tx_resources(). __LINK_STATE_START and xdp_prog stay
+  set.
+
+- igb_xdp_setup() and igb_sriov_reinit() ignore an igb_open() failure
+  after igb_close(), and igb_down() has already called napi_disable().
+
+Closing an AF_XDP socket on such a qid then runs
+xp_release_deferred()->igb_xsk_pool_disable()->igb_txrx_ring_disable()->
+napi_disable(), which loops forever with rtnl held.
+igb_xsk_pool_enable() uses the same condition.
+
+Would checking __IGB_DOWN, as igb_xsk_wakeup() does, be a more reliable
+indicator here?
+
+[Severity: High]
+This is a pre-existing issue, but what happens when
+igb_realloc_rx_buffer_info() fails further down in
+igb_xsk_pool_disable()?
+
+    if (if_running) {
+        err = igb_realloc_rx_buffer_info(rx_ring, false);
+        if (err)
+            return err;
+
+        igb_txrx_ring_enable(adapter, qid);
+    }
+
+By this point igb_txrx_ring_disable() has set IGB_RING_FLAG_TX_DISABLED,
+zeroed TXDCTL/RXDCTL and called napi_disable(). The error return skips
+igb_txrx_ring_enable(), and rx_ring->xsk_pool and tx_ring->xsk_pool
+still point to the pool.
+
+xp_disable_drv_zc() only warns:
+
+    if (err)
+        WARN(1, "Failed to disable zero-copy!\n");
+
+The core then clears and frees the pool, so the ring is left with a
+dangling xsk_pool pointer.
+
+Any later igb_down(), from igb_close(), reset_task or igb_xdp_setup(),
+calls napi_disable() on the already-disabled NAPI and blocks forever
+with rtnl held. Binding a new XSK socket to that qid hangs the same way
+through igb_txrx_ring_disable().
+
+igb_xsk_pool_enable() has the same imbalance after
+igb_realloc_rx_buffer_info(rx_ring, true) fails:
+
+    if (err) {
+        xsk_pool_dma_unmap(pool, IGB_RX_DMA_ATTR);
+        return err;
+    }
+
+>
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261119140412.163202-1-antonio%40mandelbit.com
