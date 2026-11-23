@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795470283;
-	b=i3gTRiZvuKZDmoWU3X8z5rbFUXIVntASL8Y91z7n+TILMuC5rEVCB02/wAu1eesBhVmQ
-	 Al7rNhUs0iAdn0B5hhwJQHK1BM8lU3eb4caW21YOLqfs4nxkpO/ECoCGom/Lo4sOx0Od/
-	 vjFsQWfu4goB2oH1s2t+WlifhBosGyfypaHRrl5Ppx2cK/B0BVr3pcg2oUR/lJzl+J+5E
-	 NpifeKpvkHkmvnlFTvklxm4Q5mQ2BsRGAV7sukpRRWI+8+WTYo64SRm83YCsNgI0CGg82
-	 eddzr39HO3Ks9vEb4dAF25N/YwhIPdxw/Cyrsr74io0x+09dF2cuh+Wu2V7r+ju9xqw==
+	t=1795470363;
+	b=LRssvx97Jd77pb3Vmm8wAW1Ne2ZuPGFhyZCZQXmUfS2gN5CE4UwIl1o8K8rIYctR314A
+	 g969cuoekElyllcuYVDo5Sf7beHK3whohcIWhQKFN0exyip0m5lPaxxsKc9/dpAOh9sbp
+	 3K18McMzBypc2KXgWGRsfRwBjqowfgaCjyN6jdoM/gzrIMwdtzmcRBtTYgIb+Vn23pnmT
+	 VXU6SmLUmL9u/xYnRGZoV4AYG1xkLj9r7sjAdZy0NDlRMK1KIEek8dhQVNSqa/bLy7OzT
+	 panEzvPSaDd+cVV6gyUz9qmc6dfS5uNNCe375RuI0H5Crt6nw+e1QKLHwlcYu5zAN2Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795470283;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795470363;
 	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
 	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=b9KMJd8ILQn9kiI6T5ef0qdZWNTj3EtOlVvb/ITxnN0=;
-	b=bK452u9WQNeyLfi+N/GFdpimfSS5K0zn5lGPNImQusMktIoxxY58I1C5s08UnrWrfbbO
-	 DIY9Py3FJn6BfzS1TyaAuI7kWnQMFFyZzKa29KWjg2xlP6SJaqSYARAj6hb1a8sbpWEec
-	 iAFIbhmNGlZ/ylubPbEyV8obgpAlJyD+wzcuDPWpP67tBvQWywArEACrn84FzCYeUD8+J
-	 GR2kYejGz87zJvTQTrc9l+XbbY5YBYfr3O+1HuJH+/5QaBrVfESAz/W2uM5gMYBsb4UTc
-	 iXZYAaXuWEHqiChvKUuF3IqmrQp1Na7fc2bRSIUCtolYCZL8eKRc7/v/NwMhicbvdSA==
+	bh=Shz0vFbMZApQHnxXjuMygFvUH5u2IdlpvjR1eoSsZKs=;
+	b=UejTAxu0ozrtb3NcmB6JSjR7kTCJp0LwMwRRgZV0X3u+okXiqRJzIEGOrxLHwQ9yZLwV
+	 UrWOAEwQ86t3Z+PBzQtWJq7hk6bzcY3sy9Ot/FJM+CacxwZCr6umGeuCCaQHup7gLShw9
+	 M1X0Pa/dS3p0iL4oy0s+rrXgga2Xm2PqUupFoBhXMjUcN7idCX7Z+9HL+OLZTo/koC0ik
+	 /e+bf6YorKKn0CTt2EB2u7GMLtipFE1ll3tiNFyU5//5grKExLlc2+9dagJAyWpUVpByc
+	 rRqjyvgIohVidIqSp6t3UVeg7aSbHx686FH9S8d/VSleNcy/fLzq3HnZzpBgE+QcCxA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=l6ON6QMB;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cct16vwW;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF045606A321
-	for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 21:44:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F07C4606A31E
+	for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 21:46:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=l6ON6QMB
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F0161F000C4;
-	Mon, 23 Nov 2026 21:44:42 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cct16vwW
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D99981F000CF;
+	Mon, 23 Nov 2026 21:46:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795470283;
-	bh=b9KMJd8ILQn9kiI6T5ef0qdZWNTj3EtOlVvb/ITxnN0=;
+	s=k20260515; t=1795470362;
+	bh=Shz0vFbMZApQHnxXjuMygFvUH5u2IdlpvjR1eoSsZKs=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=l6ON6QMBeLxeG7d9yChoeIhrKiMHVxa2cU41pYKd3Vit/y3CAEYJ0CIG+uygUSJQ+
-	 vu/jbM69EkP7/KqhaNnpUQfmlU07Iz5wiLYT5nvnu5WYQoMHh46w04/XZ5cW114UXE
-	 LPOGDR0UwNpHqMrs4vQFqksR5sqhsNRjwFXGz8ICfkF17aJNNX5bt91Hu4RGpXHGvL
-	 M0XKpQ8Yc7UxPMW8UZlEqZR4ytIwr7JEBGgfvqPVa901n8tLI1C6M8tinr8F+36sPf
-	 4M5WkpwoyLfRVJAZB6VTbtG+QE+qW5reyESUestkyl5yiVSoaFJrQ2QEtj4SHKnQNS
-	 +6pay1Dx6o31g==
-Content-Type: multipart/mixed; boundary="===============5985596331353088215=="
+	b=cct16vwWJKUs1vpiOrbk+vDNZPNIUmVCDRfScoNVcjBBJ4i9s/s9qgTHLV9u7A6AA
+	 J6j7Huq6hCLx+CwLF2oQmKlYBwwfUSo2DvFmir9ZX5poaFKnC6cEmqFvAOQx92ZPFn
+	 3jTLjJG7dJ9wlhPQtFNCKGkmyCgkj30KMjcEMIgXV8gHX6pEllspkJisJbcw1Yhu2F
+	 UlOwM2Kc8CpsRmtfwnSefkk92MdskY7XFdIGo/l/CnI4vHdG66flIVpiZmxQHkbgyO
+	 exSbdsq8zbvvoctMZw38Zvcdca0OmX7aRzHA7bzLGYdwBWJrOVDD/ib64v9vcJqeTT
+	 tzevIq5c3t2WA==
+Content-Type: multipart/mixed; boundary="===============7243962787031392501=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,66 +49,84 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <81079675ffbec722c00fd9e0d1d07c4127138e19202a6e1bcf4a10464b10ce3a@mail.kernel.org>
-In-Reply-To: <20261123205713.4094553-1-alexei.starovoitov@gmail.com>
-References: <20261123205713.4094553-1-alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: Force BPF_JIT on x86-64 and arm64
+Message-Id: <1cdc66100171336f5021638b5b309f3cd5e1852bed647573797a73a1f6ced776@mail.kernel.org>
+In-Reply-To: <b9243eaf40e91eb71994fce04d45ca91f1740c86.1795467315.git.memxor@gmail.com>
+References: <b9243eaf40e91eb71994fce04d45ca91f1740c86.1795467315.git.memxor@gmail.com>
+Subject: Re: [PATCH bpf-next v1 03/10] bpf, docs: Document the overwrite mode of BPF ring buffer
 From: bot+bpf-ci@kernel.org
-To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
-Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Mon, 23 Nov 2026 21:44:42 +0000 (UTC)
+To: memxor@gmail.com,bpf@vger.kernel.org
+Cc: xukuohai@huawei.com,tamird@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,emil@etsalapatis.com,ihor.solodrai@linux.dev,kkd@meta.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Mon, 23 Nov 2026 21:46:00 +0000 (UTC)
 
---===============5985596331353088215==
+--===============7243962787031392501==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> bpf: Force BPF_JIT on x86-64 and arm64
+> bpf, docs: Document the overwrite mode of BPF ring buffer
 
-TL;DR: Nit only: the new ARCH_WANT_BPF_JIT_ALWAYS_ON Kconfig comment omits the
-KMSAN exception, where bpf() can still have the interpreter and no JIT.
+TL;DR:
+- Docs claim overwrite-mode reservations never fail, but they may still fail
+  when the oldest uncommitted record would be overwritten
+- Consumer procedure may lack read ordering on weak CPUs and busy/discard bit
+  handling
 
-> diff --git a/kernel/bpf/Kconfig b/kernel/bpf/Kconfig
-> --- a/kernel/bpf/Kconfig
-> +++ b/kernel/bpf/Kconfig
+> diff --git a/Documentation/bpf/ringbuf.rst b/Documentation/bpf/ringbuf.rst
+> --- a/Documentation/bpf/ringbuf.rst
+> +++ b/Documentation/bpf/ringbuf.rst
 
 [ ... ]
 
-> @@ -26,8 +26,8 @@ config HAVE_EBPF_JIT_KASAN
->  config ARCH_WANT_DEFAULT_BPF_JIT
->  	bool
->
-> -# Used by archs to tell that kernels that were compiled with BPF JIT support
-> -# have no BPF interpreter.
-> +# Used by archs to tell that kernels with the bpf() system call have the
-> +# BPF JIT compiler and no BPF interpreter.
->  config ARCH_WANT_BPF_JIT_ALWAYS_ON
->  	bool
->
-> @@ -36,6 +36,8 @@ menu "BPF subsystem"
->  config BPF_SYSCALL
->  	bool "Enable bpf() system call"
->  	select BPF
-> +	# KMSAN doesn't see the stores of JITed progs and reports false errors.
-> +	select BPF_JIT if ARCH_WANT_BPF_JIT_ALWAYS_ON && !KMSAN
+> +Overwrite mode
+> +--------------
+> +
+> +In a ring buffer created with the ``BPF_F_RB_OVERWRITE`` map flag, reservations
+> +don't fail when the ring buffer is full. The producer overwrites the oldest
+> +records instead, so the ring buffer always holds the most recent data.
 
-This isn't a bug, but the new comment on ARCH_WANT_BPF_JIT_ALWAYS_ON
-makes an unconditional claim, and this select adds an exception to it.
+Is this strictly true?  In bpf_ringbuf_has_space() the check
 
-On x86-64 a config with KMSAN=y, BPF_SYSCALL=y and BPF_JIT=n is still
-valid.  In that config the select above is off, BPF_JIT_ALWAYS_ON is n
-because it depends on BPF_JIT, and bpf_prog_select_interpreter() still
-installs interpreters[idx].  So that kernel has the bpf() system call
-and the interpreter but no JIT, which is the opposite of what the
-comment says.
+    new_prod_pos - pend_pos > rb->mask
 
-Could the comment mention the KMSAN exception, for example "... unless
-KMSAN is enabled", so it matches the select that uses this symbol?
+returns false before the overwrite_mode shortcut is reached, so a
+reservation still fails (returns NULL) when the oldest not-yet-committed
+record and the new record together span the whole ring.
+
+Overwrite mode cannot overwrite a record that a producer is still working
+on.
+
+Could the text say that reservations don't fail merely because the consumer
+is behind, but can still fail when the oldest uncommitted record would have
+to be overwritten?
+
+[ ... ]
+
+> +1. Read the overwrite position and then the producer position. Start at the
+> +   consumer position, or at the overwrite position if the producer position is
+> +   a ring buffer size or more ahead of the consumer position. If the start is
+> +   the producer position, there is nothing to read.
+> +2. Read the record header and do the check in step 4. Use the length and flags
+> +   of the header only if it passes.
+
+Should step 1 say that these two loads must be ordered (acquire or a read
+barrier)?  On weakly ordered CPUs such as arm64 the two loads can be
+reordered, which breaks the ordering the kernel relies on; the kernel's own
+ringbuf_avail_data_sz() uses smp_load_acquire() for both.  Only step 4
+mentions a barrier.
+
+Also, step 2 doesn't mention BPF_RINGBUF_BUSY_BIT or BPF_RINGBUF_DISCARD_BIT.
+The record at the producer position is reserved but may still be busy, and
+the length has to be masked before use, so a consumer following only this
+section could treat a busy header as a valid length.
+
+Finally, the batching paragraph needs the first record's length to find the
+next record before the step 4 check has validated it.  Doesn't that conflict
+with step 2's "Use the length and flags of the header only if it passes"?
 
 
 ---
 AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/45267122015
---===============5985596331353088215==--
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/45270351590
+--===============7243962787031392501==--
