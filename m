@@ -1,105 +1,76 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.181
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.21
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795394455;
-	b=cCyn6EPknRNEFpm1PFhwVp2D51Oy7krLowlHSUwnv0FKEUVYPV8tjWn9fqfbbgPcNqmI
-	 yMes/07izw2SXvaTLp26F/1UeLlB8Kt4yBaUar3BoV3jIPzBdR/Zz7CCPVHN0e2imWrVl
-	 sSv3XdfMkMYZPWunYtk3aucJevWVPRhCATtCB63e2cm52Y5WX/7aJ77Wknc5+0wulb2ol
-	 rXLR2G8m2e31rA3TDeSrDyoyMhQvViMqNSEXbCY36rb06+5jOeYxlQEFybR9ANeo3446m
-	 Y72pbhJoGORBlvCrcF99zHIZO9tr7Y4CPBOn138y/XASgBEs/ev8lPmoBTlmobMn0Qw==
+	t=1795394597;
+	b=dIqmkEmP0jC/51WqvB5v0C2FxveqFlAfkENtGb571NAzrdVMiJVZcEByOYNac+8obxwM
+	 bCrgl/O9SRwHSlIRNbsB/TEF/EwEwBxbf/ssbAa+xuFNjnT8GB9+THABqPIRvgQMMFR6U
+	 R2z34/8dbJ9Yt0kPm9S8AR7hPj38nheKBw3YVjahLVPK+Oyq4n+2+PlIxBZ1tM9+daUAT
+	 He9zn8zom+q+BAFuC9r4lQjfwI4nCwwF8MpXOl1ZM9rk4bAsLMRxJqCgwFWhcSeTS0VUs
+	 eBPqPol4agpY7KJPCmG4TamO2hUXbpFe/vq1aJVLibLqKIqkKd/4+xorIgHsgRlaGqg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795394455;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Content-Type:Date:
-	 Message-Id:Cc:Subject:From:To:In-Reply-To:References:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=JhBGO+Bzff2sfRtYfk09jmNW/MhpZG21e/W39Xvcbis=;
-	b=LjwkCMioQjNRg5jnOjdiGFSz9V8tdLDG5Z+5kojhyzLJH6yv1jPvyPgc+j6oPvHl4iiM
-	 hmGurfWUPLfJo4q8c2HWBkbxI2OWIdsaalMgWMYtQZkHXH1PyXreVci7gpOzcQFaOXdfG
-	 D+vjA8Sd0kJY+OUOk4zqjqWMxX4XWGvVHV6L7aX1vxYaP32PxyNjy+yQdD1wNczb3ShM4
-	 HfHV/EtMN6ZU//47dhEehYLEVwpa+dXJg4vY375fJPIy98U04jkfRhHMJ/TDtXd/S9tgg
-	 X8s397MlSPtn/iXH+kMSzuP2/6U4RPL0XlyTI6aUFeExvFtpys7SToEm5d7TpISXT6A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795394597;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Date:From:To:Cc:
+	 Subject:Message-ID:MIME-Version:Content-Type:Content-Disposition:
+	 Content-Transfer-Encoding;
+	bh=TLXj3Fi8Kl5VNZ08p1Bk9+717X3RrFhG/5sffc1EOzM=;
+	b=Kts1F8uAftwV8Z5qviE03kvROAHT/DJ17gvUkJZWdarqsBG0VycisWfSHL0dm2mdDrBb
+	 HHuL5WV6v0VeTNZHiq1uJt5r6QqdONMHT5lm7qSrKi4keIahpejxq+2x4A5BpEWWP1OkU
+	 UqO/0u1ZtZTXVWEStfGXVtsnuwHQ7x6APbKdKy4lJ9I9T/VkIhrktSgvvdrZ2B3DxAUlf
+	 cYGWdTqC84qZmy/EOEPdVUaAQbrO9bQAhRXt+3OGh3AZcnhuqNDQi3xwjGPC/WMKSbaTu
+	 KUCg1rv4DLWddLnCGOCbK14Vw6bEFJqFoyXofA4CffdHJjn76zSoF9TJY6aHzwZlttQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=H7VxvMiF;
-	arc=none smtp.remote-ip=209.85.210.181
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=Op86zi+m;
+	arc=none smtp.remote-ip=198.175.65.21
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 686BB606A696
-	for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 00:40:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 686BB606A696
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B472606A33C;
+	Mon, 23 Nov 2026 00:43:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6B472606A33C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=H7VxvMiF
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-8c20d68c83fso2075855b3a.0
-        for <bpf@vger.kernel.org>; Sun, 22 Nov 2026 16:40:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795394434; x=1795999234; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=JhBGO+Bzff2sfRtYfk09jmNW/MhpZG21e/W39Xvcbis=;
-        b=H7VxvMiFVH4s8ClRmHAsMycvb8VDbOKtQc1O2zfUQwjLSuXbwP35iqp8VjXYOxQqPR
-         EZFiGAwwggYd5yjCZvYjKgxafzXFwYEGQCBVQovrw+xO041oD6iHc6XkhJXyVCMg7s3H
-         oRW6zgEMhlMvIZHTIIKfIudIPg/e9Ojbl7lKmaZwZcIOuSdVy1uFNZTZjNUWuAAHnYij
-         914nbt3VYInsCaLfSoNxUWD79rl3NtXQiOM86aghrhzomO5YY+hv2/nWPQnS2uBQWvWb
-         0VrLXZ61RsylhET2ZoWL+Sox7aXKrrq2DGjfWyP64T2sNVk3Bu2pomSgzwU383pH5r7P
-         L5lw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795394434; x=1795999234;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=JhBGO+Bzff2sfRtYfk09jmNW/MhpZG21e/W39Xvcbis=;
-        b=GtruEM1Zq55L4+OW1aMu9AcKNe62nYps2CqmScD/koqKkpZ5TB20wyWByg3LGbzhny
-         2h+MSh9mAuWeP5sjKRZe/ojIkBJQgbgxDnipNB4EVTuusMhu8DLzUsIuWkBRt4VGhUvi
-         lgaRN8KIZe4gDt9YdDWhtmQ4ol6WRFz1gfacShz/NhsFcFMisTW7nftouBWBd/xAztJZ
-         QfYocjjJpYowW8DsuXx5+DTVofVRFe9dRLAsLaSMzVYFHY2VrRdlj2FB0oYmfYmXh6Kt
-         ecOiM4rMZvS/767y9iPKrnZSYPjphBrwwKPfAGHAoeZcCKjiKEU2bDUCLC6djkVknLsi
-         ItmA==
-X-Gm-Message-State: APuU4Z/CZahaOqhKHj5/LKN5KFA+6QYN9OBypNeJ0Q3uyYy/rbYj+gzp
-	1UuEhMZ8sJUYWAmbD95TEYxw1YQTOLl8OMtgnYRjGuD7jGsiHxX8SYMa
-X-Gm-Gg: AZFdTZfSCrneO6K3wUbXtRyznvLqmX6CHTEmOKxceA+gcJI5afeAfxC+P9WG9m4Xo7n
-	rvoADekiRncg8UkrL2K0NteHtb65iva5IGy+eh0Grg3frpeg480G1niPSHJm4tLR6dPVbOokP0e
-	+Ad2xmg8J55NhAMfh7wEpZN+CdC2jOWVD5iCDDnqWlb2/f5hFHYa7g+6POxYsFr27C1P/lRGv8s
-	mhKbqD6I4CWj8EjV5KiTl/ZSp+gxpKPhcAGAtVezo2Vyk7y1WxLzrhFatxvdeQOR9hYttt27ZKx
-	j37anRlwmsxypEVLo/337EatDdvhJo2qFJHzUxkBfKCEgYoL9mXk9l3RDjZHXOCUjIK/Wz19Iz6
-	gv4TZW01DswjYD0rpfqmR7gUiNLwwiKmabmmPiQbwx3Szh6zh8fXB85fu8U5G4ldNrbz5nTbrU7
-	Y55cf5XeKv9JBOhdeO9evlbiGvKWj3yps/efUc8gis8VO2oxSm2aBmcaHTAfhPWDZidjN7HcYE7
-	uo4SonAalcXo1JErWytqWIY6viv7kraVnTk6qDa1piY5BFyfgG7hpfY6MkNhD9hS3o2ExUEV+nr
-	s1SkWThsOFjO6ls+UP2tG5bl6uhCVEmudoPLK/S6r7KllHEPeZzaM6Wj65SgH/Kqd7rH2p0u8Nj
-	c14xu/VNMp6YjHY1k7MOEGfyDngS7Fdh7ECM=
-X-Received: by 2002:a05:6300:492:b0:3e0:df21:9df2 with SMTP id adf61e73a8af0-4014ca45234mr5333075637.10.1795394433438;
-        Sun, 22 Nov 2026 16:40:33 -0800 (PST)
-Received: from localhost ([153.61.198.251])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8c87343f726sm4738195b3a.36.2026.11.22.16.40.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 22 Nov 2026 16:40:32 -0800 (PST)
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 23 Nov 2026 00:40:32 +0000
-Message-Id: <DN267JUKDRNS.2VMV07CQ58R4X@gmail.com>
-Cc: <bpf@vger.kernel.org>, "Puranjay Mohan" <puranjay12@gmail.com>, "Andrii
- Nakryiko" <andrii@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>,
- "Martin KaFai Lau" <martin.lau@kernel.org>, "Eduard Zingerman"
- <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Mykyta
- Yatsenko" <mykyta.yatsenko5@gmail.com>, <kernel-team@meta.com>, "Liam R.
- Howlett" <liam@infradead.org>, "Suren Baghdasaryan" <surenb@google.com>,
- "Vlastimil Babka" <vbabka@kernel.org>, "Shakeel Butt"
- <shakeel.butt@linux.dev>, "Pedro Falcato" <pfalcato@suse.de>, "David
- Hildenbrand" <david@kernel.org>, "Jann Horn" <jannh@google.com>,
- <linux-mm@kvack.org>, "Chris Mason" <mason@kernel.org>
-Subject: Re: [PATCH bpf v6 2/3] bpf: switch task_vma iterator from mmap_lock
- to per-VMA locks
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>, "Puranjay Mohan"
- <puranjay@kernel.org>
-In-Reply-To: <awGZWsCp6v63H_py@gremlin>
-References: <20260408154539.3832150-1-puranjay@kernel.org> <20260408154539.3832150-3-puranjay@kernel.org> <awGZWsCp6v63H_py@gremlin>
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=Op86zi+m
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1795394595; x=1826930595;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=iJ4+vs+nmNJDXv13dvpUiuHGj5q0As+YtfUP5iiyV5A=;
+  b=Op86zi+mR5dhHG+z/KwsvjqMy+VXBm8tV//ZWRvUVIrOhCSlyn6EKNCf
+   QzIZgbZ1OLTaAQDQ9EtlgfpGMNlICcBgLUIMQq+BXFGB7jfGIkV7/Fl0s
+   5jt0j6baO4ivtoF6uoY6zbN5zO+14rjDIp+9vXdj4X5oqtKCFD4jX89kE
+   ZfodtWhIX89CbiOl7qVM3RJ2EZpWfHJDr3vLuJz7gbc1fJrk86SBDLaFM
+   P4/tqx8lYC5aMSt8KuJZEb7/0bC6kfahZpKGYq6GRXZYkDud/VPbMSAo4
+   cQi3v4sNDKdaIHnPPYYU1RXJI1RNH2oCCw5h8Lr7scgm1AMiysiQYVokY
+   g==;
+X-CSE-ConnectionGUID: YWAvt++IRyy32qublHLk7Q==
+X-CSE-MsgGUID: Jdkl/GJ4TSCp7yrhWIQDKg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11974"; a="4279016"
+X-IronPort-AV: E=Sophos;i="6.27,227,1787036400"; 
+   d="scan'208";a="4279016"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2026 16:43:14 -0800
+X-CSE-ConnectionGUID: ZkRECSoFTU6hGqtygMhgig==
+X-CSE-MsgGUID: 1bGPQQSXR5GrRHxZBsawWQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,227,1787036400"; 
+   d="scan'208";a="11073546"
+Received: from ly-workstation.sh.intel.com (HELO ly-workstation) ([10.239.182.64])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2026 16:43:12 -0800
+Date: Mon, 23 Nov 2026 08:43:08 +0800
+From: kernel test robot <yi1.lai@intel.com>
+To: Emil Tsalapatis <emil@etsalapatis.com>
+Cc: oe-lkp@lists.linux.dev, lkp@intel.com, linux-kernel@vger.kernel.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+	yi1.lai@intel.com
+Subject: [linus:master] [bpf]  bd59a58663:  stress-ng.seccomp.ops_per_sec
+ 59.6% regression
+Message-ID: <202611230821.f5107bac-lkp@intel.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -109,85 +80,71 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-On Sat, Nov 21, 2026 at 05:40 AM Lorenzo Stoakes (ARM) <ljs@kernel.org> wrote:
-> This is buggy and can result in deadlock. You need to revert it or restrict
-> which contexts it can be called in.
 
-Yeah. It's a bug though very much theoretical.
-A revert would bring back an actual deadlock that people hit in production.
-So here is that.
+Hello,
 
-> I'm a little surprised you didn't cc- or even ping mm or the VMA team here, we
-> are always willing to help and it's clearly sub-optimal to write duplicative,
-> open-coded VMA traversal in BPF.
+kernel test robot noticed a 59.6% regression of stress-ng.seccomp.ops_per_sec on:
 
-Fair point. Will cc mm next time.
+commit: bd59a58663895778da607fd02a8f17a93db97d16 ("bpf: Use dedicated workqueue for freeing BPF programs") https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
 
-> It's not really sensible to alter core mm to accommodate this at this stage, so
-> probably the best course is to disallow this code path for softirq context, or
-> you could look into patching the x86 code.
+testcase: stress-ng
+config: x86_64-rhel-9.4
+compiler: gcc-14
+test machine: 224 threads 2 sockets Intel(R) Xeon(R) Platinum 8480CTDX (Sapphire Rapids) with 256G memory
+parameters:
 
-A softirq check is not enough. A tracing prog can run in task context
-with pgd_lock held and irqs on:
+	nr_threads: 100%
+	testtime: 60s
+	test: seccomp
+	cpufreq_governor: performance
 
-  pgd_alloc()
-    spin_lock(&pgd_lock)
-      queued_spin_lock_slowpath()
-        trace_contention_end()          <- pgd_lock is held
-          tp_btf/contention_end prog
-            bpf_iter_task_vma_next()
-              lock_vma_under_rcu()
-                vma_start_read()
-                  mmdrop(other_mm)      <- last put takes pgd_lock again
 
-Equally theoretical deadlock, but since we're discussing hypothetical bugs...
+If you fix the issue in a separate patch/commit (i.e. not just a new version of the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <yi1.lai@intel.com>
+| Closes: https://lore.kernel.org/oe-lkp/202611230821.f5107bac-lkp@intel.com
 
-can vma_start_read() use mmdrop_async() like free_signal_struct() ?
-It changes only the last put of other_mm in err_unstable.
-_destroy() already calls mmput_async() from the same contexts,
-so the fix costs nothing to mm afaict.
-We can fix it on bpf side, but below fix is much cleaner.
 
-diff --git a/include/linux/sched/mm.h b/include/linux/sched/mm.h
-index d7c6a94..a3333ed 100644
---- a/include/linux/sched/mm.h
-+++ b/include/linux/sched/mm.h
-@@ -43,6 +43,7 @@ static inline void smp_mb__after_mmgrab(void)
- }
- 
- extern void __mmdrop(struct mm_struct *mm);
-+void mmdrop_async(struct mm_struct *mm);
- 
- static inline void mmdrop(struct mm_struct *mm)
- {
-diff --git a/kernel/fork.c b/kernel/fork.c
-index 5efceb8..177d5c0 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -752,7 +752,7 @@ static void mmdrop_async_fn(struct work_struct *work)
- 	__mmdrop(mm);
- }
- 
--static void mmdrop_async(struct mm_struct *mm)
-+void mmdrop_async(struct mm_struct *mm)
- {
- 	if (unlikely(atomic_dec_and_test(&mm->mm_count))) {
- 		INIT_WORK(&mm->async_put_work, mmdrop_async_fn);
-diff --git a/mm/mmap_lock.c b/mm/mmap_lock.c
-index 834bbf8..6b9a1bb 100644
---- a/mm/mmap_lock.c
-+++ b/mm/mmap_lock.c
-@@ -306,11 +306,11 @@ err_unstable:
- 	 */
- 	other_mm = vma->vm_mm; /* use a copy as vma can be freed after we drop vm_refcnt */
- 
-	/* __mmdrop() is a heavy operation, do it after dropping RCU lock. */
- 	rcu_read_unlock();
- 	mmgrab(other_mm);
- 	vma_refcount_put(vma);
--	mmdrop(other_mm);
-+	mmdrop_async(other_mm);
- 
- 	return NULL;
- }
+Details are as below:
+-------------------------------------------------------------------------------------------------->
+
+
+The kernel config and materials to reproduce are available at:
+https://download.01.org/0day-ci/archive/20261123/202611230821.f5107bac-lkp@intel.com
+
+=========================================================================================
+compiler/cpufreq_governor/kconfig/nr_threads/rootfs/tbox_group/test/testcase/testtime:
+  gcc-14/performance/x86_64-rhel-9.4/100%/debian-13-x86_64-20250902.cgz/lkp-spr-r02/seccomp/stress-ng/60s
+
+commit: 
+  ef2cb4d4c5 ("Merge branch 'reject-writable-map-iterators-on-read-only-maps'")
+  bd59a58663 ("bpf: Use dedicated workqueue for freeing BPF programs")
+
+ef2cb4d4c59132b8 bd59a58663895778da607fd02a8
+---------------- --------------------------- 
+         %stddev     %change         %stddev
+             \          |                \  
+    613342           -59.6%     247980 ±  2%  stress-ng.seccomp.ops
+     10230           -59.6%       4134 ±  2%  stress-ng.seccomp.ops_per_sec
+    691777           -84.6%     106534        stress-ng.time.involuntary_context_switches
+  60318172           -59.8%   24270033 ±  2%  stress-ng.time.minor_page_faults
+      5077           +48.9%       7560        stress-ng.time.percent_of_cpu_this_job_got
+      3007           +50.6%       4527        stress-ng.time.system_time
+     44.78           -55.9%      19.74 ±  2%  stress-ng.time.user_time
+   1475619 ±  2%     -71.9%     415109 ±  2%  stress-ng.time.voluntary_context_switches
+
+
+Disclaimer:
+Results have been estimated based on internal Intel analysis and are provided
+for informational purposes only. Any difference in system hardware or software
+design or configuration may affect actual performance.
+
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
+
+
