@@ -1,99 +1,92 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=65.109.113.108
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795393639;
-	b=ESZx9liDHvVcBN5OCVaVfQNqlcevxlmZQql1CALvGxoHufnFD9zFd8rx8QpcYZQwLbN8
-	 8UUUWr62KaBXXdeBAMtjP5KX9FB7zIB8Ee7MW2T5yciFilJgTQz/DtLOF3rN/pzY1zwSK
-	 TwT/OSs/j0LZ7qeHJN7tM9t5Qs/2uDboJ8/x2zU2NzTN5CDGrDbVJFMb9/zdkScaDIHbR
-	 gDmDXB7dU2foq9HXgMt32FvgkbaJKDAv07zo9JIKcxqeiz0ngxIQQSxoVyoJyIY/i8Hyf
-	 8G7H/iDXRQB0H9fjqj/22EqFW5Bp3WHSH6z4sM3wunSLmIjqcpEXu7Z9atOZsPBrMjw==
+	t=1795393864;
+	b=MQB2f703rNi+1kOEb3xIjU2YJYqX4JlhUugyNfaqt3QRh2oBSjGW3fN7P4gwBreIJHMe
+	 s3GjSNm2uG0a4ncNJ9dSGZpeu5Aaik6CncppviVGQA87gpGWptYpGgOC8yEWqsn2x5p4W
+	 /skwBMRKPy79F5gr5DURJSUIn4KA2ciLWttIYkcMu7+hdQ62Av1N6iF3zW7AZKMPHSmoJ
+	 ZXNyZoJE132UeQTe8MjiepOsptP3Px1TBn/ee/HmoJ7orBYZfZYv8bLSIOceZ1OLgGuMu
+	 Bgc+uGF8b1QiWHsqd8Q1IxpQrXDbI1joprlFjd56YfUNVgdp9q/hu7pqtt65yiMnNgg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795393639;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
-	 References:Content-Transfer-Encoding:MIME-Version;
-	bh=wlYfh2xtbimyN8kyMMVybX5oVF0p1B6sZ5VOviODosU=;
-	b=27MYVAIUvTxKovqwxsnIFSaNWl4FlmmgJwVTlhINLZrbSAE+PdypFxzpd0K+MKDLuf2w
-	 Vbx1xSDDw/Jeu4kcx50GysRQF+55Xh+lIVAyaiosRmMC5BJ8PjtnV43e8Q2qBWmzxyfkA
-	 jCdcjeyyIby777ERKatPa/D+7SOsItfvr3I9PayA+N+6VhlUJXw6bcctaC8oSM9r44Rzx
-	 4He5AqtuTJICb1uP2CSpq+fo5vpl0X0MeRcXlKyVh7PGGqQIjP2OshJpL/iSjSLj4RNTg
-	 0lcDfUyfCaBw/26iqAwyRAgaYfk8jGO0HiHTCemRQjR3Xr8ww2viYGBvVnaDR6Am6bg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795393864;
+	h=DMARC-Filter:Received:X-Virus-Scanned:Received:DKIM-Signature:
+	 Received:Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To;
+	bh=xeQmcAZxQUTWqI1wKM3X0FAeTjCnZYEkIZfRrsQaagk=;
+	b=Ecyuh10bL9C0ow1eLP+cNjD/8qH72STsty48qBIi2vGY+t7W9TzXZJHtaC0WfvkUMSWz
+	 pK+WP7/bPbpmUlyOjtUFkAvQnnxr5sgwXkDKfGaFyr8h9xICTbmt8E46igLOswOcgZT5z
+	 L2UPqqKoVvfYLSa0tPOzWW+CMSi1bBalffK2lc1JgMYsD6mWzTwsPunCjc45rYpVy+Byd
+	 M3gPYqPvia9Em0Wg2Lmi8NK4Qx+14fUW3E1i441m4AJcGn4faOFBQ5uJzvpNdcq+LC7wH
+	 pO58rTgP96kAtVoBBBwmL+r0Ju1Ac6MwetzBDoqSlqrdJ9lqXDZKgfo13PWLPRr2yyQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ghJ2KJrb;
-	arc=none smtp.remote-ip=209.85.214.174
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=alien8.de;
+	spf=pass smtp.mailfrom=alien8.de;
+	dkim=pass header.d=alien8.de header.i=@alien8.de header.a=rsa-sha256 header.s=alien8 header.b=OBUmdcPt;
+	arc=none smtp.remote-ip=65.109.113.108
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E302606A31A
-	for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 00:27:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3E302606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEC66606A320;
+	Mon, 23 Nov 2026 00:31:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DEC66606A320
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ghJ2KJrb
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2f04bea9a93so22153285ad.3
-        for <bpf@vger.kernel.org>; Sun, 22 Nov 2026 16:27:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795393638; x=1795998438; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=wlYfh2xtbimyN8kyMMVybX5oVF0p1B6sZ5VOviODosU=;
-        b=ghJ2KJrbjjhy2Q4dw/P6p9XqSBnPBE3BS07E6n0mhO3zDi/92pFcaHcdjqrO7ooHAl
-         eVGOU9ujw6IN6pM+B6tUP3NKJRp9QwB6xr8WIT6H36tUMznKxrO7enPSnbFzZWLxWQzK
-         cNuKBG0j2mzgt6jN/Kn+7U1BCOlgtCyEngXeBoIgYYo636yvtqn8w0FWlXncJLXmpuPU
-         HYzXSEv7RgyqAU9nhq/WZylendhEEk4luAog0bj8ODlR2J+4Y8JkMCpj1hlc5oCUyvSF
-         ERhaetRpH2gi8JNf9LMvdmMyhrg6TQIsakLLbFPEz4fn0xX7LzNLShc+pVAryROVdqTk
-         y+WQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795393638; x=1795998438;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=wlYfh2xtbimyN8kyMMVybX5oVF0p1B6sZ5VOviODosU=;
-        b=EE0GNlor/cL6PRlDVtu0R1A+YjbZb3dIdxXzuyKi8w1TEzbaq7RTRt9+G95tAZiuTO
-         M3np4NusorLEnJOLomvy1rgI+SaFldRB1FKkj3xfl6ptva5pxdwGD7F7jJHPxBSwMmhP
-         I6zLOiJVvt1MmMuMVjxPSwPVu1TB45jwQe9z9HPsrvHAvAsU601Pl3/1gSdlkPpSbkNp
-         05/7PtfCz5M1/tkqDcUwU55MYN76q1fgPfxMH2EqigW7WtbTJNA7O2RBpmEtAXm+9RqE
-         gvd5SL+V4eoEWVXvGuCbDZj117ez3+kd8ZYr1M0jQmXaSQkz9KBP/YpTxbU8E33ktHGD
-         Ob1A==
-X-Forwarded-Encrypted: i=1; AL+hErFnxyObcu7LVLA5jcjo61KmjQMMUaTRys6ouSogHiV++hnz7VG/fldaNXNj8wIT7OLjz4w=@vger.kernel.org
-X-Gm-Message-State: APuU4Z85l228vf9ms4sAwFMo1wqeWTYMy+w11lHNgcnv+ScXpK2lNXnL
-	R1Oap+WZW9XXLrDJprvHwGE/AjsDQzIbSqiitrSqNsgo+1+1Ga9hAx81
-X-Gm-Gg: AZFdTZfxql2XM86/mQ5UEVO6j2QA9RrAxVo6jYDScA8i+Y+MhDLEBfKqKkI/3Spm1+f
-	MQtAnn/HVeOCqQoUEygwtJ0I/9URMQZy+N/BHXRYyh4sa6x4r/myVu86l7clNXvA1VYGFjJ4Wfx
-	xnwtvmY6Zt478IC8t9EnVyOR2qzn7YDU4kLDwfGvdql9vcqHW9LsqE0PcgZ9zMf3Bqc3yBRSCgq
-	ASoVV6l7TxvxoXrWMHieERFSYsA/bN7LWrs53UaQm87c0g82oNUDCXDtsz7XPyNZPdYnRn1iT1q
-	e6T44QhI7BA0jHk4cd6WP68Hyv/69f0WYK+kjnkq61eramBCTe+iTzZKu007Tk5RLDIO5oRVOmu
-	o3Y2ufffCyaVOHhREEsgWK88qF+N8t3D+Xm7ijKJAsFU8PmoJJp58UwpS3znvNiinsIO6GfFOht
-	VxZtOp9WXf5vDdnHyPVUlqsFyGr/8XHlxIuHMRCpmvIt1y7H/g8jkJnn5i3QBYj2MDcJFKco718
-	m/f/C01poTVWz8tmBMpDzZYiXLAb3mcudcsT4RUgvbIq5/b1+DFSkntCDqpissYsCL5oD/cZPXe
-	jVRK8fzzLxSOICNGb++8A7uiNLBLOPC7xllToFg8IAeH1BpOSOL5Zc4N1a0ordPhavCthqVjIg4
-	J7m8QZEmugDiGCBGKvPOuADrZcEIjjixfGw==
-X-Received: by 2002:a17:903:2a86:b0:2f0:4168:fb28 with SMTP id d9443c01a7336-2f04168fde0mr105274495ad.27.1795393638345;
-        Sun, 22 Nov 2026 16:27:18 -0800 (PST)
-Received: from localhost ([153.61.198.243])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2f03f0c2091sm42574395ad.20.2026.11.22.16.27.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 22 Nov 2026 16:27:17 -0800 (PST)
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 23 Nov 2026 00:27:17 +0000
-Message-Id: <DN25XEMY8JO1.249FAY7XQUC31@gmail.com>
-Cc: <yatsenko@meta.com>, <bpf@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v4 0/6] bpf: Fix async callback use-after-free
- on map deletion
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Yun Lu" <luyun_611@163.com>, <daniel@iogearbox.net>,
- <andrii@kernel.org>, <eddyz87@gmail.com>, <memxor@gmail.com>,
- <martin.lau@linux.dev>, <song@kernel.org>, <yonghong.song@linux.dev>,
- <jolsa@kernel.org>, <emil@etsalapatis.com>, <ihor.solodrai@linux.dev>
-In-Reply-To: <20261119033051.196177-1-luyun_611@163.com>
-References: <20261119033051.196177-1-luyun_611@163.com>
-Content-Transfer-Encoding: 8bit
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.a=rsa-sha256 header.s=alien8 header.b=OBUmdcPt
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id BF7B340E021D;
+	Mon, 23 Nov 2026 00:31:01 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id MsE8HQ7xTj5Y; Mon, 23 Nov 2026 00:30:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1795393858; bh=xeQmcAZxQUTWqI1wKM3X0FAeTjCnZYEkIZfRrsQaagk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=OBUmdcPt/vi1t+PbVbpO09tSAcJ/gINEFuY00drnFzREjFXPPj5xyjURBbx7xHQAM
+	 9/VhlvdKtBElxjOEJYmXNAZAJXTtVUykQy9VW/WQU9t2OtL4bJUh6UjbojcZi9Jtr6
+	 /ZKb3K3W+EOznrdkjYHeCqjo3oJ1c8g9YMJTsVv7hMUTSdq4/9nWUeArhx8p4c1JL9
+	 59FnF6FNySZaIulKH5/TXDllVkyFDvbF+i7RDWwybiQgIUK5BidMSV8j/Tw63OWzcy
+	 fM9h7ZAe2XGqOlQOwYx2cl6ZT4UVowMkm4RnWOXuguCKPkvFFpOdFbWuvxHrt+lbqd
+	 6g9jP0bg1HIKpEUpT8ihgpTonZ7hyVlPyx0PRMHdHt1UG2At6Rm1d79PqUosbR0LJO
+	 QO0LgyeAr6f77jxFkp3RkVLkcAN0/2k+UBo1+q+JE2XnF3w3Eo+AxuU37erO8pWoXg
+	 WJKiszjPZoUBpyq/BTWgrdvxmjHhIIwsvI7xKauiwGIs/DIm0AXG052AYnUd2rxGdn
+	 jt4R4eQHn1G0VvzPB2AqPT9nKXfwjtYhKeDds8Yf7jr3h9Tc1znFWXPOvJlVS0DZqN
+	 xomlTsMJ6ZsNQJxVy9xN+feJnT6eFgvFP9jSxhLkpKrYrTUPjwgUnSomV52srzGnV9
+	 ZT5YXXsodcJ6OQK6zwYYqQ7k=
+Received: from stx.tnic (unknown [IPv6:2600:1700:38ca:c00::2b])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id E9BD240E0219;
+	Mon, 23 Nov 2026 00:30:39 +0000 (UTC)
+Date: Sun, 22 Nov 2026 16:30:36 -0800
+From: Borislav Petkov <bp@alien8.de>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: bpf@vger.kernel.org, Puranjay Mohan <puranjay@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	kkd@meta.com, kernel-team@meta.com, x86@kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next v1 1/3] x86/mm: Resolve BPF exception fixups for
+ user address faults under SMAP
+Message-ID: <20261123003036.GCawOJLKK1iX47XTDm@fat_crate.local>
+References: <20261009024925.3169077-1-memxor@gmail.com>
+ <20261009024925.3169077-2-memxor@gmail.com>
+ <20261009041346.GHashp-hYpLl-o-l3M@fat_crate.local>
+ <DM0ESVBT9553.2S1RWK1W7M8WW@gmail.com>
+ <20261122200848.GBawNL0FcQoK918YDI@fat_crate.local>
+ <CAP01T746W=8FFiJJUM3H-Qv09uRO6-XEi9B-8pjSgtpAPBx4EA@mail.gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -103,124 +96,34 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAP01T746W=8FFiJJUM3H-Qv09uRO6-XEi9B-8pjSgtpAPBx4EA@mail.gmail.com>
 
-On Wed, Nov 18, 2026 at 07:30 PM Yun Lu <luyun_611@163.com> wrote:
-> - Reject zero usercnt in the shared setter (Sashiko), order the check
->   after lookup with a full barrier, and add a wq regression for reuse.
+On Sun, Nov 22, 2026 at 10:59:33PM +0100, Kumar Kartikeya Dwivedi wrote:
+> So I am not sure I see how this risks making things worse for anyone
+> else. It's not about saving some bytes, if you look at the cover
+> letter, we reduce significant amount of code and associated overhead
+> from programs running in hot paths.
 
-bpf_task_work_acquire_ctx() has the same two reads without a barrier.
-On arm64 the 2nd load can pass the 1st:
+Lemme summarize our "discussion":
 
-  bpf_map_value_is_linked()       finds the element inserted again
-  atomic64_read(&map->usercnt)    returns the old nonzero count
+Boris: you're subverting SMAP security.
 
-The uref walk missed the element, so nothing cancels this task work.
-Task work is allowed in inner maps and ctx->prog doesn't hold them.
-The callback can run on a freed map, like the timer in Mani's fix:
-https://lore.kernel.org/bpf/20261027-bpf-timer-freed-map-v1-1-30402b0ee99b@columbia.edu/
+Kumar: but but, performance. And we're special.
 
-> - Use the existing map lookup and move the wq/timer check to the shared
->   setter (Alexei).
+Nope, not good enough.
 
-That lookup was my suggestion, sorry. bpf-ci was right on v2.
-It changes the eviction order in LRU maps:
+You need to go back to the drawing board and massage your bpf program until it
+doesn't need any hackery like that.
 
-  bpf_timer_set_callback(&val->timer, cb)
-    bpf_map_value_is_linked(map, val)
-      htab_lru_map_lookup_elem(map, key)
-        __htab_lru_map_lookup_elem(map, key, true)
-          bpf_lru_node_set_ref()
+I dunno, tag the pointer, massage it so that it causes a "normal" page fault
+like it would happen for any other userspace program, whatever. Just not this.
 
-A timer callback gets val without a lookup.
-It can call the setter in each period, like timer_cb2() in timer_mim.c.
-Then an idle element looks hot and elements in use get evicted.
-See commit 50b045a8c0cc ("bpf, lru: avoid messing with eviction
-heuristics upon syscall lookup").
+HTH.
 
-> - Give slot detachment to the first invalidator and reuse the existing
->   task-work, wq and timer selftests.
+-- 
+Regards/Gruss,
+    Boris.
 
-Now the 2nd canceller returns with a dead cb in the slot:
-
-  CPU 0: update from syscall   CPU 1: prog, same array element
-  xchg(&cb->map, NULL) wins
-  preempted
-                               bpf_map_update_elem()
-                                 xchg(&cb->map, NULL) loses, return
-                               bpf_timer_init()          -EBUSY
-                               bpf_timer_set_callback()  -ENOENT
-  WRITE_ONCE(async->cb, NULL)
-
-Today xchg(&async->cb, NULL) empties the slot first and init returns 0.
-Task work gets -EBUSY in the same window.
-You replied that cmpxchg() races with the pending WRITE_ONCE():
-https://lore.kernel.org/bpf/84286263-5111-4358-8b90-9e9d86d846cb@163.com/
-It doesn't when both cancellers use cmpxchg(), like in v2.
-guard(rcu) keeps cb alive, so its address can't come back.
-
-All three on top of the series, helpers.c compiles but I didn't run it:
-
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 029f60b..6696539 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -1155,8 +1155,12 @@ static void *map_key_from_value(struct bpf_map *map, void *value, u32 *arr_idx)
- static bool bpf_map_value_is_linked(struct bpf_map *map, void *value)
- {
- 	u32 idx;
-+	void *key = map_key_from_value(map, value, &idx);
- 
--	return map->ops->map_lookup_elem(map, map_key_from_value(map, value, &idx)) == value;
-+	/* It's not a use of the element. Don't set the ref bit of LRU node. */
-+	if (map->ops->map_lookup_elem_sys_only)
-+		return map->ops->map_lookup_elem_sys_only(map, key) == value;
-+	return map->ops->map_lookup_elem(map, key) == value;
- }
- 
- enum bpf_async_type {
-@@ -1774,13 +1778,15 @@ static void bpf_async_cancel_and_free(struct bpf_async_kern *async)
- 	guard(rcu)();
- 	/* Order unlink before reading async->cb, including an empty slot. */
- 	smp_mb();
--	/* Acquire any invalidation published before the slot was cleared. */
--	cb = smp_load_acquire(&async->cb);
--	/* Only the first invalidator detaches cb and drops the map's reference. */
--	if (!cb || !xchg(&cb->map, NULL))
-+	cb = READ_ONCE(async->cb);
-+	if (!cb)
- 		return;
- 
--	WRITE_ONCE(async->cb, NULL);
-+	/* Callbacks that run after this see NULL and return. */
-+	WRITE_ONCE(cb->map, NULL);
-+	/* The one who detaches cb drops the map's reference. */
-+	if (cmpxchg(&async->cb, cb, NULL) != cb)
-+		return;
- 
- 	bpf_async_update_prog_callback(cb, NULL, NULL);
- 	/*
-@@ -4918,6 +4924,9 @@ static struct bpf_task_work_ctx *bpf_task_work_acquire_ctx(struct bpf_task_work
- 		return ERR_PTR(-ENOENT);
- 	}
- 
-+	/* Order the lookup before the read of usercnt. See __bpf_async_set_callback(). */
-+	smp_mb();
-+
- 	/*
- 	 * If no process or bpffs is holding a reference to the map, no new callbacks should be
- 	 * scheduled. This does not address any race or correctness issue, but rather is a policy
-@@ -5245,10 +5254,10 @@ void bpf_task_work_cancel_and_free(void *val)
- 
- 	/* Prevent entry to RUNNING before clearing the slot. */
- 	state = xchg(&ctx->state, BPF_TW_FREED);
--	/* Only the first FREED transition detaches ctx and owns the map's ref. */
-+	(void)cmpxchg(&twk->ctx, ctx, NULL);
-+	/* Only the first FREED transition owns the map's ref. */
- 	if (state == BPF_TW_FREED)
- 		return;
--	WRITE_ONCE(twk->ctx, NULL);
- 
- 	if (state == BPF_TW_SCHEDULED) {
- 		/* run in irq_work to avoid locks in NMI */
-
-pw-bot: cr
+https://people.kernel.org/tglx/notes-about-netiquette
