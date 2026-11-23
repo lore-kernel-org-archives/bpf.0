@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795406361;
-	b=1NtLbOtOtDkA0Y2jtjBlb9S1N6YAYyut9ZsN0w5VpRWH6AulNqZL89ysq8yiAhyX5CnG
-	 Dz09FOCJE16IqvXlp3aW08kvRvWmF0XCs+zXFYHz5HL7x1CutMiSO9eV7nP+zDlrRJjqK
-	 EFfXC1rHSyWw8x4kCR0nEJSZ4/w32jZNhqRjPLe4Ez+Trn+EEM9OgpiT/f0hgbBlJSldH
-	 X0sBRrlWiYmwKHeYXhYdC+iNVSYFWBoc3J+9dOdwmjlRTmzLzR773TqrB+iwuOzbpFN3I
-	 fxy2xi43dGYgoz8cSGjyxRQmsjXF+Ru1QDJXlHOgCkpnvM5bvcQbgytRdoLAItrB/Eg==
+	t=1795406358;
+	b=o2M37BrkDNX+ANfqKPjIOgF5m1DWN2sRMVve/DD6zeuAnZWWxOpjUs1iyj/+xB4kRQn1
+	 FoZVLg3WXw+x0CO/vtgR4O+m4e22e4eSnQb7SSj304g9T6jabPTODuOX75H1a8tIelYxk
+	 71w69cwokrU2VYZZzlD/mlMY+dbAl2urfUzERnt2kMl8Kp/j0yIYi+e1jngi0dUUHykLM
+	 tkWn3tFjvWGaHBpG0j+uBm863SpaVgXNOHITmuX4ObOzw2TN+1OwNOKQXVnuWIDZQbafY
+	 EHOXcgX8/Mx90ERCbnjg3Zg8tALs8guizp3g0d9qdxqjWL6vfDrwSSRmVOnrpFpYu+A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795406361;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795406358;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=fOP8nRp1gVognLhoyXN7uljuF7XtV6U+cOJMjKtUatg=;
-	b=AsZIREZaHGd6eSan9kbrqUj9gaxCTDQ5twX7ZoWN+MbEbyUctNzdS1Dj3smZns6UCqSn
-	 UhvLXxGvaMH46d1R3TSUgAWACzNpGMMFqhmJDe5Kn0lPIyBKJRf6/jQw5ea0rGR/V+lk8
-	 PJQJbmJpU7nH7VFp1KRdZyR4T++S+OFc2nm7x5/8ZqmZJVky1MmiVzxrleXhoxWp55kfo
-	 iGblIQqIamlUv4PuiccFS6i/OrfkVD+XorI0tezIvERlBo1df4YuHVoTUGCrEzbn9v7na
-	 sAxel2rDsHY92MB0/oP9HvLZycNKnIdabeGF/CLdvWjE3QeHJ3jJTZmjic61e5KHGZA==
+	bh=u+5J9OiJJ+LZk35JnLQMdA67/3OC8obSeyDezikvUJs=;
+	b=q9AyD2xyL0oOXNyRG4DSTh4DS5oRrWsf0x1fE4OYLNQRT8517vH5h4f9n0jiHK9wuOui
+	 B9Y8FnkSg6rmpq1ZqSaPVrt8tg0S7u4BDowAbP7qR4ZhGJF/tkM+oWK2+AXxi0hkb+qei
+	 doOQJA4QjpP+Bb2ONvHlWXRTPi5H/gC/9QmsrdCz6N0ixSbqfeEtvFWKBp6DwLm4Os8R6
+	 O034UAVGs3LIspvPxq0LoTJfmA9ueU+P4eZ9u/jFcIMQ0RnGONjTw8rmLvhMVpQp9MgwA
+	 oYkdGt0zLn9joK1hmUmHpc8RWTsbcu8L3vQ10ocL0j69yIa2IOjIye3PYpF8G+iGbkw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=H6xO8olv;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HTPUWbEF;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2E74606A31A;
-	Mon, 23 Nov 2026 03:59:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06D96606A32C;
+	Mon, 23 Nov 2026 03:59:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=H6xO8olv
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 358D41F000C4;
-	Mon, 23 Nov 2026 03:59:18 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HTPUWbEF
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C39731F000C0;
+	Mon, 23 Nov 2026 03:59:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795406361;
-	bh=fOP8nRp1gVognLhoyXN7uljuF7XtV6U+cOJMjKtUatg=;
+	s=k20260515; t=1795406357;
+	bh=u+5J9OiJJ+LZk35JnLQMdA67/3OC8obSeyDezikvUJs=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=H6xO8olv7wO0Y7SZfipmqHPmX4GpSJODUsPhn0Fmv/AZLqcBj+54u7Ox7IaQ55/ra
-	 92d+n+DYd7Q+bd7hsh3i7aqJmKK8FzQJMQAaCr99Pv52b7nENPm7ROjgrWOm1sGxFX
-	 WH14cUpgWstVLLRRL3NPoxBKAui83tgcRhvsZ2TzzPQfevsQS/y/KvbkHyvFkUY8L8
-	 ltauS/g164SQjv3qFSIdugY82QwOXXZLKaCqBXpgrlPdNzk/LdUBu8N92SXk+EsorM
-	 yIy5NGlb+qqsH4I/+aUPndoErSYAcjeFnLEr6G0/AO70bTZIavEcbx50eRv8bkqXtD
-	 IXvGluJaPEh6g==
-Subject:
- Re: [PATCH net-next v2 05/11] selftests: net: add tx_extra_headroom test
+	b=HTPUWbEFrKN0jQGqYEvTF+xJx5j+KBJonTZiSzSxNsyXn5uIoF2RRpMWUYTcx+7fB
+	 cGmMhMmocYRpiahclzJs9tHYrmieQBonq+gJtBFSuLB1jwjlsf4bKxhPS0rgK4hud4
+	 Xdn8Cem+u5/kylxxKbVSZ1KQ26zb5+Gyq6VwAsos/UW5Vqu1TdBg73P4q7IwvdwBKO
+	 JwZMPqR8T2niDwZayPrFvaCbp5oZsTW9jlVsAYruTGwcqxLgB3rt1wVQ1Q9+P1c21i
+	 Rw5slJ+YPzb63z0aw3kZGEyfjM0k6h2EaaDlyJbW1UMCv4bjyi4DJGYjh/QeYIZNLE
+	 dxgSK0lqY4Zeg==
+Subject: Re: [PATCH net-next v2 04/11] selftests: net: add flag to send a
+ frame in xdp_helper
 From: netdev-bot+sashiko@kernel.org
 To: tianyi@cloudflare.com
 Cc: netdev@vger.kernel.org, kuba@kernel.org, pabeni@redhat.com,
@@ -67,11 +67,11 @@ Cc: netdev@vger.kernel.org, kuba@kernel.org, pabeni@redhat.com,
  runyu.xiao@seu.edu.cn, song@kernel.org, linux@leemhuis.info,
  wang.zhan@smartx.com, yonghong.song@linux.dev, n0ps1edzz@gmail.com,
  tianyi.gao@linux.dev
-Date: Mon, 23 Nov 2026 03:59:17 +0000
-Message-ID: <179540635779.3135.2960766007017620920@kernel.org>
-In-Reply-To: <20261119013830.36935-6-tianyi@cloudflare.com>
-References: <20261119013830.36935-6-tianyi@cloudflare.com>
-X-sashiko-severity: Medium
+Date: Mon, 23 Nov 2026 03:59:13 +0000
+Message-ID: <179540635338.3135.16458005376139253755@kernel.org>
+In-Reply-To: <20261119013830.36935-5-tianyi@cloudflare.com>
+References: <20261119013830.36935-5-tianyi@cloudflare.com>
+X-sashiko-severity: Low
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
@@ -84,125 +84,167 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue(s) to consider.
+Thank you for your contribution! Sashiko AI review found more severe
+issue(s) in other patches of this series. This mail is only an FYI, in case
+you want to address the nit picks below when you respin.
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 0
+Low priority / nit picks for your consideration:
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
-
-- [Medium] Two test cases assert tx_extra_headroom == XDP_PACKET_HEADROOM
-  under native veth XDP, and neither checks whether the copy is actually…
+- [Low] The commit message says the new -t option is "meant for copy
+  mode", because a zerocopy driver "may send it later".
+- [Low] The concern says nothing in the tree uses the new -t option of
+  xdp_helper, so the option is dead code and the AF_XDP copy-mode…
+- [Low] parse_frame() in tools/testing/selftests/net/lib/xdp_helper.c
+  checks each byte only through the return value of sscanf(hex + 2 * i,…
 
 --
 
-selftests: net: add tx_extra_headroom test
+selftests: net: add flag to send a frame in xdp_helper
 
-This adds a Python selftest and a TC BPF program. They check that generic
-XDP on a veth or netkit peer stops copying locally generated skbs once the
-kernel sets tx_extra_headroom on the other end. The test also checks the
-tx_extra_headroom value on attach and detach for native and generic XDP,
-for XDP propagated through a bond, and for a bridge with a vxlan port.
+This adds a -t option to xdp_helper. The option takes one Ethernet frame
+in hex, creates a TX ring, posts a single descriptor, kicks the socket
+with sendto() and exits. Without -t the helper behaves as before.
 
-> diff --git a/tools/testing/selftests/net/tx_extra_headroom.py b/tools/testing/selftests/net/tx_extra_headroom.py
-> new file mode 100755
-> index 0000000000000..4058d0e64fc5a
-> --- /dev/null
-> +++ b/tools/testing/selftests/net/tx_extra_headroom.py
+> diff --git a/tools/testing/selftests/net/lib/xdp_helper.c b/tools/testing/selftests/net/lib/xdp_helper.c
+> index eb025a9f35b18..1111631efd73b 100644
+> --- a/tools/testing/selftests/net/lib/xdp_helper.c
+> +++ b/tools/testing/selftests/net/lib/xdp_helper.c
+> @@ -19,15 +19,65 @@
 
 [ ... ]
 
-> +@ksft_variants([
-> +    KsftNamedVariant("generic", "xdpgeneric"),
-> +    KsftNamedVariant("native", "xdpdrv"),
-> +])
-> +def test_detach(mode) -> None:
-> +    """Check that XDP on the veth peer sets tx_extra_headroom until detach."""
-> +    with NetNS() as send_ns, NetNS() as peer_ns, NetNSEnter(str(send_ns)):
-> +        _setup_veth(peer_ns)
-> +        map_id = _load_progs()
-> +        _attach_tcx("veth0", "egress", "record")
-> +        _attach_xdp(peer_ns, mode)
-> +        _send_udp4()
-> +        ksft_eq(_read_bss(map_id)["tx_extra_headroom"], XDP_PACKET_HEADROOM)
-
-[Severity: Medium]
-In the native variant, do the 256 reserved bytes actually prevent a copy?
-
-With native XDP on veth1, the skb goes through veth_xmit() ->
-veth_xdp_rcv_skb() -> veth_convert_skb_to_xdp_buff(). That function copies
-whenever skb_head_is_locked() is true, whatever the headroom:
-
-drivers/net/veth.c:veth_convert_skb_to_xdp_buff() {
-    ...
-	if (skb_shared(skb) || skb_head_is_locked(skb) ||
-	    skb_is_nonlinear(skb) ||
-	    skb_headroom(skb) < XDP_PACKET_HEADROOM) {
-		if (skb_pp_cow_data(rq->page_pool, pskb, XDP_PACKET_HEADROOM))
-			goto drop;
-    ...
-}
-
-include/linux/skbuff.h:
-static inline bool skb_head_is_locked(const struct sk_buff *skb)
-{
-	return !skb->head_frag || skb_cloned(skb);
-}
-
-The UDP, raw, AF_PACKET and AF_XDP copy-mode senders all allocate through
-__alloc_skb()/kmalloc_reserve(), and those paths leave head_frag at 0.
-
-With xdpdrv on the peer, does each of these skbs then get the extra 256
-bytes of headroom, a larger truesize and a bigger sk_wmem charge, and still
-get copied by skb_pp_cow_data()?
-
-Generic XDP is different. netif_receive_generic_xdp() checks only for
-cloned, nonlinear and headroom, so test_peer_xdp checks a real benefit.
-
-test_bond() has the same problem. There, native XDP on bond0 is propagated
-to veth1 through netif_xdp_propagate(), and the test also asserts
-tx_extra_headroom == XDP_PACKET_HEADROOM.
-
-The prerequisite patch "net: set tx_extra_headroom of the peer on XDP
-attach" says it removes the copy for native XDP on veth in
-veth_convert_skb_to_xdp_buff(). However, __netdev_update_tx_extra_headroom()
-sets the reservation whenever dev_xdp_prog_count(peer) is non-zero, and that
-includes XDP_MODE_DRV:
-
-net/core/dev.c:__netdev_update_tx_extra_headroom() {
-    ...
-	if (peer && dev_xdp_prog_count(peer) &&
-	    needed_headroom < XDP_PACKET_HEADROOM)
-		tx_extra_headroom = XDP_PACKET_HEADROOM - needed_headroom;
-    ...
-}
-
-Should the native and bond cases expect the reservation at all? A
-native-mode variant of test_peer_xdp would likely see pp_recycle == True,
-which would expose this.
-
-No later patch in the series changes veth_convert_skb_to_xdp_buff() or
-limits the reservation to generic mode.
-
-> +        ip(f"link set dev veth1 {mode} off", ns=peer_ns)
-> +        _send_udp4()
-> +        ksft_eq(_read_bss(map_id)["tx_extra_headroom"], 0)
+> +static int parse_frame(unsigned char *buf, const char *hex)
+> +{
+> +	size_t len = strlen(hex) / 2;
+> +	size_t i;
 > +
+> +	if (!len || len > 2048 || strlen(hex) % 2)
+> +		return -1;
+> +	for (i = 0; i < len; i++)
+> +		if (sscanf(hex + 2 * i, "%2hhx", &buf[i]) != 1)
+> +			return -1;
+
+[Severity: Low]
+Is the sscanf() return value strict enough to validate each byte in
+parse_frame()?
+
+The %x conversion skips leading whitespace, accepts an optional +/- sign,
+and succeeds after a single hex digit. So "0g" is parsed as 0x00 and "-1"
+as 0xff.
+
+" f" reads into the next pair, because whitespace does not count toward
+the width but the loop always moves forward by 2.
+
+This means parse_frame() can return a positive length for input that is
+not strict hex. The only caller later in the series, _send_xsk() in
+tx_extra_headroom.py, passes bytes.hex() output. The commit message also
+says -t takes one well-formed frame, so this only matters for malformed
+command line input.
+
+Would an isxdigit() check on both characters of each pair be worth adding?
+
+> +	return len;
+> +}
+
+[ ... ]
+
+> @@ -94,9 +146,20 @@ int main(int argc, char **argv)
+>  	sxdp.sxdp_queue_id = queue;
+>  	sxdp.sxdp_flags = 0;
+>  
+> -	if (argc > 3) {
+> -		if (!strcmp(argv[3], "-z")) {
+> +	for (i = 3; i < argc; i++) {
+> +		if (!strcmp(argv[i], "-z")) {
+>  			sxdp.sxdp_flags = XDP_ZEROCOPY;
+> +		} else if (!strcmp(argv[i], "-t") && i + 1 < argc) {
+
+[Severity: Low]
+The commit message says:
+
+  "A driver with zerocopy support may send it later, so -t is meant for
+  copy mode."
+
+Is this restriction enforced anywhere? With -t and no -z, sxdp_flags
+stays 0. This loop also accepts -z together with -t, which sets
+XDP_ZEROCOPY.
+
+With flags == 0, xp_assign_dev() tries zerocopy first. It only uses copy
+mode when the driver lacks support:
+
+net/xdp/xsk_buff_pool.c:xp_assign_dev() {
+    ...
+	if (force_copy)
+		/* For copy-mode, we are done. */
+		return 0;
+
+	if ((netdev->xdp_features & NETDEV_XDP_ACT_XSK) != NETDEV_XDP_ACT_XSK) {
+    ...
+}
+
+On a zerocopy socket, __xsk_sendmsg() only wakes the driver and does not
+transmit anything inside the syscall:
+
+net/xdp/xsk.c:__xsk_sendmsg() {
+    ...
+	if (pool->cached_need_wakeup & XDP_WAKEUP_TX) {
+		if (xs->zc)
+			return xsk_wakeup(xs, XDP_WAKEUP_TX);
+		return xsk_generic_xmit(sk);
+	}
+    ...
+}
+
+send_frame() treats a successful sendto() as the frame having been sent.
+main() then returns right away, so process exit closes the socket and
+tears down the pool. Nothing checks the completion ring.
+
+On a zerocopy-capable NIC, can the helper exit with status 0 even though
+the frame was never sent? veth stays in copy mode, so tx_extra_headroom.py
+later in the series is not affected. However, xdp_helper is shared with
+queues.py and xsk_reconfig.py, which run on real hardware.
+
+print_usage() shows "[-z] [-t frame_hex]" and "send one frame, given in
+hex, and exit". The header comment says "with -t it sends one frame
+through the TX ring and exits". Neither mentions the copy mode limit.
+
+Could -t set XDP_COPY and reject -z, or could the usage text at least
+document the limit?
+
+> +			frame_len = parse_frame(umem_area, argv[++i]);
+> +			if (frame_len < 0) {
+> +				print_usage(argv[0]);
+> +				return 1;
+> +			}
+
+[ ... ]
+
+> @@ -119,6 +182,9 @@ int main(int argc, char **argv)
+>  		}
+>  	}
+>  
+> +	if (frame_len)
+> +		return send_frame(sock_fd, frame_len);
 > +
-> +def test_bond() -> None:
-> +    """Check that XDP that a bond propagates to the veth peer counts."""
 
-[ ... ]
+[Severity: Low]
+Nothing in this patch uses the new -t option, so by itself the patch adds
+no test coverage for the AF_XDP copy mode TX path.
 
-> +        _attach_xdp(peer_ns, "xdpdrv", "bond0")
-> +        _send_udp4()
-> +        ksft_eq(_read_bss(map_id)["tx_extra_headroom"], XDP_PACKET_HEADROOM)
+This seems to be handled later in the series. The patch "selftests: net:
+add tx_extra_headroom test" adds tx_extra_headroom.py, whose _send_xsk()
+runs this on veth0:
 
-[ ... ]
+    cmd(f"{XDP_HELPER} {ifindex} 0 -t {_eth_frame().hex()}")
+
+That patch also updates the xdp_helper.c header comment to list
+tx_extra_headroom.py as a user.
+
+Is this split across the two patches intended?
+
+>  	ksft_ready();
+>  	ksft_wait();
+>
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261119013830.36935-1-tianyi%40cloudflare.com
