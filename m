@@ -1,44 +1,44 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795473165;
-	b=gxSVmgt3RG4LHq/T2kS1uH+zL8Utmx9UiHIaASGfRJMsKkeN2fvVE3VzPvcdn+htjLuq
-	 NNmu7ij3B2kiNaWBvj6vzvD2fFhYmiadltaWV7fVV+EHVB6+3KuLfCc7DOdx0U6aEAjY6
-	 y5OZjgAfx+/WaDTO40dmjRQBuho7bJexiaKdP+3j6ctMszZHuaX/khLZa8Zv5oGU2LHm/
-	 3fUiLEO55vRdZDcUvucI0dz1w7jPUK96wSWtlVFNYz1yzLzph5f6YUjfvIW77i26QWfY3
-	 z33poRmizmKPHF3551jcumuEL2hWGsckVaK0iqrgGuDue4sRu8ksqO2xnXWYjPstFog==
+	t=1795473169;
+	b=w8cTVsJDWqooLxLEpf2hdjqsM/dYthFDD+FpUwa3XC8nfWgPB4XkoDbGOzR8K7GuoFYi
+	 hEXYBlDtI9VShtgxo1tejtT6j50lGL87fpUeEg6ng+lqXkuQxdIYcc1xPJ07tx0iyk7Lo
+	 ycsyOUG0RguCEeA8hcOpRwR0Bu/wTwuKCDOg8tcfIkqhcR05pxAApEEXvnbovaEuIQ30L
+	 wks9XgzgxSJllwcRXC59BhqtvTIlr1vdcz+2E8nW09MdYMsi/tci68//S3D8jxM59w5lF
+	 +qWxwjH3Es6cZZZePPsvx6OYvtAnsRIZs7ylnWSAWMdnjp9r6d3aJk+MfptKJGocpfw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795473165;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795473169;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
 	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=XAy7Zo7/gYAQlR5f74poZIVKiqvqpkw7L7pOGhlViSU=;
-	b=wFLmRj2MMc1n8sIlnORzWOkg0bLXbiq13P0fRN2/9CoZAZXwVQsj2ZDe//9MhSW9QqHX
-	 VeFDWtPhCBhAP8qINf6EtFQF4kGXBkDLxgOvQdR51Geuc473mtDwWo67K0oS1BhN85Nfy
-	 fylM8BX6e3fKJ6p7FqgRzDOOfctXMrS7Tnib8SIE5MQgHBYvZ1v7OQyo70b9Cxi5wzNco
-	 Irfw4hVzwsSDVcLM0p0o/SQnC+tNJhKhSBNLJC/gQC2u8vNMnSpcAQToh7+tXe8sH5A17
-	 p+Bt2uVogK0F5ANLwHcPbTSuwD7tgG4Vx4SNLNSRMdPy8V0D3n74lFAATYhdYb7cvxg==
+	bh=UmVB/hx96/XZkABr/sAXjG/EjRmta8Spwad9W79gKgQ=;
+	b=WwlQ/PrwSAXVHe7ZJVzr1DGLQ6LvCvefuTOwe+uZ4nqynjyYrW/a0bg4tAFbffpHzhGK
+	 cdxe/gxzJEpSyZnuI0KUqhY2S0twRhUr2NoEE/waqFmIyhJ6aWnlL8Pf2qm11m/7dH1jQ
+	 JCb/3AgoAFFq+lAe9645RrjWSgvVksQwiiN+AdC2lc4nx7SAhGfbLaao+fVuwEOdC3jOI
+	 LRtNt/7T+AfuCgRgChwlyPNrBszQGeB+TFq0MEld7zgH/gkezfsDiZy4iMercBUDZ29Jm
+	 DkPqnn6B4He9g5Dkwwc6VN1NRbAkNHatvRxLpb3wRmxp7YF+qzWBkQT3ZkCSBnWP7WA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=b2otCAzf;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hYVqXnx5;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0CCB606A31E
-	for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 22:32:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49CA7606A31E
+	for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 22:32:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=b2otCAzf
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58BC91F000D2;
-	Mon, 23 Nov 2026 22:32:42 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hYVqXnx5
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E09C51F000C0;
+	Mon, 23 Nov 2026 22:32:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795473165;
-	bh=XAy7Zo7/gYAQlR5f74poZIVKiqvqpkw7L7pOGhlViSU=;
+	s=k20260515; t=1795473168;
+	bh=UmVB/hx96/XZkABr/sAXjG/EjRmta8Spwad9W79gKgQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=b2otCAzf+bwoByzTIL97WSNSKMvo89WDLV0o2ZKmX+4F+RfYSq6vAd3A7Fs6JLAH+
-	 bkQVr6T8updhygrhHRgB3EicBTyeFJT1M35IkmcTUyo4LEDBmBLtshZjDwdb78lJ5q
-	 mYKwCb1kxasIxl1MXWanqnT7iJ5JOcSVZxMjRrCNKkw5oYix0wFq7K3eU/GMNZrnJn
-	 dovKFTcO4lqmBFlR03ugH5sMpsIg2cbOyYYibxECSK2zElLlANaL8sB1vqn7DjRz5Z
-	 9xWk0j5VYESJkkU2uGIvMqiDL82NsQL+bsUN7SrKUByv/NMhWHyYYc4/DJW1DVF/By
-	 PG1dPJzTYuGTA==
+	b=hYVqXnx5ZoKFHP2SMhn86st9xULY+SxSlx8K2xE8XbUwE0QdlnPzsb+pD5ABLRoCX
+	 t+NUdil6iWNCfg83XBEfzIQCbTu7H6gVhLGiQTCrXGk7IZh7nx0qYs8GlOETtJz7kW
+	 7mCEMF2wkgnpFZcsyWyaIN8VKbAjoEeBybkCUOnnykyMM0NyfCcMsmy5Xf9sC7GO6Z
+	 VUDgKYIwrNzxdWMBsskPxqHKvNJYzlNmpcthCm1FpnnLYaUM5g+54HpW6lDsSO0Rh9
+	 y4y+RphlTd3nTeUAp8P422ZiDtdSchLFxMGMJsGd7f6L3ak/NPYDEbQEz/FDK7UJO2
+	 a3dcTLZsITAsA==
 From: Alan Maguire <almagui@kernel.org>
 To: ast@kernel.org,
 	daniel@iogearbox.net,
@@ -54,9 +54,9 @@ Cc: eddyz87@gmail.com,
 	john.fastabend@gmail.com,
 	bpf@vger.kernel.org,
 	Alan Maguire <almagui@kernel.org>
-Subject: [PATCH bpf-next 3/7] selftests/bpf: Test CO-RE relocation of tracing program arguments
-Date: Mon, 23 Nov 2026 22:32:23 +0000
-Message-ID: <20261123223227.745345-4-almagui@kernel.org>
+Subject: [PATCH bpf-next 4/7] selftests/bpf: Test CO-RE relocation of BPF LSM program arguments
+Date: Mon, 23 Nov 2026 22:32:24 +0000
+Message-ID: <20261123223227.745345-5-almagui@kernel.org>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261123223227.745345-1-almagui@kernel.org>
 References: <20261123223227.745345-1-almagui@kernel.org>
@@ -71,439 +71,483 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Exercise __bpf_func_args structs with:
+Check that function argument structs work for BPF LSM programs, where
+the attach target is the bpf_lsm_<hook>() function, against the
+file_ioctl hook (file, cmd, arg), triggered by an ioctl() on a memfd
+with a command that no file implements. That fails with ENOTTY after
+the hook ran, so whatever the programs return has no effect on the test
+process, and no other selftest attaches to that hook:
 
-- fentry/fexit on bpf_fentry_test3() with members in a different order
-  than the parameters, a member with no matching parameter (both with
-  and without a ___flavor suffix), a member whose type is incompatible
-  with the matching parameter, a ___flavor alias, and a __bpf_func_ret
-  member that only exists for fexit;
-- fexit on a bpf_testmod function taking a 16-byte struct by value,
-  which occupies two context slots and shifts the following arguments;
-- tp_btf on a bpf_testmod tracepoint, where parameter names come from
-  __probestub_bpf_testmod_test_read(), including pointer members whose
-  pointed-to type differs from the parameter's (no match), is a
-  forward declaration of the same struct (match), or is void (match);
-- fmod_ret on bpf_modify_return_test(), with members out of order, a
-  missing member and the return value slot (holding the return value of
-  previous fmod_ret programs);
-- fentry on bpf_fentry_test3() with a typedef'd anonymous struct, whose
-  relocations have the typedef rather than the struct as their root type.
+- a __bpf_func_args struct describing the arguments out of order,
+  omitting cmd, adding a member with no matching parameter, and
+  reading the return value of the previous hook via __bpf_func_ret;
+- BPF_PROG_CORE() with arguments out of order, the return value, and
+  an added argument which reads as zero and is reported as absent by
+  bpf_func_arg_exists(); the cmd passed has its top bit set, to check
+  that an unsigned int argument isn't sign-extended;
+- both of these describing the file parameter with two flavors, as for
+  a (hypothetical) kernel in which it pointed to a renamed struct
+  vfs_file: 'struct vfs_file *file___new' doesn't match, and the
+  program reads the inode number through whichever variant exists,
+  which also checks that the poisoned accesses through the missing one
+  are dead code;
+- the reverse, as for a program written for that kernel: both of these
+  describing the file parameter as 'struct vfs_file *file', which
+  doesn't match, and 'struct file *file___old', which does, checking
+  that a flavored member matches when the unflavored one doesn't.
 
-Also exercise BPF_PROG_CORE() on the same targets: reordered arguments,
-a missing argument reading as zero with bpf_func_arg_exists() reporting
-it as absent, an argument whose type is incompatible with the matching
-parameter, which also reads as zero and is reported as absent, the
-return value on fexit (and its absence on fentry), a tp_btf program,
-and an fsession program on bpf_fentry_test3(), which calls
-bpf_session_is_return() on the ctx and checks that the return value
-exists on both entry and exit, reading 0 and 15 respectively.
+The inode numbers read are checked against fstat() on the memfd.
 
-Argument structs use __bpf_func_args_marker, so that they also work when
-built with GCC, except for the one used by the fentry/fexit programs on
-bpf_fentry_test3(), which only has the struct-level tag when built with
-clang, to also cover that form.
+Also cover BPF_LSM_CGROUP programs with a __bpf_func_args struct for the
+socket_create hook (family, type, protocol, kern), attached to a test
+cgroup and triggered via socket(AF_UNIX, SOCK_STREAM, 0), describing
+the arguments out of order, omitting type, adding a member with no
+matching parameter and checking that the return value slot exists.
 
-Build the object both as a skeleton and a light skeleton, so that both
-libbpf's and the kernel's CO-RE relocation are covered.
-
-Skip the test on big-endian targets: the programs read signed int
-arguments and return values with zero-extending loads (directly and via
-BPF_PROG_CORE()), which can't be relocated there, as the verifier only
-allows loads of whole context slots, so they would fail to load.
+As with the tracing tests, run these with both a skeleton and a light
+skeleton to cover libbpf's and the kernel's CO-RE relocation. They are
+also skipped on big-endian targets, as they read signed int arguments
+and return values as well.
 
 Signed-off-by: Alan Maguire <almagui@kernel.org>
 Assisted-by: LLM
 ---
- tools/testing/selftests/bpf/Makefile.skel     |   2 +-
- .../selftests/bpf/prog_tests/func_args_core.c | 130 ++++++++++
- .../selftests/bpf/progs/func_args_core.c      | 228 ++++++++++++++++++
- 3 files changed, 359 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/func_args_core.c
- create mode 100644 tools/testing/selftests/bpf/progs/func_args_core.c
+ tools/testing/selftests/bpf/Makefile.skel     |   3 +-
+ .../selftests/bpf/prog_tests/func_args_core.c | 189 ++++++++++++++++++
+ .../selftests/bpf/progs/func_args_core_lsm.c  | 152 ++++++++++++++
+ .../bpf/progs/func_args_core_lsm_cgroup.c     |  39 ++++
+ 4 files changed, 382 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/func_args_core_lsm.c
+ create mode 100644 tools/testing/selftests/bpf/progs/func_args_core_lsm_cgroup.c
 
 diff --git a/tools/testing/selftests/bpf/Makefile.skel b/tools/testing/selftests/bpf/Makefile.skel
-index 45e4ce5dca4d..69808d962fc7 100644
+index 69808d962fc7..3c48251ae5b7 100644
 --- a/tools/testing/selftests/bpf/Makefile.skel
 +++ b/tools/testing/selftests/bpf/Makefile.skel
-@@ -40,7 +40,7 @@ LSKELS_SIGNED := fentry_test.c fexit_test.c atomics.c
+@@ -40,7 +40,8 @@ LSKELS_SIGNED := fentry_test.c fexit_test.c atomics.c
  
  # Generate both light skeleton and libbpf skeleton for these
  LSKELS_EXTRA := test_ksyms_module.c test_ksyms_weak.c kfunc_call_test.c \
--	kfunc_call_test_subprog.c test_global_percpu_data.c
-+	kfunc_call_test_subprog.c test_global_percpu_data.c func_args_core.c
+-	kfunc_call_test_subprog.c test_global_percpu_data.c func_args_core.c
++	kfunc_call_test_subprog.c test_global_percpu_data.c func_args_core.c \
++	func_args_core_lsm.c func_args_core_lsm_cgroup.c
  SKEL_BLACKLIST += $(LSKELS) $(LSKELS_SIGNED)
  
  test_static_linked.skel.h-deps := test_static_linked1.bpf.o test_static_linked2.bpf.o
 diff --git a/tools/testing/selftests/bpf/prog_tests/func_args_core.c b/tools/testing/selftests/bpf/prog_tests/func_args_core.c
-new file mode 100644
-index 000000000000..1516ad13eaa2
---- /dev/null
+index 1516ad13eaa2..f4cc859f20cd 100644
+--- a/tools/testing/selftests/bpf/prog_tests/func_args_core.c
 +++ b/tools/testing/selftests/bpf/prog_tests/func_args_core.c
-@@ -0,0 +1,130 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <test_progs.h>
-+#include "func_args_core.skel.h"
-+#include "func_args_core.lskel.h"
-+
-+/* runs bpf_fentry_test1..N() (via a fentry prog), bpf_modify_return_test()
-+ * (via a fmod_ret prog) and bpf_testmod's test read
+@@ -2,6 +2,14 @@
+ #include <test_progs.h>
+ #include "func_args_core.skel.h"
+ #include "func_args_core.lskel.h"
++#include "func_args_core_lsm.skel.h"
++#include "func_args_core_lsm.lskel.h"
++#include "func_args_core_lsm_cgroup.skel.h"
++#include "func_args_core_lsm_cgroup.lskel.h"
++#include "cgroup_helpers.h"
++#include <sys/ioctl.h>
++#include <sys/mman.h>
++#include <sys/stat.h>
+ 
+ /* runs bpf_fentry_test1..N() (via a fentry prog), bpf_modify_return_test()
+  * (via a fmod_ret prog) and bpf_testmod's test read
+@@ -110,6 +118,179 @@ static void test_lskel(void)
+ 	func_args_core_lskel__destroy(skel);
+ }
+ 
++/* An ioctl command that no file implements: the call fails after the
++ * file_ioctl hook ran, so whatever the programs return has no effect on the
++ * process (unlike, e.g., an mprotect() that they allow). Its top bit is set
++ * to check that the unsigned int argument isn't sign-extended.
 + */
-+static void trigger(int fentry_prog_fd, int fmod_ret_prog_fd)
-+{
-+	LIBBPF_OPTS(bpf_test_run_opts, topts);
++#define LSM_IOCTL_CMD	0xb1f0c0deU
++#define LSM_IOCTL_ARG	0x0123456789abcdefULL
 +
-+	ASSERT_OK(bpf_prog_test_run_opts(fentry_prog_fd, &topts), "test_run");
-+	ASSERT_OK(bpf_prog_test_run_opts(fmod_ret_prog_fd, &topts), "test_run_fmod_ret");
-+	ASSERT_OK(trigger_module_test_read(256), "trigger_read");
++/* Run file_ioctl(file, cmd, arg) for an ioctl() on a memfd, only monitoring
++ * that call; returns the memfd's inode number, or 0 on failure.
++ */
++static __u64 lsm_ioctl(int *monitored_pid)
++{
++	struct stat st;
++	__u64 ino = 0;
++	int fd, err;
++
++	fd = memfd_create("func_args_core", MFD_CLOEXEC);
++	if (!ASSERT_OK_FD(fd, "memfd_create"))
++		return 0;
++	if (!ASSERT_OK(fstat(fd, &st), "fstat"))
++		goto out;
++
++	*monitored_pid = getpid();
++	err = ioctl(fd, LSM_IOCTL_CMD, LSM_IOCTL_ARG) ? -errno : 0;
++	*monitored_pid = 0;
++
++	if (ASSERT_EQ(err, -ENOTTY, "ioctl"))
++		ino = st.st_ino;
++out:
++	close(fd);
++	return ino;
 +}
 +
-+/* the skeleton and light skeleton have identically named bss/data members */
-+#define check_results(skel) ({							\
-+	ASSERT_EQ(skel->bss->t3_a, 4, "t3_a");					\
-+	ASSERT_EQ(skel->bss->t3_b, 5, "t3_b");					\
-+	ASSERT_EQ(skel->bss->t3_c, 6, "t3_c");					\
-+	ASSERT_EQ(skel->bss->t3_b_alias, 5, "t3_b_alias");			\
-+	ASSERT_EQ(skel->data->t3_missing_exists, 0, "t3_missing_exists");	\
-+	ASSERT_EQ(skel->data->t3_bad_type_exists, 0, "t3_bad_type_exists");	\
-+	ASSERT_EQ(skel->data->t3_missing_flavor_exists, 0, "t3_missing_flavor_exists"); \
-+	ASSERT_EQ(skel->data->t3_fentry_ret_exists, 0, "t3_fentry_ret_exists"); \
-+	ASSERT_EQ(skel->data->t3_ret_exists, 1, "t3_ret_exists");		\
-+	ASSERT_EQ(skel->bss->t3_ret, 15, "t3_ret");				\
++/* file_ioctl(file, cmd, arg) via lsm_ioctl() */
++#define check_lsm_results(skel, ino) ({					\
++	ASSERT_EQ(skel->bss->s_calls, 1, "s_calls");				\
++	ASSERT_EQ(skel->bss->s_arg, LSM_IOCTL_ARG, "s_arg");			\
++	ASSERT_EQ(skel->bss->s_ino, ino, "s_ino");				\
++	ASSERT_EQ(skel->data->s_ret, 0, "s_ret");				\
++	ASSERT_EQ(skel->data->s_ret_exists, 1, "s_ret_exists");		\
++	ASSERT_EQ(skel->data->s_added_exists, 0, "s_added_exists");		\
 +										\
-+	ASSERT_EQ(skel->bss->fm_calls, 1, "fm_calls");				\
-+	ASSERT_EQ(skel->bss->fm_a, 1, "fm_a");					\
-+	ASSERT_TRUE(skel->bss->fm_b_set, "fm_b_set");				\
-+	ASSERT_EQ(skel->data->fm_ret, 0, "fm_ret");				\
-+	ASSERT_EQ(skel->data->fm_ret_exists, 1, "fm_ret_exists");		\
-+	ASSERT_EQ(skel->data->fm_missing_exists, 0, "fm_missing_exists");	\
++	/* file___new (struct vfs_file *) doesn't match, file is used instead */ \
++	ASSERT_EQ(skel->data->v_new_exists, 0, "v_new_exists");		\
++	ASSERT_EQ(skel->data->v_old_exists, 1, "v_old_exists");		\
++	ASSERT_EQ(skel->bss->v_ino, ino, "v_ino");				\
++	ASSERT_EQ(skel->data->vm_new_exists, 0, "vm_new_exists");		\
++	ASSERT_EQ(skel->data->vm_old_exists, 1, "vm_old_exists");		\
++	ASSERT_EQ(skel->bss->vm_ino, ino, "vm_ino");				\
 +										\
-+	ASSERT_EQ(skel->data->fs_ret_exists, 1, "fs_ret_exists");		\
-+	ASSERT_EQ(skel->bss->fs_entry_calls, 1, "fs_entry_calls");		\
-+	ASSERT_EQ(skel->bss->fs_exit_calls, 1, "fs_exit_calls");		\
-+	ASSERT_EQ(skel->bss->fs_entry_c, 6, "fs_entry_c");			\
-+	ASSERT_EQ(skel->bss->fs_exit_c, 6, "fs_exit_c");			\
-+	ASSERT_EQ(skel->data->fs_entry_ret, 0, "fs_entry_ret");		\
-+	ASSERT_EQ(skel->data->fs_exit_ret, 15, "fs_exit_ret");			\
++	/* only the flavored file___old matches */				\
++	ASSERT_EQ(skel->data->o_new_exists, 0, "o_new_exists");		\
++	ASSERT_EQ(skel->data->o_old_exists, 1, "o_old_exists");		\
++	ASSERT_EQ(skel->bss->o_ino, ino, "o_ino");				\
++	ASSERT_EQ(skel->data->om_new_exists, 0, "om_new_exists");		\
++	ASSERT_EQ(skel->data->om_old_exists, 1, "om_old_exists");		\
++	ASSERT_EQ(skel->bss->om_ino, ino, "om_ino");				\
 +										\
-+	ASSERT_EQ(skel->bss->m3_a, 4, "m3_a");					\
-+	ASSERT_EQ(skel->bss->m3_b, 5, "m3_b");					\
-+	ASSERT_EQ(skel->bss->m3_c, 6, "m3_c");					\
-+	ASSERT_EQ(skel->data->m3_missing, 0, "m3_missing");			\
-+	ASSERT_EQ(skel->data->m3_missing_exists, 0, "m3_missing_exists");	\
-+	ASSERT_EQ(skel->bss->m3_ret, 15, "m3_ret");				\
-+	ASSERT_EQ(skel->data->m3_ret_exists, 1, "m3_ret_exists");		\
-+										\
-+	ASSERT_EQ(skel->bss->mf_b, 5, "mf_b");					\
-+	ASSERT_EQ(skel->data->mf_ret, 0, "mf_ret");				\
-+	ASSERT_EQ(skel->data->mf_ret_exists, 0, "mf_ret_exists");		\
-+	ASSERT_EQ(skel->data->mf_a, 0, "mf_a");					\
-+	ASSERT_EQ(skel->data->mf_a_exists, 0, "mf_a_exists");			\
-+										\
-+	ASSERT_EQ(skel->bss->td_c, 6, "td_c");					\
-+	ASSERT_EQ(skel->data->td_missing_exists, 0, "td_missing_exists");	\
-+										\
-+	ASSERT_EQ(skel->bss->s1_a_a, 2, "s1_a_a");				\
-+	ASSERT_EQ(skel->bss->s1_a_b, 3, "s1_a_b");				\
-+	ASSERT_EQ(skel->bss->s1_b, 1, "s1_b");					\
-+	ASSERT_EQ(skel->bss->s1_c, 4, "s1_c");					\
-+	ASSERT_EQ(skel->bss->s1_ret, 10, "s1_ret");				\
-+										\
-+	ASSERT_EQ(skel->bss->tp_pid, getpid(), "tp_pid");			\
-+	ASSERT_EQ(skel->bss->tp_len, 256, "tp_len");				\
-+	ASSERT_EQ(skel->data->tp_bad_ptr_exists, 0, "tp_bad_ptr_exists");	\
-+	ASSERT_EQ(skel->data->tp_fwd_exists, 1, "tp_fwd_exists");		\
-+	ASSERT_EQ(skel->data->tp_void_exists, 1, "tp_void_exists");		\
-+	ASSERT_EQ(skel->data->tp_void_same, 1, "tp_void_same");		\
-+	ASSERT_EQ(skel->bss->mtp_pid, getpid(), "mtp_pid");			\
++	ASSERT_EQ(skel->bss->m_calls, 1, "m_calls");				\
++	ASSERT_EQ(skel->bss->m_arg, LSM_IOCTL_ARG, "m_arg");			\
++	ASSERT_EQ(skel->bss->m_cmd, LSM_IOCTL_CMD, "m_cmd");			\
++	ASSERT_EQ(skel->data->m_added, 0, "m_added");				\
++	ASSERT_EQ(skel->data->m_added_exists, 0, "m_added_exists");		\
++	ASSERT_EQ(skel->data->m_ret, 0, "m_ret");				\
++	ASSERT_EQ(skel->data->m_ret_exists, 1, "m_ret_exists");		\
 +})
 +
-+/* CO-RE relocations applied by libbpf */
-+static void test_skel(void)
++static void test_lsm_skel(void)
 +{
-+	struct func_args_core *skel;
++	struct func_args_core_lsm *skel;
++	__u64 ino;
 +
-+	skel = func_args_core__open_and_load();
++	skel = func_args_core_lsm__open_and_load();
 +	if (!ASSERT_OK_PTR(skel, "skel_open_and_load"))
 +		return;
-+	if (!ASSERT_OK(func_args_core__attach(skel), "skel_attach"))
++	if (!ASSERT_OK(func_args_core_lsm__attach(skel), "skel_attach"))
 +		goto cleanup;
 +
-+	trigger(bpf_program__fd(skel->progs.fentry3),
-+		bpf_program__fd(skel->progs.fmod_ret_test));
-+	check_results(skel);
++	ino = lsm_ioctl(&skel->bss->monitored_pid);
++	if (ASSERT_NEQ(ino, 0, "lsm_ioctl"))
++		check_lsm_results(skel, ino);
 +cleanup:
-+	func_args_core__destroy(skel);
++	func_args_core_lsm__destroy(skel);
 +}
 +
-+/* CO-RE relocations applied by the kernel */
-+static void test_lskel(void)
++static void test_lsm_lskel(void)
 +{
-+	struct func_args_core_lskel *skel;
++	struct func_args_core_lsm_lskel *skel;
++	__u64 ino;
 +
-+	skel = func_args_core_lskel__open_and_load();
++	skel = func_args_core_lsm_lskel__open_and_load();
 +	if (!ASSERT_OK_PTR(skel, "lskel_open_and_load"))
 +		return;
-+	if (!ASSERT_OK(func_args_core_lskel__attach(skel), "lskel_attach"))
++	if (!ASSERT_OK(func_args_core_lsm_lskel__attach(skel), "lskel_attach"))
 +		goto cleanup;
 +
-+	trigger(skel->progs.fentry3.prog_fd, skel->progs.fmod_ret_test.prog_fd);
-+	check_results(skel);
++	ino = lsm_ioctl(&skel->bss->monitored_pid);
++	if (ASSERT_NEQ(ino, 0, "lsm_ioctl"))
++		check_lsm_results(skel, ino);
 +cleanup:
-+	func_args_core_lskel__destroy(skel);
++	func_args_core_lsm_lskel__destroy(skel);
 +}
 +
-+void test_func_args_core(void)
++/* socket_create(family, type, protocol, kern) via socket(AF_UNIX, ...) */
++#define check_lsm_cgroup_results(skel) ({					\
++	ASSERT_EQ(skel->bss->lc_calls, 1, "lc_calls");				\
++	ASSERT_EQ(skel->data->lc_family, AF_UNIX, "lc_family");		\
++	ASSERT_EQ(skel->data->lc_protocol, 0, "lc_protocol");			\
++	ASSERT_EQ(skel->data->lc_kern, 0, "lc_kern");				\
++	ASSERT_EQ(skel->data->lc_ret_exists, 1, "lc_ret_exists");		\
++	ASSERT_EQ(skel->data->lc_added_exists, 0, "lc_added_exists");		\
++})
++
++static void trigger_lsm_cgroup(void)
 +{
-+#if __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
-+	/* On big-endian targets, the verifier only allows loads of whole
-+	 * context slots, and loads of signed arguments smaller than 8 bytes
-+	 * can only be widened to their slot if they are sign-extending. The
-+	 * programs read signed int arguments and return values with
-+	 * zero-extending loads (directly and via BPF_PROG_CORE()), which
-+	 * are poisoned there, so they would fail to load.
-+	 */
-+	test__skip();
-+	return;
-+#endif
-+	if (test__start_subtest("skel"))
-+		test_skel();
-+	if (test__start_subtest("lskel"))
-+		test_lskel();
++	int fd = socket(AF_UNIX, SOCK_STREAM, 0);
++
++	if (ASSERT_OK_FD(fd, "socket"))
++		close(fd);
 +}
-diff --git a/tools/testing/selftests/bpf/progs/func_args_core.c b/tools/testing/selftests/bpf/progs/func_args_core.c
++
++static void test_lsm_cgroup_skel(void)
++{
++	struct func_args_core_lsm_cgroup *skel;
++	struct bpf_link *link = NULL;
++	int cgroup_fd;
++
++	cgroup_fd = test__join_cgroup("/func_args_core");
++	if (!ASSERT_OK_FD(cgroup_fd, "join_cgroup"))
++		return;
++
++	skel = func_args_core_lsm_cgroup__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "skel_open_and_load"))
++		goto out;
++	link = bpf_program__attach_cgroup(skel->progs.socket_create_struct, cgroup_fd);
++	if (!ASSERT_OK_PTR(link, "attach_cgroup"))
++		goto out;
++
++	trigger_lsm_cgroup();
++	check_lsm_cgroup_results(skel);
++out:
++	bpf_link__destroy(link);
++	func_args_core_lsm_cgroup__destroy(skel);
++	close(cgroup_fd);
++}
++
++static void test_lsm_cgroup_lskel(void)
++{
++	struct func_args_core_lsm_cgroup_lskel *skel;
++	int cgroup_fd, link_fd = -1;
++
++	cgroup_fd = test__join_cgroup("/func_args_core");
++	if (!ASSERT_OK_FD(cgroup_fd, "join_cgroup"))
++		return;
++
++	skel = func_args_core_lsm_cgroup_lskel__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "lskel_open_and_load"))
++		goto out;
++	link_fd = bpf_link_create(skel->progs.socket_create_struct.prog_fd, cgroup_fd,
++				  BPF_LSM_CGROUP, NULL);
++	if (!ASSERT_OK_FD(link_fd, "link_create"))
++		goto out;
++
++	trigger_lsm_cgroup();
++	check_lsm_cgroup_results(skel);
++out:
++	if (link_fd >= 0)
++		close(link_fd);
++	func_args_core_lsm_cgroup_lskel__destroy(skel);
++	close(cgroup_fd);
++}
++
+ void test_func_args_core(void)
+ {
+ #if __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+@@ -127,4 +308,12 @@ void test_func_args_core(void)
+ 		test_skel();
+ 	if (test__start_subtest("lskel"))
+ 		test_lskel();
++	if (test__start_subtest("lsm_skel"))
++		test_lsm_skel();
++	if (test__start_subtest("lsm_lskel"))
++		test_lsm_lskel();
++	if (test__start_subtest("lsm_cgroup_skel"))
++		test_lsm_cgroup_skel();
++	if (test__start_subtest("lsm_cgroup_lskel"))
++		test_lsm_cgroup_lskel();
+ }
+diff --git a/tools/testing/selftests/bpf/progs/func_args_core_lsm.c b/tools/testing/selftests/bpf/progs/func_args_core_lsm.c
 new file mode 100644
-index 000000000000..4656a6c642d1
+index 000000000000..f4b9e68e4578
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/func_args_core.c
-@@ -0,0 +1,228 @@
++++ b/tools/testing/selftests/bpf/progs/func_args_core_lsm.c
+@@ -0,0 +1,152 @@
 +// SPDX-License-Identifier: GPL-2.0
 +#include "vmlinux.h"
 +#include <bpf/bpf_helpers.h>
 +#include <bpf/bpf_tracing.h>
 +#include <bpf/bpf_core_read.h>
-+#include "../test_kmods/bpf_testmod.h"
 +
 +char _license[] SEC("license") = "GPL";
 +
-+/* int bpf_fentry_test3(char a, int b, u64 c), called as (4, 5, 6) */
-+struct fentry_test3_args {
-+#ifndef __clang__
-+	/* GCC doesn't support BTF decl tags on types, see __bpf_func_args;
-+	 * with clang, this struct relies on the struct-level tag only
-+	 */
++int monitored_pid;
++
++/* int file_ioctl(struct file *file, unsigned int cmd, unsigned long arg) */
++struct file_ioctl_args {
 +	__bpf_func_args_marker;
-+#endif
-+	/* deliberately in a different order to the target */
-+	__u64 c;
-+	int b;
-+	char a;
-+	/* no such parameter */
-+	long missing;
-+	/* flavor of a parameter that doesn't exist */
-+	long missing___v2;
-+	/* parameter exists, but the type isn't compatible */
-+	struct task_struct *a___bad_type;
-+	/* flavor of an existing parameter */
-+	int b___alias;
++	/* out of order */
++	unsigned long arg;
++
 +	int ret __bpf_func_ret;
++	struct file *file;
++	/* added: no such parameter */
++	unsigned long added;
++	/* missing: cmd isn't described */
 +} __bpf_func_args;
 +
-+__u64 t3_a, t3_b, t3_c, t3_b_alias, t3_ret;
-+int t3_missing_exists = -1, t3_bad_type_exists = -1, t3_missing_flavor_exists = -1;
-+int t3_fentry_ret_exists = -1, t3_ret_exists = -1;
++__u64 s_arg, s_ino;
++int s_ret = -1, s_ret_exists = -1, s_added_exists = -1, s_calls;
 +
-+SEC("fentry/bpf_fentry_test3")
-+int fentry3(struct fentry_test3_args *args)
++SEC("lsm/file_ioctl")
++int ioctl_struct(struct file_ioctl_args *args)
 +{
-+	t3_a = args->a;
-+	t3_b = args->b;
-+	t3_c = args->c;
-+	t3_b_alias = args->b___alias;
-+	t3_missing_exists = bpf_core_field_exists(args->missing);
-+	t3_bad_type_exists = bpf_core_field_exists(args->a___bad_type);
-+	t3_missing_flavor_exists = bpf_core_field_exists(args->missing___v2);
-+	/* the return value isn't available on entry */
-+	t3_fentry_ret_exists = bpf_core_field_exists(args->ret);
++	if ((bpf_get_current_pid_tgid() >> 32) != monitored_pid)
++		return 0;
++
++	s_calls++;
++	s_arg = args->arg;
++	s_ino = args->file->f_inode->i_ino;
++	s_ret = args->ret;
++	s_ret_exists = bpf_core_field_exists(args->ret);
++	s_added_exists = bpf_core_field_exists(args->added);
 +	return 0;
 +}
 +
-+SEC("fexit/bpf_fentry_test3")
-+int fexit3(struct fentry_test3_args *args)
-+{
-+	t3_ret_exists = bpf_core_field_exists(args->ret);
-+	t3_ret = args->ret;
-+	return 0;
-+}
-+
-+/* typedef'd anonymous struct, for which relocations have the typedef rather
-+ * than the (tagged) struct as their root type
++/* A hypothetical future kernel in which file_ioctl()'s file parameter
++ * points to a renamed struct: both variants are described with flavors,
++ * and only one of them can match in a given kernel.
 + */
-+typedef struct {
++struct vfs_file {
++	struct inode *f_inode;
++} __attribute__((preserve_access_index));
++
++struct file_ioctl_variant_args {
 +	__bpf_func_args_marker;
-+	__u64 c;
-+	long missing;
-+} __bpf_func_args fentry_test3_td_args_t;
-+
-+__u64 td_c;
-+int td_missing_exists = -1;
-+
-+SEC("fentry/bpf_fentry_test3")
-+int fentry3_typedef(fentry_test3_td_args_t *args)
-+{
-+	td_c = args->c;
-+	td_missing_exists = bpf_core_field_exists(args->missing);
-+	return 0;
-+}
-+
-+/* int bpf_modify_return_test(int a, int *b), called as (1, &b) */
-+struct modify_return_args {
-+	__bpf_func_args_marker;
-+	int *b;
-+	int a;
-+	long missing;
-+	int ret __bpf_func_ret;
++	struct vfs_file *file___new;
++	struct file *file;
 +} __bpf_func_args;
 +
-+int fm_a, fm_calls, fm_ret = -1, fm_ret_exists = -1, fm_missing_exists = -1;
-+bool fm_b_set;
++__u64 v_ino, vm_ino;
++int v_new_exists = -1, v_old_exists = -1, vm_new_exists = -1, vm_old_exists = -1;
 +
-+SEC("fmod_ret/bpf_modify_return_test")
-+int fmod_ret_test(struct modify_return_args *args)
++SEC("lsm/file_ioctl")
++int ioctl_variants(struct file_ioctl_variant_args *args)
 +{
-+	fm_calls++;
-+	fm_a = args->a;
-+	fm_b_set = args->b != NULL;
-+	fm_ret = args->ret;
-+	fm_ret_exists = bpf_core_field_exists(args->ret);
-+	fm_missing_exists = bpf_core_field_exists(args->missing);
-+	/* don't override the return value */
++	if ((bpf_get_current_pid_tgid() >> 32) != monitored_pid)
++		return 0;
++
++	v_new_exists = bpf_core_field_exists(args->file___new);
++	v_old_exists = bpf_core_field_exists(args->file);
++	if (bpf_core_field_exists(args->file___new))
++		v_ino = args->file___new->f_inode->i_ino;
++	else if (bpf_core_field_exists(args->file))
++		v_ino = args->file->f_inode->i_ino;
 +	return 0;
 +}
 +
-+/* fsession on bpf_fentry_test3(char a, int b, u64 c), called as (4, 5, 6) */
-+__u64 fs_entry_c, fs_exit_c;
-+int fs_entry_ret = -1, fs_exit_ret = -1, fs_ret_exists = -1;
-+int fs_entry_calls, fs_exit_calls;
-+
-+SEC("fsession/bpf_fentry_test3")
-+int BPF_PROG_CORE(fsession3, __u64, c, __bpf_func_ret int, ret)
++SEC("lsm/file_ioctl")
++int BPF_PROG_CORE(ioctl_macro_variants, struct vfs_file *, file___new,
++		  struct file *, file)
 +{
-+	fs_ret_exists = bpf_func_arg_exists(ret);
-+	if (!bpf_session_is_return(ctx)) {
-+		fs_entry_calls++;
-+		fs_entry_c = c;
-+		fs_entry_ret = ret;
-+	} else {
-+		fs_exit_calls++;
-+		fs_exit_c = c;
-+		fs_exit_ret = ret;
-+	}
++	if ((bpf_get_current_pid_tgid() >> 32) != monitored_pid)
++		return 0;
++
++	vm_new_exists = bpf_func_arg_exists(file___new);
++	vm_old_exists = bpf_func_arg_exists(file);
++	if (bpf_func_arg_exists(file___new))
++		vm_ino = file___new->f_inode->i_ino;
++	else if (bpf_func_arg_exists(file))
++		vm_ino = file->f_inode->i_ino;
 +	return 0;
 +}
 +
-+/* int bpf_testmod_test_struct_arg_1(struct bpf_testmod_struct_arg_2 a,
-+ *				     int b, int c), called as ({2, 3}, 1, 4);
-+ * 'a' is passed by value and occupies two context slots.
++__u64 m_arg, m_cmd, m_added = -1;
++int m_ret = -1, m_ret_exists = -1, m_added_exists = -1, m_calls;
++
++SEC("lsm/file_ioctl")
++int BPF_PROG_CORE(ioctl_macro, unsigned long, arg, __bpf_func_ret int, ret,
++		  unsigned long, added, unsigned int, cmd)
++{
++	if ((bpf_get_current_pid_tgid() >> 32) != monitored_pid)
++		return 0;
++
++	m_calls++;
++	m_arg = arg;
++	m_cmd = cmd;
++	m_added = added;
++	m_added_exists = bpf_func_arg_exists(added);
++	m_ret = ret;
++	m_ret_exists = bpf_func_arg_exists(ret);
++	return 0;
++}
++
++/* The reverse: a program written for the hypothetical kernel, describing
++ * file with the new type and the current one with a flavor, so that only
++ * the flavored member matches.
 + */
-+struct bpf_testmod_struct_arg_2 {
-+	long a;
-+	long b;
-+};
-+
-+struct struct_arg_1_args {
++struct file_ioctl_old_variant_args {
 +	__bpf_func_args_marker;
-+	int c;
-+	int b;
-+	struct bpf_testmod_struct_arg_2 a;
++	struct vfs_file *file;
++	struct file *file___old;
++} __bpf_func_args;
++
++__u64 o_ino, om_ino;
++int o_new_exists = -1, o_old_exists = -1, om_new_exists = -1, om_old_exists = -1;
++
++SEC("lsm/file_ioctl")
++int ioctl_old_variant(struct file_ioctl_old_variant_args *args)
++{
++	if ((bpf_get_current_pid_tgid() >> 32) != monitored_pid)
++		return 0;
++
++	o_new_exists = bpf_core_field_exists(args->file);
++	o_old_exists = bpf_core_field_exists(args->file___old);
++	if (bpf_core_field_exists(args->file))
++		o_ino = args->file->f_inode->i_ino;
++	else if (bpf_core_field_exists(args->file___old))
++		o_ino = args->file___old->f_inode->i_ino;
++	return 0;
++}
++
++SEC("lsm/file_ioctl")
++int BPF_PROG_CORE(ioctl_macro_old_variant, struct vfs_file *, file,
++		  struct file *, file___old)
++{
++	if ((bpf_get_current_pid_tgid() >> 32) != monitored_pid)
++		return 0;
++
++	om_new_exists = bpf_func_arg_exists(file);
++	om_old_exists = bpf_func_arg_exists(file___old);
++	if (bpf_func_arg_exists(file))
++		om_ino = file->f_inode->i_ino;
++	else if (bpf_func_arg_exists(file___old))
++		om_ino = file___old->f_inode->i_ino;
++	return 0;
++}
+diff --git a/tools/testing/selftests/bpf/progs/func_args_core_lsm_cgroup.c b/tools/testing/selftests/bpf/progs/func_args_core_lsm_cgroup.c
+new file mode 100644
+index 000000000000..2743c58f13aa
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/func_args_core_lsm_cgroup.c
+@@ -0,0 +1,39 @@
++// SPDX-License-Identifier: GPL-2.0
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++#include <bpf/bpf_core_read.h>
++
++char _license[] SEC("license") = "GPL";
++
++/* int socket_create(int family, int type, int protocol, int kern) */
++struct socket_create_args {
++	__bpf_func_args_marker;
++	/* out of order */
++	int kern;
++	int protocol;
 +	int ret __bpf_func_ret;
++	int family;
++	/* added: no such parameter */
++	long added;
++	/* missing: type isn't described */
 +} __bpf_func_args;
 +
-+long s1_a_a, s1_a_b, s1_b, s1_c, s1_ret;
++int lc_calls, lc_family = -1, lc_protocol = -1, lc_kern = -1;
++int lc_ret_exists = -1, lc_added_exists = -1;
 +
-+SEC("fexit/bpf_testmod_test_struct_arg_1")
-+int fexit_struct_arg(struct struct_arg_1_args *args)
++SEC("lsm_cgroup/socket_create")
++int socket_create_struct(struct socket_create_args *args)
 +{
-+	s1_a_a = args->a.a;
-+	s1_a_b = args->a.b;
-+	s1_b = args->b;
-+	s1_c = args->c;
-+	s1_ret = args->ret;
-+	return 0;
-+}
++	if (args->family != 1 /* AF_UNIX */)
++		return 1;
 +
-+/* TP_PROTO(struct task_struct *task, struct bpf_testmod_test_read_ctx *ctx) */
-+struct task_struct___fwd;
-+
-+struct test_read_args {
-+	__bpf_func_args_marker;
-+	struct bpf_testmod_test_read_ctx *ctx;
-+	struct task_struct *task;
-+	/* pointer to a different type than the parameter's: no match */
-+	struct file *task___bad_ptr;
-+	/* forward-declared pointee with the same essential name: match */
-+	struct task_struct___fwd *task___fwd;
-+	/* void pointers match any pointer */
-+	void *ctx___void;
-+} __bpf_func_args;
-+
-+int tp_pid, tp_len;
-+int tp_bad_ptr_exists = -1, tp_fwd_exists = -1, tp_void_exists = -1, tp_void_same = -1;
-+
-+SEC("tp_btf/bpf_testmod_test_read")
-+int tp_read(struct test_read_args *args)
-+{
-+	tp_pid = args->task->pid;
-+	tp_len = args->ctx->len;
-+	tp_bad_ptr_exists = bpf_core_field_exists(args->task___bad_ptr);
-+	tp_fwd_exists = bpf_core_field_exists(args->task___fwd);
-+	tp_void_exists = bpf_core_field_exists(args->ctx___void);
-+	tp_void_same = args->ctx___void == (void *)args->ctx;
-+	return 0;
-+}
-+
-+/* BPF_PROG_CORE() versions, with the arguments struct declared implicitly */
-+__u64 m3_a, m3_b, m3_c, m3_missing = -1, m3_ret;
-+int m3_missing_exists = -1, m3_ret_exists = -1;
-+
-+SEC("fexit/bpf_fentry_test3")
-+int BPF_PROG_CORE(fexit3_macro, __u64, c, int, b, char, a, long, missing,
-+		  __bpf_func_ret int, ret)
-+{
-+	m3_a = a;
-+	m3_b = b;
-+	m3_c = c;
-+	m3_missing = missing;
-+	m3_missing_exists = bpf_func_arg_exists(missing);
-+	m3_ret = ret;
-+	m3_ret_exists = bpf_func_arg_exists(ret);
-+	return 0;
-+}
-+
-+__u64 mf_b, mf_ret = -1, mf_a = -1;
-+int mf_ret_exists = -1, mf_a_exists = -1;
-+
-+SEC("fentry/bpf_fentry_test3")
-+int BPF_PROG_CORE(fentry3_macro, int, b, __bpf_func_ret int, ret,
-+		  struct task_struct *, a)
-+{
-+	mf_b = b;
-+	/* 'a' is a char, so a pointer isn't compatible: it reads as zero */
-+	mf_a = (__u64)a;
-+	mf_a_exists = bpf_func_arg_exists(a);
-+	/* no return value on entry, so it reads as zero */
-+	mf_ret = ret;
-+	mf_ret_exists = bpf_func_arg_exists(ret);
-+	return 0;
-+}
-+
-+int mtp_pid;
-+
-+SEC("tp_btf/bpf_testmod_test_read")
-+int BPF_PROG_CORE(tp_read_macro, struct task_struct *, task)
-+{
-+	mtp_pid = task->pid;
-+	return 0;
++	lc_calls++;
++	lc_family = args->family;
++	lc_protocol = args->protocol;
++	lc_kern = args->kern;
++	lc_ret_exists = bpf_core_field_exists(args->ret);
++	lc_added_exists = bpf_core_field_exists(args->added);
++	/* allow */
++	return 1;
 +}
 -- 
 2.56.0
