@@ -1,56 +1,62 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795469309;
-	b=16qlN1ZnEweQrfgNxtJzxnR0aetNDxjciPbnGGzWWdjMo0e5Ev3/tAniGkahhE3yNVU0
-	 qqLvDq3YeQUivmQXmgoyuyf4fOPGH09qsq7NRQoisPVeBuNx3CZVChfjTWahxWydqkQfE
-	 H+1FPjLZOXBg00mYqlRFzVyO5ZMDlp7mCRqMUpcS3v/35DRf6GZsxUDMTf6oRID4XCswO
-	 0dkFkthByAljzZi5uSiKoP3zsryt0mFEB2TnPqilEIJOYgaVnMx6M8W3UbIvKIu5QHsaQ
-	 SemXGDZV6jaEuspVgtk3eleu4OI8DI7pQMXsZ7/H04cLUIxe9D/YN9UrkBmJLKhFZWA==
+	t=1795470139;
+	b=k2XStnQaoAwloNMFnnFRKgXeVVvzoIzHOzl60y/oNP6C9EqBAHVCpJJjB3vzh6QWvNb/
+	 0bpMw4S9i9EGR9janYk/peAOwjQad4HKpPg4//VZhTwMtm3K/yUtzSDkF537gUfLASMN3
+	 +AezdaFG1vMf3zef+5rI+5/U/N3ZQuxnd6XC60Q/EFCzeUVSaT+C6QO2qah+n8L4FBFCt
+	 rGWUkPATHT3mJAnE+29JRNEAPR9UVY6fln4rmAB+RTCvGsAb7ANGp0AtLGJP6LDQOiSm5
+	 AI8DO/6t5e5tQoJRz6wy2iPpAO5eIv6Gdj/Nij3cwjWDvmq/Tb0RVAfVUIW7LGK9pkQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795469309;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=0HT6xoigilQl4nxh76XDvII1KxBquEAEUflGScVzCo0=;
-	b=0Jt1+2bDI6VPQOcBNKZM7MViNGFnoO2Fh7vbM/M89Fl4qtBunrlz+SDiM8wHSAsmusGp
-	 fMIOTEL3UvFR2QoHPmjZQc2ufblwbxnViszfS0eEpEiyhxgI6MoKDCYJ2/QhFNfQqrR68
-	 QAK7Ii33986koLlhwEaiG4kyRuQ/oyCfH9EIrbLXgrxO1pg9NRXmpvqA/P8Wg5IfhCw9O
-	 JgsnbNj7hlp4GGnMfhCu68M9GhP4QH31lBCvABvN558u31utVhQRxBu2acG+l7JUj9skA
-	 8Hv+R6/WS4Syt2tPWOduGdd0Ph9RxEQEICX946nAmODued3YiRsFE9LVVUIJNWK2dZw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795470139;
+	h=Received:DKIM-Signature:From:To:Cc:In-Reply-To:References:Subject:
+	 Message-Id:Date:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	 X-Mailer;
+	bh=tvWKEa7sW7hqM8IXTCuuvyVs44O8ZoRdUQz3cjoo/Vk=;
+	b=HIodHgIgYE4f2W4bYXlwwu0LCzn72LFJAaq9MckT5PKbm+jaNppQtEXN+KWBL0x2Qkvb
+	 rq+oLAcE9PuZPwI4mXnkaAO7FjFpCIEPweB8ohOSaHj1TxA8tLRT2mu+D++gtvK05Whr0
+	 +2tAku0Kz0LPhgVtpoJNGm1y+gjrFkuKC3zjoLlWEC+7dyxfumUITxH+ZO2mzOy0wHJOs
+	 kGoHzsoM3bZ31cCMeiDQzOM/j2csokt79ZGLRb4Asofho0KLyNjc9i1hpGpeLsBiGb0Xi
+	 UZ4nxIYhYR0W+WgkJe01C+TQ6w3jVKmH5WkVfNP7AcMAIdQC7VoSK/nRPHvEh14TA7w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=X8IUNhaC;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=J2oPR40R;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70E4C606A31E
-	for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 21:28:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54B5D606A31E;
+	Mon, 23 Nov 2026 21:42:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=X8IUNhaC
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DCAB1F000C4;
-	Mon, 23 Nov 2026 21:28:29 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=J2oPR40R
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2212A1F000C6;
+	Mon, 23 Nov 2026 21:42:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795469309;
-	bh=0HT6xoigilQl4nxh76XDvII1KxBquEAEUflGScVzCo0=;
-	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=X8IUNhaCWFfkad4JxkrHe2IJoHElQbFCEcV9sHZrGQ4K76dg9GIsnCft7xYuegRus
-	 hGrlLo5g/UH8lSMRyr/35S550F4DF+WaCUsaqzR7Y/BxZMAtaqRB26P1vocx8Q+nkI
-	 P5WBD74N6GjKu2JHQ0AnJBouWQKDv34CQ5lqa/o1LsHdzyArJHPluhoNM5Icfn+KWC
-	 4lcsw+HAGEBbd/m7S5gk+sEW7qPIQtFFRl56Dd5Aa9s//UV6bhcgPTIGYetRSe9HX9
-	 0ESD7LsdIHLxw8XnClky1W50SdPqmXtEiQBL3VLUgFT9iTbTI370KmEY1XC/mpL+UU
-	 i6wPZHG6j3JmA==
-Message-ID: <sashiko-outbox-230084@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v1 07/10] libbpf: Support overwritable ring
- buffers in the record API
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, bpf@vger.kernel.org
-In-Reply-To: <8115836d8bcbb9d59e2a350f9fb999f5ab497348.1795467315.git.memxor@gmail.com>
-References: <cover.1795467315.git.memxor@gmail.com>
- <8115836d8bcbb9d59e2a350f9fb999f5ab497348.1795467315.git.memxor@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 23 Nov 2026 21:28:28 +0000
+	s=k20260515; t=1795470138;
+	bh=tvWKEa7sW7hqM8IXTCuuvyVs44O8ZoRdUQz3cjoo/Vk=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date;
+	b=J2oPR40RkOi0OwKPeYKckICMhLk/a3PcfLQsYaII7Wu5YzfZDNKsdPE57apkIQOOx
+	 2XDlh3mgVtKu/17KkU6T54JqD87azNYahvIAjImb7wAwXMLG0hsL+3fnSVEZ4E15b+
+	 wfYKy7NIF4ZHNLluMWn6GH4yaY4zk+p+WkgH2fwCQd0gxIo2eiaNljn6jdlAS/Z2g9
+	 HYxYgH3QZBKb+Lx5HXXZCKxmQuuFnze58IqALG01Erb9l1hrOMdnPn7xZC5CCk0cVO
+	 wK5Cq6UVRL6AlMzuYLTGxqzcGVZPhpHRS1qTxVtQVKOa3evj5zqbTTMBhF7P6nK8ZG
+	 JdcpweUPXyMGA==
+From: Namhyung Kim <namhyung@kernel.org>
+To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+ Arnaldo Carvalho de Melo <acme@kernel.org>, 
+ Mark Rutland <mark.rutland@arm.com>, 
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>, 
+ Adrian Hunter <adrian.hunter@intel.com>, 
+ James Clark <james.clark@linaro.org>, 
+ Hang Zhengyang <hang.zhengyang1010@gmail.com>
+Cc: Song Liu <song@kernel.org>, linux-perf-users@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+In-Reply-To: <20261120-bperf-attr-map-err-v1-1-b12b6b550273@gmail.com>
+References: <20261120-bperf-attr-map-err-v1-1-b12b6b550273@gmail.com>
+Subject: Re: [PATCH] perf bpf_counter: Say why the perf_event_attr map
+ can't be used
+Message-Id: <179547013808.1307628.8006860065256784042.b4-ty@b4>
+Date: Mon, 23 Nov 2026 13:42:18 -0800
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -59,174 +65,26 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15.2
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue to consider:
-- [Medium] libbpf: silent loss of valid records via batch_pos in
-  ring__invalidated()
---
+On Fri, 20 Nov 2026 14:49:03 +0800, Hang Zhengyang wrote:
+> When 'perf stat --bpf-counters' can't set up the pinned map it uses to
+> share counters, all it prints is:
+> 
+>   Failed to lock perf_event_attr map
+> 
+> Arnaldo asked for better wording when bperf was added.  The map can
+> fail to be created, pinned, opened, checked or locked, and the message
+> says neither which step failed nor why.
+> 
+> [...]
 
-commit d2233d2ea9e5d957fed51c54cbd2073eb0c4fc69
-Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Applied to perf-tools-next, thanks!
 
-libbpf: Support overwritable ring buffers in the record API
+Best regards
+Namhyung
 
-This commit adds support for overwritable BPF ring buffers
-(BPF_F_RB_OVERWRITE) to the libbpf record API and introduces
-ring__invalidated() to detect whether records returned since the last
-release or rewind were overwritten.
 
-> diff --git a/tools/lib/bpf/ringbuf.c b/tools/lib/bpf/ringbuf.c
-> index 12d586afed1dd..b4e9e27951eb8 100644
-> --- a/tools/lib/bpf/ringbuf.c
-> +++ b/tools/lib/bpf/ringbuf.c
-
-[ ... ]
-
-> @@ -497,11 +500,72 @@ static int ringbuf_validate_rec_api(const struct ri=
-ng *r)
->  {
->  	if (unlikely(r->sample_cb))
->  		return -EINVAL;
-> -	if (unlikely(r->overwrite))
-> +	/* 32-bit: no overwrite_pos, and positions wrap after 4 GiB of records =
-*/
-> +	if (unlikely(r->overwrite && !r->overwrite_pos))
->  		return -EOPNOTSUPP;
->  	return 0;
->  }
-> =20
-> +/*
-> + * Overwrite mode: check that whatever was read at pos, and at later pos=
-itions,
-> + * was not overwritten while we were reading it. The producer can overwr=
-ite pos
-> + * once it is a ring size ahead of pos.
-> + */
-> +static bool ringbuf_pos_valid(const struct ring *r, unsigned long pos, u=
-nsigned long *prod_pos)
-> +{
-> +	/* pairs with smp_wmb() after the producer_pos update in the kernel */
-> +	smp_rmb();
-> +	*prod_pos =3D smp_load_acquire(r->producer_pos);
-> +	return *prod_pos - pos <=3D r->mask;
-> +}
-> +
-> +/* ring__next() for overwritable ring buffers */
-> +static const struct ring_rec *ringbuf_overwrite_next(struct ring *r)
-> +{
-> +	unsigned long pos =3D r->next_pos, prod_pos;
-> +	__u32 *len_ptr, len;
-> +
-> +	prod_pos =3D smp_load_acquire(r->producer_pos);
-> +	for (;;) {
-> +		if (prod_pos - pos > r->mask) {
-> +			/*
-> +			 * The producer lapped us, continue from the oldest record.
-> +			 * overwrite_pos is never ahead of a producer_pos that is
-> +			 * loaded after it.
-> +			 */
-> +			pos =3D smp_load_acquire(r->overwrite_pos);
-> +			prod_pos =3D smp_load_acquire(r->producer_pos);
-> +			continue;
-> +		}
-> +		r->next_pos =3D pos;
-> +		if (pos =3D=3D prod_pos)
-> +			return NULL;
-> +
-> +		len_ptr =3D r->data + (pos & r->mask);
-> +		len =3D smp_load_acquire(len_ptr);
-> +		/* if the producer lapped us, this is not a record header */
-> +		if (!ringbuf_pos_valid(r, pos, &prod_pos))
-> +			continue;
-> +		/* record is not committed yet */
-> +		if (len & BPF_RINGBUF_BUSY_BIT)
-> +			return NULL;
-> +
-> +		r->next_pos =3D pos + roundup_len(len);
-> +		if (len & BPF_RINGBUF_DISCARD_BIT) {
-> +			pos =3D r->next_pos;
-> +			continue;
-> +		}
-> +		if (!r->has_batch) {
-> +			r->batch_pos =3D pos;
-> +			r->has_batch =3D true;
-> +		}
-> +		r->rec.data =3D (void *)len_ptr + BPF_RINGBUF_HDR_SZ;
-> +		r->rec.pos =3D pos;
-> +		r->rec.len =3D len;
-> +		return &r->rec;
-> +	}
-> +}
-
-[ ... ]
-
-> @@ -540,9 +607,20 @@ const struct ring_rec *ring__next(struct ring *r)
->  	}
->  }
-> =20
-> +bool ring__invalidated(const struct ring *r)
-> +{
-> +	unsigned long prod_pos;
-> +
-> +	if (!r->has_batch)
-> +		return false;
-> +
-> +	/* records are overwritten in order, so it is enough to check the first=
- one */
-> +	return !ringbuf_pos_valid(r, r->batch_pos, &prod_pos);
-> +}
-> +
->  int ring__release(struct ring *r)
->  {
-> -	unsigned long pos =3D r->next_pos;
-> +	unsigned long pos =3D r->next_pos, prod_pos;
->  	__u32 len;
->  	int err;
-> =20
->  	err =3D ringbuf_validate_rec_api(r);
->  	if (err)
->  		return libbpf_err(err);
-> =20
-> +	r->has_batch =3D false;
->  	smp_store_release(r->consumer_pos, pos);
-
-[Severity: Medium]
-Can checking r->batch_pos in ring__invalidated() cause the documented
-consumption loop to drop valid records that were never overwritten?
-
-In the per-record loop:
-
-	do {
-		while ((rec =3D ring__next(r))) {
-			memcpy(copy, rec->data, rec->len);
-			if (ring__invalidated(r))
-				break;
-			handle(copy, rec->len);
-		}
-	} while (ring__release(r) > 0);
-
-r->batch_pos is only set on the first record returned after
-ring__release() or ring__rewind(), while r->next_pos advances past every
-record returned by ring__next().
-
-If the inner loop processes record A at r->batch_pos and then reads a
-later record B, the producer can overwrite record A without reaching
-record B.  ring__invalidated() still checks r->batch_pos, so it returns
-true for record B even though B's data copy is valid.  The caller then
-breaks out of the inner loop without handling B, and ring__release()
-advances r->consumer_pos to r->next_pos (past B), permanently skipping
-record B.
-
-Similarly, if the producer laps pos on a later iteration of the same
-batch (when r->has_batch is already true), ringbuf_overwrite_next() jumps
-to r->overwrite_pos, advances r->next_pos past the oldest valid record
-there, and returns it with r->batch_pos still pointing to the lapped start
-of the batch.  ring__invalidated() is then guaranteed to return true, so
-ring__release() drops that record too (and in the ring__rewind() dump
-pattern, jumping to r->overwrite_pos mid-batch keeps returning records for
-a batch that is already invalidated).
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1795467315.gi=
-t.memxor@gmail.com?part=3D7
