@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795406358;
-	b=o2M37BrkDNX+ANfqKPjIOgF5m1DWN2sRMVve/DD6zeuAnZWWxOpjUs1iyj/+xB4kRQn1
-	 FoZVLg3WXw+x0CO/vtgR4O+m4e22e4eSnQb7SSj304g9T6jabPTODuOX75H1a8tIelYxk
-	 71w69cwokrU2VYZZzlD/mlMY+dbAl2urfUzERnt2kMl8Kp/j0yIYi+e1jngi0dUUHykLM
-	 tkWn3tFjvWGaHBpG0j+uBm863SpaVgXNOHITmuX4ObOzw2TN+1OwNOKQXVnuWIDZQbafY
-	 EHOXcgX8/Mx90ERCbnjg3Zg8tALs8guizp3g0d9qdxqjWL6vfDrwSSRmVOnrpFpYu+A==
+	t=1795406366;
+	b=rWe9owb70/r0AjxP6oOZuN5uxgCOVOiTWlz+W0vb23FGS119e0m8kfaiCjkW3FubNHPh
+	 P2GOXIGj6F4gPKTTklsX0XmWD/k3vFpd6rIcgSYGygJ0bAY4Vj4QOUW9MMDgl4MTzK950
+	 vaktNuk8zn68NChH8NdojJNxr3rVXCtORBFcDbLfYpWSAL1xB+oTUWogrJ1lIO4j3eVDR
+	 WHu5FJ9c33KWZzIMBYhIf6I/mqA3P1h519fgCT4TJnXv0uYKm/x+KkxCcpc2EZHzr2gVD
+	 PfWO3Fi83OowBn6YLB6ZeZtITo140QrHZg306joZ5E9JlZ9isPTuJhs3IEfEsfa1yAw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795406358;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795406366;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=u+5J9OiJJ+LZk35JnLQMdA67/3OC8obSeyDezikvUJs=;
-	b=q9AyD2xyL0oOXNyRG4DSTh4DS5oRrWsf0x1fE4OYLNQRT8517vH5h4f9n0jiHK9wuOui
-	 B9Y8FnkSg6rmpq1ZqSaPVrt8tg0S7u4BDowAbP7qR4ZhGJF/tkM+oWK2+AXxi0hkb+qei
-	 doOQJA4QjpP+Bb2ONvHlWXRTPi5H/gC/9QmsrdCz6N0ixSbqfeEtvFWKBp6DwLm4Os8R6
-	 O034UAVGs3LIspvPxq0LoTJfmA9ueU+P4eZ9u/jFcIMQ0RnGONjTw8rmLvhMVpQp9MgwA
-	 oYkdGt0zLn9joK1hmUmHpc8RWTsbcu8L3vQ10ocL0j69yIa2IOjIye3PYpF8G+iGbkw==
+	bh=vegiDY49ZcYgORuJO1fhtRNIMkQaGPWJGKKu4gUfQQ0=;
+	b=bnWsUPB24pjRvlri28mw3eOSn9JXcd4IXFY5q7kQuAIcyYTHoBfJTpYeIEnGPRx69hE9
+	 kmH6zcuhHJzkOhW2ZIGALQPWrcoSzOqGtq2004AqsDUDosyW91N9ZblDmKduTvLnWAgqW
+	 AW09mx73ySGY/0Op5LisDaflCIZv7jYgmvAziF6J2lNuoU28vb9TREroPl11jb8w7v+AF
+	 w3BdVJwy4pPRs13iKjRPABtmICISKFnZPidbzbVy/nrGPHJ5g2LmYHKGEmvVCEyLViRYh
+	 fTg1Miuccfr5ciXJnzvCZDRu6eWf04fxxVFgF74j8C00ysIU/qkFOq+dBDR/95sbQbw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HTPUWbEF;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Ld7KzfY2;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06D96606A32C;
-	Mon, 23 Nov 2026 03:59:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4876606A327;
+	Mon, 23 Nov 2026 03:59:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HTPUWbEF
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C39731F000C0;
-	Mon, 23 Nov 2026 03:59:13 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Ld7KzfY2
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37B2E1F000D4;
+	Mon, 23 Nov 2026 03:59:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795406357;
-	bh=u+5J9OiJJ+LZk35JnLQMdA67/3OC8obSeyDezikvUJs=;
+	s=k20260515; t=1795406365;
+	bh=vegiDY49ZcYgORuJO1fhtRNIMkQaGPWJGKKu4gUfQQ0=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=HTPUWbEFrKN0jQGqYEvTF+xJx5j+KBJonTZiSzSxNsyXn5uIoF2RRpMWUYTcx+7fB
-	 cGmMhMmocYRpiahclzJs9tHYrmieQBonq+gJtBFSuLB1jwjlsf4bKxhPS0rgK4hud4
-	 Xdn8Cem+u5/kylxxKbVSZ1KQ26zb5+Gyq6VwAsos/UW5Vqu1TdBg73P4q7IwvdwBKO
-	 JwZMPqR8T2niDwZayPrFvaCbp5oZsTW9jlVsAYruTGwcqxLgB3rt1wVQ1Q9+P1c21i
-	 Rw5slJ+YPzb63z0aw3kZGEyfjM0k6h2EaaDlyJbW1UMCv4bjyi4DJGYjh/QeYIZNLE
-	 dxgSK0lqY4Zeg==
-Subject: Re: [PATCH net-next v2 04/11] selftests: net: add flag to send a
- frame in xdp_helper
+	b=Ld7KzfY22dAo+OphJpVbhEbsc7tWwIDdOUc+e60ahqoz1ksrlIqsWr2WvtFloVTY9
+	 EeSNO+QHhELGG7+swr0AcNRWT7lBzENDaNR+p9L7lu17jvIBN4Xoh2oSdWgN0Oe9QM
+	 wafZExCnX4CvU6SVIujaAxbTZ6iku8+xkpYCmIHZSIAjIdUMRkyR4VVqEJwgHID8as
+	 RBQbudNomNtMb996gLYhDtSOM+o4kYYJGzSXo2rA/zi6lOyuXRpU18bqQtg/uWB/d8
+	 fU38daeySbI6l+C1cUQ/emGwck49pbrGPwThzi8o7SkSDFvz7mHu/NsvstgZ9GPiyn
+	 9JWqynaDeGrjA==
+Subject: Re: [PATCH net-next v2 06/11] bpf, tcx: Set tx_extra_headroom from a
+ decl tag on egress programs
 From: netdev-bot+sashiko@kernel.org
 To: tianyi@cloudflare.com
 Cc: netdev@vger.kernel.org, kuba@kernel.org, pabeni@redhat.com,
@@ -67,10 +67,10 @@ Cc: netdev@vger.kernel.org, kuba@kernel.org, pabeni@redhat.com,
  runyu.xiao@seu.edu.cn, song@kernel.org, linux@leemhuis.info,
  wang.zhan@smartx.com, yonghong.song@linux.dev, n0ps1edzz@gmail.com,
  tianyi.gao@linux.dev
-Date: Mon, 23 Nov 2026 03:59:13 +0000
-Message-ID: <179540635338.3135.16458005376139253755@kernel.org>
-In-Reply-To: <20261119013830.36935-5-tianyi@cloudflare.com>
-References: <20261119013830.36935-5-tianyi@cloudflare.com>
+Date: Mon, 23 Nov 2026 03:59:21 +0000
+Message-ID: <179540636180.3135.12677199986882977729@kernel.org>
+In-Reply-To: <20261119013830.36935-7-tianyi@cloudflare.com>
+References: <20261119013830.36935-7-tianyi@cloudflare.com>
 X-sashiko-severity: Low
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -90,161 +90,121 @@ you want to address the nit picks below when you respin.
 
 Low priority / nit picks for your consideration:
 
-- [Low] The commit message says the new -t option is "meant for copy
-  mode", because a zerocopy driver "may send it later".
-- [Low] The concern says nothing in the tree uses the new -t option of
-  xdp_helper, so the option is dead code and the AF_XDP copy-mode…
-- [Low] parse_frame() in tools/testing/selftests/net/lib/xdp_helper.c
-  checks each byte only through the return value of sscanf(hex + 2 * i,…
+- [Low] The new documentation in Documentation/networking/netdevices.rst
+  names only one load failure for the "tx_extra_headroom:" decl tag:…
+- [Low] This patch adds tcx egress decl tags as a source of
+  tx_extra_headroom.
 
 --
 
-selftests: net: add flag to send a frame in xdp_helper
+bpf, tcx: Set tx_extra_headroom from a decl tag on egress programs
 
-This adds a -t option to xdp_helper. The option takes one Ethernet frame
-in hex, creates a TX ring, posts a single descriptor, kicks the socket
-with sendto() and exits. Without -t the helper behaves as before.
+This patch lets a tcx egress program declare how many bytes of headers
+it pushes, using a "tx_extra_headroom:" BTF decl tag on its main
+function. The verifier parses the tag at load time into struct
+bpf_prog_aux. The tags of all programs at tcx egress are summed into
+dev->tx_extra_headroom whenever an egress program is attached, detached
+or replaced.
 
-> diff --git a/tools/testing/selftests/net/lib/xdp_helper.c b/tools/testing/selftests/net/lib/xdp_helper.c
-> index eb025a9f35b18..1111631efd73b 100644
-> --- a/tools/testing/selftests/net/lib/xdp_helper.c
-> +++ b/tools/testing/selftests/net/lib/xdp_helper.c
-> @@ -19,15 +19,65 @@
-
-[ ... ]
-
-> +static int parse_frame(unsigned char *buf, const char *hex)
-> +{
-> +	size_t len = strlen(hex) / 2;
-> +	size_t i;
-> +
-> +	if (!len || len > 2048 || strlen(hex) % 2)
-> +		return -1;
-> +	for (i = 0; i < len; i++)
-> +		if (sscanf(hex + 2 * i, "%2hhx", &buf[i]) != 1)
-> +			return -1;
-
-[Severity: Low]
-Is the sscanf() return value strict enough to validate each byte in
-parse_frame()?
-
-The %x conversion skips leading whitespace, accepts an optional +/- sign,
-and succeeds after a single hex digit. So "0g" is parsed as 0x00 and "-1"
-as 0xff.
-
-" f" reads into the next pair, because whitespace does not count toward
-the width but the loop always moves forward by 2.
-
-This means parse_frame() can return a positive length for input that is
-not strict hex. The only caller later in the series, _send_xsk() in
-tx_extra_headroom.py, passes bytes.hex() output. The commit message also
-says -t takes one well-formed frame, so this only matters for malformed
-command line input.
-
-Would an isxdigit() check on both characters of each pair be worth adding?
-
-> +	return len;
-> +}
-
-[ ... ]
-
-> @@ -94,9 +146,20 @@ int main(int argc, char **argv)
->  	sxdp.sxdp_queue_id = queue;
->  	sxdp.sxdp_flags = 0;
+> diff --git a/Documentation/networking/netdevices.rst b/Documentation/networking/netdevices.rst
+> index 53ca8439f73bd..128a93303a6d3 100644
+> --- a/Documentation/networking/netdevices.rst
+> +++ b/Documentation/networking/netdevices.rst
+> @@ -459,12 +459,27 @@ values:
 >  
-> -	if (argc > 3) {
-> -		if (!strcmp(argv[3], "-z")) {
-> +	for (i = 3; i < argc; i++) {
-> +		if (!strcmp(argv[i], "-z")) {
->  			sxdp.sxdp_flags = XDP_ZEROCOPY;
-> +		} else if (!strcmp(argv[i], "-t") && i + 1 < argc) {
+>  * ``XDP_PACKET_HEADROOM`` (256 bytes) minus ``needed_headroom``, when the
+>    peer of a veth or netkit device has an XDP program
+> +* the headroom that the programs at tcx egress of the device declare
+>  
+>  When the peer has an XDP program, locally generated UDP, raw and
+>  AF_PACKET packets and AF_XDP packets in copy mode have enough headroom
+>  for it. ``tx_extra_headroom`` is not recalculated when a bridge or
+>  openvswitch changes ``needed_headroom`` later.
+>  
+> +A program at tcx egress declares its headroom with a BTF decl tag on its
+> +main function. The value is a decimal number of bytes:
+> +
+> +.. code-block:: c
+> +
+> +  SEC("tcx/egress")
+> +  __attribute__((btf_decl_tag("tx_extra_headroom:64")))
+> +  int prog(struct __sk_buff *skb)
+> +
 
 [Severity: Low]
-The commit message says:
+Should this paragraph say which packets actually get the declared
+headroom?
 
-  "A driver with zerocopy support may send it later, so -t is meant for
-  copy mode."
+The XDP paragraph above lists UDP, raw, AF_PACKET and AF_XDP copy mode.
+The tcx paragraph does not limit the earlier statement at the top of the
+section, which says tx_extra_headroom is extra headroom for locally
+generated packets and that the stack adds it when it allocates such a
+packet for the device.
 
-Is this restriction enforced anywhere? With -t and no -z, sxdp_flags
-stays 0. This loop also accepts -z together with -t, which sets
-XDP_ZEROCOPY.
+The commit message makes a similar claim:
 
-With flags == 0, xp_assign_dev() tries zerocopy first. It only uses copy
-mode when the driver lacks support:
+  A locally generated packet gets only LL_RESERVED_SPACE() of
+  headroom, so bpf_skb_adjust_room() reallocates every such packet.
 
-net/xdp/xsk_buff_pool.c:xp_assign_dev() {
+The only readers of dev->tx_extra_headroom are
+netdev_get_alloc_headroom(), netdev_get_alloc_headroom_hlen() and
+netdev_get_alloc_needed_headroom(). These are called from:
+
+  __ip_append_data()
+  raw_send_hdrinc()
+  __ip6_append_data()
+  rawv6_send_hdrinc()
+  the AF_PACKET TX paths
+  AF_XDP copy mode
+
+TCP sizes its headroom with MAX_TCP_HEADER and never reads the value.
+
+Say an encapsulating egress program carries "tx_extra_headroom:400".
+TCP packets still get no extra reservation. bpf_skb_adjust_room() will
+still reallocate them whenever MAX_TCP_HEADER leaves too little room.
+
+TCP was left out on purpose in "net: add tx_extra_headroom and
+netdev_get_alloc_headroom()". Could the tcx documentation, and the
+commit message, state that scope?
+
+> +The tag of the attached program covers the whole tail call chain. Tags on
+> +tail call targets, freplace programs and programs at tcx ingress are
+> +ignored. Loading a program whose tag is above 512 or does not parse fails
+> +with ``-EINVAL``.
+
+[Severity: Low]
+Is this list of load failures complete? The loader also rejects a main
+function with two "tx_extra_headroom:" decl tags, but the error is
+-EEXIST, not -EINVAL.
+
+btf_find_decl_tag_value() returns ERR_PTR(-EEXIST) for a duplicate:
+
+kernel/bpf/btf.c:btf_find_decl_tag_value() {
     ...
-	if (force_copy)
-		/* For copy-mode, we are done. */
-		return 0;
-
-	if ((netdev->xdp_features & NETDEV_XDP_ACT_XSK) != NETDEV_XDP_ACT_XSK) {
+	/* Prevent duplicate entries for same type */
+	id = btf_find_next_decl_tag(btf, pt, comp_idx, tag_key, id);
+	if (id >= 0)
+		return ERR_PTR(-EEXIST);
     ...
 }
 
-On a zerocopy socket, __xsk_sendmsg() only wakes the driver and does not
-transmit anything inside the syscall:
+bpf_find_tx_extra_headroom() returns that error unchanged:
 
-net/xdp/xsk.c:__xsk_sendmsg() {
-    ...
-	if (pool->cached_need_wakeup & XDP_WAKEUP_TX) {
-		if (xs->zc)
-			return xsk_wakeup(xs, XDP_WAKEUP_TX);
-		return xsk_generic_xmit(sk);
+	if (IS_ERR(value)) {
+		if (PTR_ERR(value) == -ENOENT)
+			return 0;
+		verbose(env,
+			"multiple tx_extra_headroom tags for main subprog\n");
+		return PTR_ERR(value);
 	}
-    ...
-}
 
-send_frame() treats a successful sendto() as the frame having been sent.
-main() then returns right away, so process exit closes the socket and
-tears down the pool. Nothing checks the completion ring.
+The error goes back through add_subprogs(), so BPF_PROG_LOAD fails with
+-EEXIST. The tag_twice selftest in verifier_tx_extra_headroom.c, later in
+the series, expects this rejection. The documentation is still unchanged
+at the end of the series.
 
-On a zerocopy-capable NIC, can the helper exit with status 0 even though
-the frame was never sent? veth stays in copy mode, so tx_extra_headroom.py
-later in the series is not affected. However, xdp_helper is shared with
-queues.py and xsk_reconfig.py, which run on real hardware.
-
-print_usage() shows "[-z] [-t frame_hex]" and "send one frame, given in
-hex, and exit". The header comment says "with -t it sends one frame
-through the TX ring and exits". Neither mentions the copy mode limit.
-
-Could -t set XDP_COPY and reject -z, or could the usage text at least
-document the limit?
-
-> +			frame_len = parse_frame(umem_area, argv[++i]);
-> +			if (frame_len < 0) {
-> +				print_usage(argv[0]);
-> +				return 1;
-> +			}
-
-[ ... ]
-
-> @@ -119,6 +182,9 @@ int main(int argc, char **argv)
->  		}
->  	}
->  
-> +	if (frame_len)
-> +		return send_frame(sock_fd, frame_len);
-> +
-
-[Severity: Low]
-Nothing in this patch uses the new -t option, so by itself the patch adds
-no test coverage for the AF_XDP copy mode TX path.
-
-This seems to be handled later in the series. The patch "selftests: net:
-add tx_extra_headroom test" adds tx_extra_headroom.py, whose _send_xsk()
-runs this on veth0:
-
-    cmd(f"{XDP_HELPER} {ifindex} 0 -t {_eth_frame().hex()}")
-
-That patch also updates the xdp_helper.c header comment to list
-tx_extra_headroom.py as a user.
-
-Is this split across the two patches intended?
-
->  	ksft_ready();
->  	ksft_wait();
->
+Could the documentation also list the duplicate tag case and its error
+code?
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261119013830.36935-1-tianyi%40cloudflare.com
