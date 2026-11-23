@@ -1,60 +1,64 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=216.40.44.11
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795457261;
-	b=gDmq+Ph2P0noNJ9ckX+fGvJHp2dFVixnEWYupYiw2voU/4aFXDy8hnpqarlipXKyf9W1
-	 H76tEZC39Wq/buBDBn3hC7LhzDSXSnqG0hEiE8N9VHP/KeUk2HtwG5BJnH5mJD6beep4B
-	 XnTFAEYt0GWup+jfJGSlYzxp1iz9JJ4OUSytKkMVR5KkvNUT3w1WUzYs6/iuWzH9Wz3nq
-	 FGKF9qAWKnUDVroRvew4VBWaJmSLUpFQ9zHpe8TlgTLl6B5mGxgfJvx5GIxYgNWcSSV3a
-	 m6d7idLb+IB9sDkNacq3NgjAUw66IpZY6DWU4DLNZvxhk+0VexmEStYcneAYrqIPtKg==
+	t=1795458053;
+	b=dWYziEVxS16GB54s+YgivIPuwjL4iojrebRgVdyzP6vX2gqTrjdV748EXtCy3szLV6j5
+	 bfW71O3cHSrFWAhBf/Cw2tXfZwVtHwy9/Fo3fptbQiUcc/IP3h5XmdS3gIBFTBcei0K64
+	 7ZpM9Qbxo5S36Hf6xulGR0/8aQ5Vh7oUzAwc6R1CB9oZ2Bdv1Aw2mXknO3BLWHVnMscSd
+	 zCKzhd89G7LCxtRziY5DXbUiKDDF2sJ3jB1pkhq1iVlDwxQQRxOLTBimaZjWNjevi56fB
+	 eZFDufVli2PkdCNmBk6aupVY+WlcKUHJHwcOn3jw4D8ki/IefDiGx/qfesCV4rDyH8Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795457261;
-	h=DMARC-Filter:Received:Received:Date:From:To:Cc:Subject:Message-ID:
-	 In-Reply-To:References:X-Mailer:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:X-Rspamd-Queue-Id:X-Stat-Signature:
-	 X-Spam-Status:X-Rspamd-Server:X-Session-Marker:X-Session-ID:
-	 DKIM-Signature:X-HE-Tag:X-HE-Meta;
-	bh=O1sGPyXUc9bPDWnQAdr+MIOIAp5+yAtJPc4tls2ompc=;
-	b=dOYkNbHqierleMr6HNTgzPwWQT0N0hNH9U0Kh9aITk2OCRwhplpsoHaqRtTFHpnSM9Z/
-	 rb6ASOtpT62pdzWQI7SNV2iEzHaaApz8FM24obQpGq3d9aTlQXfyYGWJ//GAjbK15kgIS
-	 al/9w+ikmWuGbSJTsk4HPJR0bJ8RIEXOV3KbqBWGm+lWbNJHsTcDLIEhBDgWHdjEnFE6y
-	 Xygzr8QiQAf2S6u8USOJZhXCk5kdb4XHWcsfi9NBa8SY+YX2m0NQJXWWWEyrkebqSnXNQ
-	 9ArVPfxlWnCb7OI6z06WIopiHzZOMz2WJgbw4DWvj5Dz8Y7NJiqjz4vbrI9YIm76+RA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795458053;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 In-Reply-To:References:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=SYRtQaK9bBhPzxGCpD6OlN2FA/DLdvIovLXNdKDkqAU=;
+	b=fStQxzllieatQIAbmcKGBa1ZEiZ0wPRZBxmSRDMT0rX02K+4Qn64m1saknZgrsAdOMiQ
+	 TQok/HYTGWVjItIYEb2s5gezOrqDahz5iFAP/wQ5IeIs0RUIdzTlb5NIPFqAr+FlCwEAX
+	 fTgSCuM9KynUzM1mdmzybD5dJ0O+bralXnN59FLYisQ/tINGbDjZ4HapZ3TOYYrry9VOO
+	 zL88GVu8NaQjjQ85a2G6doT0cUv2CGd1HogMjgFBhQockZW9asKO9M+P59+1+c+aQ9mtx
+	 g4fyYOU/U6Z3nAGA2imKi+MLZ3dDmwQ3P6FsVfnBCP2d7yloKIChNuLd2rU/YaXMq6g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=goodmis.org;
-	spf=pass smtp.mailfrom=goodmis.org;
-	dkim=pass header.d=goodmis.org header.i=@goodmis.org header.a=rsa-sha256 header.s=dkim1 header.b=aI1cIg5x;
-	arc=none smtp.remote-ip=216.40.44.11
-Received: from relay.hostedemail.com (smtprelay0011.hostedemail.com [216.40.44.11])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=SjCQaFgT;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69B36606A31F;
-	Mon, 23 Nov 2026 18:07:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 69B36606A31F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E6C2606A32E;
+	Mon, 23 Nov 2026 18:20:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=goodmis.org header.i=@goodmis.org header.a=rsa-sha256 header.s=dkim1 header.b=aI1cIg5x
-Received: from omf17.hostedemail.com (lb01a-stub [10.200.18.249])
-	by unirelay07.hostedemail.com (Postfix) with ESMTP id 3A57616095D;
-	Mon, 23 Nov 2026 18:07:32 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf17.hostedemail.com (Postfix) with ESMTPA id EFF0F17;
-	Mon, 23 Nov 2026 18:07:29 +0000 (UTC)
-Date: Mon, 23 Nov 2026 13:07:28 -0500
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Jiri Olsa <jolsa@kernel.org>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>, Naveen N Rao
- <naveen@kernel.org>, "David S. Miller" <davem@davemloft.net>, Peter
- Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
- x86@kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCHv2 2/2] x86/kprobes: Use ftrace_location_range in
- __recover_probed_insn
-Message-ID: <20261123130728.6e1e9f89@gandalf.local.home>
-In-Reply-To: <20261122200239.1481088-3-jolsa@kernel.org>
-References: <20261122200239.1481088-1-jolsa@kernel.org>
-	<20261122200239.1481088-3-jolsa@kernel.org>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=SjCQaFgT
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 255EC1F000C6;
+	Mon, 23 Nov 2026 18:20:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795458053;
+	bh=SYRtQaK9bBhPzxGCpD6OlN2FA/DLdvIovLXNdKDkqAU=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=SjCQaFgTP82giEwzzRMCNkCKr1aBuGc55jIzcXhhf6L2LHdB3bycCzFw/6VSOosCo
+	 8lMHNZ0FDAhSKCjIN081TsjiVg5q6x540scSa/1KRCy0jin9IUbMmB77b4tq4oWVSS
+	 SO6LYSWR/LTaiaBff/ln4BwltXdC/OMVGl4lMt2qCcLZCeOXYxaQ+Qc+HVpBYo9bCj
+	 iFFzF51j3DjiWM6dRf28k108y+s41ZDYRyWiA2Ar+/mABpD1ToyWTkYQ1oYXFN9DcY
+	 6JGQ+MLRoy+KuJCZjoPbwUy2NZ89HcXtbngE0NwHSSIlOOcdLFdshMFrfKyD6gMgrn
+	 x21LP9Q21GvUA==
+From: "Harry Yoo (Meta)" <harry@kernel.org>
+To: Vlastimil Babka <vbabka@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Hao Li <hao.li@linux.dev>,
+	Christoph Lameter <cl@gentwo.org>,
+	David Rientjes <rientjes@google.com>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc: kernel-team@meta.com,
+	linux-mm@kvack.org,
+	loongarch@lists.linux.dev,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] mm/slub: Genericize x86-specific cmpxchg16b comment
+Date: Mon, 23 Nov 2026 18:20:48 +0000
+Message-ID: <179545803368.3865273.2843095802985514919.b4-ty@b4>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20261111011108.29311-1-yangtiezhu@loongson.cn>
+References: <20261111011108.29311-1-yangtiezhu@loongson.cn>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -64,91 +68,19 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: EFF0F17
-X-Stat-Signature: bdygsegicskjsrpjed81ijwfaryinbt5
-X-Rspamd-Server: rspamout06
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX1/3S8xkynlWy2q1CYyyaQCibAXZKXMbUHk=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=goodmis.org; h=date:from:to:cc:subject:message-id:in-reply-to:references:mime-version:content-type:content-transfer-encoding; s=dkim1; bh=O1sGPyXUc9bPDWnQAdr+MIOIAp5+yAtJPc4tls2ompc=; b=aI1cIg5xIlw902dfRoCNkqPGqMRPa2mglps1azEb7Vr4HzCZzqK0/liUmaFN6cvbRVtqG7rom1ET+e6tPPVoe2vbhf6TJjOJS7DFaZWy1pRqGKwQ9r/mrzwmaXuK/6nj7Wdj+laWFNy6HLQBCsMowZFvBtNDpjqfjO/T8lPL/Ro=
-X-HE-Tag: 1795457249-925218
-X-HE-Meta: U2FsdGVkX1/4Id+e+sAZuY/BDz6Eq3nMflt+ZgbBhYvYjKnUKdCYiUMq5fcu/TuqtqlbSyNZs/RSajICqJlOrVv6moeGFcA9nZRjOPbEThEDOG10Nk4oFyTSBEYf2c44XzfrzAVsdp+T8TOkxkhpjJOfGAEsiKQUAcWchpzvssAv9NL3v1Lynq3jxZXNiFRbjmtGFseKCBJfcz+bP4GPMQ8gsCZdD8QCp6ydg43vxcGj/8qxWnwztGwqUVaQW2Ni9TlEaCRjq3I8L+LvLlLnb8GAvP51fuPNSP1iBEaMtTTAnhKNBvcl8IaeVglo+6a/r0RH6yZ0W+pYNDW3IHrOksrkCikaw8haPjkhutCdIfZBe90C+DRRf0FOwO8NbbNm0VjURbGhee5oITirfqn6rQ==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-On Sun, 22 Nov 2026 21:02:39 +0100
-Jiri Olsa <jolsa@kernel.org> wrote:
+On Wed, 11 Nov 2026 09:11:08 +0800, Tiezhu Yang wrote:
+> In __kmalloc_nolock_noprof(), update the comment from x86-specific
+> "cmpxchg16b" to generic "double-width atomic cmpxchg".
 
-> The __recover_probed_insn function is called for every instruction
-> decoded on the way to the probed address and it uses ftrace_location
-> to find out whether the instruction is the ftrace location.
-> 
-> When the address is not ftrace location, ftrace_location does also
-> the symbol lookup to map the sym+0 address to its ftrace location.
-> But __recover_probed_insn only checks if the returned location is
-> the address itself, and that can't be the result of the mapping
-> after the lookup of the address failed, so the symbol lookup is
-> done for nothing for almost every decoded instruction.
-> 
-> Using ftrace_location_range for the address instead, which does
-> just the lookup of the address.
-> 
-> Adding the missing ftrace_location_range stub for the config
-> without dynamic ftrace.
-> 
-> Registering 20587 kprobes (as disabled) with the kprobe_many_example
-> sample module [1] in qemu with 8 CPUs goes from 4.02s to 3.70s.
-> 
-> The sample module was posted as the last patch of the kprobes
-> lookup cost series [1] only to demonstrate the testing, it is not
-> merged and is not going to be.
-> 
-> [1] https://lore.kernel.org/bpf/20261109195827.1091410-1-jolsa@kernel.org/
-> 
+Applied to mm/slab.git for-next, thanks!
 
-Hmm, we probably should create a bool ftrace_location_addr() helper
-function that does this internally. But that could come later as a clean up.
+[1/1] mm/slub: Genericize x86-specific cmpxchg16b comment
+      commit: edfe1515dd356af6f6d7b124cbf90ae79cb6b9f7
 
-Reviewed-by: Steven Rostedt <rostedt@goodmis.org>
-
--- Steve
-
-
-> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> ---
->  arch/x86/kernel/kprobes/core.c | 6 +++++-
->  include/linux/ftrace.h         | 4 ++++
->  2 files changed, 9 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/kernel/kprobes/core.c b/arch/x86/kernel/kprobes/core.c
-> index 133ff20caccd..34d71907e6d1 100644
-> --- a/arch/x86/kernel/kprobes/core.c
-> +++ b/arch/x86/kernel/kprobes/core.c
-> @@ -207,7 +207,11 @@ __recover_probed_insn(kprobe_opcode_t *buf, unsigned long addr)
->  	bool faddr;
->  
->  	kp = get_kprobe((void *)addr);
-> -	faddr = ftrace_location(addr) == addr;
-> +	/*
-> +	 * Only the exact ftrace location matters, so skip the symbol
-> +	 * lookup ftrace_location() does to map sym+0 to its location.
-> +	 */
-> +	faddr = ftrace_location_range(addr, addr) == addr;
->  	/*
->  	 * Use the current code if it is not modified by Kprobe
->  	 * and it cannot be modified by ftrace.
-> diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
-> index 1c2056a1a68b..255751899682 100644
-> --- a/include/linux/ftrace.h
-> +++ b/include/linux/ftrace.h
-> @@ -1075,6 +1075,10 @@ static inline unsigned long ftrace_location(unsigned long ip)
->  {
->  	return 0;
->  }
-> +static inline unsigned long ftrace_location_range(unsigned long start, unsigned long end)
-> +{
-> +	return 0;
-> +}
->  
->  /*
->   * Again users of functions that have ftrace_ops may not
+-- 
+Cheers,
+Harry / Hyeonggon
 
