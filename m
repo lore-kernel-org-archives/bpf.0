@@ -1,45 +1,54 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795477304;
-	b=hWF/UDzAum61BxDJzjeXOyTBQyJBY7HKuq5DuBooth/TEnQvzMNEPnFV9mF57yVghPoV
-	 q2AK6oo/U4M9xtLWBi+Ckd+Ain3nv097G1ox4mKaNWKJOSLUKarorZMT+hQ8h+f6rz/8N
-	 HCHfojHHskD/xQupwKVTzuLSE4s0K4K90V9Pod6T+tvevnsGNQr+Vg92VrAmx4BFWkNTV
-	 GACGHUQw4Hu3ukchauCqT/IGpKAvIWgQIHOLjDXj76OPRjDAkYCyx4kldv/1QnMSyH17I
-	 0c32Sm9m/+POSA2f3bdog3BnwipysqLFOqCIb03qk8/ic8s8W/xZimsoB77EeXF5+eA==
+	t=1795477749;
+	b=C5jQsx3vr7mQ3nxy9u3clmgqVfb66Mc2N2USIC6tqPyw750MriVLzYbwBG0ogWc2QrZA
+	 WNI/prEDV/mnK+4D3ythzfzxcYywW+49SbpVxzy9ntHxVElqrbIRoh1IbhOCYpM/ef8Ac
+	 98Pn9LQG6cG4GxCHG8o3Ep5WyoRkOacYKiTr/z5i4nNiEIOutu4Xyjtd6ADb3IP2ozqkq
+	 pjv/wN87aHHqruoXHnr2n7IzVO9VfhPJJJjGn7vJGVTIMhtJYAP/PQsEvO5T17K8J0ItC
+	 eZeVIQq2VGRcObCjU7G/BUNCAevQpjP0yFwrQVumoRAX0zQ2LrY3avW9voS7XgUXMeA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795477304;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=Dbpz5yq7gJjAkGR04GNS7F/n7nOquCefhwUbEDv7Bzg=;
-	b=vN3EqOE/ZaS1gZM+3gM9ILT3BmOsAb+gA0JnG5VK3Qc6feTsIuKSA2VTnIz4UdYrLXRB
-	 8TDKzB4Ns8d8UKV5JNyTqo15D41FSvQor7JQkzQ/XijhvxfWwNAwWXHXsdiKM+XHCjNpP
-	 OvvKbB+6sVmgoEPiTnTCqUmeaOxmHhycRCe7BvFJp+7Oi8qUN9qlk5r5g+aIywuPnCfMU
-	 3xRearwjNsFtHkMCA/z8OgNw/uyd4hz3QcpDqRO3odua4QrGCsy0tK12+XVNVNRYubKOg
-	 Rc0qVLaFxIK+mJMXaOFdwpGLeiYm/RGEKlWmyJHrWO+LHiBVdfSxzSVI/11mXZpJ8TQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795477749;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 In-Reply-To:References:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=XvAgZF6CkwRKo3VMFZxbR36QgXiqw9zi2A6dGkoweNA=;
+	b=k7Ryw1+mRBXUMnZXqSOkpAGiMPaOY1DP7aIAi7DNeAJli8P6JTKHxDiRKVchlpWzmGsL
+	 wIH93BGblEUXGMEYibdXdsZJOIWj+0Vy4wzQJMARRiAmUEdrBKU91gDRwF2Crv9duCpaC
+	 h3SU86gYmVqOJ9PPuL3/GUNZiPwmcBWj/veXv4GYca6pfBbkuRVQn4PTSZ1iSbHE1bGMf
+	 o2PoXqgs2UlP31VuDPqtAWo+CuPd57i2Md/AqH9LIlKD5udzSnz8b9I+nssWtJXDIObMc
+	 a/3WExj6oDuRCDbU1V0uq/v2a+wEqy+ZWLHIjuhsuP7t7AOs/Hq2l9mU1SY9vheJC4w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eS++9ZkO;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=foft4ovj;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B229D606A31E
-	for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 23:41:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE9C7606A31E;
+	Mon, 23 Nov 2026 23:49:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eS++9ZkO
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9ED4C1F000C0;
-	Mon, 23 Nov 2026 23:41:42 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=foft4ovj
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03F301F000C6;
+	Mon, 23 Nov 2026 23:49:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795477303;
-	bh=Dbpz5yq7gJjAkGR04GNS7F/n7nOquCefhwUbEDv7Bzg=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=eS++9ZkO8UoUuD1QMYHloXaObpGevjyOhIinBoUCoCySNCm0Eyk5uP2j6M/j1hxwx
-	 2hgnmafGkwnqUZpZwiYV5N3NZedsgTNvdCXdYToK+8uvhjysfceQJOJS7gAvNS8SXQ
-	 JasyfozzFvc7SB3NexYGeiwl/Yi4fZPCY9hHnsMO1eiNAYEWtYcybvDBdQahXvlJcY
-	 mI0belNPQXjcXk1iXxre0Jwq7TbbOLRgV9eNrZNcA4IZEURIoljMybWVTFwb0lWgm3
-	 +yswTYxVt2Rh0rlNMPMjtpdINfa0wNwxKqprnKQZzxXlWqczSY9crRMa/d1LcolDB6
-	 DuifWleRFr4Gw==
-Content-Type: multipart/mixed; boundary="===============6228661783317720632=="
+	s=k20260515; t=1795477749;
+	bh=XvAgZF6CkwRKo3VMFZxbR36QgXiqw9zi2A6dGkoweNA=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=foft4ovjFmNERzm+RAv+xWpfSO5wFzXeA0DrrAVZ6tOR7ovm78/E5KWERujlMYq/X
+	 Y8arbrbGoK90ZC3t4uMkSgIy7+xxwHOsgRctIsGR9k45sa+s9uOFBk46OaPeiFvtF8
+	 v/Z/qWFAZCm6slfIfs7Z1PfCyTNJoYUxXHj1Radbk6nsWF9pgI4iRNtRtYXpH2sAkv
+	 6q9U8MYJfG1fy01Ux6Jna7v5iOoK/xKb7DjC88fvr7VKgY4kIbft8UwvEgUzRaf9KV
+	 7G9tkA+3hZOb2WsHOT0qrjdjIZwZOutEUsGIwXGncft595bJUDJbVyXa4kTwgX6qSu
+	 Ohe9HrrUdGX8w==
+From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+To: Jiri Olsa <jolsa@kernel.org>
+Cc: Naveen N Rao <naveen@kernel.org>, "David S. Miller" <davem@davemloft.net>, Peter Zijlstra <peterz@infradead.org>, Steven Rostedt <rostedt@goodmis.org>, Ingo Molnar <mingo@redhat.com>, x86@kernel.org, linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCHv2 1/2] kprobes: Increase the kprobe hash table size
+Date: Tue, 24 Nov 2026 08:49:05 +0900
+Message-ID: <undine-1795477745290490698-99e2fcc5c9b45beb@undined.local>
+X-Mailer: UndineD 0.1
+In-Reply-To: <20261122200239.1481088-2-jolsa@kernel.org>
+References: <20261122200239.1481088-1-jolsa@kernel.org> <20261122200239.1481088-2-jolsa@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,74 +58,112 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <dc257c60f91ba87c244a6bf9a9d7b424adfd17629c6926085c87cd2188772df3@mail.kernel.org>
-In-Reply-To: <20261123231058.2538362-1-yonghong.song@linux.dev>
-References: <20261123231058.2538362-1-yonghong.song@linux.dev>
-Subject: Re: [PATCH bpf-next 2/2] kbuild, bpf: Remove pahole version checks below v1.24
-From: bot+bpf-ci@kernel.org
-To: yonghong.song@linux.dev,bpf@vger.kernel.org
-Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,kernel-team@fb.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Mon, 23 Nov 2026 23:41:42 +0000 (UTC)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
 
---===============6228661783317720632==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Sun, 22 Nov 2026 21:02:38 +0100, Jiri Olsa <jolsa@kernel.org> wrote:
+> The kprobe hash table has 64 buckets, so with many probes registered
+> each get_kprobe() call walks a long chain. With 20000 probes that is
+> more than 300 entries per bucket on average, and every entry is a
+> separate struct kprobe, so the walk is mostly cache misses.
+> 
+> get_kprobe() is not called just once per registered probe. On x86 the
+> registration path calls it for each address it has to check around
+> the new probe: get_optimized_kprobe(), __recover_probed_insn(),
+> __recover_optprobed_insn() and arch_check_optimized_kprobe() all do
+> one lookup per byte or per decoded instruction, and most of these
+> lookups miss, which means walking the whole chain. It is also called
+> from the breakpoint and ftrace handlers on every probe hit.
+> 
+> Increase KPROBE_HASH_BITS from 6 to 12, which gives 4096 buckets and
+> cuts the chains to about 5 entries for 20000 probes and about 12
+> entries for 50000 probes.
+> 
+> Time to register the probes with the kprobe_many_example sample
+> module [1] (insmod with nr_functions=20000 and nr_functions=50000)
+> in a KVM guest, mean of 5 runs, for different KPROBE_HASH_BITS
+> values. The table memory is the size of the static kprobe_table on
+> 64-bit:
+> 
+>   bits   buckets   table memory   20000 probes   50000 probes
+>      6        64          512 B         4.71 s        29.99 s
+>      8       256           2 KB         2.05 s         9.90 s
+>     10      1024           8 KB         1.39 s         4.63 s
+>     12      4096          32 KB         1.30 s         3.64 s
+>     14     16384         128 KB         1.28 s         3.41 s
+>     16     65536         512 KB         1.28 s         3.38 s
+> 
 
-> kbuild, bpf: Remove pahole version checks below v1.24
+Thank you for conducting the testing and evaluation. The results show
+a trend similar to that of a study I previously carried out[1].
 
-TL;DR: Commit message only: claiming the resulting config is unchanged looks
-inaccurate, since PAHOLE_HAS_BTF_TAG becomes y for clang builds without BTF,
-though with no functional effect today.
+[1] https://qiita.com/mhiramat/items/1bbeb309ee5dfbc979ce (Japanese
+article)
 
-> kbuild, bpf: Remove pahole version checks below v1.24
+> With 12 bits the registration of 20000 probes is 3.6 times faster
+> and the registration of 50000 probes is 8.2 times faster than with
+> the current 6 bits. 12 bits is where the curve flattens: compared
+> to 10 bits it is still 21% faster for 50000 probes (6% for 20000),
+> while going further to 16 bits gains only 1.5% for 20000 probes and
+> 7% for 50000 probes, for a table 16 times bigger (512KB vs 32KB).
+> 
+
+I personally think 6 bits is too small, maybe up until 9 bits (4KB)
+will be OK.
+
+> The cost is the size of the static table, which grows from 64 to
+> 4096 hlist heads, that is from 512 bytes to 32KB on 64-bit. The
+> functions that walk the whole table (module notifier, arming or
+> optimizing all probes, the debugfs list) are slow paths that take
+> kprobe_mutex and now scan 4096 buckets.
+
+What I still fail to understand is the use case for employing such a large
+number of Kprobes simultaneously. If the goal is to trace individual
+functions, Fprobes are already available and offer better scalability.
+Personally, while I might occasionally deploy around 100 probes, I cannot
+conceive of a scenario requiring 1,000 or more. Would you have actual
+usecase maybe from eBPF?
+
+If this change is intended solely to improve performance for an extremely
+unlikely use case, I would, at the very least, make the size configurable
+via Kconfig.
+
+Since this change affects all architectures, those working with small,
+embedded-system chips might be reluctant to "pay" 32 KB for a use case
+that is highly unlikely to ever occur.
+
+Thank you,
+
+> 
+> The sample module was posted as the last patch of the kprobes
+> lookup cost series [1] only to demonstrate the testing, it is not
+> merged and is not going to be.
+> 
+> [1] https://lore.kernel.org/bpf/20261109195827.1091410-1-jolsa@kernel.org/
+> 
+> Suggested-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> ---
+>  kernel/kprobes.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/kernel/kprobes.c b/kernel/kprobes.c
+> index f14f7ff45961..47ce0bfb7298 100644
+> --- a/kernel/kprobes.c
+> +++ b/kernel/kprobes.c
+> @@ -50,7 +50,7 @@
+>  #include <asm/errno.h>
+>  #include <linux/uaccess.h>
+>  
+> -#define KPROBE_HASH_BITS 6
+> +#define KPROBE_HASH_BITS 12
+>  #define KPROBE_TABLE_SIZE (1 << KPROBE_HASH_BITS)
+>  
+>  #if !defined(CONFIG_OPTPROBES) || !defined(CONFIG_SYSCTL)
+> -- 
+> 2.56.1
+> 
 >
-> The previous patch makes CONFIG_DEBUG_INFO_BTF require pahole v1.24, so
-> the Kconfig checks for an older pahole always pass with
-> CONFIG_DEBUG_INFO_BTF.
-> Remove CONFIG_PAHOLE_HAS_LANG_EXCLUDE (pahole v1.24), which is always
-> set with CONFIG_DEBUG_INFO_BTF. Drop it from the dependency of
-> CONFIG_RUST on !CONFIG_DEBUG_INFO_BTF, and always pass
-> --lang_exclude=rust in scripts/Makefile.btf, which is only included
-> with CONFIG_DEBUG_INFO_BTF.
-> CONFIG_PAHOLE_HAS_BTF_TAG (pahole v1.23) is still needed, since
-> btf_type_tag is only used with clang, but it no longer needs the pahole
-> version. Every user of it also checks CONFIG_DEBUG_INFO_BTF, so make it
-> depend on CONFIG_CC_IS_CLANG only.
-> The pahole flags and the resulting config are unchanged, except that
-> CONFIG_PAHOLE_HAS_LANG_EXCLUDE is gone.
 
-Is the last sentence of the commit message accurate?
-
-The new definition changes the resulting config for clang builds without
-BTF:
-
-    Before:
-    config PAHOLE_HAS_BTF_TAG
-        def_bool PAHOLE_VERSION >= 123
-        depends on CC_IS_CLANG
-
-    After:
-    config PAHOLE_HAS_BTF_TAG
-        def_bool CC_IS_CLANG
-
-With LLVM=1 and pahole missing or older than v1.23, PAHOLE_VERSION is
-below 123, so PAHOLE_HAS_BTF_TAG was n before.  Now it is y, and
-CONFIG_PAHOLE_HAS_BTF_TAG=y is written to .config and the generated
-autoconf.h and rustc_cfg even though CONFIG_DEBUG_INFO_BTF is n.
-
-This has no functional effect today, since both users (compiler_types.h
-and trace_event_update_with_eval_map()) also test CONFIG_DEBUG_INFO_BTF.
-
-Would it be better to use "def_bool DEBUG_INFO_BTF && CC_IS_CLANG" so the
-generated config stays identical, or to reword the commit message to say
-that CONFIG_PAHOLE_HAS_BTF_TAG is now also set in clang configurations
-without BTF?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/45289030741
---===============6228661783317720632==--
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
