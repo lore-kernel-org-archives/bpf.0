@@ -1,89 +1,63 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795449108;
-	b=tTieSIaZw+WrsP9oO0HHTdRvFjPguc9mnFlqv7dAi5FL02oZxbLedufcu39sfkfn+exx
-	 Dz5j4Mm8IUNA07iit/tgChtZdAVO7Mwqm93xDOOeP9SanJ4VF8gJC3fJzuZ1w+xamzFfr
-	 MgbtH4aQpQQoZlrEOK4U5ktGdQebCD2Xx2ay1eWzgTY+SpTVWxZZSPHhkq/fwOFZ0Mpsa
-	 hLO9b9ve8yDU3F7thwaIGTXY/2dNdZL1kbSUb5cp6CgAeHJpYmrRCMLZhBKoY+7TaaaYs
-	 goHAhabU8cJl8Ney1JYJdt3MLKcYAwzxCaHkIYNE4KMXQJV+krNxSJtuRVfE0uutJMQ==
+	t=1795449170;
+	b=QDeX0bNQdcwSruQFRsRbbX4DXD8d6vijJQUti78ZC/wCv5vj4XZs+gRH+A51U2zB1YJP
+	 vmYl+X5Yu3kSrlD1WDIz/WclZoPs4T1UojKA0WgjJBgs7866Z5ylRLZR27bBIRmcdLbHV
+	 p/j1LP582SAqP3VxhVKFvHIT/pAOx/coiuWOPOkAOprNS/UNKHKS+GPncNl3gydoU65Xb
+	 dnHf+Go6rZjHU/Z7Actf1aNSCL1lU+Qb2QbsKrCXlo9B/d/B7DYeAgEDadvrDHR7P89km
+	 y57/gBc5L8mXkGHdBO1teIFp8pXYQQ5v1MXMGOXnvKhM2ovsESV/pfLnNfM5O1DP9VQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795449108;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795449170;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=UwQ48wOTLkO0bDqXN9a1jl6i0o7vHJe4bfY0WMjHxA0=;
-	b=Bg2ePhDJsxksI4GAIoVlH14EPQBsJ55PdFW0M4mNhmo/OZpAp0W/rPpYwU7IwVv7Cn4F
-	 iiRk39qJuqc/my+I8ew89GWQjUoGudrJMQ3Ge18ahW3KwtmtX86L1YZlTd6vkeej0R8kg
-	 GmfPNgNYQ9QRJYMrnbYu1cLn4IGEMLijldZ3xYb30FOjwvDyfYdXyOn3L0MnH0/6kz6/I
-	 OQELYeBhE50TgIaDVkX258Vi/ohyJLPPQileovzIrbSWU/BcYyiGJPEMn1KLYagTmt8zk
-	 Ev9EgCzgiwtGHUT305TET3fB8Rrstvkz1IKzpyZRSauxdAnvJ5MAOgPBHaGdxSFsOvQ==
+	 In-Reply-To:References:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=k8rF/ZxvHVGoqlNnInPhIlRC9B636la7vmqkeuSHtkI=;
+	b=Qu31atFQLBWFf14ppz1SdYNpAQxwAeIbxqZ6/RP9+yDo8RMok1P/bnsqmaqHY0tbp4IO
+	 KTojA52DhJIS5YXrCM8wU0V5KlY+DoisatPJt7ih8dEeTYt3yQQSrK1b6SSEl888J9oyL
+	 mQ7K2oP94XmJNOumRVu9bYa+prxSu93c298BV/XG+Rk1rD9Dko05KgA+Ntw9BtK8EKdmV
+	 s7j8dwRtim1vhRXPhWVUCWlg8LJbfLSen8D5xsX0NkgwzPyfzdz/y+paBT9bgVD+Ohrm9
+	 0xG0+QHVkXhZYqnzY3S7NycI1YdvdhbCNfV/5BdkMvxuhkWRGzRK4D+afv4x2BUJeUg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ffEczR10;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NZVYoAzk;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FCDB606A31A;
-	Mon, 23 Nov 2026 15:51:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C530606A327;
+	Mon, 23 Nov 2026 15:52:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ffEczR10
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37E3B1F000D0;
-	Mon, 23 Nov 2026 15:51:41 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NZVYoAzk
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF7CF1F000C6;
+	Mon, 23 Nov 2026 15:52:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795449107;
-	bh=UwQ48wOTLkO0bDqXN9a1jl6i0o7vHJe4bfY0WMjHxA0=;
-	h=From:To:Cc:Subject:Date;
-	b=ffEczR10kkz6TwinqVlb2eqxN6YHZfPjHgTME+LIdeQFDnaJpfTfDbbKAxYyR8dkT
-	 C/KF29bpbofnjfmI+LyU5opbRTVKXHaYTqX3H9UJxU9XY/sL6OHFqYic1mAv5nZ7JD
-	 SSw02x/zrDSYJw7ootSjHsO4JJuZCWGv9ztWNARHSc5DHgJNO03wxWj69OxnbIl2+k
-	 2Pn5B1lFOaWmJi7OJgHHuB7f/a+1/NzWJyPKg67Kf4nNZhbYSHYCP9VydSTOFOf9pi
-	 dxGF0mA1uTGwyLyibjPY5K8qtP7wkDwFA2eEHvTn1TBcyXfEIlZvbJsmWUuFfT7IUX
-	 06xNE+qMx1lbw==
+	s=k20260515; t=1795449169;
+	bh=k8rF/ZxvHVGoqlNnInPhIlRC9B636la7vmqkeuSHtkI=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=NZVYoAzkCu8J7J0psuvLW7JpybEEGdw9rPZUhwJu3XRpcBeapwcM7CiCYdTNJPbzx
+	 27YPfmYDH4tvCoSrVNNO4UMYkobzFismkRoNMbvlxFOuM3hMVNmEmtlmLH7t+TyLeo
+	 BUnIGiE0PE9CXkKubNEwCRRS0jzn/VTU5FgBlrD4Oxm3cA1BZ4FsYFe4sl6+SBrWDA
+	 0t/Te1qt1G58E3mr0d0dSbYRc0j+hFOhr5A6ctrrrtZ+t12jSngQJuYo+QFqcp/0bn
+	 MXLZ5UuZoxJscvYHZ3CjqIRZeqQVlsYAfR+lMaQtQHXnlywHFAP4FDZeW8UwIKDYU3
+	 t2VXEuqT7tOaA==
 From: Lee Jones <lee@kernel.org>
 To: lee@kernel.org,
-	bpf@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	=?UTF-8?q?Barnab=C3=A1s=20P=C5=91cze?= <pobrn@protonmail.com>,
-	=?UTF-8?q?Beno=C3=AEt=20Sevens?= <bsevens@google.com>,
-	=?UTF-8?q?Filipe=20La=C3=ADns?= <lains@riseup.net>,
-	"He, Bo" <bo.he@intel.com>,
-	"K. Y. Srinivasan" <kys@microsoft.com>,
-	"Zhang, Jun" <jun.zhang@intel.com>,
-	Andreas Gal <gal@cs.uni-magdeburg.de>,
-	Andy Shevchenko <andriy.shevchenko@intel.com>,
-	Bastien Nocera <hadess@hadess.net>,
-	Benjamin Tissoires <bentiss@kernel.org>,
-	Charles Wang <charles.goodix@gmail.com>,
-	Dexuan Cui <decui@microsoft.com>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Haiyang Zhang <haiyangz@microsoft.com>,
-	Jason Gerecke <jason.gerecke@wacom.com>,
-	Jiangshan Yi <yijiangshan@kylinos.cn>,
 	Jiri Kosina <jikos@kernel.org>,
-	Jonathan Cameron <jic23@kernel.org>,
-	linux-hyperv@vger.kernel.org,
-	linux-i2c@vger.kernel.org,
-	linux-iio@vger.kernel.org,
-	linux-input@vger.kernel.org,
-	Lopez Casado <nlopezcasad@logitech.com>,
-	Marcel Holtmann <marcel@holtmann.org>,
+	Benjamin Tissoires <bentiss@kernel.org>,
+	Andreas Gal <gal@cs.uni-magdeburg.de>,
 	Vojtech Pavlik <vojtech@ucw.cz>,
-	Michael Bommarito <michael.bommarito@gmail.com>,
-	Michael Haboustak <mike-@cinci.rr.com>,
-	Pan Chuang <panchuang@vivo.com>,
-	Ping Cheng <ping.cheng@wacom.com>,
-	Rishi Gupta <gupt21@gmail.com>,
-	Roderick Colenbrander <roderick.colenbrander@sony.com>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	Stefan Achatz <erazor_de@users.sourceforge.net>,
-	Tianchu Chen <flynnnchen@tencent.com>,
-	Vojtech Pavlik <vojtech@suse.cz>,
-	Wei Liu <wei.liu@kernel.org>,
-	Zhang Lixu <lixu.zhang@intel.com>
-Subject: [PATCH 00/10] HID: Assorted bug fixes across HID core and drivers
-Date: Mon, 23 Nov 2026 15:50:44 +0000
-Message-ID: <20261123155138.2907049-1-lee@kernel.org>
+	"He, Bo" <bo.he@intel.com>,
+	"Zhang, Jun" <jun.zhang@intel.com>,
+	linux-input@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org
+Cc: stable@vger.kernel.org
+Subject: [PATCH 09/10] HID: debug: Hold driver_input_lock while dumping raw report descriptor
+Date: Mon, 23 Nov 2026 15:50:53 +0000
+Message-ID: <20261123155138.2907049-10-lee@kernel.org>
 X-Mailer: git-send-email 2.56.1.750.gf70dc682cf-goog
+In-Reply-To: <20261123155138.2907049-1-lee@kernel.org>
+References: <20261123155138.2907049-1-lee@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -96,74 +70,57 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-These issues were reported by Sashiko.
+hid_debug_rdesc_show() reads hdev->rdesc and hdev->rsize and formats
+the raw report descriptor before acquiring hdev->driver_input_lock.
+When a HID driver with report_fixup() unbinds or HID-BPF reprobes the
+device, hid_device_remove() and __hid_device_probe() free hdev->rdesc
+and hdev->bpf_rdesc under hdev->driver_input_lock while the debugfs
+entry remains accessible, causing a use-after-free in
+hid_debug_rdesc_show().
 
-None of these changes have been tested on physical hardware.
+Acquire hdev->driver_input_lock at the start of hid_debug_rdesc_show()
+before reading hdev->rdesc and hdev->rsize.
 
-Cc: "Barnabás Pőcze" <pobrn@protonmail.com>
-Cc: "Benoît Sevens" <bsevens@google.com>
-Cc: "Filipe Laíns" <lains@riseup.net>
-Cc: "He, Bo" <bo.he@intel.com>
-Cc: "K. Y. Srinivasan" <kys@microsoft.com>
-Cc: "Zhang, Jun" <jun.zhang@intel.com>
-Cc: Andreas Gal <gal@cs.uni-magdeburg.de>
-Cc: Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc: Bastien Nocera <hadess@hadess.net>
-Cc: Benjamin Tissoires <bentiss@kernel.org>
-Cc: bpf@vger.kernel.org
-Cc: Charles Wang <charles.goodix@gmail.com>
-Cc: Dexuan Cui <decui@microsoft.com>
-Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc: Haiyang Zhang <haiyangz@microsoft.com>
-Cc: Jason Gerecke <jason.gerecke@wacom.com>
-Cc: Jiangshan Yi <yijiangshan@kylinos.cn>
-Cc: Jiri Kosina <jikos@kernel.org>
-Cc: Jonathan Cameron <jic23@kernel.org>
-Cc: linux-hyperv@vger.kernel.org
-Cc: linux-i2c@vger.kernel.org
-Cc: linux-iio@vger.kernel.org
-Cc: linux-input@vger.kernel.org
-Cc: Lopez Casado <nlopezcasad@logitech.com>
-Cc: Marcel Holtmann <marcel@holtmann.org>
-Cc: Vojtech Pavlik <vojtech@ucw.cz>
-Cc: Michael Bommarito <michael.bommarito@gmail.com>
-Cc: Michael Haboustak <mike-@cinci.rr.com>
-Cc: Pan Chuang <panchuang@vivo.com>
-Cc: Ping Cheng <ping.cheng@wacom.com>
-Cc: Rishi Gupta <gupt21@gmail.com>
-Cc: Roderick Colenbrander <roderick.colenbrander@sony.com>
-Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc: Stefan Achatz <erazor_de@users.sourceforge.net>
-Cc: Tianchu Chen <flynnnchen@tencent.com>
-Cc: Vojtech Pavlik <vojtech@suse.cz>
-Cc: Wei Liu <wei.liu@kernel.org>
-Cc: Zhang Lixu <lixu.zhang@intel.com>
+Fixes: cef0d4948cb0 ("HID: debug: fix race condition with between rdesc_show() and device removal")
+Closes: https://sashiko.dev/#/bug/linux-31c0bbf2-e4e7-41e6-ab3b-0d17dfe45389
+Cc: stable@vger.kernel.org
+Signed-off-by: Lee Jones <lee@kernel.org>
+---
+ drivers/hid/hid-debug.c | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
-Lee Jones (10):
-  HID: core: Protect hid->inputs traversal in hid_check_keys_pressed()
-  HID: mcp2221: Synchronise rxbuf access against raw_event callback
-  HID: logitech-hidpp: Synchronise send_receive_buf against raw events
-  HID: sensor-hub: Serialise synchronous read teardown under data->lock
-  HID: roccat: pyra: Resolve USB device from parent in actual_profile
-  HID: hyperv: Validate VMBus packet and payload bounds on receive
-  HID: hid-goodix-spi: Validate package sizes in goodix_hid_irq()
-  HID: wacom: Stop HID hardware before releasing resources on mode
-    change
-  HID: debug: Hold driver_input_lock while dumping raw report descriptor
-  HID: playstation: Cancel DualSense output worker on create failure
-
- drivers/hid/hid-core.c           | 16 ++++++---
- drivers/hid/hid-debug.c          | 12 ++++---
- drivers/hid/hid-goodix-spi.c     | 34 +++++++++++++------
- drivers/hid/hid-hyperv.c         | 12 +++++++
- drivers/hid/hid-logitech-hidpp.c | 58 +++++++++++++++++++++-----------
- drivers/hid/hid-mcp2221.c        | 47 ++++++++++++++------------
- drivers/hid/hid-playstation.c    |  1 +
- drivers/hid/hid-roccat-pyra.c    |  9 +++--
- drivers/hid/hid-sensor-hub.c     | 28 +++++++++++----
- drivers/hid/wacom_sys.c          |  4 +--
- 10 files changed, 149 insertions(+), 72 deletions(-)
-
+diff --git a/drivers/hid/hid-debug.c b/drivers/hid/hid-debug.c
+index f44e6e708404..56207dea4aa7 100644
+--- a/drivers/hid/hid-debug.c
++++ b/drivers/hid/hid-debug.c
+@@ -3654,10 +3654,15 @@ static void hid_dump_input_mapping(struct hid_device *hid, struct seq_file *f)
+ static int hid_debug_rdesc_show(struct seq_file *f, void *p)
+ {
+ 	struct hid_device *hdev = f->private;
+-	const __u8 *rdesc = hdev->rdesc;
+-	unsigned rsize = hdev->rsize;
++	const __u8 *rdesc;
++	unsigned int rsize;
+ 	int i;
+ 
++	if (down_interruptible(&hdev->driver_input_lock))
++		return 0;
++
++	rdesc = hdev->rdesc;
++	rsize = hdev->rsize;
+ 	if (!rdesc) {
+ 		rdesc = hdev->dev_rdesc;
+ 		rsize = hdev->dev_rsize;
+@@ -3669,9 +3674,6 @@ static int hid_debug_rdesc_show(struct seq_file *f, void *p)
+ 	seq_printf(f, "\n\n");
+ 
+ 	/* dump parsed data and input mappings */
+-	if (down_interruptible(&hdev->driver_input_lock))
+-		return 0;
+-
+ 	hid_dump_device(hdev, f);
+ 	seq_printf(f, "\n");
+ 	hid_dump_input_mapping(hdev, f);
 -- 
 2.56.1.750.gf70dc682cf-goog
 
