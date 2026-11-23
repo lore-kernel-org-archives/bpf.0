@@ -1,67 +1,57 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795448284;
-	b=jLdWZqsN/eLQD1DckdWNHBdn/7BQNaMioQREJgi/QX3RaS49Cw7LuKGzcNEVDSor+TsP
-	 2IeMJA1qTwc5ZIaKUCb/r2+/HCGE+oulZ4DdSmJInU/pKqjq/VRBVeuypxWm1fuEhyRPi
-	 aZYmqufX/FT2hD2x1ul/d47OJ7a7ChtoeT7nCFyZ6A+++b34uhsaOrMulbC69c9mBGyEr
-	 rRJb1Xpdm3D4aiI9Esa9E+ALU8AfAz8ue/9VyWeb5Bqg9xHtRc7mNbHSIQOMGUWswiTbA
-	 IBUy2xBzBVwDBWVvEVIoWYu3m/bjUdZgbYW5Z2CNVyaPKWwwQor/NLxE/rot2oT2Mig==
+	t=1795448328;
+	b=UVKoCL2XTk/YmFs/w27qWNjzEtvv/fJgh+hsU2On+2pMqomECHAuRN96O03MznijHBct
+	 NwXj2qAE9v2YfLwKMwVh7/670ctaKi0t01cwZXXuPQpbiKOH8C6cq0fW0K43iWaEtiCUZ
+	 EOHe6J+ipdELoMKeD0jSiWBebvaM9isk7uGTRtmGgzZT7PLmDDoZiIiWzDfbApiFQiQyM
+	 Du9ffuQGVDlkyjHKRCblwJJOWKexRdTEZ+5rvASpo+W9ZwoXrsYLlNAR5amHVfhItCXB9
+	 h+vqZ2CtPbhnxQW83WyqHfFKIbD071AHe2Bfggk2bZr3xUAUd6A7oACfEgqesY56LVw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795448284;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=+Dr3Yxe6IMfqQTqamQRvWaq+1EPQPGHIOcF25gOzcos=;
-	b=QYz+MuI2XhUsb60QvmeQomV7oWeAgg3v+MGvLFdls9I3L0Cxg/2D+h8SME2Isd40q0Ja
-	 siG/FOa2j0JHrF5JKoBFg2gc+QHuejBnQKuWRht57Y/wyYus8UDnp76uAFTo2TyidmKr9
-	 1mqRmHjTN8ikYioHsq/hvx8fBXcwypenpwRHcXUU0gPnhi38v9PQ47//K6BDiSs+szFIC
-	 pqUk3HrgnPajmfn9QcUrrr0VV2d9gJH/8Er4IlDgho2y/EUBN62vL61dIuE+o2rPvEWT8
-	 yLdW+U7dlsbn/OONvOp4E+FHt9c8w2HpInocxfkrF/LyFlxi5/tAEkMfidQcwdwqNMA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795448328;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=5+X5nQctZfjuCagT5X1YCMQN83cSSzFpr4WZl4ytKKU=;
+	b=N7vCJUI+kOkmlr8NwiOsfHoKdS6RTucl/Fi8lRer4EOVFGbMFoJAenP4Nfy3HPMjYsp8
+	 qXf+wjicHBAxgzwjxxzOQHUNI5KQuMln7U/K9Q9flcG4/mNsx6cbQ7z1aZ92UobuK18nH
+	 f6WTwRt1+MCbzn990Z8VNNp/chKjJeq+XrxMOiNeO/ghiO+95YuPWM5mUy5ubSsQg48JH
+	 Fps0oKlRJwjBwfz7SYQkbxxTqept+a/VNmMnOSNI1QTaxX9OsiOk0Qh25KfWK1sRU2A+2
+	 uGEPjtadVkm/9i6mUABIc90h9zJnivMFFP5jIUwpc4fCQjqyHyasiQ3/QMWToWkRzOw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=arm.com;
-	spf=pass smtp.mailfrom=arm.com;
-	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=NR0yTnO8;
-	arc=none smtp.remote-ip=217.140.110.172
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B21E5606A31E;
-	Mon, 23 Nov 2026 15:38:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B21E5606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="PqW/s6MP";
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C010606A31A;
+	Mon, 23 Nov 2026 15:38:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=NR0yTnO8
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5017C176B;
-	Mon, 23 Nov 2026 07:38:00 -0800 (PST)
-Received: from arm.com (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5C4F43F763;
-	Mon, 23 Nov 2026 07:38:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1795448283; bh=ZtZSCFfSS7AH1eoflbymwNl2l/6JZjRWRRcFOneOrtQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NR0yTnO8eL//qf8rHTLt5m/S5J1hkJUzo1muilLaNZrwO0c1pSt7D9cwwm9bCG3Zw
-	 dxeucstnM+0H/F4tzbbBlYMXzGETjbM+Dd8y/v+KiUzCy6GO1YfI6fTbJhyUhaP/gx
-	 PjEgbnLXZA2jNZiRzkOHlyEm203Of8VqEoZYwClw=
-Date: Mon, 23 Nov 2026 15:37:58 +0000
-From: Catalin Marinas <catalin.marinas@arm.com>
-To: Ryan Roberts <ryan.roberts@arm.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v1] arm64: Mitigate Spectre v1 in the BPF interpreter
-Message-ID: <awRd1mHcQDVNi9U9@arm.com>
-References: <20261117172341.3152407-1-ryan.roberts@arm.com>
- <DMYSI3BOQWOC.2P2FZB0H872DR@gmail.com>
- <awAay4FFj1_wQtaL@arm.com>
- <DN07ZMOAD4GP.37PG3XUPBG4CM@gmail.com>
- <a6cda8a2-992f-41f9-a814-ee78363c3a69@arm.com>
- <DN2ALO12MI1Z.3HI553HDMO2FL@gmail.com>
- <85385aae-af06-4742-a39b-5a95e3e73a7e@arm.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PqW/s6MP
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAD9A1F000C6;
+	Mon, 23 Nov 2026 15:38:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795448327;
+	bh=5+X5nQctZfjuCagT5X1YCMQN83cSSzFpr4WZl4ytKKU=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=PqW/s6MPKvEqPXmL4DOmTtx8aVsCX6kDD/Zo5HwWfu4HovzEPk4iBUQqQj5XNdX/N
+	 87HUiKQbPdtjPWVB+ZHsWRqKnJSYu/WcfhE1H9pONNg2qI9wkZYVgavpSDfQsHvDAI
+	 gjiJEnATI32bCTM7QDktvNE3ldtK69q2cfP4np8ykeEaHOSC8/Ey2/ASO9lsrjlvWM
+	 PIUWn8iRCj3YVY9RPtTs+GX18xfibSmo8krZ2qFXYwvd1km4YggT/UpKV2mXwWhG/P
+	 itu/Y/m8l0Qjf3gFYzFpEk6HZRnIB93nyC+QZFLReWg88H7bAonvbgDVqTuFpP/oRL
+	 4s4pebocVDbEw==
+Message-ID: <sashiko-outbox-229589@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v3 1/9] bpf: Add log support for tracing
+ link_create
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Leon Hwang" <leon.hwang@linux.dev>, bpf@vger.kernel.org
+Cc: linux-trace-kernel@vger.kernel.org
+In-Reply-To: <20261123152743.19629-2-leon.hwang@linux.dev>
+References: <20261123152743.19629-1-leon.hwang@linux.dev>
+ <20261123152743.19629-2-leon.hwang@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 23 Nov 2026 15:38:47 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -70,57 +60,68 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <85385aae-af06-4742-a39b-5a95e3e73a7e@arm.com>
 
-On Mon, Nov 23, 2026 at 10:49:58AM +0000, Ryan Roberts wrote:
-> On 23/11/2026 04:07, Alexei Starovoitov wrote:
-> > On Sun, Nov 22, 2026 at 12:58 AM Ryan Roberts <ryan.roberts@arm.com> wrote:
-> >> I view this patch as a fix to arm64, not as a fix to BPF. I haven't changed any
-> >> BPF code - I've only removed an out of date comment in BPF code, which assumed
-> >> the code path was for Spectre v4 only. But that's not true since Commit
-> >> dff883d9e93a ("bpf, arm64, powerpc: Change nospec to include v1 barrier").
-> > 
-> > Fair enough, but the arm64 part of that comment is stale.
-> > The verifier relies on nospec for v1 since
-> > commit d6f1c85f2253 ("bpf: Fall back to nospec for Spectre v1").
-> > 
-> >> arm64 was previously nop'ing barrier_nospec() despite seemingly needing it in
-> >> the same situation as x86. I think this is orthogonal to whether or not the BPF
-> >> interpreter permits speculation attacks in other places?
-> > 
-> > Not quite. In the interpreter the barrier sits behind an indirect branch:
-> > 
-> >   goto *jumptable[insn->code];
-> > 
-> > arm64 has no retpoline, and the prog can train this branch.
-> > With a wrong target the CPU skips ST_NOSPEC and runs the next insn.
-> > So the interpreter is still not safe.
-> > Yet you're arguing that you're making bpf interpreter a viable option
-> > on arm64. That's just not fair to users.
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue to consider:
+- [Low] bpf: non-UAPI field name tgt_fd logged in
+  bpf_tracing_prog_attach()
+--
 
-[...]
+commit 476f541041ef9d87251f0598129c4def280d1320
+Author: Leon Hwang <leon.hwang@linux.dev>
 
-> > Say it in the commit log that you're fixing one tiny issue and leaving
-> > giant security hole in place.
-> > With that I'm no longer nacking it.
-> 
-> Happy to fix up the commit log as you suggest.
+bpf: Add log support for tracing link_create
 
-This patch closes the Spectre v1 hole in the interpreter but, as per
-Alexei's point, we are still left open to Spectre v2, even with CSV2.
-CSV2 only isolates branch prediction between contexts and here the
-predictor could be trained from within the BPF program itself (in
-theory, not sure if this has been demonstrated on arm64 though).
-Training it this way is harder but I wonder whether it's worth patching
-the kernel for v1 or just recommend that people disable unprivileged,
-interpreted BPF (that's Arm's official recommendation anyway). Would we
-give the wrong impression that such configuration is safe?
+This commit adds verifier log reporting to tracing BPF_LINK_CREATE for
+attach parameter validation, reattachment checks, and target compatibility
+checks in bpf_check_attach_target().
 
-If Alexei makes the Kconfig change to force JIT always on, I'd be
-inclined to drop this patch.
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> index ec8e787929112..80504011403f6 100644
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
+> @@ -3677,7 +3677,8 @@ static int bpf_tracing_prog_attach(struct bpf_prog =
+*prog,
+>  				   int tgt_prog_fd,
+>  				   u32 btf_id,
+>  				   u64 bpf_cookie,
+> -				   enum bpf_attach_type attach_type)
+> +				   enum bpf_attach_type attach_type,
+> +				   struct bpf_verifier_log *log)
+>  {
+>  	struct bpf_link_primer link_primer;
+>  	struct bpf_prog *tgt_prog =3D NULL;
+> @@ -3714,6 +3715,7 @@ static int bpf_tracing_prog_attach(struct bpf_prog =
+*prog,
+>  	}
+> =20
+>  	if (!!tgt_prog_fd !=3D !!btf_id) {
+> +		bpf_log(log, "target_fd and target_btf_id must be both set or both uns=
+et.\n");
+>  		err =3D -EINVAL;
+>  		goto out_put_prog;
+>  	}
+> @@ -3726,12 +3728,14 @@ static int bpf_tracing_prog_attach(struct bpf_pro=
+g *prog,
+>  		 * attach_tracing_prog flag is set.
+>  		 */
+>  		if (prog->type !=3D BPF_PROG_TYPE_EXT) {
+> +			bpf_log(log, "target_fd is only allowed for freplace prog.\n");
+>  			err =3D -EINVAL;
+>  			goto out_put_prog;
+>  		}
+> =20
+>  		tgt_prog =3D bpf_prog_get(tgt_prog_fd);
+>  		if (IS_ERR(tgt_prog)) {
+> +			bpf_log(log, "Invalid tgt_fd.\n");
 
--- 
-Catalin
+[Severity: Low]
+As reported by Alexei Starovoitov on v2 [1], should this log "Invalid
+target_fd.\n" to match the link_create.target_fd UAPI field name used by
+the other log messages in bpf_tracing_prog_attach()?
+
+[1] https://lore.kernel.org/r/DMX8G01GB597.2KEEFI12YK9V0@gmail.com
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261123152743.1962=
+9-1-leon.hwang@linux.dev?part=3D1
