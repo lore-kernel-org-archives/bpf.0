@@ -1,101 +1,65 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.221.42
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795463738;
-	b=QHJ3rvfqKCIH9/NmD6aNfRtTWczWtZiCk5SONuXB2M5DdBdL4E7VAmUEKhUAYhrWVCsz
-	 5UbmAeh0WdicQQh1POW37NJah7lUr0HhqVwa1OcoI6KS7ATjanVyK0AYXPt9f436Z2gIU
-	 BmQJi4xOiwz+yqMiS5Bu/2PeW/z0W8lYB7/3q7UBooU0s7eMhDKRzCBpB0nKxQdvxD9Es
-	 Wsd2sYqSdBt6eRQhqn/UJqkWLGuscLQHO6IIhRfXyvzvHi1DJA9d+wcFJ5B2p6StDE36d
-	 fJOX3+YhtC8OHWDg0FImPPRXPB7mFycm6PCzHV0fNCFqHG2ptOdvNx49/D6nuw1SYJg==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795463738;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=Gd5vkS8rekRzrNw14AZBHfRH+N9fBKRzF69D+TwAlOc=;
-	b=aphAbaktb/4kmtTdiVgMcK5xQ35jLzX/ud3z5SwiaZz8FFE/fZPN9sjFREoSsDzJRpZ0
-	 RCSn44cWq8l+Rm18QEtLjNNx7ZwoHPFc7vLNzikY7UWeBa7207Fyd4PciRRMDpr2M9h4j
-	 CpMwzFnQ1qW3HY8dn3gpreitnkbK+eC/6pmqfjGIfHEHYkqqoRl+1EP9KoZY6HPrVxGuX
-	 bifURARzzflXB78dxpcIIigVP+1q8J9hBg2ph+sNK6/QKnq4MyqMVJP8HQk/hl12fHxrE
-	 pEhALm/rOghRJbUahZ3vdivhz2Te2HudhOKZWseO8lZ7rVKORfn2ctjm99wy8Dhyd8g==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=klX4BZ2S;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.221.42
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=128.30.2.78
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795463822;
+	b=txaI9soYd80lQbdHr2ec2ddKsmReaInMb0+X6RVaMQ7a5/Whtt0goR9WLRi61CPexEPw
+	 FI5oPDDNDyx6A7u902N1r1txugjGi1CzM7vajn10IpzONR4eduPTzDioYH+lWTi1Pho2e
+	 m9DwXJlqTpeonHPMhBdF6fxkKr//cFAyVJB3EZrw6hzjWLvHcl5EqM1slji7yer0UjPZF
+	 ZW0u6RHM2EmysssTGdInlP8qGGA8dElvm4VX5CjxK7XTgQy1jSVFG+7oMlkhcTYa1DU2R
+	 rvtcwzx+1ksz15HQx6BCUq9UosQKyb6B9hGiIAySF4IyvDrCK5fz3r+giyS39HATn4g==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795463822;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:To:cc:From:Reply-To:
+	 Subject:MIME-Version:Content-Type:Date:Message-ID;
+	bh=gL/q1hOlHUU9eJtG0oeQF4G94S2zh6dlEpg6/FnmiqE=;
+	b=lkBfdWWpcCUMkP51zrUUFFeZTo5oa/d5Q1Yck3pPRgo1VkLCCU3OZsFhpclnYnnhjnBo
+	 EUqSTbyj0gjsiwUQX5H7BUy43/FOPz0p0PDCFdK64x3qnC7sUQycGo/cIuOF6BsToWpbx
+	 Jbh4YNqwR1Qnq1B9FqXu39xgfUEn8adbs80x8yVwRBTjFUQLCZt8eemHpB84V2hx0RVs7
+	 lmzDupJolXLh8zdmAeJpENCxGjdx6JOm1VJ0Nkhe0J4XX20Mc9DM+vZ+X4gbFJqumfJxW
+	 ozWacN2p3mOoIo3QE/NpxbUusKKq3arZ2ZoJ78ZJkvCxmZhep8MBItt5/hACmvF5ATw==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=csail.mit.edu;
+	spf=pass smtp.mailfrom=csail.mit.edu;
+	dkim=pass header.d=outgoing.csail.mit.edu header.i=@outgoing.csail.mit.edu header.a=rsa-sha256 header.s=test20231205 header.b=JqKe5LOn;
+	arc=none smtp.remote-ip=128.30.2.78
+Received: from outgoing2021.csail.mit.edu (outgoing2021.csail.mit.edu [128.30.2.78])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61AE0606A31F
-	for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 19:55:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 61AE0606A31F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DC2E606A31F
+	for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 19:57:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7DC2E606A31F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=csail.mit.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csail.mit.edu
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=klX4BZ2S
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-490d59c3f0aso1737334f8f.1
-        for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 11:55:38 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795463737; cv=none;
-        d=google.com; s=arc-20260327;
-        b=Z0ILfgWB3WtfYXK8ca/MhRWdKx5G3oL4yb4XHbjezuJDNJfRDHAbrFSiVMGLhTd79t
-         DOf13Xd3bRgp8xWv+hqjsfiBxxsFc9nD8UOlrhVDxAWwB8qSoLC6RL78B2w8ULPOzblZ
-         NAypj6aEKr4pY9Jecar4cAxAl/siTxGCQC/pO4GianiS3fDnQJJLuvQqrOYrcPzQ9pz+
-         UlPKZxeK7EGxRausm8tQlfcUO84errWNdX6OGkJeVCiwbbbMVD5CMePGk6OlUMK7gXxg
-         tdgODvizKk3wdZ1UYlonAkbMuqFg27Jv3wjjyuyUqMUSRVR5pVGbBCN1WNXOMLYfluJO
-         Bdcg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=Gd5vkS8rekRzrNw14AZBHfRH+N9fBKRzF69D+TwAlOc=;
-        fh=1OXVCQc27ypUHKFiuwmZexxZIppHFZUI6P3i9XG6NEA=;
-        b=HRHuEPpuUUAmQTWo6Lk4+vjGf3GleICFBOAQao7mRhZQ/HZoRISLJ+ReauXMC8eb6M
-         Vvfp4wbMW+bbDG/4gwnN+arTpPLy5vupsDIvSGOyKKdDS+wLFL56VPc2vKB6nRc/eMk5
-         9cJd9MLiPbhkhjm4yil7vk/T1Htz4TT01Xc3BCk2TEhiG0vzfcBwafrItMWl8OvQOJuY
-         Ckp4C1Y6UOfZYz9f/kHiXSINQmtXgKu7ZYXLvVhS93nXd+VgzFvtC+N7pk2r8wgS6zDc
-         Z2BZgbPnVXxIqDJyY/wAHMnPuikK3KX1vYGy5MHlX8XlbER0GZYLOtKCdIp//Mqnz0dy
-         QdWw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795463737; x=1796068537; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=Gd5vkS8rekRzrNw14AZBHfRH+N9fBKRzF69D+TwAlOc=;
-        b=klX4BZ2SJNTMSrywDGSIV/16noC15wpAvjoBOkCL6VprZy61rDcD9QTHuztfR9Tuzg
-         ya2nK4c06Oxw/VjQ01rYZooWGjRYhIlcehQDLDYYHAihJcTUhaX+DcZEH7BVZC7b8DdI
-         3VE9xpA6SNF0jRhObUVsSkdyTgO/dD9XZSshAODtcgr/63eyBQDMfk2w21S/AWnlOAmx
-         C6Nxy8ygfimfdk7a67J7QXglsWVIVZ87KpZL0j3iWCA02hOY1H6mCULb6CwOnFGgqsaJ
-         Z1GsKqUmNaVZa85kFWwKTasKVepJYI+oWjQPr8BOLjrBomj0HKFEKJN0TbNA9qYZJyZo
-         rGiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795463737; x=1796068537;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Gd5vkS8rekRzrNw14AZBHfRH+N9fBKRzF69D+TwAlOc=;
-        b=jfEyn8baMVqonGVEutDyH5EbVUfnxcjxwjOmQwNx/LjZOoZY/MhZ/fvBImYWgA/9G5
-         oD7WphFQga2Vs3DAxmTQCZIjBTavADdNaNHXg4wO3b6HUTQTSBARtv0DBLQLLppUoRiH
-         MtMbHo3F4IgUO/iQWS8vaSGCiLVw31wTp5fjrICy3vqtYhZZ/XVzFXVsTWix3cyjiZNe
-         qYjtKJ4EDEQVoARKM2mhPQ3tV3nEOhNfxlBT9U+6OUKjCMfsYeaxuxS/aIdVwceqHo7U
-         dVuLC8UwYX0bLIK7K7fB6CscVQWpGMERlyjPOONGzlQCl15ylLRGsok4sLKZGKRsEtbC
-         G/XA==
-X-Forwarded-Encrypted: i=1; AL+hErF26gC/Pt7eBaGILs9eF7qZxxBz3DP8MR41iDIMs4cHE+f6H7kAo3eHlBCD+HnCt4t5a4A=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9rpmY+KC0ELmyvWmDM23jL2+9CnoG5BdpAP5wxlZp7J9F1rFB/
-	kZgp21NTano2N6S1DsAgzBkWaMwkh7Sv8KMMZgBNlcpJGreroaFCfzVQ4g76zVilgpgnUzoZt10
-	ZeJgK5j0anNRSo1YfDRk+b0YBHdgRJAE=
-X-Gm-Gg: AZFdTZe5u9Xl1cLQXR6BTvkppcRRINjNU94C4zghfjZX0UetOrOaw6777Cncvns/Owm
-	E2BC3uNBEsH6VoWvRc8LJ7nl6FBAp44vCLXWW07XOOW4hRR2EfZ0+59NTJPSkDj0o6VIgcxnxAw
-	vU/3GIgSPJzODzL98BmccDOIuAjMNJWEVfAKhAX4jwbJJG+XKpu9oFHrZA025nzUSDI21ey+fjZ
-	kKew4zGQmpD8ACzS90UhFbyTGE2J9p/Rd5HKcNXtX8ksL5Gs6m/ejtlG7FPLKCDpsOQ7XkAxV0b
-	ItbVDvV82Ijnh7U+sExBWUAuZaAnet+z5C6HPCuq+Cz6CpryHFAha4DFcU9F7zFqEjWexqzt1N8
-	u9BJMZcySl315hKCCPwc/1wHFQ3P36vVELjb7rR9wXnEF1FZX+uLmmEDMTl04snUyThoaUNgC8n
-	Fh8wosV83z60WUjF7XOMg7EndExXusxN1gyg==
-X-Received: by 2002:a05:6000:29d2:b0:4aa:831a:d0eb with SMTP id
- ffacd0b85a97d-4abb3c37a50mr16976489f8f.9.1795463736432; Mon, 23 Nov 2026
- 11:55:36 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=outgoing.csail.mit.edu header.i=@outgoing.csail.mit.edu header.a=rsa-sha256 header.s=test20231205 header.b=JqKe5LOn
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=outgoing.csail.mit.edu; s=test20231205; h=Message-ID:Date:Content-Type:
+	MIME-Version:Subject:Reply-To:From:cc:To:Sender:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=gL/q1hOlHUU9eJtG0oeQF4G94S2zh6dlEpg6/FnmiqE=; t=1795463821; x=1796327821; 
+	b=JqKe5LOnli2OINwNv2LfCR5GgRSXn6qY4liStqwiTsP5pWqfnVTZsQqK+DoALazFHerntMCYhjH
+	c0+0wJ11prf9n9ERCBQq0HdMMYWSaI//ryWLEn1z/0R2nU8gEKzTH2sUZFRKiu4ywXyeXczO5Wf57
+	v/xUOt+3orDwQd9MUoXpmgIoTwdPAuQUABQ/+2wAfVPNQVSKMj8d+s0KL0ZJAOYmUJnLNhp//E0wA
+	6jveemzr/UE8eHeNOkdu2J1oDd1fnlO/dtYKAb5LtZ0BXc14pxlxW6S6bz3dwxHabA8rCU7IsIsdH
+	ba3UwE8SGPoaG3Lerp26hUP8OfXnNMdj0aiw==;
+Received: from 30-11-166.wireless.csail.mit.edu ([128.30.11.166])
+	by outgoing2021.csail.mit.edu with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.95)
+	(envelope-from <rtm@csail.mit.edu>)
+	id 1xVa9i-006gc4-5A;
+	Mon, 23 Nov 2026 14:56:50 -0500
+Received: from 30-11-166.wireless.csail.mit.edu (localhost [127.0.0.1])
+	by 30-11-166.wireless.csail.mit.edu (Postfix) with ESMTP id D16413FBF5AC;
+	Mon, 23 Nov 2026 14:56:49 -0500 (EST)
+To: Alexei Starovoitov <ast@kernel.org>,
+    Daniel Borkmann <daniel@iogearbox.net>,
+    John Fastabend <john.fastabend@gmail.com>
+cc: bpf@vger.kernel.org
+From: rtm@csail.mit.edu
+Reply-To: rtm@csail.mit.edu
+Subject: ebpf program can cause verifier crash in check_return_code()
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -105,90 +69,167 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <d85ece6e-27f9-4d9f-83af-4101bc76fef6@app.fastmail.com>
- <356db94e-f5d6-4fb2-839a-b97aef72256b@app.fastmail.com> <CAHC9VhR9sjunJRnM9gy-BkBZkapQTrr8a8FtmaK7JkAmUqTrLA@mail.gmail.com>
- <CAEf4BzZKmn6g0SK8OddjKFj_vAmZFvpZv32Hs_S+GHgT7VNfrg@mail.gmail.com>
- <9d6bdc31-e57c-4187-be78-29d82471f710@app.fastmail.com> <9695ec3d-7b81-488d-989f-0bd411d673f2@linux.dev>
- <CAPa8sAh6b5xn4rZzPfM0nZ+_kkywWj22fy8deLq+6qYews0rdQ@mail.gmail.com>
- <MRYP264MB7057096D13282544720793F2E67A2@MRYP264MB7057.FRAP264.PROD.OUTLOOK.COM>
- <CAEf4BzZWEU24+ZC0W_20hc3t+qnEHncQA1ztTF7ZPPOf3DDPVA@mail.gmail.com> <CAHC9VhSFvOiP5Tyt=rOFMwg=Ro1jRw+hfcw4AdCkEyftZJHQCQ@mail.gmail.com>
-In-Reply-To: <CAHC9VhSFvOiP5Tyt=rOFMwg=Ro1jRw+hfcw4AdCkEyftZJHQCQ@mail.gmail.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Mon, 23 Nov 2026 11:55:24 -0800
-X-Gm-Features: Aa3M54rW4zsDQnYRhxM3Ycfdbtgyp7iJNkovd2OcGLgGuI-HlydZfB9BSFPhl3s
-Message-ID: <CAEf4BzZqjiWR4EzBFdV-czH-GnxqOeOAsMLgXtQ6TwN2ZiiT8w@mail.gmail.com>
-Subject: Re: [BUG] bpf, lsm: new first argument in 7.4 inode hooks silently
- breaks BPF LSMs
-To: Paul Moore <paul@paul-moore.com>
-Cc: Paul Mabileau <paul.mabileau@harfanglab.fr>, 
-	Linus Torvalds <torvalds@linux-foundation.org>, Daan De Meyer <daan@amutable.com>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, roblabla <linux@roblab.la>, 
-	"bpf@vger.kernel.org" <bpf@vger.kernel.org>, 
-	"linux-security-module@vger.kernel.org" <linux-security-module@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/mixed; boundary="=-=-="
+Date: Mon, 23 Nov 2026 14:56:49 -0500
+Message-ID: <43917.1795463809@30-11-166.wireless.csail.mit.edu>
 
-On Thu, Nov 19, 2026 at 11:37=E2=80=AFAM Paul Moore <paul@paul-moore.com> w=
-rote:
->
-> On Thu, Nov 19, 2026 at 12:59=E2=80=AFPM Andrii Nakryiko
-> <andrii.nakryiko@gmail.com> wrote:
-> > On Wed, Nov 18, 2026 at 7:14=E2=80=AFAM Paul Mabileau
-> > <paul.mabileau@harfanglab.fr> wrote:
-> > >
-> > > Hello,
-> > >
-> > > On our end, we also have already merged code to adapt our eBPFs to th=
-e argument order change. However, we would still prefer if this easily-avoi=
-dable breakage could be fixed by moving the argument to the end, even if it=
- means having to revert our fix.
-> > >
-> > > This is motivated by the fact that such a change is not made in place=
- on our end because we ship our software to environments we don't control, =
-meaning that any and potentially all versions ranging from 4.11 to the very=
- latest should be supported, so the change is made by compiling and shippin=
-g a new variant of the concerned eBPFs for the version interval it is valid=
- for (7.4+ in this case). And that has to be done every time there is an up=
-stream change like this, so the total installation size and overall complex=
-ity grows accordingly.
-> > >
-> > > If we could avoid that, especially for such trivial root causes, it w=
-ould be nice.
-> > >
-> >
-> > I agree, and that's why I'm asking Paul to accept the patch reordering
-> > the newly added argument before 7.4 final is released.
-> >
-> > I do not think that the maintainer's personal preference for argument
-> > ordering beats real user pain.
->
-> As stated several times in the past, the problem lies not with the LSM
-> framework but with the lack of an abstraction layer in the BPF LSM
-> providing a stable API.  As far as I can tell the lack of an
+--=-=-=
+Content-Type: text/plain
 
-I think the problem lies neither in the LSM framework itself nor in
-the BPF LSM in particular. Neither have any abstractions built on top
-of LSM hook prototypes to guard against argument reshuffling. And
-that's fine and basically inevitable. If you change LSM hook
-prototype, you'd need to adjust source code of all LSM frameworks
-relying on that LSM hook (which is easy for in-tree source code, of
-course). For BPF LSM, if argument is added at the end, that pain can
-be avoided completely.
+I've attached a demo struct_ops / io_uring program that causes the ebpf
+verifier to dereference a bad pointer. The disassembled instructions are
+below. I believe what's happening is:
 
-> abstraction layer in the BPF LSM is by design, and while that does
-> provide some advantages, one of the notable disadvantages is that the
-> API is unstable.  If you want to be upset at anyone, direct your
-> frustrations towards the design and current implementation of the BPF
-> LSM.
+  * instruction 6 is a call to bpf_io_uring_get_region(), causing the
+    verifier to set r0's reg->type to PTR_TO_MEM|PTR_MAYBE_NULL, with
+    reg->mem_size set to the call's 3rd argument (64 in the demo).
 
-What upsets me is that your personal grudges against BPF community
-(or, perhaps, just particular members of it, doesn't matter) gets in
-the way of doing the right thing as a maintainer and putting Linux
-users' pain above your personal preferences and/or dislikes. And
-hiding this behind "I like this specific order of arguments" or "BPF
-LSM should have better architecture" is just petty.
+  * the conditional jump at instruction 7 goes to the exit.
 
->
-> --
-> paul-moore.com
+  * the verifier's check_return_code() executes this without a check
+    of r0's reg->type:
+
+        if (prog_type == BPF_PROG_TYPE_STRUCT_OPS) {
+                /* Allow a struct_ops program to return a referenced kptr if it
+                 * matches the operator's return type and is in its unmodified
+                 * form. A scalar zero (i.e., a null pointer) is also allowed.
+                 */
+                reg_type = reg->btf ? btf_type_by_id(reg->btf, reg->btf_id) : NULL;
+
+  * reg->btf shares a slot in the bpf_reg_state union with mem_size, so
+    reg->btf is 64, and check_return_code() calls btf_type_by_id(64, ...),
+    which crashes.
+
+The attached demo code is suitable for libbpf-bootstrap/examples/c; here
+are the bpf instructions (you may need to fiddle with instruction 7's
+jump offset; +19 works on one of my setups, while +16 is required on
+another):
+
+io3.bpf.o: file format elf64-bpf
+Disassembly of section struct_ops.s/loop_step:
+0000000000000000 <my_loop_step>:
+       0:       79 18 08 00 00 00 00 00 r8 = *(u64 *)(r1 + 0x8)
+       1:       79 17 00 00 00 00 00 00 r7 = *(u64 *)(r1 + 0x0)
+       2:       b7 06 00 00 00 00 00 00 r6 = 0x0
+       3:       bf 71 00 00 00 00 00 00 r1 = r7
+       4:       b7 02 00 00 00 00 00 00 r2 = 0x0
+       5:       b7 03 00 00 40 00 00 00 r3 = 0x40
+       6:       85 10 00 00 ff ff ff ff call -0x1
+       7:       c6 06 13 00 00 00 00 40 if w6 s< 0x40000000 goto +0x13 <my_loop_step+0xd8>
+       8:       84 02 00 00 00 00 00 00 w2 = -w2
+       9:       89 50 00 00 00 00 00 00 r0 = *(s16 *)(r5 + 0x0)
+      10:       85 10 00 00 ff ff ff ff call -0x1
+      11:       b7 09 00 00 01 00 00 00 r9 = 0x1
+      12:       bf 71 00 00 00 00 00 00 r1 = r7
+      13:       b7 02 00 00 01 00 00 00 r2 = 0x1
+      14:       85 10 00 00 ff ff ff ff call -0x1
+      15:       67 00 00 00 20 00 00 00 r0 <<= 0x20
+      16:       c7 00 00 00 20 00 00 00 r0 s>>= 0x20
+      17:       6d 09 03 00 00 00 00 00 if r9 s> r0 goto +0x3 <my_loop_step+0xa8>
+      18:       b7 01 00 00 01 00 00 00 r1 = 0x1
+      19:       63 18 00 00 00 00 00 00 *(u32 *)(r8 + 0x0) = r1
+      20:       05 00 05 00 00 00 00 00 goto +0x5 <my_loop_step+0xd0>
+      21:       18 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 r1 = 0x0 ll
+      23:       b7 02 00 00 07 00 00 00 r2 = 0x7
+      24:       85 00 00 00 06 00 00 00 call 0x6
+      25:       b7 06 00 00 01 00 00 00 r6 = 0x1
+      26:       bf 60 00 00 00 00 00 00 r0 = r6
+      27:       95 00 00 00 00 00 00 00 exit
+
+The crash backtrace:
+
+Unable to handle kernel access to user memory without uaccess routines at virtual address 00000000000000e8
+Current io3 pgtable: 4K pagesize, 39-bit VAs, pgdp=0x0000000084ca3000
+[00000000000000e8] pgd=0000000000000000, p4d=0000000000000000, pud=0000000000000000
+Oops [#1]
+Modules linked in:
+CPU: 0 UID: 0 PID: 70 Comm: io3 Not tainted 7.4.0-rc3-00441-g539a78300c41-dirty #843 PREEMPTLAZY 
+Hardware name: riscv-virtio,qemu (DT)
+epc : btf_type_by_id+0x6/0x40
+ ra : check_return_code+0x22e/0x448
+status: 0000000200000120 badaddr: 00000000000000e8 cause: 000000000000000d
+[<ffffffff80222746>] btf_type_by_id+0x6/0x40
+[<ffffffff801c4ddc>] check_return_code+0x22e/0x448
+[<ffffffff801dd3f0>] do_check_common+0x2474/0x2af4
+[<ffffffff801e0d7c>] bpf_check+0x28f0/0x2b2c
+[<ffffffff801b5806>] bpf_prog_load+0x4bc/0x95a
+[<ffffffff801b7fda>] __sys_bpf+0x181c/0x25d6
+[<ffffffff801b8fc6>] __riscv_sys_bpf+0x1e/0x26
+[<ffffffff80b88fbe>] do_trap_ecall_u+0x14a/0x324
+[<ffffffff80b97788>] handle_exception+0x168/0x174
+
+Robert Morris
+rtm@mit.edu
+
+
+--=-=-=
+Content-Type: application/octet-stream
+Content-Disposition: attachment; filename=io3.bpf.c
+Content-Transfer-Encoding: base64
+
+Ci8vCi8vIHRvIGJlIHJ1bmluIGxpYmJwZi1ib290c3RyYXAvZXhhbXBsZXMvYwovLwoKI2luY2x1
+ZGUgInZtbGludXguaCIKI2luY2x1ZGUgPGJwZi9icGZfaGVscGVycy5oPgojaW5jbHVkZSA8YnBm
+L2JwZl90cmFjaW5nLmg+CgpzdHJ1Y3QgaW91X2xvb3BfcGFyYW1zIHsKCV9fdTMyCQkJY3Ffd2Fp
+dF9pZHg7Cn07CgpzdHJ1Y3QgaW91X2N0eCB7IH07CgpleHRlcm4gaW50IGJwZl9pb191cmluZ19z
+dWJtaXRfc3FlcyhzdHJ1Y3QgaW91X2N0eCAqbG9vcF9jdHgsIF9fdTMyIG5yKSBfX2tzeW07CmV4
+dGVybiBfX3U4ICpicGZfaW9fdXJpbmdfZ2V0X3JlZ2lvbihzdHJ1Y3QgaW91X2N0eCAqbG9vcF9j
+dHgsIF9fdTMyIHJlZ2lvbl9pZCwKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+IGNvbnN0IHNpemVfdCByZHdyX2J1Zl9zaXplKSBfX2tzeW07CgplbnVtIHsKICBJT1VfUkVHSU9O
+X01FTSA9IDAsCiAgSU9VX1JFR0lPTl9DUSAgPSAxLAogIElPVV9SRUdJT05fU1EgID0gMiwKfTsK
+CmVudW0gewogIElPVV9MT09QX0NPTlRJTlVFID0gMCwKICBJT1VfTE9PUF9TVE9QICAgICA9IDEs
+Cn07CgpTRUMoInN0cnVjdF9vcHMucy9sb29wX3N0ZXAiKQppbnQgQlBGX1BST0cobXlfbG9vcF9z
+dGVwLCBzdHJ1Y3QgaW91X2N0eCAqbG9vcF9jdHgsIHN0cnVjdCBpb3VfbG9vcF9wYXJhbXMgKmxw
+KQp7CgogIF9fdTggKm1lbSA9IGJwZl9pb191cmluZ19nZXRfcmVnaW9uKGxvb3BfY3R4LCBJT1Vf
+UkVHSU9OX01FTSwgNjQpOwogIGlmICghbWVtKXsKICB9CgogIHJlZ2lzdGVyIHZvbGF0aWxlIHZv
+aWQgKnIxIGFzbSgicjEiKTsKICByZWdpc3RlciB2b2xhdGlsZSB2b2lkICpyMiBhc20oInIyIik7
+CiAgcmVnaXN0ZXIgdm9sYXRpbGUgdm9pZCAqcjMgYXNtKCJyMyIpOwoKICBhc20gdm9sYXRpbGUo
+ImlmIHc2IHM8IDB4NDAwMDAwMDAgZ290byArMTkiKTsKICBhc20gdm9sYXRpbGUoIncyID0gLXcy
+Iik7CiAgYXNtIHZvbGF0aWxlKCJyMCA9ICooczE2ICopKHI1ICsgMCkiKTsKCiAgc3RydWN0IGlv
+X3VyaW5nX3NxZSAqc3FlcyA9CiAgICAoc3RydWN0IGlvX3VyaW5nX3NxZSAqKWJwZl9pb191cmlu
+Z19nZXRfcmVnaW9uKHIxLAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAobG9uZylyMiwKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgKGxvbmcpcjMpOwoKICBpZiAoIXNxZXMpewogIH0KCiAgaW50IHN1Ym1p
+dHRlZCA9IGJwZl9pb191cmluZ19zdWJtaXRfc3Flcyhsb29wX2N0eCwgMSk7CiAgaWYgKHN1Ym1p
+dHRlZCA8IDApewogIH0KCiAgaWYgKHN1Ym1pdHRlZCA+IDApIHsKICAgIGxwLT5jcV93YWl0X2lk
+eCA9IDE7IC8qIFdhaXQgZm9yIGF0IGxlYXN0IDEgQ1FFIGJlZm9yZSBuZXh0IHN0ZXAgKi8KICAg
+IHJldHVybiBJT1VfTE9PUF9DT05USU5VRTsKICB9CgogIGJwZl9wcmludGsoImlvMyAjMiIpOwoK
+ICAvKiBSZXR1cm4gY29udHJvbCB0byB1c2Vyc3BhY2UgaW9fdXJpbmdfZW50ZXIoKSAqLwogIHJl
+dHVybiBJT1VfTE9PUF9TVE9QOwp9CgpzdHJ1Y3QgaW9fdXJpbmdfYnBmX29wcyB7CglpbnQgKCps
+b29wX3N0ZXApKHN0cnVjdCBpb3VfY3R4ICosIHN0cnVjdCBpb3VfbG9vcF9wYXJhbXMgKmxwKTsK
+CglfX3UzMiByaW5nX2ZkOwoJdm9pZCAqcHJpdjsKfTsKClNFQygiLnN0cnVjdF9vcHMubGluayIp
+CnN0cnVjdCBpb191cmluZ19icGZfb3BzIG15X3VyaW5nX29wcyA9IHsKICAubG9vcF9zdGVwID0g
+KHZvaWQgKilteV9sb29wX3N0ZXAsCiAgLyogLnJpbmdfZmQgaXMgcG9wdWxhdGVkIGZyb20gdXNl
+cnNwYWNlIGJlZm9yZSBsb2FkaW5nL2F0dGFjaGluZyAqLwp9OwoKY2hhciBfbGljZW5zZVtdIFNF
+QygibGljZW5zZSIpID0gIkdQTCI7Cg==
+--=-=-=
+Content-Type: application/octet-stream
+Content-Disposition: attachment; filename=io3.c
+Content-Transfer-Encoding: base64
+
+Ly8KLy8gdG8gYmUgcnVuIGluIGxpYmJwZi1ib290c3RyYXAvZXhhbXBsZXMvYwovLwoKI2luY2x1
+ZGUgPHN0ZGlvLmg+CiNpbmNsdWRlIDxzdGRsaWIuaD4KI2luY2x1ZGUgPHVuaXN0ZC5oPgojaW5j
+bHVkZSA8bGlidXJpbmcuaD4KI2luY2x1ZGUgPGJwZi9saWJicGYuaD4KI2luY2x1ZGUgImlvMy5z
+a2VsLmgiCgppbnQgbWFpbih2b2lkKQp7CiAgc3RydWN0IGlvX3VyaW5nIHJpbmc7CiAgc3RydWN0
+IGlvX3VyaW5nX3BhcmFtcyBwYXJhbXMgPSB7CiAgICAuZmxhZ3MgPSBJT1JJTkdfU0VUVVBfU0lO
+R0xFX0lTU1VFUiB8IElPUklOR19TRVRVUF9ERUZFUl9UQVNLUlVOLAogIH07CiAgc3RydWN0IGlv
+M19icGYgKnNrZWw7CiAgc3RydWN0IGJwZl9saW5rICpsaW5rOwogIGludCBlcnI7CgogIHN5c3Rl
+bSgiZWNobyAxID4gL3Byb2Mvc3lzL25ldC9jb3JlL2JwZl9qaXRfZW5hYmxlIik7CgogIGVyciA9
+IGlvX3VyaW5nX3F1ZXVlX2luaXRfcGFyYW1zKDMyLCAmcmluZywgJnBhcmFtcyk7CiAgaWYgKGVy
+ciA8IDApIHsKICAgIGZwcmludGYoc3RkZXJyLCAiaW9fdXJpbmdfcXVldWVfaW5pdF9wYXJhbXMg
+ZmFpbGVkOiAlZFxuIiwgZXJyKTsKICAgIHJldHVybiAxOwogIH0KCiAgc2tlbCA9IGlvM19icGZf
+X29wZW4oKTsKICBpZiAoIXNrZWwpIHsKICAgIGZwcmludGYoc3RkZXJyLCAiRmFpbGVkIHRvIG9w
+ZW4gQlBGIHNrZWxldG9uXG4iKTsKICAgIGdvdG8gb3V0X3Jpbmc7CiAgfQoKICBza2VsLT5zdHJ1
+Y3Rfb3BzLm15X3VyaW5nX29wcy0+cmluZ19mZCA9IHJpbmcucmluZ19mZDsKCiAgZXJyID0gaW8z
+X2JwZl9fbG9hZChza2VsKTsKICBpZiAoZXJyKSB7CiAgICBmcHJpbnRmKHN0ZGVyciwgIkZhaWxl
+ZCB0byBsb2FkIEJQRiBza2VsZXRvbjogJWRcbiIsIGVycik7CiAgICBnb3RvIG91dF9za2VsOwog
+IH0KCiAgbGluayA9IGJwZl9tYXBfX2F0dGFjaF9zdHJ1Y3Rfb3BzKHNrZWwtPm1hcHMubXlfdXJp
+bmdfb3BzKTsKICBpZiAoIWxpbmspIHsKICAgIGZwcmludGYoc3RkZXJyLCAiRmFpbGVkIHRvIGF0
+dGFjaCBzdHJ1Y3Rfb3BzXG4iKTsKICAgIGdvdG8gb3V0X3NrZWw7CiAgfQoKICBzdHJ1Y3QgaW9f
+dXJpbmdfc3FlICpzcWUgPSBpb191cmluZ19nZXRfc3FlKCZyaW5nKTsKICBpb191cmluZ19wcmVw
+X25vcChzcWUpOwogIGlvX3VyaW5nX3N1Ym1pdF9hbmRfd2FpdCgmcmluZywgMSk7CgogIHN0cnVj
+dCBpb191cmluZ19jcWUgKmNxZTsKICBpZiAoaW9fdXJpbmdfcGVla19jcWUoJnJpbmcsICZjcWUp
+ID09IDApIHsKICAgIHByaW50ZigiQ29tcGxldGVkIENRRSByZXM6ICVkXG4iLCBjcWUtPnJlcyk7
+CiAgICBpb191cmluZ19jcWVfc2VlbigmcmluZywgY3FlKTsKICB9CgogIGJwZl9saW5rX19kZXN0
+cm95KGxpbmspOwogb3V0X3NrZWw6CiAgaW8zX2JwZl9fZGVzdHJveShza2VsKTsKIG91dF9yaW5n
+OgogIGlvX3VyaW5nX3F1ZXVlX2V4aXQoJnJpbmcpOwogIHJldHVybiAwOwp9Cg==
+--=-=-=--
