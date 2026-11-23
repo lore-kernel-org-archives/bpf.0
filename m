@@ -1,88 +1,87 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.160.52
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.167.176
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795446962;
-	b=sVcup+YMZvl2q30JHgE+xYSqSC9aV5rWtvRgapC6w2lW0qIiJmqdihORqOhMGoak9dwa
-	 YyAYoo+CC6nCWiWCR0EDfQWZpRV07ddGsevzhWe0VZ4UZRaDI3gISYDUSgpD1X6EmuZv/
-	 Uz68D9bc+w8SR7JieWec8dn+9ThhBnuYFAFRQrE/o7XIZzSJFzymjEJ9dAA+Mm5dOsx3S
-	 /nu6/cas9kJrDdQbMnD+7EycrF4UgsPSTHC8aiIY++ntkVsD3FZbRvvpkz/NPK21xJ5CB
-	 SpHOe85IGZQw104wY/7QDyja0eX/alKvjognrtuYwS6R/cpY+779Y9E5AeXO1dNnWww==
+	t=1795446964;
+	b=XUnvcLD7oxKtLWhckCUYAnHZHxH3Qwm3F7cXmcQSpaGq6ry9iczvsTZ3ha0lAMCZMuq8
+	 PVvHkuhvFBmlR9dPqVYkVp/hCHxyVfmLIUGdDKmrryuDuGLIGVbKBNCGcFUUoJA1LOrd9
+	 JBp6cQzdfxOyTEosXCu8t6seJZCcLEbfaTVKYKTK2Qypx2NTgxET+NKpRB+m5vWZbML3X
+	 jqlPaMwErz34Xqjtj/ju1oZKn2KDheV0KNnPnx/Y4OyXni0H5qdfSIH6xAyW8DXuEbY0P
+	 Qv20XR99OfUcOIjurbGPyTO1ISaEWwkhF4ME73ELhOVLfYQxw8bXq3Oqr1bC4M9ZqWQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795446962;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795446964;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:Date:Subject:
 	 MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:
 	 References:In-Reply-To:To:Cc:X-Mailer:X-Developer-Signature:
 	 X-Developer-Key;
-	bh=J24RLR53zlPX5f5tzZyOuR6MXK+JSdJ7SqSssMORHsc=;
-	b=Qb7QLIEnJwFBn2wm1uYKv4yw7cqJzmNxo8h50A3ULItYwqU4kd04yXC+dsqvfhS2txcx
-	 +X7FcomNS2Ps907fRKWBirEqaHgpLQ4P1EUjxYqHlSEG0Ih0nk/YOP+WZ8Kd3nDASnUU9
-	 J5KPhNI1N7DY2vxwysCUapi1goXTFgO5pCPQsgG5VyzpNzvkYlUR0TqD/pmyjtu836AIh
-	 jmDdQpUgIL5I9IcRysgMiYjHjztAXbGJmqK4MAMcJaGKjj+k9DS/BqIpo51RJzeJnTwbM
-	 JD59R7JarpJUSinBbSu4DU5VND26Y7S7IEvUlyaszqegHHkXZHNzkaf1WqVZ53+wHow==
+	bh=TtuR7YqeDmhnfJgd+bTQJdPUX0cLcGaSFgJndQm1lTo=;
+	b=ON/n7inlama/n8PFosxbLvZqRl2gUhTLle4XZfVJEi3M3YbbVlqQ8oQEbJCpdW5Xw6Id
+	 RoYy09ZjGs8bV4FTb/XXybHfe/tEqSrdkKYJw2ugK4up4AiAGNvIb9Uwzx1/9FNVhoN30
+	 6BPIZuZAASf8Sf9uNOCVqk79AKgBCBB1DQB5YMZ1kz13d5qiFOXo/ecQeY4rt8MOcOA+u
+	 uIlrcOwFWVLt9ihzVSb04/CWUEuYL2bo4wa0LXunQnLFnJMmrlwtOjwF+d2gbd9AydlrY
+	 1TZL/nPGpQdetYbm5QBuCtHUccYF1faDSCIhdQNSDJ+iUYqAOtH6ZAsv+W6Q2UZQOKA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=YEr5k8lU;
-	arc=none smtp.remote-ip=209.85.160.52
-Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xny6A5HQ;
+	arc=none smtp.remote-ip=209.85.167.176
+Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91C6A606A31A
-	for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 15:16:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 91C6A606A31A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8813606A32A
+	for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 15:16:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A8813606A32A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=YEr5k8lU
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-483d290f398so1942455fac.2
-        for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 07:16:02 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xny6A5HQ
+Received: by mail-oi1-f176.google.com with SMTP id 5614622812f47-57148b8ec14so1145036b6e.3
+        for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 07:16:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795446960; x=1796051760; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1795446962; x=1796051762; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=J24RLR53zlPX5f5tzZyOuR6MXK+JSdJ7SqSssMORHsc=;
-        b=YEr5k8lU5DFVhc17sWpU5V7NUTjJu6ww/YZOdWOq0cPvcAe5fYwfLI1++9siGlfM+B
-         ndeyAHKObHAgChmbQUawXH/yG5XiFcaI/5YruF2xMy5EKMOncftv0mG9wWZsc2GVlCos
-         mcQKT7zThgFvyVP6oQGj6sAS9Rx6j00DUvsj0vbrT+umunoml9405PpM5h2z7P/8UOo4
-         Py1c9MnWWsDjT1HRvKlckDZUwS6FWDPszDN+BkupDuZImNpaHSC0dA4bMRa3b4vvkHh1
-         zfwCdNVfdtCYUw09W6RmfSfMvJk4DZV3uxZ1EPszu+sGXkCKWG9fLrIdujKssvN20tuF
-         qfoQ==
+        bh=TtuR7YqeDmhnfJgd+bTQJdPUX0cLcGaSFgJndQm1lTo=;
+        b=xny6A5HQeJ5ZmD0pblsZCK+mdhlM8vo0BXZWNmdr+f08E3Wu0BkcYgY+WVGBnYyxwO
+         sLB+c3sKAo48zjjDpnQ464a4X4AhgYBChydt//7GHBYhJf+4F3e0ShpnDDf3rkBTJBmK
+         oJ+T1r8e90gPPtdq0mkx3X/OFwDZR2IF1D7KSyQHnkxLKzzDoZ7llLOPiTb7LdI1wNuY
+         Yc1BJMwK37OTQT8Qh2dVNHGliKGFtmLtK1lQ/Y07FmtN+toHRIEmtWB1h472I9TsPgsD
+         YoQtCpiscFuv9L/AsjCqFAJelWGE1PupuG4lwxPvqSPlT/5eYVzAB/tZN2xx0uw1kKlM
+         H18Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795446960; x=1796051760;
+        d=1e100.net; s=20260707; t=1795446962; x=1796051762;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=J24RLR53zlPX5f5tzZyOuR6MXK+JSdJ7SqSssMORHsc=;
-        b=oKQAEex1fOoCYGt4GRIwDPwdL4ukFUmNR6RZ58gFEhmHKjHCRkHWV53iARZ6y+MIWb
-         ZQxQPWN3SoxSEizN7WQi+qk6XGDsQiDOoTVY2MfKJeiEhBT97cCK5KhvcTNgBgh+Efwf
-         ifhljherdlz4U41B1ctvzj+qTSKeBmHv9x49qyQSZYvXOJ2/X4WdNgXCjUhqCJG9P1kO
-         BAoA8hAIHLET9tNQtcb44d5Trpm6bvB3Y/ieJwCsi5tYVYXRBhERSgCglbOX+KIHh+Hc
-         AAsxGifGeGkfiLbPwqm7PtMn9uaVHqhFDoP2HgPx7pQAzGbHj8uPyOJ36x2VZSeplceb
-         3uaQ==
-X-Gm-Message-State: APuU4Z+UU0UnL8OeFC1CtuCh5hfb5YWNM3ZaAHdrP5oHF6Y3qHvRf29W
-	4kaHLIXNAJGoTiVY6z2wqSGiUaeTukVUWOWZCQkRetuteJaWuMwSbh6y
-X-Gm-Gg: AZFdTZcVSiaxKAf5ZSHOU+7A2h+6N9MDbyvfZVob/+urp87+A6strujLgYtDx69O7v7
-	yQS1KVaYyycThiREcqCuNy4f6BffyeTUIIpchR2HfOLj2BMTAAKE0L0QlS6qgdNV82YtPSijbru
-	QjEc5qo3OjXL/afQvVEY0tCbBztCkvarlmmXoURzgJ82VCAKoKbQgaTWWmkJN+hhAKmkJN51pG/
-	EU9mAwP8YMaw5b7ymbIcDOBYrk8FFcKB2mNVa2IaZZSi0pBDz14ShC723ctbeYHRsPSz0KyLlWh
-	xqrVQHOzUPQBJXzdSQQuJhS7dTha1FaKKtUJGxtZimfWZdItbQuTwbBgi4629VTYjAQvZAK8HrZ
-	4dGpgQZPPH3k9Yye8Cjwe7oHBbOCzjFe4qkTviLaXzHvhby1XiGb/v52PR2kb059+i8Bc4uPwha
-	GoMa9EqNMmMpK1+FhNxNzL+fELzmj4RNLbO3pWnNJnHXQcBa3H3KvPUOUIJLKeTRxgrWM+RIxGv
-	RSEJBZreTt0/pe1IwsawejXSqRw+yX8LtTQgnDCdaB9AhM8E2yq860fGjLS06lfG3ag++afVIG9
-	PwgWAPC2OJNvrnyW0KZphw==
-X-Received: by 2002:a05:6809:2792:20b0:57e:3c4f:4b4c with SMTP id 5614622812f47-57e3c4f5369mr674626b6e.68.1795446960084;
-        Mon, 23 Nov 2026 07:16:00 -0800 (PST)
-Received: from localhost ([2a03:2880:30ff:75::])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-57a2eb50d63sm9414635b6e.0.2026.11.23.07.15.59
+        bh=TtuR7YqeDmhnfJgd+bTQJdPUX0cLcGaSFgJndQm1lTo=;
+        b=qluztgqesd6chXVnzAODudNq6xne4NXzttcFa1KW6V2SODXykTdkiD+7+kZhyOKM4P
+         r/YiPfeS6bibqDClywG956ZyGZvmhV1a3POaAVzsgjtSaQlx0RYbl1cV68BXhcSkHgpS
+         AABWQtdSi7jRhS3HghktvFXUq8eTo3rjUFsQ0X8uHVMLHrhxDDVuwwFJDUMxZRfB6v3M
+         6AHKcWd4cnyKVgjAJGLkkc/EImNz3xb3VUbfEAtlWp+fCggHsWqg5e1aAjj6JcrQ/d/g
+         bGrIoGQHZ2GwkjFSY4B+H1Wiv+iqtLTTcJved5m6OoAQ3qhrUO4ACs90tmDwwe38ZH/X
+         79/A==
+X-Gm-Message-State: APuU4Z9KqYkmLnH+CMx/r+PYk5u+tir1jtXMuBrMXaO0XMUMemuUv/CB
+	jOFS6S04OWBGag3hfrBUNCbC5/l9fGX308czuOfUqoFWRd/L2UEIQftU
+X-Gm-Gg: AZFdTZcOgtvGYXBvIhnZRJOJO//HCTHNHTzhgle8vjGmQ+fTFaDIsXJWe/LVHpCzuoD
+	saDJmrz02hN/i/ITDhj26iWbxXdbTST/cvoCvzOr5YADXQsoOsB2f4YSQdHojepdW0HgxAnOvsh
+	aAkkpr4uVcY9cYWnGpXwi+S47+GlxOyr1UG/7cJV6qfIdyH8mm3LgIT0xSldeyCxDGLh3qpv5C7
+	FZcTstlZb3O/BrmjVTe25wEwSWqy+PzIu/qd4SCepvyz3mAkuffoHRECBNrTnyKIu+Hkf3/bx7g
+	rKpBcGFn7WeG7KcgonyFJApfbbvtns65bqAJULopDc1XMOtft7taEc9kGnEy39eB48XhSCH44+q
+	M+cRinCfTtaGAVJNwuQ14q+1UQgBrmk/5iqRYtw82Vbb7TRy3RdMlI3FDZ371kBKBLRO6W8Ckcs
+	aPViDX3gQW8RnDS7GqkqgJUx4KWFwfsipnRuEZrut2ppuEiuqwMH0v0ewaavHj9HoGnDWXpb7jy
+	O2tPcNG+NODi0UmcoV3AUBo6MLa7M6bemb/p6twVB80vk3vbJ97atRx83HJHxlDfU22mZ9GXmiP
+	wUDjYQ==
+X-Received: by 2002:a05:6808:244e:b0:4f5:aa1c:d934 with SMTP id 5614622812f47-57a0a71998fmr13627947b6e.38.1795446962458;
+        Mon, 23 Nov 2026 07:16:02 -0800 (PST)
+Received: from localhost ([2a03:2880:30ff:42::])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4bcf0794755sm10396602fac.10.2026.11.23.07.16.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Nov 2026 07:15:59 -0800 (PST)
+        Mon, 23 Nov 2026 07:16:02 -0800 (PST)
 From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Date: Mon, 23 Nov 2026 07:15:41 -0800
-Subject: [PATCH bpf-next v2 01/13] bpf: Free unpublished local storage with
- kfree_nolock()
+Date: Mon, 23 Nov 2026 07:15:42 -0800
+Subject: [PATCH bpf-next v2 02/13] bpf: Add obj_size to bpf_local_storage
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -94,90 +93,96 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261123-sls_f1-v2-1-76474de9b052@meta.com>
+Message-Id: <20261123-sls_f1-v2-2-76474de9b052@meta.com>
 References: <20261123-sls_f1-v2-0-76474de9b052@meta.com>
 In-Reply-To: <20261123-sls_f1-v2-0-76474de9b052@meta.com>
 To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
  daniel@iogearbox.net, kernel-team@meta.com, eddyz87@gmail.com
 Cc: Mykyta Yatsenko <yatsenko@meta.com>
 X-Mailer: b4 0.16-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1795446955; l=2691;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1795446955; l=2852;
  i=yatsenko@meta.com; s=20260324; h=from:subject:message-id;
- bh=x7XFB2uSqCSLnN2T6J6S0To4SeK+7aYkkdeErraTbSc=;
- b=0ma33oi296xFHCs9uRUQ5P/bVLA8WkXkEC5CujD3XZBMDX+Nup7XRb5ENXIXZ+mMxVi2So9rj
- FJgfMN+tCyAAmooRs8FWtTJcSQ0M7+p5VHa44VkslxWAgvAvHnnAzWP
+ bh=XGgYZBEDxTJTTMTfnkSuB9FlBa4shVtukrQ84OtNC8g=;
+ b=s9A2anRldb15f/nXPmVA8uCnHNVZ+kJ5ol70JOqyK6mC5fUnLUkmIStQDVmRzZypchqVY6X6A
+ TR39ijGBRfVCPvlnAflx1r22ffqqklsBC2P4T1smAalze9NV1o/P0A5
 X-Developer-Key: i=yatsenko@meta.com; a=ed25519;
  pk=1zCUBXUa66KmzfjNsG8YNlMj2ckPdqBPvFq2ww3/YaA=
 
 From: Mykyta Yatsenko <yatsenko@meta.com>
 
-A tracing program can create local storage in NMI. When the create
-fails, the new storage and selem are freed with kfree_rcu(), which is
-not safe in NMI. Nobody has seen them yet, so free them at once with
-kfree_nolock(), which works in any context for kmalloc_nolock() memory.
+A later patch makes storage objects that are bigger than the struct.
+Keep the size in the object, and charge and uncharge that size.
 
-This fix needs commit bd897919e4dc ("bpf: Link the first element after
-its storage is published"). Before that commit, an iterator can find the
-first selem before the storage is published, so an immediate free is not
-safe.
-
-Fixes: f484f4a3e058 ("bpf: Replace bpf memory allocator with kmalloc_nolock() in local storage")
 Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
 ---
- kernel/bpf/bpf_local_storage.c | 19 ++++++++++++++++---
- 1 file changed, 16 insertions(+), 3 deletions(-)
+ include/linux/bpf_local_storage.h |  1 +
+ kernel/bpf/bpf_local_storage.c    | 14 ++++++++------
+ 2 files changed, 9 insertions(+), 6 deletions(-)
 
+diff --git a/include/linux/bpf_local_storage.h b/include/linux/bpf_local_storage.h
+index 6c643ac51079..d336fc051054 100644
+--- a/include/linux/bpf_local_storage.h
++++ b/include/linux/bpf_local_storage.h
+@@ -100,6 +100,7 @@ struct bpf_local_storage {
+ 				 */
+ 	struct rcu_head rcu;
+ 	rqspinlock_t lock;	/* Protect adding/removing from the "list" */
++	u32 obj_size;		/* Size of this object. It does not change. */
+ 	u64 mem_charge;		/* Copy of mem charged to owner. Protected by "lock" */
+ 	refcount_t owner_refcnt;/* Used to pin owner when map_free is uncharging */
+ };
 diff --git a/kernel/bpf/bpf_local_storage.c b/kernel/bpf/bpf_local_storage.c
-index b12fcec47ffa..3abfe7034df8 100644
+index 3abfe7034df8..6f884c9fdcea 100644
 --- a/kernel/bpf/bpf_local_storage.c
 +++ b/kernel/bpf/bpf_local_storage.c
-@@ -158,6 +158,18 @@ void bpf_selem_free(struct bpf_local_storage_elem *selem,
- 	call_rcu_tasks_trace(&selem->rcu, bpf_selem_free_trace_rcu);
- }
+@@ -199,7 +199,7 @@ static void bpf_selem_unlink_storage_nolock_misc(struct bpf_local_storage_elem *
+ 	if (pin_owner && !refcount_inc_not_zero(&local_storage->owner_refcnt))
+ 		return;
  
-+/*
-+ * selem was never published: no reader can see it, and this works in NMI.
-+ * Only the syscall update puts special fields (uptrs) in a new selem, and it
-+ * never runs in NMI, so freeing them here is safe too.
-+ */
-+static void bpf_selem_free_unpublished(struct bpf_local_storage_elem *selem,
-+				       struct bpf_local_storage_map *smap)
-+{
-+	bpf_obj_free_fields(smap->map.record, SDATA(selem)->data);
-+	kfree_nolock(selem);
-+}
-+
- static void bpf_selem_free_list(struct hlist_head *list, bool reuse_now)
- {
- 	struct bpf_local_storage_elem *selem;
-@@ -562,7 +574,8 @@ int bpf_local_storage_alloc(void *owner,
- 	return 0;
+-	uncharge += free_local_storage ? sizeof(*local_storage) : 0;
++	uncharge += free_local_storage ? local_storage->obj_size : 0;
+ 	mem_uncharge(smap, local_storage->owner, uncharge);
+ 	local_storage->mem_charge -= uncharge;
  
+@@ -517,15 +517,16 @@ int bpf_local_storage_alloc(void *owner,
+ 	struct bpf_local_storage *prev_storage, *storage;
+ 	struct bpf_local_storage **owner_storage_ptr;
+ 	struct bpf_local_storage_map_bucket *b;
++	u32 size = sizeof(*storage);
+ 	unsigned long flags;
+ 	int err;
+ 
+-	err = mem_charge(smap, owner, sizeof(*storage));
++	err = mem_charge(smap, owner, size);
+ 	if (err)
+ 		return err;
+ 
+-	storage = bpf_map_kmalloc_nolock(&smap->map, sizeof(*storage),
+-					 __GFP_ZERO, NUMA_NO_NODE);
++	storage = bpf_map_kmalloc_nolock(&smap->map, size, __GFP_ZERO,
++					 NUMA_NO_NODE);
+ 	if (!storage) {
+ 		err = -ENOMEM;
+ 		goto uncharge;
+@@ -534,7 +535,8 @@ int bpf_local_storage_alloc(void *owner,
+ 	INIT_HLIST_HEAD(&storage->list);
+ 	raw_res_spin_lock_init(&storage->lock);
+ 	storage->owner = owner;
+-	storage->mem_charge = sizeof(*storage);
++	storage->obj_size = size;
++	storage->mem_charge = size;
+ 	refcount_set(&storage->owner_refcnt, 1);
+ 
+ 	bpf_selem_link_storage_nolock(storage, first_selem);
+@@ -576,7 +578,7 @@ int bpf_local_storage_alloc(void *owner,
  uncharge:
--	bpf_local_storage_free(storage, true);
-+	/* storage was never published: no reader can see it */
-+	kfree_nolock(storage);
- 	mem_uncharge(smap, owner, sizeof(*storage));
+ 	/* storage was never published: no reader can see it */
+ 	kfree_nolock(storage);
+-	mem_uncharge(smap, owner, sizeof(*storage));
++	mem_uncharge(smap, owner, size);
  	return err;
  }
-@@ -605,7 +618,7 @@ bpf_local_storage_update(void *owner, struct bpf_local_storage_map *smap,
  
- 		err = bpf_local_storage_alloc(owner, smap, selem);
- 		if (err) {
--			bpf_selem_free(selem, true);
-+			bpf_selem_free_unpublished(selem, smap);
- 			mem_uncharge(smap, owner, smap->elem_size);
- 			return ERR_PTR(err);
- 		}
-@@ -692,7 +705,7 @@ bpf_local_storage_update(void *owner, struct bpf_local_storage_map *smap,
- 	bpf_selem_free_list(&old_selem_free_list, false);
- 	if (alloc_selem) {
- 		mem_uncharge(smap, owner, smap->elem_size);
--		bpf_selem_free(alloc_selem, true);
-+		bpf_selem_free_unpublished(alloc_selem, smap);
- 	}
- 	return err ? ERR_PTR(err) : SDATA(selem);
- }
 
 -- 
 2.53.1-Meta
