@@ -1,99 +1,102 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.46
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795471290;
-	b=ceUiAIkH9kevd/4EtfKoot7sBSMPkc9OK0epkeuBae3EeLcgbzauRFsB5ia6zO/L9IEn
-	 ZRFOMDr6aBJRVUnMaOQbQuf8EPoRkL68kpOpDr1RZ7/CbvQrzE8RYCBa+0Hhh92KNgzbs
-	 6OFx1IQOAkuhOw44wbj4jtOHp3/kUmyIoQGhU3mH9ObaJqEeBCT6f4TLwFm2mtI8Za307
-	 GZlDEsBh9bzKhvVKWCALou9CWK7wSg/cp6v3NA9ZOm855xIK2pHqcNg3tdXfc8M4JV18W
-	 ADLKQucv4lD/+UnVBnuEH88G2KHoZVpLc0afbrLstyIjSrvk1TfUVfDBqtzMsTv0sQA==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795471290;
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.48
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795471461;
+	b=EYO72h4jL5n7ugNFra2I4dwS/PEMERQFAU+AA+U/pVttCoVTaFKq4HDc0lGaSYp7QLcU
+	 lQXNVNGtHWp6MuTUzyyjaFtHhrfoWUEW/2AMX5qJWf9GGcYrPgaYQJRTpkKvvhpIJ9p0G
+	 x/rJKE+8sr3k60IRbyYiA6243DSo/uJxzygjiYPWldbWivk6n77ZKa0nF0W5Zcqg4YUo5
+	 hUmiJMgLvZLJ2b2w+3vz07YuY6otkoM8cCwdyvg1qYNfYPrK9NeHYyNagjtvZ0Gkk6ogm
+	 lirOdHMc9rvPsaw3F3eq48X2DWSc7gt/SY7ZjIyY1L8vpemz5YhmdAFFZYyTJH+yClQ==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795471461;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type;
-	bh=srL4Uf6AX26Xr4iCAP6zHkN1OE8a5FhQcDs//2mI1Q8=;
-	b=C5NiOfM1MwflRlOKJQnlBYoCZwBUh4f5Nl/XMReF9/VRY1JHp2pLxrr6lQCbw4vUtiQ3
-	 jSIyMGfzoVBOpvoCt9GDybmfCgntaV433gGFUNRYmgHO8+oCxbJDShgHpOFHCQ9S6uUj9
-	 an5sQ8dlv9svGE/fS+FkQvCidWZgR/h4k0Dm9HD2jK6EUU2/0GD+CUp+YQvBaaTfzkmJR
-	 LfrqM3lpcZSOb/Cel4FR9PdjHib93yI7c9JTHE5i5bGHD8R+rWNz+rO1Xb3l611VGKVZ9
-	 nwcU4PeR5u7c1AO/hqptzaHIi1PPdxcBNHakTNfSEH2dlTHMzvm+UHsPxn90bq1xHrg==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=cloudflare.com;
-	spf=pass smtp.mailfrom=cloudflare.com;
-	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=bIEcMOri;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.46
-Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:X-Google-Original-From:Date:To:Cc:Subject:Message-ID:References:
+	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=2f3F7pReyCVh5ohj9DIUA9RqsDOv9jV9G6uqHApB7O0=;
+	b=zOBis9sU4GX3drSE4CYilzKv2H+fD42NY8/qMhuZXt0NqX3gue4aJOSJTgiFdQwdu5dQ
+	 JC2p1gRnBO96fREdbptuRS2ZLvU9D5vv1PXtSkmf/AdOwcYu11VWUhguYXKNX788YN3aB
+	 gvpPeua4DrNju1Z+2DldEUnMFS5CJgdeJWh+E3iIVw0vbRk6/zmM2rOyv3+SFM0JybXJx
+	 VlBtygG7ANsm96Mt3H7UW2x/JoHe+/2sXkO3vhIqYtzrUytbRHY0yd54sTVF9K8MLfSQN
+	 PbAkYDUUa16yrLiNJI8Kpuvf75+RV5MVZDpY83tTU6oMvvVdsJ4AD0L4LxWaTqha8zA==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=wtVnmpzv;
+	arc=none smtp.remote-ip=209.85.128.48
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67F9E606A32A
-	for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 22:01:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 67F9E606A32A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA923606A321
+	for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 22:04:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AA923606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=bIEcMOri
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-4877837890fso2143973fac.2
-        for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 14:01:30 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795471289; cv=none;
-        d=google.com; s=arc-20260327;
-        b=mPECR54vExc5cCwDKHWpG7M6MjdXAj4yXhKrGTRWplEictMe8RnT+2VTRKAC5JfUN9
-         mmE3Uob/cERlpF5zVwIkvZgxtK7NFKWCpmYaXYB325A5h6UYVDZAFFPWzAJ6M6fQpbxI
-         hwjd9IqXYSZSx0U2tHuhNQ6Q9ghA2xhKWVQGr6CFLJHT+h2+KWL3QWN8gLyV7XZzXz4k
-         p4uC0YKSeTACMYE3ApDk7yL21UzpvglovJAdGCUP5OOCoxFmsijIVqu+5qVooXKzhQU5
-         gXdcKz1SIz5BeZP/1s9DRc+pMerUPvD0VgEAZ/5l17mDLr8gWm8DYzFYAc6Vr1z7u/eM
-         cKmQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=srL4Uf6AX26Xr4iCAP6zHkN1OE8a5FhQcDs//2mI1Q8=;
-        fh=9ZKTGBU5oBXOpS5tZggmP8v8kTLF7bZE8T1ZnFmHUMw=;
-        b=aAcI7r0dCXg2ZXcidSZ96X+41ecTA6F+K67MUF4qJiNJxKarBpBzo7spLM212y2Ts2
-         k9GFfSXpla8rbz8PIrkbFAnGNxxVoqe9qcYoneIv0RWxa4imtYk2u6EUXDHv/8HtA0aK
-         mhciq+cNFu4oULKqCDpP8eTPRIytWEB9+rKtco8vEV/Q2WfX1Xu9bC4mI/i7TPTYFloC
-         XaGHEkuvCV/7U6eZiBq2LSRovwTtYYyB1W/3cMXX6q1bOffwmqtODaNb/W73VNmHOzd0
-         MMZ/SfXWSf2V03KRjkhOMuc/U2U0bEVPXgd/ir3HAmuxME0O4+zd9mSHsACBXTy7uWkW
-         p0+w==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=wtVnmpzv
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4a214c5c4c0so36316885e9.3
+        for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 14:04:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1795471289; x=1796076089; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=srL4Uf6AX26Xr4iCAP6zHkN1OE8a5FhQcDs//2mI1Q8=;
-        b=bIEcMOri8Aax8dKFPrgYNg8wJhG1TdHlstGt2MlCyltgaYxCPE3njcf/ibhUFjv9+A
-         DUCiQLx8Ue8lqs8APjUUIua4gZUO8hcQX5Mpziqka8UfmD+frjU+gJD+i+bF5k7RHgwj
-         fpdDp2HDYwI0VfSnwrxLMhUzCsK58c2MIKdK56m2LP31pTpIPMaOGEdrx/LC/YAxGnRV
-         xDNA95uN/5YkxdEZ6dQjD3YfWy3iBL1pEQc/bRHawTjj21LlnI30bfI7XWeA5oSCgrC5
-         inFIAx1nx0xqQpVBsutU31JvUAm5Z3V0Qg87HKJTPqRxxFl8nRb+b27K2AMX0xRg9Dej
-         aBOQ==
+        d=gmail.com; s=20260707; t=1795471459; x=1796076259; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:date:from:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=2f3F7pReyCVh5ohj9DIUA9RqsDOv9jV9G6uqHApB7O0=;
+        b=wtVnmpzvYZCD0GaLZu5xfru9ELcjZM/X3gc10J+KIN5n8p5arnhGlxvdZtuiEyO+SF
+         mXICRZeaJ2Yi+kfmmdhQdJJsugjTetjy6sSEz9ogL2VfZiBVbHasEkV22gWyrwSX/9iG
+         gXP5KWXVdP09JEupsR0PUyqFKWnmmNcnY1K6WK4XNiptsVNjkbR83Oe++P10kA8oCycU
+         syRoavExVO4TMq6Rf94nzquu91XYDe0jrE3mOWRkel5ldFIFYGjyxM9BnJB5iIqlQKty
+         ZwnmN8MZDypLgKC1fNGIYoSh2uoC1c1DYQyWGPsAypQxJiD5h5LhoNSwIqSiXUZTNEJA
+         rwsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795471289; x=1796076089;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=srL4Uf6AX26Xr4iCAP6zHkN1OE8a5FhQcDs//2mI1Q8=;
-        b=FD/iBXqdYD9RUoRYLBn0W33xiq1TLjiA8LRP/FKRZaIa2kv7QRe2CbFr0CQ5DHLRJz
-         2hDpZxrY1GhVTMrO72CRZndwWz++aP2CfGtc2/QHjmqaAge4Km34PmH7iipNecsJ5yOi
-         m/M9GKBSxr3Bpoa1lhTICDaTt8TWsMNyvwZVn/cwlMLzqvUAQWB2xoDD+i+vuMJQhuDZ
-         njP+gNUUtLN8OpVOkWethG6GpIXHxJ2kFEyToCwE4MZW2uhh/3PWdrCsXkvNlHocnEw4
-         7/JR9LBS/Fzv5kwUBLfq+AT6fX/nLaMM83fkh+ooMxA0bzXqlBXkzelkxhUKHw9k4WkA
-         SM1A==
-X-Forwarded-Encrypted: i=1; AL+hErH0U/ms/E4pLAfhkWwYynQgQh11op0+260lunJNcZQvI3MczP7ExIemFY7Mmvz/vY0nKjk=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8g48/OMNL77eqCmwj9Kog+D3GvJrRO5PyY5aBRa4Jji/ErKvnF
-	NGLJHShURLIVHphgcSD9Yfy2Fb5+rwd8H7veZwjrwNk9QjLzgbRS2m+jWixaiuc5pXlBAmUdS5c
-	SVOdaBJnLRlwXsOx8EMY592V/rgX3yoGKtzH5B4ILGQ==
-X-Gm-Gg: AZFdTZcVuDgP9b8ZxA+pnCcWIzskbbRNCuaBrE+Fp1/bzQuz0rNTUFo6tlbk6qpEu9o
-	tlcTf6Mk0c1fP8Uk7W+t9j81UbivUNQDbHCrNt8JofoMbJnjj4d3MleyM4++zjmBH8Zuf8ZwQYw
-	qQ9Xxtg/KrT0//AaYeBA/cMbWZ/Slk0PFAbs2D+EUqQLeAfHGyARDcpvbdxFlvVwK57cQ0Hh7dt
-	sot5HIhAOE+5YSJkMKOvvGlRjjq1t9hmW/+YlpFQ1WqFv/IJaVhzlXTjoXBXXPZWXpHoIS9uSRV
-	80zQUQgsqUuyF9WU8igsKZfhAM2AuOe/d2lyK135QDRMDPtOFoymlsR69wRHNsH2wFMHhUi898b
-	Bptrigv5lE19WOchocC+c2QLuwaehBxGSxgx8acf5SMs09tEimmOFP6GqXRjlrwtzclrGrSA=
-X-Received: by 2002:a05:6871:60c:b0:475:a153:2dce with SMTP id
- 586e51a60fabf-4bc84926567mr11531088fac.36.1795471288917; Mon, 23 Nov 2026
- 14:01:28 -0800 (PST)
+        d=1e100.net; s=20260707; t=1795471459; x=1796076259;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:date:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=2f3F7pReyCVh5ohj9DIUA9RqsDOv9jV9G6uqHApB7O0=;
+        b=eIf3R8DRFWPbdf8zAivq0QChkPjAwqpN14RAL00FIygMLQYT1M2iG8B7r+nL6EMbw6
+         YpE4qZm0uUHdYLZhWaW9eZHd6dklmXjjV3bXmOOYVRx5wKUyeKWq0eOsyk7jHNtT251S
+         gBiJYRudhlFGbhfyl0kKOxUKe8OVRYBnqeFEf7+D43lVdgeJ6/EX9kYA6nlV+evX4P3t
+         q44OOblxSheuSN54bb3drD77ghgWV8ez2v3VqN3hCvLFcgOtGMSTwLl74B1iPh14qrwm
+         7VTppys6hNcTc1uRIV648YLiOXwGTg/iAQmzBF9xhBJf/HA1tNCO7gAnLeI5p7nb5aVg
+         2r4g==
+X-Forwarded-Encrypted: i=1; AL+hErFt7ZonR3ipltgGxpTr+yGf24m/Bm1W0cESD0up2tQ+sMzbuGyPFB3k3zrdnIHLZ1eOhEE=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+PQD/cKIR4T8DoR7l7WpEhC6DnOOVy7wHAgMxFQzvYYTMpR4uO
+	6jnPENBs2gAj01h3PgDJcLEafF9OgcLIo5JFH6hHtrYtsmFcMeFRptLB
+X-Gm-Gg: AZFdTZev9NDuhJxEO0Ze+PuTiKfx3Kr64tqoYPkQm+zjZygETLDaOhINEZX5elcachW
+	625t9AICa5OC9LSOkZby7I4VYxICDl1UcffJgPUgZ05wzpxCb6165FnmaXcHcrVihJ04olQzAyf
+	0g2cQ7Z6dvDnjkNja357BgJqsV0kBUAFHB4AtHoWKchHg+LUoR56zM4Xln7o+Tk0YMMMTyKYUDA
+	Bt38DVBOYLrJg9eYOKxw9pp/ekP0zezttBwW3zMibho8xMTgZt913+0hdwVqRQ/NLKymldPZg5B
+	fJER6APQMWJk/CRks456RhBsK70Lb+kyWEqXhC1NTTaaOCLEYPMM4wVxqdB+kbxGh2OmBCl0yF7
+	tQqGvGHrRr5hJIltlts8UD5hOFStWODx5IXnRqT5LFSb5jnVLGm6ueGusi9iMS7dZGpVsv6mGTo
+	tGJ+iWWHvsXtcFJCKqtpFgWsMbZrwZNpu3FncZTXbc9bJtWPw2rI/8htANIsxi6Mfl+WfHfElw2
+	ftdI12uB+2J1NjiGk2JI5j6ewbSUSYb8jXa+fbdRHCq9lVpRye+773FhTxeT3qQMS9NRynmba5E
+	PoPWvAVkqFV/Ibga
+X-Received: by 2002:a05:600c:1c0e:b0:4a1:ddaa:571e with SMTP id 5b1f17b1804b1-4bb88824f38mr302199135e9.15.1795471458927;
+        Mon, 23 Nov 2026 14:04:18 -0800 (PST)
+Received: from krava ([176.74.159.170])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb853a1e8bsm324214035e9.9.2026.11.23.14.04.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Nov 2026 14:04:18 -0800 (PST)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Mon, 23 Nov 2026 23:04:16 +0100
+To: bot+bpf-ci@kernel.org
+Cc: leon.hwang@linux.dev, bpf@vger.kernel.org, ast@kernel.org,
+	daniel@iogearbox.net, john.fastabend@gmail.com, andrii@kernel.org,
+	eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev,
+	song@kernel.org, yonghong.song@linux.dev, emil@etsalapatis.com,
+	ihor.solodrai@linux.dev, rostedt@goodmis.org, mhiramat@kernel.org,
+	mathieu.desnoyers@efficios.com, kpsingh@kernel.org,
+	matt@bobrowski.net, shuah@kernel.org, linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	netdev@vger.kernel.org, martin.lau@kernel.org, mason@kernel.org
+Subject: Re: [PATCH bpf-next v3 7/9] selftests/bpf: Test tracing_multi
+ link_create logs
+Message-ID: <awS4YG9LyfxIbE-m@krava>
+References: <20261123152743.19629-8-leon.hwang@linux.dev>
+ <d3920bd7ae0cc6a941895e00534e8f8818402a673351894d0bf98639272f7d7e@mail.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -103,79 +106,70 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261121012402.84848-1-tianyi@cloudflare.com> <3adef4b4d528780bae31f2fb02d0a08bf9c8ebd5.camel@gmail.com>
- <CAG4wq-f18SHytDb39SdJYzRPk-dzECjH_HCSiMGAQ721Zmfomg@mail.gmail.com> <CAKgT0UeWWherBt1MDcPF7R7jxt6E_3peo8VuxrgY3JdseM-0rg@mail.gmail.com>
-In-Reply-To: <CAKgT0UeWWherBt1MDcPF7R7jxt6E_3peo8VuxrgY3JdseM-0rg@mail.gmail.com>
-From: Tianyi Gao <tianyi@cloudflare.com>
-Date: Mon, 23 Nov 2026 22:01:17 +0000
-X-Gm-Features: Aa3M54rB6Tkjt_a_xBRCBKw7WSvCOL2uVv3n24p_DPRCDrCGO9kKs27p19qzjqs
-Message-ID: <CAG4wq-dizUz-6GB8Aj1wRTQBOzbHbT7pX9gom+AhR=5OWSyjzw@mail.gmail.com>
-Subject: Re: [PATCH net] ice: do not report CHECKSUM_COMPLETE when an XDP
- program is attached
-To: Alexander Duyck <alexander.duyck@gmail.com>
-Cc: netdev@vger.kernel.org, intel-wired-lan@lists.osuosl.org, 
-	Tony Nguyen <anthony.l.nguyen@intel.com>, Przemek Kitszel <przemyslaw.kitszel@intel.com>, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Simon Horman <horms@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
-	Paul Greenwalt <paul.greenwalt@intel.com>, Alice Michael <alice.michael@intel.com>, 
-	Eric Joyner <eric.joyner@intel.com>, Jesse Brandeburg <jbrandeb@kernel.org>, 
-	Lorenzo Bianconi <lorenzo@kernel.org>, bpf@vger.kernel.org, kernel-team@cloudflare.com, 
-	tianyi.gao@linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d3920bd7ae0cc6a941895e00534e8f8818402a673351894d0bf98639272f7d7e@mail.kernel.org>
 
-On Mon, 2026-11-23, Alexander H Duyck wrote:
-> For example, one recent one I saw was an issue on the Tx side where
-> an outgoing XDP program was modifying the frame and actually not
-> updating the pseudoheader checksum. As a result it was breaking Tx
-> checksum offloads for NICs that were using the HW_CSUM that used
-> that checksum header. We could have fixed it by forcing all the
-> drivers to recalculate the pseudo-header checksum, but instead we
-> pushed back on the program that was making that change.
+On Mon, Nov 23, 2026 at 04:04:41PM +0000, bot+bpf-ci@kernel.org wrote:
+> > selftests/bpf: Test tracing_multi link_create logs
+> 
+> TL;DR: Test issue: the migrate_disable denylist subtest's skip may not trigger
+> on !CONFIG_SMP kernels, since the function still exists in BTF, so it could
+> fail instead of skipping.
+> 
+> > diff --git a/tools/testing/selftests/bpf/prog_tests/tracing_link.c b/tools/testing/selftests/bpf/prog_tests/tracing_link.c
+> > --- a/tools/testing/selftests/bpf/prog_tests/tracing_link.c
+> > +++ b/tools/testing/selftests/bpf/prog_tests/tracing_link.c
+> [ ... ]
+> > +static void test_multi_log_denylist(void)
+> > +{
+> > +	const char *msg = "Cannot attach to denylist btf id %u.\n";
+> > +	const char *target = "migrate_disable";
+> > +	struct btf *btf;
+> > +
+> > +	btf = btf__load_vmlinux_btf();
+> > +	if (!ASSERT_OK_PTR(btf, "btf__load_vmlinux_btf"))
+> > +		return;
+> > +
+> > +	/* migrate_disable is only in the denylist on SMP kernels. */
+> > +	if (btf__find_by_name_kind(btf, target, BTF_KIND_FUNC) == -ENOENT)
+> > +		test__skip();
+> > +	else
+> > +		test_multi_log_target(btf, "fentry", target, -EINVAL, msg);
+> 
+> Is this skip reachable on a !CONFIG_SMP kernel?
+> 
+> kernel/sched/core.c always builds an out-of-line, exported
+> migrate_disable() with no CONFIG_SMP guard:
+> 
+>     void migrate_disable(void)
+>     {
+>             __migrate_disable();
+>     }
+>     EXPORT_SYMBOL_GPL(migrate_disable);
+> 
+> while the denylist in kernel/bpf/verifier.c adds it only under
+> CONFIG_SMP:
+> 
+>     BTF_SET_START(btf_id_deny)
+>     BTF_ID_UNUSED
+>     #ifdef CONFIG_SMP
+>     BTF_ID(func, ___migrate_enable)
+>     BTF_ID(func, migrate_disable)
+>     BTF_ID(func, migrate_enable)
+>     #endif
+> 
+> So btf__find_by_name_kind() should find migrate_disable even when
+> CONFIG_SMP=n, and test__skip() would never run.
+> 
+> On such an x86_64 kernel, bpf_check_attach_btf_id_multi() would not deny
+> the id, the link would be created, and the subtest would fail at
+> ASSERT_LT(fd, 0, "bpf_link_create") instead of skipping.
+> 
+> Should the skip check the kernel's SMP configuration directly, for
+> example through a __kconfig extern, or should the comment and skip be
+> dropped?
 
-Thank you for the explanation, Alex.
+I don't think we care, but if we do perhaps we could use __rcu_read_lock instead
 
-On Tx the checksum is in the frame, so the program can fix it. On Rx
-the program can't touch skb->csum at all, so there is nothing to push
-back on.
-
-> The point is you are fixing things for your use case, but anybody
-> who is using the CHECKSUM_COMPLETE to compute the checksum on the
-> frames and using XDP without changing the frames will see this as a
-> significant performance regression.
-
-Without GCS, TCP and UDP still get CHECKSUM_UNNECESSARY, same as
-E810. GCS only came in v6.15, so this just puts E830 with XDP back
-to where it was.
-
-The cases I can think of that are truly impacted are IPv6 with
-extension headers, and UDP tunnels that the NIC does not parse and
-that have a zero outer checksum. These fall back to software
-checksum.
-
-And programs that do change the frame are worse off today. Every
-packet gets summed again in software, plus the "hw csum failure".
-
-I don't see a fix that meets all of these:
-
-1. It is small enough and can be backported to stable.
-2. It fixes the problem fully. We could drop CHECKSUM_COMPLETE only
-   when the program moved data or data_end, but some in-place
-   writes, e.g. NAT or the IPv6 hop limit, would still trigger
-   "hw csum failure". IMO that brings more problems.
-3. It keeps CHECKSUM_COMPLETE for programs that do not change the
-   frame. But that looks like a bigger change, which doesn't fit
-   net.
-
-If you have one, I am happy to take it. Otherwise, as I understand
-it, the choice is between:
-
-1. A performance regression for some programs, but no "hw csum
-   failure".
-2. No regression for those programs, but "hw csum failure" stays
-   for programs that change the frame.
-
-I would like to know how the community normally decides between
-these.
+jirka
