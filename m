@@ -1,38 +1,38 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=114.242.206.163
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795408756;
-	b=nqNNWro4sClV3wPcopAb7V2gLRpsFEzpGKmzwtLhR2M3HeFaiox91iefze4duP/1a/Z/
-	 J7fF7yNu3+p4p4lIwErlufPk8mEdKTS0GelytVmpn2seNyl3WrRdhgV20FuZrRBt1Ssbk
-	 /Kih9aa0blhbcnWK8DaPci/cj9/gijH1ZGuBhBtse0XX7bT5Cdl9sS5rY4NTWwCPIzFOe
-	 Os1XDG4Qjkce72IWtjnILMP6D8VWoZGFPb7imWBPKRDuCXB5ZWyFs+E2/LVmROoICQph0
-	 HCHcJE5RqC+E96B3s59orD+tmoWtx1/VjSFnTeiD7q9Xe3D0teO8SLpmMnnW4jmwV+g==
+	t=1795408757;
+	b=UUymPs7h1ISIJDo7gZIdVABPHdR9d+36SfO5HjHUS5KxTmI/sX7oIigX+fqaoM5ZZA0y
+	 50G+YEzznd45MRv0GIiMqKMkQopTkwoIRUBcxb7GXZ+3pQI72UC8MEnUXeLNebGByDunD
+	 zh7KPSmrFHUKywhKWjUqyCO102IcrZ8btLUQuD6dXdbF8XNYvLqIXSnBSmJm96hJVHzzR
+	 8ZtEpNQUoOn8b5VDpEVqrusbmJAWffjtgkgw8WvJ+4TF7dITL/F21U14RZ+LusXeiw8nX
+	 146Bm8K5Jln1eBW9Z9g4kS9ahHu2lT0GPItLTOkZHY7wigTe3EVGA7y3RvTmSAV1qVA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795408756;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795408757;
 	h=DMARC-Filter:Received:Received:From:To:Cc:Subject:Date:Message-ID:
 	 X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding:X-CM-TRANSID:X-CM-SenderInfo:
 	 X-Coremail-Antispam;
-	bh=wktoHsTPl0uC0mTAWi6j6QZypwk4cQFTMLqetgOCy5k=;
-	b=HrCloJ1NBLuXyHHraht6J0n6bvAh7QH+CObbIr3y3a1yzI9BDT60OdAXQC0AM+tF3+wr
-	 C78XcUA+mdwF+r/89yv87RI0OIWbEq0KQB60e7XszMpqO+jTqShY7qCoMUew0zCvatPU8
-	 EMgB4/0bnoOgmYCg5Vjemr3tFetmLHF8I/oqN2ENrfESEmPuV4i/1gJqLZxzGh312AS7k
-	 2Kcr0D6+iQpOh/MKcRTVsV/8WR0PKoa+n9ut+0Cfrf3fXZ1OlwHaG7GxfesTPGK45xWmK
-	 ck2OSrOv9DdjYSsTa/AddJsyN4XtpQM3peCMwBN7miliiPcbWaDXOjdwj7ch+8DjsVA==
+	bh=bV7AmIeoif0Xb99TtDOmDQ1HklCx/hLF6DDVzUDafnE=;
+	b=uUTHlS6rQtsrt7Yto9K+mltEX9wlfBBi7Q5bHTTekGNhbVjIboRv8UY/JPNdEwhcgyED
+	 xQS88fa7VWeErLHctYJUziLsBFrEXbzSQHtGkzxelMOhcTSMnhoy/t+/C7nWQjR73dAQE
+	 aeV0sLVN+62B+s2GzMO6Ql05pT92JAj2Fj6IANJKI+RL+BMwLRG5ka21X0pPU6t7xlffz
+	 V4arsaeRv21BDqBetYzYJDamWAusDHFmahwlNyWAVat56+o9/gcocQ3HyFpBhG49j8GzO
+	 90Irn8Tlu6LEggSc/Op6AicyCypnMgNLSbbWe0kNGsgnGHTR1QLTwk8RnDWz0cX97fw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=loongson.cn;
 	spf=pass smtp.mailfrom=loongson.cn;
 	arc=none smtp.remote-ip=114.242.206.163
 Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8C85606A32D;
-	Mon, 23 Nov 2026 04:39:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B8C85606A32D
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6561E606A331;
+	Mon, 23 Nov 2026 04:39:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6561E606A331
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
 Received: from loongson.cn (unknown [123.138.236.242])
-	by gateway (Coremail) with SMTP id _____8DxztBywwNrFh0iAA--.7255S3;
+	by gateway (Coremail) with SMTP id _____8DxjdBywwNrGh0iAA--.4072S3;
 	Mon, 23 Nov 2026 12:39:14 +0800 (CST)
 Received: from linux.localdomain (unknown [123.138.236.242])
-	by front1 (Coremail) with SMTP id qMiowJCxPs9rwwNra8s2AA--.43419S5;
+	by front1 (Coremail) with SMTP id qMiowJCxPs9rwwNra8s2AA--.43419S6;
 	Mon, 23 Nov 2026 12:39:14 +0800 (CST)
 From: Tiezhu Yang <yangtiezhu@loongson.cn>
 To: Huacai Chen <chenhuacai@kernel.org>,
@@ -40,9 +40,9 @@ To: Huacai Chen <chenhuacai@kernel.org>,
 Cc: loongarch@lists.linux.dev,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v1 3/4] LoongArch: BPF: Add support for indirect jumps
-Date: Mon, 23 Nov 2026 12:39:06 +0800
-Message-ID: <20261123043907.20225-4-yangtiezhu@loongson.cn>
+Subject: [PATCH v1 4/4] LoongArch: BPF: Add support for indirect calls
+Date: Mon, 23 Nov 2026 12:39:07 +0800
+Message-ID: <20261123043907.20225-5-yangtiezhu@loongson.cn>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <20261123043907.20225-1-yangtiezhu@loongson.cn>
 References: <20261123043907.20225-1-yangtiezhu@loongson.cn>
@@ -56,53 +56,66 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJCxPs9rwwNra8s2AA--.43419S5
+X-CM-TRANSID:qMiowJCxPs9rwwNra8s2AA--.43419S6
 X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj9xXoW7JFy5ZryxGF4xKF48Zry5GFX_yoWDJFX_tw
-	13G34xWw4rWFyrA3WYgayrJFyDCw18XFn0krnFgrW8ua4Ygry5ArWvqas8C3yjgrWYkay5
-	X393t3sIyw12qosvyTuYvTs0mTUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUj1kv1TuYvT
-	s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
-	cSsGvfJTRUUUb28YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
-	vaj40_Wr0E3s1l1IIY67AEw4v_JF0_JFyl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-	W8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27w
-	Aqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2jsIE
-	14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04k20xvY0x
-	0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E
-	7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcV
-	C0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF
-	04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7
-	CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07j5l1kUUUUU=
+X-Coremail-Antispam: 1Uk129KBj93XoW7Ary3JF13tryUGF4UJr48KrX_yoW8GFy3p3
+	yDAr4fArZ5WryfKFnrJa1xuw13KFs5Wry2qF1jv3yFkanxZr1fXF1rK34YvF98Jw4rXw4x
+	XrZ0krnxua1DJacCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUk2b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r126r13M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+	xVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
+	1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q6rW5McIj6I8E87Iv
+	67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2
+	Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s02
+	6x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0x
+	vE2Ix0cI8IcVAFwI0_Gr0_Xr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE
+	42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6x
+	kF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUco7KUUUUU
 
-In order to implement JIT support for the indirect jump instruction
-(BPF_JMP | BPF_JA | BPF_X), emit a jirl instruction to jump to the
-target address held in dst without saving PC+4 into return address.
+In order to implement JIT support for the indirect call instruction
+(BPF_JMP | BPF_CALL | BPF_X), load REG_TCC from the stack (just like
+a direct bpf2bpf call) first, and emit a jirl instruction to jump to
+the target subprog address held in dst while saving PC+4 into return
+address.
 
-This is similar to commit f4a66cf1cb14 ("bpf: arm64: Add support for
-indirect jumps").
+This is similar to commit 1cec0b70fdc6 ("riscv, bpf: Support indirect
+calls to bpf subprogs (callx)").
 
 Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 ---
- arch/loongarch/net/bpf_jit.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ arch/loongarch/net/bpf_jit.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
 diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
-index 415b945bf818..52da39dce4f6 100644
+index 52da39dce4f6..567729921d6d 100644
 --- a/arch/loongarch/net/bpf_jit.c
 +++ b/arch/loongarch/net/bpf_jit.c
-@@ -1184,6 +1184,11 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
- 			goto toofar;
+@@ -1258,6 +1258,13 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
+ 
  		break;
  
-+	/* PC = dst */
-+	case BPF_JMP | BPF_JA | BPF_X:
-+		emit_insn(ctx, jirl, LOONGARCH_GPR_ZERO, dst, 0);
++	/* indirect call to a bpf subprog via the address in dst */
++	case BPF_JMP | BPF_CALL | BPF_X:
++		tcc_ptr_off = BPF_TAIL_CALL_CNT_PTR_STACK_OFF(ctx->stack_size);
++		emit_insn(ctx, ldd, REG_TCC, LOONGARCH_GPR_SP, tcc_ptr_off);
++		emit_insn(ctx, jirl, LOONGARCH_GPR_RA, dst, 0);
 +		break;
 +
- 	/* PC += off */
- 	case BPF_JMP | BPF_JA:
- 		jmp_offset = bpf2la_offset(i, off, ctx);
+ 	/* tail call */
+ 	case BPF_JMP | BPF_TAIL_CALL:
+ 		if (emit_bpf_tail_call(ctx, i) < 0)
+@@ -2559,3 +2566,8 @@ bool bpf_jit_inlines_helper_call(s32 imm)
+ 		return false;
+ 	}
+ }
++
++bool bpf_jit_supports_callx(void)
++{
++	return true;
++}
 -- 
 2.42.0
 
