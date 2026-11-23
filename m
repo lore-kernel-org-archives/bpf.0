@@ -1,54 +1,60 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.16
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=216.40.44.11
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795457071;
-	b=IitXWiqFNEcafp6mhVVGC/CDX1g9cPUyqe22yqU32fWEuvvH2zFhn08k0YcQklVNE2ZP
-	 LnA2a9MYAb2ao4m90h7TDDpb4QLXI97NnHNxyZu14mgzsDAuUp8dabvmWGbSIENW44drV
-	 L9kL1ju/zpdaDgyEV+apVc8cyF19DhbFugbqOWT65Z5d1QRq1ysXh7Og1+HjNxxM9GsSZ
-	 9VfzkntG9CKS+ROIVZVLCo1iWnQ4mQEjt+ZOqL3Ac/fMUzCKp5mGrDzWCXZPQj066nj0s
-	 luL0MTH8cilNAAtazf7iYMdhjI070hKM7JVdkXc2VGmMQPDrGv5PUDeveF8EADulzog==
+	t=1795457261;
+	b=gDmq+Ph2P0noNJ9ckX+fGvJHp2dFVixnEWYupYiw2voU/4aFXDy8hnpqarlipXKyf9W1
+	 H76tEZC39Wq/buBDBn3hC7LhzDSXSnqG0hEiE8N9VHP/KeUk2HtwG5BJnH5mJD6beep4B
+	 XnTFAEYt0GWup+jfJGSlYzxp1iz9JJ4OUSytKkMVR5KkvNUT3w1WUzYs6/iuWzH9Wz3nq
+	 FGKF9qAWKnUDVroRvew4VBWaJmSLUpFQ9zHpe8TlgTLl6B5mGxgfJvx5GIxYgNWcSSV3a
+	 m6d7idLb+IB9sDkNacq3NgjAUw66IpZY6DWU4DLNZvxhk+0VexmEStYcneAYrqIPtKg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795457071;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:From:To:Cc:References:Content-Language:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=/MRrQ3r/FsSqfgiAVcoLx4c4RLhZEkDW2vzDgBjMFHY=;
-	b=U2IBL7NsaFAtBvkAxG5pp6DhQhqEzh+WrMbpAIA6qoysFyBHXKXVFn9jPIn+iNoxZmwB
-	 z+d2gu9x/n/PNEO4lV3fmXd9q5Tn5CJxenDhZ4fPzFrrA6EyjLo6Xm0McDcmnxCugROwg
-	 D4Wba2GhsrhhfzueJdcd8gDCpZ85h/8TPDZyK5/epT5MUk5s9g+0L4HJi2/GenpjQlzsU
-	 1JEKHdLFp+3HD2KYQ9VHGfpCVnCxSYVudWHesc+JEbXaAmQ1IPMlSpSZ5IzyO2S/yf+0g
-	 F5/l8W+FC31UkCm79XRtdYzc2IWBhzeqjZ/3bQPWO+yRrc3VTZq4iLQedtmvrYotkCQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795457261;
+	h=DMARC-Filter:Received:Received:Date:From:To:Cc:Subject:Message-ID:
+	 In-Reply-To:References:X-Mailer:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:X-Rspamd-Queue-Id:X-Stat-Signature:
+	 X-Spam-Status:X-Rspamd-Server:X-Session-Marker:X-Session-ID:
+	 DKIM-Signature:X-HE-Tag:X-HE-Meta;
+	bh=O1sGPyXUc9bPDWnQAdr+MIOIAp5+yAtJPc4tls2ompc=;
+	b=dOYkNbHqierleMr6HNTgzPwWQT0N0hNH9U0Kh9aITk2OCRwhplpsoHaqRtTFHpnSM9Z/
+	 rb6ASOtpT62pdzWQI7SNV2iEzHaaApz8FM24obQpGq3d9aTlQXfyYGWJ//GAjbK15kgIS
+	 al/9w+ikmWuGbSJTsk4HPJR0bJ8RIEXOV3KbqBWGm+lWbNJHsTcDLIEhBDgWHdjEnFE6y
+	 Xygzr8QiQAf2S6u8USOJZhXCk5kdb4XHWcsfi9NBa8SY+YX2m0NQJXWWWEyrkebqSnXNQ
+	 9ArVPfxlWnCb7OI6z06WIopiHzZOMz2WJgbw4DWvj5Dz8Y7NJiqjz4vbrI9YIm76+RA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=IgkY0jIl;
-	arc=none smtp.remote-ip=91.218.175.16
-Received: from mta0.migadu.com (out-16.mta0.migadu.com [91.218.175.16])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=goodmis.org;
+	spf=pass smtp.mailfrom=goodmis.org;
+	dkim=pass header.d=goodmis.org header.i=@goodmis.org header.a=rsa-sha256 header.s=dkim1 header.b=aI1cIg5x;
+	arc=none smtp.remote-ip=216.40.44.11
+Received: from relay.hostedemail.com (smtprelay0011.hostedemail.com [216.40.44.11])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97B9D606A31E
-	for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 18:04:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 97B9D606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69B36606A31F;
+	Mon, 23 Nov 2026 18:07:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 69B36606A31F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=IgkY0jIl
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=xV3BrWnrBSFsdnZPVdY3EKhS+zRaIDNGentZoexLv/0=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1795457068; v=1; x=1796061868;
- b=IgkY0jIlaPMtxMg30S2bXBQ8BnmJlWwDq4r3//qAnyRsveMYxlSVmDJZCoflx3HhWG9MyD4X
- du8M1f2m0dojRDRsxeX8MGOqA8l5WJA02zydg/bzeZIwIA42+cxwHRgqzDI8FNzgg3t/+I+3Ns8
- 9VkPoFUxoVmEyb6ICrG6DoZI=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id ec4d2de4b5deccbd;
-	Mon, 23 Nov 2026 18:04:28 +0000
-X-Mizu-Trace-ID: ec4d2de4b5deccbd
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <cc4f6f63-d21a-4e78-a9fc-3397e041955e@linux.dev>
-Date: Mon, 23 Nov 2026 10:04:22 -0800
+	dkim=pass (1024-bit key, unprotected) header.d=goodmis.org header.i=@goodmis.org header.a=rsa-sha256 header.s=dkim1 header.b=aI1cIg5x
+Received: from omf17.hostedemail.com (lb01a-stub [10.200.18.249])
+	by unirelay07.hostedemail.com (Postfix) with ESMTP id 3A57616095D;
+	Mon, 23 Nov 2026 18:07:32 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf17.hostedemail.com (Postfix) with ESMTPA id EFF0F17;
+	Mon, 23 Nov 2026 18:07:29 +0000 (UTC)
+Date: Mon, 23 Nov 2026 13:07:28 -0500
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Jiri Olsa <jolsa@kernel.org>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>, Naveen N Rao
+ <naveen@kernel.org>, "David S. Miller" <davem@davemloft.net>, Peter
+ Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+ x86@kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCHv2 2/2] x86/kprobes: Use ftrace_location_range in
+ __recover_probed_insn
+Message-ID: <20261123130728.6e1e9f89@gandalf.local.home>
+In-Reply-To: <20261122200239.1481088-3-jolsa@kernel.org>
+References: <20261122200239.1481088-1-jolsa@kernel.org>
+	<20261122200239.1481088-3-jolsa@kernel.org>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -58,140 +64,91 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v5 0/3] libbpf: Fix CO-RE relocations of unsigned
- 32-bit enum values
-From: Yonghong Song <yonghong.song@linux.dev>
-To: Eduard Zingerman <eddyz87@gmail.com>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com,
- vineet.gupta@linux.dev
-References: <20261120214957.868409-1-yonghong.song@linux.dev>
- <fc517c55e7060cf7c0da6e797a602488cea403fd.camel@gmail.com>
- <8fdf1b51-7368-46e0-80f9-744b15845ad0@linux.dev>
-Content-Language: en-GB
-In-Reply-To: <8fdf1b51-7368-46e0-80f9-744b15845ad0@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: EFF0F17
+X-Stat-Signature: bdygsegicskjsrpjed81ijwfaryinbt5
+X-Rspamd-Server: rspamout06
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX1/3S8xkynlWy2q1CYyyaQCibAXZKXMbUHk=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=goodmis.org; h=date:from:to:cc:subject:message-id:in-reply-to:references:mime-version:content-type:content-transfer-encoding; s=dkim1; bh=O1sGPyXUc9bPDWnQAdr+MIOIAp5+yAtJPc4tls2ompc=; b=aI1cIg5xIlw902dfRoCNkqPGqMRPa2mglps1azEb7Vr4HzCZzqK0/liUmaFN6cvbRVtqG7rom1ET+e6tPPVoe2vbhf6TJjOJS7DFaZWy1pRqGKwQ9r/mrzwmaXuK/6nj7Wdj+laWFNy6HLQBCsMowZFvBtNDpjqfjO/T8lPL/Ro=
+X-HE-Tag: 1795457249-925218
+X-HE-Meta: U2FsdGVkX1/4Id+e+sAZuY/BDz6Eq3nMflt+ZgbBhYvYjKnUKdCYiUMq5fcu/TuqtqlbSyNZs/RSajICqJlOrVv6moeGFcA9nZRjOPbEThEDOG10Nk4oFyTSBEYf2c44XzfrzAVsdp+T8TOkxkhpjJOfGAEsiKQUAcWchpzvssAv9NL3v1Lynq3jxZXNiFRbjmtGFseKCBJfcz+bP4GPMQ8gsCZdD8QCp6ydg43vxcGj/8qxWnwztGwqUVaQW2Ni9TlEaCRjq3I8L+LvLlLnb8GAvP51fuPNSP1iBEaMtTTAnhKNBvcl8IaeVglo+6a/r0RH6yZ0W+pYNDW3IHrOksrkCikaw8haPjkhutCdIfZBe90C+DRRf0FOwO8NbbNm0VjURbGhee5oITirfqn6rQ==
+
+On Sun, 22 Nov 2026 21:02:39 +0100
+Jiri Olsa <jolsa@kernel.org> wrote:
+
+> The __recover_probed_insn function is called for every instruction
+> decoded on the way to the probed address and it uses ftrace_location
+> to find out whether the instruction is the ftrace location.
+> 
+> When the address is not ftrace location, ftrace_location does also
+> the symbol lookup to map the sym+0 address to its ftrace location.
+> But __recover_probed_insn only checks if the returned location is
+> the address itself, and that can't be the result of the mapping
+> after the lookup of the address failed, so the symbol lookup is
+> done for nothing for almost every decoded instruction.
+> 
+> Using ftrace_location_range for the address instead, which does
+> just the lookup of the address.
+> 
+> Adding the missing ftrace_location_range stub for the config
+> without dynamic ftrace.
+> 
+> Registering 20587 kprobes (as disabled) with the kprobe_many_example
+> sample module [1] in qemu with 8 CPUs goes from 4.02s to 3.70s.
+> 
+> The sample module was posted as the last patch of the kprobes
+> lookup cost series [1] only to demonstrate the testing, it is not
+> merged and is not going to be.
+> 
+> [1] https://lore.kernel.org/bpf/20261109195827.1091410-1-jolsa@kernel.org/
+> 
+
+Hmm, we probably should create a bool ftrace_location_addr() helper
+function that does this internally. But that could come later as a clean up.
+
+Reviewed-by: Steven Rostedt <rostedt@goodmis.org>
+
+-- Steve
 
 
-
-On 11/23/26 10:01 AM, Yonghong Song wrote:
->
->
-> On 11/23/26 9:45 AM, Eduard Zingerman wrote:
->> On Fri, 2026-11-20 at 13:49 -0800, Yonghong Song wrote:
->>> For a BPF_CORE_ENUMVAL_VALUE relocation, libbpf sign-extends the value
->>> of a 32-bit enumerator even if the enum is unsigned. A value in
->>> [0x80000000, 0xffffffff], e.g., DCACHE_PRIVATE of enum dentry_flags,
->>> then doesn't match the zero-extended value clang emits, and the whole
->>> object is refused. And a target value in that range is patched
->>> sign-extended.
->>>
->>> Patch 1 zero-extends the 32-bit values of unsigned enums, i.e., with
->>> the kflag 0, which is the form clang emits. The kernel builds the same
->>> relo_core.c, so it gets the fix too.
->>>
->>> GCC emits every 32-bit enum value sign-extended, since its
->>> __builtin_preserve_enum_value() returns int. So with the change above
->>> alone, GCC objects that load today would be refused. Patch 1 therefore
->>> also accepts the sign-extended form of an unsigned value, and patches
->>> the target value in the same form.
->> Hi Yonghong,
->>
->> I checked LLVM and GCC definitions for __builtin_preserve_enum_value().
->> LLVM:
->>
->>    clang/include/clang/Basic/BuiltinsBPF.td:
->>
->>    def PreserveEnumValue : TargetBuiltin {
->>      let Spellings = ["__builtin_preserve_enum_value"];
->>      let Attributes = [CustomTypeChecking];
->>      let Prototype = "long int(...)";
->>    }
->>
->>    ---
->>
->>    gcc/config/bpf/bpf.cc:
->>
->>      def_builtin ("__builtin_preserve_enum_value",
->>                   BPF_BUILTIN_PRESERVE_ENUM_VALUE,
->>                   build_function_type_list (integer_type_node, 
->> ptr_type_node,
->>                                             integer_type_node, 
->> integer_type_node,
->>                                             0));
->>    gcc/tree.cc:
->>
->>      integer_type_node = make_signed_type (INT_TYPE_SIZE);
->>
->>
->> Meaning that the two indeed disagree. Given that GCC version can't
->> express 64-bit values, it appears that GCC side definition needs an
->> update. Would this allow to avoid GCC-specific workaround in libbpf?
->
-> Yes, I am aware of this issue. See
-> https://lore.kernel.org/bpf/a4aec2b1-f754-48ed-a7d7-ef07bed43eb8@linux.dev/
->
-> I even suggested a solution:
->
-> diff --git a/gcc/config/bpf/bpf.cc b/gcc/config/bpf/bpf.cc index 
-> 3ef93938222..45d5337bab6 100644 --- a/gcc/config/bpf/bpf.cc +++ 
-> b/gcc/config/bpf/bpf.cc @@ -1048,7 +1048,7 @@ bpf_init_builtins (void) 
-> integer_type_node, 0));
->     def_builtin ("__builtin_preserve_enum_value",
->                 BPF_BUILTIN_PRESERVE_ENUM_VALUE,
-> - build_function_type_list (integer_type_node, ptr_type_node, + 
-> build_function_type_list (ullt, ptr_type_node, integer_type_node, 
-> integer_type_node,
->                                           0));
->
-> diff --git a/gcc/config/bpf/core-builtins.cc 
-> b/gcc/config/bpf/core-builtins.cc index a5c973cd385..289d3e67d78 
-> 100644 --- a/gcc/config/bpf/core-builtins.cc +++ 
-> b/gcc/config/bpf/core-builtins.cc @@ -877,8 +877,12 @@ 
-> pack_enum_value_fail:     else
->       {
->         ret.reloc_data.expr = tmp;
-> + /* Extend the enumerator to 64 bits according to its own signedness, 
-> + as clang does, instead of expanding it as a sign-extended SImode + 
-> CONST_INT. */         if (kind == BPF_RELO_ENUMVAL_VALUE)
-> - ret.reloc_data.default_value = enum_value; + 
-> ret.reloc_data.default_value + = fold_convert 
-> (long_long_unsigned_type_node, enum_value);         else
->          ret.reloc_data.default_value = integer_one_node;
->       }
->
-> Vineet Gupta will take a look.
->
-> Discussed with Alexei earlier, the suggestion is to proceed as is for 
-> now.
-> It is not clear when gcc will implement this.
-
-Sorry, messed up the above diff. The below is a better one:
-
-diff --git a/gcc/config/bpf/bpf.cc b/gcc/config/bpf/bpf.cc index 
-3ef93938222..45d5337bab6 100644 --- a/gcc/config/bpf/bpf.cc +++ 
-b/gcc/config/bpf/bpf.cc @@ -1048,7 +1048,7 @@ bpf_init_builtins (void)                                           integer_type_node, 0));
-     def_builtin ("__builtin_preserve_enum_value",
-                 BPF_BUILTIN_PRESERVE_ENUM_VALUE,
-- build_function_type_list (integer_type_node, ptr_type_node, + 
-build_function_type_list (ullt, ptr_type_node,                                           integer_type_node, integer_type_node,
-                                           0));
-
-diff --git a/gcc/config/bpf/core-builtins.cc 
-b/gcc/config/bpf/core-builtins.cc index a5c973cd385..289d3e67d78 100644 
---- a/gcc/config/bpf/core-builtins.cc +++ 
-b/gcc/config/bpf/core-builtins.cc @@ -877,8 +877,12 @@ 
-pack_enum_value_fail:     else
-       {
-         ret.reloc_data.expr = tmp;
-+ /* Extend the enumerator to 64 bits according to its own signedness, + 
-as clang does, instead of expanding it as a sign-extended SImode + 
-CONST_INT. */         if (kind == BPF_RELO_ENUMVAL_VALUE)
-- ret.reloc_data.default_value = enum_value; + 
-ret.reloc_data.default_value + = fold_convert 
-(long_long_unsigned_type_node, enum_value);         else
-          ret.reloc_data.default_value = integer_one_node;
-       }
+> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> ---
+>  arch/x86/kernel/kprobes/core.c | 6 +++++-
+>  include/linux/ftrace.h         | 4 ++++
+>  2 files changed, 9 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/kernel/kprobes/core.c b/arch/x86/kernel/kprobes/core.c
+> index 133ff20caccd..34d71907e6d1 100644
+> --- a/arch/x86/kernel/kprobes/core.c
+> +++ b/arch/x86/kernel/kprobes/core.c
+> @@ -207,7 +207,11 @@ __recover_probed_insn(kprobe_opcode_t *buf, unsigned long addr)
+>  	bool faddr;
+>  
+>  	kp = get_kprobe((void *)addr);
+> -	faddr = ftrace_location(addr) == addr;
+> +	/*
+> +	 * Only the exact ftrace location matters, so skip the symbol
+> +	 * lookup ftrace_location() does to map sym+0 to its location.
+> +	 */
+> +	faddr = ftrace_location_range(addr, addr) == addr;
+>  	/*
+>  	 * Use the current code if it is not modified by Kprobe
+>  	 * and it cannot be modified by ftrace.
+> diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
+> index 1c2056a1a68b..255751899682 100644
+> --- a/include/linux/ftrace.h
+> +++ b/include/linux/ftrace.h
+> @@ -1075,6 +1075,10 @@ static inline unsigned long ftrace_location(unsigned long ip)
+>  {
+>  	return 0;
+>  }
+> +static inline unsigned long ftrace_location_range(unsigned long start, unsigned long end)
+> +{
+> +	return 0;
+> +}
+>  
+>  /*
+>   * Again users of functions that have ftrace_ops may not
 
