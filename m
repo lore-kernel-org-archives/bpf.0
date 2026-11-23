@@ -1,97 +1,99 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.181
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795416596;
-	b=VH1AQbJ22IGXd676qtToZAzgEdjEj45rETgEzx3fsNKPDbK72ZVFqcxwWFcpBiU0zfCH
-	 D6Bj64GCDrqA7mbIjyWXJJaGmxVxu5FaDTdMVWp6a7Hf8/qYsaihy0/6RLjWyFEWzFG+L
-	 H1/TM+hbROcSAXs1iVitbpXZYOM46+2clEKESJ7PQxo0qaJQMmKL9aUB1Mkv/Kzu2YeFd
-	 6AnheALIe2iHP+1qzBgXSBgZC34xjMBUJs4PH/j4Qf1YcvRXOGKzv8Q4An0clh8yDc7AQ
-	 Oka9H5BO5U4YMtFSrX3t4Hb2mR7nEjs9rlqrLUwZ2YWhjKP6yB0/+MO1gLIPoJxSAsw==
+	t=1795416691;
+	b=0N935ZpVCR02B7cP1jyTd3UwOdnbLpEHUYr+saGLJbIlmsHfv4ibeUA7HYCK7Pfko+zJ
+	 QO3mXtZJe0b6ftp8tU8pmsFbmOlK3KUMCo1QYjKD4XJzfIUO6b8YQ4zic+7Y30j87v1lA
+	 xb+Mtal1uGkKmka+of4M6TCJjWT/q39OSAMbh+D150dqi46kbBNz3mZNDwyaanagag8rB
+	 eiyl2xv0PaLpFYLUmfsoAwk1+NZNdL17dRR/jDrqu6qxe4aOaoKgFrUyenN+O0UVoXEIt
+	 xzZsKe6PujsM0IhT5/90E7ymCHbZAJXLU9pSIyMG4dEiXkCQHQy29xQZSKJ4HoMSj4A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795416596;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795416691;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:From:To:Cc:Subject:In-Reply-To:
+	 Content-Type:Date:Message-Id:Subject:From:To:Cc:In-Reply-To:
 	 References:Content-Transfer-Encoding:MIME-Version;
-	bh=VWkjtsN4TDl9WFd6UDgts8vNtEvBJiL0lWopiTLtRrY=;
-	b=d5vvMsmmo2/V4Asy78gH6PREURTKqHwDr7x1ildDwYBdljRQYdmydS2DIIgMj6FJfGZG
-	 GBWlAkOeExANUI8yr4rjOIi7zjSMQmWcMoHogIM2LOY8pvQfZm0T77rMLMZN95o0r3SOA
-	 QXDMRuI7O87IJ+zqt+exe9AryeTWhSvfOOpksdeWz/3112woviTKh+ne1sVQ3nq1Yr0eD
-	 radoCsCLeQuaUC929RMPLKWY/k5WJ6zgAdxzVZmwIqN5yK8sBODIM3BG4x47yVmh0rpVQ
-	 8Em4pK+E43WisZiO+v3RD6k2/ZDDPRdrTed+YqL/r26z48mCGYRjX8ZLAak3kCgvKOg==
+	bh=K+6B0gWoSrUledv2HKRXi0gyYw6VTPkEWeocJbaGXVY=;
+	b=0yBn3ms+oL+w+5ybcag20gCxZml7sU1FJP6WbQhLwPlO0gJaw/nPOPhRZQ1nBnbV6K/9
+	 xGHrs+44eIN15Tt8cvvkxDfnXMKYk0KrV0IkeYCaZPfz3m4pYgvraw3yPppSfWSxdtXx6
+	 MKBPLCT16U8Iar7QyaWVZf2ySO7Xp/vei96rdqy11JdVl6hnwLo7PLL89D7xlRAtRuG9C
+	 pm2LiOBdpu2yw5zcSTUeWaAv5tvaMOGRgmpjRchW7iAk043T7FxY+zoRfarWIOYNGb9/l
+	 w0plNbE3/5if8pRnVbgEKs0FN55g7XZAt6XlwsgWVoFnKIrGM+F6nUE9zNCbXEeL3pg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=La2ax3J7;
-	arc=none smtp.remote-ip=209.85.214.180
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=QjRNna0B;
+	arc=none smtp.remote-ip=209.85.215.181
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFF41606A31A
-	for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 06:49:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BFF41606A31A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88BD5606A31E
+	for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 06:51:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 88BD5606A31E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=La2ax3J7
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2f02ee04378so23297145ad.1
-        for <bpf@vger.kernel.org>; Sun, 22 Nov 2026 22:49:55 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=QjRNna0B
+Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-cc147d86bebso1501066a12.0
+        for <bpf@vger.kernel.org>; Sun, 22 Nov 2026 22:51:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795416595; x=1796021395; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to
-         :subject:cc:to:from:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=VWkjtsN4TDl9WFd6UDgts8vNtEvBJiL0lWopiTLtRrY=;
-        b=La2ax3J72api3sc3l5D6ef9MXqUpoj11DOC6hRUoS9SYad50gNOWPMNmy+7JO1oZ6l
-         2wtFpzA7soMsTMSoxMtYRkpnngAvgFYTzwnqtahjGYxGZ+BlXW+zNtW2PJseHm7+6nEx
-         aad4lthd+6ETGiAgMggVc/wgZsyaIpl9mwWvm0Im4Q74Tln1qTzryR11Cd+skeMKJMHV
-         5gARo/qeTnZ1eE97EpNjX59K0mAC3ycB8KzxA8DOt855W8Vg4YkWUfcMNbSGbWTUgWkn
-         iTblSMeGmI49TwZX1Yg3XRbQDfW0w1Ng3X71sXX3vz2ZHnh3jFINOlECOZd0Yaq16/T6
-         N4Dw==
+        d=gmail.com; s=20260707; t=1795416691; x=1796021491; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
+         :from:subject:message-id:date:content-type:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=K+6B0gWoSrUledv2HKRXi0gyYw6VTPkEWeocJbaGXVY=;
+        b=QjRNna0BnzrMShDrBLER9RcS7SXIBigrkI1n4Bk+l9+Xh89Juvw5yv3CkkklTVfoVU
+         grvTUapDfWPJyLD3z3a1Tp7UTWcEAtCYjcs0xV0M4CrwroRQ+LsaogwFtkii8F27sbtX
+         aoG8Rlv2K5euod4K8q0y17aE/6KUeAc6Kt7IjZb8mvyyU7RLDoPAN4wf3MjfY2Yef+SG
+         TA5VFEIytF2KB2JCbtt6svywVI4l8wHPVqTo5X8iIbi6Snsv1zkPdeREwAVG3Q1NJP4k
+         HH6p2v2pT7DkSJ6AKpOitvVxgiHI9cOXbw02i5qukjv/n8Jqw5+LkOFvn+RvTl9kkNo3
+         /tkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795416595; x=1796021395;
-        h=mime-version:content-transfer-encoding:references:in-reply-to
-         :subject:cc:to:from:message-id:date:content-type:x-gm-gg
+        d=1e100.net; s=20260707; t=1795416691; x=1796021491;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
+         :from:subject:message-id:date:content-type:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=VWkjtsN4TDl9WFd6UDgts8vNtEvBJiL0lWopiTLtRrY=;
-        b=b5L1+n/ovDkkPJ+CKrbsTXZuJMNYgw59NlCzPtm5kz8SmUNcIgh+Y7Ct/j4d2uM8cj
-         g59CJwLYMe5ubfGD3bYAh0Rdu/+j250mcr2O/WqCg3r/GvgDC6RTlXC1BZpUxy7BMBr+
-         K+pSSKydd08fYyrgPacfMK8ezXZ3y2s9scddDCACiO+sIms0oEfpBZpbsxyeDzEnKeM4
-         t2yjbmuzCRwtdQwiNxwxe99GVA3Wj2KzFjRGF6GtlI04q6LwOZ9yfxbSSB6wS/KxrGSW
-         7eoA4MsKNZzJnJKMo+hLbeZPNIzrFbxiP0v0MoyIawKbBO/hGmpjmpGEYK9u+Wn8I0vc
-         oP3w==
-X-Forwarded-Encrypted: i=1; AL+hErF7APHRtTeBffHI1PzMu5gjVZZZkYMvlFbiVvS2AWpdzFA73+hc1dlZ1pcFwPyXQzKjyxs=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+JnMT3KYlUsICddQrPBBgG0ajpysfub7wFovVEopXftXq9yrvT
-	+Num/DKxbSjgrR6Y3AJ+DHrqWPYHDvTpTxTMdDNDc860jAmOhnJNqH/5
-X-Gm-Gg: AZFdTZeFziFd8I0O6AfE1buTm1x9ZuA64DKIORn9Ri+02K3viUQBmFye6loWF+rghJ8
-	w76FKINoGyTiKtOAkZ2gQgQn1lwBv3KPIctojuzDd0FvwBC8pjd+02OpnpWaxcoT+SM/A1mejQU
-	K8dGYIuN53wncTS329fJEUk6p1pC8dlmb+CIGDIwmyP1gPu8F6rc5BvsQo1wZQvLNWEAr9p1FUR
-	o12zWuYoOvs39FM1ScpGxOPfdG8w6VCOMJD5XYdc0A2fMf5f3Fg7tcNl77rds7ny8sui4NUSSCf
-	TGc4SjqaFfITY/VHIxSXyGsROB7ow9Alf6dQ0dsY09Py+Tfvbhgi+6ft/dIcOMuKs1tVjZVS2pg
-	a/2AyOLCDieeqLhyBBMEN8uCfXH8JBhQbzQVwC0w8qJv+BKJ2zMUjo0swGSmK+vigOhMeHjImgB
-	Sb3UCspUecm2hk+1uU/goydrO+TG/hvf+wm6DhWPaYP6RL/sDkQk4wCyGoTFJJ1XRGQPmhBYBr6
-	Eld7CWrfIt63shY4p6pZJe2CJc0KeukOModTDa37P0+8QWnZvgdE9SizaXMLmbB5Isr4BV54QSo
-	JltcYQ5tzTFhAZ9MhDnttAqc8baBlWoZAOJQtxnGW2GWqXyWeKI0sPtnPHAnXwmaOiPJAoVHUD9
-	fifYzXfI8lDv3ZZZ75Jzub6B6rRIxtjy4Pw==
-X-Received: by 2002:a17:90b:1dcd:b0:3b4:bef:9bc7 with SMTP id 98e67ed59e1d1-3b41c7d075fmr9977275a91.7.1795416594917;
-        Sun, 22 Nov 2026 22:49:54 -0800 (PST)
-Received: from localhost ([153.61.198.241])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b41ad0a34asm16171221a91.3.2026.11.22.22.49.54
+        bh=K+6B0gWoSrUledv2HKRXi0gyYw6VTPkEWeocJbaGXVY=;
+        b=jm5Fhf6YQpotsPd7MzRfYPQGx54j+eUEmVzGvP5EylYYUiCRNr/ssIjcplrnVuB99X
+         NKwK1X6FC9Iy8fWWa7Gg9Fbf373EPuBZF01qyoeegDw5Z+2F2dm9+w7hZPbq4wkOI9u0
+         lsO4nC6VrbgPbZT6MxSLzAflyaj8byPLNC/3amq7/ikHeic4HcE9LRVNcd/Ms4TDfw3m
+         qn8H+oSgdgwbmpJVjWvc/Ak5hJSMI37FJ33YrqToY19lpOkecLb3JKapm5Vr+Wqhih50
+         Nb06RZ8hFOxzBvok4RVsIzoB/f/r+Kef6kuSwsbviNTlJ7dOtuYIxePUEHZtB+98PMM2
+         TIPA==
+X-Forwarded-Encrypted: i=1; AL+hErE0hOQ1nbSALiLIt6jhieRcGAi5uGxf/5MZ0erJX0DaX1IYCUslD2c3kosusPd3MmjrMC8=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/z+RkQS3G4o/wSx4wokyMtiRb4fzyEMTvAZnHwlYptIRT9xkKc
+	TGdTuQwC6kGivrXtAmw3cs+8qAQZNUjqxFZwCdHIwjbH7jCI4PA04OFi
+X-Gm-Gg: AZFdTZdDMwpHtpMR17h8OkP4UssLPfE5G9A9eR/hGHsXpuw1kjVVZ6Jz0bSnKJwPtQ+
+	naOinwDvuqYfADLsGtcC5yOslZm0sbywTHdnzN/vbP+BtQ5hrBRM/qwth1OxaDGTlGk6APfNPeH
+	ReZrnHAf9Ewztc9B2BDvmhnUaBCTOepUiCizxuS+dmX3EktThTeVUAWyUUERzt70khaheCWwAJk
+	i0J47k5ujZRgmd6xLOXBBc/wEFPJ8Jisp5KGIw5pwhjwJICgzUBwr3cxFTvFUhJRZE/AB43vC/P
+	L++gfjtsBjF7yu+A00Mu4SC3XzRPdT0SufG/IVJgG1Yrux+2B4AYRQFImCYSdObeKEXYPsqKhLk
+	H6oe5gvGK1/nGMuxwlAYECvuf9RycFmIXgqXZb+rDSCytP4PkBbPyk+BPhSnTyLVOjPQcqM0YSV
+	4rjW5TGyTkmy01oY3eJinJGQUe1GjwhbR/Fx9iemE4VcIWaMqHJCJhCt6ZPkT9Qhflpc+ODfOhl
+	NFGUNeGaoyzuwvVM3eFufGZk0RI/4DVigaVKa0qQMHggsfjK2rD1CP0ZarHRyzqatyq2dYVni2w
+	9RvnfI+xVmMTzZ4GbNUCMd5mSs2LeB8P9WH9/PpVSh+hZq7n9NO8iCOXybWByjtnoCKYl5sclZh
+	tILNzn4H3uS6RrHvAZCIvivhBfkZqBnDulQ==
+X-Received: by 2002:a05:6a21:3995:b0:3e2:8c2f:4b80 with SMTP id adf61e73a8af0-4014db586d6mr7642491637.25.1795416690430;
+        Sun, 22 Nov 2026 22:51:30 -0800 (PST)
+Received: from localhost ([153.61.198.252])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8c87344184fsm5152236b3a.35.2026.11.22.22.51.29
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 22 Nov 2026 22:49:54 -0800 (PST)
+        Sun, 22 Nov 2026 22:51:30 -0800 (PST)
 Content-Type: text/plain; charset=UTF-8
-Date: Mon, 23 Nov 2026 06:49:54 +0000
-Message-Id: <DN2E2CRNK19S.3QVBNS12O2D35@gmail.com>
+Date: Mon, 23 Nov 2026 06:51:29 +0000
+Message-Id: <DN2E3KPRKZL5.3PSJD3I9JFARH@gmail.com>
+Subject: Re: [PATCH net-next] net: gro: skip the checksum of fraglist GRO
+ packets
 From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Rongguang Wei" <clementwei90@163.com>, <netdev@vger.kernel.org>,
- <bpf@vger.kernel.org>
-Cc: <willemdebruijn.kernel@gmail.com>, <jasowangio@gmail.com>,
- <andrew+netdev@lunn.ch>, <davem@davemloft.net>, <kuba@kernel.org>,
- <andrii@kernel.org>, "Rongguang Wei" <weirongguang@kylinos.cn>
-Subject: Re: [PATCH net v12 0/2] tun: fix re-attaching the socket filter
-In-Reply-To: <20261123054209.89946-1-clementwei90@163.com>
-References: <20261123054209.89946-1-clementwei90@163.com>
+To: "Rosen Penev" <rosenp@gmail.com>, <netdev@vger.kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>, "Eric Dumazet"
+ <edumazet@kernel.org>, "Jakub Kicinski" <kuba@kernel.org>, "Paolo Abeni"
+ <pabeni@redhat.com>, "Willem de Bruijn" <willemb@google.com>, "Simon
+ Horman" <horms@kernel.org>, "Neal Cardwell" <ncardwell@google.com>,
+ "Kuniyuki Iwashima" <kuniyu@google.com>, <bpf@vger.kernel.org>
+In-Reply-To: <20261123042735.139550-1-rosenp@gmail.com>
+References: <20261123042735.139550-1-rosenp@gmail.com>
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -103,13 +105,47 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-On Sun, Nov 22, 2026 at 09:42 PM Rongguang Wei <clementwei90@163.com> wrote:
-> v12:
->   - drop the EXPORT_SYMBOL_GPL() of sk_attach_filter() and
->     sk_detach_filter(), as Alexei asked.  It is a cleanup on its own, so it
->     goes in a separate patch and the stable backport of the fix does not
->     carry it
+On Sun, Nov 22, 2026 at 08:27 PM Rosen Penev <rosenp@gmail.com> wrote:
+> Make __skb_checksum_complete() verify each packet against its own
+> headers instead, and mark the skb CHECKSUM_UNNECESSARY when they all
+> match. This covers whatever asks for the checksum later: conntrack with
+> nf_conntrack_checksum enabled, and local delivery, which happens for
 
-This text is stale.
+It doesn't. This breaks tc progs.
+Today the skb is CHECKSUM_UNNECESSARY when a tc ingress prog runs.
+With the patch valid packets fail skb_flist_csum_ok() after the prog:
 
-Acked-by: Alexei Starovoitov <ast@kernel.org>
+  helper                  what skb_flist_tcp_csum_ok() gets
+  ----------------------  -------------------------------------------
+  bpf_skb_pull_data()     2 packets, mss 536, thlen 20, all pulled:
+                          len = 1092 bytes, th->check covers 556
+  bpf_skb_change_proto()  6 to 4: ipv6 = false, frag_list has IPv6
+                          headers, iph->ihl = 0
+
+TCP drops the skb and conntrack marks it invalid.
+CLAT has no IPv6 socket, so GRO always picks fraglist for it.
+
+> A fraglist skb whose geometry was changed after GRO, by NAT or
+> bpf_skb_pull_data(), is segmented by skb_segment(), which computes new
+> checksums. Such a packet is now forwarded with a valid checksum even if
+> it was corrupted before it arrived; the packet boundaries needed to
+> check it are gone by then.
+
+That's silent data corruption. It's not an option.
+tcp4_gso_segment() also takes that path on SKB_GSO_DODGY.
+bpf_skb_adjust_room() and bpf_skb_change_proto() set it on every GSO skb.
+Willem's series adds skb->encapsulation, like seg6 encap or ESP offload:
+https://lore.kernel.org/bpf/20261120044733.222627-3-willemdebruijn.kernel@gmail.com/
+
+> At the full MSS the router already forwards at line rate in each
+> direction, and csum_partial(), which took 27% of the cycles, drops out
+> of the profile.
+
+So there is no throughput win at full MSS.
+With the default nf_conntrack_checksum the work only moves to conntrack.
+Paolo suggests to remove fraglist GSO. This adds another state to it:
+https://lore.kernel.org/bpf/ce3e6832-ca9f-4e91-8302-b5bd7cf2f178@redhat.com/
+
+Nack.
+
+pw-bot: cr
