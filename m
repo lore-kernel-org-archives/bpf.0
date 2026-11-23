@@ -1,69 +1,55 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=62.210.214.84
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795425454;
-	b=zUHibClwj9KmSTJCwrWRVgaLXqAxBkL2uOzbEARAf3AJVSMoCI1LwJT7pjfbjXFBKuxI
-	 oa3Tk8Pcrh4H04CBXylpg2JKYfXfm7RUQTZh74WrRbvmKL1MP08bkhz8VQcZ2KvxGXMDE
-	 evKnxrUAmNgHcaVlc8wvUEZOw8lWOMMuYB+CAkVbIdr7aLm3u95saHz0qX3sqKNR59Mk4
-	 0m4crbkdubBRybPmfpv/u3s4ZT2PNeaO5BNuMY5ixQ+Yyoi5w41rIIqsdvvuwCH+gpyBq
-	 xVBKxJEG0clJL3/NkZ5t+RUlnuVeyPJWTCpBV7p8rVq1jhk1kLnDcJ7ZIKJZfYo8mbw==
+	t=1795426151;
+	b=5rO+Vga07z4dAfBP+neNxpNPa+fJHZ5J7jAb8mDBjReWgMuacIFhULslKpoRrso4B9pO
+	 ujqvU3BE+gMJvakQlgL9sSjroHY2W2ak4cmWG9nfdwTKpGNx/NolJm2iqADIAQHSKfeS/
+	 bo4Pvc/uKcjd5ThsdFj2VyqxcPUHP1sBPq31bwxrdhodQm6D7gqGAd8goSIToABnmG6DE
+	 mwrUXLfygUVHc3ZchwttxParqZhMWpPr48bQyMH5E/VOwsi/8Za4FPYdNsYMwbRWsKw6Y
+	 oi269es9oR009EzXmjwpp8QZKx5T1ybPF8T3YoZeCN6vXlgyqTltNdEimyt7uLxMivw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795425454;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=ElwxQXV69V07ZeUKRJboa14Xz3/tNiSouYX2pJvwG1o=;
-	b=mEb+gPmrQRQcf91qATTr0oxnn1EXJCeIdAcbwGBJPJN8iM4TChFcAR+nHdqN2UW590v6
-	 QfnIJoeaFcZZgO47Q7v+GPD/lBx3wLj3sZOCZ4hu6EDFA6dHbDkC3nUzWZFoDkHVsN7r3
-	 AhRGH9ySUEwxpG9OffQH/zaqHRYkYrQrpRgkpXxTVX1QZD6JneB9vx2V9qDSxqDlgw1IO
-	 0lDXBvWBrROH4pFW4esuO4YFqhAb74i0xg/8fJnLLrfAaI08TO5VboyUGm5g8iiWRUkUP
-	 11ui9HHoS67FJNwoywxCGhLVMrYb9qFq+xNEkIjipjNjWehXrBw9ung4uihyxY6BtdA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795426151;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=HweZ1D6upucTVFzfMFDjA9bhYMQ/pDaA3YaZryk5Enc=;
+	b=NK7Wvg1i66CCxrJv/+t1xo+5Wt4G2gspj3ojUkIWov0RO9w24x4WYjIhkkeU6yfKXr/5
+	 KlQvzMIT6VJ11lb8Wwk5LfSoZSDN1LE/SYIaUU0zz3WDa3TFdpbcv6blaJqZspaEba4HO
+	 L9fC9IiJ7v/6+Q6zGo2EYvnMfl3Cm/OEbOJ8oukO/+5ySHBvPNfao7pA1w//o9JIC34v7
+	 gcj3Z5m8cDHrUGsr/1TIz7XXaNeADCzYF2GlM7vnLZS/eP/374/+/G5Uh68claNw7d3Q9
+	 KuK5H5RAyFGlm3GckCkZZA19lRJ3e4dNfJrX0Q+C1z5aMba62XxS9tUM/sP41wrkeFQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=codewreck.org;
-	spf=pass smtp.mailfrom=codewreck.org;
-	dkim=pass header.d=codewreck.org header.i=@codewreck.org header.a=rsa-sha256 header.s=2 header.b=ACN0oEy6;
-	arc=none smtp.remote-ip=62.210.214.84
-Received: from submarine.notk.org (submarine.notk.org [62.210.214.84])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="S/skPY0G";
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 043B6606A683;
-	Mon, 23 Nov 2026 09:17:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 043B6606A683
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codewreck.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codewreck.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29DD0606A31E
+	for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 09:29:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=codewreck.org header.i=@codewreck.org header.a=rsa-sha256 header.s=2 header.b=ACN0oEy6
-Received: from gaia.codewreck.org (localhost [127.0.0.1])
-	by submarine.notk.org (Postfix) with ESMTPS id 5428414C2D6;
-	Mon, 23 Nov 2026 10:17:25 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org;
-	s=2; t=1795425450;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ElwxQXV69V07ZeUKRJboa14Xz3/tNiSouYX2pJvwG1o=;
-	b=ACN0oEy6kHGPAYj2kayjdpp8gj2GkTrOA2AQUxOKeYmnUDHRWs3uwXKy66n0kBBJefQyQp
-	9R7DKC6G7wIoRmoIeJFDyge8zKBeMK720UAllN5+OkdOxSBpIQnKXRLgGbgUSuZ/Du/amo
-	soMoHx8vWj/hewpIjtJaaptWHP+jhFq+28hQp3AuCecA+qqhgmlcZhF+RKQl8fcCu8ILEX
-	EdBxAb3tGw6FeVU4hfhSHVIiwj1ypB4tDIkxszYYYquBvo+ozhn6RqJ3fJe4QMNpdoLmwM
-	5kCmeRdg7U78F8t4S+22AOqx9iy3BG1FL7QFq6wWLKackQ41xeevc3HtYD6Smg==
-Received: from localhost (gaia.codewreck.org [local])
-	by gaia.codewreck.org (OpenSMTPD) with ESMTPA id 5b02b061;
-	Mon, 23 Nov 2026 09:17:23 +0000 (UTC)
-Date: Mon, 23 Nov 2026 18:17:08 +0900
-From: Dominique Martinet <asmadeus@codewreck.org>
-To: Greg KH <greg@kroah.com>
-Cc: stable@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>,
-	andrii@kernel.org, eddyz87@gmail.com, ast@kernel.org,
-	ihor.solodrai@linux.dev, daniel@iogearbox.net, memxor@gmail.com,
-	martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
-	jolsa@kernel.org, emil@etsalapatis.com, dwarves@vger.kernel.org,
-	bpf@vger.kernel.org, Alan Maguire <almagui@kernel.org>
-Subject: Re: [PATCH 5.10-6.18 v2] libbpf: fix cross-endian build with newer
- libbpf
-Message-ID: <awQElOwB_C7UzMXF@codewreck.org>
-References: <20261116233301.1531563-1-asmadeus@codewreck.org>
- <2026112357-corncob-exclude-7266@gregkh>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=S/skPY0G
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F6AB1F000CF;
+	Mon, 23 Nov 2026 09:29:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795426150;
+	bh=HweZ1D6upucTVFzfMFDjA9bhYMQ/pDaA3YaZryk5Enc=;
+	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
+	b=S/skPY0GMLc9DMRFu6DYIc7TtV0r211zAIMvLuNd9fQVQa9gbwaupvn8iFTpJiyV4
+	 55z2Atz/kEMROG+X06pt+onkKPFqsHK8Xr/io1MSrrdXVwzrFNLjO6BTB5B/pS+d6c
+	 aP0knVGS+Y+pXDKoVRvPNweyxbTKHhIkv8XFfayCiUvZOachNaOPHRLcQoCO92uExN
+	 l3txHgcd804SfDf3ux9UD5SZTPSi2r2OWg9iPCMs0RCPaPbqjZAJhl4yhqrzUO9UYg
+	 D3N0n+XX4siDbATY8EcL6qikkE37Wo0K25TU1+A/YR7tsaQ3Vy9FCoxlPMAeNrmxPn
+	 98nHnfO5cgVyQ==
+Message-ID: <sashiko-outbox-228972@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf 1/2] bpf, net: validate assigned socket on receive
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Nikolay Aleksandrov" <razor@blackwall.org>, bpf@vger.kernel.org
+In-Reply-To: <20261123084138.723275-2-razor@blackwall.org>
+References: <20261123084138.723275-1-razor@blackwall.org>
+ <20261123084138.723275-2-razor@blackwall.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 23 Nov 2026 09:29:10 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -72,69 +58,197 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <2026112357-corncob-exclude-7266@gregkh>
 
-Greg KH wrote on Mon, Nov 23, 2026 at 08:01:33AM +0100:
-> On Tue, Nov 17, 2026 at 08:33:01AM +0900, Dominique Martinet wrote:
-> > commit 087f3964f4b3 ("libbpf: Support layout section handling in BTF")
-> > added extra data to the BTF header.
-> > 
-> > This extra data is ignored in the native case, but when building with
-> > different endianness the bswap code in old libbpf would check for strict
-> > size equality, leading to build failures such as this when BTF data is
-> > generated with a newer version of libbpf (through pahole)
-> >     BTFIDS  vmlinux.unstripped
-> >   libbpf: Can't load BTF with non-native endianness due to unsupported header length 32
-> >   FAILED: load BTF from vmlinux.unstripped: Operation not supported
-> >   make[2]: *** [../scripts/Makefile.vmlinux:72: vmlinux.unstripped] Error 255
-> > 
-> > Newer libbpf versions also properly ignore trailing data in the bswap
-> > case, but the patch is too intrusive to backport, so take the header 
-> > length comparison fix from it instead.
-> 
-> Why not always just use the libbpf version from newer kernels?
+Thank you for your contribution! Sashiko AI review found 4 potential
+issues to consider:
+- [High] net: missing family check for non-fullsocks in
+  inet[6]_prefetched_sk_mismatch()
+- [High] net: missing v4-mapped check for AF_INET6 sockets in
+  inet[6]_prefetched_sk_mismatch()
+- [High] net: unvalidated syncookie request_sock left on skb->sk in
+  inet[6]_steal_sock()
+- [Medium] bpf, net: sk mismatch check bypassed in inet_steal_sock()
+  after __nf_queue()
+--
 
-I'm a simple user as far as this part of the tree goes, but the build
-system uses two libbpf versions:
-- indirectly, whatever was used to build pahole to generate BTF
-debuginfos
-- directly, what is in the build tree to generate BTFIDs from the above
-BTF debuginfos (tools/bpf/resolve_btfids)
+commit 2c31081df7649a22a023cb4c1f5a5c68555be5ac
+Author: Nikolay Aleksandrov <razor@blackwall.org>
 
-This build failure happens if pahole uses a newer libbpf version, that
-the libbpf version in the kernel isn't able to parse because of a too
-strict check in the cross-endian case.
+bpf, net: validate assigned socket on receive
 
-Technically resolve_btfids could probably be built with the system
-libbpf instead of the one in the kernel tree but then we'd need to
-backport potential build failures instead if the libbpf API changes, I'm
-not sure it'd be less work in the long run.
+This commit validates prefetched sockets in inet_steal_sock() and
+inet6_steal_sock() against the caller's network namespace, address family,
+and transport protocol, releasing the socket on mismatch.
 
+> diff --git a/include/net/inet_hashtables.h b/include/net/inet_hashtables.h
+> index 44b7e39a1245b..ad8a7af17ddbc 100644
+> --- a/include/net/inet_hashtables.h
+> +++ b/include/net/inet_hashtables.h
+> @@ -444,11 +444,24 @@ static inline struct sock *inet_lookup(struct net *=
+net,
+>  	return sk;
+>  }
+> =20
+> +static inline bool inet_prefetched_sk_mismatch(const struct sock *sk,
+> +					       const struct net *net,
+> +					       u8 protocol)
+> +{
+> +	if (unlikely(!net_eq(sock_net(sk), net)))
+> +		return true;
+> +	if (!sk_fullsock(sk))
+> +		return unlikely(protocol !=3D IPPROTO_TCP);
 
-> And why not backport the full series, one-off are almost always more
-> work over time.
+[Severity: High]
+Does returning early for !sk_fullsock(sk) allow a request_sock or
+timewait socket of the opposite address family through?
 
-Happy to send a revert of the above patch + full series backport if
-that's what you/libbpf maintainers prefer...
-In this case the current code already supports newer libbpf versions and
-the bug was only in a corner case with cross-endian handling (e.g. I'm
-not expecting further fixes to be needed in that area), so it seemed
-simpler to just backport that part of the patch instead of backporting a
-"feature patch", but I'm not fussy.
+In inet_prefetched_sk_mismatch(), a native IPv6 TCP_NEW_SYN_RECV
+request_sock (with rsk_ops =3D=3D &tcp6_request_sock_ops) or IPv6
+TCP_TIME_WAIT socket passes without any family check.  Conversely, in
+inet6_prefetched_sk_mismatch(), checking sk->sk_family !=3D AF_INET6 is not
+sufficient for non-fullsocks because an IPv4 request_sock or timewait
+socket created on a dual-stack AF_INET6 listener inherits sk_family =3D
+AF_INET6 from sk_listener->sk_family in inet_reqsk_alloc() while using
+&tcp_request_sock_ops and storing struct ip_options_rcu in ireq->ireq_opt.
 
-I'd argue that the cross-endian fix should have been a separate commit
-instead of being part of a new feature commit in the first place, but
-hindsight 20/20 and it probably wasn't obvious that it'd cause build
-failures at the time...
+When such an IPv4 request_sock is delivered to tcp_v6_rcv() ->
+tcp_check_req(), tcp_v6_syn_recv_sock() reads ireq->ipv6_opt (which shares
+a union with ireq->ireq_opt in struct inet_request_sock) and passes the
+struct ip_options_rcu pointer to ipv6_dup_options().
 
-Anyway, I stand by my opinion that minimal patch sounds better to me,
-but just say the word and I can look at backporting the full layout
-section handling code instead. Not sure I'd be able to get prereqs right
-for very old kernels but 5.10/5.15 are gone next month anyway...
+[Severity: Critical]
+This problem wasn't introduced by this patch, but in bpf_sk_assign()
+[1] can an unreferenced BTF socket pointer be unhashed, freed, and
+reallocated from a SLAB_TYPESAFE_BY_RCU cache between the pre-checks and
+refcount_inc_not_zero_acquire()?
 
-Thanks,
--- 
-Dominique
+net/core/filter.c:bpf_sk_assign() {
+    ...
+	if (unlikely(dev_net(skb->dev) !=3D sock_net(sk)))
+		return -ENETUNREACH;
+	if (sk_unhashed(sk))
+		return -EOPNOTSUPP;
+	if (sk_is_refcounted(sk) &&
+	    unlikely(!refcount_inc_not_zero_acquire(&sk->sk_refcnt)))
+		return -ENOENT;
+}
+
+CPU0 (bpf_sk_assign)              CPU1
+--------------------              ----
+checks sock_net(sk)
+checks !sk_unhashed(sk)
+                                  reqsk unhashed and freed
+                                  reallocated in tcp_get_cookie_sock():
+                                    req->rsk_listener =3D NULL
+                                    refcount_set(&req->rsk_refcnt, 1)
+refcount_inc_not_zero_acquire()
+skb->sk =3D sk
+
+When tcp_v4_rcv() or tcp_v6_rcv() steals skb->sk, inet_steal_sock()
+accepts the TCP_NEW_SYN_RECV request_sock and tcp_v4_rcv() dereferences
+the NULL rsk_listener pointer.  A reallocation during sk_clone() while
+sock_copy() temporarily has SOCK_RCU_FREE set before inet_csk_clone_lock()
+clears it also causes sk_is_refcounted(sk) to skip taking a reference that
+sock_pfree() or skb_steal_sock() later drops, underflowing sk_refcnt.
+
+> +	return unlikely(sk->sk_protocol !=3D protocol ||
+> +			(sk->sk_family =3D=3D AF_INET6 && ipv6_only_sock(sk)));
+> +}
+
+[Severity: High]
+Can a dual-stack AF_INET6 socket connected to a native IPv6 address still
+pass inet_prefetched_sk_mismatch(), and can an IPv4-mapped AF_INET6 socket
+still pass inet6_prefetched_sk_mismatch()?
+
+Unlike bpf_sk_lookup_assign(), bpf_sk_assign() accepts connected and
+connecting sockets.  When ipv6_only_sock(sk) is 0, an AF_INET6 TCP socket
+connected to a native IPv6 address has icsk_af_ops =3D &ipv6_specific
+(.sk_rx_dst_set =3D inet6_sk_rx_dst_set) and sk_backlog_rcv =3D tcp_v6_do_r=
+cv.
+If it is assigned to an IPv4 packet, inet_prefetched_sk_mismatch() allows
+it into tcp_v4_rcv(), where tcp_v4_do_rcv() calls inet6_sk_rx_dst_set() on
+the IPv4 skb, casting the IPv4 struct rtable to struct rt6_info in
+rt6_get_cookie(), or queues the IPv4 skb to sk_backlog for tcp_v6_do_rcv().
+
+Similarly, an AF_INET6 socket connected to an IPv4-mapped address has
+sk_family =3D=3D AF_INET6 with icsk_af_ops =3D &ipv6_mapped and sk_backlog_=
+rcv =3D
+tcp_v4_do_rcv, so inet6_prefetched_sk_mismatch() allows it into
+tcp_v6_rcv().
+
+>  static inline
+>  struct sock *inet_steal_sock(struct net *net, struct sk_buff *skb, int d=
+off,
+>  			     const __be32 saddr, const __be16 sport,
+>  			     const __be32 daddr, const __be16 dport,
+> -			     bool *refcounted, inet_ehashfn_t *ehashfn)
+> +			     bool *refcounted, inet_ehashfn_t *ehashfn,
+> +			     u8 protocol)
+>  {
+>  	struct sock *sk, *reuse_sk;
+>  	bool prefetched;
+> =20
+>  	sk =3D skb_steal_sock(skb, refcounted, &prefetched);
+>  	if (!sk)
+>  		return NULL;
+> =20
+> -	if (!prefetched || !sk_fullsock(sk))
+> +	if (!prefetched)
+>  		return sk;
+
+[Severity: Medium]
+Does returning when !prefetched is true bypass the mismatch check after a
+packet passes through NFQUEUE?
+
+When a packet carrying a prefetched SOCK_RCU_FREE socket (such as a
+TCP_LISTEN or UDP socket) is queued by __nf_queue(), __nf_queue() takes a
+reference on sk and replaces skb->destructor =3D sock_pfree with
+sock_edemux:
+
+net/netfilter/nf_queue.c:__nf_queue() {
+    ...
+	if (skb_sk_is_prefetched(skb)) {
+		struct sock *sk =3D skb->sk;
+
+		if (!sk_is_refcounted(sk)) {
+			if (!refcount_inc_not_zero(&sk->sk_refcnt))
+				return -ENOTCONN;
+
+			/* drop refcount on skb_orphan */
+			skb->destructor =3D sock_edemux;
+		}
+	}
+    ...
+}
+
+On reinjection, skb_steal_sock() sees skb->destructor !=3D sock_pfree and
+sets prefetched =3D false, so inet_steal_sock() and inet6_steal_sock()
+return the unvalidated socket before running
+inet[6]_prefetched_sk_mismatch().
+
+> -	if (sk->sk_protocol =3D=3D IPPROTO_TCP) {
+> +	if (unlikely(inet_prefetched_sk_mismatch(sk, net, protocol)))
+> +		goto mismatch;
+
+[Severity: High]
+When skb->sk is a syncookie request_sock attached by
+bpf_sk_assign_tcp_reqsk(), skb_steal_sock() returns req->rsk_listener as
+sk while leaving the request_sock on skb->sk.  Does validating only the
+listener sk leave a cross-family syncookie request_sock attached to
+skb->sk?
+
+If bpf_sk_assign_tcp_reqsk() attaches an IPv6 syncookie request_sock
+(rsk_ops =3D=3D &tcp6_request_sock_ops) with a dual-stack AF_INET6 listener
+and the packet is then decapsulated or rewritten to IPv4,
+inet_prefetched_sk_mismatch() accepts the listener sk and leaves the IPv6
+request_sock on skb->sk.  cookie_v4_check() then stores an IPv4 struct
+ip_options_rcu pointer into ireq->ireq_opt, and when the request_sock is
+freed, tcp_v6_reqsk_destructor() calls kfree_rcu(inet_rsk(req)->ipv6_opt,
+rcu), writing struct rcu_head at the ipv6_txoptions offset (48) out of
+bounds of the ip_options_rcu allocation.
+
+[1] https://sashiko.dev/#/bug/linux-a29ff632-3911-4094-af19-2d49a80d3698
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261123084138.7232=
+75-1-razor@blackwall.org?part=3D1
