@@ -1,57 +1,89 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795448328;
-	b=UVKoCL2XTk/YmFs/w27qWNjzEtvv/fJgh+hsU2On+2pMqomECHAuRN96O03MznijHBct
-	 NwXj2qAE9v2YfLwKMwVh7/670ctaKi0t01cwZXXuPQpbiKOH8C6cq0fW0K43iWaEtiCUZ
-	 EOHe6J+ipdELoMKeD0jSiWBebvaM9isk7uGTRtmGgzZT7PLmDDoZiIiWzDfbApiFQiQyM
-	 Du9ffuQGVDlkyjHKRCblwJJOWKexRdTEZ+5rvASpo+W9ZwoXrsYLlNAR5amHVfhItCXB9
-	 h+vqZ2CtPbhnxQW83WyqHfFKIbD071AHe2Bfggk2bZr3xUAUd6A7oACfEgqesY56LVw==
+	t=1795449108;
+	b=tTieSIaZw+WrsP9oO0HHTdRvFjPguc9mnFlqv7dAi5FL02oZxbLedufcu39sfkfn+exx
+	 Dz5j4Mm8IUNA07iit/tgChtZdAVO7Mwqm93xDOOeP9SanJ4VF8gJC3fJzuZ1w+xamzFfr
+	 MgbtH4aQpQQoZlrEOK4U5ktGdQebCD2Xx2ay1eWzgTY+SpTVWxZZSPHhkq/fwOFZ0Mpsa
+	 hLO9b9ve8yDU3F7thwaIGTXY/2dNdZL1kbSUb5cp6CgAeHJpYmrRCMLZhBKoY+7TaaaYs
+	 goHAhabU8cJl8Ney1JYJdt3MLKcYAwzxCaHkIYNE4KMXQJV+krNxSJtuRVfE0uutJMQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795448328;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=5+X5nQctZfjuCagT5X1YCMQN83cSSzFpr4WZl4ytKKU=;
-	b=N7vCJUI+kOkmlr8NwiOsfHoKdS6RTucl/Fi8lRer4EOVFGbMFoJAenP4Nfy3HPMjYsp8
-	 qXf+wjicHBAxgzwjxxzOQHUNI5KQuMln7U/K9Q9flcG4/mNsx6cbQ7z1aZ92UobuK18nH
-	 f6WTwRt1+MCbzn990Z8VNNp/chKjJeq+XrxMOiNeO/ghiO+95YuPWM5mUy5ubSsQg48JH
-	 Fps0oKlRJwjBwfz7SYQkbxxTqept+a/VNmMnOSNI1QTaxX9OsiOk0Qh25KfWK1sRU2A+2
-	 uGEPjtadVkm/9i6mUABIc90h9zJnivMFFP5jIUwpc4fCQjqyHyasiQ3/QMWToWkRzOw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795449108;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding;
+	bh=UwQ48wOTLkO0bDqXN9a1jl6i0o7vHJe4bfY0WMjHxA0=;
+	b=Bg2ePhDJsxksI4GAIoVlH14EPQBsJ55PdFW0M4mNhmo/OZpAp0W/rPpYwU7IwVv7Cn4F
+	 iiRk39qJuqc/my+I8ew89GWQjUoGudrJMQ3Ge18ahW3KwtmtX86L1YZlTd6vkeej0R8kg
+	 GmfPNgNYQ9QRJYMrnbYu1cLn4IGEMLijldZ3xYb30FOjwvDyfYdXyOn3L0MnH0/6kz6/I
+	 OQELYeBhE50TgIaDVkX258Vi/ohyJLPPQileovzIrbSWU/BcYyiGJPEMn1KLYagTmt8zk
+	 Ev9EgCzgiwtGHUT305TET3fB8Rrstvkz1IKzpyZRSauxdAnvJ5MAOgPBHaGdxSFsOvQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="PqW/s6MP";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ffEczR10;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C010606A31A;
-	Mon, 23 Nov 2026 15:38:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FCDB606A31A;
+	Mon, 23 Nov 2026 15:51:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PqW/s6MP
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAD9A1F000C6;
-	Mon, 23 Nov 2026 15:38:47 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ffEczR10
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37E3B1F000D0;
+	Mon, 23 Nov 2026 15:51:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795448327;
-	bh=5+X5nQctZfjuCagT5X1YCMQN83cSSzFpr4WZl4ytKKU=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=PqW/s6MPKvEqPXmL4DOmTtx8aVsCX6kDD/Zo5HwWfu4HovzEPk4iBUQqQj5XNdX/N
-	 87HUiKQbPdtjPWVB+ZHsWRqKnJSYu/WcfhE1H9pONNg2qI9wkZYVgavpSDfQsHvDAI
-	 gjiJEnATI32bCTM7QDktvNE3ldtK69q2cfP4np8ykeEaHOSC8/Ey2/ASO9lsrjlvWM
-	 PIUWn8iRCj3YVY9RPtTs+GX18xfibSmo8krZ2qFXYwvd1km4YggT/UpKV2mXwWhG/P
-	 itu/Y/m8l0Qjf3gFYzFpEk6HZRnIB93nyC+QZFLReWg88H7bAonvbgDVqTuFpP/oRL
-	 4s4pebocVDbEw==
-Message-ID: <sashiko-outbox-229589@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v3 1/9] bpf: Add log support for tracing
- link_create
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Leon Hwang" <leon.hwang@linux.dev>, bpf@vger.kernel.org
-Cc: linux-trace-kernel@vger.kernel.org
-In-Reply-To: <20261123152743.19629-2-leon.hwang@linux.dev>
-References: <20261123152743.19629-1-leon.hwang@linux.dev>
- <20261123152743.19629-2-leon.hwang@linux.dev>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 23 Nov 2026 15:38:47 +0000
+	s=k20260515; t=1795449107;
+	bh=UwQ48wOTLkO0bDqXN9a1jl6i0o7vHJe4bfY0WMjHxA0=;
+	h=From:To:Cc:Subject:Date;
+	b=ffEczR10kkz6TwinqVlb2eqxN6YHZfPjHgTME+LIdeQFDnaJpfTfDbbKAxYyR8dkT
+	 C/KF29bpbofnjfmI+LyU5opbRTVKXHaYTqX3H9UJxU9XY/sL6OHFqYic1mAv5nZ7JD
+	 SSw02x/zrDSYJw7ootSjHsO4JJuZCWGv9ztWNARHSc5DHgJNO03wxWj69OxnbIl2+k
+	 2Pn5B1lFOaWmJi7OJgHHuB7f/a+1/NzWJyPKg67Kf4nNZhbYSHYCP9VydSTOFOf9pi
+	 dxGF0mA1uTGwyLyibjPY5K8qtP7wkDwFA2eEHvTn1TBcyXfEIlZvbJsmWUuFfT7IUX
+	 06xNE+qMx1lbw==
+From: Lee Jones <lee@kernel.org>
+To: lee@kernel.org,
+	bpf@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	=?UTF-8?q?Barnab=C3=A1s=20P=C5=91cze?= <pobrn@protonmail.com>,
+	=?UTF-8?q?Beno=C3=AEt=20Sevens?= <bsevens@google.com>,
+	=?UTF-8?q?Filipe=20La=C3=ADns?= <lains@riseup.net>,
+	"He, Bo" <bo.he@intel.com>,
+	"K. Y. Srinivasan" <kys@microsoft.com>,
+	"Zhang, Jun" <jun.zhang@intel.com>,
+	Andreas Gal <gal@cs.uni-magdeburg.de>,
+	Andy Shevchenko <andriy.shevchenko@intel.com>,
+	Bastien Nocera <hadess@hadess.net>,
+	Benjamin Tissoires <bentiss@kernel.org>,
+	Charles Wang <charles.goodix@gmail.com>,
+	Dexuan Cui <decui@microsoft.com>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Haiyang Zhang <haiyangz@microsoft.com>,
+	Jason Gerecke <jason.gerecke@wacom.com>,
+	Jiangshan Yi <yijiangshan@kylinos.cn>,
+	Jiri Kosina <jikos@kernel.org>,
+	Jonathan Cameron <jic23@kernel.org>,
+	linux-hyperv@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	linux-iio@vger.kernel.org,
+	linux-input@vger.kernel.org,
+	Lopez Casado <nlopezcasad@logitech.com>,
+	Marcel Holtmann <marcel@holtmann.org>,
+	Vojtech Pavlik <vojtech@ucw.cz>,
+	Michael Bommarito <michael.bommarito@gmail.com>,
+	Michael Haboustak <mike-@cinci.rr.com>,
+	Pan Chuang <panchuang@vivo.com>,
+	Ping Cheng <ping.cheng@wacom.com>,
+	Rishi Gupta <gupt21@gmail.com>,
+	Roderick Colenbrander <roderick.colenbrander@sony.com>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	Stefan Achatz <erazor_de@users.sourceforge.net>,
+	Tianchu Chen <flynnnchen@tencent.com>,
+	Vojtech Pavlik <vojtech@suse.cz>,
+	Wei Liu <wei.liu@kernel.org>,
+	Zhang Lixu <lixu.zhang@intel.com>
+Subject: [PATCH 00/10] HID: Assorted bug fixes across HID core and drivers
+Date: Mon, 23 Nov 2026 15:50:44 +0000
+Message-ID: <20261123155138.2907049-1-lee@kernel.org>
+X-Mailer: git-send-email 2.56.1.750.gf70dc682cf-goog
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -60,68 +92,78 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue to consider:
-- [Low] bpf: non-UAPI field name tgt_fd logged in
-  bpf_tracing_prog_attach()
---
+These issues were reported by Sashiko.
 
-commit 476f541041ef9d87251f0598129c4def280d1320
-Author: Leon Hwang <leon.hwang@linux.dev>
+None of these changes have been tested on physical hardware.
 
-bpf: Add log support for tracing link_create
+Cc: "Barnabás Pőcze" <pobrn@protonmail.com>
+Cc: "Benoît Sevens" <bsevens@google.com>
+Cc: "Filipe Laíns" <lains@riseup.net>
+Cc: "He, Bo" <bo.he@intel.com>
+Cc: "K. Y. Srinivasan" <kys@microsoft.com>
+Cc: "Zhang, Jun" <jun.zhang@intel.com>
+Cc: Andreas Gal <gal@cs.uni-magdeburg.de>
+Cc: Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc: Bastien Nocera <hadess@hadess.net>
+Cc: Benjamin Tissoires <bentiss@kernel.org>
+Cc: bpf@vger.kernel.org
+Cc: Charles Wang <charles.goodix@gmail.com>
+Cc: Dexuan Cui <decui@microsoft.com>
+Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc: Haiyang Zhang <haiyangz@microsoft.com>
+Cc: Jason Gerecke <jason.gerecke@wacom.com>
+Cc: Jiangshan Yi <yijiangshan@kylinos.cn>
+Cc: Jiri Kosina <jikos@kernel.org>
+Cc: Jonathan Cameron <jic23@kernel.org>
+Cc: linux-hyperv@vger.kernel.org
+Cc: linux-i2c@vger.kernel.org
+Cc: linux-iio@vger.kernel.org
+Cc: linux-input@vger.kernel.org
+Cc: Lopez Casado <nlopezcasad@logitech.com>
+Cc: Marcel Holtmann <marcel@holtmann.org>
+Cc: Vojtech Pavlik <vojtech@ucw.cz>
+Cc: Michael Bommarito <michael.bommarito@gmail.com>
+Cc: Michael Haboustak <mike-@cinci.rr.com>
+Cc: Pan Chuang <panchuang@vivo.com>
+Cc: Ping Cheng <ping.cheng@wacom.com>
+Cc: Rishi Gupta <gupt21@gmail.com>
+Cc: Roderick Colenbrander <roderick.colenbrander@sony.com>
+Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc: Stefan Achatz <erazor_de@users.sourceforge.net>
+Cc: Tianchu Chen <flynnnchen@tencent.com>
+Cc: Vojtech Pavlik <vojtech@suse.cz>
+Cc: Wei Liu <wei.liu@kernel.org>
+Cc: Zhang Lixu <lixu.zhang@intel.com>
 
-This commit adds verifier log reporting to tracing BPF_LINK_CREATE for
-attach parameter validation, reattachment checks, and target compatibility
-checks in bpf_check_attach_target().
+Lee Jones (10):
+  HID: core: Protect hid->inputs traversal in hid_check_keys_pressed()
+  HID: mcp2221: Synchronise rxbuf access against raw_event callback
+  HID: logitech-hidpp: Synchronise send_receive_buf against raw events
+  HID: sensor-hub: Serialise synchronous read teardown under data->lock
+  HID: roccat: pyra: Resolve USB device from parent in actual_profile
+  HID: hyperv: Validate VMBus packet and payload bounds on receive
+  HID: hid-goodix-spi: Validate package sizes in goodix_hid_irq()
+  HID: wacom: Stop HID hardware before releasing resources on mode
+    change
+  HID: debug: Hold driver_input_lock while dumping raw report descriptor
+  HID: playstation: Cancel DualSense output worker on create failure
 
-> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> index ec8e787929112..80504011403f6 100644
-> --- a/kernel/bpf/syscall.c
-> +++ b/kernel/bpf/syscall.c
-> @@ -3677,7 +3677,8 @@ static int bpf_tracing_prog_attach(struct bpf_prog =
-*prog,
->  				   int tgt_prog_fd,
->  				   u32 btf_id,
->  				   u64 bpf_cookie,
-> -				   enum bpf_attach_type attach_type)
-> +				   enum bpf_attach_type attach_type,
-> +				   struct bpf_verifier_log *log)
->  {
->  	struct bpf_link_primer link_primer;
->  	struct bpf_prog *tgt_prog =3D NULL;
-> @@ -3714,6 +3715,7 @@ static int bpf_tracing_prog_attach(struct bpf_prog =
-*prog,
->  	}
-> =20
->  	if (!!tgt_prog_fd !=3D !!btf_id) {
-> +		bpf_log(log, "target_fd and target_btf_id must be both set or both uns=
-et.\n");
->  		err =3D -EINVAL;
->  		goto out_put_prog;
->  	}
-> @@ -3726,12 +3728,14 @@ static int bpf_tracing_prog_attach(struct bpf_pro=
-g *prog,
->  		 * attach_tracing_prog flag is set.
->  		 */
->  		if (prog->type !=3D BPF_PROG_TYPE_EXT) {
-> +			bpf_log(log, "target_fd is only allowed for freplace prog.\n");
->  			err =3D -EINVAL;
->  			goto out_put_prog;
->  		}
-> =20
->  		tgt_prog =3D bpf_prog_get(tgt_prog_fd);
->  		if (IS_ERR(tgt_prog)) {
-> +			bpf_log(log, "Invalid tgt_fd.\n");
+ drivers/hid/hid-core.c           | 16 ++++++---
+ drivers/hid/hid-debug.c          | 12 ++++---
+ drivers/hid/hid-goodix-spi.c     | 34 +++++++++++++------
+ drivers/hid/hid-hyperv.c         | 12 +++++++
+ drivers/hid/hid-logitech-hidpp.c | 58 +++++++++++++++++++++-----------
+ drivers/hid/hid-mcp2221.c        | 47 ++++++++++++++------------
+ drivers/hid/hid-playstation.c    |  1 +
+ drivers/hid/hid-roccat-pyra.c    |  9 +++--
+ drivers/hid/hid-sensor-hub.c     | 28 +++++++++++----
+ drivers/hid/wacom_sys.c          |  4 +--
+ 10 files changed, 149 insertions(+), 72 deletions(-)
 
-[Severity: Low]
-As reported by Alexei Starovoitov on v2 [1], should this log "Invalid
-target_fd.\n" to match the link_create.target_fd UAPI field name used by
-the other log messages in bpf_tracing_prog_attach()?
+-- 
+2.56.1.750.gf70dc682cf-goog
 
-[1] https://lore.kernel.org/r/DMX8G01GB597.2KEEFI12YK9V0@gmail.com
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261123152743.1962=
-9-1-leon.hwang@linux.dev?part=3D1
