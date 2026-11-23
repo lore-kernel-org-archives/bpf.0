@@ -1,116 +1,79 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.114
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795450855;
-	b=aFnI8u1N6de9mDPlY614qNwrOU5szrk9AFOMirXiOJWjo3DXrgabTip8JOtxTvw7EGM1
-	 YW+iQJDWeRiVrLXSGJKzRkbHS9gMF3/+yKy6lPR2s0kESkLX7q3QmNobP/lsueQZO/eqf
-	 ijDiKpdSnOrfzdKLFjpuSscBtxm7hM5ABrtV8+OirdYZPyTLd0/tuXmAGnnYSwLujvzsb
-	 cwqE71dnfLzMijuVS5Kq33razq9IovO6HfxEXgW45HrS0XkFywOTwosublncSxR+SaxMa
-	 0aNGBhgJZXu5rtDD5fb1cK5WmpSDk9rSBTCC5zXF/kCaPDEhQsU7waTuePRGaZaZVxg==
+	t=1795451088;
+	b=fEd+W95ikm+0xhrv1/35nSGG3krmCHQIl01+riCjMimKFELAqfZtsWgb4ieG/dcvNfvp
+	 54BhGH6qnFjz00qotlTr4ptkt9ZgvL/O1XjjgJsqzp7ysKEEAsIfgvw0r95x+wkIIJTwy
+	 1ROZPwsv+KB6ib966q9BLVPsHv+Z+AofxzFZrOjoZaF+eXowr39VKEfkpz/PRMIfQOxh5
+	 ni5ppfoX0JTx+LNF6IwROz0plvjYV9/wcuVCIIXkEQZI0CEJtDMU5Nz+1PwEt9uSv+Opm
+	 kSYY1/LdbIf/3zeOSWqnCe8uq6TzNN7VD3E1YxqycuXWiBM4dcPCUsxPUbv3Ln6d4QA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795450855;
-	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
-	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 X-Received:Received:Date:From:To:Cc:Subject:Message-ID:References:
-	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=OMtq5aBML9D8zyZzLVDbeex6HGKBk1QCt6vR9V0tuYU=;
-	b=1qt2bu+NnTmC88MHcjIBRANuH5p7o4PK2UZpy4qxV3J6sGY3MXK1TmF/Dprlw2H2ZYAk
-	 789Ryjgya8/vTIcErw7/cX2UTfzFzBYuRcXivZcZDh6GaLwinMONqN32MfvN42EQXLPmq
-	 p5OBYKfa8M51CmjagZfx1Pjw2D+7f0Euxj+B/Xo1sXa66D3+XF0MvwfipEkjbxKB1mNlP
-	 YGG1cZkAZnz7Ffa+Pz0JCIrzZK+uy6Kh0VJaPUDC/SIsdX5c7Qn5w0UZHP/u3ljwnYfsB
-	 r/U5GePp/I4OWSXmkR/nwb8RsTb/8eM2riizCjeDpiUvgl/jmr6lRRRWkVUi6TuzAuQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795451088;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=p+07Lu+S55AxaC2G20FuMEl4VZfeN5TOr6+tP6KLYe4=;
+	b=yGcHKFL4WLHLnNy7gNCwvhTeFw6gJWQ9H8X9VW4IUQ3EHO7EZyt0v5Fd1u2wOz8H42sX
+	 Ouc3y8WUYz7JaWcCbkC+/UOjbX/JV5rjA2z3q8FtW4tbwCr9R1zKkpwmO88Y8gl9u7vUw
+	 K7Ueu3bKRyMhKzwE25sAEx6w0I2MBARlRDYVNYAXj5B3Z0m+z+CGJs/DDaMYJ+iliEyCB
+	 HrVgVzJE8iBkKtU2D2sRdrwNR5dudRdqxPVgeJmjfl3v3RmiPz9LI+6zfNvixRnWkRfxE
+	 Mii6sXctE+HKgF6Nr34DCvFh0Ht6Zxg6F1uG12EoPO+Zlf+DJx8pYlMKBD+z2FzktMQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=redhat.com;
-	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=Ryw0eabE;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=bUzFLfz7;
-	arc=none smtp.remote-ip=170.10.129.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="XWf/veLb";
+	arc=none smtp.remote-ip=95.215.58.114
+Received: from mta1.migadu.com (out-114.mta1.migadu.com [95.215.58.114])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB795606A32E
-	for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 16:20:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AB795606A32E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9E86606A31E
+	for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 16:24:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A9E86606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=Ryw0eabE;
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=bUzFLfz7
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1795450853;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=OMtq5aBML9D8zyZzLVDbeex6HGKBk1QCt6vR9V0tuYU=;
-	b=Ryw0eabEgPGuOSZzVXRN6BfZDCget4nrLvTEhf6Ht/8aadAFVmfwlGJCSaVjnOibH2JCtE
-	5NFuU+ZY9UrFKE3FU7QVzBRMwIxOnu4Q7KbG2TjnM3BfhnWNkcP/7aPxbHg9geMzYH+KJx
-	pLCHZgEnKl3XJqL4YNW2vdykqgMCceo=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-589-S_vHDlKJOiKmrvdB5Yl51A-1; Mon, 23 Nov 2026 16:20:52 +0000
-X-MC-Unique: S_vHDlKJOiKmrvdB5Yl51A-1
-X-Mimecast-MFC-AGG-ID: S_vHDlKJOiKmrvdB5Yl51A_1795450851
-Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-4915ba023d4so2129917f8f.0
-        for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 08:20:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1795450851; x=1796055651; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=OMtq5aBML9D8zyZzLVDbeex6HGKBk1QCt6vR9V0tuYU=;
-        b=bUzFLfz74y5qbCVGHjDhYxEeigC9aluW+HztuPAdq6hFzOqtRKHTLhHflo4IUPnUeY
-         mW19uZKUQxKJfnkMKlvmEa8N8oaM4GsEYK103xruhls/JD5evz4v0DRnZfkM7oc4UPcM
-         d93andd6WDsPFdoE3mrK2vW7lheN1Kg/Njm7J1UoYFLDCLSlROCmSuZRK/7b30t9ML9n
-         N6Maf5faXrPHKvnCTCRv2kOK5XqBqZYcl1iFsgeIlDiXtnmIpEfFoeou0TyTcVKzXBM5
-         30O70kW3LUdx5NsFrrEnX6ObGQygOQUw5AcEjBOZr/mICWP8qiXSEXVFrRHISjX5+GJn
-         hVyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795450851; x=1796055651;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=OMtq5aBML9D8zyZzLVDbeex6HGKBk1QCt6vR9V0tuYU=;
-        b=oAwMzjeTXstng/UNd3kl4/5B5m6AGPx9fkbeGsxB7ySfHFFp7QyNpgnBkBf8Dl3yvB
-         zn+xnYgIIzLh/5d4g30ThLKYoWirrxMwHMw9QiPPhJMoqiS+DDv3LJK24C5xziF4QgKR
-         rDx04ekMwzHjNaZQ9ssBDvRuCN5cg9WBvUqJ//Y9nysOTv7FmJquGmFSQVShSeYLnfpi
-         br2ScjiWN+/4sVSVYSQvIOSwjNkM01bm7afiwHR4B5yZP5+iuUgDFPLtzMfpk4GGQwkS
-         YWjkWF3XXeI1QizNvsTcWcAEEEgyQqXCejsgSezDYRRpEO1CAcUa6NNB4fNhc2S4BoBk
-         Mv1A==
-X-Forwarded-Encrypted: i=1; AL+hErHi3VaFkNurW8OM0IRtLVvDITP1T6crG5JHtSDCLK2IduNPsUd1E/XcfhiCyYig3l1qCtQ=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/FTbaV0WlVOO1558Wt0drNrVGegtvoGPYX5K/1Uhp7m4BAzZzM
-	AWENiQZq9IwrmEXlxJmQLWSHPXY+GUfjdFI+ar82e7+WGAmtBwzDZZLmRrD778vmgg6lVj8DviI
-	qm9+jL2xG5Igf7Q/qQPYYo0d0qUAy6QP8caEqURGVta2GCrw9VsRpvQ==
-X-Gm-Gg: AZFdTZcOKWaGKZmQ6pyJF1s+OLYpOg/TKgUDog3EaWeqRtK8/dFnUo9whgw19tyB1L9
-	Z0FEEo9QSR8DJK4u/npU7oEaoTOBI0CKWirXl8kYyb7Xm4Li5fDDujE8ZPoN9WsrF6nX2tiD7VK
-	sr5MU/2isK/TqpfsWXib5aoOIf/hSd3HVAeU9atI1HpjyKCqHQlj7K9TMgW/MKKzKq3k8pjTf1V
-	3j8Dbu9D8LMeZxIDlZHSE4hdxmdxS8J0tpT3VAAZqaNBzknVtzfNiJ0NoIK9JYeEmq4wCApNzPT
-	rUEodbOzcic90jDpfylHvQDoa03+zn03RtkJI7+jqTmtclvwuiEBELSKRNzOBr7zAKIUtJIewyH
-	OV740/3T3JWXW1WQBOirQcLHVl+LATaMFVLJiJRCB6+SJcszq4aJRzw==
-X-Received: by 2002:a05:600c:3b8a:b0:4bb:76d9:f81a with SMTP id 5b1f17b1804b1-4bb88824fc8mr265197985e9.34.1795450850746;
-        Mon, 23 Nov 2026 08:20:50 -0800 (PST)
-X-Received: by 2002:a05:600c:3b8a:b0:4bb:76d9:f81a with SMTP id 5b1f17b1804b1-4bb88824fc8mr265197125e9.34.1795450850173;
-        Mon, 23 Nov 2026 08:20:50 -0800 (PST)
-Received: from sgarzare-redhat ([80.116.143.202])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb8849e598sm320400955e9.8.2026.11.23.08.20.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Nov 2026 08:20:49 -0800 (PST)
-Date: Mon, 23 Nov 2026 17:20:44 +0100
-From: Stefano Garzarella <sgarzare@redhat.com>
-To: jrmmhm.kernel@eldare.de
-Cc: Bobby Eshleman <bobbyeshleman@meta.com>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	"Michael S. Tsirkin" <mst@redhat.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Michal Luczaj <mhal@rbox.co>, virtualization@lists.linux.dev, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH net v6 2/2] vsock/bpf: release sock lock while waiting
- for data in recvmsg
-Message-ID: <awRnkbbxYUw-ihGb@sgarzare-redhat>
-References: <20261114-kbh3-1-022-fix-v2-v6-0-96b6029bbffa@eldare.de>
- <20261114-kbh3-1-022-fix-v2-v6-2-96b6029bbffa@eldare.de>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=XWf/veLb
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=wx164rbT9+RkVqbCqv3zOQ0DLYdXXy6xw/muQtr/CGs=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1795451084; v=1; x=1796055884;
+ b=XWf/veLbQQ/dIkKYBBYnG34bOh2K92O73CGgHy4doQUutDaHltmkJDesFJ2LBynfWSa+/hCZ
+ CJAK+AwFLp3rPc1cbPGtAxpR5JflWUQES5u0g98y2Wwqd7plkyu+qalVmQCpMWfpfgUASXH+dR8
+ 7DERAhQ2AcJAamatjKxrCc+g=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by mta12.migadu.com with ESMTPS id bf5c4d1ccc873b70;
+	Mon, 23 Nov 2026 16:24:44 +0000
+X-Mizu-Trace-ID: bf5c4d1ccc873b70
+X-Migadu-Flow: FLOW_OUT
+From: Usama Arif <usama.arif@linux.dev>
+To: Usama Arif <usama.arif@linux.dev>
+Cc: Peter Zijlstra <peterz@infradead.org>,
+	mingo@redhat.com,
+	acme@kernel.org,
+	namhyung@kernel.org,
+	mark.rutland@arm.com,
+	alexander.shishkin@linux.intel.com,
+	jolsa@kernel.org,
+	irogers@google.com,
+	adrian.hunter@intel.com,
+	james.clark@linaro.org,
+	linux-perf-users@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	rkeilty@meta.com,
+	atish.patra@linux.dev,
+	dgreid@meta.com,
+	riel@surriel.com,
+	shakeel.butt@linux.dev,
+	kernel-team@meta.com
+Subject: Re: [PATCH 3/3] perf/core: Don't zero perf_sample_data in do_perf_sw_event()
+Date: Mon, 23 Nov 2026 08:24:40 -0800
+Message-ID: <20261123162441.1187994-1-usama.arif@linux.dev>
+X-Mailer: git-send-email 2.53.1
+In-Reply-To: <7f9c12cf-b2a6-4238-b768-17d66b84b2a9@linux.dev>
+References: 
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -120,128 +83,219 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20261114-kbh3-1-022-fix-v2-v6-2-96b6029bbffa@eldare.de>
+Content-Transfer-Encoding: 8bit
 
-On Sat, Nov 14, 2026 at 12:59:15PM +0100, Jerome Mohm via B4 Relay wrote:
->From: Jerome Mohm <jrmmhm.kernel@eldare.de>
->
->vsock_bpf_recvmsg() sleeps in vsock_msg_wait_data() with the socket lock
->held, so the virtio delivery worker, which needs that lock, deadlocks
->with the reader and all vsock rx on that worker stops.
->
->Release the lock around the wait. The reader can then wake without
->data, so the wait also has to loop; the fix needs both halves. The loop
->ends on data, the timeout, a signal (the sleep returns at once while
->one is pending), a lost transport after a failed connect(), or a state
->in which __vsock_recvmsg() would not wait. Those states go to
->__vsock_recvmsg(), so a non-blocking read now sees them before -EAGAIN.
->A blocking read interrupted by a signal now gets -EINTR, or restarts,
->instead of -EAGAIN. One tested difference remains: a reader asleep at a
->virtio transport reset gets -ENOTCONN, where a native socket gets
->-ECONNRESET (0 on seqpacket).
->
->The deadlock was found with the help of Anthropic's Claude; the netdev
->Sashiko reviews and Alexei found the wakeup, reset, shutdown and
->lost-transport cases. Each was reproduced in a VM without kernel
->changes or error injection (the resets unbind the guest's virtio-vsock
->device), except the lost transport and a SHUT_RD with a pending socket
->error, which were checked only in the code. With this patch the
->reproduced cases behave as on a native socket, apart from the reset. I
->ran the vsock vmtest.sh single-VM tests and the BPF sockmap selftests
->with the series; they pass, though none of them sleeps in this wait.
+On Fri, 20 Nov 2026 20:05:12 +0000 Usama Arif <usama.arif@linux.dev> wrote:
 
-Ditto about series/patches.
+> 
+> 
+> On 20/11/2026 01:12, Peter Zijlstra wrote:
+> > On Fri, Nov 20, 2026 at 10:11:51AM +0100, Peter Zijlstra wrote:
+> >> On Thu, Nov 19, 2026 at 01:10:46PM -0800, Usama Arif wrote:
+> >>
+> >>>  kernel/events/core.c | 2 +-
+> >>>  1 file changed, 1 insertion(+), 1 deletion(-)
+> >>>
+> >>> diff --git a/kernel/events/core.c b/kernel/events/core.c
+> >>> index 57ea7e3c01a025..fa10ad7cfd99af 100644
+> >>> --- a/kernel/events/core.c
+> >>> +++ b/kernel/events/core.c
+> >>> @@ -11212,7 +11212,7 @@ static void do_perf_sw_event(enum perf_type_id type, u32 event_id,
+> >>>  				    u64 nr, struct pt_regs *regs, u64 addr)
+> >>>  {
+> >>>  	struct swevent_htable *swhash = this_cpu_ptr(&swevent_htable);
+> >>> -	struct perf_sample_data data;
+> >>> +	struct perf_sample_data data __uninitialized;
+> >>>  	struct perf_event *event;
+> >>>  	struct hlist_head *head;
+> >>>  
+> >>
+> >> I like this one, didn't know about the __uninitialized thing. But I
+> >> think we wants to be more consistent with this.
+> >>
+> >> A little git-grep seems to suggest we ought to do the same elsewhere.
+> >> Shall I fold the little something below in this patch?
+> >>
+> > 
+> > And this should be a separate patch again I think.
+> 
+> Agreed, but IBS is not safe yet. For PERF_SAMPLE_WEIGHT_STRUCT,
+> perf_ibs_parse_ld_st_data() writes only var1_dw and var2_w but sets
+> PERF_SAMPLE_WEIGHT_TYPE, so perf_output_sample() copies var3_w from
+> whatever is on the stack. INIT_STACK_ALL_ZERO hides that today, and
+> INIT_STACK_NONE kernels have leaked those 2 bytes since 6b2ae4952ef8.
+> With __uninitialized in perf_ibs_handle_irq() every kernel would.
+> 
+> We need the below:
 
->
->Fixes: 634f1a7110b4 ("vsock: support sockmap")
->Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
->Cc: stable@vger.kernel.org
->Signed-off-by: Jerome Mohm <jrmmhm.kernel@eldare.de>
->---
-> net/vmw_vsock/vsock_bpf.c | 42 +++++++++++++++++++++++++++---------------
-> 1 file changed, 27 insertions(+), 15 deletions(-)
->
->diff --git a/net/vmw_vsock/vsock_bpf.c b/net/vmw_vsock/vsock_bpf.c
->index c9b399f37720..41307759da99 100644
->--- a/net/vmw_vsock/vsock_bpf.c
->+++ b/net/vmw_vsock/vsock_bpf.c
->@@ -34,24 +34,37 @@ static bool vsock_has_data(struct sock *sk, struct sk_psock *psock)
-> 	return vsock_sk_has_data(sk, psock);
-> }
->
->-static bool vsock_msg_wait_data(struct sock *sk, struct sk_psock *psock, long timeo)
->+/* __vsock_recvmsg() doesn't wait in these states. */
->+static bool vsock_rx_done(struct sock *sk)
-> {
->-	bool ret;
->+	return sk->sk_err || sk->sk_state != TCP_ESTABLISHED ||
->+	       (sk->sk_shutdown & RCV_SHUTDOWN) ||
->+	       (vsock_sk(sk)->peer_shutdown & SEND_SHUTDOWN);
->+}
->+
->+static int vsock_msg_wait_data(struct sock *sk, struct sk_psock *psock,
->+			       long timeo)
->+{
->+	struct vsock_sock *vsk = vsock_sk(sk);
->+	int ret = 0;
->
-> 	DEFINE_WAIT_FUNC(wait, woken_wake_function);
->
->-	if (sk->sk_shutdown & RCV_SHUTDOWN)
->-		return true;
->-
->-	if (!timeo)
->-		return false;
->-
-> 	add_wait_queue(sk_sleep(sk), &wait);
-> 	sk_set_bit(SOCKWQ_ASYNC_WAITDATA, sk);
->-	ret = vsock_has_data(sk, psock);
->-	if (!ret) {
->-		wait_woken(&wait, TASK_INTERRUPTIBLE, timeo);
->-		ret = vsock_has_data(sk, psock);
+I have sent the below patch here [1]
 
-nit: a comment here to explain why a transport can become null would be 
-nice.
+[1] https://lore.kernel.org/all/20261123162315.1142701-1-usama.arif@linux.dev/
 
->+	while (vsk->transport && !vsock_has_data(sk, psock) &&
->+	       !vsock_rx_done(sk)) {
->+		if (!timeo) {
->+			ret = -EAGAIN;
->+			break;
->+		}
->+		if (signal_pending(current)) {
->+			ret = sock_intr_errno(timeo);
->+			break;
->+		}
->+		release_sock(sk);
->+		timeo = wait_woken(&wait, TASK_INTERRUPTIBLE, timeo);
->+		lock_sock(sk);
-> 	}
-> 	sk_clear_bit(SOCKWQ_ASYNC_WAITDATA, sk);
-> 	remove_wait_queue(sk_sleep(sk), &wait);
->@@ -105,10 +118,9 @@ static int vsock_bpf_recvmsg(struct sock *sk, struct msghdr *msg,
-> 	while (copied == 0) {
-> 		long timeo = sock_rcvtimeo(sk, flags & MSG_DONTWAIT);
->
->-		if (!vsock_msg_wait_data(sk, psock, timeo)) {
->-			copied = -EAGAIN;
->+		copied = vsock_msg_wait_data(sk, psock, timeo);
->+		if (copied)
-> 			break;
->-		}
->
-> 		if (sk_psock_queue_empty(psock)) {
-> 			release_sock(sk);
->
->-- 
->2.56.0
->
->
-
-I can't see anything wrong, just some nit comments left.
-
-Acked-by: Stefano Garzarella <sgarzare@redhat.com>
-
-
+> 
+> commit e662f8539ca00096db3ee4d570efe97767427fbe
+> Author: Usama Arif <usama.arif@linux.dev>
+> Date:   Fri Nov 20 09:04:13 2026 -0800
+> 
+>     perf/x86/amd/ibs: Don't leak stack contents through PERF_SAMPLE_WEIGHT_STRUCT
+> 
+>     For a load that missed the data cache, perf_ibs_parse_ld_st_data()
+>     reports the miss latency as the sample weight and marks
+>     PERF_SAMPLE_WEIGHT_TYPE as done, so perf_prepare_sample() leaves the
+>     field alone. With PERF_SAMPLE_WEIGHT_STRUCT it writes only var1_dw and
+>     var2_w, but perf_output_sample() copies all 8 bytes of the union into
+>     the ring buffer. var3_w therefore carries whatever was left in the
+>     on-stack struct perf_sample_data in perf_ibs_handle_irq().
+> 
+>     CONFIG_INIT_STACK_ALL_ZERO hides this by clearing the struct on entry.
+>     Without it, every such sample hands 2 bytes of kernel stack to user
+>     space. "perf mem record" asks for PERF_SAMPLE_WEIGHT_STRUCT on x86, and
+>     since v6.14 swfilt lets an unprivileged user sample their own tasks with
+>     IBS.
+> 
+>     Write var3_w as well.
+> 
+>     Fixes: 6b2ae4952ef8 ("perf/x86/amd: Support PERF_SAMPLE_{WEIGHT|WEIGHT_STRUCT}")
+>     Cc: stable@vger.kernel.org
+>     Signed-off-by: Usama Arif <usama.arif@linux.dev>
+> 
+> diff --git a/arch/x86/events/amd/ibs.c b/arch/x86/events/amd/ibs.c
+> index 66e67e27224f18..9aa47751b37f6c 100644
+> --- a/arch/x86/events/amd/ibs.c
+> +++ b/arch/x86/events/amd/ibs.c
+> @@ -1376,6 +1376,7 @@ static void perf_ibs_parse_ld_st_data(__u64 sample_type,
+>                 if (sample_type & PERF_SAMPLE_WEIGHT_STRUCT) {
+>                         data->weight.var1_dw = op_data3.dc_miss_lat;
+>                         data->weight.var2_w = op_data.tag_to_ret_ctr;
+> +                       data->weight.var3_w = 0;
+>                 } else if (sample_type & PERF_SAMPLE_WEIGHT) {
+>                         data->weight.full = op_data3.dc_miss_lat;
+>                 }
+> 
+> 
+> The other sites look fine to me, including arch-PEBS: the drain skips
+> records whose first fragment has no basic group, so var3_w is always
+> written there.
+> 
+> 
+> 
+> > 
+> > ---
+> > diff --git a/arch/x86/events/amd/core.c b/arch/x86/events/amd/core.c
+> > index 49b6b8fce566..db6c87552594 100644
+> > --- a/arch/x86/events/amd/core.c
+> > +++ b/arch/x86/events/amd/core.c
+> > @@ -958,7 +958,7 @@ static int amd_pmu_v2_handle_irq(struct pt_regs *regs)
+> >  	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
+> >  	static atomic64_t status_warned = ATOMIC64_INIT(0);
+> >  	u64 reserved, status, mask, new_bits, prev_bits;
+> > -	struct perf_sample_data data;
+> > +	struct perf_sample_data data __uninitialized;
+> >  	struct hw_perf_event *hwc;
+> >  	struct perf_event *event;
+> >  	int handled = 0, idx;
+> > diff --git a/arch/x86/events/amd/ibs.c b/arch/x86/events/amd/ibs.c
+> > index 96c96369480a..cf0eafd67430 100644
+> > --- a/arch/x86/events/amd/ibs.c
+> > +++ b/arch/x86/events/amd/ibs.c
+> > @@ -1483,7 +1483,7 @@ static int perf_ibs_handle_irq(struct perf_ibs *perf_ibs, struct pt_regs *iregs)
+> >  	struct cpu_perf_ibs *pcpu = this_cpu_ptr(perf_ibs->pcpu);
+> >  	struct perf_event *event = pcpu->event;
+> >  	struct hw_perf_event *hwc;
+> > -	struct perf_sample_data data;
+> > +	struct perf_sample_data data __uninitialized;
+> >  	struct perf_raw_record raw;
+> >  	struct pt_regs regs;
+> >  	struct perf_ibs_data ibs_data;
+> > diff --git a/arch/x86/events/core.c b/arch/x86/events/core.c
+> > index 4e344fb1ae3e..5f8bfc65b256 100644
+> > --- a/arch/x86/events/core.c
+> > +++ b/arch/x86/events/core.c
+> > @@ -2157,7 +2157,7 @@ void x86_pmu_update_perf_regs(struct perf_event *event,
+> >  
+> >  int x86_pmu_handle_irq(struct pt_regs *regs)
+> >  {
+> > -	struct perf_sample_data data;
+> > +	struct perf_sample_data data __uninitialized;
+> >  	struct cpu_hw_events *cpuc;
+> >  	struct perf_event *event;
+> >  	int idx, handled = 0;
+> > diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
+> > index 0a34d674df59..5d84c18096a9 100644
+> > --- a/arch/x86/events/intel/core.c
+> > +++ b/arch/x86/events/intel/core.c
+> > @@ -3819,7 +3819,7 @@ static int x86_pmu_handle_guest_pebs(struct pt_regs *regs,
+> >  
+> >  static int handle_pmi_common(struct pt_regs *regs, u64 status)
+> >  {
+> > -	struct perf_sample_data data;
+> > +	struct perf_sample_data data __uninitialized;
+> >  	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
+> >  	int bit;
+> >  	int handled = 0;
+> > diff --git a/arch/x86/events/intel/ds.c b/arch/x86/events/intel/ds.c
+> > index 8444670cee4a..73f6fd66856f 100644
+> > --- a/arch/x86/events/intel/ds.c
+> > +++ b/arch/x86/events/intel/ds.c
+> > @@ -1184,7 +1184,7 @@ int intel_pmu_drain_bts_buffer(void)
+> >  	struct bts_record *at, *base, *top;
+> >  	struct perf_output_handle handle;
+> >  	struct perf_event_header header;
+> > -	struct perf_sample_data data;
+> > +	struct perf_sample_data data __uninitialized;
+> >  	unsigned long skip = 0;
+> >  	struct pt_regs regs;
+> >  
+> > @@ -1265,7 +1265,7 @@ int intel_pmu_drain_bts_buffer(void)
+> >  void intel_pmu_drain_pebs_buffer(void)
+> >  {
+> >  	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
+> > -	struct perf_sample_data data;
+> > +	struct perf_sample_data data __uninitialized;
+> >  
+> >  	WARN_ON_ONCE(cpuc->enabled);
+> >  
+> > diff --git a/arch/x86/events/intel/knc.c b/arch/x86/events/intel/knc.c
+> > index e887adc108ac..aa38b0ac3c7b 100644
+> > --- a/arch/x86/events/intel/knc.c
+> > +++ b/arch/x86/events/intel/knc.c
+> > @@ -213,7 +213,7 @@ static inline void knc_pmu_ack_status(u64 ack)
+> >  
+> >  static int knc_pmu_handle_irq(struct pt_regs *regs)
+> >  {
+> > -	struct perf_sample_data data;
+> > +	struct perf_sample_data data __uninitialized;
+> >  	struct cpu_hw_events *cpuc;
+> >  	int handled = 0;
+> >  	int bit, loops;
+> > diff --git a/arch/x86/events/intel/p4.c b/arch/x86/events/intel/p4.c
+> > index 5368dc31787c..4ac429e55935 100644
+> > --- a/arch/x86/events/intel/p4.c
+> > +++ b/arch/x86/events/intel/p4.c
+> > @@ -1033,7 +1033,7 @@ static int p4_pmu_set_period(struct perf_event *event)
+> >  
+> >  static int p4_pmu_handle_irq(struct pt_regs *regs)
+> >  {
+> > -	struct perf_sample_data data;
+> > +	struct perf_sample_data data __uninitialized;
+> >  	struct cpu_hw_events *cpuc;
+> >  	struct perf_event *event;
+> >  	struct hw_perf_event *hwc;
+> > diff --git a/arch/x86/events/zhaoxin/core.c b/arch/x86/events/zhaoxin/core.c
+> > index e506f677db57..fc98a7fdd3bc 100644
+> > --- a/arch/x86/events/zhaoxin/core.c
+> > +++ b/arch/x86/events/zhaoxin/core.c
+> > @@ -355,7 +355,7 @@ static void zhaoxin_pmu_enable_event(struct perf_event *event)
+> >   */
+> >  static int zhaoxin_pmu_handle_irq(struct pt_regs *regs)
+> >  {
+> > -	struct perf_sample_data data;
+> > +	struct perf_sample_data data __uninitialized;
+> >  	struct cpu_hw_events *cpuc;
+> >  	int handled = 0;
+> >  	u64 status;
+> > diff --git a/arch/x86/include/asm/stop_machine.h b/arch/x86/include/asm/stop_machine.h
+> > deleted file mode 100644
+> > index e69de29bb2d1..000000000000
+> 
+> 
