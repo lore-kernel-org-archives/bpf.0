@@ -1,45 +1,105 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.181
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795394423;
-	b=ESMgCN9ZZgoS4z/OCBgyB3HS9Dkn7roBbXCGgoe35Ibe/HG6SZuPVQGQcYN+HLWXOWnE
-	 BlN2W1ci7YBloCUWrCri8VV/P4lOrVx6MzF5C3/5EfV1VD6rrRRgqgwLvxzQAAwweQO0t
-	 q6XK9/AJrTD0FmL22vCSnv9ppblFPPYLQkP0IUuOkg1DlJuQ7wy0rKARDKluK8uygEFAj
-	 O/jqyJQo2jtXL+Gt7ZFswjgaFYFQ4psrUMrvUYDuICjV2cgRBegfDL25fMFzVAZykVUv/
-	 oj+ugR6cUM/To8iCfZzTqaSaVsRjlnOZhsmA3HCh4U0J+1tRgJpk+NLP7gHZvEnABag==
+	t=1795394455;
+	b=cCyn6EPknRNEFpm1PFhwVp2D51Oy7krLowlHSUwnv0FKEUVYPV8tjWn9fqfbbgPcNqmI
+	 yMes/07izw2SXvaTLp26F/1UeLlB8Kt4yBaUar3BoV3jIPzBdR/Zz7CCPVHN0e2imWrVl
+	 sSv3XdfMkMYZPWunYtk3aucJevWVPRhCATtCB63e2cm52Y5WX/7aJ77Wknc5+0wulb2ol
+	 rXLR2G8m2e31rA3TDeSrDyoyMhQvViMqNSEXbCY36rb06+5jOeYxlQEFybR9ANeo3446m
+	 Y72pbhJoGORBlvCrcF99zHIZO9tr7Y4CPBOn138y/XASgBEs/ev8lPmoBTlmobMn0Qw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795394423;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=vvX7FxyAeqZ8LNbdDutoA2XUQbgC5esuzUM1lgllSu8=;
-	b=YE3q5Ur8dEZQAySLUOJAL7cF4qRjQCHPo7aZ4GN5OzZKWfqFJEAuXmuK/8+es0R33drn
-	 d1+OvY8aAVA89uZHBkRGt56937QL5QSUgyH1FtZjAGkCTkHizfLtvugVBdz1R2AtsEztE
-	 Qe+slYZuR4bCpxJeJ51mrYqFU+Pe5Z0lP4jfAfTEBs1XNZMdZmSXS/61PktMo+cZbKWuG
-	 3AdTu4Dy5nuJa+YGc6ySxKTOH3i8NO4Ilz82hay4rUGHNnn29p8sUnbPP496L37tWzetA
-	 qkLsbWxPPRlYlsNx9ZMGtj2klur/qGU/xrXdapNYzMjtiYoPmfmTU8sKuu9w+kO8GTw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795394455;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Content-Type:Date:
+	 Message-Id:Cc:Subject:From:To:In-Reply-To:References:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=JhBGO+Bzff2sfRtYfk09jmNW/MhpZG21e/W39Xvcbis=;
+	b=LjwkCMioQjNRg5jnOjdiGFSz9V8tdLDG5Z+5kojhyzLJH6yv1jPvyPgc+j6oPvHl4iiM
+	 hmGurfWUPLfJo4q8c2HWBkbxI2OWIdsaalMgWMYtQZkHXH1PyXreVci7gpOzcQFaOXdfG
+	 D+vjA8Sd0kJY+OUOk4zqjqWMxX4XWGvVHV6L7aX1vxYaP32PxyNjy+yQdD1wNczb3ShM4
+	 HfHV/EtMN6ZU//47dhEehYLEVwpa+dXJg4vY375fJPIy98U04jkfRhHMJ/TDtXd/S9tgg
+	 X8s397MlSPtn/iXH+kMSzuP2/6U4RPL0XlyTI6aUFeExvFtpys7SToEm5d7TpISXT6A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=fail reason="signature verification failed" header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JXEHzbfF;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=H7VxvMiF;
+	arc=none smtp.remote-ip=209.85.210.181
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 405D5606A69A;
-	Mon, 23 Nov 2026 00:40:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 686BB606A696
+	for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 00:40:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 686BB606A696
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JXEHzbfF
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67FBE1F000CF;
-	Mon, 23 Nov 2026 00:40:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795394422;
-	bh=vvX7FxyAeqZ8LNbdDutoA2XUQbgC5esuzUM1lgllSu8=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=JXEHzbfF8FivyAPYlaHLt/sjbu+sMiIjeW4J+JAcZF6DHPGHnSyZEpAWSwINg/QtG
-	 qMvwlT/dWevDFNZE3EmB0+EkujzNQv14fIUwxBlg1u97hvPQJwRQnnmknUtnGSLqKp
-	 +w5Um1rJbFy/7SBBmUFzG6PI0EN+0XZSOaBoPzsvzRgHkXsEq4GgASFguFoLMWjWp8
-	 pki1qgTUTfJ2n1dkykh8Sx93oxX6Z8qzQ4/xFm3kvMlIB6UOQ+FNx+6SDa9dAoC1g2
-	 a4qmqFwXmDraqu/60o0Pgvn+4KIPfMe0B0GUm210pl1FgrO0ZXdh5vy5fgaMO4wlqy
-	 O+/vKLTVv+O+A==
-Content-Type: multipart/mixed; boundary="===============5817084910596839964=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=H7VxvMiF
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-8c20d68c83fso2075855b3a.0
+        for <bpf@vger.kernel.org>; Sun, 22 Nov 2026 16:40:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795394434; x=1795999234; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=JhBGO+Bzff2sfRtYfk09jmNW/MhpZG21e/W39Xvcbis=;
+        b=H7VxvMiFVH4s8ClRmHAsMycvb8VDbOKtQc1O2zfUQwjLSuXbwP35iqp8VjXYOxQqPR
+         EZFiGAwwggYd5yjCZvYjKgxafzXFwYEGQCBVQovrw+xO041oD6iHc6XkhJXyVCMg7s3H
+         oRW6zgEMhlMvIZHTIIKfIudIPg/e9Ojbl7lKmaZwZcIOuSdVy1uFNZTZjNUWuAAHnYij
+         914nbt3VYInsCaLfSoNxUWD79rl3NtXQiOM86aghrhzomO5YY+hv2/nWPQnS2uBQWvWb
+         0VrLXZ61RsylhET2ZoWL+Sox7aXKrrq2DGjfWyP64T2sNVk3Bu2pomSgzwU383pH5r7P
+         L5lw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795394434; x=1795999234;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=JhBGO+Bzff2sfRtYfk09jmNW/MhpZG21e/W39Xvcbis=;
+        b=GtruEM1Zq55L4+OW1aMu9AcKNe62nYps2CqmScD/koqKkpZ5TB20wyWByg3LGbzhny
+         2h+MSh9mAuWeP5sjKRZe/ojIkBJQgbgxDnipNB4EVTuusMhu8DLzUsIuWkBRt4VGhUvi
+         lgaRN8KIZe4gDt9YdDWhtmQ4ol6WRFz1gfacShz/NhsFcFMisTW7nftouBWBd/xAztJZ
+         QfYocjjJpYowW8DsuXx5+DTVofVRFe9dRLAsLaSMzVYFHY2VrRdlj2FB0oYmfYmXh6Kt
+         ecOiM4rMZvS/767y9iPKrnZSYPjphBrwwKPfAGHAoeZcCKjiKEU2bDUCLC6djkVknLsi
+         ItmA==
+X-Gm-Message-State: APuU4Z/CZahaOqhKHj5/LKN5KFA+6QYN9OBypNeJ0Q3uyYy/rbYj+gzp
+	1UuEhMZ8sJUYWAmbD95TEYxw1YQTOLl8OMtgnYRjGuD7jGsiHxX8SYMa
+X-Gm-Gg: AZFdTZfSCrneO6K3wUbXtRyznvLqmX6CHTEmOKxceA+gcJI5afeAfxC+P9WG9m4Xo7n
+	rvoADekiRncg8UkrL2K0NteHtb65iva5IGy+eh0Grg3frpeg480G1niPSHJm4tLR6dPVbOokP0e
+	+Ad2xmg8J55NhAMfh7wEpZN+CdC2jOWVD5iCDDnqWlb2/f5hFHYa7g+6POxYsFr27C1P/lRGv8s
+	mhKbqD6I4CWj8EjV5KiTl/ZSp+gxpKPhcAGAtVezo2Vyk7y1WxLzrhFatxvdeQOR9hYttt27ZKx
+	j37anRlwmsxypEVLo/337EatDdvhJo2qFJHzUxkBfKCEgYoL9mXk9l3RDjZHXOCUjIK/Wz19Iz6
+	gv4TZW01DswjYD0rpfqmR7gUiNLwwiKmabmmPiQbwx3Szh6zh8fXB85fu8U5G4ldNrbz5nTbrU7
+	Y55cf5XeKv9JBOhdeO9evlbiGvKWj3yps/efUc8gis8VO2oxSm2aBmcaHTAfhPWDZidjN7HcYE7
+	uo4SonAalcXo1JErWytqWIY6viv7kraVnTk6qDa1piY5BFyfgG7hpfY6MkNhD9hS3o2ExUEV+nr
+	s1SkWThsOFjO6ls+UP2tG5bl6uhCVEmudoPLK/S6r7KllHEPeZzaM6Wj65SgH/Kqd7rH2p0u8Nj
+	c14xu/VNMp6YjHY1k7MOEGfyDngS7Fdh7ECM=
+X-Received: by 2002:a05:6300:492:b0:3e0:df21:9df2 with SMTP id adf61e73a8af0-4014ca45234mr5333075637.10.1795394433438;
+        Sun, 22 Nov 2026 16:40:33 -0800 (PST)
+Received: from localhost ([153.61.198.251])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8c87343f726sm4738195b3a.36.2026.11.22.16.40.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 22 Nov 2026 16:40:32 -0800 (PST)
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 23 Nov 2026 00:40:32 +0000
+Message-Id: <DN267JUKDRNS.2VMV07CQ58R4X@gmail.com>
+Cc: <bpf@vger.kernel.org>, "Puranjay Mohan" <puranjay12@gmail.com>, "Andrii
+ Nakryiko" <andrii@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>,
+ "Martin KaFai Lau" <martin.lau@kernel.org>, "Eduard Zingerman"
+ <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Mykyta
+ Yatsenko" <mykyta.yatsenko5@gmail.com>, <kernel-team@meta.com>, "Liam R.
+ Howlett" <liam@infradead.org>, "Suren Baghdasaryan" <surenb@google.com>,
+ "Vlastimil Babka" <vbabka@kernel.org>, "Shakeel Butt"
+ <shakeel.butt@linux.dev>, "Pedro Falcato" <pfalcato@suse.de>, "David
+ Hildenbrand" <david@kernel.org>, "Jann Horn" <jannh@google.com>,
+ <linux-mm@kvack.org>, "Chris Mason" <mason@kernel.org>
+Subject: Re: [PATCH bpf v6 2/3] bpf: switch task_vma iterator from mmap_lock
+ to per-VMA locks
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>, "Puranjay Mohan"
+ <puranjay@kernel.org>
+In-Reply-To: <awGZWsCp6v63H_py@gremlin>
+References: <20260408154539.3832150-1-puranjay@kernel.org> <20260408154539.3832150-3-puranjay@kernel.org> <awGZWsCp6v63H_py@gremlin>
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,139 +109,85 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <7e1d3d4067c817a0ae6137044406af1138613ce289199ca065c65fc6d611f990@mail.kernel.org>
-In-Reply-To: <20261122235757.3456048-4-irogers@google.com>
-References: <20261122235757.3456048-4-irogers@google.com>
-Subject: Re: [RFC PATCH v1 03/11] scripts, unwind: Add build-time .eh_frame minifier
-From: bot+bpf-ci@kernel.org
-To: irogers@google.com,linux-kernel@vger.kernel.org,linux-trace-kernel@vger.kernel.org,linux-arch@vger.kernel.org
-Cc: jpoimboe@kernel.org,rostedt@goodmis.org,peterz@infradead.org,mingo@redhat.com,tglx@kernel.org,bp@alien8.de,dave.hansen@linux.intel.com,x86@kernel.org,catalin.marinas@arm.com,will@kernel.org,mark.rutland@arm.com,linux-arm-kernel@lists.infradead.org,pjw@kernel.org,palmer@dabbelt.com,aou@eecs.berkeley.edu,alex@ghiti.fr,linux-riscv@lists.infradead.org,acme@kernel.org,namhyung@kernel.org,linux-perf-users@vger.kernel.org,mhiramat@kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,bpf@vger.kernel.org,nathan@kernel.org,nsc@kernel.org,linux-kbuild@vger.kernel.org,ojeda@kernel.org,rust-for-linux@vger.kernel.org,ardb@kernel.org,linux-efi@vger.kernel.org,maz@kernel.org,oupton@kernel.org,kvmarm@lists.linux.dev,shuah@kernel.org,linux-kselftest@vger.kernel.org,indu.bhagat@oracle.com,jremus@linux.ibm.com,wnliu@google.com,dylanbhatch@google.com,irogers@google.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mas
- on@kernel.org,ihor.solodrai@linux.dev
-Date: Mon, 23 Nov 2026 00:40:18 +0000 (UTC)
 
---===============5817084910596839964==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Sat, Nov 21, 2026 at 05:40 AM Lorenzo Stoakes (ARM) <ljs@kernel.org> wrote:
+> This is buggy and can result in deadlock. You need to revert it or restrict
+> which contexts it can be called in.
 
-> scripts, unwind: Add build-time .eh_frame minifier
+Yeah. It's a bug though very much theoretical.
+A revert would bring back an actual deadlock that people hit in production.
+So here is that.
 
-TL;DR:
-- On big-endian build hosts, min_eh_frame may silently skip minifying every
-  object, so the size reduction is lost
-- Kconfig depends on UNWINDER_DWARF_CFI, which is defined only later in the
-  series
-- min_eh_frame is missing from scripts/.gitignore
+> I'm a little surprised you didn't cc- or even ping mm or the VMA team here, we
+> are always willing to help and it's clearly sub-optimal to write duplicative,
+> open-coded VMA traversal in BPF.
 
-> diff --git a/arch/Kconfig b/arch/Kconfig
-> --- a/arch/Kconfig
-> +++ b/arch/Kconfig
-> @@ -528,6 +528,16 @@ config HAVE_UNWIND_USER_CFI
->  	select UNWIND_USER
->  	select UNWIND_DWARF_CFI
->
-> +config UNWINDER_DWARF_CFI_MINIFY
-> +	bool "Minify .eh_frame tables at build time"
-> +	depends on UNWINDER_DWARF_CFI
+Fair point. Will cc mm next time.
 
-A subsystem pattern flags this as potentially concerning: a depends on
-naming a symbol that no Kconfig file defines.
+> It's not really sensible to alter core mm to accommodate this at this stage, so
+> probably the best course is to disallow this code path for softirq context, or
+> you could look into patching the x86 code.
 
-UNWINDER_DWARF_CFI is not defined anywhere at this commit, so this option
-evaluates to n on every architecture.  That leaves the hostprogs-always
-entry in scripts/Makefile, the cmd_min_eh_frame hooks in Makefile.lib,
-Makefile.build, Makefile.vmlinux_o and rust/Makefile, and
-scripts/min_eh_frame.c itself unreachable here, so the results quoted in
-the commit message cannot be reproduced from this commit.
+A softirq check is not enough. A tracing prog can run in task context
+with pgd_lock held and irqs on:
 
-The symbol is defined later in the series, in 6cf5792e969e ("x86/unwind:
-Add Minimal DWARF CFI kernel unwinder"), efdfa5f38673 ("arm64/unwind: Add
-Minimal DWARF CFI kernel unwinder") and 90a680847a32 ("riscv/unwind: Add
-Minimal DWARF CFI kernel unwinder"), so this looks like a forward
-reference rather than a misspelling, and bisection is not broken.
+  pgd_alloc()
+    spin_lock(&pgd_lock)
+      queued_spin_lock_slowpath()
+        trace_contention_end()          <- pgd_lock is held
+          tp_btf/contention_end prog
+            bpf_iter_task_vma_next()
+              lock_vma_under_rcu()
+                vma_start_read()
+                  mmdrop(other_mm)      <- last put takes pgd_lock again
 
-Would it make sense to reorder the series so the unwinder Kconfig symbol
-comes before its consumers?
+Equally theoretical deadlock, but since we're discussing hypothetical bugs...
 
-> +	default y
-> +	help
-> +	  Strip unneeded callee-saved register opcodes and coalesce PC-advance
-> +	  bytecodes in .eh_frame sections at build time, reducing kernel unwind
-> +	  table memory usage while ensuring only Minimal DWARF CFA bytecodes
-> +	  remain in vmlinux and modules.
+can vma_start_read() use mmdrop_async() like free_signal_struct() ?
+It changes only the last put of other_mm in err_unstable.
+_destroy() already calls mmput_async() from the same contexts,
+so the fix costs nothing to mm afaict.
+We can fix it on bpf side, but below fix is much cleaner.
 
-[ ... ]
-
-> diff --git a/scripts/Makefile b/scripts/Makefile
-> --- a/scripts/Makefile
-> +++ b/scripts/Makefile
-> @@ -12,6 +12,7 @@ hostprogs-always-$(CONFIG_SYSTEM_EXTRA_CERTIFICATE)	+= insert-sys-cert
->  hostprogs-always-$(CONFIG_RUST_KERNEL_DOCTESTS)		+= rustdoc_test_builder
->  hostprogs-always-$(CONFIG_RUST_KERNEL_DOCTESTS)		+= rustdoc_test_gen
->  hostprogs-always-$(CONFIG_TRACEPOINTS)			+= tracepoint-update
-> +hostprogs-always-$(CONFIG_UNWINDER_DWARF_CFI_MINIFY)	+= min_eh_frame
-
-Should /min_eh_frame be added to scripts/.gitignore?
-
-Every other host program built here has an entry there (/kallsyms,
-/sorttable, /tracepoint-update, /insert-sys-cert, and so on), and
-git check-ignore -v scripts/min_eh_frame matches no rule.  After an in-tree
-build with the option enabled, the binary shows up as untracked and could be
-picked up by git add -A.  No later commit in the series adds the entry.
-
-[ ... ]
-
-> diff --git a/scripts/min_eh_frame.c b/scripts/min_eh_frame.c
-> new file mode 100644
-> --- /dev/null
-> +++ b/scripts/min_eh_frame.c
-
-[ ... ]
-
-> +int main(int argc, char **argv)
-> +{
-
-[ ... ]
-
-> +		if (memcmp(map, ELFMAG, SELFMAG) == 0 &&
-> +		    map[EI_DATA] == ELFDATA2LSB &&
-> +		    map[EI_CLASS] == ELFCLASS64)
-> +			rc = process_elf64(map, (size_t)st.st_size);
-
-main() checks that the target object is little-endian, but not the byte
-order of the host the tool runs on.  process_elf64() then reads and writes
-the ELF header, section header, symbol and Elf64_Rela fields as native
-structs, and only the .eh_frame payload goes through get_le32()/put_le32().
-
-On a big-endian build host cross-compiling an x86_64, arm64 or riscv64
-kernel, the first check in process_elf64() sees the bytes 01 00 of e_type
-as 0x0100:
-
-    if (ehdr->e_type != ET_REL)
-        return 0;
-
-Won't every object then be silently left unminified while the build still
-succeeds?  CONFIG_UNWINDER_DWARF_CFI_MINIFY is default y and its help text
-says only Minimal DWARF CFA bytecodes remain in vmlinux and modules, but on
-such a host nothing is stripped, coalesced or dropped, and nothing reports
-it.
-
-Other ELF host tools in scripts/ handle this: scripts/elf-parse.c picks
-rle/rbe accessors from EI_DATA, and scripts/mod/modpost.c applies
-TO_NATIVE() to the ELF header fields.
-
-The resulting kernel should still work, since kernel/unwind/dwarf_cfi.c
-parses unminified CIEs and FDEs, but the documented size reduction would
-not apply.
-
-Could this either fail the build with a message when the host is not
-little-endian, or read the ELF header, section, symbol and rela fields
-through le16/le32/le64 accessors as elf-parse.c does?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/45087188604
---===============5817084910596839964==--
+diff --git a/include/linux/sched/mm.h b/include/linux/sched/mm.h
+index d7c6a94..a3333ed 100644
+--- a/include/linux/sched/mm.h
++++ b/include/linux/sched/mm.h
+@@ -43,6 +43,7 @@ static inline void smp_mb__after_mmgrab(void)
+ }
+ 
+ extern void __mmdrop(struct mm_struct *mm);
++void mmdrop_async(struct mm_struct *mm);
+ 
+ static inline void mmdrop(struct mm_struct *mm)
+ {
+diff --git a/kernel/fork.c b/kernel/fork.c
+index 5efceb8..177d5c0 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -752,7 +752,7 @@ static void mmdrop_async_fn(struct work_struct *work)
+ 	__mmdrop(mm);
+ }
+ 
+-static void mmdrop_async(struct mm_struct *mm)
++void mmdrop_async(struct mm_struct *mm)
+ {
+ 	if (unlikely(atomic_dec_and_test(&mm->mm_count))) {
+ 		INIT_WORK(&mm->async_put_work, mmdrop_async_fn);
+diff --git a/mm/mmap_lock.c b/mm/mmap_lock.c
+index 834bbf8..6b9a1bb 100644
+--- a/mm/mmap_lock.c
++++ b/mm/mmap_lock.c
+@@ -306,11 +306,11 @@ err_unstable:
+ 	 */
+ 	other_mm = vma->vm_mm; /* use a copy as vma can be freed after we drop vm_refcnt */
+ 
+	/* __mmdrop() is a heavy operation, do it after dropping RCU lock. */
+ 	rcu_read_unlock();
+ 	mmgrab(other_mm);
+ 	vma_refcount_put(vma);
+-	mmdrop(other_mm);
++	mmdrop_async(other_mm);
+ 
+ 	return NULL;
+ }
