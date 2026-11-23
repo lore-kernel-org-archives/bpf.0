@@ -1,45 +1,99 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795470363;
-	b=LRssvx97Jd77pb3Vmm8wAW1Ne2ZuPGFhyZCZQXmUfS2gN5CE4UwIl1o8K8rIYctR314A
-	 g969cuoekElyllcuYVDo5Sf7beHK3whohcIWhQKFN0exyip0m5lPaxxsKc9/dpAOh9sbp
-	 3K18McMzBypc2KXgWGRsfRwBjqowfgaCjyN6jdoM/gzrIMwdtzmcRBtTYgIb+Vn23pnmT
-	 VXU6SmLUmL9u/xYnRGZoV4AYG1xkLj9r7sjAdZy0NDlRMK1KIEek8dhQVNSqa/bLy7OzT
-	 panEzvPSaDd+cVV6gyUz9qmc6dfS5uNNCe375RuI0H5Crt6nw+e1QKLHwlcYu5zAN2Q==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795470363;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=Shz0vFbMZApQHnxXjuMygFvUH5u2IdlpvjR1eoSsZKs=;
-	b=UejTAxu0ozrtb3NcmB6JSjR7kTCJp0LwMwRRgZV0X3u+okXiqRJzIEGOrxLHwQ9yZLwV
-	 UrWOAEwQ86t3Z+PBzQtWJq7hk6bzcY3sy9Ot/FJM+CacxwZCr6umGeuCCaQHup7gLShw9
-	 M1X0Pa/dS3p0iL4oy0s+rrXgga2Xm2PqUupFoBhXMjUcN7idCX7Z+9HL+OLZTo/koC0ik
-	 /e+bf6YorKKn0CTt2EB2u7GMLtipFE1ll3tiNFyU5//5grKExLlc2+9dagJAyWpUVpByc
-	 rRqjyvgIohVidIqSp6t3UVeg7aSbHx686FH9S8d/VSleNcy/fLzq3HnZzpBgE+QcCxA==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cct16vwW;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.46
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795471290;
+	b=ceUiAIkH9kevd/4EtfKoot7sBSMPkc9OK0epkeuBae3EeLcgbzauRFsB5ia6zO/L9IEn
+	 ZRFOMDr6aBJRVUnMaOQbQuf8EPoRkL68kpOpDr1RZ7/CbvQrzE8RYCBa+0Hhh92KNgzbs
+	 6OFx1IQOAkuhOw44wbj4jtOHp3/kUmyIoQGhU3mH9ObaJqEeBCT6f4TLwFm2mtI8Za307
+	 GZlDEsBh9bzKhvVKWCALou9CWK7wSg/cp6v3NA9ZOm855xIK2pHqcNg3tdXfc8M4JV18W
+	 ADLKQucv4lD/+UnVBnuEH88G2KHoZVpLc0afbrLstyIjSrvk1TfUVfDBqtzMsTv0sQA==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795471290;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type;
+	bh=srL4Uf6AX26Xr4iCAP6zHkN1OE8a5FhQcDs//2mI1Q8=;
+	b=C5NiOfM1MwflRlOKJQnlBYoCZwBUh4f5Nl/XMReF9/VRY1JHp2pLxrr6lQCbw4vUtiQ3
+	 jSIyMGfzoVBOpvoCt9GDybmfCgntaV433gGFUNRYmgHO8+oCxbJDShgHpOFHCQ9S6uUj9
+	 an5sQ8dlv9svGE/fS+FkQvCidWZgR/h4k0Dm9HD2jK6EUU2/0GD+CUp+YQvBaaTfzkmJR
+	 LfrqM3lpcZSOb/Cel4FR9PdjHib93yI7c9JTHE5i5bGHD8R+rWNz+rO1Xb3l611VGKVZ9
+	 nwcU4PeR5u7c1AO/hqptzaHIi1PPdxcBNHakTNfSEH2dlTHMzvm+UHsPxn90bq1xHrg==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=cloudflare.com;
+	spf=pass smtp.mailfrom=cloudflare.com;
+	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=bIEcMOri;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.46
+Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F07C4606A31E
-	for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 21:46:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67F9E606A32A
+	for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 22:01:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 67F9E606A32A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cct16vwW
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D99981F000CF;
-	Mon, 23 Nov 2026 21:46:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795470362;
-	bh=Shz0vFbMZApQHnxXjuMygFvUH5u2IdlpvjR1eoSsZKs=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=cct16vwWJKUs1vpiOrbk+vDNZPNIUmVCDRfScoNVcjBBJ4i9s/s9qgTHLV9u7A6AA
-	 J6j7Huq6hCLx+CwLF2oQmKlYBwwfUSo2DvFmir9ZX5poaFKnC6cEmqFvAOQx92ZPFn
-	 3jTLjJG7dJ9wlhPQtFNCKGkmyCgkj30KMjcEMIgXV8gHX6pEllspkJisJbcw1Yhu2F
-	 UlOwM2Kc8CpsRmtfwnSefkk92MdskY7XFdIGo/l/CnI4vHdG66flIVpiZmxQHkbgyO
-	 exSbdsq8zbvvoctMZw38Zvcdca0OmX7aRzHA7bzLGYdwBWJrOVDD/ib64v9vcJqeTT
-	 tzevIq5c3t2WA==
-Content-Type: multipart/mixed; boundary="===============7243962787031392501=="
+	dkim=pass (2048-bit key, unprotected) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=bIEcMOri
+Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-4877837890fso2143973fac.2
+        for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 14:01:30 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795471289; cv=none;
+        d=google.com; s=arc-20260327;
+        b=mPECR54vExc5cCwDKHWpG7M6MjdXAj4yXhKrGTRWplEictMe8RnT+2VTRKAC5JfUN9
+         mmE3Uob/cERlpF5zVwIkvZgxtK7NFKWCpmYaXYB325A5h6UYVDZAFFPWzAJ6M6fQpbxI
+         hwjd9IqXYSZSx0U2tHuhNQ6Q9ghA2xhKWVQGr6CFLJHT+h2+KWL3QWN8gLyV7XZzXz4k
+         p4uC0YKSeTACMYE3ApDk7yL21UzpvglovJAdGCUP5OOCoxFmsijIVqu+5qVooXKzhQU5
+         gXdcKz1SIz5BeZP/1s9DRc+pMerUPvD0VgEAZ/5l17mDLr8gWm8DYzFYAc6Vr1z7u/eM
+         cKmQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=srL4Uf6AX26Xr4iCAP6zHkN1OE8a5FhQcDs//2mI1Q8=;
+        fh=9ZKTGBU5oBXOpS5tZggmP8v8kTLF7bZE8T1ZnFmHUMw=;
+        b=aAcI7r0dCXg2ZXcidSZ96X+41ecTA6F+K67MUF4qJiNJxKarBpBzo7spLM212y2Ts2
+         k9GFfSXpla8rbz8PIrkbFAnGNxxVoqe9qcYoneIv0RWxa4imtYk2u6EUXDHv/8HtA0aK
+         mhciq+cNFu4oULKqCDpP8eTPRIytWEB9+rKtco8vEV/Q2WfX1Xu9bC4mI/i7TPTYFloC
+         XaGHEkuvCV/7U6eZiBq2LSRovwTtYYyB1W/3cMXX6q1bOffwmqtODaNb/W73VNmHOzd0
+         MMZ/SfXWSf2V03KRjkhOMuc/U2U0bEVPXgd/ir3HAmuxME0O4+zd9mSHsACBXTy7uWkW
+         p0+w==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google09082023; t=1795471289; x=1796076089; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=srL4Uf6AX26Xr4iCAP6zHkN1OE8a5FhQcDs//2mI1Q8=;
+        b=bIEcMOri8Aax8dKFPrgYNg8wJhG1TdHlstGt2MlCyltgaYxCPE3njcf/ibhUFjv9+A
+         DUCiQLx8Ue8lqs8APjUUIua4gZUO8hcQX5Mpziqka8UfmD+frjU+gJD+i+bF5k7RHgwj
+         fpdDp2HDYwI0VfSnwrxLMhUzCsK58c2MIKdK56m2LP31pTpIPMaOGEdrx/LC/YAxGnRV
+         xDNA95uN/5YkxdEZ6dQjD3YfWy3iBL1pEQc/bRHawTjj21LlnI30bfI7XWeA5oSCgrC5
+         inFIAx1nx0xqQpVBsutU31JvUAm5Z3V0Qg87HKJTPqRxxFl8nRb+b27K2AMX0xRg9Dej
+         aBOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795471289; x=1796076089;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=srL4Uf6AX26Xr4iCAP6zHkN1OE8a5FhQcDs//2mI1Q8=;
+        b=FD/iBXqdYD9RUoRYLBn0W33xiq1TLjiA8LRP/FKRZaIa2kv7QRe2CbFr0CQ5DHLRJz
+         2hDpZxrY1GhVTMrO72CRZndwWz++aP2CfGtc2/QHjmqaAge4Km34PmH7iipNecsJ5yOi
+         m/M9GKBSxr3Bpoa1lhTICDaTt8TWsMNyvwZVn/cwlMLzqvUAQWB2xoDD+i+vuMJQhuDZ
+         njP+gNUUtLN8OpVOkWethG6GpIXHxJ2kFEyToCwE4MZW2uhh/3PWdrCsXkvNlHocnEw4
+         7/JR9LBS/Fzv5kwUBLfq+AT6fX/nLaMM83fkh+ooMxA0bzXqlBXkzelkxhUKHw9k4WkA
+         SM1A==
+X-Forwarded-Encrypted: i=1; AL+hErH0U/ms/E4pLAfhkWwYynQgQh11op0+260lunJNcZQvI3MczP7ExIemFY7Mmvz/vY0nKjk=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8g48/OMNL77eqCmwj9Kog+D3GvJrRO5PyY5aBRa4Jji/ErKvnF
+	NGLJHShURLIVHphgcSD9Yfy2Fb5+rwd8H7veZwjrwNk9QjLzgbRS2m+jWixaiuc5pXlBAmUdS5c
+	SVOdaBJnLRlwXsOx8EMY592V/rgX3yoGKtzH5B4ILGQ==
+X-Gm-Gg: AZFdTZcVuDgP9b8ZxA+pnCcWIzskbbRNCuaBrE+Fp1/bzQuz0rNTUFo6tlbk6qpEu9o
+	tlcTf6Mk0c1fP8Uk7W+t9j81UbivUNQDbHCrNt8JofoMbJnjj4d3MleyM4++zjmBH8Zuf8ZwQYw
+	qQ9Xxtg/KrT0//AaYeBA/cMbWZ/Slk0PFAbs2D+EUqQLeAfHGyARDcpvbdxFlvVwK57cQ0Hh7dt
+	sot5HIhAOE+5YSJkMKOvvGlRjjq1t9hmW/+YlpFQ1WqFv/IJaVhzlXTjoXBXXPZWXpHoIS9uSRV
+	80zQUQgsqUuyF9WU8igsKZfhAM2AuOe/d2lyK135QDRMDPtOFoymlsR69wRHNsH2wFMHhUi898b
+	Bptrigv5lE19WOchocC+c2QLuwaehBxGSxgx8acf5SMs09tEimmOFP6GqXRjlrwtzclrGrSA=
+X-Received: by 2002:a05:6871:60c:b0:475:a153:2dce with SMTP id
+ 586e51a60fabf-4bc84926567mr11531088fac.36.1795471288917; Mon, 23 Nov 2026
+ 14:01:28 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,84 +103,79 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <1cdc66100171336f5021638b5b309f3cd5e1852bed647573797a73a1f6ced776@mail.kernel.org>
-In-Reply-To: <b9243eaf40e91eb71994fce04d45ca91f1740c86.1795467315.git.memxor@gmail.com>
-References: <b9243eaf40e91eb71994fce04d45ca91f1740c86.1795467315.git.memxor@gmail.com>
-Subject: Re: [PATCH bpf-next v1 03/10] bpf, docs: Document the overwrite mode of BPF ring buffer
-From: bot+bpf-ci@kernel.org
-To: memxor@gmail.com,bpf@vger.kernel.org
-Cc: xukuohai@huawei.com,tamird@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,emil@etsalapatis.com,ihor.solodrai@linux.dev,kkd@meta.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Mon, 23 Nov 2026 21:46:00 +0000 (UTC)
+References: <20261121012402.84848-1-tianyi@cloudflare.com> <3adef4b4d528780bae31f2fb02d0a08bf9c8ebd5.camel@gmail.com>
+ <CAG4wq-f18SHytDb39SdJYzRPk-dzECjH_HCSiMGAQ721Zmfomg@mail.gmail.com> <CAKgT0UeWWherBt1MDcPF7R7jxt6E_3peo8VuxrgY3JdseM-0rg@mail.gmail.com>
+In-Reply-To: <CAKgT0UeWWherBt1MDcPF7R7jxt6E_3peo8VuxrgY3JdseM-0rg@mail.gmail.com>
+From: Tianyi Gao <tianyi@cloudflare.com>
+Date: Mon, 23 Nov 2026 22:01:17 +0000
+X-Gm-Features: Aa3M54rB6Tkjt_a_xBRCBKw7WSvCOL2uVv3n24p_DPRCDrCGO9kKs27p19qzjqs
+Message-ID: <CAG4wq-dizUz-6GB8Aj1wRTQBOzbHbT7pX9gom+AhR=5OWSyjzw@mail.gmail.com>
+Subject: Re: [PATCH net] ice: do not report CHECKSUM_COMPLETE when an XDP
+ program is attached
+To: Alexander Duyck <alexander.duyck@gmail.com>
+Cc: netdev@vger.kernel.org, intel-wired-lan@lists.osuosl.org, 
+	Tony Nguyen <anthony.l.nguyen@intel.com>, Przemek Kitszel <przemyslaw.kitszel@intel.com>, 
+	Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Simon Horman <horms@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
+	Paul Greenwalt <paul.greenwalt@intel.com>, Alice Michael <alice.michael@intel.com>, 
+	Eric Joyner <eric.joyner@intel.com>, Jesse Brandeburg <jbrandeb@kernel.org>, 
+	Lorenzo Bianconi <lorenzo@kernel.org>, bpf@vger.kernel.org, kernel-team@cloudflare.com, 
+	tianyi.gao@linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
---===============7243962787031392501==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Mon, 2026-11-23, Alexander H Duyck wrote:
+> For example, one recent one I saw was an issue on the Tx side where
+> an outgoing XDP program was modifying the frame and actually not
+> updating the pseudoheader checksum. As a result it was breaking Tx
+> checksum offloads for NICs that were using the HW_CSUM that used
+> that checksum header. We could have fixed it by forcing all the
+> drivers to recalculate the pseudo-header checksum, but instead we
+> pushed back on the program that was making that change.
 
-> bpf, docs: Document the overwrite mode of BPF ring buffer
+Thank you for the explanation, Alex.
 
-TL;DR:
-- Docs claim overwrite-mode reservations never fail, but they may still fail
-  when the oldest uncommitted record would be overwritten
-- Consumer procedure may lack read ordering on weak CPUs and busy/discard bit
-  handling
+On Tx the checksum is in the frame, so the program can fix it. On Rx
+the program can't touch skb->csum at all, so there is nothing to push
+back on.
 
-> diff --git a/Documentation/bpf/ringbuf.rst b/Documentation/bpf/ringbuf.rst
-> --- a/Documentation/bpf/ringbuf.rst
-> +++ b/Documentation/bpf/ringbuf.rst
+> The point is you are fixing things for your use case, but anybody
+> who is using the CHECKSUM_COMPLETE to compute the checksum on the
+> frames and using XDP without changing the frames will see this as a
+> significant performance regression.
 
-[ ... ]
+Without GCS, TCP and UDP still get CHECKSUM_UNNECESSARY, same as
+E810. GCS only came in v6.15, so this just puts E830 with XDP back
+to where it was.
 
-> +Overwrite mode
-> +--------------
-> +
-> +In a ring buffer created with the ``BPF_F_RB_OVERWRITE`` map flag, reservations
-> +don't fail when the ring buffer is full. The producer overwrites the oldest
-> +records instead, so the ring buffer always holds the most recent data.
+The cases I can think of that are truly impacted are IPv6 with
+extension headers, and UDP tunnels that the NIC does not parse and
+that have a zero outer checksum. These fall back to software
+checksum.
 
-Is this strictly true?  In bpf_ringbuf_has_space() the check
+And programs that do change the frame are worse off today. Every
+packet gets summed again in software, plus the "hw csum failure".
 
-    new_prod_pos - pend_pos > rb->mask
+I don't see a fix that meets all of these:
 
-returns false before the overwrite_mode shortcut is reached, so a
-reservation still fails (returns NULL) when the oldest not-yet-committed
-record and the new record together span the whole ring.
+1. It is small enough and can be backported to stable.
+2. It fixes the problem fully. We could drop CHECKSUM_COMPLETE only
+   when the program moved data or data_end, but some in-place
+   writes, e.g. NAT or the IPv6 hop limit, would still trigger
+   "hw csum failure". IMO that brings more problems.
+3. It keeps CHECKSUM_COMPLETE for programs that do not change the
+   frame. But that looks like a bigger change, which doesn't fit
+   net.
 
-Overwrite mode cannot overwrite a record that a producer is still working
-on.
+If you have one, I am happy to take it. Otherwise, as I understand
+it, the choice is between:
 
-Could the text say that reservations don't fail merely because the consumer
-is behind, but can still fail when the oldest uncommitted record would have
-to be overwritten?
+1. A performance regression for some programs, but no "hw csum
+   failure".
+2. No regression for those programs, but "hw csum failure" stays
+   for programs that change the frame.
 
-[ ... ]
-
-> +1. Read the overwrite position and then the producer position. Start at the
-> +   consumer position, or at the overwrite position if the producer position is
-> +   a ring buffer size or more ahead of the consumer position. If the start is
-> +   the producer position, there is nothing to read.
-> +2. Read the record header and do the check in step 4. Use the length and flags
-> +   of the header only if it passes.
-
-Should step 1 say that these two loads must be ordered (acquire or a read
-barrier)?  On weakly ordered CPUs such as arm64 the two loads can be
-reordered, which breaks the ordering the kernel relies on; the kernel's own
-ringbuf_avail_data_sz() uses smp_load_acquire() for both.  Only step 4
-mentions a barrier.
-
-Also, step 2 doesn't mention BPF_RINGBUF_BUSY_BIT or BPF_RINGBUF_DISCARD_BIT.
-The record at the producer position is reserved but may still be busy, and
-the length has to be masked before use, so a consumer following only this
-section could treat a busy header as a valid length.
-
-Finally, the batching paragraph needs the first record's length to find the
-next record before the step 4 check has validated it.  Doesn't that conflict
-with step 2's "Use the length and flags of the header only if it passes"?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/45270351590
---===============7243962787031392501==--
+I would like to know how the community normally decides between
+these.
