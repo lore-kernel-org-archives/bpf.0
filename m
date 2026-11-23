@@ -1,96 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.225.64
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.41
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795463151;
-	b=V9wA/AA9EVGFQaiJrlRBGTiI80GZTekyd7dyU1UHrcEePitMHGG0XzdOvc7BDp3kEOuD
-	 dvYTwhW81seFZ+1wKXnCL5TgShvJEiRcY8FJ9bTBiUIpxP6e0tKCS1FNCAoBUvSxnZJ7Q
-	 5QDvWhz1XtioKGgIf4cwhPmdUwBxDnl2MO2vmGL6Z6BIwyM7lExuyXGf4QvE0QHDfLoYW
-	 Fhg5EQaHVfqxgVClqLwRZFrfxKSXczB073Z/xxyvAwK+u/ZFaOmlclltAVlJolZI5gYfq
-	 M/tcsr3Skm7dY1Gmw6nvq6hMdVyjqc8fdu3lB1BTirWKvf5U9MrAYWbZBiXCgQNIklg==
+	t=1795463169;
+	b=sxE7gAsWAQ4Q7rpqxIV+eMPipg4r9JwRnR9TjX7gnenStSD8LSRqV7KoKAl2p7fFbZ0O
+	 q6PwXBCsrW7M+R/UaxFX5p8EOiIxn3g25BmlYVS7R58mpa6QAD8vKteMZZpDerJk2Fqm4
+	 NKqYmt1iBFDNE4+8UCLFPZ95n3hC9L6+uT68s8YxNkcj6UAW2UkUJEBE5HTepmodoOR85
+	 Mrs+Z1GGoE6D6j0wVhJfkTJZMCfg0GOhYRXt2JR8eMkTYsWtZfhSrk5eJO6LGWHDJDvn9
+	 GHFJReQMFv44FXQOVKgNrYYRdyupeO5wrorTC5Lymv7TU0XsF2iLhd4H0nL7WBo8jRQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795463151;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795463169;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:MIME-Version:X-Developer-Signature:
-	 X-Developer-Key:Content-Transfer-Encoding;
-	bh=QRk9jGCH9SqcVB+JDEpuaayjYm5ZQivk5REOIhhydmw=;
-	b=Ha55jhbTzRnLmlG5/NbHxcrQwYskIncE4QMK7LAL4Oc4GcDpKz2sA5styU9i5RjE2fNG
-	 rc1RNnME64xPI/iuaRdqtiOsUlAGTaq0E1kmcqkVVUXkOtwiczpb45MvJw8AtxQYRYRmN
-	 JUzDRhg7qb2DHoW2U/AEf/RaXaaGeUn/yu9OmVMNus7YUC8u3+ax9grTGG+61spVbVFqX
-	 mN3ls44zeCtkHaCxtH0WBX64Szx8RzQLiKGx8mwkH+ilLtKutYUr93JAGvhjn2qsW4KwK
-	 p4MoRgseTG835z6gOga6E/x08jJ4zdzGRjDHfqMcSrV5ckuN69SwsmA7k3KeE+om57Q==
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:Content-Transfer-Encoding:User-Agent:MIME-Version;
+	bh=+oTeWEIZYvGUzs7OiSyKKI+4MzSKO59unTd0y8MRQwU=;
+	b=SiSybBSfwjGFcEGRseRJZY1UhIfMv/Jz6Ih6myfUU1I+qLjtvARDU1jBnYDfvRjMMwOE
+	 h8cfAv6BP1Ych+4CVBH4BVLp7vdCVpkK02zaFU/9slYdhLDv1Me2vzQ9PWqkoB53wX1rd
+	 PEXeAKJq+ZOY8IleUMe1OJ4Ze5rMQ8PSKrQBtIkup1+ofqv/Ed12qXWqzbIuBU1AEZEKJ
+	 hdnvL6aps7XN9avvSPWiVWcNmyqnlI0nMj6u9A2YPYF755A8y7d8gMY18CkNk+xDWVEsG
+	 sLklcQOTiz9FQPXb+qAmh4yx4QWn4t84ouDXRsRDv9lrO50vSWiIvwANcwVMifTUfUw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=mMM2+Vzu;
-	arc=none smtp.remote-ip=74.125.225.64
-Received: from mail-wr2-f0.google.com (mail-wr2-f0.google.com [74.125.225.64])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=MFzc9cdS;
+	arc=none smtp.remote-ip=209.85.216.41
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62F65606A31E
-	for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 19:45:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 62F65606A31E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0622606A321
+	for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 19:46:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D0622606A321
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=mMM2+Vzu
-Received: by mail-wr2-f0.google.com with SMTP id ffacd0b85a97d-4a3da0fc008so1072926f8f.1
-        for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 11:45:51 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=MFzc9cdS
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-3ae1da332bcso1840854a91.2
+        for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 11:46:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795463150; x=1796067950; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=QRk9jGCH9SqcVB+JDEpuaayjYm5ZQivk5REOIhhydmw=;
-        b=mMM2+VzuDH2kdBskpxSqnvKqjSZ907SJoukp4gORoBh98Plly52uLYjTicWwgGvQLv
-         6bdrF5KJJ9u+QZ3vA+iYuX0BrOjcF8w7U3TSmP+zqSUTFYvOABkdq3GQLZ6PoO2JxEsN
-         v9h/m+6lA3L9YoJpjOy/5uVnFPeFWzPtPICRWd3HNw286lCGtZSsalorCX3XqYYOAxrd
-         6OBejy64zO/tBWnLxQ1uK93y09B7fGeaT4CXFad2nEgAOy7SxrH+iRzHi5Hq+91OiQWm
-         N0+onAXkMIW99PEBbR/KrRepJm35MoHjQ+qPJtWe2eB/NSMSEFD2eSsWWH4Rdz9CK4oH
-         e2BA==
+        d=gmail.com; s=20260707; t=1795463168; x=1796067968; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=+oTeWEIZYvGUzs7OiSyKKI+4MzSKO59unTd0y8MRQwU=;
+        b=MFzc9cdSeIc0xnvgDnyqVFhMq30gHLI7/3oyOhAJjhYeG6gz6DN2eJ4EyCT3haueLx
+         dU9Znxsvkq5EJVI80krRc5xWijRQZNLAJVMxAyFuppFn4v417RwHFl04eYmcBjwCpJuD
+         I3eQmog2RnPLzGHtM8mM7EcRmyzZkwklWoo5JBY6Jbiojq3cjkE913agY/dRu49M3FCx
+         momiJB5lfK+o8lGgyGnD8vBhEPZXi0rgAd8mQkP9XuMBLZsFZ96KJSj9uN8KM9rxrl64
+         jbbyAMoerKr/0AySbwvpolPu96gOJ2fcvgDLHmsBdyYXWbp8epfYjtZEgpAa9YyE7G3b
+         wkDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795463150; x=1796067950;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=QRk9jGCH9SqcVB+JDEpuaayjYm5ZQivk5REOIhhydmw=;
-        b=faDrFd1PTw8ECxZQyDxRymZwweaBV8ljKieeWiCjFhLI8eLtDMC/9QoDA3V+UBb2eG
-         MdKPmLsKTj+6670mrSwIn0KsycWn64rK0Ri4oa15VyqZX8RO5zZCpW2+rD2vg+qjgi0o
-         +9+Yc0371YR2ZX0uOEFxsYI4LM7D0Kd170tslq3V5+kDUMspBTP5jjKP6cfM+7AYQyIH
-         ecGhNjxVOHED8gc+CibOl2meTllOwQyzhWtQmW9/Nacluv/LTCP8BVxbjd6dAwnoHC4W
-         boGy6MENve+QeTSBk5UkBp7iS3Y7vtVr2tJNdFg7F6Ry2eTTfeFzrR9V2W5ppnFHk1Yh
-         Ht/w==
-X-Gm-Message-State: APuU4Z+W0y8N2zdFqx+EVE79tO5SHW5dS+ewNYZrQtXf09XJw1vtusa9
-	LqFTp5Up/6R/JABnaCHb4cXMsjcloSmzMrlqzl00DvcFuHrpeQSFUOKVbQ1ZFc/BSyE=
-X-Gm-Gg: AZFdTZcBmtfaNeapwkXz6gY5AwX1Z3/EvIbsuKwC4wmLIV2y/RpddSlrcb1PGfN8DuN
-	jqb1ULLAO26gJuuvQziZ1lymHsCvUn56hPK7dgIBIfgzN2y0ScggZDbMoJQvOIERFC14evmA1CZ
-	pUZo27EXrZB+nZqbgEJTQC4cKsYHGU0pdQ8JRHARyIKV/Fbd/YGyhsKftxO6rnKuQ5ZszwuagtC
-	t+wH1ORnA6gqxEK5j7ahngUPM8kPIU76rvjnPviFKEYxk9TvQGLDAo6NGikhlZHW0MQPAVC9qn8
-	ySBmsP0mBVohyabNd+FnHqHKYJd8A6ZxVu063fnJcv+qUmEpV/OkeJoIeTjgZ0pS/7ObNzin3S3
-	bl5xEO3s+6rpkjx5hkqdXluVQJv0qoypVajxCCtgE/xV3tgJK5nfKWaqEBICsYft5nreIq0Xko2
-	Hv6AociNoGbjwssDZcRflD5N0aHdMG0peVjvI3l+3nYCghgksN/z5bKThQvBTY8cuo9gAFBYzvy
-	wOBa/NEJ1WvcPB06HCj1K8GrTxqDEgmTeVf5TzW0Rw5zciMsTNOnra3LhHsbULdyWLoUJmdjYt/
-	Jbu5yg/Vh9J9UucpT64Mq1qaB4I6M2n2T9icwpiHHrGPbrFxNZJOj0DWOlRPfmA3T+n5X50bc/k
-	RC/5RpRQV9w+zxq4OZwbu0lT50UV2XoLFPzqX57IvwzqB+qCIHlmhfrdnLoaCn5SG6Mvp
-X-Received: by 2002:a05:6000:4819:b0:4a3:a0f:ecf0 with SMTP id ffacd0b85a97d-4abb9edc730mr20292687f8f.55.1795463149684;
-        Mon, 23 Nov 2026 11:45:49 -0800 (PST)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4ab6b205443sm25112206f8f.39.2026.11.23.11.45.49
+        d=1e100.net; s=20260707; t=1795463168; x=1796067968;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=+oTeWEIZYvGUzs7OiSyKKI+4MzSKO59unTd0y8MRQwU=;
+        b=RkjqK9iTJs3XEbtLuonOTHqDGcfMh4fWyELd3PKOYzDWip0jOj2I/8jNGJ0QJSbpMX
+         fBLrNsc9oGYLFxH50709/UCexHpB63zzGnY6USHLxgIAvvAAR4iNYyGo57nEXACl8DLD
+         aBxFSpPs2FM1A2fNiSWTYhE3vjxhlNObBsBUOsUSbJV5iWKUx0D+F29ZoxXWwLu7/5G1
+         MblEQvaGM+DZhheHH3ani8NGsTAtWA+zr6WF7bTcnnJh2ooqPzb8Pm/wFTBVlKxqwp1f
+         qI3eJsUBmS9j9MeTVRDroeiE6QWc5T8yYuS7mDLzeq9qMYyxjCq947Zrk6SoQSJ8s64J
+         y4IA==
+X-Forwarded-Encrypted: i=1; AL+hErGkE8ZQCk6IXuJ2egbWB3+UUABgeKW8h+VDDLxeDbiOK2f1ZyjuP9Stnuy8wR9piDYHswk=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9Tp/GY50q+ZE5XmZxNIk0MEOM249WtD1I8qNpwBZmVkstrYgVm
+	zMV9q8uGcFd3RZot1fhoSC8cbiMuTNzCGXn/+AIwp/HJXJYuWnzJTneF
+X-Gm-Gg: AZFdTZf/oAVj3M76WKYgGvL0PBW/9PBWsaC+ZkdC1TdM3turT5tXe1kSu20eNzBKpAY
+	PooWUezQWopaz7kypu3oeQSXgOiIHkDP7ZqAcKeidgTF9kIzexnex1cMeIyeA8Hn0xlNa3nsNPl
+	2lZo3FLyfrKWKfWe43sFwpLdfHzLSqLX+SwkhXRXjkRkwagBd6CI8oDByahWWEcGevG/7t96Wt8
+	IFLMGMjMFWodUz3B84OeJqbY9HUTcUBXlu93Y8LJ3EXP6L5auY0L9BxNFC4pq0efd7JDlWNbFmZ
+	P7DaYOecJ46YMJTj4cgzSUdjWds+lJmdMIT4IuBMiPYeI2D+yfkqGlimhOMFxPjr+Fg3RB1NADt
+	aij3k3MObTlTiS4N+hNxOhCG5TFWXCgYdSFLZmydTr7AbhnPeRYxB5GVMF/ci1LD+wTXTHRY1Wz
+	FJ++OSp5ijtvy9TGgLL5mPHnHJl5HkptMX4CeNrfWbD8hbrNXGDWuXU7xAXJ+DDgbooQJr9VCma
+	SfRyjF8DR+gRFV3uG1YhroR80qOSMLZoChqk8QnF++jv4g3V/7m/u/TWroM7P1gFICV55XkhoHB
+	XCbdReWuhtl/r11rxhDWif07NTrslcXxAn7PKW+bX6IOBRqCdAwdJbo2KA==
+X-Received: by 2002:a17:90b:4ec4:b0:3b3:bf8f:9ccb with SMTP id 98e67ed59e1d1-3b41c8ffa94mr9996644a91.18.1795463168019;
+        Mon, 23 Nov 2026 11:46:08 -0800 (PST)
+Received: from [192.168.0.226] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b4b3c71192sm2963167a91.5.2026.11.23.11.46.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Nov 2026 11:45:49 -0800 (PST)
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	kkd@meta.com,
-	kernel-team@meta.com
-Subject: [PATCH bpf v1] bpf: net_sched: Let bpf_kfree_skb() run with irqs off
-Date: Mon, 23 Nov 2026 20:45:48 +0100
-Message-ID: <3450cf11dfeb468e1c6eb2102e4b679088f9581b.1795462791.git.memxor@gmail.com>
-X-Mailer: git-send-email 2.53.0
+        Mon, 23 Nov 2026 11:46:07 -0800 (PST)
+Message-ID: <d678f6992169065c5f1e67b89d39ad6a463923c8.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v5 0/3] libbpf: Fix CO-RE relocations of
+ unsigned 32-bit enum values
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
+ <andrii@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>,
+ kernel-team@fb.com, vineet.gupta@linux.dev
+Date: Mon, 23 Nov 2026 12:46:06 -0700
+In-Reply-To: <8fdf1b51-7368-46e0-80f9-744b15845ad0@linux.dev>
+References: <20261120214957.868409-1-yonghong.song@linux.dev>
+	 <fc517c55e7060cf7c0da6e797a602488cea403fd.camel@gmail.com>
+	 <8fdf1b51-7368-46e0-80f9-744b15845ad0@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.2 (3.60.2-3.fc44) 
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -100,62 +104,138 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2121; i=memxor@gmail.com; h=from:subject:message-id; bh=0/d2oRQxAIuAo/Y7HfgrrnUnUOdlGA84o0VGWbYH0MI=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIZtlWkexKLflmU1MTmWOLQ+EZ+1+MfHmxldKK3bl7ao4/ c+37sCZjlIWBjEuBlkxRZaS//uYjE9U/g60XcYNM4eVCWQIAxenAExkRSHD//Tfk0JX1TXxhbU/ y9nnmzxTNv/qxFW/ryRJhBz4J/MpUYSRYWVljOHk2289xa9EKW/hXXZn/dr5BwuXJ9nmqxWt0zb xZgUA
-X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
-Content-Transfer-Encoding: 8bit
 
-From: Alexei Starovoitov <ast@kernel.org>
+On Mon, 2026-11-23 at 10:01 -0800, Yonghong Song wrote:
+>=20
+> On 11/23/26 9:45 AM, Eduard Zingerman wrote:
+> > On Fri, 2026-11-20 at 13:49 -0800, Yonghong Song wrote:
+> > > For a BPF_CORE_ENUMVAL_VALUE relocation, libbpf sign-extends the valu=
+e
+> > > of a 32-bit enumerator even if the enum is unsigned. A value in
+> > > [0x80000000, 0xffffffff], e.g., DCACHE_PRIVATE of enum dentry_flags,
+> > > then doesn't match the zero-extended value clang emits, and the whole
+> > > object is refused. And a target value in that range is patched
+> > > sign-extended.
+> > >=20
+> > > Patch 1 zero-extends the 32-bit values of unsigned enums, i.e., with
+> > > the kflag 0, which is the form clang emits. The kernel builds the sam=
+e
+> > > relo_core.c, so it gets the fix too.
+> > >=20
+> > > GCC emits every 32-bit enum value sign-extended, since its
+> > > __builtin_preserve_enum_value() returns int. So with the change above
+> > > alone, GCC objects that load today would be refused. Patch 1 therefor=
+e
+> > > also accepts the sign-extended form of an unsigned value, and patches
+> > > the target value in the same form.
+> > Hi Yonghong,
+> >=20
+> > I checked LLVM and GCC definitions for __builtin_preserve_enum_value().
+> > LLVM:
+> >=20
+> >    clang/include/clang/Basic/BuiltinsBPF.td:
+> >=20
+> >    def PreserveEnumValue : TargetBuiltin {
+> >      let Spellings =3D ["__builtin_preserve_enum_value"];
+> >      let Attributes =3D [CustomTypeChecking];
+> >      let Prototype =3D "long int(...)";
+> >    }
+> >=20
+> >    ---
+> >=20
+> >    gcc/config/bpf/bpf.cc:
+> >=20
+> >      def_builtin ("__builtin_preserve_enum_value",
+> >                   BPF_BUILTIN_PRESERVE_ENUM_VALUE,
+> >                   build_function_type_list (integer_type_node, ptr_type=
+_node,
+> >                                             integer_type_node, integer_=
+type_node,
+> >                                             0));
+> >    gcc/tree.cc:
+> >=20
+> >      integer_type_node =3D make_signed_type (INT_TYPE_SIZE);
+> >=20
+> >=20
+> > Meaning that the two indeed disagree. Given that GCC version can't
+> > express 64-bit values, it appears that GCC side definition needs an
+> > update. Would this allow to avoid GCC-specific workaround in libbpf?
+>=20
+> Yes, I am aware of this issue. See
+>     https://lore.kernel.org/bpf/a4aec2b1-f754-48ed-a7d7-ef07bed43eb8@linu=
+x.dev/
+>=20
+> I even suggested a solution:
+>=20
+> diff --git a/gcc/config/bpf/bpf.cc b/gcc/config/bpf/bpf.cc index=20
+> 3ef93938222..45d5337bab6 100644 --- a/gcc/config/bpf/bpf.cc +++=20
+> b/gcc/config/bpf/bpf.cc @@ -1048,7 +1048,7 @@ bpf_init_builtins (void)   =
+                                        integer_type_node, 0));
+>      def_builtin ("__builtin_preserve_enum_value",
+>                  BPF_BUILTIN_PRESERVE_ENUM_VALUE,
+> - build_function_type_list (integer_type_node, ptr_type_node, +=20
+> build_function_type_list (ullt, ptr_type_node,                           =
+                integer_type_node, integer_type_node,
+>                                            0));
+>=20
+> diff --git a/gcc/config/bpf/core-builtins.cc=20
+> b/gcc/config/bpf/core-builtins.cc index a5c973cd385..289d3e67d78 100644=
+=20
+> --- a/gcc/config/bpf/core-builtins.cc +++=20
+> b/gcc/config/bpf/core-builtins.cc @@ -877,8 +877,12 @@=20
+> pack_enum_value_fail:     else
+>        {
+>          ret.reloc_data.expr =3D tmp;
+> + /* Extend the enumerator to 64 bits according to its own signedness, +=
+=20
+> as clang does, instead of expanding it as a sign-extended SImode +=20
+> CONST_INT. */         if (kind =3D=3D BPF_RELO_ENUMVAL_VALUE)
+> - ret.reloc_data.default_value =3D enum_value; +=20
+> ret.reloc_data.default_value + =3D fold_convert=20
+> (long_long_unsigned_type_node, enum_value);         else
+>           ret.reloc_data.default_value =3D integer_one_node;
+>        }
+>=20
+> Vineet Gupta will take a look.
+>=20
+> Discussed with Alexei earlier, the suggestion is to proceed as is for now=
+.
+> It is not clear when gcc will implement this.
+>=20
 
-bpf_kfree_skb() is also the destructor of an skb kptr. A destructor runs
-wherever an object or a map value with such a field is freed. That can be
-with irqs off, for example:
+Had a discussion with Andrii on this topic with the following conclusions:
+- pahole 1.24 is 4 years old, it should be acceptable to bump minimal
+  pahole version to get reliable signed/unsigned enum information.
+- such a bump simplifies the fix, effectively moving it to:
 
- - bpf_list_add() drops the new node when @prev is not in the list, while
-   the program holds the bpf_spin_lock of the list, which keeps irqs off.
-   The drop frees a node that has no other reference, with its fields.
+  static int bpf_core_calc_enumval_relo(const struct bpf_core_relo *relo,
+				      const struct bpf_core_spec *spec,
+				      __u64 *val)
+  {
+	const struct btf_type *t;
 
- - bpf_local_storage_map_free() frees the fields of each value under the
-   lock of its bucket, which bpf_selem_unlink_nofail() takes with
-   raw_res_spin_lock_irqsave(). A qdisc program can keep an skb in task
-   storage.
+	switch (relo->kind) {
+	case BPF_CORE_ENUMVAL_EXISTS:
+		*val =3D spec ? 1 : 0;
+		break;
+	case BPF_CORE_ENUMVAL_VALUE:
+		if (!spec)
+			return -EUCLEAN; /* request instruction poisoning */
+		t =3D btf_type_by_id(spec->btf, spec->spec[0].type_id);
+		if (btf_is_enum(t))
+			*val =3D btf_enum(t)[spec->spec[0].idx].val; // <------- take care of a =
+sign flag here.
+		else
+			*val =3D btf_enum64_value(btf_enum64(t) + spec->spec[0].idx);
+		break;
+	default:
+		return -EOPNOTSUPP;
+	}
 
-Currently bpf_kfree_skb() calls kfree_skb(), which is not made for that.
-The destructor of the skb may enable softirqs, or take a lock that sleeps
-on PREEMPT_RT.
+	return 0;
+  }
 
-Use dev_kfree_skb_any(). With irqs on it is kfree_skb(). With irqs off the
-skb goes to the completion queue of the cpu, and NET_TX_SOFTIRQ frees it.
+- we don't want to workaround GCC bug on the libbpf side, let's assume
+  that __builtin_preserve_enum_value() always return long.
 
-Fixes: 870c28588afa ("bpf: net_sched: Add basic bpf qdisc kfuncs")
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-[ memxor: Name two places where the destructor runs with irqs off,
-  bpf_list_add() and bpf_local_storage_map_free(). ]
-Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
----
- net/sched/bpf_qdisc.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/net/sched/bpf_qdisc.c b/net/sched/bpf_qdisc.c
-index 5691c13781a8..e041383a848f 100644
---- a/net/sched/bpf_qdisc.c
-+++ b/net/sched/bpf_qdisc.c
-@@ -196,10 +196,13 @@ __bpf_kfunc u32 bpf_skb_get_hash(struct sk_buff *skb)
- 
- /* bpf_kfree_skb - Release an skb's reference and drop it immediately.
-  * @skb: The skb whose reference to be released and dropped.
-+ *
-+ * Also the destructor of an skb kptr, which runs wherever an object or a map
-+ * value with such a field is freed: under a bpf_spin_lock too, with irqs off.
-  */
- __bpf_kfunc void bpf_kfree_skb(struct sk_buff *skb)
- {
--	kfree_skb(skb);
-+	dev_kfree_skb_any(skb);
- }
- 
- __bpf_kfunc void bpf_kfree_skb_dtor(void *skb)
-
-base-commit: 84afebd853437e44cb71f718be11d90e4c1a59dd
--- 
-2.53.0
-
+Wdyt?
