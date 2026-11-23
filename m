@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795397634;
-	b=yy57mWKx7am1eps5IscAC4HN+tbIMYyNOBxEfzAu98FR0vLp4g4qYkM/+1kP6GM5pPbo
-	 so1e66U6SJy800mkhUcNupP60usfaVaN8ticLRGqtYO/X8lzYnNHRe2vD2UWFaj+n/0XE
-	 yrT4n61xyfnxZEsuXW9hPLVM3OKEnfSQPxxxofUEKrG+ynotW9FcN06NThbPfvpSPGPAe
-	 W5zRgynzI55oGfnLKNDLAQJKdDkJM/4YSzNx373haqa68mkkOnB5C1t7OZoJ9J+0msEXt
-	 TYfwdJbLSUepo+GraSsbpD+F37l8Z0Mg1oAr8rtH2j1yzmBCfIcSOFYM0kMu7T5OUPQ==
+	t=1795397631;
+	b=Y8RU824p4DRK4KHVK3M8wW7LCXldwflxxmao6IZGW3wQDwcuSNURNNsTYP0X4FHSK42u
+	 j9nlrts0bvaWtgYKbUAewaK/XEFbiLNy3671ElrZxetdRC7yYbMrTLOd4RyyB537SyVkY
+	 YqUmmpokZrRkH3yLJ4lLU2oysyFCPo6RmCt16nvDxdZ1hfHyLUslFIOn6mRZK2wTpHpvW
+	 GTpBzq/CkQ4G61fmlRLCJw6goRWbQuz6doKq5stIhNArhe/qQYcgNGh48A+DBuX/ASRiq
+	 G18QBMBBPLNlMn/sUbJJL4rkSDThRJxk0Y5jF1szyx2JNZPLJnXN3aRT/mZsvpc+vfQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795397634;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795397631;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=TFjV7U7E5Jx1Ins2cB0HnvxZayy3EZy1RrJEu6KQsis=;
-	b=uRnuRRhPbXphUw58HmVd9PQtFSfeSoR8cM3zrnyKbW65NJsBHhz87qIMPhGyREFV5+wU
-	 FcTx5sbo710Qy1V06pD7SIeQWch9DBIll/3mnB4Mi4i4e+oVEST4E/jZl6dXgLNm+LV2y
-	 lwrqbKxKZrOppEYaKPAr4IYg3vGOk4bUAlkbgbNaDWg8agfKw7q66UHUOtMeP5ktjaqZx
-	 Adj+ykuoc3QLwGyBM/Q+bzl2c3VENETGZ3GwKePDrkzLohfh0IO86RhvmgMlQ6uT3aRb0
-	 gC3aBNdiMUSYEmQdWYVdru+hdi9/9S57czsr+DWt+MRYxCF9HIOXaigmQyw3I3DLRrw==
+	bh=mt8mJUZhq4KTZ3utexyMaCQYzKL+gpqFc3XekMPH/vs=;
+	b=tOnXXq6D4p0JcW2z0baHcxVSjWbA7+LpCGAqMJ28+N/MKrOxsAVEJwMbPylvgqoUXYJS
+	 aFua33wkrUmRNl10sxFT1J8Iq22W1z9Lfc7dFqW81SixlS55BWpICNBL7pL6w43ZGig2S
+	 rxkmj9nPJnTohepnrX5UDROU0BqdhvJ2/4SYD9dnOj9RpNbNU6QHB6HQ7nbs7aBt428wj
+	 EcT2dZIeFZGt2BLDht23vlIG2VmqNjfSsgVgcXXCqisWkX8Pn9Y5yC5aQi7QvYsiYhRVC
+	 ggs4AozoYn3MWqWJ7woVcrLyt/B72Q1c3fuwOsJLWxtGu+81rHCSjgva7NgS9oH0TbA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ehUlkQuc;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Tfv53e5C;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C670C606A332;
-	Mon, 23 Nov 2026 01:33:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D404606A31A;
+	Mon, 23 Nov 2026 01:33:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ehUlkQuc
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 587111F000C4;
-	Mon, 23 Nov 2026 01:33:53 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Tfv53e5C
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 902601F000C4;
+	Mon, 23 Nov 2026 01:33:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795397634;
-	bh=TFjV7U7E5Jx1Ins2cB0HnvxZayy3EZy1RrJEu6KQsis=;
+	s=k20260515; t=1795397630;
+	bh=mt8mJUZhq4KTZ3utexyMaCQYzKL+gpqFc3XekMPH/vs=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=ehUlkQucOqjykh4wWL3BvReDkEexCsjN4X9QiqTyw2K/9Yuql7oK+bCqXG0ppjUEf
-	 It2cJdkkztbFLFFgaqLR0ldSI/dzgEzk2E6Tx6TylGiRSGFcOBsMU8+oETAPHOQH5L
-	 oxTQv3kKTzbxPdPoyvxdUcbmUDe7aoTZjoZ8uwM0VQ3e9CObaKdcsQYlc/hp0BJLbI
-	 1js/mo3RLvjYXyTBvSGzYRshz7Zi7ino9cdCmtHtnqvtRbzp+rgs9qWkxdjoQ/S+YK
-	 3c/a8h40wYTATYqzcxHRNf7Zv9p/l5T8TDESqdxniaS2ocbfpFXokefDED9skhNtjE
-	 F6eHtObpoZLsg==
-Subject: Re: [PATCH net-next v2 9/9] eth: gve: drop the now-dead HW-GRO vs XDP
- interlock
+	b=Tfv53e5CQYha7nbvfhAnyzZTn6wsYR/I5Ua2iD3gdMsysxiJ05SUrj5HboAXMDdtQ
+	 pY4dO6GcbmUO1zAggkALjC1TyH1FSzqsWZ34yejXQ7K2hAV4VZAjTBWDZf56vBRJPM
+	 p6X89wss2xsCCNdvju/VzLmP7DW2BCfxXxZwLtkfoIKSqEDZL5U6UA7/FtS6HG2Um1
+	 o/MS2soDde27BNYFQRCQHtB9MHe6zx5/q8DEeCoBIv1SpVpGyISORgUe9nEPR5/JnV
+	 x0i58uHAxfmNX7rMCOD7eVdCTjIf3qKXTNb7FM8MHKiFwViek7MrWiEeG/CYMcTXGU
+	 iV0aibwmKiVsA==
+Subject: Re: [PATCH net-next v2 5/9] net: state the "XDP excludes LRO" rule in
+ the core
 From: netdev-bot+sashiko@kernel.org
 To: kuba@kernel.org
 Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
@@ -50,10 +50,10 @@ Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
  hramamurthy@google.com, tariqt@nvidia.com, saeedm@nvidia.com,
  daniel@iogearbox.net, hawk@kernel.org, sdf@fomichev.me, willemb@google.com,
  przemyslaw.kitszel@intel.com, bpf@vger.kernel.org, nktgrg@google.com
-Date: Mon, 23 Nov 2026 01:33:52 +0000
-Message-ID: <179539763293.3135.3326411357299687013@kernel.org>
-In-Reply-To: <20261122010112.1471146-10-kuba@kernel.org>
-References: <20261122010112.1471146-10-kuba@kernel.org>
+Date: Mon, 23 Nov 2026 01:33:49 +0000
+Message-ID: <179539762917.3135.17061480086535171425@kernel.org>
+In-Reply-To: <20261122010112.1471146-6-kuba@kernel.org>
+References: <20261122010112.1471146-6-kuba@kernel.org>
 X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -67,10 +67,10 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 2 potential
+Thank you for your contribution! Sashiko AI review found 3 potential
 issue(s) to consider.
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 1
+Critical: 0 · High: 0 · Medium: 1 · Low: 2
 
 If you believe none of the issues are legitimate, please reply to each
 issue of Medium severity or higher and explain why the AI is wrong.
@@ -78,46 +78,59 @@ If any of them are legitimate and you plan to respin, please let patchwork
 know by including "pw-bot: cr" as a separate line at the end of your reply
 (one such reply per series is enough).
 
-- [Medium] A rejected XDP attach on a running gve DQO device with HW-GRO
-  on (the DQO default) now rebuilds all of the device's hardware queues…
-- [Low] gve's XDP attach path no longer reports its own error when HW-GRO
-  cannot be turned off, because the HW-GRO handling now happens inside…
+- [Medium] On a stacked device, an XDP attach that fails now turns LRO
+  off on every lower device, and it stays off.
+- [Low] The netvsc driver documentation is now out of date.
+- [Low] The comment above the XDP feature-clearing block in
+  __netdev_update_features() (net/core/dev.c:11444-11446) still covers…
 
 --
 
-eth: gve: drop the now-dead HW-GRO vs XDP interlock
+net: state the "XDP excludes LRO" rule in the core
 
-This patch removes two gve checks: one refused XDP while HW-GRO was on,
-the other refused HW-GRO while XDP was attached. The core now clears
-NETIF_F_GRO_HW before ndo_bpf runs and keeps it off while a program is
-attached. Attaching XDP with HW-GRO on now succeeds with HW-GRO turned
-off instead of failing with -EOPNOTSUPP.
+This patch adds NETIF_F_XDP_DISABLES (GRO_HW | LRO). The core now clears
+LRO next to HW-GRO before an XDP program is attached, and refuses the
+attach if the driver keeps LRO on. It also drops netif_disable_lro() from
+generic_xdp_install(), so LRO comes back on the device itself after the
+detach.
 
-> diff --git a/drivers/net/ethernet/google/gve/gve_main.c b/drivers/net/ethernet/google/gve/gve_main.c
-> index 35cf0f06a0f27..59ced629dcf6b 100644
-> --- a/drivers/net/ethernet/google/gve/gve_main.c
-> +++ b/drivers/net/ethernet/google/gve/gve_main.c
-> @@ -1804,12 +1804,6 @@ static int gve_verify_xdp_configuration(struct net_device *dev,
+> diff --git a/net/core/dev.c b/net/core/dev.c
+> index 5d38cdb6c3260..308501d384b6f 100644
+> --- a/net/core/dev.c
+> +++ b/net/core/dev.c
+
+[ ... ]
+
+> @@ -10599,26 +10598,35 @@ static void dev_xdp_set_prog(struct net_device *dev, enum bpf_xdp_mode mode,
+
+[ ... ]
+
+>  static int dev_xdp_clear_rx_agg(struct net_device *dev,
+>  				struct netlink_ext_ack *extack)
+>  {
+> -	if (!(dev->features & NETIF_F_GRO_HW))
+> +	netdev_features_t agg = dev->features & NETIF_F_XDP_DISABLES;
+> +
+> +	if (!agg)
+>  		return 0;
+> -	if (!(dev->hw_features & NETIF_F_GRO_HW)) {
+> -		NL_SET_ERR_MSG(extack,
+> -			       "unable to disable HW-GRO, fixed on");
+> +	if (agg & ~dev->hw_features) {
+> +		NL_SET_ERR_MSG_FMT(extack, "unable to disable %s, fixed on",
+> +				   dev_xdp_rx_agg_name(agg & ~dev->hw_features));
 >  		return -EOPNOTSUPP;
 >  	}
 >  
-> -	if (dev->features & NETIF_F_GRO_HW) {
-> -		NL_SET_ERR_MSG_MOD(extack,
-> -				   "XDP is not supported when HW-GRO is on.");
-> -		return -EOPNOTSUPP;
-> -	}
-> -
->  	if (priv->header_split_enabled) {
->  		NL_SET_ERR_MSG_MOD(extack,
->  				   "XDP is not supported when header-data split is enabled.");
+>  	netdev_update_features(dev);
 
 [Severity: Medium]
-With this check gone, a rejected XDP attach on a running gve DQO device
-with HW-GRO on (the DQO default) seems to rebuild every hardware queue
-twice before it fails. Is that intended?
 
-In dev_xdp_attach(), HW-GRO is cleared before dev_xdp_install() and
-ndo_bpf get a chance to refuse:
+Can a refused XDP attach on a bond now leave LRO off on the slaves for
+good?
+
+dev_xdp_attach() calls dev_xdp_clear_rx_agg() before dev_xdp_install() runs
+its checks and before the driver's bpf_op is called:
 
 net/core/dev.c:dev_xdp_attach() {
     ...
@@ -132,120 +145,85 @@ net/core/dev.c:dev_xdp_attach() {
 		if (err)
 			goto err_clear_pending;
     ...
-err_clear_pending:
-	dev->xdp_pending = 0;
-	netdev_update_features(dev);
-	return err;
 }
 
-dev_xdp_clear_rx_agg()->netdev_update_features() reaches
-gve_set_features() with GRO_HW cleared. On a running device that runs a
-full gve_adjust_config(): gve_queues_mem_alloc(), gve_close(), then
-gve_queues_start(). RSC is fixed per queue when the queue is created, in
-gve_adminq_create_rx_queue():
+LRO is now in NETIF_F_XDP_DISABLES. So for a bond with LRO on, this
+netdev_update_features(bond) call drops LRO. LRO is also in
+NETIF_F_UPPER_DISABLES, so netdev_sync_lower_features() then does this on
+each slave that has LRO on:
 
-	cmd->create_rx_queue.enable_rsc =
-		!!(priv->dev->features & NETIF_F_GRO_HW);
+			lower->wanted_features &= ~feature;
+			__netdev_update_features(lower);
 
-The remaining refusals only run after that rebuild. First come the core
-checks in dev_xdp_install(), then
-gve_xdp()->gve_verify_xdp_configuration(), which checks queue format,
-header split, buffer size, MTU and queue counts.
+Now suppose the attach fails afterwards, for example in bond_xdp_set() when
+the bonding mode doesn't support XDP:
 
-If any of them fails, err_clear_pending calls netdev_update_features()
-again. GRO_HW is still in wanted_features, so gve_adjust_config() runs a
-second time to turn RSC back on.
-
-DQO_QPL looks like the easiest way to hit this. gve_init_priv() enables
-NETIF_F_GRO_HW for every DQO format, but gve_set_netdev_xdp_features()
-leaves xdp_features at 0 for DQO_QPL:
-
-	} else {
-		xdp_features = 0;
+	if (!bond_xdp_check(bond, BOND_MODE(bond))) {
+		BOND_NL_ERR(dev, extack,
+			    "No native XDP support for the current bonding mode");
+		return -EOPNOTSUPP;
 	}
 
-As a result, every native attach on a running DQO_QPL device rebuilds the
-queues twice and then fails with "XDP is not supported on this queue
-format.". The MTU and queue-count refusals can be hit the same way on
-DQO_RDA, for example with a jumbo MTU.
+The err_clear_pending path calls netdev_update_features() on the bond
+only. The bond gets LRO back from its own wanted_features. But
+netdev_sync_lower_features() only ever clears bits, so the slaves keep LRO
+off.
 
-Either rebuild can also fail in gve_queues_start(), which leaves the
-interface running with no live queues:
+The attach can also fail at this point if a slave lacks ndo_bpf or
+ndo_xdp_xmit. A dev_xdp_install() check can reject it too, for example a
+BPF_XDP_DEVMAP or BPF_XDP_CPUMAP program.
 
-	err = gve_queues_start(priv, tx_alloc_cfg, rx_alloc_cfg);
-	if (err) {
-		netif_err(priv, drv, priv->dev,
-			  "Adjust config failed to start new queues, !!! DISABLING ALL QUEUES !!!\n");
-		gve_queues_mem_remove(priv);
-		gve_turndown(priv);
-		return err;
-	}
+Before this patch, a failed native attach never touched LRO. In generic
+mode, netif_disable_lro() was only called from generic_xdp_install(), and
+that runs after all of the checks in dev_xdp_install().
 
-Before the series, gve refused the same request right away with no
-hardware side effects. The new ordering comes from the earlier patch
-"net: state the "XDP excludes HW-GRO" rule in the core", which put
-dev_xdp_clear_rx_agg() ahead of dev_xdp_install() and ndo_bpf.
+The commit message explains that slaves stay LRO-off after a detach. It
+doesn't say the same happens after a refused attach. Is that intended?
 
-The commit message only describes the success case ("now succeeds with
-HW-GRO turned off"). Even a successful attach now rebuilds the queues
-twice: once for the GRO_HW toggle and once in gve_configure_rings_xdp().
+On a single device, a refused attach now also turns LRO off and back on
+through ndo_set_features. On ixgbe and vmxnet3 that is a full
+reconfiguration, for an attach that simple checks would reject. Could the
+checks in dev_xdp_install() run before the aggregation features are
+cleared?
 
-Could the gve configuration checks run before the core clears HW-GRO? If
-the double rebuild is acceptable, could the commit message say so?
+[ ... ]
 
-> @@ -2218,12 +2212,6 @@ static int gve_set_features(struct net_device *netdev,
->  	if ((netdev->features & NETIF_F_GRO_HW) !=
->  	    (features & NETIF_F_GRO_HW)) {
->  		netdev->features ^= NETIF_F_GRO_HW;
-> -		if (priv->xdp_prog && (netdev->features & NETIF_F_GRO_HW)) {
-> -			netdev_warn(netdev,
-> -				    "HW-GRO is not supported when XDP is on.");
-> -			err = -EOPNOTSUPP;
-> -			goto revert_features;
-> -		}
->  		if (netif_running(netdev)) {
->  			err = gve_adjust_config(priv, &tx_alloc_cfg, &rx_alloc_cfg);
->  			if (err)
+> @@ -11436,9 +11444,9 @@ int __netdev_update_features(struct net_device *dev)
+>  	/* GRO_HW may be added back in via ndo_fix_features e.g. if driver needs
+>  	 * it to honor the HDS config, clear it before the fix features call.
+>  	 */
 
 [Severity: Low]
-If gve_adjust_config() fails here while the core is turning HW-GRO off
-for an XDP attach, does the user get the real error back?
 
-gve_set_features() restores orig_features and returns the errno.
-__netdev_update_features() only logs that errno and returns -1, and
-netdev_update_features() discards the -1. dev_xdp_clear_rx_agg() then
-just re-reads dev->features:
+This isn't a bug, but this comment still mentions only GRO_HW, while the
+code below now clears NETIF_F_XDP_DISABLES, which is GRO_HW and LRO. The
+patch updates the other comments and the netdev_dbg() string. Should this
+comment be updated as well?
 
-net/core/dev.c:dev_xdp_clear_rx_agg() {
-    ...
-	netdev_update_features(dev);
+> -	if ((features & NETIF_F_GRO_HW) && dev_xdp_prog_count(dev)) {
+> -		netdev_dbg(dev, "Dropping HW-GRO feature since XDP is attached.\n");
+> -		features &= ~NETIF_F_GRO_HW;
+> +	if ((features & NETIF_F_XDP_DISABLES) && dev_xdp_prog_count(dev)) {
+> +		netdev_dbg(dev, "Dropping HW-GRO and LRO features since XDP is attached.\n");
+> +		features &= ~NETIF_F_XDP_DISABLES;
+>  	}
 
-	agg = dev->features & NETIF_F_XDP_DISABLES;
-	if (agg) {
-		NL_SET_ERR_MSG_FMT(extack,
-				   "unable to disable %s, required by another feature",
-				   dev_xdp_rx_agg_name(agg));
-		return -EBUSY;
-	}
-    ...
-}
+[Severity: Low]
 
-gve has no ndo_fix_features, and no gve feature depends on HW-GRO. For
-gve, GRO_HW can only stay on because gve_set_features() failed: -ENOMEM
-from gve_queues_mem_alloc(), an adminq error from gve_close(), or a
-gve_queues_start() failure.
+Should Documentation/networking/device_drivers/ethernet/microsoft/netvsc.rst
+be updated along with this? It still says:
 
-The user gets -EBUSY and a feature-dependency message instead of the
-real errno.
+  XDP program cannot run with LRO (RSC) enabled, so you need to disable LRO
+  before running XDP::
 
-If gve_queues_start() was the failure, the device is also left turned
-down. The later netdev_update_features() call in err_clear_pending finds
-features already equal to wanted_features and does nothing. Nothing in
-the extack shows that the NIC has lost its queues.
+	ethtool -K eth0 lro off
 
-Before the series, gve refused the same request itself with a specific
--EOPNOTSUPP extack. The new error reporting comes from the earlier patch
-"net: state the "XDP excludes HW-GRO" rule in the core".
+With this change the core clears LRO before ndo_bpf is called. So
+netvsc_set_features() turns RSC off first, and the "XDP: not support LRO"
+refusal in netvsc_xdp_set() can no longer trigger on attach.
+
+Following the doc by hand also clears LRO from wanted_features. LRO then
+doesn't come back after the detach, as it would when the core handles it.
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261122010112.1471146-1-kuba%40kernel.org
