@@ -1,44 +1,44 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795473172;
-	b=1qGqBRRg0FgTDhBMaASL7G+jjcst3CXEV0JVhrZvfVhFNlr9SpJTp4koHuB12lAJ1br7
-	 xL8vpqREyaZthG59JgkklBi+T2i2X/wTLt0npc9h+cxdSRU910t86eXi1Tl5lqA4XxOws
-	 efGL7f3BLXmaL0hCGYnufYSk2SoSG31SorRTxXwfpBp8LJ11O7P7oyxnv7f4hNkbOVQVx
-	 zR0zibVluTUIj0Rr0YdDSHYc4UqqEDgFxn57kXNzJnppmwLudMJXLiVd2R6SV1O2j6Zsy
-	 28y3jZ7cfY+Dz/cWk+F5dYUIk3qWwSvZbYisC/dUNZhhtgz02MjtKAvDJgIRyQ3NqXw==
+	t=1795473176;
+	b=dCmgv5WsMwhcXTYAorqrDm+HAWP0o+6AljbnGENzVb7HiyMKRoyZu5kt5o3dEeXCaCJF
+	 lHBFu/OXxxRcNqxRogTb56PW1thHBMO68Ydg15dgHFJumpfu6nnkTJb8ZHjr85Mji6Mk6
+	 ursJQ9iXlEQ7cCjA0wlbY7Bz7GAUO0IYMYzKcI0f4uhb8Vgun0hpAK03p3CX6rUvRBl6s
+	 xyBADORpjs3z82hNlyl92y9r3JDq0D2yT6EB+qNtQIxfVTCwHahEBzeN7FDHaBYgrkwsN
+	 QsZbyoWglYyPAW6V0eI0Vgxn8IkF37pf5+xYTcn6H9wbl3JuVIDWDyMpWamQI+HiKug==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795473172;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795473176;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
 	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=+LJzIzaihaUWMo7KZAjjgcmeQI3T0a6B6zd2AU66n2Q=;
-	b=C7OxNIU6WbyGRTGL2cIy6HHam5dwFuAdc3sGYLiptULop38PEOXg0IhTJndYuEas7YTE
-	 5XkHjPdQcwLEmvRwWN0NeeEif7dfiPckbKuUf9Rv3SPRLKrlnZJ+h50nAbs+TrVy4cAIo
-	 5fxqhZ8ompkwr2HaJ5XXzQPK25vwmYZyFt6/AXT77tTstVcBOobyIAm6Pok/+aB9AVZm5
-	 i6YBtzVTmUo9CG7NjVQz4u5DeH3NvF0m7sfF5g4yFRL91qch6m4X7dWrktR7damXG5Bt3
-	 sd0hMoph3xJFg4XqlR7tAoOJsXgfqPHlKrTsVUPmldEkIqXZi+MkSkBVPgRz1aLSwOA==
+	bh=ZfdrrQ1Yh58LVrSTZwLbWD1yNXEptkQP0rrVCFErzRw=;
+	b=B2b8BsCvyimh3o8YL5txZBTnposN0luVXeS6WkptRVFOR2OB+dFTv5S//5CWSCH6CjJR
+	 VRgf/4xiUtx9EjSt/DIozNP/ke+0b3Y+qjCNSuWUjxMPNyaKp39URDwiIbopF+Tr432ib
+	 lnsCNCDzcKN2yHvKhuNbfBW0YB7zH+O9ZukNK0ft1es0/aIUqFCGKnrSpsE9bUOdKg2Iv
+	 ujFQmfD7VOeiLLUjhYLzsSqjuCcDt7R5WK+uaK16Ul7rDwT0pEQzJ4d5TKoDxJBxcnxMk
+	 kcmZv8JmrhGaz6HkfOnWTeXCE8McFI3+1UqpBjV7knmDnMQXEFXEaSBDCuhGDE194+Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DlLWcGlL;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Wv0TbAjn;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5C54606A322
-	for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 22:32:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F00F606A321
+	for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 22:32:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DlLWcGlL
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A40C1F000C0;
-	Mon, 23 Nov 2026 22:32:49 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Wv0TbAjn
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BBC81F000C0;
+	Mon, 23 Nov 2026 22:32:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795473172;
-	bh=+LJzIzaihaUWMo7KZAjjgcmeQI3T0a6B6zd2AU66n2Q=;
+	s=k20260515; t=1795473176;
+	bh=ZfdrrQ1Yh58LVrSTZwLbWD1yNXEptkQP0rrVCFErzRw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=DlLWcGlLnfRGn3XRjlb2hjUFEcIXUhQZXORIL8WVIStJGnU410A4ZAsgmLNNW+Brd
-	 wOmersy2B1QmpJm8QoiNl2FdoMNklUYk1ZRI7XStDT+YPpmpmqRds2PaOBtT3H4OCc
-	 scvsJrTM3iUxViDNJr8mKDx4pA/rrRh1T1ilPePVzGXvKVrUaoIFNzPVzUxiTIwToJ
-	 pV9OpHRqOdk/6CshiVokEp0ciVdT5sOMypSzWPYIVF9lLPCurGFjmjNC6sfMW6VB0j
-	 fKtsBZe5JP04azu7zg9wdC2Cpnpdgn6zPbQOHcres+nqpz1WrFz+U9HgIjGULau7oH
-	 waJ8842BcSecA==
+	b=Wv0TbAjnTdm2+8BH3Uy1oTfdEJT8j+f875QMnxqi57lv8ZIUNJ37Zo+USsr1iDPff
+	 jn56wJgka+V2+mk5W2GJsZC0P1Dwk+C3GbXJnzRBEzwbbKk9bU7NkqFn3dEPTN6feX
+	 lol3St3DcIrjfERXxq59M9FbLGhD/rlquCnJa3/TCtoT1ERaeIxl8bcOFAxNqgN+UM
+	 DT4JX7ay4kFva8SV3E9UiYMauPfc6Au8XPA3UYgZcJIcyBdk3pQrWW5PIxTq37ay3N
+	 bv75a/kXamSsw082Pr/EoF6hR/0vY5CPjZki+1xt2xcDPPllVpBMqL9QmC4b1/QKRy
+	 fC6N9BpCF3ITw==
 From: Alan Maguire <almagui@kernel.org>
 To: ast@kernel.org,
 	daniel@iogearbox.net,
@@ -54,9 +54,9 @@ Cc: eddyz87@gmail.com,
 	john.fastabend@gmail.com,
 	bpf@vger.kernel.org,
 	Alan Maguire <almagui@kernel.org>
-Subject: [PATCH bpf-next 5/7] libbpf: Report function argument relocation support via type existence
-Date: Mon, 23 Nov 2026 22:32:25 +0000
-Message-ID: <20261123223227.745345-6-almagui@kernel.org>
+Subject: [PATCH bpf-next 6/7] selftests/bpf: Test detection of function argument relocation support
+Date: Mon, 23 Nov 2026 22:32:26 +0000
+Message-ID: <20261123223227.745345-7-almagui@kernel.org>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261123223227.745345-1-almagui@kernel.org>
 References: <20261123223227.745345-1-almagui@kernel.org>
@@ -71,106 +71,162 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Function argument structs (see __bpf_func_args) are relocated against the
-attach target by whatever applies the program's CO-RE relocations at load
-time, which needn't match the bpf_tracing.h the program was built with.
-A loader without support for function argument relocations treats such a
-struct as an ordinary local type, for which a same-named kernel type is
-looked up, so all of its members appear to be missing. As BPF_PROG_CORE()
-guards each argument read with a field existence check, such programs
-still load, but all arguments silently read as zero, which can't be told
-apart from the arguments not existing in the attach target.
+Check that bpf_func_args_supported() returns 1 for function argument
+structs, both explicitly declared (including one relying only on the
+struct-level BTF decl tag when built with clang) and declared by
+BPF_PROG_CORE(), in fentry, fexit, LSM and LSM cgroup programs, with
+both skeletons and light skeletons, i.e., when relocated by libbpf and
+by the kernel.
 
-When the program is loaded by the libbpf version whose headers it was built
-with (e.g., a vendored or statically linked libbpf), support is a given.
-It isn't with:
-
-- light skeletons, as the kernel applies the relocations, so support
-  depends on the running kernel;
-- objects built against newer headers than the libbpf loading them, e.g.,
-  an older shared libbpf provided by the distribution;
-- loaders other than libbpf that implement CO-RE relocations themselves.
-
-Additionally, explicitly declared structs lose their "bpf_func_args" BTF
-decl tag when built with GCC without __bpf_func_args_marker (which
-BPF_PROG_CORE() always adds), so they are treated as ordinary local types
-as well. And for tp_btf programs on kernels before 5.10, whose BTF has no
-parameter names for tracepoints, there is no candidate to match against.
-
-Allow programs to detect this, by having BPF_CORE_TYPE_EXISTS relocations
-against function argument structs resolve to 1 when they are matched
-against the attach target (otherwise, the lookup by name finds nothing,
-resolving to 0), and add bpf_func_args_supported() to bpf_tracing.h to
-check it, using bpf_core_type_exists(), which handles the differences
-between clang's and GCC's __builtin_preserve_type_info(). It tells
-whether the struct is relocated against the attach target, not which of
-its members exist. Other type-based relocations against such structs
-remain unsupported.
-
-As relo_core.c is shared with the kernel, this also applies to light
-skeletons on kernels with this change, while on kernels without support
-for function argument relocations, bpf_func_args_supported() resolves to
-0, as intended.
+Also check that it returns 0 for a struct lacking the "bpf_func_args"
+tag, as all structs would appear to libbpf or kernel versions without
+support for function argument relocations, or when built with GCC
+without __bpf_func_args_marker.
 
 Assisted-by: LLM
 Signed-off-by: Alan Maguire <almagui@kernel.org>
 ---
- tools/lib/bpf/bpf_tracing.h | 19 +++++++++++++++++++
- tools/lib/bpf/relo_core.c   | 11 +++++++++--
- 2 files changed, 28 insertions(+), 2 deletions(-)
+ .../selftests/bpf/prog_tests/func_args_core.c     |  6 ++++++
+ .../testing/selftests/bpf/progs/func_args_core.c  | 15 ++++++++++++++-
+ .../selftests/bpf/progs/func_args_core_lsm.c      |  8 ++++++--
+ .../bpf/progs/func_args_core_lsm_cgroup.c         |  3 ++-
+ 4 files changed, 28 insertions(+), 4 deletions(-)
 
-diff --git a/tools/lib/bpf/bpf_tracing.h b/tools/lib/bpf/bpf_tracing.h
-index 24182b48fa4d..f08164ce4f3c 100644
---- a/tools/lib/bpf/bpf_tracing.h
-+++ b/tools/lib/bpf/bpf_tracing.h
-@@ -721,6 +721,25 @@ struct pt_regs;
- #else
- #define __bpf_func_args __attribute__((preserve_access_index))
- #endif
-+/*
-+ * bpf_func_args_supported() tells whether the __bpf_func_args struct that
-+ * args points to is relocated against the parameters of the program's attach
-+ * target. That is done by whatever applies the program's CO-RE relocations,
-+ * which needn't match this header. With the libbpf version providing this
-+ * header, it is 1, except for tp_btf programs on kernels before Linux 5.10,
-+ * whose BTF has no parameter names for tracepoints. It is also 0 for light
-+ * skeletons on kernels without that support, with older libbpf versions
-+ * (e.g., a distribution's shared libbpf), with other loaders lacking that
-+ * support, and if the struct lost its BTF decl tag (e.g., when built with GCC
-+ * without __bpf_func_args_marker). Whenever it is 0, all members appear to be
-+ * missing (BPF_PROG_CORE() arguments read as zero). It doesn't tell which
-+ * members exist. Note that loaders without that support look for a same-named
-+ * kernel type instead, so the struct's name shouldn't be that of a kernel
-+ * type. Within BPF_PROG_CORE() programs, use bpf_func_args_supported(ctx).
-+ * Requires bpf_core_read.h.
-+ */
-+#define bpf_func_args_supported(args)	bpf_core_type_exists(typeof(*(args)))
-+
- #define __bpf_func_args_marker \
- 	char ___bpf_func_args[0] __attribute__((btf_decl_tag("bpf_func_args")))
- #define __bpf_func_ret __attribute__((btf_decl_tag("bpf_func_ret")))
-diff --git a/tools/lib/bpf/relo_core.c b/tools/lib/bpf/relo_core.c
-index 2f6627952220..ed566a55cb06 100644
---- a/tools/lib/bpf/relo_core.c
-+++ b/tools/lib/bpf/relo_core.c
-@@ -907,8 +907,15 @@ static int bpf_core_spec_match(struct bpf_core_spec *local_spec,
- 	targ_spec->relo_kind = local_spec->relo_kind;
+diff --git a/tools/testing/selftests/bpf/prog_tests/func_args_core.c b/tools/testing/selftests/bpf/prog_tests/func_args_core.c
+index f4cc859f20cd..e63591b6ccf5 100644
+--- a/tools/testing/selftests/bpf/prog_tests/func_args_core.c
++++ b/tools/testing/selftests/bpf/prog_tests/func_args_core.c
+@@ -35,6 +35,9 @@ static void trigger(int fentry_prog_fd, int fmod_ret_prog_fd)
+ 	ASSERT_EQ(skel->data->t3_fentry_ret_exists, 0, "t3_fentry_ret_exists"); \
+ 	ASSERT_EQ(skel->data->t3_ret_exists, 1, "t3_ret_exists");		\
+ 	ASSERT_EQ(skel->bss->t3_ret, 15, "t3_ret");				\
++	ASSERT_EQ(skel->data->t3_supported, 1, "t3_supported");		\
++	ASSERT_EQ(skel->data->t3_untagged_supported, 0, "t3_untagged_supported"); \
++	ASSERT_EQ(skel->data->m3_supported, 1, "m3_supported");		\
+ 										\
+ 	ASSERT_EQ(skel->bss->fm_calls, 1, "fm_calls");				\
+ 	ASSERT_EQ(skel->bss->fm_a, 1, "fm_a");					\
+@@ -160,6 +163,8 @@ static __u64 lsm_ioctl(int *monitored_pid)
+ 	ASSERT_EQ(skel->data->s_ret, 0, "s_ret");				\
+ 	ASSERT_EQ(skel->data->s_ret_exists, 1, "s_ret_exists");		\
+ 	ASSERT_EQ(skel->data->s_added_exists, 0, "s_added_exists");		\
++	ASSERT_EQ(skel->data->s_supported, 1, "s_supported");			\
++	ASSERT_EQ(skel->data->m_supported, 1, "m_supported");			\
+ 										\
+ 	/* file___new (struct vfs_file *) doesn't match, file is used instead */ \
+ 	ASSERT_EQ(skel->data->v_new_exists, 0, "v_new_exists");		\
+@@ -230,6 +235,7 @@ static void test_lsm_lskel(void)
+ 	ASSERT_EQ(skel->data->lc_kern, 0, "lc_kern");				\
+ 	ASSERT_EQ(skel->data->lc_ret_exists, 1, "lc_ret_exists");		\
+ 	ASSERT_EQ(skel->data->lc_added_exists, 0, "lc_added_exists");		\
++	ASSERT_EQ(skel->data->lc_supported, 1, "lc_supported");		\
+ })
  
- 	if (func_args) {
--		/* only field accesses (args->x...) of the arguments struct
--		 * have a meaning for function argument candidates
-+		/* the existence of an arguments struct indicates that it is
-+		 * matched against the attach target, as only libbpf and
-+		 * kernel versions supporting that find a candidate for it,
-+		 * allowing programs to detect that support
-+		 */
-+		if (local_spec->relo_kind == BPF_CORE_TYPE_EXISTS)
-+			return 1;
-+		/* otherwise, only field accesses (args->x...) have a meaning
-+		 * for function argument candidates
- 		 */
- 		if (!core_relo_is_field_based(local_spec->relo_kind) ||
- 		    local_spec->len < 2 || local_spec->spec[0].idx != 0)
+ static void trigger_lsm_cgroup(void)
+diff --git a/tools/testing/selftests/bpf/progs/func_args_core.c b/tools/testing/selftests/bpf/progs/func_args_core.c
+index 4656a6c642d1..cf2785d9349f 100644
+--- a/tools/testing/selftests/bpf/progs/func_args_core.c
++++ b/tools/testing/selftests/bpf/progs/func_args_core.c
+@@ -32,11 +32,23 @@ struct fentry_test3_args {
+ 
+ __u64 t3_a, t3_b, t3_c, t3_b_alias, t3_ret;
+ int t3_missing_exists = -1, t3_bad_type_exists = -1, t3_missing_flavor_exists = -1;
++int t3_supported = -1, t3_untagged_supported = -1;
++
++/* without the bpf_func_args tag, as for libbpf or kernel versions without
++ * support for function argument relocations; no kernel type has this name
++ */
++struct func_args_core_untagged {
++	int a;
++} __attribute__((preserve_access_index));
+ int t3_fentry_ret_exists = -1, t3_ret_exists = -1;
+ 
+ SEC("fentry/bpf_fentry_test3")
+ int fentry3(struct fentry_test3_args *args)
+ {
++	struct func_args_core_untagged *untagged = (void *)args;
++
++	t3_supported = bpf_func_args_supported(args);
++	t3_untagged_supported = bpf_func_args_supported(untagged);
+ 	t3_a = args->a;
+ 	t3_b = args->b;
+ 	t3_c = args->c;
+@@ -185,12 +197,13 @@ int tp_read(struct test_read_args *args)
+ 
+ /* BPF_PROG_CORE() versions, with the arguments struct declared implicitly */
+ __u64 m3_a, m3_b, m3_c, m3_missing = -1, m3_ret;
+-int m3_missing_exists = -1, m3_ret_exists = -1;
++int m3_missing_exists = -1, m3_ret_exists = -1, m3_supported = -1;
+ 
+ SEC("fexit/bpf_fentry_test3")
+ int BPF_PROG_CORE(fexit3_macro, __u64, c, int, b, char, a, long, missing,
+ 		  __bpf_func_ret int, ret)
+ {
++	m3_supported = bpf_func_args_supported(ctx);
+ 	m3_a = a;
+ 	m3_b = b;
+ 	m3_c = c;
+diff --git a/tools/testing/selftests/bpf/progs/func_args_core_lsm.c b/tools/testing/selftests/bpf/progs/func_args_core_lsm.c
+index f4b9e68e4578..53f39275614a 100644
+--- a/tools/testing/selftests/bpf/progs/func_args_core_lsm.c
++++ b/tools/testing/selftests/bpf/progs/func_args_core_lsm.c
+@@ -22,7 +22,7 @@ struct file_ioctl_args {
+ } __bpf_func_args;
+ 
+ __u64 s_arg, s_ino;
+-int s_ret = -1, s_ret_exists = -1, s_added_exists = -1, s_calls;
++int s_ret = -1, s_ret_exists = -1, s_added_exists = -1, s_calls, s_supported = -1;
+ 
+ SEC("lsm/file_ioctl")
+ int ioctl_struct(struct file_ioctl_args *args)
+@@ -30,6 +30,8 @@ int ioctl_struct(struct file_ioctl_args *args)
+ 	if ((bpf_get_current_pid_tgid() >> 32) != monitored_pid)
+ 		return 0;
+ 
++	s_supported = bpf_func_args_supported(args);
++
+ 	s_calls++;
+ 	s_arg = args->arg;
+ 	s_ino = args->file->f_inode->i_ino;
+@@ -88,7 +90,7 @@ int BPF_PROG_CORE(ioctl_macro_variants, struct vfs_file *, file___new,
+ }
+ 
+ __u64 m_arg, m_cmd, m_added = -1;
+-int m_ret = -1, m_ret_exists = -1, m_added_exists = -1, m_calls;
++int m_ret = -1, m_ret_exists = -1, m_added_exists = -1, m_calls, m_supported = -1;
+ 
+ SEC("lsm/file_ioctl")
+ int BPF_PROG_CORE(ioctl_macro, unsigned long, arg, __bpf_func_ret int, ret,
+@@ -97,6 +99,8 @@ int BPF_PROG_CORE(ioctl_macro, unsigned long, arg, __bpf_func_ret int, ret,
+ 	if ((bpf_get_current_pid_tgid() >> 32) != monitored_pid)
+ 		return 0;
+ 
++	m_supported = bpf_func_args_supported(ctx);
++
+ 	m_calls++;
+ 	m_arg = arg;
+ 	m_cmd = cmd;
+diff --git a/tools/testing/selftests/bpf/progs/func_args_core_lsm_cgroup.c b/tools/testing/selftests/bpf/progs/func_args_core_lsm_cgroup.c
+index 2743c58f13aa..e2b149272556 100644
+--- a/tools/testing/selftests/bpf/progs/func_args_core_lsm_cgroup.c
++++ b/tools/testing/selftests/bpf/progs/func_args_core_lsm_cgroup.c
+@@ -20,7 +20,7 @@ struct socket_create_args {
+ } __bpf_func_args;
+ 
+ int lc_calls, lc_family = -1, lc_protocol = -1, lc_kern = -1;
+-int lc_ret_exists = -1, lc_added_exists = -1;
++int lc_ret_exists = -1, lc_added_exists = -1, lc_supported = -1;
+ 
+ SEC("lsm_cgroup/socket_create")
+ int socket_create_struct(struct socket_create_args *args)
+@@ -29,6 +29,7 @@ int socket_create_struct(struct socket_create_args *args)
+ 		return 1;
+ 
+ 	lc_calls++;
++	lc_supported = bpf_func_args_supported(args);
+ 	lc_family = args->family;
+ 	lc_protocol = args->protocol;
+ 	lc_kern = args->kern;
 -- 
 2.56.0
 
