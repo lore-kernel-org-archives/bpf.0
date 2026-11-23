@@ -1,84 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.231.199
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.231.136
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795468441;
-	b=HchjaW19jxYUcp7oZdEBIBIRS6Yr2DsZWQCSsOuL64Yf8a7EksxnovCTGjvg6OoGRcip
-	 fURlWMve0QvMQXNBWcqA6GGV7B8c3XTF/X8MXYABS9BuFxtksolBYXQSwjW9Fr+M+Ijy5
-	 QzkhhjKPhFghK/sVI325PHS0MBtySEt8GVNdBBYVlJAMX7Czttu48HQig4CQax8T1Akqt
-	 GaDxossttm1vXsCtfMDHVeWneLST7EVnEBNz0NYylmalpgOy+tD1YEnmTxS0j5NCsK6cf
-	 Brs5fOITF/mEf/qFPezxbiQ26prgPZrj1191Q7h9v+adxtAdDNmHFv8Wcv8tNAzGyDg==
+	t=1795468443;
+	b=vNtjJgV2lFPA2WTkYbDotxlCe34gP2JdmZU2lOMK8Izl012jLSaxjBsbje8wiI1XfnuC
+	 dKIQoSyrRIw92SbTV4mQJtw4IgCgR8BBfqwjy+g0fIS+LOyXfrtjd7WyMyyHCkkfbz8rQ
+	 jEQvq2CWCtSKMVeTq9I5Bc0MmDEqEE/NEXx7+40PByYLLrDIOXvviytSFamU2vg/84btL
+	 00UKOARsvGuDqwu7tQnMnlG42OIlVk3FgI95IBw/SoEDOGZM+MeNGHDesJuhCfuZXDjxd
+	 BTlriLHvrB2xA06hS6Ny/VXzU8dHaVOISZhYM0mTsXvAulLpP1fFnMfpVA7NnIiJlFQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795468441;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795468443;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 X-Developer-Signature:X-Developer-Key:Content-Transfer-Encoding;
-	bh=gcQvjA8+h2ohzgIuzsHN3vA4zsOOD3Q9/0Wle15fFD0=;
-	b=4MwtSuhlmm1U1+jq2lwdTLmJGQEwGcxUzIEBkJ2+JEBjIjxh3r4teLeqZGZKTKSoy0pZ
-	 xzdj9ajwiGTB3Za17soupmG38BMrvNEKifAIgUcopCSjT4FeDvE0tqC++O0SgBG1J5s20
-	 TH2cETSsQBNUFFMEZpyZkdWDMvPn3dj3fgC/my4enEbAKJlhIL0Ul5TcBqUCi2S8cV1mf
-	 uPij2mVJioMZDmShEM0VqmbI0zfk2poKFyazwqxZI9/ReSnoLNzgpIPHeo9weirI+CBOF
-	 wQN+HhHKlV57Us1baUCLHu84/FI/dMimLxBdB5EikAH90ZkbrKpagOuBaEipLgn3f4Q==
+	bh=iLUI5O+p+2tRmHjW4/14o7W/IN6GSuTZ+C+ANbuOOSE=;
+	b=IJpDloenTRLXc17Lw+Yi/JZhgKV5NnJ9+jfnvoij7i3jIaqgm8oeHayOtH+1HFu5qgdn
+	 OJ8PFUtNbwTvunqVkD7+TI/ZnV25Rcuvi5JnenC6oVIUFDpo2bj2WpxwyE7KxoFgjOJ7i
+	 G25mizTx1on3k7xeSSY8YA/lCYdxtUqLspuZbVjK/0wUciGSooGRBZ7FCYA9HIMc6ZfI7
+	 zEQ5hV6Jwea829f7xIZbucKofv09pA4tbijvjmEDy0zh619+rukK/blJfySBio0j+nLyY
+	 wX7no2y+eLPc3qpz7mmQDLqfLr0puFyPy8Vq2BtfTcXPB+qnAecZp8PsKkoWRBwss2Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=enhv+Itv;
-	arc=none smtp.remote-ip=74.125.231.199
-Received: from mail-oi2-f7.google.com (mail-oi2-f7.google.com [74.125.231.199])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=nZiomkya;
+	arc=none smtp.remote-ip=74.125.231.136
+Received: from mail-oo2-f8.google.com (mail-oo2-f8.google.com [74.125.231.136])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9497D606A31E
-	for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 21:14:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9497D606A31E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1FCA606A31E
+	for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 21:14:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D1FCA606A31E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=enhv+Itv
-Received: by mail-oi2-f7.google.com with SMTP id 5614622812f47-4b39374fab5so1296831b6e.1
-        for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 13:14:00 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=nZiomkya
+Received: by mail-oo2-f8.google.com with SMTP id 006d021491bc7-718facffeffso362179eaf.0
+        for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 13:14:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795468439; x=1796073239; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1795468441; x=1796073241; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=gcQvjA8+h2ohzgIuzsHN3vA4zsOOD3Q9/0Wle15fFD0=;
-        b=enhv+Itvhk3d/X/mcqcSKPH2NDZW287V3ruGlO/fWLOtzgNHAg/ro/3LM+hizod23+
-         NGE1cp3ZFhIAuT/l9W2wbldHz3IUdNoLelsMZCZaYtO4Uqe6PnZniITZEDy+NBdP8vE1
-         lw71SSw5IGF/So/yJ0CFaIquaDrhIRNTGjZvJ5DShUaVtdQt275Bpeh5nvmRMBik4TYN
-         rno0UE8PtHGvyRa3VXWxs1rHlh/Mj0i3DkFBvudPzQSgUtlRiJN0guD2Fz4c+BYH5Hwh
-         oImDRc7iNHhHjHfDA4I1UCWHX+SvKRvjS7lUfuegwi6K2uQLsBuO6SGn8Rdke82SC5Gy
-         vyYw==
+        bh=iLUI5O+p+2tRmHjW4/14o7W/IN6GSuTZ+C+ANbuOOSE=;
+        b=nZiomkyahKYT8+PRSnf89xNJ8CCphUGLtL2v31TTwQMBJElKwTFCkSWIPFt3WIdhnu
+         Lfah9XPyz7e8MklvANayD7UJxd0YxiDTmLIiTl3jNBiE5XokD8rjxh3RNK1hBaNj28dT
+         JYkLZrXq9SGt2UGqFAOacouVxDdfpaId8HxaqULKuaYun2ptOYACeePECR7XL7k47/QO
+         XBAONMr4F6O/+W3nxp7h8gc5cZfbtchNX5R7YdQDrAW+Z9yvwEKeHAjwbGD0S30Bp/dC
+         Frirs9E6DGCKTfJ8wNxa5o81QSNHYoszuqubnTzn3a06DOwzFRw+P5H9SjysLMq/CQVH
+         AVqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795468439; x=1796073239;
+        d=1e100.net; s=20260707; t=1795468441; x=1796073241;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=gcQvjA8+h2ohzgIuzsHN3vA4zsOOD3Q9/0Wle15fFD0=;
-        b=t5fOGlVejlTdATCimWySzVASFRebH1CqVCvUJute6wRKVISdDFsgAm5u7flDYOGtoi
-         icjfPQvvo9tE1JOipVvBKKIRUg3zTpmgja78ID5ZyTrhyT/rUhhpo3efYRfLH3uSK27Z
-         RGKvzkE05D5Y3VeTzP2fC6BR2v++KOUY1J4LB/mIj6BcrCrO+vTRA4/nsEm5rsJMP4cj
-         e5oUoEI4tY7CXd4SMKlJ4QQeiVhdoaHYrsjZyXugKTP/1Tj1dlnUtGRE3NqjUUDRq188
-         7Fuw4U0a63LFn0G/j0RJBaxUEujYhRp8h5L6HKfY9YjQ86fYrbToFk+VsJZLeWXngKjo
-         6Gsg==
-X-Gm-Message-State: APuU4Z/JnVKuviDBP6rGJLaSv3te7DL+F70H4Ljl9AmBoH4nrJzrlNR9
-	AoVpwZVB+SDlH+NiAr3tlWRSJuI4ZKTXgfG7yW7M28nN984R6wceDb15xDNhJHkqKYf7/A==
-X-Gm-Gg: AZFdTZdm5ZXXBYiPlUsWV+cak089hlJ7k6q5P+joeyhQlqUb712Jf4t3qjH1NK3iiKX
-	9zt2J5XioDiO4FT840APqynvZfq90VFu1rv/dVDVKBR5RIO08rsJOK7NigJMf3y3/TVi1Rrfqk/
-	ceqzyCXm3AO3QVYRszQUulALykPIH3FxFBFHtylivN+fnkmswnh7yRctfL7rjCRcsFk1xUuj2tW
-	24AX6v8qWAkavm+L/ovZs6cmbXiDyhbWPCpV3KP2wWXZ7mvz/KiDJkkaxhqG5UZQDhDQ1dSemsD
-	+hhtxVuCBKXbxbV7vvwGStRZcOjoqasAqDF+uP5EJdYYnv7xyhrj97i3NDwhBy/lDqOTsJktaY8
-	uVmB9sNekR5/wd8ZLAoa5EEz6lnZVjQj92k8Ffl/PxxPXTjthqpqlB8dX7bH+50eQxSqU/PIcRx
-	DdqcUFNpo3Wi2R0RROReNPCiDOzAwB0tZuZLC/8QZiBmrRaausQt/bl9QOsdDQOduvWg11/Eyzh
-	Rjze9KXL4kuj0dHAfz9oGz8ZImH2vugcXdRbIyyVg6d7wk+XgFFZhIo78uSpdpq1/45ifafOqyi
-	KgRpHNazwe9pcavgGG3Oy8hVu4cKkqe1BBb77mkYJGm6PWAaGiAwf8pYlJBdM3AFF0z+dl4cU24
-	BIhP41ec96QpGgJuNZgG22Ma0Y3xNrNYgfGtZzL2KL5Nqv8jh9XdCWT8OwAwj3pXlTqGsyOa48/
-	BHzHT7AgZ7jA==
-X-Received: by 2002:a05:6808:6404:b0:55c:836:5955 with SMTP id 5614622812f47-57a0bb6ee75mr12832420b6e.44.1795468439386;
-        Mon, 23 Nov 2026 13:13:59 -0800 (PST)
-Received: from localhost (fwdproxy-atn-115.fbsv.net. [173.252.95.115])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4bc5f7ae7dcsm11402662fac.8.2026.11.23.13.13.57
+        bh=iLUI5O+p+2tRmHjW4/14o7W/IN6GSuTZ+C+ANbuOOSE=;
+        b=xTH3q5RCK0tu7a/qASTJ4EsE9EqeBkF+JNA7A3G9aiKmQmksjAFk0lPOCjbTKN2lnH
+         bJedUuMrt/BOjT39Zb41v+J55BDF3q1NMUSibtSOWzLZDiroSsk8Ku6GSzmw6ZZQQuJm
+         eaZ4B3FiOXMSCg8uNFz+HdB/Ydu1FApa84p4iYnCIEPBYHrES+rausNFQh6qWN3Eqiwr
+         omrhr9dG24MisaE+dgALLOom68rEDORzGoQ5dUsuHaC2Ho2EfUK8dmujjVqBxOpXvXQl
+         FNbGgxOTmjgetwW3GqdJGtQsqorkp1N3oe/ilbFbcjtOTES/CSQEapCjm8PehxJEfLSl
+         a1nw==
+X-Gm-Message-State: APuU4Z/Bwe3Grzr+fqJuVXh99w2RCszHx9yaHTFNz5XqfqI69pozeAhO
+	ixIIiqzLqPJgwLLIEwELcN0WD+W+ye3i/ih1B7AMZfOG4Xpa5/k9kgOhTNgDZr1KmNA=
+X-Gm-Gg: AZFdTZcKW9N3ftIg9rOQsW6jzvrvpFoDN1q5JdNs34tNJ+qT6l9rCfoKmnfas5/c36r
+	kwnRcJE1KOkzYB1KsQqaF3fLK5su819ICD3etoQ746Fx5/i0oC/MNIYsjVdpxhQGm+hv0VIh3XK
+	jyY7fkl1s5JhoVZJuHIUe+KRCun1uWlVNITVO9ieBupSNkB0Mzbf4Az0Gckbh/wwkaJuonSuDWU
+	BhmaH9DF6u3ZMVKZYd/b9CbewGbzAgBl/wTdl3dvhdC7E3HaASDvqPircnvmhSASxFxV2WJ3uqT
+	seCbv6Bg+v1UE0ssYsD+8cJ1gEiCDbpLKu3xuZ/9ya2O4IAS8OjP8DcIcaZudxttse/1YgTCVYk
+	3hUjs53LM9RYhAa8mpvE/eYMYM3EXP7Y0BmSZ5SzEuHaPQcXpjG1JeEpYDfyvnwlMOgZJuoFZoW
+	O8/MOVde+rwFmYmFfGnHdxacCbaZXhagzNOv2V4zan1F1IT3N5NFhHYsKBVWfEZqhxeYbZmZt/Q
+	H1x0DL8/zx/efFdF1MrkTZ+8R3qRTw5BOslIXLyrYL+op0cdAk3yBb6GsCrpa/Sm9zGPmbfdeDs
+	DR1pt2sOpuq4sX5EqYGgnAAzlDGxMeVCaI4Y/GIETI9dzQfUDMufGMBu+Fm0NbqaSfw0ZDc8cSa
+	oE/hLX5PRRki7Iixy4A+1BNESmTBhZ/gB9/Qw
+X-Received: by 2002:a05:6820:c7c5:b0:6cd:3ffc:64d7 with SMTP id 006d021491bc7-71b3959fa95mr7008872eaf.82.1795468441542;
+        Mon, 23 Nov 2026 13:14:01 -0800 (PST)
+Received: from localhost ([2a03:2880:10ff:4e::])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-71b38058102sm7596881eaf.6.2026.11.23.13.14.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Nov 2026 13:13:57 -0800 (PST)
+        Mon, 23 Nov 2026 13:14:01 -0800 (PST)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Xu Kuohai <xukuohai@huawei.com>,
@@ -91,9 +90,9 @@ Cc: Xu Kuohai <xukuohai@huawei.com>,
 	Ihor Solodrai <ihor.solodrai@linux.dev>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 07/10] libbpf: Support overwritable ring buffers in the record API
-Date: Mon, 23 Nov 2026 22:13:30 +0100
-Message-ID: <8115836d8bcbb9d59e2a350f9fb999f5ab497348.1795467315.git.memxor@gmail.com>
+Subject: [PATCH bpf-next v1 08/10] libbpf: Split ring setup out of ring_buffer__add()
+Date: Mon, 23 Nov 2026 22:13:31 +0100
+Message-ID: <bbb91dd4804421327bdff500116871aaf51c2325.1795467315.git.memxor@gmail.com>
 X-Mailer: git-send-email 2.53.1
 In-Reply-To: <cover.1795467315.git.memxor@gmail.com>
 References: <cover.1795467315.git.memxor@gmail.com>
@@ -106,283 +105,202 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=9362; h=from:subject:message-id; bh=vQUWD3Rg27gWL4YkQg4LvJNa3rPJ1zAXcilMiFGGwvw=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIZtlhUnRcmf+nKNHF0mf2xA7UehEzdsjSxwZDnyfeHxdVka7 xj/FjlIWBjEuBlkxRZaS//uYjE9U/g60XcYNM4eVCWQIAxenAEykvZWR4dGBZtWOVd0vF/BElLUWza lou6p3/avGvweqtZHq/t+3XGNkOHF41nzdG30MQRlTRFzdtFjl5v77yajBWL9RRufIi92RHAA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5842; h=from:subject:message-id; bh=V4TbzUfl5fL/TT6Gd1SKNMzHdATe91qsV0P+vP2Xl0s=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIZtlhUnClDtvffbx/jlt5bTgmb7GwVMf3kWVzlCz/sjM1fdp R6V9RykLgxgXg6yYIkvJ/31MxicqfwfaLuOGmcPKBDKEgYtTACZycCkjw+q9jQ/3njU5HsnuXFemrv hlc9DcE7OKnq3uXNB54cpi/RMMv1kjrk9a7pelHaz7eY9b2bxArb+tMWZfZJV4WdX3tN9l4gAA
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-In an overwritable ring buffer (BPF_F_RB_OVERWRITE) the kernel doesn't
-wait for the consumer and overwrites the oldest records when the ring
-buffer is full. A record returned by ring__next() can be overwritten while
-the caller is reading it, which is why such ring buffers can't be consumed
-through callbacks.
+Move the part of ring_buffer__add() that validates and mmap()s the ring
+buffer map into ringbuf_map_ring(), and keep the page size in struct ring
+instead of taking it from the ring_buffer manager. This way a ring can be
+set up and freed without a manager.
 
-Add ring__invalidated(), which returns true if any of the records returned
-by ring__next() since the last ring__release() or ring__rewind() may have
-been overwritten. The caller has to copy record data first, and use the
-copy only if ring__invalidated() returns false afterwards:
-
-	do {
-		while ((rec = ring__next(r))) {
-			memcpy(copy, rec->data, rec->len);
-			if (ring__invalidated(r))
-				break;
-			handle(copy, rec->len);
-		}
-	} while (ring__release(r) > 0);
-
-It can also be called once for a number of records, e.g. to dump the ring
-buffer without consuming anything:
-
-	n = 0;
-	while ((rec = ring__next(r))) {
-		memcpy(copies[n], rec->data, rec->len);
-		lens[n++] = rec->len;
-	}
-	if (!ring__invalidated(r))
-		dump(copies, lens, n);
-	ring__rewind(r);
-
-Records are overwritten in order, so ring__invalidated() only has to check
-that the producer is less than a ring buffer size ahead of the first record
-returned since the last release or rewind. For regular ring buffers it
-always returns false.
-
-Overwritable ring buffers get their own implementation of ring__next(),
-ringbuf_overwrite_next(), so that the regular one stays as it is.
-ringbuf_overwrite_next() does the same check for every record header
-before using it, so pos and len of a returned record are always valid and
-only record data needs ring__invalidated(). If the check fails, it
-continues from the kernel's overwrite position. There is no limit on how
-often that can repeat: a producer that keeps overwriting records before
-they can be read is not expected in practice.
-
-Overwritable ring buffers are not supported by 32-bit libbpf, where
-ring__next() fails with EOPNOTSUPP. It doesn't know where the overwrite
-position is, and 32-bit positions wrap after 4 GiB of records, which the
-check can't notice.
+No functional changes intended.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- tools/lib/bpf/libbpf.h   | 32 ++++++++++++++
- tools/lib/bpf/libbpf.map |  1 +
- tools/lib/bpf/ringbuf.c  | 94 ++++++++++++++++++++++++++++++++++++++--
- 3 files changed, 123 insertions(+), 4 deletions(-)
+ tools/lib/bpf/ringbuf.c | 88 ++++++++++++++++++++++++-----------------
+ 1 file changed, 51 insertions(+), 37 deletions(-)
 
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index 91d25bed5a04..24a70bf3f782 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -1691,6 +1691,10 @@ struct ring_rec {
-  * Each call invalidates and reuses the previous struct ring_rec, so copy it if
-  * it is needed later.
-  *
-+ * In an overwritable ring buffer (BPF_F_RB_OVERWRITE) record data can be
-+ * overwritten at any time, see **ring__invalidated()**. Such ring buffers are
-+ * not supported by 32-bit libbpf: **ring__next()** fails with EOPNOTSUPP.
-+ *
-  * @param r A ringbuffer object.
-  * @return The next record, or NULL if there is nothing to consume. errno is
-  * set on any error.
-@@ -1719,6 +1723,34 @@ LIBBPF_API int ring__release(struct ring *r);
-  */
- LIBBPF_API void ring__rewind(struct ring *r);
- 
-+/**
-+ * @brief **ring__invalidated()** checks if any of the records returned by
-+ * **ring__next()** since the last **ring__release()** or **ring__rewind()**
-+ * may have been overwritten.
-+ *
-+ * The kernel can overwrite records of an overwritable ring buffer
-+ * (BPF_F_RB_OVERWRITE) while they are being read. Copy record data first, and
-+ * use the copy only if this function returns false afterwards:
-+ *
-+ *	do {
-+ *		while ((rec = ring__next(r))) {
-+ *			memcpy(copy, rec->data, rec->len);
-+ *			if (ring__invalidated(r))
-+ *				break;
-+ *			handle(copy, rec->len);
-+ *		}
-+ *	} while (ring__release(r) > 0);
-+ *
-+ * Once it returns true, it keeps returning true until **ring__release()** or
-+ * **ring__rewind()** is called. *pos* and *len* of a returned record are
-+ * always valid and don't need this check.
-+ *
-+ * @param r A ringbuffer object.
-+ * @return true if records may have been overwritten, false if not. Always
-+ * false for a ring buffer that is not overwritable.
-+ */
-+LIBBPF_API bool ring__invalidated(const struct ring *r);
-+
- struct user_ring_buffer_opts {
- 	size_t sz; /* size of this struct, for forward/backward compatibility */
- };
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index 943f6f3f0639..6a953f123138 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -479,6 +479,7 @@ LIBBPF_1.9.0 {
- 		bpf_program__load;
- 		bpf_program__load_strategy;
- 		bpf_program__set_load_strategy;
-+		ring__invalidated;
- 		ring__next;
- 		ring__release;
- 		ring__rewind;
 diff --git a/tools/lib/bpf/ringbuf.c b/tools/lib/bpf/ringbuf.c
-index 12d586afed1d..b4e9e27951eb 100644
+index b4e9e27951eb..90ed354118de 100644
 --- a/tools/lib/bpf/ringbuf.c
 +++ b/tools/lib/bpf/ringbuf.c
-@@ -36,6 +36,9 @@ struct ring {
- 	struct ring_rec rec;
- 	/* always zero, in case struct ring_rec needs new fields */
- 	unsigned long rec_reserved[2];
-+	/* overwrite mode: first record returned since the last release or rewind */
-+	unsigned long batch_pos;
-+	bool has_batch;
+@@ -39,6 +39,7 @@ struct ring {
+ 	/* overwrite mode: first record returned since the last release or rewind */
+ 	unsigned long batch_pos;
+ 	bool has_batch;
++	size_t page_size;
  	int map_fd;
  	bool overwrite;
  };
-@@ -497,11 +500,72 @@ static int ringbuf_validate_rec_api(const struct ring *r)
- {
- 	if (unlikely(r->sample_cb))
- 		return -EINVAL;
--	if (unlikely(r->overwrite))
-+	/* 32-bit: no overwrite_pos, and positions wrap after 4 GiB of records */
-+	if (unlikely(r->overwrite && !r->overwrite_pos))
- 		return -EOPNOTSUPP;
- 	return 0;
- }
+@@ -68,28 +69,24 @@ struct ringbuf_hdr {
+ 	__u32 pad;
+ };
  
-+/*
-+ * Overwrite mode: check that whatever was read at pos, and at later positions,
-+ * was not overwritten while we were reading it. The producer can overwrite pos
-+ * once it is a ring size ahead of pos.
-+ */
-+static bool ringbuf_pos_valid(const struct ring *r, unsigned long pos, unsigned long *prod_pos)
-+{
-+	/* pairs with smp_wmb() after the producer_pos update in the kernel */
-+	smp_rmb();
-+	*prod_pos = smp_load_acquire(r->producer_pos);
-+	return *prod_pos - pos <= r->mask;
-+}
-+
-+/* ring__next() for overwritable ring buffers */
-+static const struct ring_rec *ringbuf_overwrite_next(struct ring *r)
-+{
-+	unsigned long pos = r->next_pos, prod_pos;
-+	__u32 *len_ptr, len;
-+
-+	prod_pos = smp_load_acquire(r->producer_pos);
-+	for (;;) {
-+		if (prod_pos - pos > r->mask) {
-+			/*
-+			 * The producer lapped us, continue from the oldest record.
-+			 * overwrite_pos is never ahead of a producer_pos that is
-+			 * loaded after it.
-+			 */
-+			pos = smp_load_acquire(r->overwrite_pos);
-+			prod_pos = smp_load_acquire(r->producer_pos);
-+			continue;
-+		}
-+		r->next_pos = pos;
-+		if (pos == prod_pos)
-+			return NULL;
-+
-+		len_ptr = r->data + (pos & r->mask);
-+		len = smp_load_acquire(len_ptr);
-+		/* if the producer lapped us, this is not a record header */
-+		if (!ringbuf_pos_valid(r, pos, &prod_pos))
-+			continue;
-+		/* record is not committed yet */
-+		if (len & BPF_RINGBUF_BUSY_BIT)
-+			return NULL;
-+
-+		r->next_pos = pos + roundup_len(len);
-+		if (len & BPF_RINGBUF_DISCARD_BIT) {
-+			pos = r->next_pos;
-+			continue;
-+		}
-+		if (!r->has_batch) {
-+			r->batch_pos = pos;
-+			r->has_batch = true;
-+		}
-+		r->rec.data = (void *)len_ptr + BPF_RINGBUF_HDR_SZ;
-+		r->rec.pos = pos;
-+		r->rec.len = len;
-+		return &r->rec;
-+	}
-+}
-+
- const struct ring_rec *ring__next(struct ring *r)
+-static void ringbuf_free_ring(struct ring_buffer *rb, struct ring *r)
++static void ringbuf_free_ring(struct ring *r)
  {
- 	unsigned long pos, prod_pos;
-@@ -512,6 +576,9 @@ const struct ring_rec *ring__next(struct ring *r)
- 	if (err)
- 		return libbpf_err_ptr(err);
- 
-+	if (r->overwrite)
-+		return ringbuf_overwrite_next(r);
-+
- 	pos = r->next_pos;
- 	prod_pos = r->prod_pos;
- 	for (;;) {
-@@ -540,9 +607,20 @@ const struct ring_rec *ring__next(struct ring *r)
+ 	if (r->consumer_pos) {
+-		munmap(r->consumer_pos, rb->page_size);
++		munmap(r->consumer_pos, r->page_size);
+ 		r->consumer_pos = NULL;
  	}
+ 	if (r->producer_pos) {
+-		munmap(r->producer_pos, rb->page_size + 2 * (r->mask + 1));
++		munmap(r->producer_pos, r->page_size + 2 * (r->mask + 1));
+ 		r->producer_pos = NULL;
+ 	}
+ 
+ 	free(r);
  }
  
-+bool ring__invalidated(const struct ring *r)
-+{
-+	unsigned long prod_pos;
-+
-+	if (!r->has_batch)
-+		return false;
-+
-+	/* records are overwritten in order, so it is enough to check the first one */
-+	return !ringbuf_pos_valid(r, r->batch_pos, &prod_pos);
+-/* Add extra RINGBUF maps to this ring buffer manager */
+-int ring_buffer__add(struct ring_buffer *rb, int map_fd,
+-		     ring_buffer_sample_fn sample_cb, void *ctx)
++static int ringbuf_map_ring(struct ring *r, int map_fd)
+ {
+ 	struct bpf_map_info info;
+ 	__u32 len = sizeof(info);
+-	struct epoll_event *e;
+-	struct ring *r;
+ 	__u64 mmap_sz;
+ 	void *tmp;
+ 	int err;
+@@ -101,43 +98,26 @@ int ring_buffer__add(struct ring_buffer *rb, int map_fd,
+ 		err = -errno;
+ 		pr_warn("ringbuf: failed to get map info for fd=%d: %s\n",
+ 			map_fd, errstr(err));
+-		return libbpf_err(err);
++		return err;
+ 	}
+ 
+ 	if (info.type != BPF_MAP_TYPE_RINGBUF) {
+ 		pr_warn("ringbuf: map fd=%d is not BPF_MAP_TYPE_RINGBUF\n",
+ 			map_fd);
+-		return libbpf_err(-EINVAL);
++		return -EINVAL;
+ 	}
+ 
+-	tmp = libbpf_reallocarray(rb->rings, rb->ring_cnt + 1, sizeof(*rb->rings));
+-	if (!tmp)
+-		return libbpf_err(-ENOMEM);
+-	rb->rings = tmp;
+-
+-	tmp = libbpf_reallocarray(rb->events, rb->ring_cnt + 1, sizeof(*rb->events));
+-	if (!tmp)
+-		return libbpf_err(-ENOMEM);
+-	rb->events = tmp;
+-
+-	r = calloc(1, sizeof(*r));
+-	if (!r)
+-		return libbpf_err(-ENOMEM);
+-	rb->rings[rb->ring_cnt] = r;
+-
+ 	r->map_fd = map_fd;
+-	r->sample_cb = sample_cb;
+-	r->ctx = ctx;
+ 	r->mask = info.max_entries - 1;
+ 	r->overwrite = info.map_flags & BPF_F_RB_OVERWRITE;
+ 
+ 	/* Map writable consumer page */
+-	tmp = mmap(NULL, rb->page_size, PROT_READ | PROT_WRITE, MAP_SHARED, map_fd, 0);
++	tmp = mmap(NULL, r->page_size, PROT_READ | PROT_WRITE, MAP_SHARED, map_fd, 0);
+ 	if (tmp == MAP_FAILED) {
+ 		err = -errno;
+ 		pr_warn("ringbuf: failed to mmap consumer page for map fd=%d: %s\n",
+ 			map_fd, errstr(err));
+-		goto err_out;
++		return err;
+ 	}
+ 	r->consumer_pos = tmp;
+ 
+@@ -145,21 +125,20 @@ int ring_buffer__add(struct ring_buffer *rb, int map_fd,
+ 	 * data size to allow simple reading of samples that wrap around the
+ 	 * end of a ring buffer. See kernel implementation for details.
+ 	 */
+-	mmap_sz = rb->page_size + 2 * (__u64)info.max_entries;
++	mmap_sz = r->page_size + 2 * (__u64)info.max_entries;
+ 	if (mmap_sz != (__u64)(size_t)mmap_sz) {
+-		err = -E2BIG;
+ 		pr_warn("ringbuf: ring buffer size (%u) is too big\n", info.max_entries);
+-		goto err_out;
++		return -E2BIG;
+ 	}
+-	tmp = mmap(NULL, (size_t)mmap_sz, PROT_READ, MAP_SHARED, map_fd, rb->page_size);
++	tmp = mmap(NULL, (size_t)mmap_sz, PROT_READ, MAP_SHARED, map_fd, r->page_size);
+ 	if (tmp == MAP_FAILED) {
+ 		err = -errno;
+ 		pr_warn("ringbuf: failed to mmap data pages for map fd=%d: %s\n",
+ 			map_fd, errstr(err));
+-		goto err_out;
++		return err;
+ 	}
+ 	r->producer_pos = tmp;
+-	r->data = tmp + rb->page_size;
++	r->data = tmp + r->page_size;
+ 	/*
+ 	 * overwrite_pos comes after producer_pos and pending_pos. Its offset
+ 	 * depends on the size of the kernel's unsigned long, which 32-bit libbpf
+@@ -170,6 +149,41 @@ int ring_buffer__add(struct ring_buffer *rb, int map_fd,
+ 	r->next_pos = smp_load_acquire(r->consumer_pos);
+ 	r->prod_pos = r->next_pos;
+ 
++	return 0;
 +}
 +
- int ring__release(struct ring *r)
- {
--	unsigned long pos = r->next_pos;
-+	unsigned long pos = r->next_pos, prod_pos;
- 	__u32 len;
- 	int err;
++/* Add extra RINGBUF maps to this ring buffer manager */
++int ring_buffer__add(struct ring_buffer *rb, int map_fd,
++		     ring_buffer_sample_fn sample_cb, void *ctx)
++{
++	struct epoll_event *e;
++	struct ring *r;
++	void *tmp;
++	int err;
++
++	tmp = libbpf_reallocarray(rb->rings, rb->ring_cnt + 1, sizeof(*rb->rings));
++	if (!tmp)
++		return libbpf_err(-ENOMEM);
++	rb->rings = tmp;
++
++	tmp = libbpf_reallocarray(rb->events, rb->ring_cnt + 1, sizeof(*rb->events));
++	if (!tmp)
++		return libbpf_err(-ENOMEM);
++	rb->events = tmp;
++
++	r = calloc(1, sizeof(*r));
++	if (!r)
++		return libbpf_err(-ENOMEM);
++	rb->rings[rb->ring_cnt] = r;
++
++	r->page_size = rb->page_size;
++	r->sample_cb = sample_cb;
++	r->ctx = ctx;
++
++	err = ringbuf_map_ring(r, map_fd);
++	if (err)
++		goto err_out;
++
+ 	e = &rb->events[rb->ring_cnt];
+ 	memset(e, 0, sizeof(*e));
  
-@@ -550,6 +628,7 @@ int ring__release(struct ring *r)
- 	if (err)
- 		return libbpf_err(err);
+@@ -186,7 +200,7 @@ int ring_buffer__add(struct ring_buffer *rb, int map_fd,
+ 	return 0;
  
-+	r->has_batch = false;
- 	smp_store_release(r->consumer_pos, pos);
- 	/*
- 	 * bpf_ringbuf_commit() clears the busy bit of a record and then checks
-@@ -563,8 +642,14 @@ int ring__release(struct ring *r)
- 	if (pos == r->prod_pos)
- 		return 0;
- 	len = smp_load_acquire((__u32 *)(r->data + (pos & r->mask)));
--	/* we get a wakeup when a busy record is committed */
--	return !(len & BPF_RINGBUF_BUSY_BIT);
-+	if (!(len & BPF_RINGBUF_BUSY_BIT))
-+		return 1;
-+	/*
-+	 * A busy record wakes us up when it is committed, so return 0. In
-+	 * overwrite mode return 1 if the producer lapped us, as len was not
-+	 * read from a record header then.
-+	 */
-+	return r->overwrite && !ringbuf_pos_valid(r, pos, &prod_pos);
+ err_out:
+-	ringbuf_free_ring(rb, r);
++	ringbuf_free_ring(r);
+ 	return libbpf_err(err);
  }
  
- void ring__rewind(struct ring *r)
-@@ -573,6 +658,7 @@ void ring__rewind(struct ring *r)
+@@ -198,7 +212,7 @@ void ring_buffer__free(struct ring_buffer *rb)
  		return;
  
- 	r->next_pos = smp_load_acquire(r->consumer_pos);
-+	r->has_batch = false;
- }
+ 	for (i = 0; i < rb->ring_cnt; ++i)
+-		ringbuf_free_ring(rb, rb->rings[i]);
++		ringbuf_free_ring(rb->rings[i]);
+ 	if (rb->epoll_fd >= 0)
+ 		close(rb->epoll_fd);
  
- static void user_ringbuf_unmap_ring(struct user_ring_buffer *rb)
 -- 
 2.53.1-Meta
 
