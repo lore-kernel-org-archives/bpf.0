@@ -1,55 +1,49 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.140.110.172
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795430981;
-	b=14kLIhilEAD34O+MSBu7v++oszkTSSL288Zve/6rkgkhCAk7p1EbEaq451ejdwrlgbBP
-	 TbvH7zgD+Va8YmuBt+dB6quneI8vpyYoZ1Czf9YzXSH2AGZuD7h9n87LzWkJdr6FWj2eK
-	 LhcIADbVIsGpPaCQggf+ReDTyPudXWgmk+ssc6nXyOB1E+Gn/A6wWUxgGo6IooMVWNFAs
-	 k4Pie2CTb72F0bBl1teujZU9cCiZcmp7G8ayD9bp755zz8WdCh1qRz/z65NWJD/etQq5s
-	 i9ZZIuqj/kP1KnURsq0PdWasuBltK4/q4whI+fXBcFL4GoK5SpMjNBzlmmL8nMCdhCA==
+	t=1795431003;
+	b=Mc1qHi75xqIUj2Qp3XWvCc36YoghumYSLLLsDoMqXBe2rWrJA+v6256wq/uXcf8fAu4E
+	 8NwNmzgIbKNHkOyCgFOUosZ4yOhuWwpibGoq3j9RC3nud+b7pOGq14I2Grv6q0rAwy3PP
+	 S/5PgkQwMLUbSgFA8O+cQW+frYTrajL5c4qcX2igmQ7V+YK+sr0V0xBqySL0M0INZJxJF
+	 IuaEzknvhTcpDmd9qrS0UBI8yKKaeOrr4bG9LQRNjfVrmn2OQYjzFzuLnbvIfmGjlvPE9
+	 DpL6AYuKzMvh9MlP4fsoIZHE6mR90DefD+btC7wy7NuSGlaWl+DmpM2BBW1LhxAUAWQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795430981;
-	h=Received:DKIM-Signature:Received:X-Forwarded-Encrypted:
-	 X-Gm-Message-State:X-Received:MIME-Version:References:In-Reply-To:
-	 From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:
-	 Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=uuiRLHk3N+E1oMrfv2VmXcFop83iL6iVXO7sXhu2XFk=;
-	b=rPgQOsn6XuxDEhhOOP5/gDHdoAfcesCRZRun1BDsg+KLSWtmGTpuqrWl1uOJ3XGJ+eJH
-	 tH9lEz3RxzuepChyN+0/riFf+K9BpuWJC7gHzxR7+zJWlg4JfAx2jPncivDObEKhso5SY
-	 /YDHmbYa4rYL0N1daGGvQQsja3eepDdb4Sqduf0390YUoYUOUx9q+CRqeBz8mioPDaj+5
-	 6BPrHKmsOD4PeOdgM9Vklc1Wnpn/gUiJFYcdM6ri7K7dc0JHSDLvu9k/7la2W+luVU68Q
-	 qLbpoxY5uqm4/TsPdTbXzd6vWDdgsBVuBTZmC0AGASqhp+0kP+Al3qDjcwW2XRbb13Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795431003;
+	h=DMARC-Filter:Received:Received:DKIM-Signature:Message-ID:Date:
+	 MIME-Version:User-Agent:Subject:To:Cc:References:From:
+	 Content-Language:In-Reply-To:Content-Type:Content-Transfer-Encoding;
+	bh=HONgwvcLnwdQ2wr7NdDYe7XePSqL8bRXwzbHmI19pt4=;
+	b=yJEjCwnnr5292ugHb0+KcaY894pICECQPMtLf547WJioQDpcPOxr9ewV07W3pRs8PkMd
+	 RL+apkZREFLvWOurewQL5gruwbWUdyh38g7Eo73vrub/NLTwhR2OLjUQsvllbvpcZh9Nr
+	 qEq2imm7nb0lmzPSTcYI1y0HCf2WCsHUekV9QAv2Ny5P3iNXT3LlhKYCmz/kYZ4QnNuqr
+	 EqnFVs29gSa7qC5njtyDkCYnrg6G4T2Eeily/btKoEDAGEI1xn00czl2K9Wn9BqVo9NIS
+	 OD6Tepjfqc91SqfcvAC9c6aOwwnTZwrPQoTi285QzEHyCDRBYW14YpfxgkcCCmJcCWA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=SywKQylB;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D99D2606A31E
-	for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 10:49:41 +0000 (UTC)
+	dmarc=pass header.from=arm.com;
+	spf=pass smtp.mailfrom=arm.com;
+	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=h+WxKwoB;
+	arc=none smtp.remote-ip=217.140.110.172
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6758606A31A;
+	Mon, 23 Nov 2026 10:50:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D6758606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=SywKQylB
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F3161F000E6
-	for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 10:49:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795430981;
-	bh=uuiRLHk3N+E1oMrfv2VmXcFop83iL6iVXO7sXhu2XFk=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=SywKQylBl15vaQ2TR8/YwlAerzTW9Z/hriV5iTYVrPGsrBpT5/BpymJGSDyzRfRcA
-	 afP6Veqc/qzG/dzFdd+c3MnMbcbkYY+O99HsMZ3IEMhP6VMkw1VdF7hMDpAMlP6eWF
-	 DqK7jIV8HzgzvbZsz6SPuk0+6j1aeBVyaBcarinzGlqQSIm0KNM9hPMxfZ0rkzJgZ+
-	 LzMmhg+vob9QZUizpAwu+xQzL9UkV5bLCt/V7u8UU1bukNmoRmpGN9A04ZZ9LvF68a
-	 11TUz3NR5ndHlmmHdkYoKRlevi4DetxogRs+W5dqFGnwes2ocTqadojkXYnhtpGDry
-	 XHh6aJqebkNAg==
-Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-833e671ee9fso3005726a34.0
-        for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 02:49:41 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AL+hErGLiyrb0iJBWQOiIBYCh0Dp6Wcrj3StWHEIZ0wxJsZkjASIfNA4RQ96O8JlkXDxeBEr0Mw=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8kbAdRNpr+Ds0XF2dSulRbFcqHn2TyOgdeRyAvUfhIYSBIPjwt
-	0IKrZb+2irACN0LKjOl7p4KawW9Ff+YBbuBYsEQm4PzuNvoM2uqlsnNyVSh6AFbzpic/Ab4t8x+
-	CvLYAYbdNttazfQXjgper3ZvufE3gFUo=
-X-Received: by 2002:a05:6830:2692:b0:862:c6cb:2e25 with SMTP id
- 46e09a7af769-863152f8ef7mr11716687a34.2.1795430980592; Mon, 23 Nov 2026
- 02:49:40 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=h+WxKwoB
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 32286143D;
+	Mon, 23 Nov 2026 02:49:59 -0800 (PST)
+Received: from [10.57.91.245] (unknown [10.57.91.245])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0B8093F632;
+	Mon, 23 Nov 2026 02:49:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1795431002; bh=88wKm6a3kg+rRCdOpXoIcUGAgG5m2xf6YFDPEexucGk=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=h+WxKwoB8MqOR3y6DbBUX+gVZWSCUCEStlY/uJ4F5pyUZHSJkTOnOl5qaT+iImAQz
+	 SibvFVG+nLxs2gyjgFTTpoSjEGXdKvhdtuB+LekSEzw6CMbTE4PCvbAGjhbsDR7iw6
+	 1uPYGOcS1CkKqQFZ+hRzzeAZi6Hd+4PL/Q7rEBEs=
+Message-ID: <85385aae-af06-4742-a39b-5a95e3e73a7e@arm.com>
+Date: Mon, 23 Nov 2026 10:49:58 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -59,68 +53,104 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261121160204.4024204-1-razor@blackwall.org>
-In-Reply-To: <20261121160204.4024204-1-razor@blackwall.org>
-From: Eric Dumazet <edumazet@kernel.org>
-Date: Mon, 23 Nov 2026 11:49:29 +0100
-X-Gmail-Original-Message-ID: <CAL4WiireDJ9=d1QQS+kSJtBJDmzMbgM+tb7zNk1WunqCLKNMOQ@mail.gmail.com>
-X-Gm-Features: Aa3M54qCBv2IH6BzoDtiob3Sz3xbIJRxyZ9--0FGnQoJNgurECB5N83TdB_5iZI
-Message-ID: <CAL4WiireDJ9=d1QQS+kSJtBJDmzMbgM+tb7zNk1WunqCLKNMOQ@mail.gmail.com>
-Subject: Re: [PATCH net] net: keep skbs with a prefetched socket out of
- gro_cells gro
-To: Nikolay Aleksandrov <razor@blackwall.org>
-Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Martin KaFai Lau <kafai@fb.com>, Joe Stringer <joe@wand.net.nz>, 
-	Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1] arm64: Mitigate Spectre v1 in the BPF interpreter
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Alexander Viro <viro@zeniv.linux.org.uk>,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, stable@vger.kernel.org
+References: <20261117172341.3152407-1-ryan.roberts@arm.com>
+ <DMYSI3BOQWOC.2P2FZB0H872DR@gmail.com> <awAay4FFj1_wQtaL@arm.com>
+ <DN07ZMOAD4GP.37PG3XUPBG4CM@gmail.com>
+ <a6cda8a2-992f-41f9-a814-ee78363c3a69@arm.com>
+ <DN2ALO12MI1Z.3HI553HDMO2FL@gmail.com>
+From: Ryan Roberts <ryan.roberts@arm.com>
+Content-Language: en-GB
+In-Reply-To: <DN2ALO12MI1Z.3HI553HDMO2FL@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Le sam. 21 nov. 2026 =C3=A0 17:04, Nikolay Aleksandrov
-<razor@blackwall.org> a =C3=A9crit :
->
-> bpf_sk_assign at tc ingress holds a reference on a socket that is not
-> rcu freed, such as an established tcp socket, until the receive path
-> steals it. ip_rcv_core keeps a prefetched socket so when the assigned
-> packet is an ipip, gre or esp packet the socket stays attached after
-> decap and their rx paths pass the skb to gro_cells_receive. GRO merges
-> skbs with the same skb->sk into one flow and clears skb->sk and
-> skb->destructor of each merged skb without calling the destructor so
-> every merged skb leaks a socket ref.
->
-> Send skbs with a prefetched socket to netif_rx instead as
-> gro_cells_receive already does for cloned skbs, where each skb is
-> consumed on its own and no reference is lost.
->
-> skb_sk_is_prefetched tests skb->destructor which shares a cache line
-> with skb->cloned that is read just before so the common case adds a singl=
-e
-> cheap test.
->
-> Reproduced with a tcx ingress program on a veth in a receiver netns with
-> an ipip tunnel which assigns an established tcp socket to ipip packets.
-> The sender sends 32 tcp segments of one flow inside ipip through a netem
-> slot qdisc so they are decapsulated in one batch and merged by gro.
-> Then the socket is closed and the receiver netns is deleted. The leaked
-> socket holds a ref on the netns so it is never torn down and its devices
-> are never unregistered:
->
-> Before:
->   bpf_sk_assign() calls 32, sk_refcnt 32 after the burst
->   receiver netns deleted, 30s later its veth peer still exists
->
-> After:
->   bpf_sk_assign() calls 32, sk_refcnt 1 after the burst
->   receiver netns deleted, its veth peer is gone
->
-> The problem was found during reviews of patches that add bpf_sk_assign
-> egress support.
->
-> Fixes: cf7fbe660f2d ("bpf: Add socket assign support")
-> Signed-off-by: Nikolay Aleksandrov <razor@blackwall.org>
+On 23/11/2026 04:07, Alexei Starovoitov wrote:
+> On Sun, Nov 22, 2026 at 12:58 AM Ryan Roberts <ryan.roberts@arm.com> wrote:
+>> I view this patch as a fix to arm64, not as a fix to BPF. I haven't changed any
+>> BPF code - I've only removed an out of date comment in BPF code, which assumed
+>> the code path was for Spectre v4 only. But that's not true since Commit
+>> dff883d9e93a ("bpf, arm64, powerpc: Change nospec to include v1 barrier").
+> 
+> Fair enough, but the arm64 part of that comment is stale.
+> The verifier relies on nospec for v1 since
+> commit d6f1c85f2253 ("bpf: Fall back to nospec for Spectre v1").
+> 
+>> arm64 was previously nop'ing barrier_nospec() despite seemingly needing it in
+>> the same situation as x86. I think this is orthogonal to whether or not the BPF
+>> interpreter permits speculation attacks in other places?
+> 
+> Not quite. In the interpreter the barrier sits behind an indirect branch:
+> 
+>   goto *jumptable[insn->code];
+> 
+> arm64 has no retpoline, and the prog can train this branch.
+> With a wrong target the CPU skips ST_NOSPEC and runs the next insn.
+> So the interpreter is still not safe.
+> Yet you're arguing that you're making bpf interpreter a viable option
+> on arm64. That's just not fair to users.
 
-Right, GRO callers are supposed to only feed skbs with no socket, or
-sock_wfree() ones (see skb_prepare_for_gro() used by veth), and
-gro_cells never enforced this.
+I'm not saying that at all. I wasn't aware that it previously considered unviable.
 
-Reviewed-by: Eric Dumazet <edumazet@kernel.org>
+I noticed this particular issue while doing manual code inspection while working
+on something else. I sent the patch to close what I perceived to be a bug to try
+to be a good citizen.
+
+> Say it in the commit log that you're fixing one tiny issue and leaving
+> giant security hole in place.
+> With that I'm no longer nacking it.
+
+Happy to fix up the commit log as you suggest.
+
+> 
+>> Looking at bpf-next, it is still possible to deselect BPF_JIT when building. If
+>> this is such a security issue, shouldn't we disallow that on arm64, or at the
+>> every least make it an EXPERT option?
+> 
+> Yeah. Good point. Let's disallow it on arm64 and x86-64.
+> 
+> I'm thinking to push something like this
+> 
+> diff --git a/kernel/bpf/Kconfig b/kernel/bpf/Kconfig
+> index d705d7b..8b8688d 100644
+> --- a/kernel/bpf/Kconfig
+> +++ b/kernel/bpf/Kconfig
+> @@ -26,8 +26,8 @@ config HAVE_EBPF_JIT_KASAN
+>  config ARCH_WANT_DEFAULT_BPF_JIT
+>  	bool
+>  
+> -# Used by archs to tell that kernels that were compiled with BPF JIT support
+> -# have no BPF interpreter.
+> +# Used by archs to tell that kernels with the bpf() system call have the
+> +# BPF JIT compiler and no BPF interpreter.
+>  config ARCH_WANT_BPF_JIT_ALWAYS_ON
+>  	bool
+>  
+> @@ -36,6 +36,7 @@ menu "BPF subsystem"
+>  config BPF_SYSCALL
+>  	bool "Enable bpf() system call"
+>  	select BPF
+> +	select BPF_JIT if ARCH_WANT_BPF_JIT_ALWAYS_ON
+>  	select IRQ_WORK
+>  	select NEED_TASKS_RCU
+>  	select TASKS_TRACE_RCU
+
+Seems reasonable as long as we're sure that there are no users that rely on the
+interpreter on arm64 for some reason?
+
+Would you propose that this is something that should be backported? If so, I'll
+drop this patch. Otherwise, I'll send a v2 with a more cautious commit log.
+
+Thanks,
+Ryan
+
