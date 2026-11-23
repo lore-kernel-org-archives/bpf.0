@@ -1,48 +1,47 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=117.135.210.2
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=117.135.210.3
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795412571;
-	b=U9jNO7K2DtEn2PweJcDsKpLFOA6okfAj1OOEP06uQhpcaiHvYMXuROxJ4EWx7VRpcb63
-	 ZS1bZozULH10KIScoR5YQQcaKPgJZs2I8d2OoQTz1mjFBnNWGa/sJY8I1TO4wDVkuE7kz
-	 690yeRyAGPPrvr7B6P/RLEr7VwnU7j/KL3MdhEc2H9fMev3X9yDZPL9jVHUka7bSUVJVp
-	 Blcm3eYyUICJz8n2s6V5XVcgxNBbtbVlnhPqqbG/WlpzXH/XpjfylrUmp2kxXMOl6SyaH
-	 YZswe5Jiox1y4+JPFz6XnMIhT1KsiDMAR3txPxD/USVniZg3V1mK6lxwFAgwYf8lq7Q==
+	t=1795412574;
+	b=OR2gV34gsgpWGwyTVWwbHCgFLXaejftuJI2Ef+cksEzeA6b94Mcd8qqgG5CRIOgNaKmg
+	 FstYBzdyGAKjliHDliiniAiHARrTAJtlK4b9dxcL1KtfV7znFUacCZoloRoBSwXHhDTj5
+	 fObYJ/JQhEDWAlSyEX30ocir1FrR/YnTDF2HD584wbU93Aw3XA3gMCvX6wp07yONhYbbq
+	 fS2+HJ0ol7fn71d9KmNrk9JR7cEgkHM+uTwvWsgsjgodxQ9FJ7Zanbu0+BqbBiy+Azbmz
+	 t8UYmSMHpCNeFfXEciPe7H4/TA6/mKDd4ZM5mjoQHmiZH52TySc3BpgbpWtcg1RlKJw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795412571;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795412574;
 	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
-	 Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding:X-CM-TRANSID:X-Coremail-Antispam:
-	 X-CM-SenderInfo;
-	bh=XzqBPbsAJ7iRQUzHM2XsULWuUT79ufDyPjza06YYrkM=;
-	b=WtcqLrKKE07cdcSy1sa2SyDw4tUesCbIGUjEazAzPN4gZH9g5dnslU/AwE1MENzSyiqq
-	 lWI5V4hGWyIKP9aMuaMq51cfoXCC5vY6KNAfo6fLYCdqbqodhss7xR2RhWrkCJ88MqVbl
-	 RUU92ClYCn8KpMpaFY+Z8Vk9bObpVMO4wP2iU0pv918r4HCsQHVTWT1m3GUZMOFV9zD0K
-	 inLGJ7nehEAWNNETQ2lVXbUFFxg0P6/uiXTB3Fx5OwU9R+l/9x4z0DpXUXRfrHj8VPI14
-	 vnPjwGGtXBggEnIIkSFphBAu6r+bESrRG+f9U1YFyDSTPz0h46xS43Wem7e6JOmpqkg==
+	 Message-Id:X-Mailer:MIME-Version:Content-Transfer-Encoding:
+	 X-CM-TRANSID:X-Coremail-Antispam:X-CM-SenderInfo;
+	bh=H8JwR7B+7ndWtT3MP8NnXDucTckP4zsTxZorbc3F8PY=;
+	b=SF74R9tN0g0ZWkUhquPDEie5Auz/SDSeWipL1FeWAGkY0/fK1AqpxTmXJW8fasAeA98s
+	 HmdpRgSTJc5Ko8cQknp+PtFkW26B3pbeqOgNgkTon6/gCq3mEoVRS0lTXfQEjreRith/0
+	 Y0W3UnVSuS+I8qkYgWPu7WNEzoWtCMlN0h2Z9AJlCqv+u5SyD2xpo5bcJu5aNln1pBMTN
+	 bZ1ux3A3pqsXN5wMsJ1SjuRRLTACBXtJ3FvPLYq1vQABbVR24s/e58HhzBNhBeJSsQ/Ur
+	 F1ddpE5Zn43F/UwXFGFUQIM+Om0AIdeJ8FLJ1DhOkDeNx6Jd+FNeimG01C0ihFcBcEg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=163.com;
 	spf=pass smtp.mailfrom=163.com;
-	dkim=pass header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=jBMphh80;
-	arc=none smtp.remote-ip=117.135.210.2
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
+	dkim=pass header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b="opMt/z35";
+	arc=none smtp.remote-ip=117.135.210.3
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.3])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F586606A31A;
-	Mon, 23 Nov 2026 05:42:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4F586606A31A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56733606A330;
+	Mon, 23 Nov 2026 05:42:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 56733606A330
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=jBMphh80
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=opMt/z35
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=Xz
-	qBPbsAJ7iRQUzHM2XsULWuUT79ufDyPjza06YYrkM=; b=jBMphh80SjsqYMOzff
-	DI9r1MEMNtfk5LncTqI0dGkNKypsmKqoMMHc8Cfrgu3lYoL5cd4TPbsyFQlACMdT
-	eXLN/SW4JIRyG67D6b/EoBxTyHXRI0HQd3IYGKom+18XIOrOH9qZ/iQu+ZZ8gDdO
-	o9+7ekrc6femOqnsOCkXsYmZA=
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=H8
+	JwR7B+7ndWtT3MP8NnXDucTckP4zsTxZorbc3F8PY=; b=opMt/z352qWOs9qMoD
+	LmEGxBHptIxlk1itiymmC70dXvV6Y+N/4ZFWSPSoxiL6bEqJmYgd2AZqv2MFQHSs
+	prsQbXfaL5Zwx1N/8s7IlunlcCoPKMw6xC+7+PMxgfW2ycueMEoS4/1A4GSBo0n0
+	tE5BFA3abKNaliair3jkxWlNk=
 Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g1-0 (Coremail) with SMTP id _____wDnL9ky0gNrZC+QIw--.65118S4;
-	Mon, 23 Nov 2026 13:42:13 +0800 (CST)
+	by gzga-smtp-mtada-g1-0 (Coremail) with SMTP id _____wDnL9ky0gNrZC+QIw--.65118S2;
+	Mon, 23 Nov 2026 13:42:12 +0800 (CST)
 From: Rongguang Wei <clementwei90@163.com>
 To: netdev@vger.kernel.org,
 	bpf@vger.kernel.org
@@ -55,12 +54,10 @@ Cc: willemdebruijn.kernel@gmail.com,
 	alexei.starovoitov@gmail.com,
 	andrii@kernel.org,
 	Rongguang Wei <weirongguang@kylinos.cn>
-Subject: [PATCH net v12 2/2] selftests: net: add TAP socket filter attach tests
-Date: Mon, 23 Nov 2026 13:42:09 +0800
-Message-Id: <20261123054209.89946-3-clementwei90@163.com>
+Subject: [PATCH net v12 0/2] tun: fix re-attaching the socket filter
+Date: Mon, 23 Nov 2026 13:42:07 +0800
+Message-Id: <20261123054209.89946-1-clementwei90@163.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20261123054209.89946-1-clementwei90@163.com>
-References: <20261123054209.89946-1-clementwei90@163.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -71,404 +68,96 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wDnL9ky0gNrZC+QIw--.65118S4
-X-Coremail-Antispam: 1Uf129KBjvJXoW3CF47Jw4DAryxCw17ZF15CFg_yoWktr1kpF
-	97WayDJr15Xr47Xws7ArW8ZFW3Zw4DGr1rAan5K3s8ZFs8Jry5Ca9YkFWakws7tr48uws0
-	kFyaya43WwsxtFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07j718kUUUUU=
-X-CM-SenderInfo: 5fohzv5qwzvxizq6il2tof0z/xtbC4hVdyGsD0jXr5gAA3g
+X-CM-TRANSID:_____wDnL9ky0gNrZC+QIw--.65118S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxAFWktw4kZF1rAr15Gw1rZwb_yoWrWr15pa
+	yrWw15Gr4kW3yxWw4fua1xAw15Xw1kGF13uwnxG34ruFWYgry8C3yI93yYv3Z0yryvgr4r
+	JFnavFnFg3WDJFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jjuWLUUUUU=
+X-CM-SenderInfo: 5fohzv5qwzvxizq6il2tof0z/xtbC-hRdyGsD0jTDLgAA3c
 
 From: Rongguang Wei <weirongguang@kylinos.cn>
 
-Add tests for TUNATTACHFILTER and TUNDETACHFILTER: a queue re-attached
-after the buffer the program came from was made unreadable, a bad program
-and a bad length with queues attached and with none, a program configured
-before any queue, and the IFF_NOFILTER paths.
+This series fixes attaching a queue to a TAP device, which re-installs the
+socket filter of a persistent device.
 
-Signed-off-by: Rongguang Wei <weirongguang@kylinos.cn>
----
+TUNATTACHFILTER keeps only the sock_fprog header, so the instructions are
+read from user space again for every queue that is attached later. Keep
+the program on the device instead, run it from tun_net_xmit(), and record
+IFF_NOFILTER per queue. Patch 1 does that. Also removes the exports of
+sk_attach_filter() and sk_detach_filter() because no caller in a module.
+
+Patch 2 adds selftests for the re-attach, for bad programs with and without
+queues, and for the IFF_NOFILTER paths.
+
+Thanks to Willem de Bruijn and Alexei Starovoitov for the reviews.
+
+---                                                                             
+v12:
+  - drop the EXPORT_SYMBOL_GPL() of sk_attach_filter() and
+    sk_detach_filter(), as Alexei asked.  It is a cleanup on its own, so it
+    goes in a separate patch and the stable backport of the fix does not
+    carry it
+v11:
+  - keep one program on the device instead of a copy per queue, as Alexei
+    suggested; sk_attach_filter_kern() and bpf_prog_validate_classic() are
+    gone with it
+  - TUNDETACHFILTER now applies to queues detached with IFF_DETACH_QUEUE too
+  - selftests: cover the zero-queue and detached-queue paths
+  - https://lore.kernel.org/netdev/20261119032242.71919-1-clementwei90@163.com/
+v10:
+  - add bpf@vger.kernel.org and the BPF maintainers to Cc
+  - selftests: fix the queue numbering and add a zero-queue case
+  - https://lore.kernel.org/netdev/20261109023848.59575-1-clementwei90@163.com/
+v9:
+  - zero the whole sock_fprog header, so that the padding TUNGETFILTER
+    copies is not uninitialized stack
+  - https://lore.kernel.org/netdev/20261030060043.94719-1-clementwei90@163.com/
+v8:
+  - narrow the bpf_prog_validate_classic() contract to the classic
+    verifier and note that it can also return -ENOMEM
+  - commit the new program only after every queue took it
+  - https://lore.kernel.org/netdev/20261028093235.148649-1-clementwei90@163.com/
+v7:
+  - verify the instructions before anything is replaced
+  - fix the kernel-doc of sk_attach_filter_kern()
+  - reject a program whose length is out of range before allocating memory
+  - selftests: add a case for a rejected program with valid length and bad
+    instructions
+  - https://lore.kernel.org/netdev/20261023092239.186665-1-clementwei90@163.com/
+v6:
+  - add description for return value of sk_attach_filter_kern()
+  - https://lore.kernel.org/netdev/20261016070654.170932-1-clementwei90@163.com/
+v5:
+  - add kernel-doc for sk_attach_filter_kern()
+  - fix the wording of the mprotect() comment
+  - https://lore.kernel.org/netdev/20261012021113.45939-1-clementwei90@163.com/
+v4:
+  - merge the kernel copy and the error check into one patch
+  - charge the kernel copy to the caller's memory cgroup
+  - https://lore.kernel.org/netdev/20261003063859.136895-1-clementwei90@163.com/
+v3:
+  - reorder: the kernel copy of the program comes before the corrected
+    error check
+  - add sk_attach_filter_kern() in the patch that first uses it
+  - https://lore.kernel.org/netdev/20260930080746.135017-1-clementwei90@163.com/
+v2:
+  - roll back the filter attach when a later step of tun_attach() fails
+  - keep a copy of the program in the kernel
+  - add selftests for the re-attach and for a rejected TUNATTACHFILTER
+  - https://lore.kernel.org/netdev/20260929093712.131096-1-clementwei90@163.com/
+v1:
+  - https://lore.kernel.org/netdev/20260923025653.59348-1-clementwei90@163.com/
+
+Rongguang Wei (2):
+  tun: run the socket filter from tun_net_xmit()
+  selftests: net: add TAP socket filter attach tests
+
+ drivers/net/tun.c                 |  93 ++++----
+ net/core/filter.c                 |   2 -
  tools/testing/selftests/net/tun.c | 358 ++++++++++++++++++++++++++++++
- 1 file changed, 358 insertions(+)
+ 3 files changed, 401 insertions(+), 52 deletions(-)
 
-diff --git a/tools/testing/selftests/net/tun.c b/tools/testing/selftests/net/tun.c
-index 34de2580e32e..ac326193867b 100644
---- a/tools/testing/selftests/net/tun.c
-+++ b/tools/testing/selftests/net/tun.c
-@@ -9,9 +9,11 @@
- #include <stdlib.h>
- #include <string.h>
- #include <unistd.h>
-+#include <linux/filter.h>
- #include <linux/if_tun.h>
- #include <netinet/tcp.h>
- #include <sys/ioctl.h>
-+#include <sys/mman.h>
- #include <sys/socket.h>
- 
- #include "kselftest_harness.h"
-@@ -548,6 +550,362 @@ TEST_F(tun, reattach_close_delete)
- 	EXPECT_EQ(tun_delete(self->ifname), 0);
- }
- 
-+/* accept: return skb->len.  Three instructions on purpose, so that the
-+ * length read back through TUNGETFILTER tells it apart from a rejected
-+ * program that is shorter.
-+ */
-+static const struct sock_filter filter_accept[] = {
-+	BPF_STMT(BPF_LD | BPF_W | BPF_LEN, 0),
-+	BPF_STMT(BPF_ALU | BPF_ADD | BPF_K, 0),
-+	BPF_STMT(BPF_RET | BPF_A, 0),
-+};
-+
-+/* Put the instructions in an anonymous mapping, so that the test can make the
-+ * address unreadable afterwards.
-+ */
-+static void *filter_alloc(const struct sock_filter *insns, unsigned int len)
-+{
-+	void *p;
-+
-+	p = mmap(NULL, getpagesize(), PROT_READ | PROT_WRITE,
-+		 MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-+	if (p == MAP_FAILED)
-+		return NULL;
-+
-+	memcpy(p, insns, len * sizeof(*insns));
-+
-+	return p;
-+}
-+
-+static int filter_attach(int fd, const struct sock_filter *insns, unsigned int len)
-+{
-+	struct sock_fprog fp = {
-+		.len = len,
-+		.filter = (struct sock_filter *)insns,
-+	};
-+
-+	return ioctl(fd, TUNATTACHFILTER, (void *)&fp);
-+}
-+
-+static int filter_get(int fd, struct sock_fprog *fp)
-+{
-+	return ioctl(fd, TUNGETFILTER, (void *)fp);
-+}
-+
-+static int tun_get_iff_flags(int fd)
-+{
-+	struct ifreq ifr = { 0 };
-+
-+	if (ioctl(fd, TUNGETIFF, (void *)&ifr) < 0)
-+		return -1;
-+
-+	return ifr.ifr_flags;
-+}
-+
-+/*
-+ * The program is built when TUNATTACHFILTER is issued, so a queue attached
-+ * later does not read the buffer it came from.  Here the mapping is made
-+ * unreadable before the queue is attached again, and another queue is then
-+ * attached from a fresh socket, which starts without a filter of its own.
-+ */
-+TEST_F(tun, reattach_filter_without_user_buffer)
-+{
-+	struct sock_fprog gf = { 0 };
-+	struct ifreq ifr = { 0 };
-+	short flags = 0;
-+	void *prog;
-+	int fd, ret;
-+
-+	prog = filter_alloc(filter_accept, ARRAY_SIZE(filter_accept));
-+	ASSERT_NE(prog, NULL);
-+	ASSERT_EQ(filter_attach(self->fd, prog, ARRAY_SIZE(filter_accept)), 0);
-+
-+	EXPECT_EQ(tun_detach(self->fd, self->ifname), 0);
-+
-+	/* This memory is no longer readable */
-+	ASSERT_EQ(mprotect(prog, getpagesize(), PROT_NONE), 0);
-+
-+	ret = tun_attach(self->fd, self->ifname);
-+	EXPECT_EQ(ret, 0);
-+
-+	flags = tun_get_iff_flags(self->fd);
-+	EXPECT_GE(flags, 0);
-+	/* The queue is attached again, not left disabled */
-+	EXPECT_EQ(flags & IFF_DETACH_QUEUE, 0);
-+	EXPECT_EQ(flags & IFF_NOFILTER, 0);
-+
-+	/* The two checks below document the expected state, they cannot
-+	 * tell an installed filter from no filter: tun_detach() leaves the
-+	 * device program alone, and TUNGETFILTER only returns the header.
-+	 */
-+	EXPECT_EQ(filter_get(self->fd, &gf), 0);
-+	EXPECT_EQ(gf.len, ARRAY_SIZE(filter_accept));
-+
-+	/* A new queue starts without a filter, so a clear IFF_NOFILTER shows
-+	 * that the filter configured on the device covers it as well.
-+	 */
-+	fd = open("/dev/net/tun", O_RDWR);
-+	ASSERT_GE(fd, 0);
-+
-+	strcpy(ifr.ifr_name, self->ifname);
-+	ifr.ifr_flags = IFF_TAP | IFF_MULTI_QUEUE;
-+	EXPECT_GE(ioctl(fd, TUNSETIFF, (void *)&ifr), 0);
-+
-+	flags = tun_get_iff_flags(fd);
-+	EXPECT_GE(flags, 0);
-+	EXPECT_EQ(flags & IFF_NOFILTER, 0);
-+
-+	close(fd);
-+
-+	ASSERT_EQ(mprotect(prog, getpagesize(), PROT_READ | PROT_WRITE), 0);
-+	ASSERT_EQ(munmap(prog, getpagesize()), 0);
-+}
-+
-+/* A new queue attached with IFF_NOFILTER must not get the filter that is
-+ * configured on the device.
-+ */
-+TEST_F(tun, attach_filter_nofilter_flag)
-+{
-+	struct ifreq ifr = { 0 };
-+	short flags = 0;
-+	int fd;
-+
-+	ASSERT_EQ(filter_attach(self->fd, filter_accept, ARRAY_SIZE(filter_accept)), 0);
-+
-+	fd = open("/dev/net/tun", O_RDWR);
-+	ASSERT_GE(fd, 0);
-+
-+	strcpy(ifr.ifr_name, self->ifname);
-+	ifr.ifr_flags = IFF_TAP | IFF_MULTI_QUEUE | IFF_NOFILTER;
-+	EXPECT_GE(ioctl(fd, TUNSETIFF, (void *)&ifr), 0);
-+
-+	flags = tun_get_iff_flags(fd);
-+	EXPECT_GE(flags, 0);
-+	EXPECT_EQ(flags & IFF_NOFILTER, IFF_NOFILTER);
-+
-+	close(fd);
-+}
-+
-+/* A later TUNATTACHFILTER covers every queue of the device, including one that
-+ * was attached with IFF_NOFILTER.
-+ */
-+TEST_F(tun, attach_filter_clears_nofilter_queue)
-+{
-+	struct ifreq ifr = { 0 };
-+	short flags = 0;
-+	int fd;
-+
-+	fd = open("/dev/net/tun", O_RDWR);
-+	ASSERT_GE(fd, 0);
-+
-+	strcpy(ifr.ifr_name, self->ifname);
-+	ifr.ifr_flags = IFF_TAP | IFF_MULTI_QUEUE | IFF_NOFILTER;
-+	ASSERT_GE(ioctl(fd, TUNSETIFF, (void *)&ifr), 0);
-+
-+	flags = tun_get_iff_flags(fd);
-+	EXPECT_GE(flags, 0);
-+	EXPECT_EQ(flags & IFF_NOFILTER, IFF_NOFILTER);
-+
-+	ASSERT_EQ(filter_attach(self->fd, filter_accept,
-+				ARRAY_SIZE(filter_accept)), 0);
-+
-+	flags = tun_get_iff_flags(fd);
-+	EXPECT_GE(flags, 0);
-+	EXPECT_EQ(flags & IFF_NOFILTER, 0);
-+
-+	close(fd);
-+}
-+
-+/* After TUNDETACHFILTER a later attach must not install the filter again */
-+TEST_F(tun, detach_filter_clears_reattach)
-+{
-+	short flags = 0;
-+
-+	ASSERT_EQ(filter_attach(self->fd, filter_accept, ARRAY_SIZE(filter_accept)), 0);
-+	EXPECT_EQ(ioctl(self->fd, TUNDETACHFILTER, 0), 0);
-+
-+	flags = tun_get_iff_flags(self->fd);
-+	EXPECT_GE(flags, 0);
-+	EXPECT_EQ(flags & IFF_NOFILTER, IFF_NOFILTER);
-+
-+	EXPECT_EQ(tun_detach(self->fd, self->ifname), 0);
-+	EXPECT_EQ(tun_attach(self->fd, self->ifname), 0);
-+
-+	flags = tun_get_iff_flags(self->fd);
-+	EXPECT_GE(flags, 0);
-+	EXPECT_EQ(flags & IFF_NOFILTER, IFF_NOFILTER);
-+}
-+
-+/* TUNDETACHFILTER must clear the filter of a queue that was detached with
-+ * IFF_DETACH_QUEUE as well, not only that of the active queues.
-+ */
-+TEST_F(tun, detach_filter_clears_detached_queue)
-+{
-+	short flags = 0;
-+
-+	ASSERT_EQ(filter_attach(self->fd, filter_accept,
-+				ARRAY_SIZE(filter_accept)), 0);
-+
-+	EXPECT_EQ(tun_detach(self->fd, self->ifname), 0);
-+	EXPECT_EQ(ioctl(self->fd, TUNDETACHFILTER, 0), 0);
-+	EXPECT_EQ(tun_attach(self->fd, self->ifname), 0);
-+
-+	flags = tun_get_iff_flags(self->fd);
-+	EXPECT_GE(flags, 0);
-+	EXPECT_EQ(flags & IFF_NOFILTER, IFF_NOFILTER);
-+}
-+
-+/* A TUNATTACHFILTER with a bad length must leave the installed program and the
-+ * filter state that TUNGETIFF reports alone.
-+ */
-+TEST_F(tun, attach_filter_bad_len_keeps_program)
-+{
-+	struct sock_fprog gf = { 0 };
-+	struct ifreq ifr = { 0 };
-+	short flags = 0;
-+	int fd;
-+
-+	ASSERT_EQ(filter_attach(self->fd, filter_accept, ARRAY_SIZE(filter_accept)), 0);
-+
-+	errno = 0;
-+	EXPECT_EQ(filter_attach(self->fd, filter_accept, 0), -1);
-+	EXPECT_EQ(errno, EINVAL);
-+
-+	EXPECT_EQ(filter_get(self->fd, &gf), 0);
-+	EXPECT_EQ(gf.len, ARRAY_SIZE(filter_accept));
-+
-+	flags = tun_get_iff_flags(self->fd);
-+	EXPECT_GE(flags, 0);
-+	EXPECT_EQ(flags & IFF_NOFILTER, 0);
-+
-+	/* A queue attached afterwards still gets the filter, so the rejected
-+	 * ioctl left the program on the device alone.
-+	 */
-+	fd = open("/dev/net/tun", O_RDWR);
-+	ASSERT_GE(fd, 0);
-+
-+	strcpy(ifr.ifr_name, self->ifname);
-+	ifr.ifr_flags = IFF_TAP | IFF_MULTI_QUEUE;
-+	EXPECT_GE(ioctl(fd, TUNSETIFF, (void *)&ifr), 0);
-+
-+	flags = tun_get_iff_flags(fd);
-+	EXPECT_GE(flags, 0);
-+	EXPECT_EQ(flags & IFF_NOFILTER, 0);
-+
-+	close(fd);
-+}
-+
-+/* A TUNATTACHFILTER with instructions that bpf_check_classic() rejects must
-+ * be refused, and must leave the program that is installed in place.
-+ */
-+TEST_F(tun, attach_filter_bad_prog_keeps_program)
-+{
-+	struct sock_fprog gf = { 0 };
-+	struct sock_filter bad[] = {
-+		BPF_STMT(BPF_LD | BPF_W | BPF_LEN, 0),
-+		BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, 0, 1, 0),
-+	};
-+	struct ifreq ifr = { 0 };
-+	short flags = 0;
-+	int fd;
-+
-+	ASSERT_EQ(filter_attach(self->fd, filter_accept,
-+				ARRAY_SIZE(filter_accept)), 0);
-+
-+	errno = 0;
-+	EXPECT_EQ(filter_attach(self->fd, bad, ARRAY_SIZE(bad)), -1);
-+	EXPECT_EQ(errno, EINVAL);
-+
-+	/* the program attached before is untouched */
-+	EXPECT_EQ(filter_get(self->fd, &gf), 0);
-+	EXPECT_EQ(gf.len, ARRAY_SIZE(filter_accept));
-+
-+	/* IFF_NOFILTER comes from the program kept on the device, not from
-+	 * the saved header, so a clear flag shows the filter is still there.
-+	 */
-+	flags = tun_get_iff_flags(self->fd);
-+	EXPECT_GE(flags, 0);
-+	EXPECT_EQ(flags & IFF_NOFILTER, 0);
-+
-+	/* A queue attached afterwards still gets the filter, so the rejected
-+	 * program never replaced the one on the device.
-+	 */
-+	fd = open("/dev/net/tun", O_RDWR);
-+	ASSERT_GE(fd, 0);
-+
-+	strcpy(ifr.ifr_name, self->ifname);
-+	ifr.ifr_flags = IFF_TAP | IFF_MULTI_QUEUE;
-+	EXPECT_GE(ioctl(fd, TUNSETIFF, (void *)&ifr), 0);
-+
-+	flags = tun_get_iff_flags(fd);
-+	EXPECT_GE(flags, 0);
-+	EXPECT_EQ(flags & IFF_NOFILTER, 0);
-+
-+	close(fd);
-+}
-+
-+/* The program is built by TUNATTACHFILTER itself, so a bad one has to be
-+ * refused even when there is no queue attached.  A program that is only
-+ * refused when it is built would otherwise be saved and break every later
-+ * attach.  Detach all queues, check that a bad length and a bad program are
-+ * still refused, and that a re-attached queue gets the program installed
-+ * before.
-+ */
-+TEST_F(tun, attach_filter_bad_keeps_program_without_queues)
-+{
-+	struct sock_fprog gf = { 0 };
-+	struct sock_filter bad[] = {
-+		BPF_STMT(BPF_LD | BPF_W | BPF_LEN, 0),
-+		BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, 0, 1, 0),
-+	};
-+	short flags = 0;
-+
-+	ASSERT_EQ(filter_attach(self->fd, filter_accept,
-+				ARRAY_SIZE(filter_accept)), 0);
-+
-+	EXPECT_EQ(tun_detach(self->fd, self->ifname), 0);
-+	EXPECT_EQ(tun_detach(self->fd2, self->ifname), 0);
-+
-+	errno = 0;
-+	EXPECT_EQ(filter_attach(self->fd, filter_accept, 0), -1);
-+	EXPECT_EQ(errno, EINVAL);
-+
-+	errno = 0;
-+	EXPECT_EQ(filter_attach(self->fd, bad, ARRAY_SIZE(bad)), -1);
-+	EXPECT_EQ(errno, EINVAL);
-+
-+	/* The rejected ioctls did not replace the program on the device */
-+	EXPECT_EQ(filter_get(self->fd, &gf), 0);
-+	EXPECT_EQ(gf.len, ARRAY_SIZE(filter_accept));
-+
-+	/* The queue gets that program again, from the device */
-+	EXPECT_EQ(tun_attach(self->fd, self->ifname), 0);
-+
-+	flags = tun_get_iff_flags(self->fd);
-+	EXPECT_GE(flags, 0);
-+	EXPECT_EQ(flags & IFF_NOFILTER, 0);
-+}
-+
-+/* A program configured while no queue is attached must cover the queues that
-+ * are attached afterwards.
-+ */
-+TEST_F(tun, attach_filter_without_queues_then_attach)
-+{
-+	short flags = 0;
-+
-+	EXPECT_EQ(tun_detach(self->fd, self->ifname), 0);
-+	EXPECT_EQ(tun_detach(self->fd2, self->ifname), 0);
-+
-+	ASSERT_EQ(filter_attach(self->fd, filter_accept,
-+				ARRAY_SIZE(filter_accept)), 0);
-+
-+	EXPECT_EQ(tun_attach(self->fd, self->ifname), 0);
-+
-+	flags = tun_get_iff_flags(self->fd);
-+	EXPECT_GE(flags, 0);
-+	EXPECT_EQ(flags & IFF_NOFILTER, 0);
-+}
-+
- FIXTURE(tun_vnet_gso)
- {
- 	char ifname[IFNAMSIZ];
+base-commit: c44104f3642da720164042623e4832836aefdd8e
 -- 
 2.25.1
 
