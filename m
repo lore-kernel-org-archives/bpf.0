@@ -1,39 +1,38 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=114.242.206.163
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
 	t=1795409414;
-	b=iZBrW67neRG0brPGR+Jbz6ZBCm+m95LT7Fpsjq+hFF14Vy8i2LiLgHORI+tMlNlQS6Dh
-	 z/H298gCsM0hI5M6PPKjQ+/s2StPSdAL7e6rXwe+e+qdef4TCZubzlJdhQES6W2l+pBOV
-	 fhHtMg4fFfhJgqbSb40VTQLQ0mVRZXLr6JiKMRCt9ogywJwv9astPyqY+zWOKqEQ1o3Dj
-	 6OHEukaMUglp6GT1dmn2vnXc+2K9nxbWDJh5kGwWlbzBdnmxEjY00nNX2WXHWZ2amSxR1
-	 a+kbZIq+bYPNzCXqU1JCRof6zv+GU8EmGU1+DFYHQQyGJjbV9PbAuRJQKzPL+GbPhIw==
+	b=5feXQK9pghFOtKs1BXI1YIYRLMZFjhrtyDD4PA6XUpzbKUfUW06beFvdF96VjuHF8bp7
+	 9FqGMxtv0jPvk8UUmLNT7k98dvFemqwvXLS+FeyQlcpApwrtDAkzCXBPZe4n5oEJfLBhQ
+	 NRH9LfxANPqEgQpx4r3ChtEFijHf18kEoX9cbshpO90GXC76EHIEK8UFKjs8fXMYvWjpc
+	 LA6lujo21qFAXqW3vbl4EjaHo5Ls/waK/5TB6TBebyWCs8aWmXbZ4wUVtyiSIhd5TLeBP
+	 xjbRBP4GgUjgqoxq45ZQKAWuvWs2Ez8batFx3o/vUdsd6sT8TH9L46kfrnWBHp0gV9Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1795409414;
 	h=DMARC-Filter:Received:Received:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding:X-CM-TRANSID:X-CM-SenderInfo:
-	 X-Coremail-Antispam;
-	bh=4iuo+qnHY3sqHshJJ3dhJfZ/o44FpiiMLN1F2IDDpgg=;
-	b=dwES/dVYi8doLNBdcV4cUgHcF68cLotmFx0ceN3s9NcSN6fhCV2uM/JqLQa3V52KO0dY
-	 v3AqiC0aQGvG6PncQIaHw3XmnIVqfK3xq0O46v4zfDBpvHC3PwqylJo2fti7hXx2/RCeM
-	 /aP8gGmI90MpnQQtcrPThGdlsxZnOJN3irgrqHHt7hO+mXVkcMp26z4XvwJREa1H2kJL+
-	 HYcZDZ3zY6oL920NkgGY7kHGya2PPflPqUn4eA5XH/WOjvpgd/AVEp7uZCM6/6HbYE7LC
-	 z9IPk0gL04f81CC7HdNyPWN9al4IWSiKQqMwoC8ZK8ycGv304TDX6YFtwaMCSdhEZxA==
+	 X-Mailer:MIME-Version:Content-Transfer-Encoding:X-CM-TRANSID:
+	 X-CM-SenderInfo:X-Coremail-Antispam;
+	bh=wshZGIamaXiDv2OhiVIV+Y6IvMShKptZ5P4qM6iglCY=;
+	b=UnPbCnNAtF/NsOm9L84/xETAk7J6Gx5V0qWcXdGkdaNct/5LN8viWdtyMOnMlT/JmzUt
+	 fLn+V3r/DpAMt8YSlvo8ogwalmNwp3vSk90JbYfaOnN2QPSOWeYkpIv57O05Sb/7JJWv+
+	 Gl13b1txKWPQpjAJFDsR+MGd2LTZCKzz+Vvmc4W1G6HPyxzs4i0G5MISszbUSko/VaD2R
+	 Yrl0JcJ6kSvw/72hCOZYnD0YgHTkLMPHPznWQCHGzJ0PuNPNXkBqBmBurzrxp56Slv4Jv
+	 u0dSbHtnxeLN/6cbJobfiLfiGzs8ZSJbEyFeDXbDJKeYH0rei9TVuTxzrd8tEsEkQ3w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=loongson.cn;
 	spf=pass smtp.mailfrom=loongson.cn;
 	arc=none smtp.remote-ip=114.242.206.163
 Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0F64606A33D;
-	Mon, 23 Nov 2026 04:50:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F0F64606A33D
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3CD8606A6A5;
+	Mon, 23 Nov 2026 04:50:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B3CD8606A6A5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
 Received: from loongson.cn (unknown [123.138.236.242])
-	by gateway (Coremail) with SMTP id _____8CxBbUDxgNr+B0iAA--.3846S3;
-	Mon, 23 Nov 2026 12:50:11 +0800 (CST)
+	by gateway (Coremail) with SMTP id _____8CxPNACxgNr5x0iAA--.3985S3;
+	Mon, 23 Nov 2026 12:50:10 +0800 (CST)
 Received: from linux.localdomain (unknown [123.138.236.242])
-	by front1 (Coremail) with SMTP id qMiowJAxX88AxgNrIsw2AA--.43924S5;
-	Mon, 23 Nov 2026 12:50:11 +0800 (CST)
+	by front1 (Coremail) with SMTP id qMiowJAxX88AxgNrIsw2AA--.43924S2;
+	Mon, 23 Nov 2026 12:50:09 +0800 (CST)
 From: Tiezhu Yang <yangtiezhu@loongson.cn>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -43,12 +42,10 @@ To: Alexei Starovoitov <ast@kernel.org>,
 Cc: bpf@vger.kernel.org,
 	loongarch@lists.linux.dev,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v1 3/3] selftests/bpf: Enable callx related testcases for LoongArch
-Date: Mon, 23 Nov 2026 12:50:08 +0800
-Message-ID: <20261123045008.23691-4-yangtiezhu@loongson.cn>
+Subject: [PATCH bpf-next v1 0/3] selftests/bpf: Enable instructions array, indirect calls tests for LoongArch
+Date: Mon, 23 Nov 2026 12:50:05 +0800
+Message-ID: <20261123045008.23691-1-yangtiezhu@loongson.cn>
 X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20261123045008.23691-1-yangtiezhu@loongson.cn>
-References: <20261123045008.23691-1-yangtiezhu@loongson.cn>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -59,80 +56,53 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJAxX88AxgNrIsw2AA--.43924S5
+X-CM-TRANSID:qMiowJAxX88AxgNrIsw2AA--.43924S2
 X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoWxur1ruw1Dtw43Wr1UArWfCrX_yoW5Gr4Upa
-	ykA34FkryIkF13K3WxGFWagrZ3GF1kWrWUAF42grs8uFnrJ3yxXr4fKFZ0qFn0g3yFvrZ5
-	Zw1xKas3ur48ZwcCm3ZEXasCq-sJn29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUU9Ib4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r126r13M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAF
-	wI0_Gr1j6F4UJwAaw2AFwI0_Jrv_JF1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2
-	xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_
-	Wrv_ZF1lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x
-	0EwIxGrwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AK
-	xVWUXVWUAwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67
-	AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW5JVW7JwCI
-	42IY6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCw
-	CI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnI
-	WIevJa73UjIFyTuYvjxUVo7KUUUUU
+X-Coremail-Antispam: 1Uk129KBj9xXoW7Gw4UAF47AFyrZw4kKr4xXwc_yoWkZrbE9F
+	4Fqrn7XFZ7AF12yF1I93WrAFZxC3y5WryxCrWkXFyfJw15Zrs5ZF4kCwn5Za4rWrW3JrWa
+	qF4q93yFvr4avosvyTuYvTs0mTUanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvT
+	s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
+	cSsGvfJTRUUUb28YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
+	vaj40_Wr0E3s1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+	W8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27w
+	Aqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2jsIE
+	14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04k20xvY0x
+	0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E
+	7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcV
+	C0I7IYx2IY67AKxVW5JVW7JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF
+	04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7
+	CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07josjUUUUUU=
 
-As the LoongArch JIT supports indirect calls to subprogs, enable the
-corresponding callx BPF selftests for LoongArch.
+Tested on the following unmerged JIT patches:
 
-With this patch:
-  $ sudo ./test_progs -t callx | tail -1
-  Summary: 6/89 PASSED, 6 SKIPPED, 0/0 FAILED
+LoongArch: BPF: Support instructions array, indirect jumps and calls
+https://lore.kernel.org/loongarch/20261123043907.20225-1-yangtiezhu@loongson.cn/T/#u
 
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
+here are the test results:
+
+$ sudo ./test_progs -t bpf_insn_array | tail -1
+Summary: 1/20 PASSED, 0 SKIPPED, 0/0 FAILED
+
+$ sudo ./test_progs-cpuv4 -t gotox | tail -1
+Summary: 2/14 PASSED, 0 SKIPPED, 0/0 FAILED
+
+$ sudo ./test_progs -t callx | tail -1
+Summary: 6/89 PASSED, 6 SKIPPED, 0/0 FAILED
+
+Tiezhu Yang (3):
+  selftests/bpf: Enable instruction array test for LoongArch
+  selftests/bpf: Allow unaligned access in callx_rodata_misaligned_read
+  selftests/bpf: Enable callx related testcases for LoongArch
+
+ tools/testing/selftests/bpf/prog_tests/bpf_insn_array.c     | 2 +-
  tools/testing/selftests/bpf/prog_tests/callx_func_ptr_map.c | 2 +-
  tools/testing/selftests/bpf/prog_tests/callx_rodata_lskel.c | 2 +-
  tools/testing/selftests/bpf/progs/bpf_misc.h                | 3 ++-
- 3 files changed, 4 insertions(+), 3 deletions(-)
+ tools/testing/selftests/bpf/progs/verifier_callx_rodata.c   | 1 +
+ 5 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/callx_func_ptr_map.c b/tools/testing/selftests/bpf/prog_tests/callx_func_ptr_map.c
-index cc63b84e4d94..c052fa7624e8 100644
---- a/tools/testing/selftests/bpf/prog_tests/callx_func_ptr_map.c
-+++ b/tools/testing/selftests/bpf/prog_tests/callx_func_ptr_map.c
-@@ -9,7 +9,7 @@
- #include <bpf/btf.h>
- 
- #if defined(__x86_64__) || defined(__aarch64__) || \
--    (defined(__riscv) && __riscv_xlen == 64)
-+    (defined(__riscv) && __riscv_xlen == 64) || defined(__loongarch__)
- 
- #define CALLEE_INSN	6
- #define DATA		0x1234
-diff --git a/tools/testing/selftests/bpf/prog_tests/callx_rodata_lskel.c b/tools/testing/selftests/bpf/prog_tests/callx_rodata_lskel.c
-index acd821fb568f..f89bfe3e429d 100644
---- a/tools/testing/selftests/bpf/prog_tests/callx_rodata_lskel.c
-+++ b/tools/testing/selftests/bpf/prog_tests/callx_rodata_lskel.c
-@@ -4,7 +4,7 @@
- #include "callx_rodata.lskel.h"
- 
- #if defined(__x86_64__) || defined(__aarch64__) || \
--    (defined(__riscv) && __riscv_xlen == 64)
-+    (defined(__riscv) && __riscv_xlen == 64) || defined(__loongarch__)
- 
- static void run(int prog_fd, int expected, const char *name)
- {
-diff --git a/tools/testing/selftests/bpf/progs/bpf_misc.h b/tools/testing/selftests/bpf/progs/bpf_misc.h
-index 6b930cb48f8d..523e54383d7e 100644
---- a/tools/testing/selftests/bpf/progs/bpf_misc.h
-+++ b/tools/testing/selftests/bpf/progs/bpf_misc.h
-@@ -306,7 +306,8 @@
- 
- /* clang always emits callx, gcc only when it defines __BPF_FEATURE_CALLX */
- #if (defined(__TARGET_ARCH_arm64) || defined(__TARGET_ARCH_x86) ||	\
--     (defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)) &&		\
-+     (defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64) ||		\
-+     defined(__TARGET_ARCH_loongarch)) &&				\
- 	(defined(__clang__) || defined(__BPF_FEATURE_CALLX))
- #define CAN_USE_CALLX
- #endif
 -- 
 2.42.0
 
