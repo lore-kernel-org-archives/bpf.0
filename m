@@ -1,121 +1,47 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=103.168.172.137
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795417299;
-	b=DZqY3EbaHMYjpjaScDJq/QzXDsZqgvz8xPUHGsGKpG+KIA1Nb9aTr2AYFCQyjGJ5pNHn
-	 ghb3MwqI+usF25jssKUs+nKQYKBX9Fd4m+vEIKMhGLRuI5e3QTAWU8nXo6ltmz3zOwL1x
-	 6Z++j4NYeglOFzNhi81IyGn4ySyizekqFEUPPQgZfE6PkYu7n3z/MpqO8fAOIJ3oNuEAl
-	 xANKv4Xz9NzlZKiXzPVx3LZA1i+G2I49MXaP04owah9x0N2fwRDDAqJJPfNga8FUGdQ+0
-	 yWghDZchf/qHkNgqKKsX8nwl1EO6ko1AqpKamBtkaJFLNKnAU+zUuKmbpScbCWdHe/Q==
+	t=1795419988;
+	b=5scT6gEK80hfhHFUL17HtRkK+y1oPS/RJpVbFWw2/IsAhucuOyWZXPZlQ9hHa0IQ304f
+	 I81mIQSXY0t/uErwM+f4kEsM+ih95z+6peXJYboiGE7smT0MxRofZXXkeWMFu+HNehIAf
+	 p83BlFGHZEPgCtv9BjviGtDmAcDXi+62hLQRv8MVlRfBz39AVmbztuOzVrsuqFEXEbq8L
+	 6BMbQ/cgb72xOwBIYZIevXBjVCdeK/+n2gqXNyseuJRzLtvhDP4jfewNRMp4f/giYed9l
+	 BWayS17FO/wBvyOjX0ew38X1sVZIrYt5JjWs+fc58I7JCbKKlQmgDmsiID99vve2xUA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795417299;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
-	 X-DKIM2-Info:DKIM2-Signature:X-DKIM2-Info:Message-Instance:
-	 X-ME-Sender:X-ME-Received:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:
-	 Received:Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=PQaIU9jrGjv/IX920EaZ+vwMDt6FU3NtgK/Ci8DsQtE=;
-	b=AFo5TpB+6vXsUab3mMiE8BBLOs5d8jl9JddwaKo0rGWUzps3zioO/wjOBWymUq1eSPfD
-	 XnytjsN9OVhf1BiqyG1zGIBBysCFXnVwU7C+t1m3KYJN3X/HOD7cLDGhHqD1NUKpzJqh1
-	 A3PJpG6Dn49wt52Voj8LHTDcGd9K/lJEk84MjkJ8xhp7Zn8jWHdJkXx6FIsf7nkbcyRH9
-	 BZsIqy5BnhcoDAcMY99XS7DNurteG4ouYHffXS/7RAxflQ/vDb7GQ2eHqvWWPW8qPVufd
-	 ZdTfOGUhAVRp20shEKOmDU9arjE2dOnECh6fKXQWNGxOBPpwdgTJxlNuQUDa0o8tIYQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795419988;
+	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=G46SljVUhLkLQuSEWLMybJUgwMzH8Uht7tF4gSH3iGw=;
+	b=xGSBVXVGI/YzjB4ISfp4aDnjLy8y1romxkt34oZg0IEedBYauHu45Xdt6z82JSlYRk8C
+	 fivDtqGB3F2nMA1eJGKo/L0GmXvva3UqACc1XMxy+0lYzNfu/E1VyDlwg/ipiYkauGHhy
+	 U0rcA9ywgnUhCJjqITdg1KwFHxto9Dk0xFRqdwtd6u4fP7knB/29G+zq0AJtP3HCm/ttf
+	 64FmnhOTebqcCuhI58RHhDieACVjGpty3xzKaZNpZCU55qndHTgjC9Fjpp1o5/b0iPTdF
+	 qNIT/xeNDLBciFSQkt7OYmXuffGKe8Apmwii86fc0KN539CSKTye7tk0pYwoJzczbKw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=kroah.com;
-	spf=pass smtp.mailfrom=kroah.com;
-	dkim=pass header.d=kroah.com header.i=@kroah.com header.a=rsa-sha256 header.s=fm3 header.b=PZGvQW09;
-	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b="Sc/41PEo";
-	arc=none smtp.remote-ip=103.168.172.137
-Received: from flow-a2-smtp.messagingengine.com (flow-a2-smtp.messagingengine.com [103.168.172.137])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CZI8yb8L;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E5CA606A321
-	for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 07:01:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0E5CA606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kroah.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B624606A31F
+	for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 07:46:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kroah.com header.i=@kroah.com header.a=rsa-sha256 header.s=fm3 header.b=PZGvQW09;
-	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b=Sc/41PEo
-Received: from phl-compute-02.internal (phl-compute-02.internal [10.202.2.42])
-	by mailflow.phl.internal (Postfix) with ESMTP id D39961380398
-	for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 02:01:36 -0500 (EST)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-02.internal (MEProxy); Mon, 23 Nov 2026 02:01:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm3; t=1795417296; x=1795424496; bh=PQaIU9jrGj
-	v/IX920EaZ+vwMDt6FU3NtgK/Ci8DsQtE=; b=PZGvQW0962OyMG5BJwRrDEtmu9
-	DxzJInKMx6H3ZTUoF3vb5HOh9hIvMIHbTKvgTX674ldd5vJHhF2oG9fAf52k7FDS
-	3O2fA5bY4TsmpfRnthlqubgu2BbE5xwdtA346Euao9f8ChmUKq1f41aLhdFQ+wCG
-	s4XxirvJ6fi4+ozKk9tD/S1nVBIogBNAND09ynrBhNuEB6llbh5IHhfpmLpct+ay
-	ULyywCbgywV/CRE6wLxLptIChSIWFQlcq6eMd/nsv4d/ZR1prY+uGM94ndkR76fB
-	gue0avqsxE+BR1dLNdeji1Ww8av6nfyzhPmIetMP1gMB7LBRZVU34b35XXfA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-	1795417296; x=1795424496; bh=PQaIU9jrGjv/IX920EaZ+vwMDt6FU3NtgK/
-	Ci8DsQtE=; b=Sc/41PEoRKOWhtuAgJA3fFw2JJQWUOcWIWAKrXolQyRXiGkUvuh
-	WccGRA4zqLkKbp83RobU5Ap1oMLk7HTIQhYGeOUR7Xm07v0fzaLd0cu/joOytQ/E
-	kMr1kij/3feor6jjIltXNomRMg8BhYB+DDAfnVYy4y0OM1kgS9gI4Xo0c9UYg//v
-	XBrVt+ib0i6J0gXHDmxvONBo6pDTSQ4xlfGOH/xdzHX2foOr5FSNLxAJX9XexMaO
-	vaOutHhxqPagY9cYuVQUbK6FFsWnarIeQR6zR0f0leGDZ5FbywDWo3o5DsIBntau
-	TWPLWn0xU9fZpZSDF51Q4JMAgGrhklt63lQ==
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-09;
-	repo=github.com/dkim2wg/interop; date=2026-11-03; sw=lmtpprox;
-	action=sign d=kroah.com a=rsa-sha256;
-DKIM2-Signature: i=1; m=1; t=1795417296; d=kroah.com;
-	mf=PGdyZWdAa3JvYWguY29tPg==; rt=PGJwZkB2Z2VyLmtlcm5lbC5vcmc+;
-	s=fm3:rsa-sha256:eWMAFQU2aU8iib/5EXhr0o4Tce51OmYfKyO9QSErq5uWQq0
-	AUNCYcu6hd740dKpqD0pnGQeNDGlfligy45h1IUSkoDZpb8XDWFTrsjyHuTSFZHP
-	Uzejo4NlWY8cL7v5K5D573E18xoQNJw1ICeZrtcE6cUPV3wRjzOADqFsT8g8ZY+b
-	ndjtbCCjTyMdqevuecZGxSQg2FGxlIg6aZJrbVvwg9u6dxvpvr24QRuKovIQmAX0
-	NMVuTQyWRpmF5G0DWDk3M96OwKg1i2Amu+Vp967b67cevhY9V/wJ3Q8V3FgSvd5K
-	MlVyslk7cQEl+PCuHEOx8W8MGJrXu3Jc7x4iv1g==;
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-09;
-	repo=github.com/dkim2wg/interop; date=2026-11-03; sw=lmtpprox;
-	action=mi-m=1; hc=12;
-	hn=cc,content-disposition,content-type,date,feedback-id,from,
-	in-reply-to,message-id,mime-version,references,subject,to;
-Message-Instance: m=1; h=sha256:VAdcf7p/xf9lxpcqIoRZEf2GByXwU0QzE50CpNp2b3o=:KP8em782QFBhNPcrfc4hjVjWWapiSXNBTFzw3UUOr9c=;
-X-ME-Sender: <xms:z-QDa0z_PHMAW-heXRGqUy2KGJ1y2Imkn6RRuWfmo8bq5EjnwRpBPw>
-    <xme:z-QDa4cXvN0O0Rg2ObS5CW25jCKyexGaDeXGIpXV4DkpFUPZzoHETLYcDQ-T2ftkA
-    AGeAsMNsih9QEEEOV_34-WbkBGLDnnCMncnH_JnuEPCCSrdrc0>
-X-ME-Received: <xmr:z-QDa4-zkHx7Evo-YD2Z0gUazpnTPmlc4N_1yqRdZeqysauTw0pqybVOjfFuv8LeVzSLXpcWw-dZkHE8zETsb7gFtv4MJe5Mefv9UOEh8Uw>
-X-ME-Proxy-Cause: dmFkZTFyV2tzmNnMG6GVBnClF3a5MYEONstRqY1OpQbaDJwJqBfAWH//7vc37ygX/vlCeR
-    aMDvp4KuBt/yGakYvtjFbCPhvferKFkBz2KEKfRa9mw335MuvaNEliE3r+H9UOHwi0fCT5
-    Iid9UUTXzJNvTw3SFuLP8qFdvif5sEvxb50PKBkU9sqwVCegl2jj8LLSORfmBpC6+xOI2y
-    +5fvP5RqM1OffM14pPDyADlYjVrW++Jay9M6fHOYD6aa5C82lpJ4okll5eX83J0MjgGVNs
-    2DC69Xz1O72y8L+b8KA7YrG4xRJANCqBqkk/mzZmEFMpgtcryaKJMVTs6neV35rB70lYCK
-    EB0Usa8u9qnybAreq0+5RWnGq/isjiXmBOJCli6iBZTIdiYVANM6dC64lEPGav9988wmsZ
-    IDRR5o7xGg7LBp4munwoRu71Ie7uqGnQytHkJdcRWxZ+QIX0HBUfrFrDGpv4jmTzLFMCMf
-    +uQ9dvVGjDyT2JMUzBMmxFaeDRcpi19y6O6an1GgOvR9/hEA3VoTR1+piCEqCJLZbr1r0d
-    Cp2V4Fd8xSYRC97CMEXcz3Lpp3bA9GtDCpaQbztP7im2m7Bz3ITns7DAbVBQ5tpzfjOSa1
-    HnLfQnpwPUXmNM0DLwmsI1dS289VnP3gy8/9V4ibav/SlLUuXup2X7bSt7UA
-X-ME-Proxy: <xmx:z-QDa-HkQuveQbNZhAt2uXLqoK8x7OE21fLMZ81Cv_z2lTZeSKt0Dw>
-    <xmx:z-QDa6COazf6ibVpdhfCQCD3j6iRpKlf-q6vziLcr56TD9ZnGA5tyQ>
-    <xmx:z-QDa8L8ORgVroRLQzv-WgpCwh3KiBBixwllPrhcZhVSAQ4FNV4WAQ>
-    <xmx:z-QDa4w2O-WvaOoPFaBoaUFX5j3dXyv3FkmUgD_I-azye3sVz_SdjQ>
-    <xmx:0OQDawV5JUDOdAoWXTCYKTbUk033HLb4cAH78l6C0kVWheUieZZ_kNBk>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 23 Nov 2026 02:01:34 -0500 (EST)
-Date: Mon, 23 Nov 2026 08:01:33 +0100
-From: Greg KH <greg@kroah.com>
-To: Dominique Martinet <asmadeus@codewreck.org>
-Cc: stable@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>,
-	andrii@kernel.org, eddyz87@gmail.com, ast@kernel.org,
-	ihor.solodrai@linux.dev, daniel@iogearbox.net, memxor@gmail.com,
-	martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
-	jolsa@kernel.org, emil@etsalapatis.com, dwarves@vger.kernel.org,
-	bpf@vger.kernel.org, Alan Maguire <almagui@kernel.org>
-Subject: Re: [PATCH 5.10-6.18 v2] libbpf: fix cross-endian build with newer
- libbpf
-Message-ID: <2026112357-corncob-exclude-7266@gregkh>
-References: <20261116233301.1531563-1-asmadeus@codewreck.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CZI8yb8L
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 537931F000C6;
+	Mon, 23 Nov 2026 07:46:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795419987;
+	bh=G46SljVUhLkLQuSEWLMybJUgwMzH8Uht7tF4gSH3iGw=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=CZI8yb8LlP1wNIcTPsNhNtIafBqdis8cmGzSD8bbOyq5NryPPJRiFpSYDhm7HlezF
+	 jFdoNE0yZOfQ+4yPYh4egDAGtja+adFIXdGDVpA/Qga1cl9xlILz8f6cdcYS/zaPqO
+	 97IUnfFeiLpiEtOJ5/6vHTotgTUFauvGubf9E1wsAZUQDS6c1NSbcIfSF8mmAByKxD
+	 Wx4AhoDphVv7EEPSXqTSZW7CgYarxLnpt4CAY7FM54i5XOL+4B7hBQrdM36irPQebK
+	 UQPXOi114FJ1AdPOrlT9nKB9Lm65dzwqE0cpklFbVrgF2LDUJO1CHJUkvPWDG5C2hU
+	 MdhTtje12St7Q==
+Message-ID: <91f869ee-8a2f-4016-8b91-893d26692b0f@kernel.org>
+Date: Mon, 23 Nov 2026 08:46:22 +0100
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -125,32 +51,90 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261116233301.1531563-1-asmadeus@codewreck.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/4] powerpc32/bpf: fix argument passing for subprograms
+To: Lukas Stockner <lukas@lukasstockner.de>,
+ Hari Bathini <hbathini@linux.ibm.com>, bpf@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org
+Cc: Naveen N Rao <naveen@kernel.org>,
+ Madhavan Srinivasan <maddy@linux.ibm.com>,
+ Michael Ellerman <mpe@ellerman.id.au>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>
+References: <20261122194205.218543-1-lukas@lukasstockner.de>
+ <20261122194205.218543-2-lukas@lukasstockner.de>
+Content-Language: fr-FR
+From: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>
+In-Reply-To: <20261122194205.218543-2-lukas@lukasstockner.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Tue, Nov 17, 2026 at 08:33:01AM +0900, Dominique Martinet wrote:
-> commit 087f3964f4b3 ("libbpf: Support layout section handling in BTF")
-> added extra data to the BTF header.
+
+
+Le 22/11/2026 à 20:42, Lukas Stockner a écrit :
+> [Vous ne recevez pas souvent de courriers de lukas@lukasstockner.de. Découvrez pourquoi ceci est important à https://aka.ms/LearnAboutSenderIdentification ]
 > 
-> This extra data is ignored in the native case, but when building with
-> different endianness the bswap code in old libbpf would check for strict
-> size equality, leading to build failures such as this when BTF data is
-> generated with a newer version of libbpf (through pahole)
->     BTFIDS  vmlinux.unstripped
->   libbpf: Can't load BTF with non-native endianness due to unsupported header length 32
->   FAILED: load BTF from vmlinux.unstripped: Operation not supported
->   make[2]: *** [../scripts/Makefile.vmlinux:72: vmlinux.unstripped] Error 255
+> Main programs receive a single 32-bit pointer as the first argument,
+> so the current prologue converts it to the 64-bit BPF_REG_1 by moving
+> R3 to R4 and zeroing R3.
 > 
-> Newer libbpf versions also properly ignore trailing data in the bswap
-> case, but the patch is too intrusive to backport, so take the header 
-> length comparison fix from it instead.
+> However, subprograms are called like helper functions, so there the first
+> argument already is 64-bit - but the prologue still does its conversion,
+> so the argument ends up with its halves swapped and the upper one zeroed.
+> The same problem applies to the return value.
+> 
+> In particular, in the common case where the first argument is a context
+> pointer, the callee ends up with the upper (zeroed) 32 bits, which then
+> triggers a kernel panic as soon as it's used.
+> 
+> Therefore, make JIT emit the appropriate 64-bit prologue/epilogue for
+> subprograms.
+> 
+> Fixes: 51c66ad849a7 ("powerpc/bpf: Implement extended BPF on PPC32")
 
-Why not always just use the libbpf version from newer kernels?
+Take care ctx->is_subprog only exists since commit 2ed2d8f6fb38 
+("powerpc64/bpf: Support tailcalls with subprogs") which means automatic 
+backport won't work.
 
-And why not backport the full series, one-off are almost always more
-work over time.
+> Signed-off-by: Lukas Stockner <lukas@lukasstockner.de>
+> ---
+>   arch/powerpc/net/bpf_jit_comp32.c | 16 ++++++++++++----
+>   1 file changed, 12 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/powerpc/net/bpf_jit_comp32.c b/arch/powerpc/net/bpf_jit_comp32.c
+> index f5b9441cf46a..261ac0646b96 100644
+> --- a/arch/powerpc/net/bpf_jit_comp32.c
+> +++ b/arch/powerpc/net/bpf_jit_comp32.c
+> @@ -179,9 +179,11 @@ void bpf_jit_build_prologue(u32 *image, struct codegen_context *ctx)
+>          if (ctx->seen & SEEN_TAILCALL)
+>                  EMIT(PPC_RAW_STW(_R4, _R1, bpf_jit_stack_offsetof(ctx, BPF_PPC_TC)));
+> 
+> -       /* First arg comes in as a 32 bits pointer. */
+> -       EMIT(PPC_RAW_MR(bpf_to_ppc(BPF_REG_1), _R3));
+> -       EMIT(PPC_RAW_LI(bpf_to_ppc(BPF_REG_1) - 1, 0));
+> +       /* Programs receive the first arg as a 32 bits pointer, subprograms don't. */
+> +       if (!ctx->is_subprog) {
+> +               EMIT(PPC_RAW_MR(bpf_to_ppc(BPF_REG_1), _R3));
+> +               EMIT(PPC_RAW_LI(bpf_to_ppc(BPF_REG_1) - 1, 0));
+> +       }
+> 
+>          /*
+>           * We need a stack frame, but we don't necessarily need to
+> @@ -231,7 +233,13 @@ static void bpf_jit_emit_common_epilogue(u32 *image, struct codegen_context *ctx
+> 
+>   void bpf_jit_build_epilogue(u32 *image, u32 *fimage, struct codegen_context *ctx)
+>   {
+> -       EMIT(PPC_RAW_MR(_R3, bpf_to_ppc(BPF_REG_0)));
+> +       /* Programs return a 32-bit value, while subprograms return 64 bit. */
+> +       if (ctx->is_subprog) {
+> +               EMIT(PPC_RAW_MR(_R3, bpf_to_ppc(BPF_REG_0) - 1));
+> +               EMIT(PPC_RAW_MR(_R4, bpf_to_ppc(BPF_REG_0)));
+> +       } else {
+> +               EMIT(PPC_RAW_MR(_R3, bpf_to_ppc(BPF_REG_0)));
+> +       }
+> 
+>          bpf_jit_emit_common_epilogue(image, ctx);
+> 
+> --
+> 2.56.0
+> 
 
-thanks,
-
-greg k-h
