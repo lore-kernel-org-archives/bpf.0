@@ -1,68 +1,111 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.208.48
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795442763;
-	b=HteVB1HhEutf87ilxpD5kpg5PuC/OE7/9Yf2TnACs95+KhJggJz6I6Q47tRnUAmcejvx
-	 wRyEmFweEh6uCMHabSaf8LYSipq8R2Rj+HMFzlRyojM1gjl+DlRpjtFGA51utvWFmbNFu
-	 wn4Il1WFxKA/GDkxaBGNILnoH6hjLuKCZzc0cYi9e6fOreuOmKXAFQMLHLa/8K7me4WfL
-	 IorkaSKlpHZ6zOLT3JenhxXieB9iQ4rxREesa0vy67lGYV53BUAGka7NOF7AYQBMlzfRy
-	 /lqJLD7xwmdPtPm+OfjOlHPslFJ8OH/Vz+E4Ds5sljTybXhjWY3TwrYSilcSB+LUhmA==
+	t=1795442985;
+	b=DGqXtbblZQxDHjgcljlrPlnGhmkA6WCLmMhUH+0pmt2h6b1whEmm0V/c6x/eATkZ7Mks
+	 OKVYbhaNRLB+EUaoKNY11gOqPaOVtBqS5j45Rc59HvPXo/uc5YDlfP/yqw7gIrVkm9+hH
+	 8reeqWD9rXgHs/G6YqMtzNVuHWfKtleI1iARwplU8IHCDKwzA/hcsPpjnAlCPR3q7QcLQ
+	 2YO0JZfla45raw9cnh1DKiVGG77EYI+CnAmAqzaIWSBBtqbfqZ/zMP7EO0UCPiQOsUODJ
+	 +RZQO/Uut5Io3N1kh76TR7yIcqJ7t5ZenHvXepqLRGfEf5j0u+zSfSDMRwWrzmoCT+Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795442763;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=ZhrfZY0fbfvRqh4m81PmC72i9FRlptZs7yDrySCwPr4=;
-	b=SYtFgVqelkAzocufmb4qojWHGB8xkuvXRGmKrM6PPGSK35VaDLCnoDSC4QGgt/nek7/o
-	 qHfjOlW2H+PscwYdVzezYjdNvL6Wrua5wLeyl46JTlzhYzr1ZlxZmeZBr+P9moG0aaGqq
-	 qlMLfhWNTEb1Z+pSrQtBsHud9zP+ylMlZk6sJaIDJEAL5aUCXGxi11jsGfrWQ0yc07bii
-	 kP4T505oFx8IotoZgBUQUf+dYi29rZh5N9tJGFNgdK2ktGtFYhTuiFyL/wGn7ARAtcAEp
-	 CpdMGqbIdyHwj3yRub7uzfaoxVlpz7+vBtbwmPuZSQKAfrQGMRaUihRenvFomFD3Hrg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795442985;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding;
+	bh=0bvDk5tyLJ5TwCATr3/cvszAQOWSZaHFXbKMbS8WnfE=;
+	b=aYRx5km2c5HTzf2mbOxSfMaObpXKoRWbH/leDssw/LuucVZODKPE6WL2Q9CHxTcnQJFZ
+	 kmLIki2NCe9hDLOQX2sQ18ZdZikCGhrNhspWAbY+U3x8vpeNBJWB1OCY1c3Xwxg0SFQo4
+	 I1j9ZjjP/LlsZmlvc1psWt+aYoj/SEG3BFICOVX+UThNIz5COufy76dJafZfFdFx7Mvo4
+	 0DKXzfP1sV4pior8aeOeRGSoSXVTBY44WWmxx4tVtDCGz2C9eHFRdaPH74fMDnpLkS6HJ
+	 bLc+/bpvGMDcWsIFKjY3RUZ8k/9U6DEJtIgOw0tRP+79D7ku5QYGGIJu9Zp77YpCiZQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RNxcIodY;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=cloudflare.com;
+	spf=pass smtp.mailfrom=cloudflare.com;
+	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=T2k610q9;
+	arc=none smtp.remote-ip=209.85.208.48
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id F0193606A32A;
-	Mon, 23 Nov 2026 14:06:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A10FF606A327
+	for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 14:09:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A10FF606A327
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RNxcIodY
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id D36961F000CF;
-	Mon, 23 Nov 2026 14:06:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795442762;
-	bh=ZhrfZY0fbfvRqh4m81PmC72i9FRlptZs7yDrySCwPr4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=RNxcIodYicyykOWzJV9ac41R/wLtMtTMT0f/m7QOJ6ld+W2V4NCjmrvht5+ezWSqk
-	 Dy3cclszSYRA92VabFyR/cC0uPGOyYPHssIDBCdfY+KgqULwwUey6pUnHB73Wz2LlR
-	 hkvMBoXjf7CrpiBPOawkWFvKWPg3qpI0I0BA69XEEhog6RMMjCMYfTFgbRasThroj3
-	 3VZZgT2wtToaSR3IXgQGEzMZxs3Ms6FWViRaFd9Loduz7vVzijOuh6nSFxj66HY9ck
-	 NEhojYrvdZmhi6MyoIHwjX3SFqytTuELhGvYjoQLWNYl5Hp0HF12MLor0raNKqJDPd
-	 nl02fB8BrjaLw==
-Date: Mon, 23 Nov 2026 16:05:58 +0200
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: bot+bpf-ci@kernel.org
-Cc: linux-fsdevel@vger.kernel.org, bpf@vger.kernel.org,
-	containers@lists.linux.dev, linux-api@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org, linux-security-module@vger.kernel.org,
-	aleksa@amutable.com, alex@amutable.com, viro@zeniv.linux.org.uk,
-	luto@amacapital.net, arnd@arndb.de, brauner@kernel.org,
-	dhowells@redhat.com, ebiggers@kernel.org, giuseppe@scrivano.org,
-	hughd@google.com, jack@suse.cz, jlayton@kernel.org, corbet@lwn.net,
-	josef@toxicpanda.com, kees@kernel.org, kpsingh@kernel.org,
-	lennart@poettering.net, neal@gompa.dev, oleg@redhat.com,
-	paul@paul-moore.com, ptikhomirov@virtuozzo.com, sergeh@kernel.org,
-	skhan@linuxfoundation.org, zygmunt.krynicki@canonical.com,
-	ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
-	martin.lau@kernel.org, eddyz87@gmail.com, yonghong.song@linux.dev,
-	mason@kernel.org, ihor.solodrai@linux.dev
-Subject: Re: [RFC PATCH v7 07/26] mount: Support MOVE_MOUNT_CLONE with
- MOVE_MOUNT_T_MNTNS
-Message-ID: <awRIRrGwOi97H15D@kernel.org>
-References: <20261122193539.3334213-8-jarkko@kernel.org>
- <cac1fa0b133e15e7c67629319df17a0d25747093535aa246f44a75cb1073e2ed@mail.kernel.org>
+	dkim=pass (2048-bit key, unprotected) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=T2k610q9
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-6baa6f27904so1542347a12.0
+        for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 06:09:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google09082023; t=1795442983; x=1796047783; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=0bvDk5tyLJ5TwCATr3/cvszAQOWSZaHFXbKMbS8WnfE=;
+        b=T2k610q9dq6ABxK10/kvUfovzJT448peNpB8dZUFJ7a9M95oiFWIkbejfgpR0jq3ps
+         JmdtTO2qbdhrvAtfbsYXLVSDSj3iPLnoYA3AX20Nc6N5ilB23Ve496FNeGcV7q0NLeEH
+         zwQuebg7Y6bLkIXAEUPHH+uSwfuw6ufCyUCvbhBU9NiUlyP57IAHmhxTFNak3+iNQoEP
+         lOkgQOTDkr075zM9+0efVaR+ZKdXXN6K2z0jb78i2cdgl3LzuXCqes7vTBoEVLPtsHd8
+         ZLjf3wMWaNh5pzx2RJwOE7G6lW3A4YPzGRKoRnnaO9HNICIVLd+xvK5jcsu4sWPpH5S5
+         uetQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795442983; x=1796047783;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=0bvDk5tyLJ5TwCATr3/cvszAQOWSZaHFXbKMbS8WnfE=;
+        b=YCxJu63lCixE5u7yeI37FcCnuOYlXSi0TXkQrfGb6qhCIyKM+EHar+pr6MIFrTUDK/
+         K5Wq+RjYJYd1E7z0P/phKjtywrZPKBLUJhyFcMN7WMN0qj+CuWjVcDNpx0TaGAhaMJ4y
+         JSoJ9FC1A6gszZK8T/47MwCr/JeSL/f38wM3lgspzFlpnBj2UWftKoM7YbDmcqFO2ULs
+         cRM1xR8eZon5LgDWZc6CQpgvZAucvAzbtFoK0l1qogObXmd/inDv8koK9hrfcerYkJfv
+         NPaBjy0dn+bwEjiQffHMIvRp+MuXpsvlgeBrqmDL1nt4blGytzbf612j4j85poqgBk9S
+         BgTQ==
+X-Forwarded-Encrypted: i=1; AL+hErEirTKO5RXLszpr9P+R9Ym7J0ryIoS+WUaQDwFnW9NMBcSdLT2WoO3Ch/HUj8ubIsQUwaU=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+bW+obKV9R0BwTpcomKt2tOXJlMpVnvMuapZyuMcE0BqrdLzxH
+	pzPX9SP+KfjscXOBKrmjlXpIlk/nOWin5Q1F+cOu7KHPKzZnU6y5Oyl6LgaZSgM98iA=
+X-Gm-Gg: AZFdTZcBjGqdEjAKNDf4ZuqHSKh23fv+i+KCir0WSLpx+Vxph/z9nuYaPfXNmzNA4bm
+	d3SPFA9OBSLb9/g3gFzecOHJVJrkCsmcJVJrWlMZUOIUIeUKgqQ6+L6zcueHc3ZvELYUToP+mUd
+	rJjexbAgKDlwhqqC9+Shl8GD2C6csIBe/uf+kogYz3vv7Ek3o+3QB/cKwlT543B47eFBvdtYJRM
+	kWh0bKVqLM5DoZjY+1AuPCXxFgfRil4mWCNl8K1GA3TNJfJJPAG3HrfC8PB6hI3ZTgg+HHJGxhe
+	SktpN5lht3FRIVddH7RNTh9Eu7AVTg9vps937hSBWbnecjprHlpF6a2Dvoh6o1fA/VDrVKU/5Gc
+	JY6Ax1oiFR8EEIrAi1gmNVlUuoI+JAokVDQIA5RiPSzkTkv3IZVu/qvqY19nIAJUcT3UcBWvK7g
+	Z1Zzo3/G0V1SGfBfUnFjviQsPfrJWYWGeCwSCPI2s1gn2/eSITcjBdsOfrzHjpweOmakRAnNBzw
+	+ADa6Ys4YyLkOOFhY3IoseDz6YkNx5kl5g/Qczcf3h7ElxLIrW2nYTa08lYbfmBJ0fR3P97RTaw
+	m6BCOWSWUuTQ55jL3tDrC8QkcgU1XJRjww/oZuMQ24vLOTc=
+X-Received: by 2002:a05:6402:3223:b0:6b6:e74d:407e with SMTP id 4fb4d7f45d1cf-6ba37eb9c1emr9126325a12.36.1795442983003;
+        Mon, 23 Nov 2026 06:09:43 -0800 (PST)
+Received: from L9JK9NPFH9 ([2a09:bac6:37ad:1e5a::306:a])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6ba36d730d1sm5419955a12.0.2026.11.23.06.09.41
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Mon, 23 Nov 2026 06:09:42 -0800 (PST)
+From: Tianyi Gao <tianyi@cloudflare.com>
+To: Omokefe Emmanuel Onanaroghene <emmaonana18@gmail.com>
+Cc: hangbin.liu@linux.dev,
+	kuba@kernel.org,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	davem@davemloft.net,
+	edumazet@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	shuah@kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	hawk@kernel.org,
+	john.fastabend@gmail.com,
+	sdf@fomichev.me,
+	skhan@linuxfoundation.org,
+	kernel-team@cloudflare.com,
+	tianyi.gao@linux.dev
+Subject: Re: [PATCH net-next v5 1/3] selftests: net: veth: derive invalid-tx test value from kernel max
+Date: Mon, 23 Nov 2026 14:09:29 +0000
+Message-ID: <20261123140928.13688-2-tianyi@cloudflare.com>
+X-Mailer: git-send-email 2.56.0
+In-Reply-To: <20261121182217.4609-2-emmaonana18@gmail.com>
+References: <20261121182217.4609-1-emmaonana18@gmail.com> <20261121182217.4609-2-emmaonana18@gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -73,87 +116,23 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cac1fa0b133e15e7c67629319df17a0d25747093535aa246f44a75cb1073e2ed@mail.kernel.org>
+Content-Transfer-Encoding: 8bit
 
-On Sun, Nov 22, 2026 at 08:28:11PM +0000, bot+bpf-ci@kernel.org wrote:
-> Should the clone be reported to LSMs as a bind, for example through a
-> separate hook, a flag passed to security_move_mount(), or a call to the
-> bind-mount mediation?
+Hi Omokefe,
 
-Mediation can be trivially achieved:
+On Sat, 21 Nov 2026 19:22:15 +0100 Omokefe Emmanuel Onanaroghene wrote:
+> -ip netns exec $NS_DST ethtool -L veth$DST tx $((CPUS + 1)) 2>/dev/null
+> +MAX_TX=`ip netns exec $NS_DST ethtool -l veth$DST |\
+> +	grep TX: | head -n 1 | awk '{print $2}'`
+> +ip netns exec $NS_DST ethtool -L veth$DST tx $((MAX_TX + 1)) 2>/dev/null
+>  chk_channels "setting invalid channels nr" $DST $CUR_RX $CUR_TX
 
-diff --git a/security/apparmor/include/mount.h b/security/apparmor/include/mount.h
-index 46834f828179..d771ee240d42 100644
---- a/security/apparmor/include/mount.h
-+++ b/security/apparmor/include/mount.h
-@@ -43,7 +43,7 @@ int aa_move_mount_old(const struct cred *subj_cred,
-                      const char *old_name);
- int aa_move_mount(const struct cred *subj_cred,
-                  struct aa_label *label, const struct path *from_path,
--                 const struct path *to_path);
-+                 const struct path *to_path, unsigned int flags);
+I ran veth.sh from net-next on an arm64 VM with 2 CPUs, under
+"taskset -c 0". Without this patch, this check reports
+"fail rx:1:1 tx:1:2". With it, the check passes.
 
- int aa_new_mount(const struct cred *subj_cred,
-                 struct aa_label *label, const char *dev_name,
-diff --git a/security/apparmor/lsm.c b/security/apparmor/lsm.c
-index aefa71bc1cd2..797944de8273 100644
---- a/security/apparmor/lsm.c
-+++ b/security/apparmor/lsm.c
-@@ -751,7 +751,7 @@ static int apparmor_move_mount(const struct path *from_path,
-        label = __begin_current_label_crit_section(&needput);
-        if (!unconfined(label))
-                error = aa_move_mount(current_cred(), label, from_path,
--                                     to_path);
-+                                     to_path, flags);
-        __end_current_label_crit_section(label, needput);
+Reviewed-by: Tianyi Gao <tianyi@cloudflare.com>
+Tested-by: Tianyi Gao <tianyi@cloudflare.com>
 
-        return error;
-diff --git a/security/apparmor/mount.c b/security/apparmor/mount.c
-index 4ed7b9136beb..8d3db6bfdfb6 100644
---- a/security/apparmor/mount.c
-+++ b/security/apparmor/mount.c
-@@ -423,13 +423,15 @@ int aa_mount_change_type(const struct cred *subj_cred,
-
- int aa_move_mount(const struct cred *subj_cred,
-                  struct aa_label *label, const struct path *from_path,
--                 const struct path *to_path)
-+                 const struct path *to_path, unsigned int flags)
- {
-        struct aa_profile *profile;
-        char *to_buffer = NULL, *from_buffer = NULL;
-+       unsigned long mnt_flags = (flags & MOVE_MOUNT_CLONE) ?
-+                                 (MS_BIND | MS_REC) : MS_MOVE;
-        int error;
-        DEFINE_AUDIT_MOUNT(ad, OP_MOUNT, subj_cred);
--       ad.mnt.flags = MS_MOVE;
-+       ad.mnt.flags = mnt_flags;
-
-        AA_BUG(!label);
-        AA_BUG(!from_path);
-@@ -441,12 +443,12 @@ int aa_move_mount(const struct cred *subj_cred,
-        if (!to_buffer || !from_buffer)
-                goto out;
-
--       if (!our_mnt(from_path->mnt))
-+       if (!(flags & MOVE_MOUNT_CLONE) && !our_mnt(from_path->mnt))
-                /* moving a mount detached from the namespace */
-                from_path = NULL;
-        error = fn_for_each(label, profile,
-                        match_mnt(profile, to_path, to_buffer, from_path,
--                                 from_buffer, NULL, MS_MOVE, NULL, false,
-+                                 from_buffer, NULL, mnt_flags, NULL, false,
-                                  &ad));
- out:
-        aa_put_buffer(to_buffer);
-@@ -467,7 +469,7 @@ int aa_move_mount_old(const struct cred *subj_cred, struct aa_label *label,
-        if (error)
-                return error;
-
--       error = aa_move_mount(subj_cred, label, &old_path, path);
-+       error = aa_move_mount(subj_cred, label, &old_path, path, 0);
-        path_put(&old_path);
-
-        return error;
-
-Br, Jarkko
+Cheers,
+Tianyi
