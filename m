@@ -1,76 +1,110 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.175
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795394597;
-	b=dIqmkEmP0jC/51WqvB5v0C2FxveqFlAfkENtGb571NAzrdVMiJVZcEByOYNac+8obxwM
-	 bCrgl/O9SRwHSlIRNbsB/TEF/EwEwBxbf/ssbAa+xuFNjnT8GB9+THABqPIRvgQMMFR6U
-	 R2z34/8dbJ9Yt0kPm9S8AR7hPj38nheKBw3YVjahLVPK+Oyq4n+2+PlIxBZ1tM9+daUAT
-	 He9zn8zom+q+BAFuC9r4lQjfwI4nCwwF8MpXOl1ZM9rk4bAsLMRxJqCgwFWhcSeTS0VUs
-	 eBPqPol4agpY7KJPCmG4TamO2hUXbpFe/vq1aJVLibLqKIqkKd/4+xorIgHsgRlaGqg==
+	t=1795394761;
+	b=hEypgSXFkFLUFJ5HET3DRUj0goJ6WT/AtO1hMIGy5hoP/ITaCg6AE7Bfu1K6whkTfSzJ
+	 iRyA4+h84nGxn11jim021Dc3uz1hE4k7i7qk+ZoMwOnw2SEdxvuVsKnvq4VHJ/Wu8ikln
+	 v8NghoE53dJ2bg6r1O6ekSfji1PT6sj7wGRB/yiCHoGGPdWBRdGIKo4FO4qpugmSygIg4
+	 Y6K08pHzEpVrcQQ06TaEFrmosnCOxBo8brXroNpnSqz3yAe2Qo4n4FpMv+aKw9yw6S1J5
+	 j0VDJInKIGJ42xBXfnTeGlbEyrnssFWWaUlEE5eTLOGfj3qQTPAsjgQHKlnc6MKf52w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795394597;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Date:From:To:Cc:
-	 Subject:Message-ID:MIME-Version:Content-Type:Content-Disposition:
-	 Content-Transfer-Encoding;
-	bh=TLXj3Fi8Kl5VNZ08p1Bk9+717X3RrFhG/5sffc1EOzM=;
-	b=Kts1F8uAftwV8Z5qviE03kvROAHT/DJ17gvUkJZWdarqsBG0VycisWfSHL0dm2mdDrBb
-	 HHuL5WV6v0VeTNZHiq1uJt5r6QqdONMHT5lm7qSrKi4keIahpejxq+2x4A5BpEWWP1OkU
-	 UqO/0u1ZtZTXVWEStfGXVtsnuwHQ7x6APbKdKy4lJ9I9T/VkIhrktSgvvdrZ2B3DxAUlf
-	 cYGWdTqC84qZmy/EOEPdVUaAQbrO9bQAhRXt+3OGh3AZcnhuqNDQi3xwjGPC/WMKSbaTu
-	 KUCg1rv4DLWddLnCGOCbK14Vw6bEFJqFoyXofA4CffdHJjn76zSoF9TJY6aHzwZlttQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795394761;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Content-Type:Date:Message-Id:To:Cc:Subject:From:In-Reply-To:
+	 References:Content-Transfer-Encoding:MIME-Version;
+	bh=TlGQ+s1w0re2RtxBjjhAHjiKtshlusVceD/sHg+v24E=;
+	b=AZCbZ9UQL0OTASP6Hk6qWPc0aI8kIIgqz5fCnIsGjxrkNRflb3UlEWlJNW7rBdmdjWfQ
+	 ekxrtUGJo78h1yMqPRw7HrXSNHH5NiT1bmXrUmKynTXZaA3gNlI5jXF1rSHut77F1r1Mn
+	 DSPLTvm5UR7/3hEBMFFgORpxXtAENauGOa4l7bOde0vFgIuDxDBW81ohjslFrCipr6dG1
+	 dfZ8/OFBVzeNcxTbt7BnlrGRhLq1vZDuPVjyB1RjgZxg0zgA4/Hq74jbZz+ZYkk06/ugi
+	 R0tQeIsZ3US79NqhCQDlTj0OoPd8fps+nFSZM4gPaSpDJgnX9wtte2/T5PDh4krSmmg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=Op86zi+m;
-	arc=none smtp.remote-ip=198.175.65.21
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xjQNwyU6;
+	arc=none smtp.remote-ip=209.85.214.175
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B472606A33C;
-	Mon, 23 Nov 2026 00:43:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6B472606A33C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CF39606A327
+	for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 00:46:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5CF39606A327
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=Op86zi+m
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1795394595; x=1826930595;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=iJ4+vs+nmNJDXv13dvpUiuHGj5q0As+YtfUP5iiyV5A=;
-  b=Op86zi+mR5dhHG+z/KwsvjqMy+VXBm8tV//ZWRvUVIrOhCSlyn6EKNCf
-   QzIZgbZ1OLTaAQDQ9EtlgfpGMNlICcBgLUIMQq+BXFGB7jfGIkV7/Fl0s
-   5jt0j6baO4ivtoF6uoY6zbN5zO+14rjDIp+9vXdj4X5oqtKCFD4jX89kE
-   ZfodtWhIX89CbiOl7qVM3RJ2EZpWfHJDr3vLuJz7gbc1fJrk86SBDLaFM
-   P4/tqx8lYC5aMSt8KuJZEb7/0bC6kfahZpKGYq6GRXZYkDud/VPbMSAo4
-   cQi3v4sNDKdaIHnPPYYU1RXJI1RNH2oCCw5h8Lr7scgm1AMiysiQYVokY
-   g==;
-X-CSE-ConnectionGUID: YWAvt++IRyy32qublHLk7Q==
-X-CSE-MsgGUID: Jdkl/GJ4TSCp7yrhWIQDKg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11974"; a="4279016"
-X-IronPort-AV: E=Sophos;i="6.27,227,1787036400"; 
-   d="scan'208";a="4279016"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2026 16:43:14 -0800
-X-CSE-ConnectionGUID: ZkRECSoFTU6hGqtygMhgig==
-X-CSE-MsgGUID: 1bGPQQSXR5GrRHxZBsawWQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,227,1787036400"; 
-   d="scan'208";a="11073546"
-Received: from ly-workstation.sh.intel.com (HELO ly-workstation) ([10.239.182.64])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2026 16:43:12 -0800
-Date: Mon, 23 Nov 2026 08:43:08 +0800
-From: kernel test robot <yi1.lai@intel.com>
-To: Emil Tsalapatis <emil@etsalapatis.com>
-Cc: oe-lkp@lists.linux.dev, lkp@intel.com, linux-kernel@vger.kernel.org,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-	yi1.lai@intel.com
-Subject: [linus:master] [bpf]  bd59a58663:  stress-ng.seccomp.ops_per_sec
- 59.6% regression
-Message-ID: <202611230821.f5107bac-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xjQNwyU6
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2f03920c4a0so16556285ad.3
+        for <bpf@vger.kernel.org>; Sun, 22 Nov 2026 16:46:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795394761; x=1795999561; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:from
+         :subject:cc:to:message-id:date:content-type:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=TlGQ+s1w0re2RtxBjjhAHjiKtshlusVceD/sHg+v24E=;
+        b=xjQNwyU6MYR+Sv9DqBxkCsB1ojg0HIKyMipAx4s6KRT5IYdJvl+GnVSxTRanDwlO4b
+         OjsHRhZlksxkgGyYo9uQR4xnsH9smwEzvZB0U0xWIc7WLxA20JEVyHvBNfOB3Q6RKyJl
+         W3Omp6JWwiCVAkQ9a9ECTstSvDMsiW2opPGebxfCTT5SlPd+dIB1fYQxZJhDwkFAzhym
+         zUVWh9jYqyhJ1lPaR/5BHmGuhw1iLZ2Ep7uY5F2lH9rP296aefHI8qNbvrd9S8rKbf0P
+         oiX4dY0ljie0g+etEjHvsK3G0VGKqx3XN4ZOcK3unI0mprBibWrDrY0Vx0uR0JHB3rXt
+         eoGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795394761; x=1795999561;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:from
+         :subject:cc:to:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=TlGQ+s1w0re2RtxBjjhAHjiKtshlusVceD/sHg+v24E=;
+        b=2oZ3jb9guE26Q0Lqq0NB2zjKqDXJ2n8XNJXWwrst+0Va3YGDOB1v55EHIb/OtzGIkC
+         ngF0BCho3VQQO1SAuDRHlPgpx2OUR6kYYzuqhS1GxB8OrPGzqhwTuzzeRsrMHyDBztAI
+         YyDEG3cC0K9jzPr3lPpl1Z0buKuVAEtRjsS0USWqbOS/DbofXv2oUQvYAxgx5e04Tl0y
+         cVFOyfLIGUU1B6S4HaeZQw5827HP88WofxnxQozJhSrt3at4su11HUE8KiinsgeZlII+
+         wlEFyIalIoF6wUJJTcaIOXGHMOMJIUP8k/76N8kC1nj4wi/0tkLnhLY4khfSR099HhRY
+         qf0g==
+X-Forwarded-Encrypted: i=1; AL+hErGWMqJJ0U22RP/wytsRjBJONRC6GJ+jG5dRvLtr2/VOrfkMDyQNeLNxe2TUjpcENPP6rfA=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+StnNcseM3Q5+3gNZFaJTVS9x5y/wKcwCEIzvcpaNAlakucStK
+	neGP/GPAWVHK10TH1ZWmqMbw3PqiHey9mqG2f8p41EYHEP9xbWw4qzGa
+X-Gm-Gg: AZFdTZcdtLxALC6iUtrS1dUqKqXEiDp7t4MKqVG8jk9PXsV8PzRMWnYv0N43GyGmaEo
+	EwKzfpxsnno7BVh7Ib4z/u11SOv0/k9f0RY/g/lv9ze7wit9Yo4uhnvx8McCrUPMlzqqHX5+24g
+	U3W+TceLcQcKqsIXLZftn4oF+fKZBJ5EBJTU/rJAT/PAcgPKdfwOKAXF8qYLItAvCIrbx5v/s/h
+	XFNuz2rWQv2HrQ9VcvCXuoi3kUHXkwIuN0tN84GlX91ED8PwdJIkTlupAIyzz0s3ntinxgxlAym
+	UOWBtv41tNCC3s5vdVLyKtxBqBmEaydzD00Q4oJVDinpSHjhjxMhcEujliowOt1cR6SakgtEHs7
+	D1F7seRlpDET49+hnpykVC7lh2C1CwythEr9ryoOGJLJEvKa91KAvxp5kEBGBT4FlmRkOyJx+sr
+	R6c39A7Zazihv1OwTlgWUavhswF+fzBV+qzvFwVVtQYrbq735EsuVW/O54czbcsaMfO/h+r6hcd
+	8Y28iuYyNhCbbzelXTCNiy6bVDsbVAU7QXYIasCPsxM7mHYIROUZTZqKY1JmFanBlc3PNYKsHmZ
+	BXhsrOcYqyX2joVo2Ydv9ntX9fuw0y81+mY15Pez/k6dd+XmVT7L9EqeGvP6PBJizvRMJ1DixlT
+	zqm6oJLUI8bO6igPbO8lC9iWaCVDu3fbDZsA=
+X-Received: by 2002:a17:90b:1802:b0:3b1:64d3:f308 with SMTP id 98e67ed59e1d1-3b41c955a0bmr8991155a91.43.1795394760621;
+        Sun, 22 Nov 2026 16:46:00 -0800 (PST)
+Received: from localhost ([153.61.198.250])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b41ad48786sm15174661a91.9.2026.11.22.16.45.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 22 Nov 2026 16:46:00 -0800 (PST)
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 23 Nov 2026 00:45:59 +0000
+Message-Id: <DN26BQ6CGT3J.2WZ83RCCF7HDD@gmail.com>
+To: "Jiayuan Chen" <jiayuan.chen@linux.dev>, <bpf@vger.kernel.org>
+Cc: "John Fastabend" <john.fastabend@gmail.com>, "Jakub Sitnicki"
+ <jakub@cloudflare.com>, "David S. Miller" <davem@davemloft.net>, "Eric
+ Dumazet" <edumazet@kernel.org>, "Jakub Kicinski" <kuba@kernel.org>, "Paolo
+ Abeni" <pabeni@redhat.com>, "Simon Horman" <horms@kernel.org>, "Kuniyuki
+ Iwashima" <kuniyu@google.com>, "Willem de Bruijn" <willemb@google.com>,
+ "Neal Cardwell" <ncardwell@google.com>, "Andrii Nakryiko"
+ <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>, "Ihor
+ Solodrai" <ihor.solodrai@linux.dev>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>,
+ "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>,
+ "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>,
+ "Emil Tsalapatis" <emil@etsalapatis.com>, "Shuah Khan" <shuah@kernel.org>,
+ "Sechang Lim" <rhkrqnwk98@gmail.com>, "Mattia Meleleo"
+ <mattia.meleleo@coralogix.com>, "Michal Luczaj" <mhal@rbox.co>,
+ <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+ <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH bpf 00/11] fix misc sockmap issues
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+In-Reply-To: <20261121103222.88209-1-jiayuan.chen@linux.dev>
+References: <20261121103222.88209-1-jiayuan.chen@linux.dev>
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -80,71 +114,15 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
 
+On Sat, Nov 21, 2026 at 02:30 AM Jiayuan Chen <jiayuan.chen@linux.dev> wrote:
+> This series fixes misc issues in sockmap. Most of them are old.
 
-Hello,
+Jiayuan,
+thanks for the follow up,
+but the fixes are way too heavy. bots are correct.
+The patches introduce more bugs than the fix.
+Pls ask your bot to think of absolultely minimal fixes that do not
+introduce new states.
 
-kernel test robot noticed a 59.6% regression of stress-ng.seccomp.ops_per_sec on:
-
-commit: bd59a58663895778da607fd02a8f17a93db97d16 ("bpf: Use dedicated workqueue for freeing BPF programs") https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
-
-testcase: stress-ng
-config: x86_64-rhel-9.4
-compiler: gcc-14
-test machine: 224 threads 2 sockets Intel(R) Xeon(R) Platinum 8480CTDX (Sapphire Rapids) with 256G memory
-parameters:
-
-	nr_threads: 100%
-	testtime: 60s
-	test: seccomp
-	cpufreq_governor: performance
-
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <yi1.lai@intel.com>
-| Closes: https://lore.kernel.org/oe-lkp/202611230821.f5107bac-lkp@intel.com
-
-
-Details are as below:
--------------------------------------------------------------------------------------------------->
-
-
-The kernel config and materials to reproduce are available at:
-https://download.01.org/0day-ci/archive/20261123/202611230821.f5107bac-lkp@intel.com
-
-=========================================================================================
-compiler/cpufreq_governor/kconfig/nr_threads/rootfs/tbox_group/test/testcase/testtime:
-  gcc-14/performance/x86_64-rhel-9.4/100%/debian-13-x86_64-20250902.cgz/lkp-spr-r02/seccomp/stress-ng/60s
-
-commit: 
-  ef2cb4d4c5 ("Merge branch 'reject-writable-map-iterators-on-read-only-maps'")
-  bd59a58663 ("bpf: Use dedicated workqueue for freeing BPF programs")
-
-ef2cb4d4c59132b8 bd59a58663895778da607fd02a8
----------------- --------------------------- 
-         %stddev     %change         %stddev
-             \          |                \  
-    613342           -59.6%     247980 ±  2%  stress-ng.seccomp.ops
-     10230           -59.6%       4134 ±  2%  stress-ng.seccomp.ops_per_sec
-    691777           -84.6%     106534        stress-ng.time.involuntary_context_switches
-  60318172           -59.8%   24270033 ±  2%  stress-ng.time.minor_page_faults
-      5077           +48.9%       7560        stress-ng.time.percent_of_cpu_this_job_got
-      3007           +50.6%       4527        stress-ng.time.system_time
-     44.78           -55.9%      19.74 ±  2%  stress-ng.time.user_time
-   1475619 ±  2%     -71.9%     415109 ±  2%  stress-ng.time.voluntary_context_switches
-
-
-Disclaimer:
-Results have been estimated based on internal Intel analysis and are provided
-for informational purposes only. Any difference in system hardware or software
-design or configuration may affect actual performance.
-
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
-
-
+pw-bot: cr
