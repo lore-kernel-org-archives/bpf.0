@@ -1,78 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795396140;
-	b=B/gRJfw0BvUs5ldw+vfoha68TijSFgCAojvml183k/oLwIPYDLnZCd8bim7RX4GgZl4E
-	 8oq7ASm0hb5Ac4GltAvX2ERpfXYgf3FSlbC84FATaOg/5gVxsmzk3uxm646ywVP4l9ohU
-	 JC7Cwh1anpldqI3fZ1WH45xXqKGPuTmmndOk2x9nuK+z8Rm/AirWFgZWchAFE7H/xPvYK
-	 hNzwx90uUUwQi3A1rdBC9pgvAEDw+LYTwoYRj9OgtVxYj+2Tr2nDMhbbhKhw8gD9JXSBx
-	 kyz03nRzoxb4Nm7yw4+DdUEUVzlawcf3gmsZY7mFRnfmW26tpX57BMK21grLSGbeXvA==
+	t=1795396440;
+	b=WlbruDO/uIp19qK1fqd3U9JsYMVZe9gFuMoNWxmoLkI1kLMoQ+n2QU1jphBHL4khm4Ft
+	 wOuUi5KPpg7VDDjnZC2M8pSDAR79KNJm1hn3WheY2j+ljjhbeKo97MGVTY+wDl7tOU0Re
+	 nchfTaaZBG23a2NtTTypFawWKwHB2XYQY9GxvwLBGb0kB0e/DsB3aDVxIdG6CQj9IdaQD
+	 SfFNX9qr0yifmm3MiNO5fo977I+Z5+OWVUHTq4kjbsdcqdzAzpkllWcDy5eFsdm8Ha7Uu
+	 6MCTbVxGPNbNxD5cxN077Xe51QRiAjDq1YSq095pGTNezyXepIcq8zUj04u9e0c7CQw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795396140;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=54suIHluMeZO/ufn4/dBIrDiE7/KVFZ3u4m3JUaSiGc=;
-	b=mFXOX//Y414qUeWO8kH+SQN8LukPPtTGfQHXhs43Ad+AMjlB/OOyFWdncukuj7eloEzZ
-	 vrk4cMEXALE/L0DcSprBieD96lNpqhSNEAWMZo76z094qXBW2UPIwIc6mBtbGIT3znl9y
-	 lcql+wp3vV85lt69wge4ax+lG5zl5cJDHZLAolzT8GJGTV+my4LAgTcq0GqfxqE9Wrezj
-	 OiHPryxjGXcBlzjm6ncPKK+qPlyXucNSL1o0HQwH/JY+t+CaIpnOqDHe6oC9UjXA4KTkQ
-	 Yh2yvGubPAEqwPKrrByIK7V1g00/+C6SxLhrwQoHGiX7SI9mj9QOtjszE/W9btOv3Ww==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795396440;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=wOmSSxBUHRnLgd4e6+O9z5R2jz4T0d7JhRnt5K045pM=;
+	b=gVKa+bBlMNAXdlUvIMOZcGjt39fWB7Gk0rRInA+HpAz0Tt46IScdVBpxkfWBCl+YeQD7
+	 cMl5ED04OjpJaedwEkxJHfKGGM9k/2VuKoHQtSwv+dOggvjEova5CmWjthZqeL44MLZp/
+	 a9md64NGy1VLLjkA+DvWLhzvHD0PbnBtOPnIDEtHtKPyhU1Yvve9NeK0i+KUMuihR0l9m
+	 LFJzhSnRyBVjrZf3dTAYJXNHQdwnCqX2nsv/qC1/N9xACy0EFhxem+EhecUvAC05i0pFe
+	 YNzdDFWcT5Wm3sEv44RGsFA4diZU+Ryl0R7HmlPid9vZAlMwbJtUkqoA13KvXrczPDA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HF9uETWv;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=FN9NMEdt;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id 4B333606A31A;
-	Mon, 23 Nov 2026 01:09:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 481D6606A31A;
+	Mon, 23 Nov 2026 01:14:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HF9uETWv
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 5FAE31F000C0;
-	Mon, 23 Nov 2026 01:08:59 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=FN9NMEdt
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16DD91F000C6;
+	Mon, 23 Nov 2026 01:13:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795396140;
-	bh=54suIHluMeZO/ufn4/dBIrDiE7/KVFZ3u4m3JUaSiGc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=HF9uETWvgDgCbmGGppAFO03CUDvTiOIhaCY09lktVw3xBo+nBNXLRW9vgavEdg8Yq
-	 w6jb69qUgfdhMLLUmmEukONSxkeSOgm4ac11L4U2+6RHH7AfddReVAfDbiWC20UZJ1
-	 ObzV8+KU9EaJEEKwf9vQ0MB3DAwy3F+GuZAUWZiOM7AyEKWqXvrFk7f7TpuEGttoN4
-	 Fy8mjA8UXStRyDAuKWmm+xzq5TtrHIVGOHkgItUyaQRjYNC63yXCwvcjmrZVfvnU/t
-	 +zElr+nCAMWfHgU4XzXa9pP0+2Ljdb0uQglf4xGcMb1ZolxErN/TPOiWi0uas5nrft
-	 DoyDlnL5SNLMA==
-Date: Mon, 23 Nov 2026 03:08:56 +0200
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: linux-fsdevel@vger.kernel.org, Andy Lutomirski <luto@amacapital.net>
-Cc: bpf@vger.kernel.org, containers@lists.linux.dev,
-	linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-	linux-security-module@vger.kernel.org,
-	Aleksa Sarai <aleksa@amutable.com>,
-	Alexander Mikhalitsyn <alex@amutable.com>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Christian Brauner <brauner@kernel.org>,
-	David Howells <dhowells@redhat.com>,
-	Eric Biggers <ebiggers@kernel.org>,
-	Giuseppe Scrivano <giuseppe@scrivano.org>,
-	Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
-	Jeff Layton <jlayton@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Josef Bacik <josef@toxicpanda.com>, Kees Cook <kees@kernel.org>,
-	KP Singh <kpsingh@kernel.org>,
-	Lennart Poettering <lennart@poettering.net>,
-	Neal Gompa <neal@gompa.dev>, Oleg Nesterov <oleg@redhat.com>,
-	Paul Moore <paul@paul-moore.com>,
-	Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
-	Serge Hallyn <sergeh@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Zygmunt Krynicki <zygmunt.krynicki@canonical.com>
-Subject: Re: [RFC PATCH v7 00/26] userland: Userland containers
-Message-ID: <awOSKAvA-65pF3kw@kernel.org>
-References: <20261122193539.3334213-1-jarkko@kernel.org>
- <awOEa303zNUDrzA3@kernel.org>
- <awOFGIWekH9-vlhM@kernel.org>
- <awOHVCpztLQv4Uwv@kernel.org>
- <awOIIuoNvNLZ_scF@kernel.org>
+	s=k20260515; t=1795396439;
+	bh=wOmSSxBUHRnLgd4e6+O9z5R2jz4T0d7JhRnt5K045pM=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=FN9NMEdtMJA9GH5kpjH71QHTkf8sRJGmZ+SAQ9Dtpe344cU2Los23ZDyOjM043uRu
+	 gskmUdWAEA6Khpseovipvoo4GxT4JuAWfTSIYG496lGMPZZ1l8KmfCsvPAFTtHsLt0
+	 tr7sVDxw1Y/VlxaomGz0GBAyxGDZZpsKvyTIwnptX48pfpAAdyyeTM/SFazRT/nO7v
+	 IB7K+9r0KChFNtEVTbvdfnZ2ODKLmohSDTiUR7LJqP+W2bcqvn2jC6AsyuvUlzeNv4
+	 rBsYW9yNJCm8mhHJeUI6TFYrXYoOWxwpOdaIPtPaFYl3WzhyKT335+LQ51Bs5oIeYv
+	 fqgqpdNIHO5Jg==
+Content-Type: multipart/mixed; boundary="===============7245609043603540761=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -82,52 +49,78 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <awOIIuoNvNLZ_scF@kernel.org>
+Message-Id: <ef9a71b38c0ce6eb0a5112debcb242e7b52694ab5284c7a589e5952c299b3b68@mail.kernel.org>
+In-Reply-To: <20261122-bpf-rhtab-irqs-disabled-v2-3-207aedcc2215@columbia.edu>
+References: <20261122-bpf-rhtab-irqs-disabled-v2-3-207aedcc2215@columbia.edu>
+Subject: Re: [PATCH bpf v2 3/4] bpf: Don't spin on rhtab bucket locks with IRQs disabled
+From: bot+bpf-ci@kernel.org
+To: mt4022@columbia.edu,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,yatsenko@meta.com,herbert@gondor.apana.org.au,akpm@linux-foundation.org,shuah@kernel.org
+Cc: tgraf@suug.ch,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,bpf@vger.kernel.org,linux-crypto@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,tz2294@columbia.edu,mt4022@columbia.edu,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Mon, 23 Nov 2026 01:13:57 +0000 (UTC)
 
-On Mon, Nov 23, 2026 at 02:26:14AM +0200, Jarkko Sakkinen wrote:
-> On Mon, Nov 23, 2026 at 02:22:49AM +0200, Jarkko Sakkinen wrote:
-> > On Mon, Nov 23, 2026 at 02:13:16AM +0200, Jarkko Sakkinen wrote:
-> > > On Mon, Nov 23, 2026 at 02:10:23AM +0200, Jarkko Sakkinen wrote:
-> > > > On Sun, Nov 22, 2026 at 09:35:13PM +0200, Jarkko Sakkinen wrote:
-> > > > > SYSCALLS
-> > > > > ========
-> > > > > 
-> > > > > Two new system calls are proposed:
-> > > > > 
-> > > > > 1. userland_open(): open an opaque staircase-initialized container
-> > > > >    object (modeled on Intel SGX enclave initialization with separate
-> > > > >    build and live states) with no embryonic state, opting selected
-> > > > >    shared namespaces in via an allow-list instead of unshare semantics.
-> > > > > 2. userns_set_idmap(): configure all UID, GID, and project ID map
-> > > > >    extents for a container user namespace in a single atomic system
-> > > > >    call.
-> > > > 
-> > > > Andy, perhaps a bit too far of the box idea but I'll just throw this out.
-> > > > 
-> > > > An alternative to userland_open() would a file e.g., virtual device
-> > > > file, and necessary wiring for open().
-> > > > 
-> > > > Then the added syscall surface would reduce only to userns_set_idmap(),
-> > > > and it adds more robustness to access control (e.g. who can create
-> > > > containers).
-> > > > 
-> > > > What do you think of this?
-> > > 
-> > > Also, easy way to detect the feature. This does make sense to me.
-> > 
-> > This as a side-effect would enable LKM compilation, and reorganization
-> > of the beef of the core feature as a driver. Not sure what would be
-> > the best location for the driver tho, perhaps just drivers/userland.
-> > 
-> > I.e., full decoupling from the syscalls.
-> 
-> Right, and LKMs are great for live patching. This has enough quantative
-> weight.
+--===============7245609043603540761==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Not actually sure given clone flags etc. if detachment is doable, or
-even if it can be, makes sense. Likely not so great idea after all,
-after thinking this for a while  (at least not in this form).
+> bpf: Don't spin on rhtab bucket locks with IRQs disabled
 
-Br, Jarkko
+TL;DR: On CONFIG_SMP=n kernels without DEBUG_SPINLOCK, setting trylock_irqsoff
+on rhtab may make every new-key insert and delete fail with -EBUSY when IRQs
+are disabled, even if the bucket is unlocked, contrary to the commit message.
+
+> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+> --- a/kernel/bpf/hashtab.c
+> +++ b/kernel/bpf/hashtab.c
+> @@ -2983,6 +2983,7 @@ struct bpf_rhtab {
+>  static const struct rhashtable_params rhtab_params = {
+>  	.head_offset = offsetof(struct rhtab_elem, node),
+>  	.key_offset  = offsetof(struct rhtab_elem, data),
+> +	.trylock_irqsoff = true,
+>  };
+
+On CONFIG_SMP=n kernels without CONFIG_DEBUG_SPINLOCK, can this make every
+insert of a new key and every delete fail with -EBUSY whenever the caller
+has IRQs disabled, even when no CPU holds the bucket lock?
+
+rht_lock_or_busy() does this:
+
+    if (!params.trylock_irqsoff || !irqs_disabled()) {
+        *flags = rht_lock(tbl, bkt);
+        return true;
+    }
+    /* bit_spin_trylock() always succeeds on UP without DEBUG_SPINLOCK */
+    if (!IS_ENABLED(CONFIG_SMP) && !IS_ENABLED(CONFIG_DEBUG_SPINLOCK))
+        return false;
+
+The check happens before any test of the bucket, so
+__rhashtable_insert_fast() returns ERR_PTR(-EBUSY) and
+__rhashtable_remove_fast_one() returns -EBUSY every time.
+rhtab_map_update_elem() then frees the new element and returns -EBUSY, and
+rhtab_delete_elem() returns -EBUSY.  Updates of existing keys still work,
+because rhtab_map_update_existing() takes no lock.
+
+Programs running with IRQs disabled (int3-based kprobes, perf_event
+programs, tracepoint, fentry and struct_ops programs in IRQs-off regions,
+hardirq context) could insert and delete on UP before this patch, since
+bit_spin_lock() only disables preemption there and never spins.  Most
+programs ignore the helper's return value, so the failure may go
+unnoticed.
+
+The commit message says these operations "now fail with -EBUSY when the
+bucket is locked, by this CPU or another one, and work as before
+otherwise".  Is that accurate on such kernels?
+
+Only the earlier rhashtable patch mentions the UP behaviour ("On UP
+without DEBUG_SPINLOCK the lock bit isn't kept, so these callers always
+get -EBUSY there").  Could this patch state that limitation too, or could
+the lock bit be kept on UP for trylock_irqsoff tables so that rhtab fails
+only when the bucket is actually held?
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/45090312341
+--===============7245609043603540761==--
