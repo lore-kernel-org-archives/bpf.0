@@ -1,54 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.199
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795409416;
-	b=Ao9+suIoQPqEMa7bpp9PW9cU1wjvJoWYMGbpkz+7+LHrKiUL9MC+cSOu0ZUmDxCRgtJH
-	 nDHiC0j8N70ILkfSBOWwR/uVP/McYLR/pLiQjvWmMfX0NY3nRtg8DBjjE3y8Fs2rPNdCu
-	 yyI3rOhv70+i88Hb1J2wmt/ur+JEWgWQjLHoq6kDkmKoqIgRNKsm7xaAC0zegIewQ8Qqm
-	 SePaUIF1iGb/sNNhNrM1SAbZdxMOr9B4yLis34ow6KeqbtpEUb5JPSC3KLvZWNU0AbD9F
-	 7e/76c3qTj+vatkr/U9qucG821D4KkAI8mll22QLPat2u1y0p8kFS7gdi8c/CriCvtg==
+	t=1795409857;
+	b=WBzkrSLAHfSnx64/0bhQu3XLRWSyadkF8ZNVj4U3SswZBnn2mt3uSmB6avNiL2O7W39G
+	 z3Hj/RJuEvoOmmLpU7Xb0hINpte8QpqKxSfU1oWlTsc+cBbY3pjqZ7EwPxPp/ivcTvXRX
+	 dVB3rbtQqK4ooeIJjKJxXeXQ1adRRRxdMW9cQW0aJU28hWNaPlbqXraonwLI5OdWJNbSf
+	 rmWsDp2CQDtZWkJPEas+ioFUMJ+WmrC9Y1crR/fCxBYa111SHwjSkuepIdZatGpl1U3QZ
+	 VMySHncHCMMMF9U6se3CgiVVhULkh137CSB56gjHmxEh0Kmn8CoFN5zrbFYWX15QWAA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795409416;
-	h=DMARC-Filter:Received:Received:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding:X-CM-TRANSID:X-CM-SenderInfo:
-	 X-Coremail-Antispam;
-	bh=YyXLF78KCettZXiSKq1HR6wyzPidcEExzxdLrgHUJkw=;
-	b=tiHrd99fF7e7dEla03eFQDdbZQ+FHpJy2TclANwzUgIZWVy7Z+6w2BNQjU704ubI/Z4m
-	 OjEDxEONuhOZhieKHhn/IunoCIgungbdpCwMpvMMRXSsGA5OuMLCc6pBmjfMulcLmajTy
-	 pLp8SulTqBur6YRuo0F8aE3i8xY7FToROBH3ACeLe7tvAn9P+V34h5w7A9nYSp7oQmgXH
-	 xfpIh9zq6eR4LPsusQeQv4WyBZGXOZOew+k7R7SAYH1bYOn+AzSX8/M5N+tK2fuxZXLkT
-	 HDB9CSW+U7+OSN9nAAwn5ohU0lSYeQQ0JsR/XB54MBFoAwPMrAJ2z1SUVXkRfckzbCA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795409857;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:Mime-Version:
+	 X-Mailer:Message-ID:Subject:From:To:Cc:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=0mdcGcj64GzmYrPJu0IJ0WiOiRlU4XegUX2JgumUSPU=;
+	b=WQi5m4quDhJfRVCYCkfBP9G4LK3O8odQOWz+l/VG+sfuFRNqvFy/kQmsyda8s+3h3OBf
+	 oLYZN5dL0pctinoUelFZ7oZ8XE5/0ZUUKU5J3VKYYC7xd/G/1zh5GfrEeTTrk0OLP39wb
+	 gDi0sBO8eXSu+1M/CV+x0kOIFOsOMpcAGjPajxLrphzMsQHNsalsumEMakjTxKTzuEn3d
+	 F1zUeAr0cQKhvmuEySfD9bhY8q9mwp/j56ju1YS/oxMMhJkKqmqXS30WQlht9m2QW1CRC
+	 Cku5/BnE5LNIbpC+FPTnR+wFdDzpvyUojKF+WSri0P31CEQvr4HHyIBds/UZFFRWohg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=loongson.cn;
-	spf=pass smtp.mailfrom=loongson.cn;
-	arc=none smtp.remote-ip=114.242.206.163
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2CC4606AE3F;
-	Mon, 23 Nov 2026 04:50:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E2CC4606AE3F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [123.138.236.242])
-	by gateway (Coremail) with SMTP id _____8BxuLUCxgNr7R0iAA--.3878S3;
-	Mon, 23 Nov 2026 12:50:10 +0800 (CST)
-Received: from linux.localdomain (unknown [123.138.236.242])
-	by front1 (Coremail) with SMTP id qMiowJAxX88AxgNrIsw2AA--.43924S3;
-	Mon, 23 Nov 2026 12:50:10 +0800 (CST)
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: bpf@vger.kernel.org,
-	loongarch@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v1 1/3] selftests/bpf: Enable instruction array test for LoongArch
-Date: Mon, 23 Nov 2026 12:50:06 +0800
-Message-ID: <20261123045008.23691-2-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20261123045008.23691-1-yangtiezhu@loongson.cn>
-References: <20261123045008.23691-1-yangtiezhu@loongson.cn>
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--tweek.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=F9nAdFTU;
+	arc=none smtp.remote-ip=209.85.215.199
+Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com [209.85.215.199])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 524FF606A31E
+	for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 04:57:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 524FF606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tweek.bounces.google.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=F9nAdFTU
+Received: by mail-pg1-f199.google.com with SMTP id 41be03b00d2f7-cde9044a96aso350911a12.3
+        for <bpf@vger.kernel.org>; Sun, 22 Nov 2026 20:57:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20260707; t=1795409857; x=1796014657; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:from:subject
+         :message-id:mime-version:date:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=0mdcGcj64GzmYrPJu0IJ0WiOiRlU4XegUX2JgumUSPU=;
+        b=F9nAdFTUx3IwRVE5j8Herp4NHkJcsEtBnnDYRWoArcU56RCTej6HNKSzvYcwYse1oZ
+         KuG+DAq257bVijuE+P0flKXEHymfpyaP8BUL33sO1gHgGXgBiG4FfAKtwk/8OVQaOKGa
+         MMThRedOZx5zjKfLmx26hHaOoRpPig5IHsaRQHSuFFkghsihAyv7+2y3oiVTNVvoQGzo
+         SkenIBYeKyxzeU+zmDUDhTVkIRcwzHwEsqKyJdgvyfW/741nIDDOuQ/frrUuwpGdQgZH
+         qcDK2Ks3i3HDfj54HMi7bq65DmTd+CtuCCO4/i3nAvXB3W3+mFIvWBR1ZcerNPzkngS6
+         lX7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795409857; x=1796014657;
+        h=content-transfer-encoding:content-type:cc:to:from:subject
+         :message-id:mime-version:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=0mdcGcj64GzmYrPJu0IJ0WiOiRlU4XegUX2JgumUSPU=;
+        b=u/Zim9mVH2gjPf4KCirfnVBq/Z+FCwAFzAMwnJXeMH1yqiN/KluVkL3MA+k5qmCRuB
+         s5Y9SO4T3QnxtdyjsqiKsa9Q/TSI5W5mymO9cT9dZR5mWJY2w4bksbFjxs+RWsspV+dG
+         b3ZUQsxMCOO9W6LPhjVZIwixL6Y/0YEmYo8JWL2jHblGCDfqpHNHP2RhJg3mB0S9sNnz
+         1bO1p8zg8ehVpEgasfMYU5v8PBPwMyHucrqUPIXkl2JkBEeN+egzrSUhAvhn3josBJMo
+         d6z0vIPUGTuWpDCriDDSetP0d7QX0X1Do3cTbXxjlxWFNfCttGPXsl57JVVY93hxpouG
+         9X8g==
+X-Forwarded-Encrypted: i=1; AL+hErHvzhtkAaNC0uAtGrarrfiBDRyL+om8y7fccpQp3PRsPAkBdnYYjqsL1Yjj90R/EfGTSvE=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9ZbAaHtyfyEsLtmFWYMkKCGzEm2inTPk561hxFKyBJP/YFNYsB
+	4hogSsh3hve8d05h3B8yvQVt8LBNllnnV9LGS5K4zkKVTVVK7n2/ClAfdzLW5dja43LkpYdJ56B
+	F8A==
+X-Received: from pfwy15.prod.google.com ([2002:a05:6a00:1c8f:b0:89d:e040:c63e])
+ (user=tweek job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:7489:b0:3e0:e60f:2e5b
+ with SMTP id adf61e73a8af0-4014c948925mr9728669637.30.1795409856438; Sun, 22
+ Nov 2026 20:57:36 -0800 (PST)
+Date: Mon, 23 Nov 2026 15:57:28 +1100
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -57,53 +77,48 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJAxX88AxgNrIsw2AA--.43924S3
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj9xXoWrtr1fWw17CFykCFWftr43Jwc_yoWkXFX_Ka
-	12qrs7ZFWkCFyqq3W8uFySgFW8ur4rurs7Crn8Wry7J3WYgay5WFs5C3s8Aas8W39xJFW3
-	tF4kX3y3Cr4rCosvyTuYvTs0mTUanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvT
-	s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
-	cSsGvfJTRUUUb3AYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
-	vaj40_Wr0E3s1l1IIY67AEw4v_JF0_JFyl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-	W8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6r4UJVWxJr1ln4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
-	xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q
-	6rW5McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
-	vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_
-	Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1V
-	AY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Xr0_Ar1lIxAI
-	cVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42
-	IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIev
-	Ja73UjIFyTuYvjxU4OzVUUUUU
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.56.1.750.gf70dc682cf-goog
+Message-ID: <20261123045730.1960346-1-tweek@google.com>
+Subject: [PATCH bpf 0/2] libbpf: Skip BPF token preparation for gen_loader
+From: "=?UTF-8?q?Thi=C3=A9baud=20Weksteen?=" <tweek@google.com>
+To: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Shuah Khan <shuah@kernel.org>
+Cc: "=?UTF-8?q?Thi=C3=A9baud=20Weksteen?=" <tweek@google.com>, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	Sid Nayyar <sidnayyar@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-As the LoongArch JIT supports instruction array (gotox jump tables),
-enable the corresponding BPF selftest for LoongArch.
+When generating a loader program offline (obj->gen_loader), libbpf emits
+loader instructions rather than issuing BPF syscalls on the host. While
+other host-interaction steps in bpf_object_prepare() already skip
+execution under obj->gen_loader, bpf_object_prepare_token() does not.
 
-With this patch:
-  $ sudo ./test_progs -t bpf_insn_array | tail -1
-  Summary: 1/20 PASSED, 0 SKIPPED, 0/0 FAILED
+This causes offline loader generation (such as bpftool gen skeleton -L)
+to probe /sys/fs/bpf and honor LIBBPF_BPF_TOKEN_PATH. If the build host
+has a token-delegated bpffs mounted, libbpf acquires a token FD and ORs
+BPF_F_TOKEN_FD into map_flags and prog_flags without gen_loader
+serializing any token_fd, producing a broken loader blob.
 
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- tools/testing/selftests/bpf/prog_tests/bpf_insn_array.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Patch 1 skips bpf_object_prepare_token() when obj->gen_loader is set.
+Patch 2 adds a token/obj_gen_loader_no_token selftest covering implicit
+/sys/fs/bpf delegation, explicit bpf_token_path, and an invalid
+LIBBPF_BPF_TOKEN_PATH.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_insn_array.c b/tools/testing/selftests/bpf/prog_tests/bpf_insn_array.c
-index 4ffe4fe6b78e..6b1a426aa4cd 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_insn_array.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_insn_array.c
-@@ -5,7 +5,7 @@
- #include <test_progs.h>
- 
- #if defined(__x86_64__) || defined(__powerpc__) || defined(__aarch64__) || \
--	(defined(__riscv) && __riscv_xlen == 64)
-+	(defined(__riscv) && __riscv_xlen == 64) || defined(__loongarch__)
- static int map_create(__u32 map_type, __u32 max_entries)
- {
- 	const char *map_name = "insn_array";
--- 
-2.42.0
+Thi=C3=A9baud Weksteen (2):
+  libbpf: Skip BPF token preparation when generating loader
+  selftests/bpf: Verify gen_loader skips BPF token preparation
+
+ tools/lib/bpf/libbpf.c                        |  3 +
+ .../testing/selftests/bpf/prog_tests/token.c  | 82 +++++++++++++++++++
+ 2 files changed, 85 insertions(+)
+
+
+base-commit: 84afebd853437e44cb71f718be11d90e4c1a59dd
+--=20
+2.56.1.750.gf70dc682cf-goog
 
