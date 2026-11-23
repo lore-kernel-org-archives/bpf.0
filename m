@@ -1,62 +1,45 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=195.10.208.42
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795465742;
-	b=IZynVSDfhFt0F8OrG0Y73q9O4/Q2P6knw91LlHqZJiGi7dKr5PK6OwSkUr7zgC3ydeeb
-	 s0FKm5Gk6JE7++0UgaTuASIFI3p98a9ZRo8M5w73uelVv9cWSlEqHdQx1XF0LltTdGIdB
-	 SHGiCQKkFqL+F2m3ZSqRtv6TuFVD1nYx9pywkXlV8iM7aPxDVHfadYqBhfXCL6rcnhLfb
-	 VnYOxO6P8EEJLRFK593oSUdncHRE++rOxXrtCVIVmCcsUnJZeOS+ijaWd+U02nJfnX1sT
-	 6kHwh6Ty9mw4lCFjBNda5GUaowP9hubNyVSy20lX2XSG4vmCMKCfpFAtUFLrfY/fGrg==
+	t=1795466038;
+	b=Kss4vmZ7xPL2tmq8eRYyCjZN6YW2tIyRM6fG3yxBxVC1FcB7mPRYFhl8M8OtOVcG2h/O
+	 b+PHvwYQSHxWico1lGonu4tUFjvQoOZiBbqUlDoU67v+saaOZWO6IvBR+8aLwTRlHpTQO
+	 YN5Vw0Y9QVX8KCkLF+c/qAOejYwkmwNkmhquDK8KIhZKL05NIoKn/YWLYq0OJrQJOyz3U
+	 KVGhgm+cZG3PPIRGlJXNpKzGwBri6paXwQoaDfpHL5lGuzSLb47/R0lXMqAvGKkvFS0tI
+	 G5BBceSuFfP8IJwyPX+RWZf3a2+3US2pUI74obxbiCgezkDwGWg5LNat3suC3wZBpTQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795465742;
-	h=DMARC-Filter:Received:DKIM-Signature:Message-ID:Date:MIME-Version:
-	 User-Agent:Subject:To:Cc:References:Content-Language:From:
-	 Organization:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-	 X-Rspamd-Queue-Id;
-	bh=XE7qcYgylreJp0JifMPhFDkqe26p/1tmu93DZNaIw5M=;
-	b=j7WoDSquhfgNbqNh4p2DbaawmQGMNMzruk8H45sCEUCYkivc/YWgRkXstF/qVTO2G4KC
-	 8kqkSkLLteIKHu/s9tLqUQMlnhpewGvXh7MYHBSJFRqwK4v1n+wzEZrUddkkEC+4bECc4
-	 KC5lTjyq8WV/HaE+AjrQ2Ay7DyyflxrBIDiV3Kgcn5uR9H/pySKIKPIYQN0KU+gSXr4dG
-	 /wsz+EvWhxbSPVEMRr5iIC2s+1OfbqaFfB/g9Z6Nz2j6Ld3BrBp2nGlRDxNykZ9yl4iG4
-	 Ujlsnbd0MpS9bZWtKT8HTrkfKc8iTo7irIv9W9w8fLnyO6MYQ1cnLpE8SGPFLFiUUeg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795466038;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=wthDU1MJlKXQ4gOwfl778urHAsy7uIMOzikS225CULI=;
+	b=iPdA+vdosGlJyl1kxKme7Owgy7RBFd7ampz4KGb12HSorn2dSRjCNFRwkOvpOt1j/EIr
+	 i2O4/WuxtWW6SjqmIjzhqcJmTF+tl+hDdsk1m+lIll3OnKjkFHCPbPVQ1p51cmbVOY7t6
+	 8+08exF6gVmMBL+NQIvgvxdC5sMullX0sUrz2pUaQLIdC01m4fFCTmPYQrbV/1Db1YUC2
+	 275rDULqbYMG3nstrOw/aLF/VvSEuhifxU3eqK6LTDbZXAVSRRgEb6zaVDBTB4pAASCYR
+	 sgxuBnLdiq+gMqHdiYrd36Unjrsog86Gj9ovFrEJ0kprIv3f2A9FQEt8EEyT/1FpDuQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=mandelbit.com;
-	spf=pass smtp.mailfrom=mandelbit.com;
-	dkim=pass header.d=mandelbit.com header.i=@mandelbit.com header.a=rsa-sha256 header.s=MBO0001 header.b=FKA0CLkf;
-	arc=none smtp.remote-ip=195.10.208.42
-Received: from mout-b-112.mailbox.org (mout-b-112.mailbox.org [195.10.208.42])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cAEUPNTs;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39540606A31E;
-	Mon, 23 Nov 2026 20:29:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 39540606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mandelbit.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mandelbit.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BD37606A321
+	for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 20:33:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=mandelbit.com header.i=@mandelbit.com header.a=rsa-sha256 header.s=MBO0001 header.b=FKA0CLkf
-Received: from smtp1.mailbox.org (smtp1.mailbox.org [IPv6:2001:67c:2050:b231:465::1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519MLKEM768 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-b-112.mailbox.org (Postfix) with ESMTPS id 4jYHb705X0z5vQ7;
-	Mon, 23 Nov 2026 21:28:51 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mandelbit.com;
-	s=MBO0001; t=1795465731;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=XE7qcYgylreJp0JifMPhFDkqe26p/1tmu93DZNaIw5M=;
-	b=FKA0CLkfyWAcxUq1oWz9e0gq1cOVbJ9lfQ/Gioeu6GSlMfc1GEm+LmsBniqVZaIzwp/sCl
-	1SipGsLM4pPbvE2iJxAWrCVc5kiEafYwA0LxsJZa/KkAUMNf6svm5E7qmecY5I1IhmgTn6
-	zthoe8ZvvqICZi9+l9yGb5Ls6Tux5Sahr7NCAzkc8PmNgDiP03onhJsImaxDBEd98Zfk9G
-	dWASAhlejk/mpxZzCi17ObjmqylKZM9HXFAFqvfxHiDxho44PyUB8n2FnQc2USOLo3QAS8
-	l4Wm+iOolVvpdsaY1bl63sPHW9zNGnGLkDWT8IPZdTNe+zgNjNflp6sYPFOuXg==
-Authentication-Results: outgoing_mbo_mout;
-	dkim=none;
-	spf=pass (outgoing_mbo_mout: domain of antonio@mandelbit.com designates 2001:67c:2050:b231:465::1 as permitted sender) smtp.mailfrom=antonio@mandelbit.com
-Message-ID: <5b8c4005-ed10-4be5-b79b-8f59089d6fbf@mandelbit.com>
-Date: Mon, 23 Nov 2026 21:28:47 +0100
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cAEUPNTs
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68BA91F000C6;
+	Mon, 23 Nov 2026 20:33:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795466037;
+	bh=wthDU1MJlKXQ4gOwfl778urHAsy7uIMOzikS225CULI=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=cAEUPNTseR6VaDek247Kwgu29WTR0qIw6gySaahY0sG9UkuywEcyTdpnGClML9m4D
+	 1kVCbekSSXfNTstzgln7n6Mw9loq+dKaqRlV/Cm5OWn+s3Ro/ji86raakPMf+w+/O0
+	 mGoKnF3g3zV56p6vL7Oe31i0DB/IrkXgb4LakWCTix39o5ZPaN+Vi3aVcqQWhcnGCu
+	 o0fQo3Wq18m6hbdY4iRrkb4mI9sFJPEjBdHB+X7D7u0AeBHJe9lCXN8WuPHIYeBVke
+	 NtDmmO8Zgvpxh7Asm+qajt0OlBxaSfZjUHtzTxYNWCMT5b6rPOqdr4H7XhHpqMwqfa
+	 pTHMWnyAeEb8w==
+Content-Type: multipart/mixed; boundary="===============6775268101469017704=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -66,90 +49,78 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net v4 1/4] igb: don't touch rings that don't exist when
- disabling an XSK pool
-To: Janis Edvarts Lacis <janislacis06@gmail.com>
-Cc: intel-wired-lan@lists.osuosl.org, Tony Nguyen
- <anthony.l.nguyen@intel.com>, Przemek Kitszel
- <przemyslaw.kitszel@intel.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>,
- Sriram Yagnaraman <sriram.yagnaraman@ericsson.com>,
- Kurt Kanzenbach <kurt@linutronix.de>,
- Maciej Fijalkowski <maciej.fijalkowski@intel.com>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, stable@vger.kernel.org
-References: <20261120210134.133238-1-antonio@mandelbit.com>
- <20261120210134.133238-2-antonio@mandelbit.com>
- <xupy6jbpnziq2qji54zjbvm7neggrwkxg3sfrhlolmrd6ysifl@zptk6ynkbu5f>
-Content-Language: en-US
-From: Antonio Quartulli <antonio@mandelbit.com>
-Organization: Mandelbit SRL
-In-Reply-To: <xupy6jbpnziq2qji54zjbvm7neggrwkxg3sfrhlolmrd6ysifl@zptk6ynkbu5f>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Message-Id: <08485d99d4b1acae77cca252d58b50db686badaa018b58964adfee290b7e20fc@mail.kernel.org>
+In-Reply-To: <a2d4276cbf11b1254aa7997874a6539d20f296cf.1795463894.git.memxor@gmail.com>
+References: <a2d4276cbf11b1254aa7997874a6539d20f296cf.1795463894.git.memxor@gmail.com>
+Subject: Re: [PATCH bpf v2] bpf: net_sched: Let bpf_kfree_skb() run with irqs off
+From: bot+bpf-ci@kernel.org
+To: memxor@gmail.com,bpf@vger.kernel.org
+Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,emil@etsalapatis.com,ihor.solodrai@linux.dev,kkd@meta.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Mon, 23 Nov 2026 20:33:56 +0000 (UTC)
+
+--===============6775268101469017704==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 4jYHb705X0z5vQ7
+
+> bpf: net_sched: Let bpf_kfree_skb() run with irqs off
+
+TL;DR: dev_kfree_skb_any() in bpf_kfree_skb() may wake ksoftirqd with irqs
+off, possibly deadlocking on a runqueue lock if a sched_ext callback drops an
+skb kptr; irq_work deferral may be needed.
+
+> diff --git a/net/sched/bpf_qdisc.c b/net/sched/bpf_qdisc.c
+> --- a/net/sched/bpf_qdisc.c
+> +++ b/net/sched/bpf_qdisc.c
+
+[ ... ]
+
+>  __bpf_kfunc void bpf_kfree_skb(struct sk_buff *skb)
+>  {
+> -	kfree_skb(skb);
+> +	dev_kfree_skb_any(skb);
+>  }
+
+With irqs off outside of an interrupt, dev_kfree_skb_any() queues the skb
+and raises NET_TX_SOFTIRQ, which can wake ksoftirqd:
+
+dev_kfree_skb_any_reason()
+    if (in_hardirq() || irqs_disabled())
+        dev_kfree_skb_irq_reason(skb, reason);
+dev_kfree_skb_irq_reason()
+    raise_softirq_irqoff(NET_TX_SOFTIRQ);
+raise_softirq_irqoff()
+    if (!in_interrupt() && should_wake_ksoftirqd())
+        wakeup_softirqd();
+
+Can this deadlock if the destructor runs in an irqs-off context that holds
+a runqueue lock?  For example, a sched_ext struct_ops callback such as
+ops.running, called from scx_start_task_running() <- set_next_task_scx()
+<- __schedule(), can drop a local object holding an skb kptr
+(bpf_obj_drop_impl() is available to struct_ops programs):
+
+bpf_obj_drop() -> __bpf_obj_drop_impl() -> bpf_obj_free_fields()
+  -> bpf_kfree_skb_dtor() -> bpf_kfree_skb()
+  -> dev_kfree_skb_any() -> dev_kfree_skb_irq_reason()
+  -> raise_softirq_irqoff() -> wakeup_softirqd()
+  -> try_to_wake_up(ksoftirqd/N) -> ttwu_queue()
+  -> rq_lock(this_rq) while __schedule() already holds it
+
+ksoftirqd is normally sleeping, so the wakeup would be taken.  Previously
+kfree_skb() freed the skb inline in this context, and for an skb without a
+socket destructor it woke no task.
+
+Elsewhere BPF defers work for this case to irq_work, for example
+defer_timer_wq_op() uses the same in_hardirq() || irqs_disabled() test and
+queues an irq_work, and bpf_mem_free() does likewise.
+
+Is the skb kptr destructor expected to run under scheduler locks?  If so,
+would an irq_work based deferral be needed instead of dev_kfree_skb_any()?
 
 
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-On 21/11/2026 00:17, Janis Edvarts Lacis wrote:
-> On 20 Nov 22:01, Antonio Quartulli wrote:
->> xsk_get_pool_from_qid() checks the queue id against the stack's real
->> queue counts, which can be higher than the number of rings the device
->> has: on 82576, enabling VFs leaves a single Tx queue while keeping two
->> Rx queues, and igb can fall back from MSI-X to MSI with a single queue
->> on resume. Disabling the pool of such a queue, e.g. one bound to queue 1
->> before enabling VFs, then passes a NULL Tx ring to
->> igb_txrx_ring_disable().
->>
->> Only disable and re-enable the rings the device has: skip the queue if
->> it has no Rx ring, and only the Tx part if it has no Tx ring, so that
->> an Rx ring using the pool still stops using it.
->>
-> 
-> What happens if a pool is bound to, say, queue 1 and the socket stays 
-> open across a runtime resume that falls back from MSI-X to MSI (queue 1 
-> becomes invalid)?
-> 
-> If the socket is closed after igb_rtnl_resume_task() has reduced both
-> real queue counts to one, xsk_get_pool_from_qid() will return NULL for
-> queue 1. As I read it, igb_xsk_pool_disable() then returns -EINVAL
-> before doing the cleanup and resources get leaked.
-> 
-> I may be mistaken here, if so, please let me know :)
-
-Hi Janis,
-
-actually you're not mistaken, thanks for spotting it.
-Once the real Rx queue count is lowered below a queue with a bound XSK 
-pool, xsk_get_pool_from_qid() no longer finds the pool, the disable 
-fails ("Failed to disable zero-copy!") and the pool's DMA mappings are 
-never unmapped.
-
-igb already does this today (it lowers the counts on runtime resume, 
-just without RTNL), and so does any shrink done by the driver itself 
-(e.g. SR-IOV reinit), so it's worth fixing here.
-
-In v5 igb I will follow what ethtool does for channel changes: when the
-driver lowers its queue counts, it keeps the real Rx count up to the
-highest queue that still has an XSK pool, so the pool can still be
-disabled and unmapped (the rings are skipped as they don't exist). The
-Tx count follows the device, and the Rx count is lowered at the next
-open.
-
-This said, I will first wait for Sashiko to report any other potential 
-issue and then I'll work on v5.
-
-Best regards,
-
--- 
-Antonio Quartulli
-
-CEO and Co-Founder
-Mandelbit Srl
-https://www.mandelbit.com
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/45257226477
+--===============6775268101469017704==--
