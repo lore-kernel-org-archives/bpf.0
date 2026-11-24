@@ -1,57 +1,57 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795524454;
-	b=RlcMkpncTO+M0gRmlmAbpSX8HoyQVXwvf1zerytD7W2GgtXyx4e/DU+qvPjqacZiNVpD
-	 4DbBWc9PINoOl1ejISuFbKiZi9ho01Dzz5qUOvIlMAGWaqqjWIYhuruhESbmz/i3d5IUk
-	 UqZogKj+xN5jmqb6n/TU6ekXrd6qTjjJy5czNr5nmLe+ebdP4jCu1pT4sUKUkOAP7qAhW
-	 TZVuTkC6cuitWRrKU79AuBNlrw1Zsf7KBxfWK0+mQR07jQYPoyn7UtLHWS7axg9U8lUSH
-	 UeG4w9R7b5ov4Rf4vH37Q/cxHS/BdCrbqA+PQtop/TIkPHexc9Tbr+RSGRGK7GtNI4Q==
+	t=1795524577;
+	b=Wy+OD1Tv/C04E4o2gD8xdhTvxOZI3fX6rYHfwc00QziwCe7I2uJN9B+E0MrIkG9LmR1q
+	 GyXDQzlNNm3/ejQ8ccLJ0gkK4wYr/yxaYVZYTtPdUSyrKWn0ucbtx5qGLp27SVejbxJJh
+	 swApTFIVfpTSrm8armvAHK8YjPST+opLF5Jpreyotav3EbY6bwfHGiRHIi26dXEaIPWcJ
+	 7tTL6Z8YYU4Pd0IAkiX8WGG+PrTa7jK1aEaprbmvX7q2ZxhehudE9hK5eZjALrjv5DhB1
+	 taqpQS5CHYK82r/6D5YlLU/3zcE+i+racPxx1NGVioRxeEaw+eHEOowPrP5RTF8JUwg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795524454;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795524577;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=ro/RH43C78Nv0CR/7XnRdlSOTeJqQRr+VavPu3YBWK4=;
-	b=1Jy4RW6uI74IFMKZDWRY2AaUazDTncwqLWohDfDQxPauIs6ee3v7YSQ8x5TXspCZQtlb
-	 a4Ie8wSEmDOsj2ShvMGMB6XUpq1PTHOgHy5PNY0mvtwXoGV6peM23vHtUTAS98x6fQsdW
-	 /Z706OhQTOJ7LGb60R9POQiuBeOeuyRbYQXiOKWCUDfPyVh+zMPZ22IcNCkV666WVZJmq
-	 pR+F/fkOH4s9+XixWIj96J15Fh4JKujGUATdSrY49OAVStMlt+jxeI3EnycdndKxnyedQ
-	 I5MkqsoxaXczRqnPU8AxOzRzZ7Be0ouZdmmbpz5qIWpiMvEUvDEjYCyIeRKEbB5d+Pw==
+	bh=hPVmscRt3BKLvCkEaDjPIHGXvNAZyfbXnCrhubmsGcU=;
+	b=ZQ12oRy3s9638AhCeBOaE95iE9uIzHAd1O3565SLHamh9p9SxU8rkj5asrrTLKIa3ISk
+	 OOkk0sv/ZSSiMuecjD6nGCowdSkIZG/LQDhx7qkmUuf71062QZz+5mH/KsZW1tpKCHnxG
+	 PolXRzRP8e2rZcY4IH11YZ33mogbGnT9JUpoTw+gmMJCNHW73az2oLiG2HzllYR0lH0fL
+	 88A2GD7Zg6tgYRdCWOwIUSNQnPj5qETiPlcZm6V7ibIWqpN7SpEe4s+IPDVNr799TuBNT
+	 vldk7ODY32Z9U8L/DcGJA1LIZYCJBQU8rgeU/8aiRPdMHJUq4nyJ17cBRal5hzYSXLg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mxfeyXLD;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Q46t2RAx;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6BCB606A31E;
-	Tue, 24 Nov 2026 12:47:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17334606A321
+	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 12:49:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mxfeyXLD
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31D7C1F000CA;
-	Tue, 24 Nov 2026 12:47:33 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Q46t2RAx
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D49E1F000C4;
+	Tue, 24 Nov 2026 12:49:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795524453;
-	bh=ro/RH43C78Nv0CR/7XnRdlSOTeJqQRr+VavPu3YBWK4=;
+	s=k20260515; t=1795524576;
+	bh=hPVmscRt3BKLvCkEaDjPIHGXvNAZyfbXnCrhubmsGcU=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=mxfeyXLD1gPs4UQR8oTQj3OkLshj7HZiQUBU45TqVI28lk9JhOxpgQq7BDQaFClJV
-	 hkpfcliDjY+qoVOgqamRxWmXAaYN1feznIRPtzOHCK0o8k9EOsmt1GOMiFoS3AICN/
-	 vWK93aucLOFcdfR/CAu9armJTVyRUwysQM8vj/qVLPLcnhh4o9iSzjVbPW49uGBcjZ
-	 UD+0CNAV1M3PspaMlA9puxg3BJUt3qaeGmL2Y9KDnT/tUxcGjyhbeEWvh3ZMamRP0w
-	 e1KZ7cCtD9x0brzVfrQ5mdPrIoInMVaV6bpYftG/0yF/drjSzzNAehBcbi6IPMJZ83
-	 EdfRrfBiSkm0A==
-Message-ID: <sashiko-outbox-231174@kernel.org>
+	b=Q46t2RAx0tLBglnuhgEDqqdG4tH5QR1iA84XGJnTwpNbSUYoD50NekPfpAQc7p2/q
+	 Z4GbaNe4GYWF9NT/snZbeNqVivaX9X+ktxXQLoxQDEm21qn4QWQS/acAZqpQao+oLu
+	 NzUIlNyN6eh5Yrt1nbqfim4Lwh/LI67Jgsx2akb/AWTARbUIvQz7+thiyNcpce3cSi
+	 G2nCUWtHn0nfeFwXl8F7yoAguZ84jYmvJHrlxJHgQLfLLzByAuR5vr9yZ8IffQzgw2
+	 qXwGUI4DjwE8vv6gPSgmM6YXXmS22l3iEUBboWzNMB/BIS89UFkQnSH4kjLrELC5oO
+	 5DF6UrbmRzFKA==
+Message-ID: <sashiko-outbox-231177@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH RFC v4 8/8] vsock: add datagram tests to vsock_test
+Subject: Re: [PATCH net v2 2/5] vmxnet3: keep the previous XDP program when
+ attaching fails
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Sergio Lopez" <slp@redhat.com>
-Cc: virtualization@lists.linux.dev, kvm@vger.kernel.org, bpf@vger.kernel.org, linux-hyperv@vger.kernel.org, "Michael
- S. Tsirkin" <mst@redhat.com>, "Eugenio Perez" <eperezma@redhat.com>
-In-Reply-To: <20261124-vsock-dgram-support-v4-8-3607484e85e8@redhat.com>
-References: <20261124-vsock-dgram-support-v4-0-3607484e85e8@redhat.com>
- <20261124-vsock-dgram-support-v4-8-3607484e85e8@redhat.com>
+To: "Philipp Sudakas" <filzador@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20261123124855.1021-3-filzador@gmail.com>
+References: <20261123124855.1021-1-filzador@gmail.com>
+ <20261123124855.1021-3-filzador@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 24 Nov 2026 12:47:32 +0000
+Date: Tue, 24 Nov 2026 12:49:35 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -63,121 +63,118 @@ Precedence: list
 
 Thank you for your contribution! Sashiko AI review found 2 potential
 issues to consider:
-- [Medium] vsock_test: vsock_dgram_check_vmci_host() skips when
-  vhost_vsock is unloaded
-- [Medium] vsock_test: local CID tests fail when VMCI coexists with
-  vhost and loopback
+- [Medium] vmxnet3: incomplete error recovery in vmxnet3_xdp_set()
+  leaves device broken
+- [Medium] vmxnet3: wrong redirect target feature rollback in
+  vmxnet3_xdp_set()
 --
 
-commit 792ed67e2ec454b7d9e33e144a3b395a0eb9843c
-Author: Sergio Lopez <slp@redhat.com>
+commit 45dfb991794383051e0025dc90fc6eacbd3d1177
+Author: Philipp Sudakas <filzador@gmail.com>
 
-vsock: add datagram tests to vsock_test
+vmxnet3: keep the previous XDP program when attaching fails
 
-This commit adds SOCK_DGRAM test cases to vsock_test covering local
-loopback semantics, host/guest transfers, transport routing, and queue
-accounting, along with capability-based skip checks and a --local mode.
+This commit defers releasing the old XDP program in vmxnet3_xdp_set() until
+queue recreation and device activation succeed, and restores the old program
+and redirect target feature on failure.
 
-> diff --git a/tools/testing/vsock/vsock_test_dgram.c b/tools/testing/vsock=
-/vsock_test_dgram.c
-> new file mode 100644
-> index 0000000000000..16c3a6e59f792
-> --- /dev/null
-> +++ b/tools/testing/vsock/vsock_test_dgram.c
-
-[ ... ]
-
-> +static bool usable_local_cid(void)
-> +{
-> +	unsigned int cid;
-> +	int fd, ret;
+> diff --git a/drivers/net/vmxnet3/vmxnet3_xdp.c b/drivers/net/vmxnet3/vmxn=
+et3_xdp.c
+> index 5f470499e6002..45259b236ebd7 100644
+> --- a/drivers/net/vmxnet3/vmxnet3_xdp.c
+> +++ b/drivers/net/vmxnet3/vmxnet3_xdp.c
+> @@ -66,11 +66,9 @@ vmxnet3_xdp_set(struct net_device *netdev, struct netd=
+ev_bpf *bpf,
+>  		vmxnet3_quiesce_dev(adapter);
+> =20
+>  	vmxnet3_xdp_exchange_program(adapter, new_bpf_prog);
+> -	if (old_bpf_prog)
+> -		bpf_prog_put(old_bpf_prog);
+> =20
+>  	if (!running || !need_update)
+> -		return 0;
+> +		goto out;
+> =20
+>  	if (new_bpf_prog)
+>  		xdp_features_set_redirect_target(netdev, false);
+> @@ -84,17 +82,31 @@ vmxnet3_xdp_set(struct net_device *netdev, struct net=
+dev_bpf *bpf,
+>  	if (err) {
+>  		NL_SET_ERR_MSG_MOD(extack,
+>  				   "failed to re-create rx queues for XDP.");
+> -		return -EOPNOTSUPP;
+> +		goto err_restore;
+>  	}
+>  	err =3D vmxnet3_activate_dev(adapter);
+>  	if (err) {
+>  		NL_SET_ERR_MSG_MOD(extack,
+>  				   "failed to activate device for XDP.");
+> -		return -EOPNOTSUPP;
+> +		goto err_restore;
+>  	}
+>  	clear_bit(VMXNET3_STATE_BIT_RESETTING, &adapter->state);
+> =20
+> +out:
+> +	if (old_bpf_prog)
+> +		bpf_prog_put(old_bpf_prog);
+>  	return 0;
 > +
-> +	fd =3D open("/dev/vsock", O_RDONLY | O_CLOEXEC);
-> +	if (fd < 0)
-> +		return false;
-> +	ret =3D ioctl(fd, IOCTL_VM_SOCKETS_GET_LOCAL_CID, &cid);
-> +	close(fd);
-> +	return ret =3D=3D 0 && cid !=3D VMADDR_CID_ANY && cid > VMADDR_CID_LOCA=
-L;
-> +}
+> +err_restore:
+> +	/* On error the core drops its reference to the new program and
+> +	 * keeps the old one attached: the driver must keep the old one.
+> +	 */
+> +	vmxnet3_xdp_exchange_program(adapter, old_bpf_prog);
 
 [Severity: Medium]
-Can usable_local_cid() enable the local-CID loopback tests when VMCI owns
-VMADDR_CID_HOST?
+Does returning from err_restore leave netdev running while the device is
+quiesced and its rx queues are destroyed?
 
-When vhost_vsock, vsock_loopback, and vmw_vsock_vmci_transport are loaded
-together in a global namespace without a guest-to-host transport,
-IOCTL_VM_SOCKETS_GET_LOCAL_CID returns VMADDR_CID_HOST (from vhost_vsock),
-so vsock_dgram_check_local_cid() enables test_dgram_bound_lookup() and
-test_dgram_connected_cid().  However, VMCI is the datagram owner in a
-global namespace and its local CID is also VMADDR_CID_HOST, so
-vsock_select_transport() routes packets addressed to VMADDR_CID_HOST
-through vmci_transport instead of vsock_loopback.
+Before vmxnet3_rq_create_all() runs, vmxnet3_quiesce_dev() disables NAPI
+and frees IRQs, and vmxnet3_rq_destroy_all() frees rq->buf_info[0].
+Returning without either reactivating the device or closing it via
+vmxnet3_force_close() (as vmxnet3_change_mtu() and vmxnet3_set_ringparam()
+do) leaves netif_running(netdev) true on a torn-down device, so a later
+vmxnet3_reset_work() or vmxnet3_resume() dereferences NULL rq->buf_info[0]
+in vmxnet3_rq_init(), and vmxnet3_suspend() hangs in napi_disable().
 
-As a result, test_dgram_bound_lookup() fails with EADDRNOTAVAIL when
-sending from a socket bound to VMADDR_CID_LOCAL to one bound to
-VMADDR_CID_HOST, and test_dgram_connected_cid() times out because the
-receiver connects to VMADDR_CID_HOST (selecting vmci_transport) while the
-packet arrives over loopback_transport and is dropped by
-virtio_transport_dgram_source_allow().
+In addition, when a failed detach (new_bpf_prog =3D=3D NULL) restores
+adapter->xdp_bpf_prog to old_bpf_prog, a subsequent XDP program
+replacement sees need_update =3D=3D false and returns 0 without recreating =
+the
+destroyed rx queues.  If the failed detach came from
+bpf_xdp_link_release() -> dev_xdp_detach_link(), the core only wraps
+dev_xdp_install() in WARN_ON() and unconditionally clears the link, so
+skipping bpf_prog_put(old_bpf_prog) leaks the reference and leaves a stale
+pointer in adapter->xdp_bpf_prog.
 
-[ ... ]
-
-> +const char *vsock_dgram_check_vmci_host(const struct test_opts *opts)
-> +{
-> +	unsigned int caps =3D dgram_capabilities(opts, 0);
-> +	unsigned int cid;
-> +	char mode[16];
-> +	FILE *file;
-> +	int fd;
-> +
-> +	if (!(caps & DGRAM_SOCKET))
-> +		return "datagrams unavailable locally";
-> +	if (!(caps & DGRAM_VMCI_MODULE))
-> +		return "requires VMCI datagram transport";
-> +
-> +	file =3D fopen("/proc/sys/net/vsock/ns_mode", "r");
-> +	if (!file)
-> +		return "requires a mounted vsock namespace sysctl";
-> +	if (!fgets(mode, sizeof(mode), file)) {
-> +		fclose(file);
-> +		return "cannot read vsock namespace mode";
-> +	}
-> +	fclose(file);
-> +	if (strncmp(mode, "global", 6))
-> +		return "requires a global vsock namespace";
-> +
-> +	fd =3D open("/dev/vsock", O_RDONLY | O_CLOEXEC);
-> +	if (fd < 0)
-> +		return "cannot open /dev/vsock";
-> +	if (ioctl(fd, IOCTL_VM_SOCKETS_GET_LOCAL_CID, &cid)) {
-> +		close(fd);
-> +		return "cannot read local CID";
-> +	}
-> +	close(fd);
-> +	if (cid !=3D VMADDR_CID_HOST)
-> +		return "requires VMCI host CID without an active guest CID";
-> +	return NULL;
-> +}
+> +	if (old_bpf_prog)
+> +		xdp_features_set_redirect_target(netdev, false);
+> +	else
+> +		xdp_features_clear_redirect_target(netdev);
+> +	return -EOPNOTSUPP;
+>  }
 
 [Severity: Medium]
-Does checking IOCTL_VM_SOCKETS_GET_LOCAL_CID =3D=3D VMADDR_CID_HOST skip
-test_dgram_vmci_host_routes() whenever vhost_vsock is unloaded and no
-/dev/vmci host context is active?
+When attaching the first XDP program (old_bpf_prog =3D=3D NULL) fails, does
+err_restore clear NETDEV_XDP_ACT_NDO_XMIT even though it was set before
+vmxnet3_xdp_set() ran?
 
-Loading vmw_vsock_vmci_transport only registers transport_dgram_fallback;
-vmci_register_vsock_callback() registers transport_h2g only while
-vmci_host_users() > 0.  Because vsock_dev_do_ioctl() queries only
-transport_g2h, transport_h2g, and transport_local for
-IOCTL_VM_SOCKETS_GET_LOCAL_CID (never transport_dgram_fallback), the ioctl
-returns VMADDR_CID_ANY or VMADDR_CID_LOCAL when vhost_vsock is not loaded,
-causing vsock_dgram_check_vmci_host() to skip the test even though VMCI
-host datagram sockets can bind and send to VMADDR_CID_HOST.
+vmxnet3_probe_device() initializes netdev->xdp_features with
+NETDEV_XDP_ACT_NDO_XMIT enabled:
 
-Instead of requiring the ioctl to return VMADDR_CID_HOST, could this verify
-that the ioctl does not return a guest CID (> VMADDR_CID_HOST) and probe
-binding a datagram socket to VMADDR_CID_HOST?
+drivers/net/vmxnet3/vmxnet3_drv.c:vmxnet3_probe_device() {
+    ...
+	netdev->xdp_features =3D NETDEV_XDP_ACT_BASIC | NETDEV_XDP_ACT_REDIRECT |
+			       NETDEV_XDP_ACT_NDO_XMIT;
+    ...
+}
+
+Calling xdp_features_clear_redirect_target() when old_bpf_prog is NULL
+strips that initial flag on a failed attach.  Updating the redirect target
+feature only after vmxnet3_activate_dev() succeeds would avoid mutating
+netdev->xdp_features or emitting NETDEV_XDP_FEAT_CHANGE notifications on
+failure.
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261124-vsock-dgra=
-m-support-v4-0-3607484e85e8@redhat.com?part=3D8
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261123124855.1021=
+-1-filzador@gmail.com?part=3D2
