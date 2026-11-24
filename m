@@ -1,43 +1,43 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.74.67.75
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.74.67.49
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795516834;
-	b=1jDyGCgFRuvvoherfqSxsuYzTP9+NmWHpWDv6f0QTrrFJKbFnEjygjyVD4OtiTOPKTAY
-	 Cr/hxH3KQZyeAPZRUgCNBjreg63WXDF8A6dyULZO8HXglrKURDD/OwC3QtYie/bt5Obg9
-	 R6oqJJGnTv6gGT1q67AEzmr+hyWuEMT7MOJf/E9wD1AE6O96g9Qo9VZEauQEgHyatBRYG
-	 5BAf025fWZCuN5MNWoV4VMs/BkVRjLOK/xCN2PSzmEv6xnwTMtk1w9A+t4ggG7w3WvzL1
-	 740yqqX084VLnNfcMn9xYlTHbK+icQdk7HKEPjb3X7SgFp60UOMjcO+2uJNim1EPEZw==
+	t=1795516835;
+	b=Kpbla5etlZcwYQZeqc4CA/WsN03369Vqs7OiL9nh12GHlB1j76UBwP7a4HikKSHJ2hJL
+	 iWyDbwSDOxZdTO0UdHstvAePuhTqEuSC7mJ4Din3PXA99lu/ZXZ7jG2S/JJDBtqc4PIm4
+	 LmuNG+VBWXVdnS3i2nAp36qJWlF1/xQ8WQXvrUlaryT3RiQmxLTSUS9gnwzAjv90pFP9D
+	 MWAhn9xvN2OjS51YCNexKXbsboMgxBUs9gkDTLPwMQ7VgHx9s4JCBvVS9/PPT6jGkENRl
+	 GG3uM6xVR89auXcmvJ2r+vwSY7tXFDCbUOMb46G9PdxK+BUTQIUYeb2Ms9ate+nJ+Gg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795516834;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795516835;
 	h=DMARC-Filter:Received:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
 	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:
 	 DKIM-Signature;
-	bh=6xmad4X9z3ns7Ue26u3l8ROqewvXjh+VHhGEaTDpSWI=;
-	b=5c76pxXraqiit268Tnz3vXD+YEPf/f74DFWEioE/mUxF6eeScIiZOckni1AK80UIwZBI
-	 WdVdhV/zJb303aw5KdU2GlZy91vpONO/QeHdO/pJqU6+Plc120N1rarxEObNRpjffE2Js
-	 XScpBn45iTSVMFp4Rv4jLpA5BicseO9G34QN6xwo377pYVb2RCYXlCrtF4NYVojVu9Vcr
-	 dqWuwY7EvYzxKycYz/V9Txpcjve53l1ERnMCBJmu8AfLJEVS7+FMI1ZLDPxwZ7qSjpBrR
-	 0JS1x0s8t7skBTuLbGYSJ//felDCrm/Bx0hwKmCnxj9OpJrVCrkCKEuH1eG6GQG7gMA==
+	bh=/6dSyAvYrkzZrB+rNJ+F7xck+uglAdRkmahkz9MM2p4=;
+	b=4oHPU+lSY3v/T8NzLQdQee1ABP0TjOVetN9fbWGseELtEH86UgWe8Fi6SCA+jwg8rtR8
+	 q1Qgdm1o+q5AGmS1i1kJejkQ4OXTRuf5gy4nVtOelyo6d2LeQD0/oTP2vSehpLTCdxLKY
+	 yFNR3CohFMusU4THAUtOYkDZbTZZqB0vw/gCM2hhUrMptBbn6OLQPT0GTem5Vq4TtP4e1
+	 ny8857mcXbc8IJLtPYcyYq5r+rGHYzxzQo1EIBwiZSjVBJX0BMz3R/WxeKK43tBSd6wNf
+	 Kq/Ui2eFMNr6bVDjCzoQQ2bNk5CusIUOx0ZUd2Gqx8MLM8FOs95vyFie09SLz1jKuwQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=poczta.fm;
 	spf=pass smtp.mailfrom=poczta.fm;
-	dkim=pass header.d=poczta.fm header.i=@poczta.fm header.a=rsa-sha256 header.s=dk header.b=RHJYjXgr;
-	arc=none smtp.remote-ip=217.74.67.75
-Received: from smtpo75.interia.pl (smtpo75.interia.pl [217.74.67.75])
+	dkim=pass header.d=poczta.fm header.i=@poczta.fm header.a=rsa-sha256 header.s=dk header.b=DaxkLhMM;
+	arc=none smtp.remote-ip=217.74.67.49
+Received: from smtpo49.interia.pl (smtpo49.interia.pl [217.74.67.49])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2B90606A68C
-	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 10:40:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F2B90606A68C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38771606A33C
+	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 10:40:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 38771606A33C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=poczta.fm
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=poczta.fm
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=poczta.fm header.i=@poczta.fm header.a=rsa-sha256 header.s=dk header.b=RHJYjXgr
+	dkim=pass (1024-bit key) header.d=poczta.fm header.i=@poczta.fm header.a=rsa-sha256 header.s=dk header.b=DaxkLhMM
 Received: from localhost (unknown [80.68.231.31])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
 	(No client certificate requested)
 	by poczta.interia.pl (INTERIA.PL) with ESMTPSA;
-	Tue, 24 Nov 2026 11:40:29 +0100 (CET)
+	Tue, 24 Nov 2026 11:40:24 +0100 (CET)
 From: Slawomir Stepien <sst@poczta.fm>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -74,9 +74,9 @@ Cc: bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Slawomir Stepien <sst@poczta.fm>,
 	stable@vger.kernel.org
-Subject: [PATCH v8 bpf 2/7] bpf: test_run: Keep frag_size on the private rxq info
-Date: Tue, 24 Nov 2026 11:40:11 +0100
-Message-ID: <20261124104016.532341-3-sst@poczta.fm>
+Subject: [PATCH v8 bpf 1/7] bpf: test_run: Use a private rxq info for XDP test runs
+Date: Tue, 24 Nov 2026 11:40:10 +0100
+Message-ID: <20261124104016.532341-2-sst@poczta.fm>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261124104016.532341-1-sst@poczta.fm>
 References: <20261124104016.532341-1-sst@poczta.fm>
@@ -91,74 +91,87 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=poczta.fm; s=dk;
-	t=1795516832; bh=6xmad4X9z3ns7Ue26u3l8ROqewvXjh+VHhGEaTDpSWI=;
+	t=1795516828; bh=/6dSyAvYrkzZrB+rNJ+F7xck+uglAdRkmahkz9MM2p4=;
 	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=RHJYjXgr88KR/LLqf6a0QxmVQepL5NZNy/jP9F812mcYfrx4wLdC++wZtbdTbrA20
-	 KsbDK6KZwtnFnJCVW7SGw1rjHlor5n7ZaB1050iIvehed2on72ZoWbCR37irEaMqee
-	 wuQbW5OcuWBdI5GJ5T+xToD9Ir0VagQoD/AUN7Xs=
+	b=DaxkLhMMN05JVK8MD95W1fNKay9sozcTpyFGOjZpb0bAMnWvjGGkicMZVulCO5QSg
+	 bDuOIyYYREKzX325Vf3v7wqH88YVhNi5/jVAiV9SnoC7WyTFRAvXy1HG4aQ0K+xWCu
+	 8K2EHCx8r8E82J3c1yuHR4BQgqLf2nmkTmE8N3Ws=
 
-bpf_prog_test_run_xdp() sets frag_size of the rxq info of lo's queue 0
-to PAGE_SIZE, for the PAGE_SIZE frags it allocates, before
-ingress_ifindex may switch the program to another queue. This has two
-effects:
+bpf_prog_test_run_xdp() runs the program with xdp->rxq pointing to the
+xdp_rxq_info of a real device queue: queue 0 of the loopback device, or
+the queue given by ingress_ifindex and rx_queue_index in the context.
+The frags of a multi-buffer test packet come from alloc_page(), and when
+the program releases one with bpf_xdp_adjust_tail() or
+bpf_xdp_pull_data(), __xdp_return() frees it according to
+xdp->rxq->mem.type. This only works as long as nobody else changes the
+mem type of that shared queue.
 
-The value stays on lo after the test run. Generic XDP on lo runs with
-this rxq info, and bpf_xdp_frags_increase_tail() then lets a program
-grow the last frag up to the end of its page. The frags generic XDP
-gets from skb_pp_cow_data() can be parts of a page_pool page, so the
-program overwrites what follows the frag in that page, possibly the
-data of another packet. Without a test run, frag_size of lo is 0 and
-the grow fails with -EOPNOTSUPP, as for generic XDP on any other
-device. Generic XDP runs programs on frags since commit e6d5dbdd20aa
-("xdp: add multi-buff support for xdp running in generic mode").
+A later patch in this series adds xdp_convert_skb_to_buff(), which makes
+generic XDP set the mem type of the queue it runs on to
+MEM_TYPE_PAGE_POOL, since frags it hands to the program come from
+skb_pp_cow_data(). After any packet went through generic XDP on lo, a
+later test run would free its alloc_page() frags as page_pool pages:
 
-With ingress_ifindex, the program runs with the rxq info of that device
-queue, whose frag_size is 0, so growing a frag of the test packet fails
-although the frags are full pages.
+  WARNING: include/net/page_pool/helpers.h:305 at __xdp_return+0x828/0x9c0
+  Call Trace:
+   bpf_xdp_adjust_tail+0x8a0/0xd10
+   bpf_prog_..._xdp_adjust_tail_shrink+0xe1/0x101
+   bpf_test_run+0x31a/0xc30
+   bpf_prog_test_run_xdp+0x948/0x1740
 
-The previous patch made test_run run the program on a private copy of
-the rxq info. Set frag_size there and leave the device's rxq info
-alone.
+and leak the page. Restoring the mem type after generic XDP would not
+be enough, as generic XDP may run on the same queue on another CPU at
+the same time.
 
-The problem was found by Sashiko AI review in the review of v7 of this
-series.
+Run the program on a private copy of the rxq info instead, with
+MEM_TYPE_PAGE_SHARED, which describes the memory test_run allocates.
+devmap and cpumap already do the same for the programs they run. The
+device and queue index stay the same, so the program sees the same
+ingress_ifindex and rx_queue_index, and xdp_convert_buff_to_md() still
+drops the device reference. Live frames mode does not allow frags and
+uses its own rxq info for the page_pool frames, so it is unaffected.
 
-Link: https://lore.kernel.org/all/sashiko-outbox-223211@kernel.org/
-Fixes: 1c1949982524 ("bpf: introduce frags support to bpf_prog_test_run_xdp()")
+No Fixes: tag, as nothing is broken until xdp_convert_skb_to_buff()
+changes the mem type; this goes to stable together with that patch.
+
+The problem was found by Sashiko AI review and BPF CI in the review of
+v6 of this series.
+
+Link: https://lore.kernel.org/all/sashiko-outbox-197255@kernel.org/
 Cc: <stable@vger.kernel.org> # 6.4.x
 Signed-off-by: Slawomir Stepien <sst@poczta.fm>
 ---
- net/bpf/test_run.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ net/bpf/test_run.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
 diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-index 9bbd83ece67b..8e9543f98211 100644
+index d6c9dc62182e..9bbd83ece67b 100644
 --- a/net/bpf/test_run.c
 +++ b/net/bpf/test_run.c
-@@ -1418,8 +1418,7 @@ int bpf_prog_test_run_xdp(struct bpf_prog *prog, const union bpf_attr *kattr,
- 	}
+@@ -1348,6 +1348,7 @@ int bpf_prog_test_run_xdp(struct bpf_prog *prog, const union bpf_attr *kattr,
+ 	u32 repeat = kattr->test.repeat;
+ 	struct netdev_rx_queue *rxqueue;
+ 	struct skb_shared_info *sinfo;
++	struct xdp_rxq_info rxq;
+ 	struct xdp_buff xdp = {};
+ 	int i, ret = -EINVAL;
+ 	struct xdp_md *ctx;
+@@ -1426,6 +1427,15 @@ int bpf_prog_test_run_xdp(struct bpf_prog *prog, const union bpf_attr *kattr,
+ 	if (ret)
+ 		goto free_data;
  
- 	rxqueue = __netif_get_rx_queue(current->nsproxy->net_ns->loopback_dev, 0);
--	rxqueue->xdp_rxq.frag_size = PAGE_SIZE;
--	xdp_init_buff(&xdp, rxqueue->xdp_rxq.frag_size, &rxqueue->xdp_rxq);
-+	xdp_init_buff(&xdp, PAGE_SIZE, &rxqueue->xdp_rxq);
- 	xdp_prepare_buff(&xdp, data, headroom, linear_sz, true);
- 	sinfo = xdp_get_shared_info_from_buff(&xdp);
- 
-@@ -1430,10 +1429,12 @@ int bpf_prog_test_run_xdp(struct bpf_prog *prog, const union bpf_attr *kattr,
- 	/*
- 	 * xdp.rxq points to the rxq info of a real device queue, which
- 	 * generic XDP updates for every packet it runs on. Use a private
--	 * copy with the mem type of the frags allocated below.
-+	 * copy with the mem type and the frag size of the frags allocated
-+	 * below.
- 	 */
- 	rxq = *xdp.rxq;
- 	rxq.mem = (struct xdp_mem_info){ .type = MEM_TYPE_PAGE_SHARED };
-+	rxq.frag_size = PAGE_SIZE;
- 	xdp.rxq = &rxq;
- 
++	/*
++	 * xdp.rxq points to the rxq info of a real device queue, which
++	 * generic XDP updates for every packet it runs on. Use a private
++	 * copy with the mem type of the frags allocated below.
++	 */
++	rxq = *xdp.rxq;
++	rxq.mem = (struct xdp_mem_info){ .type = MEM_TYPE_PAGE_SHARED };
++	xdp.rxq = &rxq;
++
  	size = linear_sz;
+ 	if (unlikely(kattr->test.data_size_in > size)) {
+ 		void __user *data_in = u64_to_user_ptr(kattr->test.data_in);
 -- 
 2.56.0
 
