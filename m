@@ -1,49 +1,102 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.176
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795561242;
-	b=4QLAhXKSgPtgYuj60B6o39VtSBehJ+2lIK+s8bXgDUSb5olYugzLLkhn2brtgP7RMfA2
-	 gsqLBGPmhQqZEsM5R89RgsC8gcc5NKefeqAL4MqI1wsnP7oU/iSsepQAq9SVZOWIBVhw2
-	 M5rONoaUrcrLkrURpyNqNrUgZ2aGaHik7iyXf0oC9Z+MLjJDDHvxCrqqsutDKRrqlGnmc
-	 HU2U3Wjz3fE1CkvrmEGQeHs9i4qSLhFCihR5XvAQzvrcHJxrRkC3zf5tXHzFYD35O85QL
-	 aSXYZWQisEYif0lsSqqoh1RIvxv1JkTNIKXAFBrFSoZrY0TFxa5/YOst8zlqvoZRVzA==
+	t=1795561356;
+	b=TivZuI9s1nuN9uD4qTMIBhk03gU2UlM7g5BNzAXmiQphJJeqgReoTgiJdpBVHIi4tkbu
+	 tVtyFp6Hu36d3v0xb5UsfTSQkmTG8eRlkjZ8mlkQ6Iw1zFpcTcGZsX6nriVZz5HkLm2in
+	 T3swdCAswpaHVGX+CE+cVTYxFbVaLrYR373JUdowGEOj/ICAtmnvG4OFW7gJ9qUIR9Ryx
+	 Pq/9ahpfSz4KoVBrZD4yz+X/qJGq4bkcq1V0DzY/CH8KQKxRjveK3oXjahOKz8kCSWdFE
+	 /LoBIamI0y7X0KK4U0580UH5dXZaisL+aijDt1vLvyaaciDWleJc0FV2CIGG4JVl42Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795561242;
-	h=Received:DKIM-Signature:From:Date:Subject:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Message-Id:References:In-Reply-To:To:Cc:
-	 X-Mailer:X-Developer-Signature:X-Developer-Key;
-	bh=ygA0Yd5X995bialEzx8ph89vbNS4OBjVFHHzxvAT62g=;
-	b=CfOdgLVAMwCLrG4oAKkauGGOTFVYlqtg8PevBOwNFxlKwncGCsWFB5zqBw5BVjuA5jpv
-	 yMVaVBkYF54W8BOt5+eWvByJT+pY+/isJrDZTT54RDE77V42KNs8G+lpmx/VcoJuuMuXB
-	 acx9tXyyLL2sltk8or53y39psWgm8jw3gnXorCzBBFKM8AK5fJ+ilwwNZOkDcVA4N6DKS
-	 i+QBz2JQYQcOVwyW7xAELUfFgj8Vk1va4a7uGfbI2XABeiinBU0eRT0VxeDwk1q6GZQsp
-	 O0fC6pQa0ibPLbLyOPeJsj3L/wmC0W3W8y4ocpNBc4e9ov3HQJO1TXDdaa7glK4HX6Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795561356;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=D5BPfe091LT3dmDUExK7fHms4x6j0arLEPQECwd2AVo=;
+	b=b9yMKj3zU9O81tcFgauEpKzCm+98wcFkqgvb4LEdTdRCuKWhns71r+mFoz6TegxhpQNk
+	 01dMrgBWT2mhP8OgxCEU2X/SY5HFP74UX6U9r5Vr1jTYGz6FNdf/pJUv6MqnLxySjeZnp
+	 5CivHHM8Q6/UNsMrEtyCUk4cPhg6sXDaDYUHoatkt+NKXQzR9v78pAGK42C5+AqvQ4NGn
+	 ud6ZaXk7QpTKYHgjvSfXu72kxvaxp70OcC8sJT6jhb56BbWg2r1FqP2wZ9/oJyBvJE1Hz
+	 FOmk4zb64CGV98malS/a6JYr+XXYivQCatMNpAZyJH7yoLHWTVn4+Je/CpnTNrsJCgA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=f5jCebnE;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="Xyip/I4C";
+	arc=none smtp.remote-ip=74.125.82.176
+Received: from mail-dy1-f176.google.com (mail-dy1-f176.google.com [74.125.82.176])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A558606A321;
-	Tue, 24 Nov 2026 23:00:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 544A8606A32C
+	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 23:02:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 544A8606A32C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=f5jCebnE
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B75721F0093E;
-	Tue, 24 Nov 2026 23:00:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795561241;
-	bh=ygA0Yd5X995bialEzx8ph89vbNS4OBjVFHHzxvAT62g=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=f5jCebnEhbqXaTHxAeFw3ecgVwpAFmn9cbYjBd4tKLNU3UPDj3a7ISD5l2MFpkoFu
-	 TI//e9PLV4D4bSuUEEeSeCiEEthjXPMpsJb6pVvzYCyL3aAH4tEyRr8UnbIQ/r971r
-	 bOAIRFZ7wRvFhjWuYVOr09Zmgx+rui8BDAL8wEA/1gwLpg6/jHcjrQh0Bce55Af/aq
-	 QBZWfQwoJBNAUCejGhSnNL2LC1DgHeFJWSt49UfOwpSBRihZF+Yf3kTpoY4byVYFTw
-	 G7gZQau9G7RsjBePu7VYvZt91cZpN0y2DK775Hz41a5AeO002ABTFFQRaxBZL5a8Uc
-	 mB7mIwZwLGiJA==
-From: Christian Brauner <brauner@kernel.org>
-Date: Tue, 24 Nov 2026 23:58:42 +0100
-Subject: [PATCH RFC 19/19] selftests/exec: test when a vfork() parent is
- woken up
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Xyip/I4C
+Received: by mail-dy1-f176.google.com with SMTP id 5a478bee46e88-385d8a00598so7465139eec.1
+        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 15:02:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795561355; x=1796166155; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=D5BPfe091LT3dmDUExK7fHms4x6j0arLEPQECwd2AVo=;
+        b=Xyip/I4CJjOX79oknp9xnxqH8tk7ypjlRD+iGVEGJhXc1Q78Z0uyTgA7aine8/XIdk
+         u4cGGtKJxpG5CHBu0FUISUpWRuMSTxqFwiGqnMOgB0J5J282mZWz3MYJpKm6Ui2AnnZn
+         QsHovNmRZs6jMvcBr9BQ+uyJ2GWtF1yryusczyPgenGxiO/SScygAAcq0Dq0imjZ7Jce
+         wx/x5AVqjyhbNuFwTTKv0J3MYajKHMAo1Z513kotdbsU7rnQX2upFbTYZ+IbRdyVeVMM
+         DNDwT1z0nSrpBU9SnaVwzwXSaQNTHxkD/TNtoQvDCWXB1oogCnpD0WKIvTp1zLBPyvYL
+         4WxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795561355; x=1796166155;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=D5BPfe091LT3dmDUExK7fHms4x6j0arLEPQECwd2AVo=;
+        b=1Bv0KRmhLjG+1V/pC1OytA19zkXCq8xRsA79wM9R3QL1LrX+Xi1jUNq5RJgHHwo0jd
+         a0uz7SDSFK5C3fRqI4xiO11xtJ8we+05GSVf/646xcLkGHpw/0N7Bp0J2po3zVvrdvsA
+         cJpToDY0MWVjvk8cwr43MKgulbkYhhmWOkVVvP8XX6nufoOgq5p89iqNgWKYev5TLpAR
+         sYJdmL8yihOTJPjywbCva4J5q1yFtcTmwHEa9V/qC7VJK/3V7U4dJeTjxaTgQg+D4EhG
+         kxBh2C0nIdaeDngcTluRhISaFaU0Sjiv3eTKfyvRZJt0pOtH8032nuIopgOLS3S+YSc3
+         saTA==
+X-Forwarded-Encrypted: i=1; AL+hErHLhdn7WNMG8E80K5veqcw2n6dP9Ut8JdYvq0mwWU0m9N0LaH8NZugy83LhwTxeN0YI0/Y=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/t/7eW5ZYSGiKSxsF6D97QqOnGNtilR1wdtCp44uD1RXLrNUza
+	M1++ZVDqDdMZeXB7MM2TgPGg11MknwFEPwU/sZx0h0aIHN37QpdgfyoT
+X-Gm-Gg: AZFdTZetr0y5JQCsRn+QQWRJ/Jv5/worQz5V11Jb6vMG/MQvmO+8kpKzOdQEuuhhZZR
+	Dod3VCERi/YHCdVw3fhyafvTVrKZJSDtTf8Xfy6pnrA+Xh/tfqMapzRscdR/QslwQYYH57dCfeq
+	3TrP/XZ5smX2I4jCvOsfGo7mAXSGic4xiQ9qV3eVw+iwVqU/aNG0k+7U15X8O9qz4t9tEdnek7X
+	XQzbAFftb7wyCniDqIfZqGmUHq9h718yl1591J9I4OGYoTtfjUyI84p0rix6jFQsUFspEH2Nf+3
+	BZrFcDFKMK1J3j3w7csDrMrSIwdZ2VE7fB9C4li0JJXWTT835DRobHeb0r8Zg1cd0kctkijjf6V
+	0dasR7E1uFUCrZfQtjziutFYNPLraAoC9l4jO+Vu3MFeJ+jy19MXcuGbLihnSakywfDZJfi7YTB
+	p9TDSfOqBx4uwlONUTwjbWhahZSCQKn6+0qO6ZCQfv14xPyJU3hqyH2lFeDc+5F5n7dw/Rcv2sZ
+	k4hk8/RREhRl5Yj0OZrdrnGIo4Zjxmineh2mgTLUr+wnLCz3LhUVG7OTJjHny1B5NBDoDsjYJ0F
+	RnVniWXSSE5nj1+i7Lid8qpXmO2C10pmDiGfbqTeHADILSjDbw==
+X-Received: by 2002:a05:7300:7316:b0:386:c5d3:7300 with SMTP id 5a478bee46e88-386c5d37603mr3417710eec.12.1795561355161;
+        Tue, 24 Nov 2026 15:02:35 -0800 (PST)
+Received: from localhost.localdomain ([112.170.44.210])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-385666e99fdsm59747187eec.5.2026.11.24.15.02.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Nov 2026 15:02:34 -0800 (PST)
+From: Junyoung Jang <graypanda.inzag@gmail.com>
+To: Eric Dumazet <edumazet@kernel.org>,
+	Neal Cardwell <ncardwell@google.com>
+Cc: Junyoung Jang <graypanda.inzag@gmail.com>,
+	Gwanhyun Lee <gwanhyunlee@gmail.com>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Jakub Sitnicki <jakub@cloudflare.com>,
+	Jiayuan Chen <jiayuan.chen@linux.dev>,
+	netdev@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH net] tcp: avoid NULL skb dereference in zerocopy receive with sockmap
+Date: Wed, 25 Nov 2026 08:02:27 +0900
+Message-ID: <20261124230228.3868519-1-graypanda.inzag@gmail.com>
+X-Mailer: git-send-email 2.43.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -53,450 +106,70 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20261124-work-exec-update_lock-v1-19-e489035395b8@kernel.org>
-References: <20261124-work-exec-update_lock-v1-0-e489035395b8@kernel.org>
-In-Reply-To: <20261124-work-exec-update_lock-v1-0-e489035395b8@kernel.org>
-To: Jann Horn <jannh@google.com>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, 
- linux-fsdevel@vger.kernel.org, Arnaldo Carvalho de Melo <acme@kernel.org>, 
- linux-perf-users@vger.kernel.org, bpf@vger.kernel.org, 
- selinux@vger.kernel.org, Kees Cook <kees@kernel.org>, linux-mm@kvack.org, 
- linux-security-module@vger.kernel.org, apparmor@lists.ubuntu.com, 
- David Hildenbrand <david@kernel.org>, 
- "Christian Brauner (Amutable)" <brauner@kernel.org>
-X-Mailer: b4 0.17-dev-04696
-X-Developer-Signature: v=1; a=openpgp-sha256; l=12235; i=brauner@kernel.org;
- h=from:subject:message-id; bh=GmT4sHxTP/A7S4IU26xSgSWBzeaKz2RMQhkeZET1OPQ=;
- b=kA0DAAoWkcYbwGV43KIByyZiAGsGFsugFPbORXABfWEG7AK0viSfw4y5YXethbiY8xPFcp9uM
- Yh1BAAWCgAdFiEEQIc0Vx6nDHizMmkokcYbwGV43KIFAmsGFssACgkQkcYbwGV43KJp6AD/SVAq
- /vsoIIuO2HFmO7u5m04z3aEAxT+ygO4eOMSMiPEBAO37mYKnlpsSvX5+godnjIhpDKUxR3BnKP6
- MtwLA+9MN
-X-Developer-Key: i=brauner@kernel.org; a=openpgp;
- fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+Content-Transfer-Encoding: 8bit
 
-Test that a task which called vfork() only runs again once the child has
-left the mm:
+A sockmap SK_SKB verdict can remove receive skbs through tcp_read_skb()
+without advancing tp->copied_seq. tcp_inq() then reports unread bytes
+while sk_receive_queue is empty. Deleting the socket's sockmap entry
+does not repair the sequence mismatch.
 
-- when the child execs
+TCP_ZEROCOPY_RECEIVE uses tcp_inq() before inspecting the native receive
+queue. A small request enters tcp_zc_handle_leftover(), where
+tcp_recv_skb() can return NULL. A page-sized request can reach the
+mapping loop with the same empty queue and dereference a NULL skb.
 
-- when the child is killed in the middle of the exec
+Check tcp_recv_skb() before using its result in both paths. Also stop
+before advancing beyond the last skb in sk_receive_queue. Neither
+check consumes data in the sockmap ingress queue.
 
-- when the child exits
+A custom LLM agent developed by the author found this issue. The author
+manually reviewed the root cause and tested the reproducer and fix.
+On net/main with KASAN, a privileged SOCKMAP SK_PASS reproducer
+triggered NULL dereferences with both small and page-sized requests.
+A map-delete variant also triggered the small-request fault. All
+completed without a KASAN report after this change. A non-sockmap TCP
+baseline still copied one byte. An adapted tcp_mmap -z selftest, with
+only its transfer size reduced from 32 GiB to 64 MiB, passed before
+and after the fix.
 
-A parent that is woken up too early only has a few instructions to catch
-the child on the mm. So the parent runs in a realtime scheduling class
-on the cpu of the child and preempts it as soon as it's woken up. That
-takes a kernel with preemption. The tests are skipped without it and
-without the right to use a realtime class.
-
-To kill the child between the release of the old mm and the switch to
-the new one it has to wait for exec_update_lock there. So there are more
-readers of its /proc/<pid>/stat than the cpu they share can run and some
-of them are preempted with the lock held.
-
-Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
+Fixes: e5c6de5fa025 ("bpf, sockmap: Incorrectly handling copied_seq")
+Co-developed-by: Gwanhyun Lee <gwanhyunlee@gmail.com>
+Signed-off-by: Gwanhyun Lee <gwanhyunlee@gmail.com>
+Signed-off-by: Junyoung Jang <graypanda.inzag@gmail.com>
 ---
- tools/testing/selftests/exec/.gitignore |   1 +
- tools/testing/selftests/exec/Makefile   |   1 +
- tools/testing/selftests/exec/vfork-mm.c | 363 ++++++++++++++++++++++++++++++++
- 3 files changed, 365 insertions(+)
+ net/ipv4/tcp.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/tools/testing/selftests/exec/.gitignore b/tools/testing/selftests/exec/.gitignore
-index b27f4db42f87b..24f8f80543df1 100644
---- a/tools/testing/selftests/exec/.gitignore
-+++ b/tools/testing/selftests/exec/.gitignore
-@@ -18,6 +18,7 @@ null-argv
- /set-exec
- /unshare-sighand
- /update-lock-fault
-+/vfork-mm
- xxxxxxxx*
- pipe
- S_I*.test
-diff --git a/tools/testing/selftests/exec/Makefile b/tools/testing/selftests/exec/Makefile
-index 70f090a5f7648..7d61203d6547b 100644
---- a/tools/testing/selftests/exec/Makefile
-+++ b/tools/testing/selftests/exec/Makefile
-@@ -22,6 +22,7 @@ TEST_GEN_PROGS += null-argv
- TEST_GEN_PROGS += check-exec
- TEST_GEN_PROGS += update-lock-fault
- TEST_GEN_PROGS += unshare-sighand
-+TEST_GEN_PROGS += vfork-mm
+diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+index 418842a2dfd9..fa3b4bcbc726 100644
+--- a/net/ipv4/tcp.c
++++ b/net/ipv4/tcp.c
+@@ -2072,6 +2072,8 @@ static int tcp_zc_handle_leftover(struct tcp_zerocopy_receive *zc,
+ 		offset = *seq - TCP_SKB_CB(skb)->seq;
+ 	} else {
+ 		skb = tcp_recv_skb(sk, *seq, &offset);
++		if (!skb)
++			return 0;
+ 		if (TCP_SKB_CB(skb)->has_rxtstamp) {
+ 			tcp_update_recv_tstamps(skb, tss);
+ 			zc->msg_flags |= TCP_CMSG_TS;
+@@ -2274,10 +2276,14 @@ static int tcp_zerocopy_receive(struct sock *sk,
+ 			if (skb) {
+ 				if (zc->recv_skip_hint > 0)
+ 					break;
++				if (skb_queue_is_last(&sk->sk_receive_queue, skb))
++					break;
+ 				skb = skb->next;
+ 				offset = seq - TCP_SKB_CB(skb)->seq;
+ 			} else {
+ 				skb = tcp_recv_skb(sk, seq, &offset);
++				if (!skb)
++					break;
+ 			}
  
- # binfmt_misc must not be reachable as an exec source or as a stacking layer,
- # or an 'F' entry can pin the instance that owns it. Unprivileged, no bpf.
-diff --git a/tools/testing/selftests/exec/vfork-mm.c b/tools/testing/selftests/exec/vfork-mm.c
-new file mode 100644
-index 0000000000000..43cdae8e1e7b3
---- /dev/null
-+++ b/tools/testing/selftests/exec/vfork-mm.c
-@@ -0,0 +1,363 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Test that a task which called vfork() only runs again once the child has
-+ * left the mm, i.e. once it has switched to its new mm in exec or has dropped
-+ * the mm in exit, also when it is killed in the middle of an exec.
-+ *
-+ * The first field of /proc/<pid>/statm is the size of the mm a task is on.
-+ * The parent has a mapping that is larger than anything the child ends up
-+ * with: an exec'd image of this program is a lot smaller and a task that has
-+ * dropped its mm shows 0.
-+ *
-+ * A parent that is woken up too early only has a few instructions to look
-+ * before the child is gone. So it runs in a realtime scheduling class and the
-+ * child, which is on the same cpu, doesn't. On a kernel with preemption the
-+ * parent runs as soon as it's woken up and the child doesn't get any further
-+ * meanwhile. Without preemption the child gets too far for the parent to see
-+ * anything so the tests are skipped there.
-+ */
-+#define _GNU_SOURCE
-+#include <fcntl.h>
-+#include <linux/futex.h>
-+#include <sched.h>
-+#include <signal.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <sys/mman.h>
-+#include <sys/prctl.h>
-+#include <sys/syscall.h>
-+#include <sys/utsname.h>
-+#include <sys/wait.h>
-+#include <unistd.h>
-+
-+#include "kselftest_harness.h"
-+
-+/* 32 bit architectures that only have the time64 system calls. */
-+#if !defined(SYS_futex) && defined(SYS_futex_time64)
-+#define SYS_futex SYS_futex_time64
-+#endif
-+
-+/* Makes the exec'd image wait to be killed. */
-+#define EXECED_ARG	"execed"
-+
-+/* Exit status of a child that never made it into the exec'd image. */
-+#define EXIT_NO_EXEC	127
-+
-+/* How often the parent looks at a child. */
-+#define ROUNDS		16
-+
-+/* What only the mm of the parent has. */
-+#define MAPPING_SIZE	(1UL << 30)
-+
-+/* How many readers of /proc/<pid>/stat share one cpu. */
-+#define READERS		8
-+
-+/* Size in pages of the mm @pid is on, 0 if it has none. */
-+static long mm_size(pid_t pid)
-+{
-+	char path[64], buf[128];
-+	ssize_t len;
-+	int fd;
-+
-+	snprintf(path, sizeof(path), "/proc/%d/statm", pid);
-+	fd = open(path, O_RDONLY | O_CLOEXEC);
-+	if (fd < 0)
-+		return -1;
-+	len = read(fd, buf, sizeof(buf) - 1);
-+	close(fd);
-+	if (len <= 0)
-+		return -1;
-+	buf[len] = '\0';
-+	return strtol(buf, NULL, 10);
-+}
-+
-+/* A kernel that preempts kernel code says so in its version string. */
-+static bool kernel_preempts(void)
-+{
-+	struct utsname u;
-+
-+	return !uname(&u) && strstr(u.version, "PREEMPT");
-+}
-+
-+/* The child only gets to call exec and _exit(). */
-+static pid_t vfork_exec(void)
-+{
-+	pid_t pid = vfork();
-+
-+	if (pid == 0) {
-+		execl("/proc/self/exe", "vfork-mm", EXECED_ARG, (char *)NULL);
-+		_exit(EXIT_NO_EXEC);
-+	}
-+	return pid;
-+}
-+
-+/*
-+ * Same, but the child tells whoever reads from @tell who it is and waits to
-+ * be told on @go. The kernel clears *@tid when the child releases the mm.
-+ */
-+static pid_t vfork_exec_tid(int tell, int go, int *tid)
-+{
-+	pid_t pid = vfork();
-+
-+	if (pid == 0) {
-+		pid_t self = getpid();
-+		char c;
-+
-+		*tid = self;
-+		syscall(SYS_set_tid_address, tid);
-+		if (write(tell, &self, sizeof(self)) == sizeof(self) &&
-+		    read(go, &c, 1) == 1)
-+			execl("/proc/self/exe", "vfork-mm", EXECED_ARG,
-+			      (char *)NULL);
-+		_exit(EXIT_NO_EXEC);
-+	}
-+	return pid;
-+}
-+
-+static pid_t vfork_exit(void)
-+{
-+	pid_t pid = vfork();
-+
-+	if (pid == 0)
-+		_exit(EXIT_SUCCESS);
-+	return pid;
-+}
-+
-+FIXTURE(vfork_mm)
-+{
-+	char *map;
-+	long pages;
-+	/* The clear_child_tid word of a child, shared with the helper. */
-+	int *tid;
-+	/* The cpu the parent and its children are on. */
-+	int cpu;
-+	/* The cpus the test was started on. */
-+	cpu_set_t allowed;
-+};
-+
-+FIXTURE_SETUP(vfork_mm)
-+{
-+	struct sched_param param = { .sched_priority = 1 };
-+	cpu_set_t cpus;
-+	long size;
-+
-+	if (!kernel_preempts())
-+		SKIP(return, "Needs a kernel with preemption");
-+
-+	self->pages = MAPPING_SIZE / sysconf(_SC_PAGESIZE);
-+	self->map = mmap(NULL, MAPPING_SIZE, PROT_NONE,
-+			 MAP_PRIVATE | MAP_ANONYMOUS | MAP_NORESERVE, -1, 0);
-+	if (self->map == MAP_FAILED)
-+		SKIP(return, "Can't map %lu bytes", MAPPING_SIZE);
-+	size = mm_size(getpid());
-+	if (size < 0)
-+		SKIP(return, "Can't read /proc/self/statm");
-+	ASSERT_GE(size, self->pages);
-+
-+	self->tid = mmap(NULL, sizeof(*self->tid), PROT_READ | PROT_WRITE,
-+			 MAP_SHARED | MAP_ANONYMOUS, -1, 0);
-+	ASSERT_NE(self->tid, MAP_FAILED);
-+
-+	/* Too many cpus for the mask: the helper takes any cpu it can get. */
-+	if (sched_getaffinity(0, sizeof(self->allowed), &self->allowed))
-+		memset(&self->allowed, 0xff, sizeof(self->allowed));
-+
-+	/* The policy isn't inherited, the cpu is. */
-+	self->cpu = sched_getcpu();
-+	CPU_ZERO(&cpus);
-+	CPU_SET(self->cpu, &cpus);
-+	if (sched_setaffinity(0, sizeof(cpus), &cpus) ||
-+	    sched_setscheduler(0, SCHED_FIFO | SCHED_RESET_ON_FORK, &param))
-+		SKIP(return, "Can't make the parent preempt the child");
-+}
-+
-+FIXTURE_TEARDOWN(vfork_mm)
-+{
-+	munmap(self->map, MAPPING_SIZE);
-+	munmap(self->tid, sizeof(*self->tid));
-+}
-+
-+TEST_F(vfork_mm, exec)
-+{
-+	int status;
-+	pid_t pid;
-+	long size;
-+	int i;
-+
-+	for (i = 0; i < ROUNDS; i++) {
-+		pid = vfork_exec();
-+		/* Look before anything else. */
-+		size = mm_size(pid);
-+		ASSERT_GT(pid, 0);
-+		kill(pid, SIGKILL);
-+		ASSERT_EQ(waitpid(pid, &status, 0), pid);
-+		/* It didn't exit on its own so the exec didn't fail. */
-+		ASSERT_TRUE(WIFSIGNALED(status));
-+		ASSERT_GE(size, 0);
-+		ASSERT_LT(size, self->pages) {
-+			TH_LOG("round %d: vfork() returned with the child still on the mm", i);
-+		}
-+	}
-+}
-+
-+/* Take exec_update_lock of @pid for reading until it's gone. */
-+static void stat_reader(pid_t pid, int ready)
-+{
-+	char path[64], buf[1024];
-+	int fd;
-+
-+	snprintf(path, sizeof(path), "/proc/%d/stat", pid);
-+	fd = open(path, O_RDONLY | O_CLOEXEC);
-+	if (fd < 0 || pread(fd, buf, sizeof(buf), 0) <= 0 ||
-+	    write(ready, "", 1) != 1)
-+		_exit(EXIT_FAILURE);
-+	while (pread(fd, buf, sizeof(buf), 0) > 0)
-+		;
-+	_exit(EXIT_SUCCESS);
-+}
-+
-+/*
-+ * Kill whoever shows up on @tell right when it has released its mm in exec.
-+ * It only stops there if it has to wait for exec_update_lock. So there are
-+ * more readers of its /proc/<pid>/stat than the one cpu they share can run:
-+ * most of them are preempted at any time, some of them with the lock held.
-+ */
-+static void killer(FIXTURE_DATA(vfork_mm) *self, pid_t parent, int tell,
-+		   int go)
-+{
-+	struct sched_param param = { .sched_priority = 1 };
-+	pid_t helper = getpid();
-+	cpu_set_t cpus;
-+	int ready[2];
-+	int cpu, tid;
-+	pid_t pid;
-+	char c;
-+	int i;
-+
-+	prctl(PR_SET_PDEATHSIG, SIGKILL);
-+	if (getppid() != parent)
-+		_exit(EXIT_FAILURE);
-+
-+	/* Any cpu the test may use but the one of the child. */
-+	for (cpu = 0; cpu < CPU_SETSIZE; cpu++) {
-+		if (cpu == self->cpu || !CPU_ISSET(cpu, &self->allowed))
-+			continue;
-+		CPU_ZERO(&cpus);
-+		CPU_SET(cpu, &cpus);
-+		if (!sched_setaffinity(0, sizeof(cpus), &cpus))
-+			break;
-+	}
-+
-+	if (read(tell, &pid, sizeof(pid)) != sizeof(pid) ||
-+	    pipe2(ready, O_CLOEXEC))
-+		_exit(EXIT_FAILURE);
-+
-+	for (i = 0; i < READERS; i++) {
-+		pid_t reader = fork();
-+
-+		if (reader < 0)
-+			_exit(EXIT_FAILURE);
-+		if (reader == 0) {
-+			prctl(PR_SET_PDEATHSIG, SIGKILL);
-+			if (getppid() != helper)
-+				_exit(EXIT_FAILURE);
-+			stat_reader(pid, ready[1]);
-+		}
-+	}
-+	for (i = 0; i < READERS; i++) {
-+		if (read(ready[0], &c, 1) != 1)
-+			_exit(EXIT_FAILURE);
-+	}
-+
-+	/* The kernel wakes us up when it has cleared the word. */
-+	if (sched_setscheduler(0, SCHED_FIFO, &param) || write(go, "", 1) != 1)
-+		_exit(EXIT_FAILURE);
-+	while ((tid = __atomic_load_n(self->tid, __ATOMIC_RELAXED)))
-+		syscall(SYS_futex, self->tid, FUTEX_WAIT, tid, NULL, NULL, 0);
-+	kill(pid, SIGKILL);
-+
-+	/* The readers go when we do. */
-+	for (;;)
-+		pause();
-+}
-+
-+/*
-+ * A child that is killed in exec after it has released the mm doesn't get to
-+ * switch to a new one. It leaves the mm when it exits.
-+ */
-+TEST_F(vfork_mm, exec_killed)
-+{
-+	pid_t parent = getpid();
-+	int tell[2], go[2];
-+	pid_t pid, helper;
-+	int nomm = 0;
-+	int status;
-+	long size;
-+	int i;
-+
-+	for (i = 0; i < ROUNDS; i++) {
-+		ASSERT_EQ(pipe2(tell, O_CLOEXEC), 0);
-+		ASSERT_EQ(pipe2(go, O_CLOEXEC), 0);
-+		*self->tid = 1;
-+
-+		helper = fork();
-+		ASSERT_GE(helper, 0);
-+		if (helper == 0) {
-+			close(tell[1]);
-+			close(go[0]);
-+			killer(self, parent, tell[0], go[1]);
-+		}
-+		close(tell[0]);
-+		close(go[1]);
-+
-+		pid = vfork_exec_tid(tell[1], go[0], self->tid);
-+		/* Look before anything else. */
-+		size = mm_size(pid);
-+		ASSERT_GT(pid, 0);
-+		kill(pid, SIGKILL);
-+		ASSERT_EQ(waitpid(pid, &status, 0), pid);
-+		kill(helper, SIGKILL);
-+		ASSERT_EQ(waitpid(helper, NULL, 0), helper);
-+		close(tell[1]);
-+		close(go[0]);
-+		ASSERT_TRUE(WIFSIGNALED(status));
-+		ASSERT_GE(size, 0);
-+		ASSERT_LT(size, self->pages) {
-+			TH_LOG("round %d: vfork() returned with the child still on the mm", i);
-+		}
-+		if (!size)
-+			nomm++;
-+	}
-+	if (!nomm)
-+		SKIP(return, "The child was never killed before it got to the new mm");
-+}
-+
-+TEST_F(vfork_mm, exit)
-+{
-+	int status;
-+	pid_t pid;
-+	long size;
-+	int i;
-+
-+	for (i = 0; i < ROUNDS; i++) {
-+		pid = vfork_exit();
-+		/* Look before anything else. */
-+		size = mm_size(pid);
-+		ASSERT_GT(pid, 0);
-+		ASSERT_EQ(waitpid(pid, &status, 0), pid);
-+		ASSERT_TRUE(WIFEXITED(status));
-+		ASSERT_EQ(size, 0) {
-+			TH_LOG("round %d: vfork() returned with the child still on the mm", i);
-+		}
-+	}
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	if (argc == 2 && !strcmp(argv[1], EXECED_ARG)) {
-+		for (;;)
-+			pause();
-+	}
-+	return test_harness_run(argc, argv);
-+}
+ 			if (!skb_frags_readable(skb))
 
+base-commit: 37fa509e43ba59d7c329025436e8ea64bdf089d7
 -- 
-2.53.0
+2.43.0
 
