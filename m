@@ -1,81 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.54
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795533181;
-	b=i82ZifSICvYDZXGIw23dC/Z/qFDsNp5lwb/7Y54c4xhDO6pPF4OF/0HffrnJ3hBs6mSJ
-	 o9MQVKDj9h610LLONrcpduEICY1GbD9XkuHgnQZsjiE/uDJgwasSsWjowH1psu5l4HsmB
-	 sLMhabGMxeC8TTsFPn1rwabIFS1bnhqwmc5mueOjoMdTBszocqond1R9/rkMYorpKTUQK
-	 po2YHzihB7JofWoKpzo1yN+uuaE7gTrVbOHPGhB/m1jWlMSwepPXFt8oJOmLRYxn2QDPv
-	 cbb7tWTadOvJqP5zZ0IPr/xA2lCI/SX5yb19SwBuyF6f4HW3VlbF6dm9/2q1g8YYJsw==
+	t=1795533182;
+	b=C6Hpa/wIiB5FPYxVQTqqwD4/agV1t2k1ftKgBnTNMlw8/lgCOf30MdfW99e0Y6KMZuoQ
+	 u/h0/nHqlTMxUqadMoSMxrElYzqeP9mdIxZxT5GpL08v7qfMet7j04hLvjth0Zrm1R6yA
+	 6HjJ9KpXW8YJE7dNhm0MK66PaulUrjeyCrkrEZz7Jnm11lR8Wgms8gsyzAwjkZbCRm5Hq
+	 LEQgfP41Vlt2RTPzuB4w97pUfVGFhjbi7aJkk8sdkR7MAHJR7Ld1ylIXBgy+SE+zmSnfv
+	 u7K8WCi3cI58dkKCmFoiJXouSBMmV9zxwPyHnNBSROJDIRM+5a0+37AmGjkNQm/pvjQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795533181;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795533182;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=rwg2yD1zJeOjWk9k6blison6UKKrmu+SCF2d3nY+2Pc=;
-	b=mFz9g3++fC0sZYJbHziaJdXo0hAFMeIJ4EyRNZUOQ/KJz5KXYSVRjf+5s+ENureRfi1J
-	 InWEcFaor5Y0q+r45EBxsBQBUYoUOpoL7SR4RrGX3QeId25kTQJl1L7Vk43Wmh31kBx4M
-	 jll8rJFcVqe4Vqi8DGzDOkuXd0C7L6uvVxpm6VUEBFMyr9B6ipGBfbz27KM69iEp9enDa
-	 YuMWurpbKnDjH+/GeXE9wJ7+dMEOKYw1RM8VB3PJUqV4bM/vayzxu4a4uzgt8BR1Fx1af
-	 +LgqvDC9gLk6DtZ6LopKqY1yVJHiYAzvaxBVdrP7Fd+wAJZzWZDjogjDPe/+7P938hw==
+	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=lmsH11/9DkTlIQ6/VeThZwrNe3KS4D5hoTSxGmm1QUg=;
+	b=Y8Xpt1uvHcuzqN+/laQ8iip7HcnDj1NpYiM7PMCJRrpQy5xtsrX5SEkzhQJvoV+bxDF5
+	 0DKe0zpEFBH+ravFpVLQ2S6T6V7skj011ORc9so/26FUgkNkL9W5KBfsIcUvRI33ACi5y
+	 wXH5ma7/5kfoVePxulWch1CqsVbhueOaj+v7/RJASEKg1re2WED4cSZPILZpiM0kwRfRB
+	 gExc49qXb/9ypzZVnlXdxf6uUZ2/kCLvDL4En5xTqyw0XiwmPeRlr1sC8EFLeAT29ljoV
+	 BU8/L5h8kMVF7ROqwA7aY1r9IzeXQNontHAirVO7DzejnG2ym0X0jRS1dSNaJMThTYg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=blackwall.org;
 	spf=none smtp.mailfrom=blackwall.org;
-	dkim=pass header.d=blackwall.org header.i=@blackwall.org header.a=rsa-sha256 header.s=google header.b=aqSip14k;
-	arc=none smtp.remote-ip=209.85.128.45
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	dkim=pass header.d=blackwall.org header.i=@blackwall.org header.a=rsa-sha256 header.s=google header.b=OnTlYDJ7;
+	arc=none smtp.remote-ip=209.85.221.54
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88EF4606A33C
-	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 15:13:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 88EF4606A33C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A8D5606A32C
+	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 15:13:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9A8D5606A32C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=blackwall.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=blackwall.org header.i=@blackwall.org header.a=rsa-sha256 header.s=google header.b=aqSip14k
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4ac95761c85so36284025e9.2
-        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 07:13:00 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=blackwall.org header.i=@blackwall.org header.a=rsa-sha256 header.s=google header.b=OnTlYDJ7
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-4a2f4ca0dcfso2683509f8f.1
+        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 07:13:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall.org; s=google; t=1795533179; x=1796137979; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=rwg2yD1zJeOjWk9k6blison6UKKrmu+SCF2d3nY+2Pc=;
-        b=aqSip14kJuwOstw9v1SSzcUqfxbfcSSU1+YaNCeXU7kbwhBBGtPWSlwIMRuIbzfuaL
-         ERWULgL2sqSxy9m2yB+GHEnsgz3v7oetNbCl6qWvpij49i+MgesFHx2us+4u8WbGCzbC
-         8MdAf1/yl+uFdGCt0rDcvBAJNnYIvfPq9/QUn56gdyJ1Tv+TJzVS41ZJrW03dFgMhQpH
-         qwRObwBamonPdZl0dllqDtMgJjVNKthhu+GfWx0ANFoD8+gvJBtNaCRR2hq9nPvwV2OC
-         J3pcAgmbg+0PA27wvo6+P2r8s7NL5AD8NHYpc0Rp6ak9nmEFCWtPJnJppLAf3dTMnWd/
-         rOZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795533179; x=1796137979;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=blackwall.org; s=google; t=1795533180; x=1796137980; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=rwg2yD1zJeOjWk9k6blison6UKKrmu+SCF2d3nY+2Pc=;
-        b=C3BUHKiaHOt6CLw0dEN2FQ9jLxZSBS0ZyvhUAZWfTbqpx+RmSJYVVO+m57sPUoIT2X
-         QY1IXnCsbvl0+2B3QWwcbezugX9lWxd/UVPqyonD/d9mg0BqTm772Olc2E8yIHR7SSH+
-         mIWjmgl6FAzHLVrvRGPnFaNLiBciwVq12TbcsmwBFMe/TkPofdPM7MFLnJPcL/HJM1cI
-         AfUoBLbEmoTfhnLG5aDp8fCiVJ2MLPTqfLWg39mArpr+XnZk09JdQ68VPIkQSjWvjWZJ
-         kZ9u8wMIXeCd17ZFI+Wk3YxpwOzK4VfXQO3AtlHzEcE7vF/kjj96gZitRpye22vq9goW
-         Cxow==
-X-Gm-Message-State: APuU4Z/w/0PHAbSf8v7tR6yUAZgrLKuT7cvLiuYP+84YXf5R/376e15Y
-	Es6Xksx41AJszyrN+YcuR7QlFc8opduZfmnfLqeEMF16bzUgDWrS71u+cukBoajY39i19UI7iHD
-	EY0AfIk7CyQ==
-X-Gm-Gg: AZFdTZf3q75hrDa+x3krbY0zRU9jCStpBGVYFOH2soaBdl6rnfZ2MzpCUJwxjZNPB+e
-	ZqhWuyBmYzEIhcqdON+M8Ws8OYG2AUU+shHdTCQ3ZYZw1FyQZFaizxJ2IFkhqM1rYQPVG1MPX7T
-	cpEgl3ffeJiL/ecx2wBEQ7qAlPfBdphBjbcKIsfEbNl/UjRmauiLdw+MwzCmi74eLIsr/5wlDoW
-	F+dwg2zgpFVGAeaLKIkD0mumICNZavXI9V6STMgtYd3yyE0Zknjnt3MoHvh8RbT6POmKDTExqFQ
-	hjOhzmkPqT0xJpReUM8EImzRMe97XKgQJBDlwhB3jzEtrJMBqYuEd4soeNvUE8FwlFKiA10AV+J
-	3LkiKntH2Oto6sC2KqTqD1Holz0ugRj2fgwsvhtX/C0bpww11Q6EdOOXH28GQPkURJzwCtINNjB
-	aFDuTtDHn4tFgiO//Us6CG8ge0jjly8z+AjK0/+AMWa879r6W0mY9wW0ZmqcXf8/2zcYK8C4Ujf
-	b62B442bwJcC3YTJDPfuQ+bnKd6BN57DuwXcC+WL4Yt++3LkDo4/FcvTXsqU81iIeXMWZQ+qkey
-	g+c7DLju+uXdPJp5GCJkg4z0jVnhWHllEhb5oRAgdwSdioxcddw=
-X-Received: by 2002:a05:600c:a086:b0:4af:c210:5b3f with SMTP id 5b1f17b1804b1-4bb88817ef1mr320282735e9.24.1795533178500;
-        Tue, 24 Nov 2026 07:12:58 -0800 (PST)
+        bh=lmsH11/9DkTlIQ6/VeThZwrNe3KS4D5hoTSxGmm1QUg=;
+        b=OnTlYDJ7PbcIKV8JLOGSwV+u3z3kCJF/LuK2QXbopoQg/k5OHls8DopNe6yrnmaMDr
+         SXRRjqMezM7zdzApO3pOAYkKaEpEfJu021LK3lFk3yxS6+lDZuQ7ZlobsRp+FxZ5zOqR
+         eapRxxvY8rWyzAIkpk0b2RtAn4lp3BHVdbEYQvj+KQlGMnDJD+Ei04R0jo2oMlAO8+NH
+         zsXAOEk3b1F1wH9FQQSGCxKUyknmXGIJTuM+rUOLzo3CaBNQ/IqUW53TYpE+8tb8UFG6
+         wHkMCwugZ42wY4cihIZXQSPzQlr2MVniqOhonS9t52nqrXqHoVHbwp/7iPHYiAZwaxMt
+         SWoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795533180; x=1796137980;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=lmsH11/9DkTlIQ6/VeThZwrNe3KS4D5hoTSxGmm1QUg=;
+        b=Qc/V7VwIjmPJ83XI54m+0f77ejPyYBqK6T4KGcoAKbmXPzNep3IctdB8mOFBqona3i
+         PyDAwC9nRBzuz2hr0HK5aAZKqj6jpYuvSTFyCmm3vkf/6l4ttMW2bFYKDcKnlHHCaqgY
+         fgpx64OQK9d3M9ivqba2VJJDhYWaOrHmY+bnNTerWqaNxbk1J3F/HKFDDxJ2m293IYyu
+         63tGiRgLEgpbehoO4DGBIe4SfeGsNEybtwgfwaWeVimtHsDZY7ozPIHlGlFX7rxc5B2a
+         2FoRpbNigNtuH8oyDjFhjWggiZ4Kcs8lvEzRWoeEdaqLoGr99PWWU11iwYhJJKzjbsfc
+         wGxQ==
+X-Gm-Message-State: APuU4Z9yxrJDL8TJTbD3ufL6HEUBeNzcA8trFsZW7idxTddrJ/AKEnMW
+	5nL6TRmW2/z+dlngPkiMndYBg9PR2pn0aTykYldqxeb/nw+NN/VlyYb9R0Pz7ndCHgvTgOH2W4G
+	vE3eXat/uOQ==
+X-Gm-Gg: AZFdTZeisqqbQt0cay13/MC4jspGoPPN4BYuULaTsyDNr/CaSqAaC2qc7NmjFAf177c
+	nAMvdacST/jy9MIt5UMqqu0eTNg9lck8qrmxpWEXvVLYmX9tKa2xaCFgFtsI+uwnDhPiGcif/eD
+	FaB7vYwmXsyT6Q6k/+rwVhpyY6r6O1WpqJmFeHYwb8bljK23MnffzOS4ESKlIpFkjYEgkWaFesS
+	/n8xBpd+s34yivmmTtnIQFAQegxqnZk1/T1sxHjdsj9di+SLplL98pZoMfEVZ/jl0zP1GXhwy9i
+	yRvM8S5IWpBm9O/w12Q83Ve2lup+ngmOacY94NiRsW9C4Q6IfRmaVU99zCVGFYK7Dy+pFo1aTby
+	hbM1AN/e6mTAblv7HQQr2MNnv6b9pqt4YTpD/GL601oifV32+8pPYu++4oAA+RJBEFJO8lI7Wk9
+	quN0Qr+Zn5aINIfXelxffg5+d9RgmXOYul3E6X4A6z/hPM5BFCVqDsIEl9t0Eh+qBVIPJVKeD2l
+	Cko4n/VkkM/c6YoDmJsyWqT1aNbC5wm88FTwIRvJr0rtZRMgO1mJuXIcmR1M+aLN/E/RIzXVlPO
+	sz2OiEx0ofFwQK91AfM0yrFVCCVE7NNagBgtugPm7l5IiHKc7SlUvpoB85YiQDAwWEwWrZjA
+X-Received: by 2002:a05:6000:111:b0:490:71a7:6f51 with SMTP id ffacd0b85a97d-4abb4c7aab0mr22220450f8f.45.1795533179678;
+        Tue, 24 Nov 2026 07:12:59 -0800 (PST)
 Received: from localhost (78-154-14-127.ip.btc-net.bg. [78.154.14.127])
-        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-4ab6bc8ce06sm27944396f8f.47.2026.11.24.07.12.57
+        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-4ab6b2052c8sm28719088f8f.41.2026.11.24.07.12.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Nov 2026 07:12:58 -0800 (PST)
+        Tue, 24 Nov 2026 07:12:59 -0800 (PST)
 From: Nikolay Aleksandrov <razor@blackwall.org>
 To: bpf@vger.kernel.org
 Cc: Eric Dumazet <edumazet@kernel.org>,
@@ -86,10 +88,12 @@ Cc: Eric Dumazet <edumazet@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Stanislav Fomichev <sdf.kernel@gmail.com>,
 	Nikolay Aleksandrov <razor@blackwall.org>
-Subject: [PATCH RFC bpf-next 0/4] bpf: add bpf_sk_assign support on netkit egress
-Date: Tue, 24 Nov 2026 17:12:40 +0200
-Message-ID: <20261124151244.1423343-1-razor@blackwall.org>
+Subject: [PATCH RFC bpf-next 1/4] net: track references owned by prefetched socket assignments
+Date: Tue, 24 Nov 2026 17:12:41 +0200
+Message-ID: <20261124151244.1423343-2-razor@blackwall.org>
 X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20261124151244.1423343-1-razor@blackwall.org>
+References: <20261124151244.1423343-1-razor@blackwall.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -101,86 +105,176 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi,
-This RFC narrows the earlier egress series [1] to netkit's transmit
-path. NETKIT_PASS queues the assigned skb directly to the peer's
-receive backlog. NETKIT_REDIRECT clears the assignment before forwarding.
+Add sock_pfree_ref for skb-owned references whose release mustn't depend on
+SOCK_RCU_FREE. Teach receive lookup, NFQUEUE and reuseport selection to
+preserve and transfer this ownership.
 
-General TC egress support would require changes across the networking
-stack. Many transmit paths rely on skb->sk and skb->destructor for
-send-side ownership and socket write-memory accounting, and would need
-to handle an assigned socket reference in place of the transmit owner.
+A following patch lets netkit programs assign sockets. The skb is then
+queued to the backlog before the receive path consumes the socket so a
+borrowed RCU reference isn't enough and the skb must own a reference.
 
-There is a new sk_assign_skb added to bpf_net_context that is used to
-record the exact skb netkit is running BPF on, bpf_sk_assign uses that
-identity to allow egress assignment for that skb. It is valid only when
-the new kern_flags bit is set, that is used to avoid always initializing
-it to NULL in bpf_net_ctx_set.
-A nested tc egress program running on a clone still gets -EOPNOTSUPP.
+The reference must be on a full socket. skb_steal_sock returns the
+listener of a syncookie request socket before it looks at the
+destructor so a reference taken on such a request socket would leak.
+DEBUG_NET builds warn if sock_pfree_ref meets a socket that is not
+full either there or when the skb is freed.
 
-This series builds on Daniel's work [2] to steer netkit traffic to a
-transparent proxy in the receiving namespace. The receive backlog can
-outlive the transmit path's RCU read-side section, so the skb takes its
-own socket reference even for SOCK_RCU_FREE listeners.
+Signed-off-by: Nikolay Aleksandrov <razor@blackwall.org>
+---
+ include/net/inet6_hashtables.h | 10 +++++++---
+ include/net/inet_hashtables.h  | 10 +++++++---
+ include/net/request_sock.h     | 10 +++++++---
+ include/net/sock.h             |  4 +++-
+ net/core/sock.c                |  7 +++++++
+ net/netfilter/nf_queue.c       | 16 +++++++---------
+ 6 files changed, 38 insertions(+), 19 deletions(-)
 
-The selftests exercise the new netkit sk assign for both IPv4/IPv6 and
-TCP/UDP.
-
-Feedback is most welcome, more importantly if the approach taken in
-patch 03 is acceptable.
-
-Changes since the original posting:
- - Use a new approach to limit the egress sk assign only to netkit
- - Reduce the number of selftests
- - Drop some unnecessary fixes of pre-existing problems
-
-Pre-existing problems found during reviews that will be dealt with
-separately:
-   - Receive lookup could use a prefetched socket whose protocol, family
-     or network namespace did not match the packet
-   - GRO via gro_cells can merge an assigned skb after tunnel
-     decapsulation and discard its socket reference without calling the
-     destructor
-   - When a reuseport program rejects an assigned UDP socket, receive can
-     report an error pointer as rx_sk to the kfree_skb tracepoint
-   - A generic XDP program, an rx_handler or a classic mirred action on
-     the receiving device can forward the assigned skb to another network
-     namespace. Generic XDP can also drop the assignment when it copies
-     the skb, so the packet falls back to normal socket lookup
-   - nsim_forward_skb() queues the skb for napi_gro_receive() without
-     orphaning it. GRO can discard its socket reference when merging it
-
-Thanks,
- Nik
-
-[1] https://lore.kernel.org/bpf/20261119142231.2612515-1-razor@blackwall.org/
-[2] https://github.com/cilium/linux/commits/pr/bpf-tproxy
-
-
-Nikolay Aleksandrov (4):
-  net: track references owned by prefetched socket assignments
-  bpf: preserve owned socket assignments on ingress redirects
-  bpf: support bpf_sk_assign in netkit tx path
-  selftests/bpf: test netkit socket assignment to a transparent proxy
-
- drivers/net/netkit.c                          |  10 +
- include/linux/filter.h                        |   4 +
- include/net/inet6_hashtables.h                |  10 +-
- include/net/inet_hashtables.h                 |  10 +-
- include/net/netkit.h                          |  15 ++
- include/net/request_sock.h                    |  10 +-
- include/net/sock.h                            |   4 +-
- include/uapi/linux/bpf.h                      |   9 +-
- net/core/filter.c                             |  50 ++++-
- net/core/sock.c                               |   7 +
- net/netfilter/nf_queue.c                      |  16 +-
- tools/include/uapi/linux/bpf.h                |   9 +-
- .../bpf/prog_tests/sk_assign_netkit.c         | 189 ++++++++++++++++++
- .../selftests/bpf/progs/sk_assign_netkit.c    |  95 +++++++++
- 14 files changed, 412 insertions(+), 26 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/sk_assign_netkit.c
- create mode 100644 tools/testing/selftests/bpf/progs/sk_assign_netkit.c
-
+diff --git a/include/net/inet6_hashtables.h b/include/net/inet6_hashtables.h
+index 2cc5d416bbb5..e461a86f8eaf 100644
+--- a/include/net/inet6_hashtables.h
++++ b/include/net/inet6_hashtables.h
+@@ -134,10 +134,14 @@ struct sock *inet6_steal_sock(struct net *net, struct sk_buff *skb, int doff,
+ 	if (!reuse_sk)
+ 		return sk;
+ 
+-	/* We've chosen a new reuseport sock which is never refcounted. This
+-	 * implies that sk also isn't refcounted.
++	/* netkit bpf assignment holds a reference on the prefetched
++	 * socket and reuseport returns an rcu protected socket so if it
++	 * differs we have to release the original reference
+ 	 */
+-	WARN_ON_ONCE(*refcounted);
++	if (reuse_sk != sk && *refcounted) {
++		sock_put(sk);
++		*refcounted = false;
++	}
+ 
+ 	return reuse_sk;
+ }
+diff --git a/include/net/inet_hashtables.h b/include/net/inet_hashtables.h
+index 44b7e39a1245..d4dd9c3487d8 100644
+--- a/include/net/inet_hashtables.h
++++ b/include/net/inet_hashtables.h
+@@ -476,10 +476,14 @@ struct sock *inet_steal_sock(struct net *net, struct sk_buff *skb, int doff,
+ 	if (!reuse_sk)
+ 		return sk;
+ 
+-	/* We've chosen a new reuseport sock which is never refcounted. This
+-	 * implies that sk also isn't refcounted.
++	/* netkit bpf assignment holds a reference on the prefetched
++	 * socket and reuseport returns an rcu protected socket so if it
++	 * differs we have to release the original reference
+ 	 */
+-	WARN_ON_ONCE(*refcounted);
++	if (reuse_sk != sk && *refcounted) {
++		sock_put(sk);
++		*refcounted = false;
++	}
+ 
+ 	return reuse_sk;
+ }
+diff --git a/include/net/request_sock.h b/include/net/request_sock.h
+index faa6dc49cea8..72fdbf0dccbc 100644
+--- a/include/net/request_sock.h
++++ b/include/net/request_sock.h
+@@ -103,21 +103,25 @@ static inline struct sock *skb_steal_sock(struct sk_buff *skb,
+ 	}
+ 
+ 	*prefetched = skb_sk_is_prefetched(skb);
++	*refcounted = true;
++#ifdef CONFIG_INET
+ 	if (*prefetched) {
+ #if IS_ENABLED(CONFIG_SYN_COOKIES)
+ 		if (sk->sk_state == TCP_NEW_SYN_RECV && inet_reqsk(sk)->syncookie) {
+ 			struct request_sock *req = inet_reqsk(sk);
+ 
++			DEBUG_NET_WARN_ON_ONCE(skb->destructor ==
++					       sock_pfree_ref);
+ 			*refcounted = false;
+ 			sk = req->rsk_listener;
+ 			req->rsk_listener = NULL;
+ 			return sk;
+ 		}
+ #endif
+-		*refcounted = sk_is_refcounted(sk);
+-	} else {
+-		*refcounted = true;
++		*refcounted = skb->destructor == sock_pfree_ref ||
++			      sk_is_refcounted(sk);
+ 	}
++#endif
+ 
+ 	skb->destructor = NULL;
+ 	skb->sk = NULL;
+diff --git a/include/net/sock.h b/include/net/sock.h
+index 3144efad8c36..33cc361e941f 100644
+--- a/include/net/sock.h
++++ b/include/net/sock.h
+@@ -1874,6 +1874,7 @@ void sock_efree(struct sk_buff *skb);
+ #ifdef CONFIG_INET
+ void sock_edemux(struct sk_buff *skb);
+ void sock_pfree(struct sk_buff *skb);
++void sock_pfree_ref(struct sk_buff *skb);
+ 
+ static inline void skb_set_owner_edemux(struct sk_buff *skb, struct sock *sk)
+ {
+@@ -3034,7 +3035,8 @@ static inline bool
+ skb_sk_is_prefetched(struct sk_buff *skb)
+ {
+ #ifdef CONFIG_INET
+-	return skb->destructor == sock_pfree;
++	return skb->destructor == sock_pfree ||
++	       skb->destructor == sock_pfree_ref;
+ #else
+ 	return false;
+ #endif /* CONFIG_INET */
+diff --git a/net/core/sock.c b/net/core/sock.c
+index ad414878dc5b..11d5d221a2fe 100644
+--- a/net/core/sock.c
++++ b/net/core/sock.c
+@@ -2871,6 +2871,13 @@ void sock_pfree(struct sk_buff *skb)
+ 	sock_gen_put(sk);
+ }
+ EXPORT_SYMBOL(sock_pfree);
++
++void sock_pfree_ref(struct sk_buff *skb)
++{
++	DEBUG_NET_WARN_ON_ONCE(!sk_fullsock(skb->sk));
++	sock_gen_put(skb->sk);
++}
++EXPORT_SYMBOL(sock_pfree_ref);
+ #endif /* CONFIG_INET */
+ 
+ /*
+diff --git a/net/netfilter/nf_queue.c b/net/netfilter/nf_queue.c
+index bd603e3a99a5..d920a67b6fa0 100644
+--- a/net/netfilter/nf_queue.c
++++ b/net/netfilter/nf_queue.c
+@@ -195,17 +195,15 @@ static int __nf_queue(struct sk_buff *skb, const struct nf_hook_state *state,
+ 		break;
+ 	}
+ 
+-	if (skb_sk_is_prefetched(skb)) {
+-		struct sock *sk = skb->sk;
+-
+-		if (!sk_is_refcounted(sk)) {
+-			if (!refcount_inc_not_zero(&sk->sk_refcnt))
+-				return -ENOTCONN;
++#ifdef CONFIG_INET
++	if (skb->destructor == sock_pfree && !sk_is_refcounted(skb->sk)) {
++		if (!refcount_inc_not_zero(&skb->sk->sk_refcnt))
++			return -ENOTCONN;
+ 
+-			/* drop refcount on skb_orphan */
+-			skb->destructor = sock_edemux;
+-		}
++		/* drop refcount on skb_orphan */
++		skb->destructor = sock_edemux;
+ 	}
++#endif
+ 
+ 	entry = kmalloc(sizeof(*entry) + route_key_size, GFP_ATOMIC);
+ 	if (!entry)
 -- 
 2.47.3
 
