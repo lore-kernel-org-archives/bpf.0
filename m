@@ -1,79 +1,61 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795508386;
-	b=qBVsg27/PaLnQYPMMUnW0MLKjUBgqrX4Od9xISpNxKL2fQQaXxyj7XbfqSTFx24g85Kh
-	 8I4F3VfanQSKQ5zM5jQXwIelu5f666ekMJrbAGeczGmkAhc4tmPXB+HC8RL1TS/mlgI2v
-	 jdV3ay23uUth84zG9ChAVylsDtleGNNUrTop7agQoGb2wEPHT9kgvsvuDthlLNX7JUvs7
-	 FIe5zx/k35v0Jq7eAljWA49ri7fNIo063nTwfXDdphZN7+G8bZf1CiVRVsIT1Fmv1P2zg
-	 6LkKB7QS4Lq717zpbyhxopLCMAfWYKkC/g9rGoQ6YXO/mlPJqt4YHFx4yGT72udsDOw==
+	t=1795508485;
+	b=gwQHrXb2IPIrj2NjMvklLLduTBiAVRTPnxpV4e/ZFIOH9/go8uYIbNW8TaoIfZncwUTm
+	 YqI8vuJlJcUYxFtYiq/chNSxzxxR3B1UX1QFhVImnkEUj4+rbRI8Kw+oVC2DH64WfHnHB
+	 V/ch6M7ZueOCwW4VTiVAcksj5MLcYe8o+uNEKHA/9vx3iJ4lYTos/YKBZySC/0C2U7ctt
+	 ymKt1elJhquXYlUYps/NOGrTi9ZMHMhdmzrC1xjZqBzm2zgixlMZzaoiEQfEW9EulL7yy
+	 hbvkHE+RNT1Yq0SjHIji9Krafv4r3EJY/9CIGvhDWUaegNEOwwIwAwCotL2qVCbOwqQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795508386;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795508485;
 	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
 	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=E9abjPcthtIyY+MMEtQrTLzJvidQaqZjoo58q53HUoc=;
-	b=4bL36zJAWuFafEASIHo+41ON0b9Uclh5QYwRub0Szu22knTeTYftxtDPxYgRBgrZKwgO
-	 1bm7S1Ua8X1btUZss8aZa0fb1AGoQkbbcDbAR3C31m7wUEPBMlefzk1cO2W7vk3++FhiF
-	 vaEzOe0WY6WqQG+j71x9PKfQtLkCYxwwxe/pCcGWq7BJyImQ2ffgJf8Aqgj3R8GN6Faol
-	 0NRyY5Q/6YkXoRt0Ed08s73iseo7U0h9jThxh0GTKoPLgwo4Ao/CGJ7D+KIjW+Zpec1Vi
-	 08hE+A35CEE3Dvz2VHTqguR8+evlzlPpXGjYh/A4tGXaNmxyD7ecnXVl3zS3gszc7AQ==
+	bh=wwj0QXSNreWEUy/rLPR1l2BY0WuGMY1+8NqMgEz9Gj4=;
+	b=oVwYacZDKLkxroVlzTiqwCjiJ8bUpCe/CWaK0eqK3H6lnBfzM7nI+mkj4hl9yJqGNM7g
+	 +e/1B9qZ/UiNbf8pwSH+dd23ciSsBpRHjAlzFmIrsBaDbiorWKF8UZ1Hr3pYvL0b+meFk
+	 Ct4ycazizgOwIJERKM8j7OwK6e1IHlMIUWmosDplAP926sYAzuoIi7nA+96UCdUybCB8Z
+	 GblEIU43fflc2+4eLDLzjYyuz0oPgmM7+tZiTOh01ZK7vpwwHjekY8FhFG0uwvETYp7RI
+	 C/7TS90Fjs08gA5N4vBXUudN71nmcnxFUetinzgEPOgx/S8VBlyMWT/JKWCdePy/dPg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=e3O83Rok;
+	dkim=pass header.d=linuxfoundation.org header.i=@linuxfoundation.org header.a=rsa-sha256 header.s=korg header.b=Ao01OcX3;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id 10324606A330;
-	Tue, 24 Nov 2026 08:19:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF050606A322;
+	Tue, 24 Nov 2026 08:21:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=e3O83Rok
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id CDE391F000CA;
-	Tue, 24 Nov 2026 08:19:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795508385;
-	bh=E9abjPcthtIyY+MMEtQrTLzJvidQaqZjoo58q53HUoc=;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.a=rsa-sha256 header.s=korg header.b=Ao01OcX3
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A7591F000CA;
+	Tue, 24 Nov 2026 08:21:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linuxfoundation.org;
+	s=korg; t=1795508484;
+	bh=wwj0QXSNreWEUy/rLPR1l2BY0WuGMY1+8NqMgEz9Gj4=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=e3O83RokhWRQvZwd1DE9oTpgGvx6IqeB+fzR6eFpiyChO2W7NR7MJQGtBcoiAgXR8
-	 Wn3CnXsXOg60lEc79jyvbWLaENSpj7epk3SWKZSxsfG/TzzsD96HViD8sVrUPvjHiI
-	 Uu3bfmaxPEXAcEMAc1H7CfoY+IZGDYCSroILEOWmGmLpFtMqe71KxLTvROwTUBBEjK
-	 ZVvaTxYXqgEAgFgyKpJXSMDUSEV3VLF1gE9e9SbjHCr8Ql87moA1+n2j36wPzWax7i
-	 zLVJg4VgAJDdKWFmBmBJnIeOjxrS95srOseTu7pz6bMmjmadSVRv7TQ8qDqTHAkRSB
-	 BmAIIyq5qxSzQ==
-Date: Tue, 24 Nov 2026 10:19:41 +0200
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: linux-fsdevel@vger.kernel.org
-Cc: bpf@vger.kernel.org, containers@lists.linux.dev,
-	linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-	linux-security-module@vger.kernel.org,
-	Aleksa Sarai <aleksa@amutable.com>,
-	Alexander Mikhalitsyn <alex@amutable.com>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Andy Lutomirski <luto@amacapital.net>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Christian Brauner <brauner@kernel.org>,
-	David Howells <dhowells@redhat.com>,
-	Eric Biggers <ebiggers@kernel.org>,
-	Giuseppe Scrivano <giuseppe@scrivano.org>,
-	Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
-	Jeff Layton <jlayton@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Josef Bacik <josef@toxicpanda.com>, Kees Cook <kees@kernel.org>,
-	KP Singh <kpsingh@kernel.org>,
-	Lennart Poettering <lennart@poettering.net>,
-	Neal Gompa <neal@gompa.dev>, Oleg Nesterov <oleg@redhat.com>,
-	Paul Moore <paul@paul-moore.com>,
-	Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
-	Serge Hallyn <sergeh@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Zygmunt Krynicki <zygmunt.krynicki@canonical.com>
-Subject: Re: [RFC PATCH v7 00/26] userland: Userland containers
-Message-ID: <awVInf04kGC0uZZo@kernel.org>
-References: <20261122193539.3334213-1-jarkko@kernel.org>
- <awTmJIErjasO4lqq@kernel.org>
- <awToL2PFNKVgIfqs@kernel.org>
- <awUGkYoyDXp4P5LJ@kernel.org>
- <awULfmZR-pESj2EC@kernel.org>
+	b=Ao01OcX3G8/+JxAjCMpZCGjRN5lHadBQIdZmEtpffolZbq1Nf+ZtbyaMaCOrCXYKW
+	 w/rHzS39nSdkP2maH+oqTatNzFuUS+2/MG5FIEDHSSq2A3jxzZ5eXbQ5DTvwPKhRKE
+	 b+Sw6hH7z3sHevDQ18gET8jZIHeBN4D/P5xXh3C8=
+Date: Tue, 24 Nov 2026 09:21:20 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Luo Gengkun <luogengkun@huaweicloud.com>
+Cc: stable@vger.kernel.org, Sasha Levin <sashal@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>, Jiri Olsa <jolsa@kernel.org>,
+	Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	James Clark <james.clark@linaro.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	"David S . Miller" <davem@davemloft.net>,
+	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org, alexander.shishkin@linux.intel.com
+Subject: Re: [PATCH stable/linux-6.6.y] perf, bpf: Fix NULL
+ event->orig_overflow_handler dereference
+Message-ID: <2026112402-dictation-juror-2e5d@gregkh>
+References: <20261124084837.2327711-1-luogengkun@huaweicloud.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -85,89 +67,68 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <awULfmZR-pESj2EC@kernel.org>
+In-Reply-To: <20261124084837.2327711-1-luogengkun@huaweicloud.com>
 
-On Tue, Nov 24, 2026 at 05:58:58AM +0200, Jarkko Sakkinen wrote:
-> On Tue, Nov 24, 2026 at 05:37:58AM +0200, Jarkko Sakkinen wrote:
-> > On Tue, Nov 24, 2026 at 03:28:19AM +0200, Jarkko Sakkinen wrote:
-> > > On Tue, Nov 24, 2026 at 03:19:36AM +0200, Jarkko Sakkinen wrote:
-> > > > On Sun, Nov 22, 2026 at 09:35:13PM +0200, Jarkko Sakkinen wrote:
-> > > > > SYSCALLS
-> > > > > ========
-> > > > > 
-> > > > > Two new system calls are proposed:
-> > > > > 
-> > > > > 1. userland_open(): open an opaque staircase-initialized container
-> > > > >    object (modeled on Intel SGX enclave initialization with separate
-> > > > >    build and live states) with no embryonic state, opting selected
-> > > > >    shared namespaces in via an allow-list instead of unshare semantics.
-> > > > > 2. userns_set_idmap(): configure all UID, GID, and project ID map
-> > > > >    extents for a container user namespace in a single atomic system
-> > > > >    call.
-> > > > 
-> > > > I played on patching systemd and userns_set_idmap() alone does already
-> > > > a lot of good. I'm figuring out userland_open() integration next.
-> > > > 
-> > > > For the test implementation I probe the opcode's and dependening on that
-> >                                             ~~~~~~~~
-> > 					    syscalls
-> > 
-> > > > use either "userland path" or "fallback path".
-> > > > 
-> > > > This auto-probing is done so that I can commit the patches to my kernel
-> > > > test harness, which already has systemd, and try them out when built
-> > > > against userland-enabled kernel (via LINUX_OVERRIDE_SRCDIR):
-> > > > 
-> > > > https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd-test.git/tree/?h=main
-> > > > 
-> > > > The project builds a hybrid ISO, which is a bootable bootc/composefs
-> > > > based operating system, and has toolbx bundled i.e., a reasonable test
-> > > > environment for all of this. It is also device-installable via "npx
-> > > > @puu/install"
-> > > > 
-> > > > I had to level the harness up a lot so that I could realistically test
-> > > > lockdown-hibernate but it is is also pretty good emulation environment
-> > > > for any possible container features.
-> > > 
-> > > Kernel is ukified and systemd-boot is used as the boot loader i.e., for
-> > > kernel testing purposes corresponds to something like Silverblue except
-> > > not using GRUB.
-> > 
-> > Experimental systemd patches:
-> > 
-> > https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd-test.git/commit/?h=main&id=e4d6b15da3376ad09c0c575cedf467f69db32a52
-> > 
-> > The patches are layered per syscall feature:
-> > 
-> > - 1-5: userns_set_idmap
-> > - 6-10: userland_open()
-> > 
-> > Virtual device would add path/mount complexity and generally dependency
-> > to mounts i.e., I think it was an awful idea. At least initially this
-> > feels fairly lean way of doing container things now that I've trialed
-> > systemd-nspawn a bit.
-> > 
-> > I'll update the patches over time.
+On Tue, Nov 24, 2026 at 08:48:37AM +0000, Luo Gengkun wrote:
+> We hit the following problem on x86:
 > 
-> "userland_open" is just a name as I don't have anything better for the
-> time being (perhaps <something>fd() e.g., containerfd(), would work
-> better).
+> 	BUG: kernel NULL pointer dereference, address: 0000000000000000
+> 	#PF: supervisor instruction fetch in kernel mode
+> 	#PF: error_code(0x0010) - not-present page
+> 	RIP: 0010:0x0
+> 	Call Trace:
+> 	 <IRQ>
+> 	 bpf_overflow_handler+0xa4/0x120
+> 	 __perf_event_overflow+0x11d/0x2f0
+> 	 perf_swevent_hrtimer+0x127/0x140
+> 	 __hrtimer_run_queues+0x108/0x250
+> 	 hrtimer_interrupt+0xfb/0x230
+> 	 sysvec_apic_timer_interrupt+0x69/0x90
+> 	 </IRQ>
+> 	 <TASK>
+> 	 asm_sysvec_apic_timer_interrupt+0x1a/0x20
+> 	 __perf_event_set_bpf_prog+0xb7/0x180
+> 	 _perf_ioctl+0x1f9/0xb40
+> 	 perf_ioctl+0x41/0x70
+> 	 __se_sys_ioctl+0x82/0xc0
+> 	 do_syscall_64+0x44/0xb0
+> 	 entry_SYSCALL_64_after_hwframe+0x78/0xe2
+> 	 </TASK>
+> 
+> RIP is 0 with error_code(0x0010) (instruction fetch, not-present), i.e.
+> an indirect call through a NULL function pointer.
+> 
+> perf_event_set_bpf_handler() records the handler currently installed on
+> the event and replaces it with bpf_overflow_handler():
+> 
+> 	event->prog = prog;
+> 	event->bpf_cookie = bpf_cookie;
+> 	event->orig_overflow_handler = READ_ONCE(event->overflow_handler);
+> 	WRITE_ONCE(event->overflow_handler, bpf_overflow_handler);
+> 
+> WRITE_ONCE() is a single-copy atomic access, not a compiler barrier, and
+> the store to orig_overflow_handler is a plain assignment, so the compiler
+> may reorder the two stores. GCC 11.4.0 does; disassembly of
+> __perf_event_set_bpf_prog():
+> 
+> 	mov    0x3d0(%rbp),%rax                  ; prev = overflow_handler
+> 	mov    %rsi,0x3e8(%rbp)                  ; event->prog = prog
+> 	mov    %r13,0x3f0(%rbp)                  ; event->bpf_cookie = cookie
+> 	movq   $bpf_overflow_handler,0x3d0(%rbp) ; publish overflow_handler
+> 	mov    %rax,0x3e0(%rbp)                  ; orig_overflow_handler = prev
+> 
+> Use smp_store_release()/smp_load_acquire() to guarantee both the compiler
+> and the memory ordering.
+> 
+> Upstream status:
+> Not affected. commit f11f10bfa1ca ("perf/bpf: Call BPF handler directly,
+> not through overflow machinery") removed orig_overflow_handler and
+> calls bpf_overflow_handler() directly from __perf_event_overflow(), so
+> the reordering window no longer exists. That rework was not backported
+> to any stable tree.
 
-What I did at late 2025 was simply going through the old ML discussions
-for David's patches and addressed the remarks one by one. Then I
-improved the patch set bit further until other stuff came along, and I
-forgot the whole thing for some time.  Last week's burst was really
-unwritten todo list starting to remind about itself in flashbacks.
+Please backport that rework instead of doing a one-off patch.
 
-There's not much more in API sense to do except maybe syscall rename and
-associated prefixes in constants etc. My Git branch has additional fixes
-(e.g., more LSM plumbing) on top of this but they don't change the gist
-of this by any possible way so no new RFCs for the time being.
+thanks,
 
-The most up to date version:
-
-https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/log/?h=vault
-
-Br, Jarkko
-
-
+greg k-h
