@@ -1,36 +1,36 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=69.171.232.181
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=66.220.155.178
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795488407;
-	b=hZv+ORBO72tCyO+9ie67dFzSbhGR42nYiu9FbwH4WnhoI0ToF/kUGP9XhTGc0bbWiChj
-	 j6sPNdaBhYBsTCCpHgI9p6GBmBWoZiO7qv8mUSfDBe1yXSmHdnoZg0vHmcD/wETsAsidS
-	 Oz8XY5EPdaKQjuPBvBy346U5vb/w7Kvz7FVfCKtA4ScAnfvOya7Aa1kCVv/pqGs5eDwc3
-	 bU9lrIieNZtoqofRPYYcsNs3b4CRG9nl+XeROnGz94bLvZo9jejIUcsptP9RYwNGJz57G
-	 AQoeoJevUqrO3lCJ+LVTBwfa88otHzlghK73lGniMZ3TOMGXZFPEQz5f5j2fmbSFosg==
+	t=1795488410;
+	b=mDgnyZ1lmo6X25jQDXSvzDEsRHR9uGulghAzpneZtiT4zrz+k0kbe5hvh+kvNZfjZWXh
+	 adum4tzO2SpaCQvw/W+Z0jMz7ToBJrbNiMbGVB5scwRfZFdpnso/FJVZ1bA2w7qj0nX5b
+	 vC0Vnrw3kmPoNzCjahUs5P75eX7oXzW9ObuWyAazRHXo+gmVq4VVVNH6CbSfbNHFOiLxI
+	 r4clvGdM4ukVEBLF47iQi11US6BjXJm20ExY8gbhKo2g1u7ZVbyU++IoSqIMPBOYMrGZb
+	 O1U92dLlHNvIbyUEf4TV+TBehEF76se1gAWdvMjSqr9yz9BHj4zbZrVmJBllWJp5wdg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795488407;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795488410;
 	h=DMARC-Filter:Received:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
 	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=3Y6QHbsbiOxnfjeTTGulIuIET3vrMwP1khhqnYfjbVE=;
-	b=RoDNPLwf93yAHxjpNZ3DNP17gAkLO/Cwa4pzAhuj73NNks7Rdkg5A5modQXg1zYs+ud/
-	 ygfO2P9fpaOsYaW9E+NPFnpfS9wiKyJIjxAGbgybQLK/5rY+ftDD99wlGiuZtdpu8h6mT
-	 ZSa68rxxbqXrbB3x6qauMa7w/c3YX3hEdFDrSeSZyCosA+wjMm38pWmDOFHbXiCQQjILZ
-	 oQxK3wLTPcGE9nGo3BX6OfvWbITy3c9N9vYwh1/7w0VkcgqAci57mJc/UEU9RupilAK5F
-	 wQeXN7rWXhpdqyVDUKNJYfbIMDFZ+v7UlTb5lrdFQbU19rMqQDPEkg7ul5snl+Wk+0A==
+	bh=ARErnA0JvN0xgM7JabWK+2zf/VLQftOCcE/zdFs4d64=;
+	b=1HKBDNx7CfWsh9V4loagWlFGI3YBFe4mc4+wEy46SRXX1e0LOEQpvCkgvKR4iPXjmuu1
+	 UpJeN0CkY5SY+ndx1YqUAUvRcIWe6x7r/rOF6x/Dbitz+4DnYZuw+HjaJTlIAB89lH2ef
+	 pzZg+qv0TD+jIVoLiga440/BC+YS0tlmMCKVZAC3ZwovxvV2yTIRKnX/dQOPfwUAdxlC9
+	 SwUdPQ9ZKWhttETSuo2NHF1T6FGe2gAzAvf/sYEOr3ZnnfaSNLt1OCYDps2oFBAbagngk
+	 /F1PfXKrj2MVY98/r9dvyo4dfahHMwgA5dAb86ZqCFr2jiIITuy3JaxdP3hYnRz/SDg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=fail header.from=linux.dev;
 	spf=fail smtp.mailfrom=linux.dev;
-	arc=none smtp.remote-ip=69.171.232.181
-Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
+	arc=none smtp.remote-ip=66.220.155.178
+Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EB55606A321
-	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 02:46:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7EB55606A321
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54288606A31E
+	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 02:46:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 54288606A31E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm50310.atn0.facebook.com (Postfix, from userid 128203)
-	id 38B5D599919BD; Mon, 23 Nov 2026 18:46:34 -0800 (PST)
+	id 5B07159991A54; Mon, 23 Nov 2026 18:46:39 -0800 (PST)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -39,9 +39,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	kernel-team@fb.com,
 	Alan Maguire <almagui@kernel.org>
-Subject: [PATCH bpf-next v2 1/2] lib/Kconfig.debug: Set the minimum required pahole version to v1.24
-Date: Mon, 23 Nov 2026 18:46:34 -0800
-Message-ID: <20261124024634.3872058-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v2 2/2] kbuild, bpf: Remove CONFIG_PAHOLE_HAS_LANG_EXCLUDE
+Date: Mon, 23 Nov 2026 18:46:39 -0800
+Message-ID: <20261124024639.3872475-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.53.1
 In-Reply-To: <20261124024629.3871056-1-yonghong.song@linux.dev>
 References: <20261124024629.3871056-1-yonghong.song@linux.dev>
@@ -56,72 +56,73 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-Commit 2c1ccd9a1d78 ("docs: changes.rst: restore pahole 1.26 minimum
-(regressed by sort)") raised the minimal pahole version in the
-requirements table of Documentation/process/changes.rst to v1.26, since
-kfuncs with KF_IMPLICIT_ARGS needed the decl_tag_kfuncs feature of
-pahole v1.26. Commit 692393104909 ("resolve_btfids: Emit bpf_kfunc and
-bpf_fastcall decl tags") removed that need, as resolve_btfids now emits
-the kfunc decl tags itself. CONFIG_DEBUG_INFO_BTF, on the other hand,
-still accepts pahole v1.22.
+The previous patch makes CONFIG_DEBUG_INFO_BTF require pahole v1.24, so
+CONFIG_PAHOLE_HAS_LANG_EXCLUDE (pahole v1.24) is always set with
+CONFIG_DEBUG_INFO_BTF.
 
-Set the minimal version to v1.24, so that the kflag of an enum in
-vmlinux and module BTF is meaningful: 0 for an unsigned enum and 1 for a
-signed enum. pahole records the signedness of an enum in the kflag since
-v1.24. With an older pahole, every enum has the kflag 0, signed or not.
+Remove it. CONFIG_RUST now depends on !CONFIG_DEBUG_INFO_BTF ||
+!CONFIG_LTO, and scripts/Makefile.btf, which is only included with
+CONFIG_DEBUG_INFO_BTF, always passes --lang_exclude=3Drust.
+
+The pahole flags and the resulting config are unchanged, except that
+CONFIG_PAHOLE_HAS_LANG_EXCLUDE is gone.
 
 Acked-by: Alan Maguire <almagui@kernel.org>
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- Documentation/process/changes.rst | 4 ++--
- lib/Kconfig.debug                 | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ init/Kconfig         | 2 +-
+ lib/Kconfig.debug    | 9 ---------
+ scripts/Makefile.btf | 2 +-
+ 3 files changed, 2 insertions(+), 11 deletions(-)
 
-diff --git a/Documentation/process/changes.rst b/Documentation/process/ch=
-anges.rst
-index 28f2ca63318e..a292f31f1891 100644
---- a/Documentation/process/changes.rst
-+++ b/Documentation/process/changes.rst
-@@ -53,7 +53,7 @@ mcelog                 0.6              mcelog --versio=
-n
- mkimage (optional)     2017.01          mkimage --version
- nfs-utils              1.0.5            showmount --version
- openssl & libcrypto    1.0.0            openssl version
--pahole                 1.26             pahole --version
-+pahole                 1.24             pahole --version
- pcmciautils            004              pccardctl -V
- pigz (optional)        2.4              pigz --version
- PPP                    2.4.0            pppd --version
-@@ -146,7 +146,7 @@ pahole
-=20
- Since Linux 5.2, if CONFIG_DEBUG_INFO_BTF is selected, the build system
- generates BTF (BPF Type Format) from DWARF in vmlinux, a bit later from =
-kernel
--modules as well.  This requires pahole v1.22 or later.
-+modules as well.  This requires pahole v1.24 or later.
-=20
- It is found in the 'dwarves' or 'pahole' distro packages or from
- https://fedorapeople.org/~acme/dwarves/.
+diff --git a/init/Kconfig b/init/Kconfig
+index c8a7cfa60a6e..ca7f20462d0c 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -2065,7 +2065,7 @@ config RUST
+ 	depends on !MODVERSIONS || GENDWARFKSYMS
+ 	depends on !GCC_PLUGIN_RANDSTRUCT
+ 	depends on !RANDSTRUCT
+-	depends on !DEBUG_INFO_BTF || (PAHOLE_HAS_LANG_EXCLUDE && !LTO)
++	depends on !DEBUG_INFO_BTF || !LTO
+ 	depends on !CFI || HAVE_CFI_ICALL_NORMALIZE_INTEGERS_RUSTC
+ 	select CFI_ICALL_NORMALIZE_INTEGERS if CFI
+ 	depends on !KASAN || CC_IS_CLANG
 diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 2d22638ec13a..9479034afe5a 100644
+index 9479034afe5a..1d35a99d6cb5 100644
 --- a/lib/Kconfig.debug
 +++ b/lib/Kconfig.debug
-@@ -400,12 +400,12 @@ config DEBUG_INFO_BTF
- 	depends on !DEBUG_INFO_SPLIT && !DEBUG_INFO_REDUCED
- 	depends on !GCC_PLUGIN_RANDSTRUCT || COMPILE_TEST
- 	depends on BPF_SYSCALL
--	depends on PAHOLE_VERSION >=3D 122
-+	depends on PAHOLE_VERSION >=3D 124
- 	# pahole uses elfutils, which does not have support for Hexagon relocat=
-ions
- 	depends on !HEXAGON
- 	help
- 	  Generate deduplicated BTF type information from DWARF debug info.
--	  Turning this on requires pahole v1.22 or later, which will convert
-+	  Turning this on requires pahole v1.24 or later, which will convert
- 	  DWARF type info into equivalent deduplicated BTF type info.
+@@ -416,15 +416,6 @@ config PAHOLE_HAS_BTF_TAG
+ 	  btf_decl_tag) or not. Currently only clang compiler implements
+ 	  these attributes, so make the config depend on CC_IS_CLANG.
 =20
- config PAHOLE_HAS_BTF_TAG
+-config PAHOLE_HAS_LANG_EXCLUDE
+-	def_bool PAHOLE_VERSION >=3D 124
+-	help
+-	  Support for the --lang_exclude flag which makes pahole exclude
+-	  compilation units from the supplied language. Used in Kbuild to
+-	  omit Rust CUs which are not supported in version 1.24 of pahole,
+-	  otherwise it would emit malformed kernel and module binaries when
+-	  using DEBUG_INFO_BTF_MODULES.
+-
+ config PAHOLE_HAS_INLINE
+ 	def_bool PAHOLE_VERSION >=3D 132
+ 	help
+diff --git a/scripts/Makefile.btf b/scripts/Makefile.btf
+index 02ff1702e1e8..8cd8c88d4580 100644
+--- a/scripts/Makefile.btf
++++ b/scripts/Makefile.btf
+@@ -20,7 +20,7 @@ pahole-flags-$(call test-ge, $(pahole-ver), 131) +=3D -=
+-btf_features=3Dlayout
+=20
+ endif
+=20
+-pahole-flags-$(CONFIG_PAHOLE_HAS_LANG_EXCLUDE)		+=3D --lang_exclude=3Dru=
+st
++pahole-flags-y						+=3D --lang_exclude=3Drust
+=20
+ btf-inline :=3D $(CONFIG_DEBUG_INFO_BTF_INLINE)
+ ifneq ($(btf-inline),)
 --=20
 2.53.1-Meta
 
