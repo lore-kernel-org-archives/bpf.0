@@ -1,99 +1,55 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.45
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795501957;
-	b=YQBwLZxNbjw3uGm7YJmdruwlyHycVU99VbAhXjMwQlv2VLaacvgsa7u9THudOh+w/3wC
-	 aLc99zcliGIfHwSPwN8AXQXW7rBekOI7ttz40ADeR/QkdC6cTqx0L3CyY7eBirEWmoIfK
-	 h9XBkT2VcdSkqmyeH7pUcwE6IOQAFi9iskGY5L0vbp9vf0ifK7nRg4wOxvRAyA6OgRPDD
-	 EbJ06D4EzV9HXKpWZQ8CkXl80AvXvRcj0BZiuuPVcEx0qpqjoJmS+lKc+ImYmOHstGAbL
-	 meKDftn18tGpytM3IzHbyls2FHYtVzL/KA+CVUIPZnrIflY1eT+3PLV1G8Xq+Bc1xOg==
+	t=1795502081;
+	b=EcALosc3lIVVqLb1cnNpjDB3MYP9BXY7ScJqf58DljKc8GOt5OgmVCMZ4Y4HvX2/gsmD
+	 bLEhV44PwVF1VqZb7/hYo3qupyRYb+yRkB3f6fvx/faJW6DRHBoVOiJJtcyuSiwIp8oC4
+	 aaSn7FXfg198a80jdq+hC9vDT+BBuBlMh4Ii0CzRyhfqqSzE7fFGyjVOfZxo2T7GrMTA0
+	 2jB7bJjTg4Z2TZEmSDB+Pf3BL2qWQgbYizmO8u/iFvee+pQoLyUXkeVulX02ZRH0CYlIf
+	 eh8vcOGqLgzhvrLfn5mpuNaC4Nq8BJq2MhLy+wlV7majFnV/O+SAXa0uk261a3rASbA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795501957;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
-	 References:Content-Transfer-Encoding:MIME-Version;
-	bh=mzn5BWbbvEtliT+9iGFUrtwH0MOEd7ojluQSgA2kmv0=;
-	b=MExaSUe5N6Hgm/WZQpdwwR7agBy0oM5wYm0yI/MqxYtaqt9MJ8kzm66rB51g51Uq5fsa
-	 h7tXJrUlH+qU+YpVuH6wtARfEXPk4BtD/OWkCRpJqL0YUNebqIMFyTduOfWmW6LMfl5Es
-	 F5rLa7Xw3i6Z6H5BYUn41Mw4olcSERoaPoYU3tSjXtS2N24yn51waGeo4mHZgnloBzUMd
-	 Z+IFQWAeXevi9OfTA20G+usFi3Go3punW4xzovi7pyNodZfJdnVD20BzO8xeQWGGneacE
-	 MqcMDdkj5VODVF+Q32QuLiBPPatfaMoJ8cpi7jF3KlA/Ir6oKlra9aFb4lUgEZbBfPw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795502081;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=kq4yy3Fy39OMKwcapZBYgK8WTCrAQBImmzG/TKA4W2M=;
+	b=Jln5K8QBpKlssHefQWj9L16IiZiqf4bkl9K7maRFmis6+uDaPgj1gmlY7xevFph+RUFV
+	 PNJHz4s21eu8aJpZwKtoq8ZeZyu3f7r0Z3sIpPNroK+7ltgpssFo+v+jEx+zQKkGDGCHj
+	 ZYdDlLm4fy2ZNN/LjM1s1ddeQXivA5Z3JOP2mrA16OhNtlhS27emLd8t9JG4gM6ymjCPU
+	 HWHaTjU9XBQoDEXJ8DW/LrqtfiWOchcQNaOLvPlpaNyiAqndkdcabzEp1KAoiYfyswsjd
+	 jFsxeKAOTfdgRiWre11sUZWaCVkvL/r9dOKK8FTws8Klvuap2+SCW6PcHaJROVHdvqA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=mrgSIa7w;
-	arc=none smtp.remote-ip=209.85.216.45
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nRS+VBDw;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0684E606A31E
-	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 06:32:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0684E606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5786C606A331
+	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 06:34:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=mrgSIa7w
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-3b3d4d3bba3so2063432a91.3
-        for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 22:32:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795501956; x=1796106756; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=mzn5BWbbvEtliT+9iGFUrtwH0MOEd7ojluQSgA2kmv0=;
-        b=mrgSIa7wP+Vh72zhlYTcA12jSvj61+INgrl/1RZqMWQweY8esTDNeatXZfv2xdFCr9
-         /TsNRG/rSeId0qnBsWb4GWcFgcWZlF+BUT8fW8it6DlXgqT0mGtYchzNdk7O6yazx4HT
-         gv77PnLINxXR6w2pRmbk4Geqm0DCxIHDcaMffEp/oXfiG9JiM6ho2e61GmJ28plTjVWy
-         kZaFf7hu9wkO1+va8c+AzdQnnlCHLPmt/pDfOuTFQ658nSL+OymXxIg7cfU3zbQ708Yf
-         0RqteSF+KG7aRJTAFRIn8mZBzJAZcPKwBh0E18IHGlAEGkSXoxi6PVFSpdHOQz10TOZR
-         +a3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795501956; x=1796106756;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=mzn5BWbbvEtliT+9iGFUrtwH0MOEd7ojluQSgA2kmv0=;
-        b=bMQs03UDIODyFe9RihyHSe3LLNjcIJIjpM0zQPYuqfvz/ir+I1DppE/YzqsM0UiVX2
-         KRhQnBP5y5ZWhCabsWP0ody4lYy1KiV5012xrnKSmu+Qnjov0EU05bpFN3Z67PgxVZto
-         wcTtboxRlI2e/Yu1M1MfiAHP8Wn5V6Cd5R7kZ3vuZnar8gqlM2rjuaVYE5q049Z2PyjV
-         IOW4VhOLAqdihITN4U8L3azC1HwsJQt2o6qW3j9Kp9OTBwYbF8dpCATHMjShr8Gm27br
-         27GKWipJQgK13IdV9KjwYOx+eFz0cFGZM2/ilKP7IbuIShCi3j2NgggXgafDjdQEvpk+
-         3gqw==
-X-Forwarded-Encrypted: i=1; AL+hErEQaAZ298jLQiqP3FRYDzPElaFM9wknopYJK9nOU3JBObxOJ/KIZKoTQfZga/yhzbKA1Q0=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/MFfTxM/pdeL3sXObv15YPtdLt4BASpRqSXXohBIT6AZA+D6sC
-	VZ013cSNHgnw2IC3Lqei35OVc/i7+FAGOqQ2B2t5NSLnxTcpC3XXs2C8
-X-Gm-Gg: AZFdTZd49lzH9zkDQucXJpYkQOGhtc8RNoP4svv8bCis7VF8GUZMAf9U7aWAk1adWQd
-	Y9MfJZRvUXtrg4q9LyOMWfzrdxLoYESUIgMe7Dc8nFewmLdNsM6vPy0e1dFXP56JWYKtWZPlndo
-	KpW8T0tBOI8ldujswBUJZZmgubUwr3VKaBYL2bh+VEZxTFKThjve31XRvqCw6m6+YGGO/nl9WYf
-	j80cNZk9W2N0E6AShj9fg/0bO0/Tw9ImCAWfuCS58esAACrwNsW3xMa02k+sHtFwt+sU70melDl
-	1TSq1nVKxVT+iz0uVqUdZi/lQWYKFF2q8/LJlY8ZnbK95KZkyZ5k+khnaqoMOnLvpgXh4EaflSu
-	zJyYBagQXiqlyXl3Y9NE47rlPKbsqOMnpwTfxzM09QOWNIMDpWCpFCOChGyEQjBhbYqH6fZ+OMr
-	kNse3WrQnMZDDyvxdqUM1TiohMU480AYPs8dGtLHQhcAhfnJ9l1DhOy1pNGnHXcisKD1dgS5sTz
-	dwOslXKpARZFMk2hQb+tVl0RPpXyLQ6Q2Cg0lWbiTex9rv7b4xGM+WeUKWc/Gm0FsRH5pLTTMrp
-	tx6URXNm9iys5Wf5hEq0zF+qdaJ0wrKsmni/k9Ot8maZ06nicDxCJXOTaSR3dkTafEFC6YGFGB2
-	8YRa2ygQe+AVhuaIokpKVBWytoOi52MbOZQ==
-X-Received: by 2002:a17:90b:4cd0:b0:3ab:36c4:b4ff with SMTP id 98e67ed59e1d1-3b41c925a85mr13516923a91.24.1795501956132;
-        Mon, 23 Nov 2026 22:32:36 -0800 (PST)
-Received: from localhost ([153.61.198.251])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b41adcfe16sm21666684a91.17.2026.11.23.22.32.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Nov 2026 22:32:35 -0800 (PST)
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 24 Nov 2026 06:32:35 +0000
-Message-Id: <DN38BN9BAJQS.2DSRH5XIU6EU3@gmail.com>
-Cc: "Andrii Nakryiko" <andrii@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Eduard Zingerman" <eddyz87@gmail.com>, "Emil
- Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
- <ihor.solodrai@linux.dev>, <kkd@meta.com>, <kernel-team@meta.com>
-Subject: Re: [PATCH bpf v2] bpf: net_sched: Let bpf_kfree_skb() run with
- irqs off
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, <bpf@vger.kernel.org>
-In-Reply-To: <a2d4276cbf11b1254aa7997874a6539d20f296cf.1795463894.git.memxor@gmail.com>
-References: <a2d4276cbf11b1254aa7997874a6539d20f296cf.1795463894.git.memxor@gmail.com>
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nRS+VBDw
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 642CF1F000E0;
+	Tue, 24 Nov 2026 06:34:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795502080;
+	bh=kq4yy3Fy39OMKwcapZBYgK8WTCrAQBImmzG/TKA4W2M=;
+	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
+	b=nRS+VBDwR7suB3N+UmxdNRnaYAtWBgMsTVVtlHeWW/uEw1152w/4XRc+gLC7cmMzT
+	 cc90f6t41s/h7u4wcRvsBWKX2JDYNWRGf85upbGphFvOZD3sqazalpnNdjlcYVVFsh
+	 SCt3nxx1qS8OvTkdXTPDtjKDBo+H4lx9Opq9jSxLRoRM1oOPxD2qaoGnV1kOI602k6
+	 B/nzUASqVkaMQLyOMxGrM54qfIeGPfeMVjXKUYCpvk4N1jI2miomGW2Rd0NOc+sZfT
+	 TUIrcdlJDO+Z0R8imVHvfykkupr4KHk9ZZsJBYOzt5n9K0of9/NfOaIM+OxmBWkkKz
+	 L5lqia2wbXNjw==
+Message-ID: <sashiko-outbox-230603@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf 1/2] bpf, lsm: fix bpf_setsockopt() on a half set up
+ child in inet_csk_clone
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Jiayuan Chen" <jiayuan.chen@linux.dev>, bpf@vger.kernel.org
+In-Reply-To: <20261124061544.254586-1-jiayuan.chen@linux.dev>
+References: <20261124061544.254586-1-jiayuan.chen@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 24 Nov 2026 06:34:39 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -102,168 +58,111 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
 
-On Mon, Nov 23, 2026 at 11:58 AM Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
-> Use dev_kfree_skb_any(). With irqs on it is kfree_skb(). With irqs off the
-> skb goes to the completion queue of the cpu, and NET_TX_SOFTIRQ frees it.
+Thank you for your contribution! Sashiko AI review found 3 potential
+issues to consider:
+- [High] bpf: NULL deref in bpf_sk_clone_setsockopt() via MPTCP
+  subflow_write_space()
+- [Medium] bpf: unnecessary rejection of IPV6_AUTOFLOWLABEL in
+  bpf_sk_clone_setsockopt()
+- [Low] bpf: multi-line comment style violation in bpf_lsm.c and
+  filter.c
+--
 
-Bots are correct :(
-With irqs off it also wakes up ksoftirqd. I missed that, sorry.
-This will deadlock when the destructor runs under rq lock:
+commit 9470b8f4e13b2c8be2cf5cc10f852d869dbb6f7c
+Author: Jiayuan Chen <jiayuan.chen@linux.dev>
 
-  __schedule()                        holds rq lock, irqs are off
-    bpf_kfree_skb_dtor(skb)
-      dev_kfree_skb_irq_reason(skb)
-        raise_softirq_irqoff()        in_interrupt() == 0
-          wake_up_process(ksoftirqd)
-            ttwu_queue()              cpu == this_cpu
-              rq_lock(rq)             <- same rq
+bpf, lsm: fix bpf_setsockopt() on a half set up child in inet_csk_clone
 
-A prog that shares a list with the qdisc prog gets there:
+This commit introduces a dedicated bpf_setsockopt() helper for the
+bpf_lsm_inet_csk_clone hook that rejects socket options unsafe to set on
+a partially initialized cloned child socket.
 
-  prog                    drops the node with
-  ----------------------  ----------------------------------------
-  sched_ext ops.dispatch  bpf_obj_drop()
-  tp_btf/sched_switch     bpf_list_add(), @prev is not in the list
+> diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
+> index ae23511fd811b..fa71f52a055c5 100644
+> --- a/kernel/bpf/bpf_lsm.c
+> +++ b/kernel/bpf/bpf_lsm.c
+> @@ -79,6 +79,15 @@ BTF_ID(func, bpf_lsm_inet_conn_established)
+>  #endif
+>  BTF_SET_END(bpf_lsm_locked_sockopt_hooks)
+> =20
+> +/* List of LSM hooks that trigger on a locked child socket which is not
+> + * set up yet, bpf_setsockopt is restricted there.
+> + */
 
-The check from commit 94c8d1c21be4 ("bpf: Reject bpf_obj_drop() from
-tracing progs") catches neither.
-Today a UDP skb wakes nobody, unless a task waits for write space.
+[Severity: Low]
+This isn't a bug, but BPF multi-line comments place the opening /* on
+its own line (here and above bpf_sk_clone_setsockopt() in
+net/core/filter.c).
 
-With irqs on it still sleeps on RT after bpf_preempt_disable():
+[ ... ]
 
-  bpf_kfree_skb(skb)                  preempt_count() == 1
-    sock_wfree(skb)                   a writer sleeps in sk_wq
-      __wake_up_common_lock()
-        spin_lock_irqsave(&wq_head->lock)
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index 53c042b267ab6..77abc4cb9db51 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -5938,6 +5938,43 @@ const struct bpf_func_proto bpf_sk_setsockopt_prot=
+o =3D {
+>  	.arg5_type	=3D ARG_MEM_SIZE,
+>  };
+> =20
+> +/* security_inet_csk_clone() runs at the end of inet_csk_clone_lock(), t=
+he
+> + * child is locked but not set up yet: its timers are not initialized, it
+> + * holds no reference on icsk_ca_ops and an IPv6 child still points to t=
+he
+> + * ipv6_pinfo of the listener.
+> + */
+> +BPF_CALL_5(bpf_sk_clone_setsockopt, struct sock *, sk, int, level,
+> +	   int, optname, char *, optval, int, optlen)
+> +{
+> +	switch (level) {
+> +	case SOL_SOCKET:
+> +		if (optname =3D=3D SO_KEEPALIVE)
+> +			return -EOPNOTSUPP;
+> +		break;
+> +	case SOL_TCP:
+> +		if (optname =3D=3D TCP_KEEPIDLE || optname =3D=3D TCP_CONGESTION)
+> +			return -EOPNOTSUPP;
+> +		break;
 
-Lets go via irq_work like bpf_async_refcount_put() does.
-On top of your v2 bpf_qdisc.c compiles with RT off. I didn't run it:
+[Severity: High]
+Should bpf_sk_clone_setsockopt() also reject SO_SNDBUF and
+TCP_NOTSENT_LOWAT?
 
-diff --git a/net/sched/bpf_qdisc.c b/net/sched/bpf_qdisc.c
-index e041383..c569549 100644
---- a/net/sched/bpf_qdisc.c
-+++ b/net/sched/bpf_qdisc.c
-@@ -5,6 +5,7 @@
- #include <linux/bpf.h>
- #include <linux/btf.h>
- #include <linux/filter.h>
-+#include <linux/irq_work.h>
- #include <net/pkt_sched.h>
- #include <net/pkt_cls.h>
- 
-@@ -184,6 +185,19 @@ static int bpf_qdisc_gen_epilogue(struct bpf_insn *insn_buf, const struct bpf_pr
- 	return insn - insn_buf;
- }
- 
-+static LLIST_HEAD(bpf_skb_free_list);
-+
-+static void bpf_skb_free_irq_work(struct irq_work *work)
-+{
-+	struct llist_node *list = llist_del_all(&bpf_skb_free_list);
-+	struct sk_buff *skb, *next;
-+
-+	llist_for_each_entry_safe(skb, next, list, ll_node)
-+		dev_kfree_skb_any(skb);
-+}
-+
-+static DEFINE_IRQ_WORK(bpf_skb_free_work, bpf_skb_free_irq_work);
-+
- __bpf_kfunc_start_defs();
- 
- /* bpf_skb_get_hash - Get the flow hash of an skb.
-@@ -199,10 +213,17 @@ __bpf_kfunc u32 bpf_skb_get_hash(struct sk_buff *skb)
-  *
-  * Also the destructor of an skb kptr, which runs wherever an object or a map
-  * value with such a field is freed: under a bpf_spin_lock too, with irqs off.
-+ * rq lock can be held as well, so don't wake up ksoftirqd from here.
-  */
- __bpf_kfunc void bpf_kfree_skb(struct sk_buff *skb)
- {
--	dev_kfree_skb_any(skb);
-+	if (irqs_disabled() ||
-+	    (IS_ENABLED(CONFIG_PREEMPT_RT) && !preemptible())) {
-+		llist_add(&skb->ll_node, &bpf_skb_free_list);
-+		irq_work_queue(&bpf_skb_free_work);
-+		return;
-+	}
-+	kfree_skb(skb);
- }
- 
- __bpf_kfunc void bpf_kfree_skb_dtor(void *skb)
+When an incoming MPTCP subflow is cloned in inet_csk_clone_lock(),
+inet_clone_ulp() -> subflow_ulp_clone() allocates a new
+mptcp_subflow_context with new_ctx->conn still NULL while newsk inherits
+sk_write_space =3D subflow_write_space (new_ctx->conn is only populated
+later in subflow_syn_recv_sock()).  Both SO_SNDBUF in sk_setsockopt()
+and TCP_NOTSENT_LOWAT in do_tcp_setsockopt() invoke
+sk->sk_write_space(sk):
 
-> + * Also the destructor of an skb kptr, which runs wherever an object or a map
-> + * value with such a field is freed: under a bpf_spin_lock too, with irqs off.
+net/mptcp/subflow.c:subflow_write_space() {
+	struct sock *sk =3D mptcp_subflow_ctx(ssk)->conn;
 
-Also the drop under bpf_spin_lock has an old bug.
-The node can have its own list, like struct foo in linked_list.h:
+	mptcp_propagate_sndbuf(sk, ssk);
+	mptcp_write_space(sk);
+}
 
-  bpf_spin_lock(&glock)               irqsave_flags = on
-  bpf_list_add(&ghead, foo, prev)     prev is not in the list
-    bpf_list_head_free(&foo->head)
-      __bpf_spin_lock_irqsave()       irqsave_flags = off
-  bpf_spin_unlock(&glock)             restores off
+Passing sk =3D=3D NULL into mptcp_write_space() ->
+mptcp_stream_memory_free() causes a NULL pointer dereference.
 
-The prog returns with irqs off. That's a separate patch.
-This helpers.c change is on top of v2 too, it builds and was never run:
+> +	case SOL_IPV6:
+> +		if (optname =3D=3D IPV6_TCLASS || optname =3D=3D IPV6_AUTOFLOWLABEL)
+> +			return -EOPNOTSUPP;
+> +		break;
 
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 6788489..bc0dd36 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -2302,6 +2302,7 @@ void bpf_list_head_free(const struct btf_field *field, void *list_head,
- 			struct bpf_spin_lock *spin_lock)
- {
- 	struct list_head *head = list_head, drain, *pos, *n;
-+	unsigned long flags;
- 
- 	BUILD_BUG_ON(sizeof(struct list_head) > sizeof(struct bpf_list_head));
- 	BUILD_BUG_ON(__alignof__(struct list_head) > __alignof__(struct bpf_list_head));
-@@ -2313,7 +2314,8 @@ void bpf_list_head_free(const struct btf_field *field, void *list_head,
- 	 * section, and end up doing map ops that call bpf_list_head_free for
- 	 * the same map value again.
- 	 */
--	__bpf_spin_lock_irqsave(spin_lock);
-+	local_irq_save(flags);
-+	__bpf_spin_lock(spin_lock);
- 	if (!head->next || list_empty(head))
- 		goto unlock;
- 	list_for_each_safe(pos, n, head) {
-@@ -2325,7 +2327,8 @@ void bpf_list_head_free(const struct btf_field *field, void *list_head,
- 	}
- unlock:
- 	INIT_LIST_HEAD(head);
--	__bpf_spin_unlock_irqrestore(spin_lock);
-+	__bpf_spin_unlock(spin_lock);
-+	local_irq_restore(flags);
- 
- 	while (!list_empty(&drain)) {
- 		struct bpf_list_node_kern *node;
-@@ -2362,19 +2365,22 @@ void bpf_rb_root_free(const struct btf_field *field, void *rb_root,
- 	struct rb_root_cached orig_root, *root = rb_root;
- 	struct bpf_rb_node_kern *node;
- 	struct rb_node *pos, *n;
-+	unsigned long flags;
- 	void *obj;
- 
- 	BUILD_BUG_ON(sizeof(struct rb_root_cached) > sizeof(struct bpf_rb_root));
- 	BUILD_BUG_ON(__alignof__(struct rb_root_cached) > __alignof__(struct bpf_rb_root));
- 
--	__bpf_spin_lock_irqsave(spin_lock);
-+	local_irq_save(flags);
-+	__bpf_spin_lock(spin_lock);
- 	orig_root = *root;
- 	bpf_rbtree_postorder_for_each_entry_safe(pos, n, &orig_root.rb_root) {
- 		node = rb_entry(pos, struct bpf_rb_node_kern, rb_node);
- 		WRITE_ONCE(node->owner, BPF_PTR_POISON);
- 	}
- 	*root = RB_ROOT_CACHED;
--	__bpf_spin_unlock_irqrestore(spin_lock);
-+	__bpf_spin_unlock(spin_lock);
-+	local_irq_restore(flags);
- 
- 	bpf_rbtree_postorder_for_each_entry_safe(pos, n, &orig_root.rb_root) {
- 		obj = pos;
+[Severity: Medium]
+Does IPV6_AUTOFLOWLABEL need to be rejected here?
 
-pw-bot: cr
+Since commit 5121516b0c47 ("ipv6: lockless IPV6_AUTOFLOWLABEL
+implementation"), do_ipv6_setsockopt() handles IPV6_AUTOFLOWLABEL via
+inet6_assign_bit(AUTOFLOWLABEL, sk, valbool) and
+inet6_set_bit(AUTOFLOWLABEL_SET, sk), which modify
+inet_sk(sk)->inet_flags on the child socket rather than the listener's
+ipv6_pinfo.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261124061544.2545=
+86-1-jiayuan.chen@linux.dev?part=3D1
