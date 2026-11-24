@@ -1,83 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.208.49
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.208.43
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795543140;
-	b=U/QerbCRNj+oFiuOFy90vBCyk0Mfxgfnd7ciw8AaNxF28XeBiyzcdiGh9LdwRDnloYga
-	 2Pb8ZmOYNW3+nukpE0+usElnK7h8yq6xiY4sFe2ho3xSjZW3kcjocfQHVc66NlLhLdxu3
-	 ngJRdPptyJ5Ya2/mgWqb+5JUMPgBpnOQRRMUa8RmqXaDrg/GhJwZay1aBVs8zdQW3fMkZ
-	 D3yPoA6p03+kRXfQUTAJtRe2aGCJjOOl9kN7kXoT9qwm2ONWHc7CZpNqIMtGPRVJASwVs
-	 4rQxHZQHXI/e+gfevKQTqiRXkkGaWPNNUOWaTs5xjdIonM9rI6NoDFl6tcAMMjCbIbg==
+	t=1795543146;
+	b=nJBDsuwamQ2Koxr6/mh/vGL17o6JhaSVRSxrfUpLKR2Lvca5TC2iyTjY7t9XPzP2vqr+
+	 1fwRQ3hyHfHE7d1O+F1jOwaEUUa65szhmcQ+mZgGLXo8vRnEqGwXxfs1NXYPvoECvZNeO
+	 OXZEncwV08s6xDEKI5AVqBnBexz4FVca3MUR3VA9QTmYuAuAaK194qTPXgUjqWDmm1Wrw
+	 oAEvcvjYrDQDPAgNatrf0IK6QdCsTFcni5SDKObw1si1iClgyOjRjIMvVU3lI+N+kph+4
+	 TdM0rOfja7copRf9TuDkd3856cb79znHs6KHzOTTy5yu0YScqV6zb9Ac1uSDUnsUtug==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795543140;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795543146;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=bohhXAU7tFCgOgXzIKgR9vv6uOs8poL4HtEoBRHXmXw=;
-	b=VBi0AF5KZerCWe/XucBqGwyux76SYxcgN5j6MrFVd2COyLa38ANa9QP+ejiQqVWitOEX
-	 UHrDV9K96/lDmtFU0zd7wh2iScW65ASzISkR60MayJoL2ALy4NORuNJaNDzBTM4bE7sK3
-	 j4RUoOXut3EojpriinGjg5sV/UmY6ez8pL/EHkqZTqYIILpXWobjjI+jEfBAyYCHto7m0
-	 J2Cr5zME0cOsnfVxsIiBIFPMNfd5iU7ZKOZDgk2BwSwW9HfQm1LgrI3IeIV7Dh1WSlxvZ
-	 W+9R4i7XIXy+/jkYGp4LFqCwZFIb4wUQZBwDzyRE5dPjGZbWFjuU8Izoo213V2/F4Ng==
+	bh=SPUplCqj9F0zaOPfCclBy+LLhs7CEl/BQHOx3W0UaAU=;
+	b=lCFdOL9CNFEGMFCmo2dLaWn1lsUa9/nunrg7AMVt0cmgDd6zNpQQ2VWZM9qlwf1vcZzH
+	 L6qu8tKKIi+xUl0OZS4MS94eZP5CyUyF4cof/3V3aqeVq1tpvnlPiGdwtX9O9AAzU04PI
+	 hfZzPkpFkSvP8pQXNwzCUGZ8rVbgXcGyLeT69a1L3N4TDp6y7+LYlVaIfOiQrJhYcG5hY
+	 OkrDMKrc+ouQBmoLSBRGhuI9vBCcSqv6V07DgFlLPg5xImNVCFoFAOCLlqO/64rG7xpCR
+	 RNf+4iVINgcg/80LlaAG4/biMGAIogdnFu6fImaXu0Y1dQFoDYh9jUG+O9gKky6grBg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=cloudflare.com;
 	spf=pass smtp.mailfrom=cloudflare.com;
-	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=FNCLkt0+;
-	arc=none smtp.remote-ip=209.85.208.49
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=PijlVcrf;
+	arc=none smtp.remote-ip=209.85.208.43
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB41D606A326
-	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 17:58:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CB41D606A326
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51652606A31E
+	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 17:59:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 51652606A31E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=FNCLkt0+
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-6baa6f27904so3620196a12.0
-        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 09:58:59 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=PijlVcrf
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-6b8c60e0d39so6288877a12.2
+        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 09:59:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1795543138; x=1796147938; darn=vger.kernel.org;
+        d=cloudflare.com; s=google09082023; t=1795543144; x=1796147944; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=bohhXAU7tFCgOgXzIKgR9vv6uOs8poL4HtEoBRHXmXw=;
-        b=FNCLkt0+X74F8TZpGwPJ9My784ujCrxM6ZfPnrYHMenzKjY8dmDndskgj849rlsJi1
-         LYWBxXpF98Oj9PVPZmkemu0wbHqFguw1N+7GJae/hdyzuykfYYBMUIPDatFBxTzN90Zm
-         kroq07brpFUwpVripCnyotNy3p4BcxO4TPwy7b+lwa7LwvB+krZC5HVulnzTZTVcUcdZ
-         7dggCwe+5nYhDs3AWVeTTaX574POT0GKb7RCj5gh8k/jem6IYzVia3rVfzPSlc1Xyo9p
-         F7W+EXEdY76NzGcCyEe38J55jF9TroasSlvMSB+M6RsisPWiGh6C13Hgs9iFSW8Xq4qJ
-         gkxQ==
+        bh=SPUplCqj9F0zaOPfCclBy+LLhs7CEl/BQHOx3W0UaAU=;
+        b=PijlVcrfZyJqOX6yW847sRt7uMqToh02HIcycBhiLh/m4Oyoij2KLSuFbh7jfQK1w7
+         7wveidlOnlEu9EepijtSvw2K68D43Jpbe33oyueBBbXeChpOxBFFG/X4OQSwhGxRnxPQ
+         /QvWXMj/QnNfUYBh4tIA53nNZnBh5AImAJ6SE44CXgtZRUUiwdXcPmr4Q2DcjGmRV+dk
+         iu/RMLaY4clw/ZKKZFgSL7L4MAlgnbtB7tbNOkPeUZTAzp0TchgZDFD/TTcNt7Znxcwh
+         wjXKGMlNAxf9avZfYZCKmQL6AanUQ1cOAZYWE8fWutN2IClTLDUGapPtzN9jOS5K03fl
+         +CdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795543138; x=1796147938;
+        d=1e100.net; s=20260707; t=1795543144; x=1796147944;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=bohhXAU7tFCgOgXzIKgR9vv6uOs8poL4HtEoBRHXmXw=;
-        b=R+IVXEE29FRwl2VowmmvONqpz+xStsNVpIyOBU6H8n8MkK1hNBKL6zRCfkr1ZTg/Bm
-         BzDNXo6Hgp+C8eBTtxutlq2aSrSRhjoIJ+F4CRPDsBv1DO0G42NOkXwQOs9wB+tSaPen
-         OVKi0eB55t4Ddk043tNJC9lJ3PkMFiVn2Bdxx3urNXATmC68g0IFkvQviLIEfXPtvOw9
-         T063fK0iCSEBCb/GM/mj7bxyTySLUQ1pa7e0VimkpnrmVtjOTVMRu75mFkrPfwLHnuDJ
-         EX+NBBztkj2IHvmq/9iTHgoIdR4AVYEh/JeTYwecYe/BDX6INU9g+zMuRTufLGF6KUhu
-         ELUQ==
-X-Forwarded-Encrypted: i=1; AL+hErFOdv7Spq0oEpr95Vgk2QVO1xI2ATZsBZBRl9I2u7PFGJgxK5HggRwAcbmZamkMr3XysqY=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9ceNGst6miqyL/P/sAiojGcML3WvD33LhMqOGOYzlbYtpxbXaU
-	crH3ILLNN9B8YfX93UGfZFf4uLIRcixf7UdQGyuD3/xf3nC507Obfl2ECBRTO9+1pV4=
-X-Gm-Gg: AZFdTZdDs2SpGIP2+AKj61VE1GKDfNyXPXhjPXEF+WgnSERYaUSyPiDDsnc2/iTmGbb
-	H5rEurJ83asyigUiRPjeSFFl1LuNOVvgI3WjRLdd3TwaNl+mHyuwdbEDOmbYOeCfsKf6fktPVmx
-	cnSS7EGCWfFzaaRfmwEGnOWG/81qHlAHKmVSz2/11mNAocT8gdoRFiLuUhYjy66WLvcD6zsW5i6
-	k9tOcT+yomDZPxmmwxL5ZMHBLmlS0N0ALYzNHzm05qqslzrHFf5kpxHsQ/43uwsP7G36wfAh0yO
-	nZmMuVIO1EL1BdyG7KdkUcjr/8q/2rSGYNIUPLPSnEf6jpfo8WvVJI4k5jwFU9q7QvEupFvdPAh
-	u2uJG3RJVrj8bDL5A2bcDlUqbfsH1h5jJeWjhIopLV3xgE7zH6TLqGaLgkUMyDXtlP6+BUl6yFK
-	N1bqgSASc0ge2DkDtNAL+/1iWUp8hpPAnPFDKTF3nkfp+KxBQx47dt9J1NcAYfWXxVJQkUiVG8/
-	D5WRcX+zUA9SFas13JXd4lVzbb8EULnPXwOvVc931xzZhLvHBIqYrbQQuzzvhKLSZ0tKBX3i7QY
-	LasRaoWrCd2FA2btpIwcQq0Y3Ar4OUXbrjqSZFMBySHEF0E=
-X-Received: by 2002:a05:6402:2714:b0:6ba:45a3:c7de with SMTP id 4fb4d7f45d1cf-6ba45a3ca22mr10545737a12.9.1795543138120;
-        Tue, 24 Nov 2026 09:58:58 -0800 (PST)
+        bh=SPUplCqj9F0zaOPfCclBy+LLhs7CEl/BQHOx3W0UaAU=;
+        b=xHe8T0Ky0cuyTdfaqrqqc35EWD9pDUC5andNUbnbCPqk7t9kSKV6DAS9uYEOtrSVts
+         0qpRYpugitOxsFeavAhPtWexJj9KPWzXxGxmf3UzFYfVvolFzh/5CQe/vVA3kXe8WzmA
+         daLJqnNSHuCqKGZfBNUvwngawYnZMbhE7qq6w6g0QrfNbpunmApK1JBN/QC7FI/+9q5h
+         mivnPjYY4sk7unx8vBMUxAoF/Ju3i7X3SPZGDSMogTmy3JVzz8Pc1GywlTitDOEZpGPs
+         cY/4k3BqMSTYOnBHhthoRZWgAU8BXcoF4yH8/ltkoChp+XThjOMjQmWuUFxtjHBbhDOC
+         NuEg==
+X-Forwarded-Encrypted: i=1; AL+hErGbsTqtiWtAGsesW+oKu+YBDdKHU8wRIjA5GHzG1OqorRHLdYTSd2AsbGWVLZCm1XJtlbE=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9pkLl4Wuz3SZSnQGderT4ZKOldLLVSZ/PU9Dhz1j9XUDyAoI7t
+	dxsIc3TRjN1fZpe3kHi8D512n4YGNacqNq4FG70veL0Sc2+VXgJMRSkDzn4pqYmsloI=
+X-Gm-Gg: AZFdTZdNy6oziSUZHT51t9luwIJquLRJWSgUNiZxsnX8dZ6sQKMTWl2cjrZC1hsAjDB
+	VvyG4uW3Agr4uo1N0CwfloWghNrjMP3sFZFIwgKhMmMvDEQlK7Cn/NqRG2CGxlXZfw2dsl5HZhN
+	6Nlzuodu69aZlSM72cUl5xVeUpO9LBJrFcLzuwBUtlbhA8xaHUFWTfPNAZMEPPig9uLQV33ra30
+	NRU7fL02r3ssOv4+t8PeqKVNqEZ8OwMoeRD58TcU3SIE0mBr+3PADKYYkSiW4c/5wy9/aUHzZzn
+	ym9Fv7QF4TlnvG5+hJVeK77Gj9xwiXqQdWBMqLXUICYm7FiK7HW367FM99004iSdQyNEgVsIFQr
+	xaR4Wpv+TN1q4ULRjfXcfbPTDa0cVAlDhbKqRXLe93YfpppFi8aBwkP6LZd0vv2rHEgHFH5NmA5
+	RlgwVv+AEgNjByegkAvqY5gmKkvUP1QIcOsXzOd1/5/xvRFg6/OGQQdadYP5cun2G5cbDA/xQNj
+	szSnJC0u/uAR9WxYAOVYAb5NENOOgodUxYrSiKiEeELRaJZmbpD/o730d7rphCsE6ALAENR3Vkq
+	GkvFcUdOiS+bF+3OrYzzDbsRbTWGXap5MkkoJVkrL+spK1s=
+X-Received: by 2002:a05:6402:400f:b0:6b7:37f6:d307 with SMTP id 4fb4d7f45d1cf-6ba37ec45bfmr11870311a12.40.1795543143685;
+        Tue, 24 Nov 2026 09:59:03 -0800 (PST)
 Received: from L9JK9NPFH9 ([2a09:bac6:37ad:1e5a::306:5])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6ba3711ad52sm7205762a12.35.2026.11.24.09.58.51
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6ba3711ad52sm7205762a12.35.2026.11.24.09.58.58
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 24 Nov 2026 09:58:57 -0800 (PST)
+        Tue, 24 Nov 2026 09:59:03 -0800 (PST)
 From: Tianyi Gao <tianyi@cloudflare.com>
 To: netdev@vger.kernel.org,
 	Jakub Kicinski <kuba@kernel.org>,
@@ -149,9 +149,9 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	Jeff Layton <jlayton@kernel.org>,
 	Tianyi Gao <tianyi.gao@linux.dev>,
 	Tianyi Gao <tianyi@cloudflare.com>
-Subject: [PATCH net-next v3 04/11] selftests: net: add flag to send a frame in xdp_helper
-Date: Tue, 24 Nov 2026 17:58:17 +0000
-Message-ID: <20261124175824.60470-5-tianyi@cloudflare.com>
+Subject: [PATCH net-next v3 05/11] selftests: net: add tx_extra_headroom test
+Date: Tue, 24 Nov 2026 17:58:18 +0000
+Message-ID: <20261124175824.60470-6-tianyi@cloudflare.com>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261124175824.60470-1-tianyi@cloudflare.com>
 References: <20261124175824.60470-1-tianyi@cloudflare.com>
@@ -166,167 +166,470 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-xdp_helper only binds an XDP socket and waits. Tests in selftests/net
-have no way to send a frame through the AF_XDP TX path.
+Generic XDP copies an skb with less than XDP_PACKET_HEADROOM (256 bytes)
+of headroom. When XDP is attached to one end of a veth pair, the kernel
+now sets tx_extra_headroom of the other end. A locally generated packet
+then has enough headroom, and generic XDP no longer copies it.
 
-Add a -t option that takes one Ethernet frame in hex. With -t, the
-helper also creates a TX ring, sends the frame and exits. It returns 1
-if sendto() fails. Without -t, nothing changes.
+Test this for six senders. Each one allocates the skb in a different
+place: UDP over IPv4 and IPv6, raw sockets with IPPROTO_RAW over IPv4
+and IPv6, AF_PACKET and AF_XDP in copy mode. xdp_helper -t sends the
+AF_XDP frame. The peer runs xdp_dummy in generic mode.
 
-The test passes the whole frame in hex, so xdp_helper does not need to
-know about IP or UDP.
+tx_extra_headroom.bpf.c is a TC program. For the test packet it records
+needed_headroom and tx_extra_headroom of skb->dev, and skb->pp_recycle.
+For a frags program, generic XDP copies a packet into a page_pool page.
+At TC ingress of the peer, pp_recycle then shows whether the packet was
+copied. A packet socket for ETH_P_ALL on the sender holds a clone of the
+skb, which forces a copy. This checks that pp_recycle detects the copy.
 
--t binds the socket in copy mode. Copy mode sends the frame within
-sendto(), so the helper can exit right after it. In zerocopy mode,
-sendto() only wakes up the driver, which may send the frame after the
-helper has exited and closed the socket. Also, the extra headroom is
-added when copy mode allocates an skb for the frame in xsk_build_skb().
+netkit implements ndo_get_peer_dev too, so the same holds for a netkit
+pair. Test it once, with UDP over IPv4 and netkit in L2 mode.
 
-send_frame() follows tools/testing/selftests/net/lib/xsk/xsk.c and
-tools/testing/selftests/bpf/prog_tests/xdp_metadata.c. XDP_PGOFF_TX_RING
-(0x80000000) does not fit in a 32-bit off_t. xsk.c also passes it to
-mmap() without _FILE_OFFSET_BITS, so xdp_helper does not define it
-either.
+test_detach attaches native or generic XDP to veth1. needed_headroom of
+veth is 0, so tx_extra_headroom of veth0 must be XDP_PACKET_HEADROOM.
+After detach it must be 0.
+
+test_bond adds veth1 to a bond and attaches native XDP to the bond,
+which propagates it to veth1. tx_extra_headroom of veth0 must again be
+XDP_PACKET_HEADROOM, and 0 after detach.
+
+test_bridge_vxlan adds veth1 to a bridge with a vxlan port. This raises
+needed_headroom of both ends. Then the test attaches XDP.
+needed_headroom plus tx_extra_headroom must be XDP_PACKET_HEADROOM.
+
+The test does not check for netkit, bonding, bridge or vxlan, because
+the selftests/net config enables them.
+
+Mount bpffs on /sys/fs/bpf if needed, as bpf_offload.py does for
+debugfs.
 
 Signed-off-by: Tianyi Gao <tianyi@cloudflare.com>
 ---
 v3:
-- Bind in copy mode with -t (Sashiko).
+- Mount bpffs on /sys/fs/bpf if needed (Paolo).
 
 v2:
-- Exit after sendto() and do not wait for the TX completion, as
-  xdp_metadata.c does.
-- Drop the _FILE_OFFSET_BITS define, as xsk.c does.
+- v1 4/8 tested IFLA_TX_EXTRA_HEADROOM and is dropped with it.
+- Built from v1 7/8. Attach XDP to the peer instead of setting
+  IFLA_TX_EXTRA_HEADROOM.
+- Detect the copy with skb->pp_recycle instead of comparing the
+  headroom before and after the attach.
+- Add the cloned, netkit, detach, bond and bridge cases.
 ---
- tools/testing/selftests/net/lib/xdp_helper.c | 83 ++++++++++++++++++--
- 1 file changed, 75 insertions(+), 8 deletions(-)
+ tools/testing/selftests/net/Makefile          |   1 +
+ tools/testing/selftests/net/lib/xdp_helper.c  |   2 +-
+ .../selftests/net/tx_extra_headroom.bpf.c     |  81 +++++
+ .../selftests/net/tx_extra_headroom.py        | 287 ++++++++++++++++++
+ 4 files changed, 370 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/net/tx_extra_headroom.bpf.c
+ create mode 100755 tools/testing/selftests/net/tx_extra_headroom.py
 
+diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+index fb0a64662053..d2ddd30eeed8 100644
+--- a/tools/testing/selftests/net/Makefile
++++ b/tools/testing/selftests/net/Makefile
+@@ -124,6 +124,7 @@ TEST_PROGS := \
+ 	test_vxlan_vnifiltering.sh \
+ 	tfo_passive.sh \
+ 	traceroute.sh \
++	tx_extra_headroom.py \
+ 	txtimestamp.sh \
+ 	udpgro.sh \
+ 	udpgro_bench.sh \
 diff --git a/tools/testing/selftests/net/lib/xdp_helper.c b/tools/testing/selftests/net/lib/xdp_helper.c
-index eb025a9f35b1..e17768816032 100644
+index e17768816032..bcd62be014bd 100644
 --- a/tools/testing/selftests/net/lib/xdp_helper.c
 +++ b/tools/testing/selftests/net/lib/xdp_helper.c
-@@ -19,15 +19,65 @@
- 
- static void print_usage(const char *bin)
- {
--	fprintf(stderr, "Usage: %s ifindex queue_id [-z]\n\n"
--		"where:\n\t-z: force zerocopy mode", bin);
-+	fprintf(stderr, "Usage: %s ifindex queue_id [-z] [-t frame_hex]\n\n"
-+		"where:\n\t-z: force zerocopy mode\n"
-+		"\t-t: send one frame, given in hex, and exit\n", bin);
-+}
-+
-+static int parse_frame(unsigned char *buf, const char *hex)
-+{
-+	size_t len = strlen(hex) / 2;
-+	size_t i;
-+
-+	if (!len || len > 2048 || strlen(hex) % 2)
-+		return -1;
-+	for (i = 0; i < len; i++)
-+		if (sscanf(hex + 2 * i, "%2hhx", &buf[i]) != 1)
-+			return -1;
-+	return len;
-+}
-+
-+static int send_frame(int sock_fd, __u32 len)
-+{
-+	struct xdp_mmap_offsets off;
-+	socklen_t optlen = sizeof(off);
-+	struct xdp_desc *desc;
-+	size_t tx_sz;
-+	int ret = 0;
-+	char *tx;
-+
-+	if (getsockopt(sock_fd, SOL_XDP, XDP_MMAP_OFFSETS, &off, &optlen)) {
-+		perror("getsockopt failed");
-+		return 1;
-+	}
-+
-+	tx_sz = off.tx.desc + NUM_DESC * sizeof(*desc);
-+	tx = mmap(NULL, tx_sz, PROT_READ | PROT_WRITE, MAP_SHARED, sock_fd,
-+		  XDP_PGOFF_TX_RING);
-+	if (tx == MAP_FAILED) {
-+		perror("TX ring mmap failed");
-+		return 1;
-+	}
-+
-+	desc = (struct xdp_desc *)(tx + off.tx.desc);
-+	desc->addr = 0;
-+	desc->len = len;
-+	__atomic_store_n((__u32 *)(tx + off.tx.producer), 1, __ATOMIC_RELEASE);
-+
-+	if (sendto(sock_fd, NULL, 0, MSG_DONTWAIT, NULL, 0) < 0) {
-+		perror("sendto failed");
-+		ret = 1;
-+	}
-+
-+	munmap(tx, tx_sz);
-+	return ret;
- }
- 
- /* this is a simple helper program that creates an XDP socket and does the
-  * minimum necessary to get bind() to succeed.
-  *
-- * this test program is not intended to actually process packets, but could be
-- * extended in the future if that is actually needed.
-+ * without -t it does not process packets. with -t it sends one frame
-+ * through the TX ring and exits.
+@@ -80,7 +80,7 @@ static int send_frame(int sock_fd, __u32 len)
+  * through the TX ring and exits.
   *
   * it is used by queues.py to ensure the xsk netlinux attribute is set
-  * correctly.
-@@ -37,13 +87,15 @@ int main(int argc, char **argv)
- 	struct xdp_umem_reg umem_reg = { 0 };
- 	struct sockaddr_xdp sxdp = { 0 };
- 	int num_desc = NUM_DESC;
-+	int frame_len = 0;
- 	void *umem_area;
- 	int retry = 0;
- 	int ifindex;
- 	int sock_fd;
- 	int queue;
-+	int i;
- 
--	if (argc != 3 && argc != 4) {
-+	if (argc < 3) {
- 		print_usage(argv[0]);
- 		return 1;
- 	}
-@@ -94,9 +146,21 @@ int main(int argc, char **argv)
- 	sxdp.sxdp_queue_id = queue;
- 	sxdp.sxdp_flags = 0;
- 
--	if (argc > 3) {
--		if (!strcmp(argv[3], "-z")) {
--			sxdp.sxdp_flags = XDP_ZEROCOPY;
-+	for (i = 3; i < argc; i++) {
-+		if (!strcmp(argv[i], "-z")) {
-+			sxdp.sxdp_flags |= XDP_ZEROCOPY;
-+		} else if (!strcmp(argv[i], "-t") && i + 1 < argc) {
-+			sxdp.sxdp_flags |= XDP_COPY;
-+			frame_len = parse_frame(umem_area, argv[++i]);
-+			if (frame_len < 0) {
-+				print_usage(argv[0]);
-+				return 1;
-+			}
-+			if (setsockopt(sock_fd, SOL_XDP, XDP_TX_RING, &num_desc,
-+				       sizeof(num_desc))) {
-+				perror("setsockopt XDP_TX_RING failed");
-+				return 1;
-+			}
- 		} else {
- 			print_usage(argv[0]);
- 			return 1;
-@@ -119,6 +183,9 @@ int main(int argc, char **argv)
- 		}
- 	}
- 
-+	if (frame_len)
-+		return send_frame(sock_fd, frame_len);
+- * correctly.
++ * correctly, and by tx_extra_headroom.py to send a frame.
+  */
+ int main(int argc, char **argv)
+ {
+diff --git a/tools/testing/selftests/net/tx_extra_headroom.bpf.c b/tools/testing/selftests/net/tx_extra_headroom.bpf.c
+new file mode 100644
+index 000000000000..d80f4567873a
+--- /dev/null
++++ b/tools/testing/selftests/net/tx_extra_headroom.bpf.c
+@@ -0,0 +1,81 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Record the headroom fields of a test packet. */
++#include <stdbool.h>
++#include <linux/bpf.h>
++#include <linux/if_ether.h>
++#include <linux/in.h>
++#include <linux/ip.h>
++#include <linux/ipv6.h>
++#include <linux/udp.h>
++#include <bpf/bpf_core_read.h>
++#include <bpf/bpf_endian.h>
++#include <bpf/bpf_helpers.h>
 +
- 	ksft_ready();
- 	ksft_wait();
- 
++#define UDP_TEST_PORT 9999
++
++struct net_device {
++	unsigned short needed_headroom;
++	unsigned short tx_extra_headroom;
++} __attribute__((preserve_access_index));
++
++struct sk_buff {
++	struct net_device *dev;
++	__u8 pp_recycle:1;
++} __attribute__((preserve_access_index));
++
++void *bpf_cast_to_kern_ctx(void *obj) __ksym;
++
++__u32 count;
++__u32 needed_headroom;
++__u32 tx_extra_headroom;
++bool pp_recycle;
++
++static bool is_test_packet(struct __sk_buff *skb)
++{
++	struct ipv6hdr ip6h;
++	struct udphdr udph;
++	struct iphdr iph;
++	__u32 off;
++
++	if (skb->protocol == bpf_htons(ETH_P_IP)) {
++		if (bpf_skb_load_bytes(skb, ETH_HLEN, &iph, sizeof(iph)))
++			return false;
++		if (iph.protocol != IPPROTO_UDP)
++			return false;
++		off = ETH_HLEN + sizeof(iph);
++	} else if (skb->protocol == bpf_htons(ETH_P_IPV6)) {
++		if (bpf_skb_load_bytes(skb, ETH_HLEN, &ip6h, sizeof(ip6h)))
++			return false;
++		if (ip6h.nexthdr != IPPROTO_UDP)
++			return false;
++		off = ETH_HLEN + sizeof(ip6h);
++	} else {
++		return false;
++	}
++
++	if (bpf_skb_load_bytes(skb, off, &udph, sizeof(udph)))
++		return false;
++
++	return udph.dest == bpf_htons(UDP_TEST_PORT);
++}
++
++/* Attached at tcx ingress and at tcx egress. */
++SEC("tc")
++int record(struct __sk_buff *skb)
++{
++	struct sk_buff *kskb;
++
++	if (!is_test_packet(skb))
++		return TCX_NEXT;
++
++	kskb = bpf_cast_to_kern_ctx(skb);
++	needed_headroom = kskb->dev->needed_headroom;
++	tx_extra_headroom = kskb->dev->tx_extra_headroom;
++	/* For a frags program, generic XDP copies into a page_pool page. */
++	pp_recycle = BPF_CORE_READ_BITFIELD(kskb, pp_recycle);
++	count++;
++
++	return TCX_NEXT;
++}
++
++char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/net/tx_extra_headroom.py b/tools/testing/selftests/net/tx_extra_headroom.py
+new file mode 100755
+index 000000000000..49a61ad17671
+--- /dev/null
++++ b/tools/testing/selftests/net/tx_extra_headroom.py
+@@ -0,0 +1,287 @@
++#!/usr/bin/env python3
++# SPDX-License-Identifier: GPL-2.0
++
++"""Tests for tx_extra_headroom."""
++
++import socket
++import struct
++from pathlib import Path
++
++from lib.py import ksft_run, ksft_exit, ksft_eq, ksft_gt
++from lib.py import KsftSkipEx, KsftFailEx
++from lib.py import ksft_busy_wait, ksft_variants, KsftNamedVariant
++from lib.py import cmd, defer, ip, bpftool, bpf_prog_map_ids
++from lib.py import NetNS, NetNSEnter
++
++BPF_OBJ = Path(__file__).parent / "tx_extra_headroom.bpf.o"
++XDP_OBJ = Path(__file__).parent / "lib/xdp_dummy.bpf.o"
++XDP_HELPER = Path(__file__).parent / "lib/xdp_helper"
++PIN_DIR = Path("/sys/fs/bpf/tx_extra_headroom")
++PORT = 9999  # UDP_TEST_PORT in tx_extra_headroom.bpf.c
++ETH_P_ALL = 0x0003
++XDP_PACKET_HEADROOM = 256
++
++
++def _setup_addrs(peer_ns, dev, peer):
++    """Add addresses to dev and to peer in peer_ns, and bring both up."""
++    ip(f"addr add 192.0.2.1/24 dev {dev}")
++    ip(f"addr add 2001:db8::1/64 dev {dev} nodad")
++    ip(f"link set {dev} up")
++    ip(f"addr add 192.0.2.2/24 dev {peer}", ns=peer_ns)
++    ip(f"addr add 2001:db8::2/64 dev {peer} nodad", ns=peer_ns)
++    ip(f"link set {peer} up", ns=peer_ns)
++    peer_mac = ip(f"link show dev {peer}", json=True, ns=peer_ns)[0]["address"]
++    for addr in ("192.0.2.2", "2001:db8::2"):
++        ip(f"neigh replace {addr} lladdr {peer_mac} dev {dev} nud permanent")
++
++
++def _setup_veth(peer_ns):
++    """Create veth0 in the current netns and its peer veth1 in peer_ns."""
++    ip("link add veth0 type veth peer name veth1")
++    ip(f"link set veth1 netns {peer_ns}")
++    _setup_addrs(peer_ns, "veth0", "veth1")
++
++
++def _attach_xdp(peer_ns, mode="xdpgeneric", dev="veth1"):
++    """Attach xdp_dummy to dev in peer_ns."""
++    # For a frags program, generic XDP copies into a page_pool page.
++    ip(f"link set dev {dev} {mode} obj {XDP_OBJ} sec xdp.frags", ns=peer_ns)
++
++
++def _load_progs():
++    """Load the programs of BPF_OBJ, return the id of their .bss map."""
++    cmd(f"rm -rf {PIN_DIR}", shell=True, fail=False)
++    bpftool(f"prog loadall {BPF_OBJ} {PIN_DIR}")
++    defer(cmd, f"rm -rf {PIN_DIR}", shell=True, fail=False)
++    prog_id = bpftool(f"prog show pinned {PIN_DIR}/record", json=True)["id"]
++    return next(map_id for name, map_id in bpf_prog_map_ids(prog_id).items()
++                if name.endswith(".bss"))
++
++
++def _attach_tcx(dev, direction, prog):
++    """Attach program prog to tcx ingress or egress of dev."""
++    bpftool(f"net attach tcx_{direction} pinned {PIN_DIR}/{prog} dev {dev}")
++
++
++def _read_bss(map_id):
++    """Return the global variables of the programs as a dict."""
++    dump = bpftool(f"map dump id {map_id}", json=True)[0]
++    return {name: val for var in dump["formatted"]["value"][".bss"]
++            for name, val in var.items()}
++
++
++def _send_udp4():
++    """Send one UDP packet from veth0 to veth1."""
++    with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
++        s.sendto(b"x", ("192.0.2.2", PORT))
++
++
++def _send_udp6():
++    """Send one UDP packet from veth0 to veth1 over IPv6."""
++    with socket.socket(socket.AF_INET6, socket.SOCK_DGRAM) as s:
++        s.sendto(b"x", ("2001:db8::2", PORT))
++
++
++def _csum(data):
++    """Return the Internet checksum of data."""
++    data += b"\0" * (len(data) % 2)
++    return 0xffff - sum(struct.unpack(f"!{len(data) // 2}H", data)) % 0xffff
++
++
++def _ipv4_udp():
++    """Return an IPv4 UDP packet from veth0 to veth1."""
++    udp = struct.pack("!HHHH", PORT, PORT, 9, 0) + b"x"
++    iph = struct.pack("!BBHHHBBH4s4s", 0x45, 0, 20 + len(udp), 0, 0, 64,
++                      socket.IPPROTO_UDP, 0, socket.inet_aton("192.0.2.1"),
++                      socket.inet_aton("192.0.2.2"))
++    return iph[:10] + struct.pack("!H", _csum(iph)) + iph[12:] + udp
++
++
++def _ipv6_udp():
++    """Return an IPv6 UDP packet from veth0 to veth1."""
++    src = socket.inet_pton(socket.AF_INET6, "2001:db8::1")
++    dst = socket.inet_pton(socket.AF_INET6, "2001:db8::2")
++    udp = struct.pack("!HHHH", PORT, PORT, 9, 0) + b"x"
++    pseudo = src + dst + struct.pack("!IxxxB", len(udp), socket.IPPROTO_UDP)
++    udp = udp[:6] + struct.pack("!H", _csum(pseudo + udp)) + udp[8:]
++    return (struct.pack("!IHBB", 6 << 28, len(udp), socket.IPPROTO_UDP, 64) +
++            src + dst + udp)
++
++
++def _eth_frame():
++    """Return an Ethernet frame with _ipv4_udp() from veth0 to veth1."""
++    src = ip("link show dev veth0", json=True)[0]["address"]
++    dst = ip("neigh show 192.0.2.2 dev veth0", json=True)[0]["lladdr"]
++    return bytes.fromhex((dst + src).replace(":", "") + "0800") + _ipv4_udp()
++
++
++def _send_raw4():
++    """Send one UDP packet from veth0 to veth1 with an IPv4 raw socket."""
++    with socket.socket(socket.AF_INET, socket.SOCK_RAW,
++                       socket.IPPROTO_RAW) as s:
++        s.sendto(_ipv4_udp(), ("192.0.2.2", 0))
++
++
++def _send_raw6():
++    """Send one UDP packet from veth0 to veth1 with an IPv6 raw socket."""
++    with socket.socket(socket.AF_INET6, socket.SOCK_RAW,
++                       socket.IPPROTO_RAW) as s:
++        s.sendto(_ipv6_udp(), ("2001:db8::2", 0))
++
++
++def _send_packet():
++    """Send one UDP packet from veth0 to veth1 with an AF_PACKET socket."""
++    # With protocol 0 the socket receives nothing, so the skb is not cloned.
++    with socket.socket(socket.AF_PACKET, socket.SOCK_RAW) as s:
++        s.bind(("veth0", 0))
++        s.send(_eth_frame())
++
++
++def _send_xsk():
++    """Send one UDP packet from veth0 to veth1 with an AF_XDP socket."""
++    xdp = cmd(f"{XDP_HELPER} - -", fail=False)
++    if xdp.ret == 255:
++        raise KsftSkipEx("AF_XDP unsupported")
++    if xdp.ret > 0:
++        raise KsftFailEx("unable to create AF_XDP socket")
++    ifindex = socket.if_nametoindex("veth0")
++    cmd(f"{XDP_HELPER} {ifindex} 0 -t {_eth_frame().hex()}")
++
++
++@ksft_variants([
++    KsftNamedVariant("udp4", _send_udp4),
++    KsftNamedVariant("udp6", _send_udp6),
++    KsftNamedVariant("raw4", _send_raw4),
++    KsftNamedVariant("raw6", _send_raw6),
++    KsftNamedVariant("packet", _send_packet),
++    KsftNamedVariant("xsk", _send_xsk),
++])
++def test_peer_xdp(send) -> None:
++    """Check that generic XDP on the veth peer does not copy the skb.
++
++    Each sender allocates the skb in a different function.
++    """
++    with NetNS() as send_ns, NetNS() as peer_ns, NetNSEnter(str(send_ns)):
++        _setup_veth(peer_ns)
++        map_id = _load_progs()
++        _attach_xdp(peer_ns)
++        with NetNSEnter(str(peer_ns)):
++            _attach_tcx("veth1", "ingress", "record")
++        send()
++        ksft_busy_wait(lambda: _read_bss(map_id)["count"] == 1)
++        bss = _read_bss(map_id)
++
++    ksft_eq(bss["pp_recycle"], False, "generic XDP copied the skb")
++
++
++def test_peer_xdp_cloned() -> None:
++    """Check that pp_recycle is set when generic XDP copies a cloned skb."""
++    with NetNS() as send_ns, NetNS() as peer_ns, NetNSEnter(str(send_ns)):
++        _setup_veth(peer_ns)
++        map_id = _load_progs()
++        _attach_xdp(peer_ns)
++        with NetNSEnter(str(peer_ns)):
++            _attach_tcx("veth1", "ingress", "record")
++        # A packet socket for ETH_P_ALL holds a clone of the skb, so generic
++        # XDP copies it.
++        with socket.socket(socket.AF_PACKET, socket.SOCK_RAW,
++                           socket.htons(ETH_P_ALL)) as s:
++            s.bind(("veth0", 0))
++            _send_udp4()
++            ksft_busy_wait(lambda: _read_bss(map_id)["count"] == 1)
++        bss = _read_bss(map_id)
++
++    ksft_eq(bss["pp_recycle"], True, "generic XDP did not copy the skb")
++
++
++def test_peer_xdp_netkit() -> None:
++    """Check that generic XDP on the netkit peer does not copy the skb."""
++    with NetNS() as send_ns, NetNS() as peer_ns, NetNSEnter(str(send_ns)):
++        # L2 mode has MAC addresses and ARP, as on veth.
++        ip(f"link add nk0 type netkit mode l2 peer name nk1 netns {peer_ns}")
++        _setup_addrs(peer_ns, "nk0", "nk1")
++        map_id = _load_progs()
++        _attach_xdp(peer_ns, dev="nk1")
++        with NetNSEnter(str(peer_ns)):
++            _attach_tcx("nk1", "ingress", "record")
++        _send_udp4()
++        ksft_busy_wait(lambda: _read_bss(map_id)["count"] == 1)
++        bss = _read_bss(map_id)
++
++    ksft_eq(bss["pp_recycle"], False, "generic XDP copied the skb")
++
++
++@ksft_variants([
++    KsftNamedVariant("generic", "xdpgeneric"),
++    KsftNamedVariant("native", "xdpdrv"),
++])
++def test_detach(mode) -> None:
++    """Check that XDP on the veth peer sets tx_extra_headroom until detach."""
++    with NetNS() as send_ns, NetNS() as peer_ns, NetNSEnter(str(send_ns)):
++        _setup_veth(peer_ns)
++        map_id = _load_progs()
++        _attach_tcx("veth0", "egress", "record")
++        _attach_xdp(peer_ns, mode)
++        _send_udp4()
++        ksft_eq(_read_bss(map_id)["tx_extra_headroom"], XDP_PACKET_HEADROOM)
++        ip(f"link set dev veth1 {mode} off", ns=peer_ns)
++        _send_udp4()
++        ksft_eq(_read_bss(map_id)["tx_extra_headroom"], 0)
++
++
++def test_bond() -> None:
++    """Check that XDP that a bond propagates to the veth peer counts."""
++    with NetNS() as send_ns, NetNS() as peer_ns, NetNSEnter(str(send_ns)):
++        _setup_veth(peer_ns)
++        map_id = _load_progs()
++        _attach_tcx("veth0", "egress", "record")
++        ip("link add bond0 type bond mode balance-rr", ns=peer_ns)
++        # A bond only enslaves a device that is down.
++        ip("link set dev veth1 down", ns=peer_ns)
++        ip("link set dev veth1 master bond0", ns=peer_ns)
++        _attach_xdp(peer_ns, "xdpdrv", "bond0")
++        _send_udp4()
++        ksft_eq(_read_bss(map_id)["tx_extra_headroom"], XDP_PACKET_HEADROOM)
++        ip("link set dev bond0 xdpdrv off", ns=peer_ns)
++        _send_udp4()
++        ksft_eq(_read_bss(map_id)["tx_extra_headroom"], 0)
++
++
++def test_bridge_vxlan() -> None:
++    """Check that needed_headroom counts toward the headroom for XDP."""
++    with NetNS() as send_ns, NetNS() as peer_ns, NetNSEnter(str(send_ns)):
++        _setup_veth(peer_ns)
++        map_id = _load_progs()
++        _attach_tcx("veth0", "egress", "record")
++        ip("link add br0 type bridge", ns=peer_ns)
++        ip("link set dev veth1 master br0", ns=peer_ns)
++        # The bridge raises needed_headroom of veth1, and of veth0 with it.
++        ip("link add vxlan0 type vxlan id 1 dstport 4789", ns=peer_ns)
++        ip("link set dev vxlan0 master br0", ns=peer_ns)
++        # tx_extra_headroom is not recalculated when needed_headroom
++        # changes, so attach XDP after the vxlan port.
++        _attach_xdp(peer_ns)
++        _send_udp4()
++        bss = _read_bss(map_id)
++
++    ksft_gt(bss["needed_headroom"], 0,
++            "vxlan port did not raise needed_headroom")
++    ksft_eq(bss["needed_headroom"] + bss["tx_extra_headroom"],
++            XDP_PACKET_HEADROOM)
++
++
++def main() -> None:
++    """Run all test cases."""
++    if "/sys/fs/bpf type bpf" not in cmd("mount").stdout:
++        cmd("mount -t bpf bpffs /sys/fs/bpf")
++    ksft_run([test_peer_xdp,
++              test_peer_xdp_cloned,
++              test_peer_xdp_netkit,
++              test_detach,
++              test_bond,
++              test_bridge_vxlan])
++    ksft_exit()
++
++
++if __name__ == "__main__":
++    main()
 -- 
 2.56.0
 
