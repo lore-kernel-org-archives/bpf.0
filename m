@@ -1,56 +1,82 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.194
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795500683;
-	b=z6rX7gWPF6GAiVo0DUFcnL86hnlYbEro3Du3zaRX8718xR2ZX0gqCOpHBZK22JNg8J1r
-	 vV6zVi+WJTDjpmpeIlk+M5D4rJHAHXgGmq3889tAacVqUhODXGXveNqeBerTOotzsx59b
-	 hXvNsuPmVijyVo4j7ugxzo3MRFkGmqKrjGzTj0IslnjNWFMRaosgvai4qPH7uieuFfhtZ
-	 3HdpKJFhR7nk2sAsPZqu/GD8iV2HscFFJKtqDBBoZc9e/weFuJ3x6A0dRxzCR6ytlDtfa
-	 2O3aTfaY2mk6W0Z0pG1OqOLNKkSiJ9G/ovT8uBbNHANyn5LmJqBG4W7Ac+qHd4d+HMQ==
+	t=1795500962;
+	b=Q7p/jWd2fGDE5v67REA80wsrLF8IObQdlfMUkEItWRbSn2awK70TBQ+cTk82jY0dazV6
+	 zecKs4DEyRrY3EC9ZZo3XbR0WlzLoNPNEtphWeHYHn3EZ/BL1PEbsNDucmA8x7UB0xwXx
+	 bugDY2T/MsvhWqLGuo20xJTI3gu61l/PuHT3TR1gjqyzT9tBymSsxiuxNuGCQDwy3A49M
+	 IBar9xxm5Rdc7ySHjhL50J5b82RmP+RFo560k+EIIBQ5EYlbQi0f03wGUSl2C+pd65Neq
+	 mWMKe2+z0WjPJMpxrHibjMkPe9TrVvALBmRxLbyWjts8Wkk/sIa69cXJp3gy+eqeKjA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795500683;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=iVWYT+ReEjp92DC/COPfTT4+iY+7/LKwunieQrCYZRs=;
-	b=KLwW7cO6LVgM735WycMNa51b5eBHJUXTe+dKrdQq2UsaaKurCoxbA9DnAAvDNU+GBvCk
-	 C5W4WfFSCixdXPDMlM++oT6+P4j9kkStdpmaDysu+MviLg9y2mtMWlyoiwkW1VLZQymAp
-	 vVe1v6B1/L9RpLeJgnsSpEdNNulJaSoC3tHyuGWc0L5v1lRNUHGGpTGyEd/nJWPKt2EpR
-	 xNfDeV1Gfpt8mF1FzLjAnChTPGVmDm8m42FH7NJ1yy1GOj4e6y3l3adSVOY6Dnp7qdn5v
-	 K4p2JGZsTgXV4rTeZDiNaD/zsUt2I85y9FxYeKCAkbjoWAjq5wP0KyC2OepusvhJXJA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795500962;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=3deHkPqpB7aHIFtQfKEsOnKFQwe46sRzUxi3JwWt7Jc=;
+	b=P1Q8NR+1TMqM9SlhFR2BzqGewwRLZ3BIkSZCXQRtygV9dqZGaukITtFAuQ4SAOvuQhRK
+	 vE3/IiF2KQ3e6DJVcrXTDzxEkqRXGNiss0QeA/uaPdvfBeec7ng9jJdeWXPavLI1/0W2I
+	 Yeo/Y5RggUUDZq/Ba3X4YJSvbbbViuyO0gU9mRHqJEb8p8IY3lIk5e06g3FQgnoied4uZ
+	 nij80QfEhEW/kPBDMk0DlyRVoC7uwAN/Z58Km6q6SwIltpwmEzgw41M8UeKwU0n4x7bF8
+	 Qb/TTwEaQuR3fvVXcPTBYzP/+tg7L+OJQeBlsGvSo8urGLThxJ4/pDxDv6afRS1JiAA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="Ldk6v/fq";
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="AqX/eGmV";
+	arc=none smtp.remote-ip=91.218.175.194
+Received: from mta0.migadu.com (out-194.mta0.migadu.com [91.218.175.194])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4C64606A31E;
-	Tue, 24 Nov 2026 06:11:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF7CD606A31E
+	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 06:16:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DF7CD606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Ldk6v/fq
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B185E1F000C0;
-	Tue, 24 Nov 2026 06:11:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795500682;
-	bh=iVWYT+ReEjp92DC/COPfTT4+iY+7/LKwunieQrCYZRs=;
-	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=Ldk6v/fqGLh4UU8tyr0PpPqolMjgBCj1T7glBs4eAhEz/xhfnabHBUoRM+Xxx0H6O
-	 4oEqnAilstUOj6rCrwYUKygfuPefnAW/XBSrh7AaGArHULVLbo/+N+r1hGzMOFqfvg
-	 nC9l5eUyNRZJmlkLOmA8aGTfVOZTkO0uUMPdKugb8XCblH79BPQkvxtDSry5P3nFKN
-	 mAfFxbHWRjA/kAPD1wLnHCO0WJXPKfG9gl2CtHAU2TX+fbT0Z0kyW6oyU8M9qEgQCl
-	 Tv2SWu36VsR8tP2AlgQ4ZwnU7nAQ+x20Eo7p9I13nlZNwJYEgC8rYaZpCJx0e4vwaw
-	 5Di63bjNpeCNA==
-Message-ID: <sashiko-outbox-230577@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: net: act_gate bug. was: [syzbot] [tomoyo?] [mm?] INFO: rcu
- detected stall in security_file_ioctl (9)
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, syzbot <syzbot+b6f8640465bdf47ca708@syzkaller.appspotmail.com>, akpm@linux-foundation.org, andrii@kernel.org, bpf@vger.kernel.org, brauner@kernel.org, daniel@iogearbox.net, jack@suse.cz, jmorris@namei.org, linux-mm@kvack.org, linux-security-module@vger.kernel.org, paul@paul-moore.com, penguin-kernel@I-love.SAKURA.ne.jp, serge@hallyn.com, syzkaller-bugs@googlegroups.com, takedakn@nttdata.co.jp, jhs@mojatatu.com, viro@zeniv.linux.org.uk
-In-Reply-To: <DN37NBGPJJG9.2DSVDCKS3UYTV@gmail.com>
-References: <6b051681.58b41460.7037.0590.GAE@google.com>
- <DN37NBGPJJG9.2DSVDCKS3UYTV@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 24 Nov 2026 06:11:20 +0000
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=AqX/eGmV
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=LA4NmeSrzCxncZ07MmMv0SrpIWpbrAp0rnNZHVKIsfI=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1795500959; v=1; x=1796105759;
+ b=AqX/eGmV6096XQyrXkOjds70SO1IW+mSTfk0jip+i5MLP8gkyxpdwxScbitqacEkScBepdiy
+ krRwGdOxEHnvRJ3dlLZ/Dq1xrUL0OKwzL3pxtF2scz4q8IXbNFFIAViHnaJhlZghT8BIHXJcp4q
+ K93pnXhRBT7xy6CZg2OXQ7VE=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id e6a0bea410b7952c;
+	Tue, 24 Nov 2026 06:15:58 +0000
+X-Mizu-Trace-ID: e6a0bea410b7952c
+X-Migadu-Flow: FLOW_OUT
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: bpf@vger.kernel.org,
+	sdf@fomichev.me
+Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	KP Singh <kpsingh@kernel.org>,
+	Matt Bobrowski <matt@bobrowski.net>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Xu Kuohai <xukuohai@huawei.com>,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf 1/2] bpf, lsm: fix bpf_setsockopt() on a half set up child in inet_csk_clone
+Date: Tue, 24 Nov 2026 14:15:35 +0800
+Message-ID: <20261124061544.254586-1-jiayuan.chen@linux.dev>
+X-Mailer: git-send-email 2.43.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -59,68 +85,148 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issues to consider:
-- [High] net/sched: act_gate: missing Signed-off-by trailer in commit
-  message
-- [Low] net/sched: act_gate: missing Fixes trailer in commit message
---
+security_inet_csk_clone() is called at the end of inet_csk_clone_lock().
+The child is locked, which is why the hook is in
+bpf_lsm_locked_sockopt_hooks, but it is not set up yet:
+icsk->icsk_ca_ops and the ipv6_pinfo still point to the ones of the
+listener, and the timers are not initialized.
 
-commit 1dfca74c316eb54b3672929b3411874232eb4ee7
-Author: Alexei Starovoitov <ast@kernel.org>
+So bpf_setsockopt() from a lsm_cgroup prog is wrong there for:
 
-> net: act_gate bug. was: [syzbot] [tomoyo?] [mm?] INFO: rcu detected stall=
- in security_file_ioctl (9)
->
-> On Mon, Nov 23, 2026 at 08:45 PM syzbot <syzbot+b6f8640465bdf47ca708@syzk=
-aller.appspotmail.com> wrote:
-> > rcu:           hardirqs   softirqs   csw/system
-> > rcu:   number:     5264          0            0
-> > rcu:  cputime:      138      52351           25   =3D=3D> 52490(ms)
->
-> It's not tomoyo, mm or bpf. Looks like act_gate.
-> Zero new softirqs in 52 sec, so one hrtimer_run_softirq() doesn't return.
->
-> > RBP: ffff88807ed35538 R08: ffffffff91be1bbf R09: 1ffffffff237c377
-> > R10: dffffc0000000000 R11: fffffbfff237c378 R12: ffff8880b8228600
-> > R13: ffffffff89fd0480 R14: ffff8880b8228600 R15: 1ffff1101704514a
->
-> The registers with lockdep struct sizes:
->
->   reg       value             points to
->   --------  ----------------  --------------------------------------
->   R14       ffff8880b8228600  cpu_base
->   R15 << 3  ffff8880b8228a50  clock_base[HRTIMER_BASE_TAI_SOFT].seq
->   RBP       ffff88807ed35538  kmalloc-512 + 0x138, tcf_gate->hitimer
->
-> act_gate has the only soft hrtimer that can be on CLOCK_TAI.
-> bpf_timer_init() rejects that clock.
->
-> TCA_GATE_CYCLE_TIME is an unchecked u64. In gate_timer_func():
->
->   n =3D div64_u64(ktime_sub_ns(now, base), cycle);
->   close_time =3D ktime_add_ns(base, (n + 1) * cycle);
->
-> With base =3D 0 and cycle =3D U64_MAX, n is 0 and close_time is -1.
-> The timer restarts in the past and __hrtimer_run_queues() runs it again.
-> It's there since
-> commit a51c328df310 ("net: qos: introduce a gate control flow action").
->
-> Jamal,
-> taprio's INT_MAX limit doesn't fit. tdc uses cycle-time of 600 sec.
-> The diff saturates the sum instead.
-> Here is a potential fix:
+ - TCP_CONGESTION: puts icsk->icsk_ca_ops, which the child holds no
+   reference on.
+ - IPV6_TCLASS, IPV6_AUTOFLOWLABEL: write to the ipv6_pinfo of the
+   listener.
+ - SO_KEEPALIVE, TCP_KEEPIDLE: arm the keepalive timer before
+   tcp_init_xmit_timers() sets it up.
 
-[Severity: High]
-The commit message is missing a Signed-off-by: trailer.
+Options considered:
+ 1. Remove the hook from bpf_lsm_locked_sockopt_hooks, as commit
+    5416c9aea832 ("bpf: Fix the kernel crash caused by bpf_setsockopt().")
+    did for socket_sock_rcv_skb. Not done, setting options like
+    SO_PRIORITY on the child is what the hook is used for and it works.
+ 2. Make these options work. This needs the child set up before the
+    hook, too much for a fix.
 
-[Severity: Low]
-Since this fixes an infinite softirq loop when TCA_GATE_CYCLE_TIME overflows
-the timer expiration timestamp, should this include a Fixes: trailer?
+So give the hook its own bpf_setsockopt() and return -EOPNOTSUPP for
+these options there. bpf_getsockopt() is left as is.
 
-  Fixes: a51c328df310 ("net: qos: introduce a gate control flow action")
+For example, SO_KEEPALIVE ends up with:
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/DN37NBGPJJG9.2DSVDC=
-KS3UYTV@gmail.com?part=3D1
+  Oops: general protection fault, probably for non-canonical address 0xfbd59c0000000025: 0000 [#1] SMP KASAN PTI
+  KASAN: maybe wild-memory-access in range [0xdead000000000128-0xdead00000000012f]
+  RIP: 0010:__run_timers+0x5d2/0xab0
+  Call Trace:
+   <IRQ>
+   run_timer_base+0x107/0x190
+   run_timer_softirq+0x1a/0x40
+   handle_softirqs+0x251/0xa70
+   __irq_exit_rcu+0x1a8/0x260
+   irq_exit_rcu+0xe/0x30
+   sysvec_apic_timer_interrupt+0xc2/0x110
+   </IRQ>
+
+Fixes: 9113d7e48e91 ("bpf: expose bpf_{g,s}etsockopt to lsm cgroup")
+Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+---
+ include/linux/bpf.h  |  1 +
+ kernel/bpf/bpf_lsm.c | 12 ++++++++++++
+ net/core/filter.c    | 37 +++++++++++++++++++++++++++++++++++++
+ 3 files changed, 50 insertions(+)
+
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 1dd9db16f324..207a3be3138d 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -4159,6 +4159,7 @@ extern const struct bpf_func_proto bpf_task_storage_delete_proto;
+ extern const struct bpf_func_proto bpf_for_each_map_elem_proto;
+ extern const struct bpf_func_proto bpf_btf_find_by_name_kind_proto;
+ extern const struct bpf_func_proto bpf_sk_setsockopt_proto;
++extern const struct bpf_func_proto bpf_sk_clone_setsockopt_proto;
+ extern const struct bpf_func_proto bpf_sk_getsockopt_proto;
+ extern const struct bpf_func_proto bpf_sk_setsockopt_nodelay_proto;
+ extern const struct bpf_func_proto bpf_unlocked_sk_setsockopt_proto;
+diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
+index ae23511fd811..fa71f52a055c 100644
+--- a/kernel/bpf/bpf_lsm.c
++++ b/kernel/bpf/bpf_lsm.c
+@@ -79,6 +79,15 @@ BTF_ID(func, bpf_lsm_inet_conn_established)
+ #endif
+ BTF_SET_END(bpf_lsm_locked_sockopt_hooks)
+ 
++/* List of LSM hooks that trigger on a locked child socket which is not
++ * set up yet, bpf_setsockopt is restricted there.
++ */
++BTF_SET_START(bpf_lsm_clone_sockopt_hooks)
++#ifdef CONFIG_SECURITY_NETWORK
++BTF_ID(func, bpf_lsm_inet_csk_clone)
++#endif
++BTF_SET_END(bpf_lsm_clone_sockopt_hooks)
++
+ /* List of LSM hooks that trigger while the socket is _not_ locked,
+  * but it's ok to call bpf_{g,s}etsockopt because the socket is still
+  * in the early init phase.
+@@ -282,6 +291,9 @@ bpf_lsm_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ 	case BPF_FUNC_setsockopt:
+ 		if (prog->expected_attach_type != BPF_LSM_CGROUP)
+ 			return NULL;
++		if (btf_id_set_contains(&bpf_lsm_clone_sockopt_hooks,
++					prog->aux->attach_btf_id))
++			return &bpf_sk_clone_setsockopt_proto;
+ 		if (btf_id_set_contains(&bpf_lsm_locked_sockopt_hooks,
+ 					prog->aux->attach_btf_id))
+ 			return &bpf_sk_setsockopt_proto;
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 53c042b267ab..77abc4cb9db5 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -5938,6 +5938,43 @@ const struct bpf_func_proto bpf_sk_setsockopt_proto = {
+ 	.arg5_type	= ARG_MEM_SIZE,
+ };
+ 
++/* security_inet_csk_clone() runs at the end of inet_csk_clone_lock(), the
++ * child is locked but not set up yet: its timers are not initialized, it
++ * holds no reference on icsk_ca_ops and an IPv6 child still points to the
++ * ipv6_pinfo of the listener.
++ */
++BPF_CALL_5(bpf_sk_clone_setsockopt, struct sock *, sk, int, level,
++	   int, optname, char *, optval, int, optlen)
++{
++	switch (level) {
++	case SOL_SOCKET:
++		if (optname == SO_KEEPALIVE)
++			return -EOPNOTSUPP;
++		break;
++	case SOL_TCP:
++		if (optname == TCP_KEEPIDLE || optname == TCP_CONGESTION)
++			return -EOPNOTSUPP;
++		break;
++	case SOL_IPV6:
++		if (optname == IPV6_TCLASS || optname == IPV6_AUTOFLOWLABEL)
++			return -EOPNOTSUPP;
++		break;
++	}
++
++	return _bpf_setsockopt(sk, level, optname, optval, optlen);
++}
++
++const struct bpf_func_proto bpf_sk_clone_setsockopt_proto = {
++	.func		= bpf_sk_clone_setsockopt,
++	.gpl_only	= false,
++	.ret_type	= RET_INTEGER,
++	.arg1_type	= ARG_PTR_TO_BTF_ID_SOCK_COMMON,
++	.arg2_type	= ARG_ANYTHING,
++	.arg3_type	= ARG_ANYTHING,
++	.arg4_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
++	.arg5_type	= ARG_MEM_SIZE,
++};
++
+ BPF_CALL_5(bpf_sk_getsockopt, struct sock *, sk, int, level,
+ 	   int, optname, char *, optval, int, optlen)
+ {
+-- 
+2.43.0
+
