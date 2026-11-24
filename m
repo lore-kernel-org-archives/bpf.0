@@ -1,83 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.208.53
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.208.44
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795543179;
-	b=4PLjVoRWOk3TK+GOm+nG6upKsEUQoV/WbxdL6vT3Y0I6UFf7QdU1bpGwAlVGQ0norQkb
-	 6HfxP01ILxNd74UFrSMWaz79IkAKPOTD23n/GuB/YK6yRRX9ihdeirR8AM3k/KzRMDTMj
-	 dsdhc7HdXGnSdByI6sIdVdYx6pEtiDP64k95dVA2WobnMjiPuWBOU5BfStMGHfXAD3jK+
-	 77+hABMpt01VobMT/evZLtUwys6wy8b1QdjenWFUw3kOUIZ7xyCApfZ9yvT7vJbNFruVf
-	 Y5x5UaWSINZPvhKn/4bn+sGA2ejXeF20anMAHL4EkttBanfWsl0TfgS59XxbvQ/rg/A==
+	t=1795543184;
+	b=lKL6umxuRVK+BENCW6PaLmMBFSked//lB4JA2g0y42b4paFVG6x71X/mDN9/JXxx+iE6
+	 uFb0pyw30NV7SBex051/5d3xXOjqnMEWYCdfZK+clqSoCMxBK08+05MyJgwH/08tC5n+F
+	 tWRmNmIAChaatCcBrf4S8oeJR+SVsHQvWwhfMRsM5dWDdrfkem/5pWeZoTg3eet9aPHIh
+	 vVHlAU/IMET3rcTLQOCiYifQLqZ70TqSI6CBvafr0LtYD0uk3kao+OyKXvbx/kIk1eCOb
+	 Gm0xAoIGCX+I7cmJfzRWOIoB8xqA701e7Jdi73T013L/Ld053hkw0TUn/PcV5fIdXrw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795543179;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795543184;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=uaTj/IgjFnkwmASVrKkLUw8romAE2cVY2R2st4Lr99E=;
-	b=lS/74VAXZikg+tPUsFRo0BKX1J+8WhKDktD2RsvZzA/oxYP3E0x6Wdh15Hn/73QRVF4e
-	 8Td1vGbWR4QLk1Hx2zXd4TdS9Ufg1Dc0yZx4bSmAUK35VJnpGv7nOU20rnM8vb9IpOyxI
-	 3iNbXr2iTvqjX24L2qXc9s9DVjar3C64VWdE2t4diCRmNqX5pDXiMbfnPj9+1pI899tRh
-	 /EO6jZBHzutfsdYpaOclZiQSg2KewclZ5qh5cSupSdSE1Fjs09S2aIYEM5Mzpynedo6TS
-	 /o4yKy7K+WKqdUYYKgzwDTJ2V5EGmAamox+J3m483T+mEJAC+UirWMUA/3XFvzbptwA==
+	bh=Id3aruoTt9p41ov0UzfjZQHi+NKnHu/LyrCozIoZe8o=;
+	b=y/mXh+bqnLAyWkkXZKqpo1OkdoNzxfXDe4yWOAIS+kWa6MEOHvJT++k5FXZ1qez6Ykk4
+	 AAz2jn1PSGsmcwx5KBlqrInBgLM9iwqJNAkJNli4HueR9RAGmqW9FIe0rUIUnoFPyucRN
+	 EA91eSjhoNDtich83gbo96+/JFPx4Gbth8FmYoI57PLQepbr+3HGzpW8v8qKudJdohjMH
+	 QFEcVTkZNkKfd9yw+wy3Br+fws8EXCJSw69Od/F+W7L/Oh9mQp039vEXaBRczStHYmtvr
+	 yqrCzZeJ+8ogkmV99PORr2Z9GoRe8kixdYUNWLWRdrOuNrsTX4N1lcz0sVsu726qmsQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=cloudflare.com;
 	spf=pass smtp.mailfrom=cloudflare.com;
-	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=ablhK58t;
-	arc=none smtp.remote-ip=209.85.208.53
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=QxTcKneD;
+	arc=none smtp.remote-ip=209.85.208.44
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2E5D606A323
-	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 17:59:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F2E5D606A323
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F2F3606A327
+	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 17:59:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7F2F3606A327
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=ablhK58t
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-6ba38c41804so5607284a12.3
-        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 09:59:38 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=QxTcKneD
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-6b87408c797so6584108a12.1
+        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 09:59:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1795543177; x=1796147977; darn=vger.kernel.org;
+        d=cloudflare.com; s=google09082023; t=1795543183; x=1796147983; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=uaTj/IgjFnkwmASVrKkLUw8romAE2cVY2R2st4Lr99E=;
-        b=ablhK58t8MX2Gx9UkaoIkzL9AwdBhG+jhN7/JyA92ASWxcX3KuQRaPXU/sv2p/Doui
-         LLdVv4w2HJP3jvDcSLlkR4x0f8lxYbu2Th76mnUvU/1//q548yfXfPf1y47o0t/nr213
-         cx9qQE4fdbqjJTN3b7qTXmJQWEChes/ZHF7nVn3lPKUZO+BXU4yK5htEeRzA00bLNlbm
-         Rexd5gkY+Z30hujxDUGmX6ycFjtvJwWguQ0qIa/LbA/5TLbclZWcNh3mZUtjFnPIx8fT
-         JDnsdEg/PGybouR5+vOCHt8e5VCYcnhMNGBpMblnEPhIqr/ThraupuDOkUyqhAwu5NfE
-         nKzQ==
+        bh=Id3aruoTt9p41ov0UzfjZQHi+NKnHu/LyrCozIoZe8o=;
+        b=QxTcKneDwvtdOC299tZn9xw97835cRZXmaZkQk24rVeZzk4RK3GSF9B7EOMZ3kEhoO
+         671efgyHRPVjZXZ+A54xg7e9c4/anntqhSxPrZLviczRUjperlfAkuTQrXzSfptTxs+7
+         7nnsfJyBHgRATtpRGt7HLHlIAI0ukVdn7RIgqXLaUXAESe/Zi01SMmzxPMd4lAg1/OLj
+         TVinkAgOcMc9w45Z3I2NYyn+pXSMrO65ayYEv7snxF3UkwMl2Nn+VVBNqyNRMDRx6WGP
+         QlIOepd0ewcKo9WNI3SVcLfrQxBhViEtlvY+OP+b7CPCx6Esl7eDPIBDfLb7jiwd4ZOJ
+         ERrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795543177; x=1796147977;
+        d=1e100.net; s=20260707; t=1795543183; x=1796147983;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=uaTj/IgjFnkwmASVrKkLUw8romAE2cVY2R2st4Lr99E=;
-        b=Hj+yZPRTRaavqXpWsFlQx3gkqZCYQj6PRrkgD2LNJ8RkIO5XMu91MhBZhd5Y6ilXxW
-         z09sg0FwSriZTZUaTN8YZFU2KRjwVJe7ul9hj64Pxik1IWSfoh+HuVSTba3EIqrVqKI0
-         EIRaWTpm182ryWqQCn3kKAcJm8/cKT0O71JgJwnAl/PBS8I0lr/fgzjs11E1SGNDl7up
-         2Q/bw7WOahodKra5jMCojd6Acrg39FkwIbFOo3a9jmU7o4WThRBlXXXGC3kWCCtu6IzR
-         yHC2g3WL+9AUNpQhTdRYViPFWZnt/83ERCn0MXyc87//9s/tK8s/oya/8B1ry91YQLkb
-         xpnw==
-X-Forwarded-Encrypted: i=1; AL+hErFiEOJGK9VAU66OsuVVTBKGJvfPY90Mlk/FXAOx4R/+c+Vul5Anhh27TVCiZB4LuMNR0a8=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+HUvMxtQXsHl2m+5rIkT82d06ofxTfVMMBPX/9PvftE7EkJnjM
-	1xTWBUeYxN9KX9Jslvaoa6/0/oWC+CFOgWBtAJjBXKssa+III+61je0HmS8G6ntqsXA=
-X-Gm-Gg: AZFdTZdhjTDcuzDaEoUnUZ1HtyXVw+YlbzQoTnO55TqnvBIY36Ej0cj3XU7KCaZdA8g
-	FzcZhl5We70jtX/9Y4ZeH+kATxsfaeKrjft7NWgBG33ae/9aMq5drXOO7gfjmBX44Wjlmu8aAXr
-	IBNI7ZgUtwLENeGvR3c3xJeSpi3dG3ip+mc54iXlbR4SSV+nKYhYQfq5QOogH1KDThmlOEbtpi8
-	mO0I5WJXFlm2qCvlWWFbTFObEClaIlVAGmc+G23yC7WspnkDEFncOMgR6/WH0tJngGxbnSUkpA1
-	vJUiPL3qn3/JNRttcCK7X0CUN57L0/z3EoByvt4CLu18NOi+wnOTrSlUvkIzRarlQpomkbyW1di
-	QqA2Yk3zUFULbRBXUHlindZPxFiOX3OqaCAq4u/HH9MWwyI3C72fURpAjdcIdBqkGRqCrt/ZFrS
-	lqN5YRjAmBaIWdH+ySdNRAtVkxZuj6aE6Ctko/G6d3BAypKtDTct/biKcAbP7/WFNyzzbAlu1Uc
-	QYYLPqVkD+xh5eixFD4NA13s+4h/BsGzgbqayufEu6xgDFqEyt+Vb1Hwgb16xNXDidhjiAW7rBM
-	r58/W4/9J4tjxEeasgAf2QjyNE3gg1Aj/r4kDtr/0i8GliY=
-X-Received: by 2002:a05:6402:2389:b0:6bb:1e07:2eae with SMTP id 4fb4d7f45d1cf-6bb1e073294mr273795a12.9.1795543177340;
-        Tue, 24 Nov 2026 09:59:37 -0800 (PST)
+        bh=Id3aruoTt9p41ov0UzfjZQHi+NKnHu/LyrCozIoZe8o=;
+        b=OCcRmehfJ7n05CtqkTiisF0Y3zYU1XR6QM6sUqQ3WHAJMzmg5valPlVP4K5BMRcWjS
+         225NknPBos3NwM8+lQrTC3nOSgjm21rDt+Q0BjHJYNOUzPNqkbRpy9hxJLnKi0Wpj8qE
+         iS6yvptz5Uu3rezO2rkid47bSV36Y9qlTFeIW/rONO1d/yqo7D90qp2GvYxRB2sQi8Oy
+         iO3ZAlV5nT68RTo4P9gpcgA/+FkgUiOS6xyEWWVUuCzwhL73oBv89dWBmrTlgHseApBb
+         GvOquw6S5EXLfnBNO9FrJ4/Q5qG1tHr1Y+HKquqryR4PNkmH26CMOyYRwoz4lJppKplm
+         HKBA==
+X-Forwarded-Encrypted: i=1; AL+hErG6PIMj0rNBctSL1n1FqxE7Tw5bNb87IMhMuoi8Ef1zTl+WdCb4np7dwoB9dUUBA4fsniI=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8usBAPqfmUQhFUpPePkC1w0BzgcnSGkbfj1+gkbWujanEo6jeK
+	j3SB0yBlLBYt7y30WjFRMZMfvnFI+yKD9pGIKYNgYCbH3Dz3H69Nbl6bTTAiyc8p/Zs=
+X-Gm-Gg: AZFdTZfZL8WUV6OowNEHxfC/2XE/pGvX8Zk37gR1SbiEPKYMNm+RBVXnxWAv6CXgk/5
+	0CELLqFQmoYtUKoGBXj+ivEgYG5GysdIjJZn6rvkKBPHZPNe7uq32o3elnkcsgeItoVqfkrAZGL
+	1rgbJqHhZDJgGL85viI1qDh/ON9sI5DvqS7378R1+wnfMCCb0WYJQ6gllD+qsbQ16Gn9MW4nhjk
+	LglE3iVXv70iGr8LwppZtjFUYV6D2RAJT8mzogJsRfc1RN2t2CwKroupFNOCT8Eze6Uk3LEpBxx
+	CqoTjn4vGIfTK5AKGx2VhirYB/6tp9b9WVj8BFSmtZADjVrvyHBFjZPLxVylIvxthw+4AGUUSRi
+	pHs86e9GPIlkzUciiknBuMcO2P9elspGj3c7VejqbVoPIToa9WibH8moBlRbPf99XL4Qg0cG11B
+	rMrPaQST5YBP6z1O+LBnCPEilYvkSYGJln+5PIdaaZ9F9xR1CYwEBEYAyQZ5Ymu2rhVk31QNQji
+	H9Jr+2yzzIOlnBmmOa6jaxaFwKtrcMmdP54ffDfW3z6XdnZRqAtSkef5cEhn8Wbkyro/McWKxSR
+	xJD6taLYJWzXoT321FCtmQrTyXAkD/N31+WER4HS+QSJRa4=
+X-Received: by 2002:a05:6402:13d2:b0:6b7:e902:5e23 with SMTP id 4fb4d7f45d1cf-6ba37ea6d00mr12237778a12.33.1795543182884;
+        Tue, 24 Nov 2026 09:59:42 -0800 (PST)
 Received: from L9JK9NPFH9 ([2a09:bac6:37ad:1e5a::306:5])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6ba3711ad52sm7205762a12.35.2026.11.24.09.59.31
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6ba3711ad52sm7205762a12.35.2026.11.24.09.59.37
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 24 Nov 2026 09:59:36 -0800 (PST)
+        Tue, 24 Nov 2026 09:59:42 -0800 (PST)
 From: Tianyi Gao <tianyi@cloudflare.com>
 To: netdev@vger.kernel.org,
 	Jakub Kicinski <kuba@kernel.org>,
@@ -149,9 +149,9 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	Jeff Layton <jlayton@kernel.org>,
 	Tianyi Gao <tianyi.gao@linux.dev>,
 	Tianyi Gao <tianyi@cloudflare.com>
-Subject: [PATCH net-next v3 10/11] netlink: specs: rt-link: add veth attributes
-Date: Tue, 24 Nov 2026 17:58:23 +0000
-Message-ID: <20261124175824.60470-11-tianyi@cloudflare.com>
+Subject: [PATCH net-next v3 11/11] selftests: net: tx_extra_headroom: test the veth attribute
+Date: Tue, 24 Nov 2026 17:58:24 +0000
+Message-ID: <20261124175824.60470-12-tianyi@cloudflare.com>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261124175824.60470-1-tianyi@cloudflare.com>
 References: <20261124175824.60470-1-tianyi@cloudflare.com>
@@ -166,90 +166,143 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Describe the veth attributes in rt-link.yaml, so that YNL can set and
-read them. The next patch uses them to test VETH_INFO_TX_EXTRA_HEADROOM.
+Create a veth pair with VETH_INFO_TX_EXTRA_HEADROOM set to 64 bytes
+through YNL and move the peer to another netns. Check that both ends
+report 64, and that tx_extra_headroom of the peer is 64. The test reads
+it at tcx ingress, because an attach at tcx egress would recalculate
+the value set at creation. Then check that tx_extra_headroom of the
+sending end is 64. With XDP on the peer it is 64 + 256, because the two
+values are added. Also check that a value above 512 is rejected.
 
-YNL includes linux/veth.h from the source tree with get_hdr_inc, which
-needs the source header guard to differ from the installed one. Prefix
-the guard with _UAPI, as commit 8066e388be48 ("net: add UAPI to the
-header guard in various network headers") did for other network
-headers. headers_install strips the prefix, so the installed header does
-not change.
+The helpers leave the RtnlFamily socket to garbage collection, as
+link_netns.py does.
 
 Signed-off-by: Tianyi Gao <tianyi@cloudflare.com>
 ---
 v3:
-- Add the maximum of tx-extra-headroom (Sashiko).
+- Check the value set at creation at tcx ingress of the peer (Sashiko).
 
 v2:
-- New patch.
+- Test VETH_INFO_TX_EXTRA_HEADROOM with YNL only (Jakub). The IFLA
+  tests of v1 4/8 are gone, so the patch no longer carries
+  David Keogh's sign-off.
+- Drop the VLAN case of v1 4/8. In v2 no code copies
+  tx_extra_headroom to a stacked device.
 ---
- Documentation/netlink/specs/rt-link.yaml | 16 ++++++++++++++++
- include/uapi/linux/veth.h                |  4 ++--
- tools/net/ynl/Makefile.deps              |  3 ++-
- 3 files changed, 20 insertions(+), 3 deletions(-)
+ .../selftests/net/tx_extra_headroom.py        | 70 +++++++++++++++++--
+ 1 file changed, 66 insertions(+), 4 deletions(-)
 
-diff --git a/Documentation/netlink/specs/rt-link.yaml b/Documentation/netlink/specs/rt-link.yaml
-index 81b58633911d..c7967a9b3cc6 100644
---- a/Documentation/netlink/specs/rt-link.yaml
-+++ b/Documentation/netlink/specs/rt-link.yaml
-@@ -2368,6 +2368,19 @@ attribute-sets:
-         name: mode
-         type: u8
-         enum: ovpn-mode
-+  -
-+    name: linkinfo-veth-attrs
-+    name-prefix: veth-info-
-+    header: linux/veth.h
-+    attributes:
-+      -
-+        name: peer
-+        type: binary
-+      -
-+        name: tx-extra-headroom
-+        type: uint
-+        checks:
-+          max: 512
+diff --git a/tools/testing/selftests/net/tx_extra_headroom.py b/tools/testing/selftests/net/tx_extra_headroom.py
+index 02ae509ae8c2..cc33c4fa60bb 100755
+--- a/tools/testing/selftests/net/tx_extra_headroom.py
++++ b/tools/testing/selftests/net/tx_extra_headroom.py
+@@ -3,15 +3,17 @@
  
- sub-messages:
-   -
-@@ -2427,6 +2440,9 @@ sub-messages:
-       -
-         value: ovpn
-         attribute-set: linkinfo-ovpn-attrs
-+      -
-+        value: veth
-+        attribute-set: linkinfo-veth-attrs
-   -
-     name: linkinfo-member-data-msg
-     formats:
-diff --git a/include/uapi/linux/veth.h b/include/uapi/linux/veth.h
-index 04cb408e5b3a..d22a29b1bbb2 100644
---- a/include/uapi/linux/veth.h
-+++ b/include/uapi/linux/veth.h
-@@ -1,6 +1,6 @@
- /* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--#ifndef __NET_VETH_H_
--#define __NET_VETH_H_
-+#ifndef _UAPI__NET_VETH_H_
-+#define _UAPI__NET_VETH_H_
+ """Tests for tx_extra_headroom."""
  
- enum {
- 	VETH_INFO_UNSPEC,
-diff --git a/tools/net/ynl/Makefile.deps b/tools/net/ynl/Makefile.deps
-index f8850444d240..39abd83c014f 100644
---- a/tools/net/ynl/Makefile.deps
-+++ b/tools/net/ynl/Makefile.deps
-@@ -43,7 +43,8 @@ CFLAGS_psp:=$(call get_hdr_inc,_LINUX_PSP_H,psp.h)
- CFLAGS_rt-addr:=$(call get_hdr_inc,__LINUX_RTNETLINK_H,rtnetlink.h) \
- 	$(call get_hdr_inc,__LINUX_IF_ADDR_H,if_addr.h)
- CFLAGS_rt-link:=$(call get_hdr_inc,__LINUX_RTNETLINK_H,rtnetlink.h) \
--	$(call get_hdr_inc,_LINUX_IF_LINK_H,if_link.h)
-+	$(call get_hdr_inc,_LINUX_IF_LINK_H,if_link.h) \
-+	$(call get_hdr_inc,__NET_VETH_H_,veth.h)
- CFLAGS_rt-neigh:=$(call get_hdr_inc,__LINUX_RTNETLINK_H,rtnetlink.h) \
- 	$(call get_hdr_inc,__LINUX_NEIGHBOUR_H,neighbour.h)
- CFLAGS_rt-nexthop:=$(call get_hdr_inc,__LINUX_RTNETLINK_H,rtnetlink.h) \
++import errno
+ import socket
+ import struct
+ from pathlib import Path
+ 
+-from lib.py import ksft_run, ksft_exit, ksft_eq, ksft_ge, ksft_gt
++from lib.py import ksft_run, ksft_exit, ksft_eq, ksft_ge, ksft_gt, ksft_raises
+ from lib.py import KsftSkipEx, KsftFailEx
+ from lib.py import ksft_busy_wait, ksft_variants, KsftNamedVariant
+ from lib.py import cmd, defer, ip, bpftool, bpf_prog_map_ids
+ from lib.py import NetNS, NetNSEnter
++from lib.py import Netlink, NlError, RtnlFamily
+ 
+ BPF_OBJ = Path(__file__).parent / "tx_extra_headroom.bpf.o"
+ XDP_OBJ = Path(__file__).parent / "lib/xdp_dummy.bpf.o"
+@@ -37,9 +39,34 @@ def _setup_addrs(peer_ns, dev, peer):
+         ip(f"neigh replace {addr} lladdr {peer_mac} dev {dev} nud permanent")
+ 
+ 
+-def _setup_veth(peer_ns):
++def _add_veth(tx_extra_headroom):
++    """Create veth0 and veth1 with VETH_INFO_TX_EXTRA_HEADROOM through YNL."""
++    # Without names, the peer is created first and becomes veth0.
++    rtnl = RtnlFamily()
++    rtnl.newlink(
++        {
++            "linkinfo": {
++                "kind": "veth",
++                "data": {"tx-extra-headroom": tx_extra_headroom},
++            },
++        },
++        flags=[Netlink.NLM_F_CREATE, Netlink.NLM_F_EXCL],
++    )
++
++
++def _veth_tx_extra_headroom(name):
++    """Return VETH_INFO_TX_EXTRA_HEADROOM of veth device name."""
++    rtnl = RtnlFamily()
++    link = rtnl.getlink({"ifname": name})
++    return link["linkinfo"]["data"]["tx-extra-headroom"]
++
++
++def _setup_veth(peer_ns, tx_extra_headroom=None):
+     """Create veth0 in the current netns and its peer veth1 in peer_ns."""
+-    ip("link add veth0 type veth peer name veth1")
++    if tx_extra_headroom is None:
++        ip("link add veth0 type veth peer name veth1")
++    else:
++        _add_veth(tx_extra_headroom)
+     ip(f"link set veth1 netns {peer_ns}")
+     _setup_addrs(peer_ns, "veth0", "veth1")
+ 
+@@ -353,6 +380,39 @@ def test_tag_max() -> None:
+     ksft_eq(bss["tx_extra_headroom"], TX_EXTRA_HEADROOM_MAX)
+ 
+ 
++def test_veth_info() -> None:
++    """Check that VETH_INFO_TX_EXTRA_HEADROOM adds to tx_extra_headroom."""
++    with NetNS() as send_ns, NetNS() as peer_ns, NetNSEnter(str(send_ns)):
++        _setup_veth(peer_ns, tx_extra_headroom=64)
++        ksft_eq(_veth_tx_extra_headroom("veth0"), 64)
++        map_id = _load_progs()
++        # An attach at tcx egress recalculates tx_extra_headroom, so read
++        # the value set at creation at tcx ingress of the peer first.
++        with NetNSEnter(str(peer_ns)):
++            ksft_eq(_veth_tx_extra_headroom("veth1"), 64)
++            _attach_tcx("veth1", "ingress", "record")
++        _send_udp4()
++        ksft_busy_wait(lambda: _read_bss(map_id)["count"] == 1)
++        ksft_eq(_read_bss(map_id)["tx_extra_headroom"], 64)
++        with NetNSEnter(str(peer_ns)):
++            bpftool("net detach tcx_ingress dev veth1")
++        _attach_tcx("veth0", "egress", "record")
++        _send_udp4()
++        ksft_busy_wait(lambda: _read_bss(map_id)["count"] == 2)
++        ksft_eq(_read_bss(map_id)["tx_extra_headroom"], 64)
++        _attach_xdp(peer_ns)
++        _send_udp4()
++        ksft_eq(_read_bss(map_id)["tx_extra_headroom"],
++                64 + XDP_PACKET_HEADROOM)
++
++
++def test_veth_info_above_max() -> None:
++    """Check that a value above the maximum is rejected."""
++    with NetNS() as ns, NetNSEnter(str(ns)), ksft_raises(NlError) as cm:
++        _add_veth(TX_EXTRA_HEADROOM_MAX + 1)
++    ksft_eq(cm.exception.error, errno.ERANGE)
++
++
+ def main() -> None:
+     """Run all test cases."""
+     if "/sys/fs/bpf type bpf" not in cmd("mount").stdout:
+@@ -367,7 +427,9 @@ def main() -> None:
+               test_push_detach,
+               test_push_peer_xdp,
+               test_push_two_progs,
+-              test_tag_max])
++              test_tag_max,
++              test_veth_info,
++              test_veth_info_above_max])
+     ksft_exit()
+ 
+ 
 -- 
 2.56.0
 
