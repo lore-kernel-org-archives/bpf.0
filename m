@@ -1,89 +1,81 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=195.10.208.50
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=195.10.208.46
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795564660;
-	b=GhysFFkmoxHf1dlivpc1Xcs747wKJHVJjRt5BXZ/6/6kFt+2QYHH127O0IfZRd515/Dm
-	 QvoN8pX1T+NgS7pimE4yptVSv5FhjYLGHI3fpDCi9aShb21+5JGc0qGYI3gHoty+2G1C7
-	 VAktBnB0xax0vzl8KWVmp9p03Cpf3Xi+seWxCXRby5b1PMUNSMka9v2lY1eV6SAdWu3ff
-	 kpGaChgKIcKNBTfum8N7u7OdmtjaPNCN8By04zk3KCn+R7ckoi4RfpUycfD9G6uL//L9P
-	 AN0Kn4KRv4DMd4jbAhP2rKvKn853kkcW0dxTPkW1PNSNKDyvHQpNfVzskvl47ETP5nQ==
+	t=1795564829;
+	b=4shPhM6M51zHmdhjPzCY+1yT5I9PfCU/h04PSiOQ310R0EFbCJmR784S64OQthNexUQx
+	 oN8OtPI9v8NYcl6QEJxzHcgE6NXtfNMWIeUIdOUgfgY6iMtarLbkw3RbuAfqv+LFk+hsA
+	 fqyzqdhQ2/XriU9xI2EXKaQjJMmisQaYCX1Wqdl06zfhVhHtH7alz4s+gKqleHC6WLfRF
+	 dHdGi3Fhvru4JTlRyucjrML0s6DpwiQlCUMsdvQF2xvij5bMt1mQYPTany8Ac2Ytggdkw
+	 Pb3gYs+ntP7mFuiRuatvY7HL7rIR/0cyDEfVB+0iNwCIAJOsOmid5c8S8hV0T4eBjcw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795564660;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795564829;
 	h=DMARC-Filter:Received:DKIM-Signature:From:To:Cc:Subject:Date:
 	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding:X-Rspamd-Queue-Id;
-	bh=nLNAbdcbhe94cKt1uJgEZAT+B3+pg7rFP4RoRlJ/uUg=;
-	b=WjrnZp+jdEnjp9tb4jhmyGfTYSFwWu5utE84KkNjQRtB0XtkH4HcpWqbrKz9tBlo3lqm
-	 92Ce97EQFGmYTyG5sBfc/8fPJI8Bo6j42FDkDbUwDw4SK7LUtH64eTcqft62yEhSBpUgp
-	 fpl512b2qnwln7SvD66kpSjj1lMbQAi/YQjypWNAHO9n+IiYuj5P1qXrufCnvAVgu4P2w
-	 AAkgZKS47viAfpMYYTZzVcAkEvPCjk+R9s+w0I1RkpTco8UzDGEi9fXpr9Qclbx/UnE2p
-	 ogBEgVuB5eFKIk9tNPDYNgLZoBtzSbII6VpVD4D7HI0HAexa5SumASmFzLsoUzxXHiQ==
+	bh=MUSDaOJql8U2lhE9G5LULgroKuZjK1HPW/0+tyWH37A=;
+	b=ECM+SCmIcmzFyYt7zbgn6MlLqtTIMZH5m+TRNCpEYgL0/MPMCYbC/x8MqF09ZCGHj7Af
+	 I9Ud6rPNmd0znsjiq7DJkSeQTpn/EJpJ4ewCbc3Kuq51WjlKL7ljznPosIcmBLjtnNtTx
+	 D9NOqdrPdWFW/ekeXjOhBghgKon5LZD1Hib+eP6qe1pUYOuaypo4g76H5z7gg/LVFqoe3
+	 eTSTMSyEhVGx0kUcEC3gDxs9nwKtNwq4smY6r+zzjhpaTe4ktiJ7lOFXQ3xxx3IjVz2+D
+	 J/YteWZOa/GFQXXwjmPsIXSxnOsj28xsl1HRUK4va5NSmD3clw1MD6jUs79rafJrFsg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=mandelbit.com;
 	spf=pass smtp.mailfrom=mandelbit.com;
-	dkim=pass header.d=mandelbit.com header.i=@mandelbit.com header.a=rsa-sha256 header.s=MBO0001 header.b=COS+ILg0;
-	arc=none smtp.remote-ip=195.10.208.50
-Received: from mout-b-105.mailbox.org (mout-b-105.mailbox.org [195.10.208.50])
+	dkim=pass header.d=mandelbit.com header.i=@mandelbit.com header.a=rsa-sha256 header.s=MBO0001 header.b=c3KCYSlQ;
+	arc=none smtp.remote-ip=195.10.208.46
+Received: from mout-b-106.mailbox.org (mout-b-106.mailbox.org [195.10.208.46])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A49F606A335;
-	Tue, 24 Nov 2026 23:57:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1A49F606A335
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E460B606A33D;
+	Wed, 25 Nov 2026 00:00:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E460B606A33D
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mandelbit.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mandelbit.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=mandelbit.com header.i=@mandelbit.com header.a=rsa-sha256 header.s=MBO0001 header.b=COS+ILg0
-Received: from smtp102.mailbox.org (smtp102.mailbox.org [IPv6:2001:67c:2050:b231:465::102])
+	dkim=pass (2048-bit key, unprotected) header.d=mandelbit.com header.i=@mandelbit.com header.a=rsa-sha256 header.s=MBO0001 header.b=c3KCYSlQ
+Received: from smtp202.mailbox.org (smtp202.mailbox.org [IPv6:2001:67c:2050:b231:465::202])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519MLKEM768 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mout-b-105.mailbox.org (Postfix) with ESMTPS id 4jZ09Y387Dz9ttS;
-	Wed, 25 Nov 2026 00:57:37 +0100 (CET)
+	by mout-b-106.mailbox.org (Postfix) with ESMTPS id 4jZ0Dn3j41zNmD3;
+	Wed, 25 Nov 2026 01:00:25 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mandelbit.com;
-	s=MBO0001; t=1795564657;
+	s=MBO0001; t=1795564825;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=nLNAbdcbhe94cKt1uJgEZAT+B3+pg7rFP4RoRlJ/uUg=;
-	b=COS+ILg0iXL4uTSMflkkkR1xtTGh0GPyXrtxx6BTex0cDfcqYEBblZEadkQUxEMSslMyYs
-	ie/szoviBKG6/BTEhjyCQBLF29EzWIOQIW0nikKpxaJLJ4ZfVRrsV2T4u+dSTSjNQPJgUm
-	zR3mVYm0MaxxilOIfNHwy7ovCG1jixeBUxnNfAc92E63CDW+uSnVGtCcrqya1qIjrC9JI8
-	a1MMdjdfwcwT+j8hdczMB3PMkyZK6BiBd7w20KJTyDSSd+AisWxI3ymNArxJyZ04NvvRyE
-	PXpB/I5fQK+FJeExM/zBiilQQiOlYcQ0J8WLcqZZSSY09SBRl5U9ArcBF1eQEg==
+	bh=MUSDaOJql8U2lhE9G5LULgroKuZjK1HPW/0+tyWH37A=;
+	b=c3KCYSlQpDeHnvE7WVodU/bktz4NGw0UT3unSnJ+oVAjz74wRW7QzsdJliHWAb67Y213c3
+	qCMMO+XCSpYk1nv7fyZ2Q2OPFIbzSBI3gnTqHuuM96dOfNgYDUyejnkTvFPCRqpq8rtCWc
+	k6HFgbYMRg6IBTlSYL5llVvRPxfFVyqIBg4sVzlN55N8JmqTFqFuWiSGWbNtKjS3FhPLud
+	bMTX3oSRw2egaaiivUmO+5kthex0ijEDSTFee5GtAA7LiGxEcw04xTD59SPjY04+bTSJZd
+	VpM8bI8COrxHXp/4BHJ2IllAHoUqPW8TUhlTMEJ+XWzu/cBdZyRWw+VMXJQwvQ==
 Authentication-Results: outgoing_mbo_mout;
 	dkim=none;
-	spf=pass (outgoing_mbo_mout: domain of antonio@mandelbit.com designates 2001:67c:2050:b231:465::102 as permitted sender) smtp.mailfrom=antonio@mandelbit.com
+	spf=pass (outgoing_mbo_mout: domain of antonio@mandelbit.com designates 2001:67c:2050:b231:465::202 as permitted sender) smtp.mailfrom=antonio@mandelbit.com
 From: Antonio Quartulli <antonio@mandelbit.com>
-To: intel-wired-lan@lists.osuosl.org
+To: willemdebruijn.kernel@gmail.com,
+	jasowangio@gmail.com
 Cc: Antonio Quartulli <antonio@mandelbit.com>,
-	Tony Nguyen <anthony.l.nguyen@intel.com>,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Janis Edvarts Lacis <janislacis06@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Sven Auhagen <sven.auhagen@voleatech.de>,
-	Sriram Yagnaraman <sriram.yagnaraman@ericsson.com>,
-	Kurt Kanzenbach <kurt@linutronix.de>,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@kernel.org,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	hawk@kernel.org,
+	john.fastabend@gmail.com,
+	sdf@fomichev.me,
 	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: [PATCH net v5 5/6] igb: resume the device before changing XDP or XSK settings
-Date: Wed, 25 Nov 2026 00:57:20 +0100
-Message-ID: <20261124235723.1135808-6-antonio@mandelbit.com>
+	bpf@vger.kernel.org
+Subject: [PATCH net-next v2 2/2] tun: skip the virtio-net header parsing without IFF_VNET_HDR
+Date: Wed, 25 Nov 2026 00:59:56 +0100
+Message-ID: <20261124235959.1141963-3-antonio@mandelbit.com>
 X-Mailer: git-send-email 2.56.1
-In-Reply-To: <20261124235723.1135808-1-antonio@mandelbit.com>
-References: <20261124235723.1135808-1-antonio@mandelbit.com>
+In-Reply-To: <20261124235959.1141963-1-antonio@mandelbit.com>
+References: <20261124235959.1141963-1-antonio@mandelbit.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -94,72 +86,49 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 4jZ09Y387Dz9ttS
+X-Rspamd-Queue-Id: 4jZ0Dn3j41zNmD3
 
-igb_xdp() can run while the device is runtime suspended or resuming,
-and __igb_resume() rebuilds the queue counts and the rings without
-RTNL. igb_xdp_setup() and igb_xsk_pool_setup() can then see a queue
-count whose rings don't exist yet (NULL dereference), or a NAPI that
-isn't enabled yet (napi_disable() never returns). Changing the XDP
-program of a runtime suspended device also opened it twice.
+Without IFF_VNET_HDR, tun_get_user() still passes an all-zero header to
+tun_vnet_hdr_tnl_to_skb(), which then only resets the MAC header. The
+parser is not inlined, so that costs two nested calls per packet. Reset
+the MAC header directly, as tap_get_user() already does.
 
-Resume the device for the duration of igb_xdp(), as ethtool does. Like
-the other resumes done with RTNL held, this can still deadlock with a
-runtime suspend already in progress, which takes RTNL itself; closing
-an AF_XDP socket or changing the XDP program is now one of them.
+2.0% fewer instructions per 1400-byte UDP packet written and dropped at
+the raw table, 1.2% fewer when forwarded (qemu -icount, x86_64).
 
-Tested with the 82576 emulated by QEMU by closing a zero-copy AF_XDP
-socket and attaching an XDP program while the device is runtime
-suspended; the latter no longer warns in __netif_napi_del_locked()
-because of the double open. The races themselves weren't reproduced.
-
-Fixes: 9cbc948b5a20 ("igb: add XDP support")
-Fixes: 80f6ccf9f116 ("igb: Introduce XSK data structures and helpers")
-Cc: stable@vger.kernel.org
 Signed-off-by: Antonio Quartulli <antonio@mandelbit.com>
 ---
-v5: new patch (Sashiko)
+ drivers/net/tun.c | 17 ++++++++++++-----
+ 1 file changed, 12 insertions(+), 5 deletions(-)
 
- drivers/net/ethernet/intel/igb/igb_main.c | 20 ++++++++++++++++----
- 1 file changed, 16 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/net/ethernet/intel/igb/igb_main.c b/drivers/net/ethernet/intel/igb/igb_main.c
-index acd9a33..80ae03d 100644
---- a/drivers/net/ethernet/intel/igb/igb_main.c
-+++ b/drivers/net/ethernet/intel/igb/igb_main.c
-@@ -2942,16 +2942,28 @@ static int igb_xdp_setup(struct net_device *dev, struct netdev_bpf *bpf)
- static int igb_xdp(struct net_device *dev, struct netdev_bpf *xdp)
- {
- 	struct igb_adapter *adapter = netdev_priv(dev);
-+	int err;
-+
-+	/* The rings only exist while the device is resumed, and resuming
-+	 * rebuilds them without RTNL
-+	 */
-+	pm_runtime_get_sync(&adapter->pdev->dev);
- 
- 	switch (xdp->command) {
- 	case XDP_SETUP_PROG:
--		return igb_xdp_setup(dev, xdp);
-+		err = igb_xdp_setup(dev, xdp);
-+		break;
- 	case XDP_SETUP_XSK_POOL:
--		return igb_xsk_pool_setup(adapter, xdp->xsk.pool,
--					  xdp->xsk.queue_id);
-+		err = igb_xsk_pool_setup(adapter, xdp->xsk.pool,
-+					 xdp->xsk.queue_id);
-+		break;
- 	default:
--		return -EINVAL;
-+		err = -EINVAL;
+diff --git a/drivers/net/tun.c b/drivers/net/tun.c
+index 408bb0b40348..79aaadd9a2aa 100644
+--- a/drivers/net/tun.c
++++ b/drivers/net/tun.c
+@@ -1951,11 +1951,18 @@ static ssize_t tun_get_user(struct tun_struct *tun, struct tun_file *tfile,
+ 		break;
  	}
-+
-+	pm_runtime_put(&adapter->pdev->dev);
-+
-+	return err;
- }
  
- int igb_xdp_xmit_back(struct igb_adapter *adapter, struct xdp_buff *xdp)
+-	if (tun_vnet_hdr_tnl_to_skb(tun->flags, features, skb, &hdr,
+-				    (tun->flags & TUN_TYPE_MASK) == IFF_TAP)) {
+-		atomic_long_inc(&tun->rx_frame_errors);
+-		err = -EINVAL;
+-		goto free_skb;
++	if (tun->flags & IFF_VNET_HDR) {
++		bool has_eth = (tun->flags & TUN_TYPE_MASK) == IFF_TAP;
++
++		if (tun_vnet_hdr_tnl_to_skb(tun->flags, features, skb, &hdr,
++					    has_eth)) {
++			atomic_long_inc(&tun->rx_frame_errors);
++			err = -EINVAL;
++			goto free_skb;
++		}
++	} else {
++		/* a zero hdr would only reset the MAC header */
++		skb_reset_mac_header(skb);
+ 	}
+ 
+ 	if ((tun->flags & TUN_TYPE_MASK) == IFF_TAP)
 -- 
 2.56.1
 
