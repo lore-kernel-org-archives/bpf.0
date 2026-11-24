@@ -1,44 +1,44 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795479795;
-	b=aCiKjOpSe3bgbLHhf/PUC+IJmRscZHFOh/ZIMWSvTqSW39pXLrbhO5+pgm33ZjLL33Jj
-	 KETCQIicNStespcJv27Zyu8VU60Yb3+CgPDFz/zJFdE6c5kuiS0DInIqoOxNxLXVvKhhz
-	 nfG2NyA9/Ur2VYka5UTuyZwDaDLWue85Kni8bmKqLxnfvvCMdb5nHd+/gfY0SXEYvd3yc
-	 lyrmi9BkIZ1A/m0pRB8rlUFmLL5MwCwIKomNPt6D9uk/pJrp4c0IEG9KMNb6h9lt10KMy
-	 iMuHwur4bHEjABPJrgUc5tISul1CtFAT05yD7eKKZ3wa2FPW47tSY7Mwkk48L/jHQtw==
+	t=1795479796;
+	b=XM4Oegpvcjnqj1Niv/1TEe5iJ7XK2wkYvsbDHQLd7lbIESzAhqRxO5BU5Xr5HsUhSapZ
+	 3CunUP69BtKoqtWTvk9sIyPGJ7wQREQGj6sJRejmTSNM2jGglDt0IAbFMNpi3uWLWHvvy
+	 Wt45WD95Rei+2c2ld5iHO8rTHbHZ6X/wKRqMmCJOw2IUMaKOgycC/dn1jmWi+WHK96ng+
+	 y/PTgIEaMLTYQkN0LTkTrhc1GKro0I/zmWKTxx2nycEZiuxLkBuHwFxhAMq6C2accbYsd
+	 4YBV9/wuNW21wo3DARPzHTpNjA/8K596DeR3RPUDV+nWsi95HmhQKxzR9MefrPaYmUw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795479795;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795479796;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
 	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=tAohcxZBpFO1NQLl/3wbffBW8Xi/K3DQzfSMEum+Yoo=;
-	b=Ls0fyl9WvkAlMrBgzMcybF5nIvtXYaQFPrh/NTfumlal+8sJ6PkO2++sFOR8FHlloS2+
-	 HP0lt/95+1sf13dFYXJrJCOS7JiQqhtA30fmPS6FG7WpAoV1eKJ32k25xKOHnfYkwTudK
-	 DVSGKzVXiJQMVgSW16d54MrWS2xm3l/AGc/IM6iq42NjeWJlwSErF8mYorlQr8SLVtHYF
-	 Ni+jWv0VOBPgz+GBp8jnpo9yjQ0fhpl9gbtXnAYnBEcdekMf8lZRDnlMp6OqwHydNaRQW
-	 fXmxF5Qmm1iul+3R0VwNVkxGuXn6JNMJDI67WX3KNPDZ7ZlvLM0URWD3U1KGjZqhCLA==
+	bh=2bFvwakOZ1pdzP7eEmL6qPN1rRb6aMNizV/MDuBu4IM=;
+	b=Mbsk4U5PXmKdVrEWnu767XvAUHi7ukerr23OYwvo7bJzV6vWRlhu/sRj6wiXNkS1kFuT
+	 kf20RrlCCVZnsor/uFDHo8UnrqJoLSof0Qsj+r09nospFRQD//8VJNmjFEjtsv8H6JZT7
+	 NRFjFe8nSawi1ys8kG3qQD1XAYDNjz4vSkXPNBNk1P1SzTqj/+Mzch3wEUIQhX3v++gOc
+	 slUn6D3l/b1GBgcsovmpO1mTvOCr77k2A48fM41ZZJDd6YHVlKmIbCRtR+a49aNtxU38D
+	 IMTvzWbexG/aYYDhpfxg29KKBhlU0r4mNy9bm9KpNe/Jw4HduKDsT7PB11z/XAI1GsQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=M1pnJ14d;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=WY35z3nX;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5236606A6B1;
-	Tue, 24 Nov 2026 00:23:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADAB860A2612;
+	Tue, 24 Nov 2026 00:23:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=M1pnJ14d
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DEA81F000D1;
-	Tue, 24 Nov 2026 00:23:14 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=WY35z3nX
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 833651F000EE;
+	Tue, 24 Nov 2026 00:23:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795479795;
-	bh=tAohcxZBpFO1NQLl/3wbffBW8Xi/K3DQzfSMEum+Yoo=;
+	s=k20260515; t=1795479796;
+	bh=2bFvwakOZ1pdzP7eEmL6qPN1rRb6aMNizV/MDuBu4IM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=M1pnJ14dPKQXCFgbD8gezqAa/uPZHqFrMihUFX1Fo1SAFRIqFytphxAuvJBIs4tcD
-	 ZHNuT9Z/jfBjB3d92OE4ZVyMgUUUHPVkLSKaoh/YcdMEEjCscB6aoym9PRaGMlUyGV
-	 tOuJgAQwwRsT2l/30od+6hr5Trg9YQK5ZTGVBRIlI/7JFj3JPR9xSz22GI9sgNoqjs
-	 ChjIwRuffMW/mPXt98GchZtCfeMrMR3aC+/gZFAUEiBjo3l8bwUPMEWDygNufTUHch
-	 tjVjtdhru5+nHjBU/LelDcUdEvDHszVpvVRpYcPyxc84LzilbPbNME2yyexRtl2lei
-	 0rbsTlEzfj0Zg==
+	b=WY35z3nXjp6eENpvy54I5W7EhhFtJQoidqjckOmdUKO3pVrH3uAnoLJpD3bskyO2L
+	 gzH7aUF0/QbnNiBZlqUnw294fKN6Medx8RQgvUdZDlAZ3pduQxp2YY/x+FM8Xwz7Ct
+	 /P6TORPxRKiYNNuxu7pmCSCnIDP9HpciVnz4bKl4sW7daW3c0FZim0B4MMsadQbMaS
+	 AFq2L/7ZaknI1eYHA+31gHVydZvtZcXnwKQePmn18mEeunYr0NiTbSl9KiADHGTQ9k
+	 wMie0xvRne1CnOZ8bijyV/lyvBAnrB4rYucCJW0x6qxB6tPQ1WQxpuw3zEQyEn5f6y
+	 E3BmWE5tEsQXA==
 From: Yosry Ahmed <yosry@kernel.org>
 To: Sean Christopherson <seanjc@google.com>,
 	Peter Zijlstra <peterz@infradead.org>
@@ -64,9 +64,9 @@ Cc: Paolo Bonzini <pbonzini@redhat.com>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Song Liu <song@kernel.org>,
 	bpf@vger.kernel.org
-Subject: [RFC PATCH 04/26] perf/x86: Use irqsave guard in branch stack snapshotting callbacks
-Date: Tue, 24 Nov 2026 00:22:41 +0000
-Message-ID: <20261124002303.1785363-5-yosry@kernel.org>
+Subject: [RFC PATCH 05/26] perf/x86: Don't snapshot the branch stack while a guest PMU is loaded
+Date: Tue, 24 Nov 2026 00:22:42 +0000
+Message-ID: <20261124002303.1785363-6-yosry@kernel.org>
 X-Mailer: git-send-email 2.56.1.809.ga0b61035b5-goog
 In-Reply-To: <20261124002303.1785363-1-yosry@kernel.org>
 References: <20261124002303.1785363-1-yosry@kernel.org>
@@ -81,105 +81,102 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-In preparation for adding an early return to these functions, use
-guard(irqsave)() instead of local_irq_{save,restore}(), which also drops
-the local flags variable. IRQs are no longer restored in
-__intel_pmu_snapshot_branch_stack(), but in its callers.
+The branch stack snapshot callbacks behind perf_snapshot_branch_stack()
+(used by bpf_get_branch_snapshot()) freeze the LBRs by disabling the
+PMU, copy the entries, and re-enable the PMU.  If a guest's mediated
+vPMU context is loaded, e.g. if the snapshot is taken from NMI context
+or within KVM's inner run loop, re-enabling the PMU writes the host's
+GLOBAL_CTRL over the guest's PMU state.
 
-The guard saves IRQs at the same point local_irq_save() did and restores
-them at scope exit, after the PMU and LBR are re-enabled, so the
-branch-free window before the LBR is frozen is unchanged.
+On Intel, guest counters then count host code (and can raise PMIs
+delivered to the guest) until the next VM-Enter.  On AMD, the guest's
+GLOBAL_CTRL itself is overwritten.  KVM putting the guest context lazily
+would make this worse, as the guest context would also stay loaded while
+handling slowpath VM-Exits, e.g. across KVM tracepoints.
 
-No functional change intended.
+The snapshot isn't useful either: the host LBR users (core PMU events)
+are scheduled out while a guest context is loaded, so the LBRs aren't
+read, and callers get stale entries from the last time the LBRs were
+read for the host.
 
+Return an empty snapshot if a guest context is loaded, before touching
+the PMU. Callers already handle empty snapshots, e.g.
+bpf_get_branch_snapshot() returns -ENOENT for 0 entries, which the
+default static call returns without LBR support.
+
+Use unlikely() to hint to the compiler to lay out the not-taken path as
+the fall-through, so that the common path doesn't add a taken branch to
+the snapshot. Both GCC 15.2 and Clang 18.1.8 do this with the unlikely()
+hint, and emit a taken branch on the common path without it (GCC's
+-freorder-blocks, enabled at -O2 and -Os, uses __builtin_expect()
+probabilities to reduce taken branches [1]). If the hint isn't honored,
+the worst case is one extra branch entry in the snapshot.
+
+[1] https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html#index-freorder-blocks
+
+Fixes: 42457a7fb6cac ("perf: Add APIs to load/put guest mediated PMU context")
 Cc: Andrii Nakryiko <andrii@kernel.org>
 Cc: Song Liu <song@kernel.org>
 Cc: bpf@vger.kernel.org
 Signed-off-by: Yosry Ahmed <yosry@kernel.org>
 ---
- arch/x86/events/amd/core.c   |  4 +---
- arch/x86/events/intel/core.c | 15 +++++----------
- 2 files changed, 6 insertions(+), 13 deletions(-)
+ arch/x86/events/amd/core.c   |  8 ++++++++
+ arch/x86/events/intel/core.c | 16 ++++++++++++++++
+ 2 files changed, 24 insertions(+)
 
 diff --git a/arch/x86/events/amd/core.c b/arch/x86/events/amd/core.c
-index 49b6b8fce5664..79a1c5f91b3af 100644
+index 79a1c5f91b3af..874beab47541a 100644
 --- a/arch/x86/events/amd/core.c
 +++ b/arch/x86/events/amd/core.c
-@@ -931,13 +931,12 @@ static int amd_pmu_handle_irq(struct pt_regs *regs)
- static int amd_pmu_v2_snapshot_branch_stack(struct perf_branch_entry *entries, unsigned int cnt)
- {
- 	struct cpu_hw_events *cpuc;
--	unsigned long flags;
- 
- 	/*
- 	 * The sequence of steps to freeze LBR should be completely inlined
+@@ -937,6 +937,14 @@ static int amd_pmu_v2_snapshot_branch_stack(struct perf_branch_entry *entries, u
  	 * and contain no branches to minimize contamination of LBR snapshot
  	 */
--	local_irq_save(flags);
-+	guard(irqsave)();
+ 	guard(irqsave)();
++
++	/*
++	 * Bail if the guest owns the PMU.  unlikely() hints the compiler to not
++	 * take a branch on the common path, which would pollute the snapshot.
++	 */
++	if (unlikely(is_guest_mediated_pmu_loaded()))
++		return 0;
++
  	amd_pmu_core_disable_all();
  	__amd_pmu_lbr_disable();
  
-@@ -948,7 +947,6 @@ static int amd_pmu_v2_snapshot_branch_stack(struct perf_branch_entry *entries, u
- 	memcpy(entries, cpuc->lbr_entries, sizeof(struct perf_branch_entry) * cnt);
- 
- 	amd_pmu_v2_enable_all(0);
--	local_irq_restore(flags);
- 
- 	return cnt;
- }
 diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
-index 0a34d674df590..4992cf76c7e83 100644
+index 4992cf76c7e83..8972fe5c850c2 100644
 --- a/arch/x86/events/intel/core.c
 +++ b/arch/x86/events/intel/core.c
-@@ -2817,7 +2817,7 @@ static void intel_pmu_enable_all(int added)
- 
- static noinline int
- __intel_pmu_snapshot_branch_stack(struct perf_branch_entry *entries,
--				  unsigned int cnt, unsigned long flags)
-+				  unsigned int cnt)
+@@ -2834,6 +2834,14 @@ intel_pmu_snapshot_branch_stack(struct perf_branch_entry *entries, unsigned int
  {
- 	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
- 
-@@ -2826,34 +2826,29 @@ __intel_pmu_snapshot_branch_stack(struct perf_branch_entry *entries,
- 
- 	memcpy(entries, cpuc->lbr_entries, sizeof(struct perf_branch_entry) * cnt);
- 	intel_pmu_enable_all(0);
--	local_irq_restore(flags);
- 	return cnt;
- }
- 
- static int
- intel_pmu_snapshot_branch_stack(struct perf_branch_entry *entries, unsigned int cnt)
- {
--	unsigned long flags;
--
  	/* must not have branches... */
--	local_irq_save(flags);
-+	guard(irqsave)();
+ 	guard(irqsave)();
++
++	/*
++	 * Bail if the guest owns the PMU.  unlikely() hints the compiler to not
++	 * take a branch on the common path, which would pollute the snapshot.
++	 */
++	if (unlikely(is_guest_mediated_pmu_loaded()))
++		return 0;
++
  	__intel_pmu_disable_all(false); /* we don't care about BTS */
  	__intel_pmu_lbr_disable();
  	/*            ... until here */
--	return __intel_pmu_snapshot_branch_stack(entries, cnt, flags);
-+	return __intel_pmu_snapshot_branch_stack(entries, cnt);
- }
- 
- static int
- intel_pmu_snapshot_arch_branch_stack(struct perf_branch_entry *entries, unsigned int cnt)
+@@ -2845,6 +2853,14 @@ intel_pmu_snapshot_arch_branch_stack(struct perf_branch_entry *entries, unsigned
  {
--	unsigned long flags;
--
  	/* must not have branches... */
--	local_irq_save(flags);
-+	guard(irqsave)();
+ 	guard(irqsave)();
++
++	/*
++	 * Bail if the guest owns the PMU.  unlikely() hints the compiler to not
++	 * take a branch on the common path, which would pollute the snapshot.
++	 */
++	if (unlikely(is_guest_mediated_pmu_loaded()))
++		return 0;
++
  	__intel_pmu_disable_all(false); /* we don't care about BTS */
  	__intel_pmu_arch_lbr_disable();
  	/*            ... until here */
--	return __intel_pmu_snapshot_branch_stack(entries, cnt, flags);
-+	return __intel_pmu_snapshot_branch_stack(entries, cnt);
- }
- 
- /*
 -- 
 2.56.1.809.ga0b61035b5-goog
 
