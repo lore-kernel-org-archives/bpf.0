@@ -1,48 +1,49 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795561227;
-	b=kJ+6dTM1LoFqF3dGYrViepAV4dGt4cDYrULDsx7U3BektW67pnIer2eBWCqSiauWCJZy
-	 F55mAMh0vxIGt359sIhwCg/YIuSxBS/ZAdo3DwFwbxwYYMRiKN5DOa4/S9qSWGZOjShaf
-	 +C2eNGJ91CwkvO0AFQTdNema0belfUZjXMMvy9haPtxuWHQ7pM6ZM6jG4S7olOCyr+h+T
-	 /i0vc5M4gbYuqp+4a9/vPFvMjva69dHKlzlE70dddL4lCOQvN6Kk5RBvSHyDn4j1B2jJD
-	 BQ5rttCRXExCahj8i4GtyeoFbJ6GuOKeHvBxcp2gMUS8jScP5PMQFp/7a0X7v/MeTXA==
+	t=1795561238;
+	b=fodkV9DDMSNcalglBrMFxiSnQS6rfb96a8ohlTUS+bq/MM+WgcjULR4SAtEbTXDz2sse
+	 qmBB/g8edef+K9oUriEulgz1E/HxeaeE3dZ5f4nd5fSN8AemXef/5E/Ysg9qtv99MrTIZ
+	 H5Y7zSF1gP5naz8g3AzJ9cljP7/alyvjxJKOOlEOVVhFgK4EddYnX+K3bt+aFvJWWfybc
+	 8I6J22Q5NRY9BSZEhyJdYMYAsar1YrgwwdvxCwO8gOvYwotqRXJo0T9MdXJr8obhQV9fb
+	 7+2kz/V1SJ6/SBvmu48pxXMMHUNFe56p0UH9yQZJaADzo0paT1tgFgy0tJkN/u9HIPw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795561227;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795561238;
 	h=Received:DKIM-Signature:From:Date:Subject:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Message-Id:References:In-Reply-To:To:Cc:
 	 X-Mailer:X-Developer-Signature:X-Developer-Key;
-	bh=WThBmHMF1JHqTiDTsb9DdVdc8rlMyonCV9j9R+vsC04=;
-	b=fiXkOkswqbaNkmRil0oHdDlISj9DLNMrxjGH7T0Gf9uR1aj91UvZRoypOAg3tfl6+2wm
-	 lW2fmbCLP6POShA3GmW2Rur3BR2G2NL021IhbBdwvxq5KIOf8tlvxPEnOUdfse5c3KdgV
-	 WLS53KSfexhgXHeR8J0bonGv8CqWFu8XZo7ONMwykc9dsGlxgPUEBKh3gEIgX+vuf30NG
-	 C1n1Hkgoq2DV79mTC0KMMnZsZMmLruPJyiCp8ZqqIqkOPxw2Gun3hkSQ+9M4C8DltPrp7
-	 Pl7KEoSxn/yu8cbGkU8lmFtgF5sf1zlZveRvQaOYpA0zpGOACGLXat9X/MSnALvqPrQ==
+	bh=oKDDkm8rP0JSk+MZa8V9KUoNn40877PhwS+AzzAJOBo=;
+	b=h4Ezt0GHEOFWvU7vt2o+jJ5ywZfAB7oq308HbQMZSI1LFpWh/QT2698d7h2yi0XJDazk
+	 WncgKiKF9pAV7bJDGsbBfFDpatHQkTiNYAV4CVLsKmRXf+E6SS5zclkEEH1xD1j2FEh84
+	 U42znCQmQFu022icbfB6UgFX5Qv3pMQIvj+zl3iuSDsL72wnx3zZpDIj8UBzzeUeyCooA
+	 kqmZ9427NSk2cV99EBPiVHEKFBKz7OU/0/36AUtrqMH8ym1fGujBaLaicZD006HY3wk7y
+	 2lR0ftW8CR+Oo1migjzJpR2Q2IAX4/Ychn18uUzhzrcdpdl++xjMEw0Igz5V3MS1aNg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="ma/kTwrb";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=F6B6I81R;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E78C606A32A;
-	Tue, 24 Nov 2026 23:00:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11179606A329;
+	Tue, 24 Nov 2026 23:00:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ma/kTwrb
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F36191F000EE;
-	Tue, 24 Nov 2026 23:00:23 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=F6B6I81R
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01FAB1F00AD3;
+	Tue, 24 Nov 2026 23:00:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795561226;
-	bh=WThBmHMF1JHqTiDTsb9DdVdc8rlMyonCV9j9R+vsC04=;
+	s=k20260515; t=1795561237;
+	bh=oKDDkm8rP0JSk+MZa8V9KUoNn40877PhwS+AzzAJOBo=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=ma/kTwrbgGWzl6OUDPxm2b1uvUfXED6heMx8/GAQ+TmwPMgDj7YeoL/vAd9wCP14m
-	 YUZbBVmtGEuPOEoshmuDdvOrDNpUVZQhBQB2aMYPssgViwryjxnFVE/Q/zmeaDwIs2
-	 wod02cIxg6wwY1IVnd4xkMfiSKIfktKeUdlwtuNVDi8LXMENXJ4d9qrgKf9pbivd2v
-	 QUK0rdG9zH+Z8iDtQ7zGZ3WIiBpe67f31nO3orUxPKFV5klrVIWWtYsM7fTwsAtWJ0
-	 PZI5K5UuFXnRY7B/k+vfb0knWfUlCHh89/lspfwvzMI2hwae6n/TPZqvq+Dz87Hqb6
-	 kK1SWsuobrxAg==
+	b=F6B6I81RFcocB+Pb6JEPh24PHgiZAGwC8jsAylcSgfaJE4/8XQPGDk5SqsUeoKc7R
+	 IqzduO9jSUwHfnDeJPl4rzQp2I9Ap0J91IQksFiR9J2648aOXMWsK1MxrAIle0upVS
+	 NPNg2FGQcfCzrvqiDfKlSzCu/E856ce2H//tE2mf/K+Z2F882N3RYEGB+5Hk6BgBAv
+	 LkONKr8DOc4vXivY9vAb1ydnZV5wa5K6E1tkMr+9sl2N4+r9J/SHY+mUBc2TqILLRs
+	 R3IrRcHZUYUVTHLOydF0i/iApaqTqdHQrM0pndOJWN0Yc+yL+vESwVTArLI+KZ3n1W
+	 OsaVm6mXvFwsQ==
 From: Christian Brauner <brauner@kernel.org>
-Date: Tue, 24 Nov 2026 23:58:38 +0100
-Subject: [PATCH RFC 15/19] exec: don't take the mmap lock of the old mm
+Date: Tue, 24 Nov 2026 23:58:41 +0100
+Subject: [PATCH RFC 18/19] vfork: wake up the parent once the child has
+ left the mm
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -54,7 +55,7 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261124-work-exec-update_lock-v1-15-e489035395b8@kernel.org>
+Message-Id: <20261124-work-exec-update_lock-v1-18-e489035395b8@kernel.org>
 References: <20261124-work-exec-update_lock-v1-0-e489035395b8@kernel.org>
 In-Reply-To: <20261124-work-exec-update_lock-v1-0-e489035395b8@kernel.org>
 To: Jann Horn <jannh@google.com>
@@ -66,72 +67,158 @@ Cc: Linus Torvalds <torvalds@linux-foundation.org>,
  David Hildenbrand <david@kernel.org>, 
  "Christian Brauner (Amutable)" <brauner@kernel.org>
 X-Mailer: b4 0.17-dev-04696
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2065; i=brauner@kernel.org;
- h=from:subject:message-id; bh=114ewuP1qi1vzBdxjYYmwU6Ys2yZO4jjwhrnzG8rjnM=;
- b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWSziR1LinzlUrRMoahenMHOausTpuyoszPeB6+/Kb5T9
- k7UlIrbHaUsDGJcDLJiiiwO7Sbhcst5KjYbZWrAzGFlAhnCwMUpABORjmRkaP3H8G67EPe8xgN7
- b2mlpDUdzKqfLFSR/bojZvIrJ/6Z6xgZZtttOBW4e2XAT3fdoECryuVGT6obVnlFfViRseDT0h3
- 3+QE=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5246; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=kKS/ga5cKveEWXaeubsSO0J9YWxV3URvRGlj1COQm9I=;
+ b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWSziZ0ylFNgjttf9WN2t4xg62OGKU7ir45+v7bO3Jnrw
+ xLB9jfLO0pZGMS4GGTFFFkc2k3C5ZbzVGw2ytSAmcPKBDKEgYtTACZS/I6R4S7jHm6TW4/6v7n8
+ uVusFeX1lN8xXW9yZZ6E0HX19UecxBn+pz1auop5c4FjoKhdadThKz2ndhcafhc4fOGg+ZH1ni9
+ vsQEA
 X-Developer-Key: i=brauner@kernel.org; a=openpgp;
  fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 
-exec_mmap() takes the mmap lock of the old mm for reading while it
-switches the task over to the new mm. And it does that with
-exec_update_lock held for writing.
+A task that called vfork() sleeps until the child has released the mm in
+mm_release(). But exec_mmap() releases the old mm, then waits for
+exec_update_lock and only then switches to the new mm. And exit_mm()
+releases the mm and only then drops it. So the parent is woken up while
+the child is still on its mm.
 
-That lock was only ever needed for coredumps. The coredump code used to
-take the mmap lock for writing and then killed every task using the mm.
-So exec had to check for a coredump in progress under the mmap lock
-before it left the mm. Commit 7e3c4fb7fc19 ("exec: Check for a pending
-fatal signal instead of core_state") replaced that check with
-mmap_read_lock_killable(). And since commit 0258b5fd7c71 ("coredump:
-Limit coredumps to a single thread group") a coredump doesn't kill
-anything outside of its own thread-group and doesn't take the mmap lock
-to find tasks anymore. An exec in the same thread-group is serialized
-against the coredump in de_thread().
+It wasn't meant to be that way. When mm_release() was added in 2.2 it
+was called after the task had been switched away from the mm. exec only
+moved it in front of the switch in 2.5.56 because deactivate_mm() and
+the write to the child tid address need the old mm (cf. [1]).
 
-Nothing else relies on the mmap lock to keep a task from leaving its mm.
+The release has to stay where it is as it can sleep in a page fault for
+as long as userspace likes. So take the wakeup out of mm_release(). Wake
+up the parent in exec_mmap() once the task has switched to its new mm
+and in exit_mm() once it has dropped the mm.
 
-exit_mm() takes the mmap lock for the same historical reason. The next
-patch removes that one.
+While at it, fix the comment above mm_release(). It hasn't been called
+after the mm was removed from the task since 2.5.56.
 
 Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
 ---
- fs/exec.c | 14 --------------
- 1 file changed, 14 deletions(-)
+ fs/exec.c                |  3 ++-
+ include/linux/sched/mm.h |  4 +++-
+ kernel/exit.c            |  7 ++++++-
+ kernel/fork.c            | 24 ++++++++++++++----------
+ 4 files changed, 25 insertions(+), 13 deletions(-)
 
 diff --git a/fs/exec.c b/fs/exec.c
-index 6120310f3fbab..78046ed839646 100644
+index 78046ed839646..4d3f78ea0b0e6 100644
 --- a/fs/exec.c
 +++ b/fs/exec.c
-@@ -864,19 +864,6 @@ static int exec_mmap(struct linux_binprm *bprm)
- 	if (ret)
- 		return ret;
+@@ -854,7 +854,6 @@ static int exec_mmap(struct linux_binprm *bprm)
+ 	if (!exec_state)
+ 		return -ENOMEM;
  
--	if (old_mm) {
--		/*
--		 * If there is a pending fatal signal perhaps a signal
--		 * whose default action is to create a coredump get
--		 * out and die instead of going through with the exec.
--		 */
--		ret = mmap_read_lock_killable(old_mm);
--		if (ret) {
--			up_write(&tsk->signal->exec_update_lock);
--			return ret;
--		}
--	}
--
+-	/* Notify parent that we're no longer interested in the old VM */
+ 	tsk = current;
+ 	old_mm = current->mm;
+ 	/* Clean up futexes and release the mm */
+@@ -897,6 +896,8 @@ static int exec_mmap(struct linux_binprm *bprm)
+ 		mmdrop_lazy_tlb(active_mm);
+ 	}
+ 	futex_exec_done(tsk);
++	/* We've left the old mm so a vfork() parent can run again. */
++	complete_vfork_done(tsk);
+ 	return 0;
+ }
+ 
+diff --git a/include/linux/sched/mm.h b/include/linux/sched/mm.h
+index d7c6a942aa7e0..2adfba6217133 100644
+--- a/include/linux/sched/mm.h
++++ b/include/linux/sched/mm.h
+@@ -158,9 +158,11 @@ extern struct mm_struct *mm_access(struct task_struct *task, unsigned int mode);
+ 
+ /*
+  * Remove the current tasks stale references to the old mm_struct on exit() and
+- * exec(). Cleans up futexes as well.
++ * exec(). Cleans up futexes as well. A parent that sleeps in vfork() is only
++ * woken up by complete_vfork_done() once the task has left the mm.
+  */
+ extern void mm_exit_exec_release(struct task_struct *, struct mm_struct *);
++void complete_vfork_done(struct task_struct *tsk);
+ 
+ #ifdef CONFIG_MEMCG
+ extern void mm_update_next_owner(struct mm_struct *mm);
+diff --git a/kernel/exit.c b/kernel/exit.c
+index 38de318a07aaa..6120f0dc3b17d 100644
+--- a/kernel/exit.c
++++ b/kernel/exit.c
+@@ -554,8 +554,11 @@ static void exit_mm(void)
+ 	struct mm_struct *mm = current->mm;
+ 
+ 	mm_exit_exec_release(current, mm);
+-	if (!mm)
++	if (!mm) {
++		/* kthread_stop() waits for this. */
++		complete_vfork_done(current);
+ 		return;
++	}
+ 
+ 	sched_cache_exit_mm(current);
+ 
+@@ -579,6 +582,8 @@ static void exit_mm(void)
+ 	enter_lazy_tlb(mm, current);
+ 	local_irq_enable();
+ 	task_unlock(current);
++	/* We've left the mm so a vfork() parent can run again. */
++	complete_vfork_done(current);
+ 	mm_update_next_owner(mm);
+ 	mmput(mm);
+ 	if (test_thread_flag(TIF_MEMDIE))
+diff --git a/kernel/fork.c b/kernel/fork.c
+index 5efceb8d58a78..f63133b9e6faf 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -1428,10 +1428,21 @@ struct mm_struct *mm_access(struct task_struct *task, unsigned int mode)
+ 	return mm;
+ }
+ 
+-static void complete_vfork_done(struct task_struct *tsk)
++/**
++ * complete_vfork_done - wake up whoever waits for @tsk in vfork()
++ * @tsk: task that execs or exits
++ *
++ * A parent that sleeps in vfork() must not run before the child is off its
++ * mm. So this is called once @tsk has switched to its new mm in exec or has
++ * dropped its mm in exit. kthread_stop() uses this completion as well.
++ */
++void complete_vfork_done(struct task_struct *tsk)
+ {
+ 	struct completion *vfork;
+ 
++	if (!tsk->vfork_done)
++		return;
++
  	task_lock(tsk);
- 	membarrier_exec_mmap(mm);
+ 	vfork = tsk->vfork_done;
+ 	if (likely(vfork)) {
+@@ -1465,8 +1476,8 @@ static int wait_for_vfork_done(struct task_struct *child,
+  * mmput is called whenever we stop holding onto a mm_struct,
+  * error success whatever.
+  *
+- * mm_release is called after a mm_struct has been removed
+- * from the current process.
++ * mm_release is called when the current process is about to
++ * leave a mm_struct in exec or in exit. It's still on it.
+  *
+  * This difference is important for error handling, when we
+  * only half set up a mm_struct for a new process and need to restore
+@@ -1498,13 +1509,6 @@ static void mm_release(struct task_struct *tsk, struct mm_struct *mm)
+ 		}
+ 		tsk->clear_child_tid = NULL;
+ 	}
+-
+-	/*
+-	 * All done, finally we can wake up parent and return this mm to him.
+-	 * Also kthread_stop() uses this completion for synchronization.
+-	 */
+-	if (tsk->vfork_done)
+-		complete_vfork_done(tsk);
+ }
  
-@@ -903,7 +890,6 @@ static int exec_mmap(struct linux_binprm *bprm)
- 	task_unlock(tsk);
- 	lru_gen_use_mm(mm);
- 	if (old_mm) {
--		mmap_read_unlock(old_mm);
- 		BUG_ON(active_mm != old_mm);
- 		/* Defer teardown to setup_new_exec(), outside the exec locks. */
- 		bprm->old_mm = old_mm;
+ void mm_exit_exec_release(struct task_struct *tsk, struct mm_struct *mm)
 
 -- 
 2.53.0
