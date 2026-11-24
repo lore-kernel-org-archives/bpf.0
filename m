@@ -1,55 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.69
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795502516;
-	b=mgIkvTLazWefD6U/RKkvXvzIC7nUzPhTCYXYsipm8vQ2YFbs5gtPAdWMnOc3e9nZrB1L
-	 iDjuvisjo3vF510eq1Z4Bgc2u4bPOuFeYU4l50JcZ2k/GduKPk9BZuGpC+zqOsG6nonar
-	 RL5zhCgqT74gC7aCZ3e3YLavU4sv7dPFr4RBe/SHYBzM7haSeoARuI3nXJd+crw1KrqXP
-	 qkoxkCLE21jBQb9elVwz1/HwfYXJJvWJWtT8chnyHmn2YUwQVSLotJEvDUQRD8spqDVdb
-	 fUEo8BLmmUzb2fZLRtTmIpX3m9S54IAKtGWKyfEECpb7MLfxm9L5ylf/wX1PQvTXiXA==
+	t=1795502680;
+	b=m87Tn6x7nyEz+fMugFSwS7kWbC8XgVFCqw049Twu4VQo4mb4JcZxAqIYlYk0XWhSEz++
+	 ns2V7uK1Ngl2ifM1bPIq1V2nkOfziOniMJNM1KpRJJC9THKrCmDTR+6+tDNcYjgAIaLs8
+	 H6VUVdNuPBL8+egYmMc3AR/zQSVldnYVOJcoZF+YktUIpByivW1K9tnUg6XDtYhU4C/w9
+	 BefacqSHNVfxxrEtsODGdEO4r+zmtn1dJYC+i3lcjwqJVfoxCRh/0rfwJNoNIrfPjDrx7
+	 o3SK8h3iolkNvvjAduGkNz28uDcM9yqIQXmjuT+110hLNPoR2yMqt69eYIz3z8FVwbw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795502516;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=0MTKVnxWcKYuk0Iai4ZAjEaKmzIPrFCLRJdlgwxvUFQ=;
-	b=FnfiDx82Zf8u56hLq8FSwn0d1+tR1EXxIpCa0go5UF8unq+5VZN1HLjKYEdqZMOwN3yY
-	 tTaa2xKnKoAL27sh03Kou1Vd82zhbdwOTzj7OAdURg1LO/vEA7zxqWPlC7vOEweRb8qb5
-	 Zlw6KG6Je5QryksnKufp7RMzYr4XpgLKGNdsgt3vctKB94FkcJKuQajLcZpjLdYeb2GCZ
-	 Ar9yP3lMKDpnsc/qRqztRkMT1tx8gNRo1+vFNMTgtqX40jWdmj4MSe2uKWkalsgx4AclV
-	 N+T1B8+PA/fUYj4/CRockuwAqMtwvJPZeiykRinI3VNwL4VC2kC0nEJxBuXsDBrINEw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795502680;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=ZxZjeyzDUCPuBziPwBQouparBL6NVZFSLDryV/eFVHM=;
+	b=NGZ61Pn8X2sKbUjQ7ilsi7TOxl4Nx7TOmUGhraHuhkFnNEomLDhlZJLpHZsYEnSmd0cf
+	 dg02LJjtvV0r7IypEBYMixtGgPVHCCXVhBf8t47p18E9dCh7M5DvwFcZTd0pDaQpEC2F6
+	 axZJzNvsrq6p5nGwnaGQWEhiNoLQS6XMlvFiv2O1kWOERt/YGCD8ZdZuGQwagNTomAGxu
+	 9yaYGSxz4snURnyqYQV6JgaNTazMgi9oTA5wxgVFgweJ58CvFmgwE0oyXe/ayeb9Kz9XN
+	 ed1ojXrPebjynK3827/86SkFVtbhORkWjs+EwZoYAU82YOmeYwFUz679vEh+wb/w/hg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CsXw0n9X;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=oywyypjb;
+	arc=none smtp.remote-ip=91.218.175.69
+Received: from mta0.migadu.com (out-69.mta0.migadu.com [91.218.175.69])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51465606A31E
-	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 06:41:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A1B0606A32C
+	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 06:44:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3A1B0606A32C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CsXw0n9X
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64C8B1F000CF;
-	Tue, 24 Nov 2026 06:41:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795502515;
-	bh=0MTKVnxWcKYuk0Iai4ZAjEaKmzIPrFCLRJdlgwxvUFQ=;
-	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=CsXw0n9XMTxgARSrZRaAj0eiPkpAO9ddmNxhS3axF+6BibUS+c1VQlH1o9PV6lrNU
-	 LTBA1S4HLTmlYuWVbEUPxrwyfWecXrhrD6P/nSitpH96mz1RQutXj4uHbV1bO9sTRm
-	 HFuDnCPkejXhTLn/CWj+64DupNCPy0E2WkzFyLScAyImZrFed0EpEJePBBhx5IsJh0
-	 jrA0hDG6qZ30l35KvGt+QqaldSK3tVeWIwxJe5s2KIeRnc2vSBqlyWsioSq4pKy5Xa
-	 5kVW0rNuHvwSBA8ZU5U+U4tU1DpsLTDJ+6QNlF1K/kQR9l7pwfQY6L9a+UCdKvdQQx
-	 hGueDP3IWo21w==
-Message-ID: <sashiko-outbox-230606@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v1 3/4] bpf: Add sleepable local storage
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Emil Tsalapatis" <emil@etsalapatis.com>, bpf@vger.kernel.org
-In-Reply-To: <20261124060357.11700-4-emil@etsalapatis.com>
-References: <20261124060357.11700-1-emil@etsalapatis.com>
- <20261124060357.11700-4-emil@etsalapatis.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 24 Nov 2026 06:41:54 +0000
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=oywyypjb
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=eL5pZ5rp2p7r1Xu8Bzzhclg/JXgXV6fM1d0JqyHaPHM=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1795502677; v=1; x=1796107477;
+ b=oywyypjbPH//HrQWl82iC/+qiGCNYsv+90UAbK+3asbi9CSWlSypP/OWLwNtAzbBzx9A5n5k
+ 8457N3nPAwHJ5A6UlICwVqLSrgeuFUlhzzCdMHHMlwLGAaWt/iQBgEDoEnnAuks2u9xnJPvGVWz
+ CN/CQHV3Azthw2Tm0ZL4TfyE=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 865bb19f8eb4368b;
+	Tue, 24 Nov 2026 06:44:36 +0000
+X-Mizu-Trace-ID: 865bb19f8eb4368b
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <e5a6139e-814d-4aca-bf44-58871af549a5@linux.dev>
+Date: Tue, 24 Nov 2026 14:44:30 +0800
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -58,46 +57,132 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf 1/2] bpf, lsm: fix bpf_setsockopt() on a half set up
+ child in inet_csk_clone
+To: sashiko-reviews@lists.linux.dev, bpf@vger.kernel.org,
+ Alexei Starovoitov <ast@kernel.org>, matt@bobrowski.net,
+ KP Singh <kpsingh@kernel.org>
+References: <20261124061544.254586-1-jiayuan.chen@linux.dev>
+ <sashiko-outbox-230603@kernel.org>
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <sashiko-outbox-230603@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue to consider:
-- [Low] bpf: missing __GFP_NOWARN in sleepable
-  bpf_local_storage_alloc_mem()
---
 
-commit 6a9b8094f2dfaf87e47ddf985c894923ff71ad36
-Author: Emil Tsalapatis <emil@etsalapatis.com>
 
-bpf: Add sleepable local storage
+On 11/24/26 2:34 PM, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 3 potential
+> issues to consider:
+> - [High] bpf: NULL deref in bpf_sk_clone_setsockopt() via MPTCP
+>   subflow_write_space()
+> - [Medium] bpf: unnecessary rejection of IPV6_AUTOFLOWLABEL in
+>   bpf_sk_clone_setsockopt()
+> - [Low] bpf: multi-line comment style violation in bpf_lsm.c and
+>   filter.c
+> --
+> 
+> commit 9470b8f4e13b2c8be2cf5cc10f852d869dbb6f7c
+> Author: Jiayuan Chen <jiayuan.chen@linux.dev>
+> 
+> bpf, lsm: fix bpf_setsockopt() on a half set up child in inet_csk_clone
+> 
+> This commit introduces a dedicated bpf_setsockopt() helper for the
+> bpf_lsm_inet_csk_clone hook that rejects socket options unsafe to set on
+> a partially initialized cloned child socket.
+> 
+>> diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
+>> index ae23511fd811b..fa71f52a055c5 100644
+>> --- a/kernel/bpf/bpf_lsm.c
+>> +++ b/kernel/bpf/bpf_lsm.c
+>> @@ -79,6 +79,15 @@ BTF_ID(func, bpf_lsm_inet_conn_established)
+>>  #endif
+>>  BTF_SET_END(bpf_lsm_locked_sockopt_hooks)
+>>  
+>> +/* List of LSM hooks that trigger on a locked child socket which is not
+>> + * set up yet, bpf_setsockopt is restricted there.
+>> + */
+> 
+> [Severity: Low]
+> This isn't a bug, but BPF multi-line comments place the opening /* on
+> its own line (here and above bpf_sk_clone_setsockopt() in
+> net/core/filter.c).
+> 
+> [ ... ]
+> 
+>> diff --git a/net/core/filter.c b/net/core/filter.c
+>> index 53c042b267ab6..77abc4cb9db51 100644
+>> --- a/net/core/filter.c
+>> +++ b/net/core/filter.c
+>> @@ -5938,6 +5938,43 @@ const struct bpf_func_proto bpf_sk_setsockopt_proto = {
+>>  	.arg5_type	= ARG_MEM_SIZE,
+>>  };
+>>  
+>> +/* security_inet_csk_clone() runs at the end of inet_csk_clone_lock(), the
+>> + * child is locked but not set up yet: its timers are not initialized, it
+>> + * holds no reference on icsk_ca_ops and an IPv6 child still points to the
+>> + * ipv6_pinfo of the listener.
+>> + */
+>> +BPF_CALL_5(bpf_sk_clone_setsockopt, struct sock *, sk, int, level,
+>> +	   int, optname, char *, optval, int, optlen)
+>> +{
+>> +	switch (level) {
+>> +	case SOL_SOCKET:
+>> +		if (optname == SO_KEEPALIVE)
+>> +			return -EOPNOTSUPP;
+>> +		break;
+>> +	case SOL_TCP:
+>> +		if (optname == TCP_KEEPIDLE || optname == TCP_CONGESTION)
+>> +			return -EOPNOTSUPP;
+>> +		break;
+> 
+> [Severity: High]
+> Should bpf_sk_clone_setsockopt() also reject SO_SNDBUF and
+> TCP_NOTSENT_LOWAT?
+> 
+> When an incoming MPTCP subflow is cloned in inet_csk_clone_lock(),
+> inet_clone_ulp() -> subflow_ulp_clone() allocates a new
+> mptcp_subflow_context with new_ctx->conn still NULL while newsk inherits
+> sk_write_space = subflow_write_space (new_ctx->conn is only populated
+> later in subflow_syn_recv_sock()).  Both SO_SNDBUF in sk_setsockopt()
+> and TCP_NOTSENT_LOWAT in do_tcp_setsockopt() invoke
+> sk->sk_write_space(sk):
+> 
+> net/mptcp/subflow.c:subflow_write_space() {
+> 	struct sock *sk = mptcp_subflow_ctx(ssk)->conn;
+> 
+> 	mptcp_propagate_sndbuf(sk, ssk);
+> 	mptcp_write_space(sk);
+> }
+> 
+> Passing sk == NULL into mptcp_write_space() ->
+> mptcp_stream_memory_free() causes a NULL pointer dereference.
 
-This commit uses bpf_map_kzalloc() with GFP_KERNEL | __GFP_RETRY_MAYFAIL
-to allocate local storage when called from a sleepable BPF program in a
-sleepable context.
 
-> diff --git a/kernel/bpf/bpf_local_storage.c b/kernel/bpf/bpf_local_storag=
-e.c
-> index 28eaee5c66ce8..74dfebf180970 100644
-> --- a/kernel/bpf/bpf_local_storage.c
-> +++ b/kernel/bpf/bpf_local_storage.c
-> @@ -69,6 +69,10 @@ static bool selem_linked_to_map(const struct bpf_local=
-_storage_elem *selem)
->  static void *bpf_local_storage_alloc_mem(struct bpf_local_storage_map *s=
-map,
->  					size_t size, bool sleepable)
->  {
-> +	if (sleepable)
-> +		return bpf_map_kzalloc(&smap->map, size,
-> +				       GFP_KERNEL | __GFP_RETRY_MAYFAIL);
-> +
->  	return bpf_map_kmalloc_maylock(&smap->map, size, __GFP_ZERO);
->  }
 
-[Severity: Low]
-Should this bpf_map_kzalloc() call also pass __GFP_NOWARN?  Without it, an
-allocation failure under memory pressure or higher-order fragmentation
-triggers a warn_alloc() stack dump in dmesg, even though
-bpf_local_storage_update() handles a NULL return gracefully.
+It's true.
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261124060357.1170=
-0-1-emil@etsalapatis.com?part=3D3
+I can add these two. But I am not sure the list will ever be
+complete, the child is only half set up at this point and each option
+needs a look. Or we just don't allow bpf_setsockopt() in this hook at
+all?
+
+> 
+>> +	case SOL_IPV6:
+>> +		if (optname == IPV6_TCLASS || optname == IPV6_AUTOFLOWLABEL)
+>> +			return -EOPNOTSUPP;
+>> +		break;
+> 
+> [Severity: Medium]
+> Does IPV6_AUTOFLOWLABEL need to be rejected here?
+> 
+> Since commit 5121516b0c47 ("ipv6: lockless IPV6_AUTOFLOWLABEL
+> implementation"), do_ipv6_setsockopt() handles IPV6_AUTOFLOWLABEL via
+> inet6_assign_bit(AUTOFLOWLABEL, sk, valbool) and
+> inet6_set_bit(AUTOFLOWLABEL_SET, sk), which modify
+> inet_sk(sk)->inet_flags on the child socket rather than the listener's
+> ipv6_pinfo.
+> 
+
