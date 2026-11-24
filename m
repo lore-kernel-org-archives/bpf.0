@@ -1,104 +1,94 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.170
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.178
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795500052;
-	b=csXQ7T+FxSj6MDa5xm+Bb30v5O7YiZ1fCpzlpZvTSwyW0z2iKl3xH2QxYsuclC4C59Jd
-	 mZLUCqDeh7WzB7SUYWmZML0APFM2rksHdrY5D5VKFqIkEnKTHsMtBKf4Bd7Ioi2Kk/vOq
-	 Ycbb9s2ZHRFrgDV8Ag0Mv7T6IjtPFd7lBrNuFvEz6JFEhQFFUcrDWNtL9sQIKdtMrKM0f
-	 IzsQb9LVmThYGVf5FQi/dsLc0OXwkKcaNDm6dHqkK/A0vTo/aF4yRoedJKjS4J7dQdAMt
-	 vaB2B/1WZeDqoqakDGCKVE1r/FRgUy9wfh4OHEBCiHgeso+E8YlfDk2z5whJRpdUAsA==
+	t=1795500244;
+	b=VRIGvdyfpO8Xg96ZLAdjZAdjTc7rZE+AqxavNI3Vb5InjImCyaQEkbnUxUXIsKM98LAT
+	 J/FwHgX9yRBJg9Re4L0mSeph2jfp5ZDUtjYqeUlWqShUHdISs+CcNqkoyV2VUCnecMOJ+
+	 77FYUyvfDYKY0wPVkMLuzXhOZ1jqWBWFwug8kp06N+Cm2SqiE9j/kiWpqctVowXhOaxlI
+	 KsTKsx1vwSV07tUzi3fxUccTKAx2UH2QpciM2hph6gMyaz4aXG6zb76TSCpRWouPv0BeF
+	 TrgEG8o8Hz2n4k0xINgcz/a3sc8E9/nExpQIMcIjJaMhDwrjtgXo/7i8795J/HElSFA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795500052;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795500244;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:From:To:Subject:In-Reply-To:References:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=/SLHfkNsrCjSRx5Wz9p+DTV861mq73QFj5nkNZKg5lU=;
-	b=4SG7t9U45IvvPlBmFjmNoKYaS/7hTaKujAAyGkv1wFoihVSubA9vqxBHEza8uIabLYfp
-	 WmE1rJbQ7WOfhNqJNXbL7abVlGxv0pXhoU5fG002/tIfYQiQqlwAk6CojFIczF1QSTHHD
-	 Qs8wIzOpjZFfCBrx4B9Q5KgUYKRJrOHkOfMePjI1M9yHGJC/k5N47Qc/W7Q6Xv+3Gpi2V
-	 RCLEqejE5zlinwZsznL4pmBoJ6xkPOhx4rMZObarzk0rP9q/LifbrpM9JmcqfU3m5vylF
-	 yf6klD5fQpibpEZiFH7uMImZ3eZZ1FiOwAzUcj78qpxY5QbkmKjnmaryRjowVkW9yew==
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=CZLbDNzMabVN7KHk/I04b5Jq/BM2bGCSumT8JlDjLdw=;
+	b=pXJLsvD3q+wG4z0lH2emD6ONWACL3mF92L5wgZW475axk0zitMwNkDgnxLzGWr9Fdz6R
+	 khB1c6aCrEAoSkU9PZp6Sf0btSqCZ9e8ec9vhe6qk8hqG8ZaTix61Nedz7qPa/fjMeCDh
+	 WoYBLdP/GvmKZ552cao9wSXGBC9mas5bdw4Nu7zOb0gbDUyIUdq9eI7B+Ep7mJyh9Lglw
+	 KJncotAQ+GeWwecw5t+qjxkYENiYQQgW0ky+wO/abEobk5xmDPWKkZtiK/LITGue/D6WA
+	 XQGzP/M4RFsPyxDpHbhCciXD0lrY79xvpoloEWxYiSkw7bIsZdAi56KOmIcc38WieYQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=q1+Zpv7v;
-	arc=none smtp.remote-ip=209.85.215.170
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+	dmarc=none header.from=etsalapatis.com;
+	spf=pass smtp.mailfrom=etsalapatis.com;
+	dkim=pass header.d=etsalapatis.com header.i=@etsalapatis.com header.a=rsa-sha256 header.s=google header.b=JNuIkS6v;
+	arc=none smtp.remote-ip=209.85.214.178
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0421606A321
-	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 06:00:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F0421606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DD9B606A31E
+	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 06:04:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3DD9B606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=q1+Zpv7v
-Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-cc751eddf25so2762130a12.3
-        for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 22:00:50 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=etsalapatis.com header.i=@etsalapatis.com header.a=rsa-sha256 header.s=google header.b=JNuIkS6v
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2f04244c3d0so34109195ad.3
+        for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 22:04:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795500050; x=1796104850; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to
-         :subject:to:from:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=/SLHfkNsrCjSRx5Wz9p+DTV861mq73QFj5nkNZKg5lU=;
-        b=q1+Zpv7vRdLuNryjubIcK9p1C6hYtJyM8s4Ya+V8PgQONvpdTC7Ua853SGJTsIUcXQ
-         M0pFVL8Do2Ry2wiXUj3cxeKtoqtmO0eJBjUj9twM08oj3aaj/1mWJSU3N4CXDAYxBpCK
-         on+bdLfyiTexuyK1b6zmgwGoqKXFL4GeCN4DTr+jWK4djxI0BL1/DadGxeBp6DK7jASk
-         tRKgLLfGrF8S9KN1UlG+krPmugZz0AWnplxbg1kncJbcJLBXntvKA8UjrUbEBTdBxIUf
-         JruoLYhZMGVzT+PZrzx9sT1rk+fc369T12hC6PaBt2ez90GghipDT83vmsUcG8y9Od5P
-         M7qA==
+        d=etsalapatis.com; s=google; t=1795500243; x=1796105043; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=CZLbDNzMabVN7KHk/I04b5Jq/BM2bGCSumT8JlDjLdw=;
+        b=JNuIkS6vosJ+7+ggJ9Q6/px4Yo9nIt0bW9eCmWxTu/IwKa21CYO9X22ZAuOQtqranu
+         qWThE9IWqjKY52jClYVufKCtkkBxtCtzadrrOaXfYNaoApGBn39kXBIxYYhKiKtAdQN/
+         Y4WfFkr63keCa+tUGEHbG6sKwpzibRt3MksoNhUhEUAp6cRambFAeg6gWnpvhT13bP5c
+         GSKfoVpxDXV8OvDNV6bOnYqRyNbCq0BuK0X2lE7AafXNreOgCL6DlM17z/jQtg0Vj0mE
+         TQvyOYcPahrRm7QnLvgNEzjCGGzmMezehPlmd3J3q5AauJ6HDkY59dpXlYSSYorfSjY8
+         io1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795500050; x=1796104850;
-        h=mime-version:content-transfer-encoding:references:in-reply-to
-         :subject:to:from:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=/SLHfkNsrCjSRx5Wz9p+DTV861mq73QFj5nkNZKg5lU=;
-        b=CLHbL2/cV3WjwxqsZ6RDYnnTnGLZuots6kaTPfFLAOKMVd2+48ch0KdDB+ZJv9OHHg
-         hSAo16sZkURF/ua99AIhz5NLVYPQ8MYmsKPhKIEP1hBz/poKRGxwt5OhqcRip98br3DP
-         39BKg/I1M/S/b0AfHz8WbrQ/UrT/EC9glqFi26T1/DCV/Ep/UMVnsAKVqeotPRynegaN
-         eec9P4M7yXVkWT3ABIRuIvTtchNHk9Vjt/4KGEElLxfV/yPbNST8x/7ESlEnvOZlqdy7
-         Rqb0NfL7cy4lOb2w+5FJbib4CG0dqM1HDTdNBdifLl4OLVYstyRAda1pXfgPox3oer4D
-         WtcQ==
-X-Forwarded-Encrypted: i=1; AL+hErEKH3wxKIvSs5f1fbJJ2KzlAeZMDjcojDqBCsWyu8f0uVl0hHBDcaRLvv7rybQ7tVJ8tgA=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9Tir2DasM8HF6PJGcZvDBq9vpJlL6erw3TcxrhLAjDaD95ne62
-	fYeLiuycH9UqBdsQsCKl4WLFcvkvL7J8LRq1/wZ3B9ezLmnz8EMNgLtb
-X-Gm-Gg: AZFdTZcEZ5v9lA8WJOnuip+ocqUIG6QitweM8fNXiLUJquLqyi6rdaPFid+g4zDoNK6
-	c2h5u77aQvm3rCE9d0hRvFRjdfpVOpUV51omzJ5bGYg5LTQZMfr3iRwZsiobTCH7BZLCkgMVZ0Y
-	AeB6EJ5Xt/98Uae0SfK3eEUOgy+bAAZRMBHoGqS7PFVPrpnzRD6itViLf1FVbMqpPEadKn74QGC
-	qBQDLVfwa9Ddm+U+T0L1JBAqCkv/XavptIfMHzfPLfhPLVYzB7esV27ZONqtolEQ6tuw7sFOpYn
-	yNYJi8v20X7ehIf4AkDdgzFkIgamT9mjEY9O/5PMvNDWZEf/f33zsMzrG/cb2TQ3GXcpMqUERSr
-	p+bBsxcrjcMdZ11fGKv87Jxj9TX8I4m1QR2aCHitWloZVSvmCcqA4TrNJq6je5pfG3uY91WfINn
-	pr6eTGwLW5RK1ujFUILqXOPkorcBG3su17B3pCLlxSFiCUIgckB5oyMleDXslnwJwxrdsQMxAkR
-	YLqsiJeQWpsyOBr4g40G69/XCahmVtFIrMJpJe4Rc0Ika4BWjOFxDSiyqRblCfLtJ0otCuCFM7z
-	XhJIvdgePsv4yr6lr8Jp5XqL9OQIdsuUGxqeDekTpKtEqIybUruRQKxV7Qb39/d/GEFxM1y3bUF
-	NkvShgB7z14M5+AXtd6TO43HwySBtAbkWtrI=
-X-Received: by 2002:a05:6a21:780a:b0:3e2:8b64:2ca0 with SMTP id adf61e73a8af0-4014d35f1bamr11982201637.49.1795500050075;
-        Mon, 23 Nov 2026 22:00:50 -0800 (PST)
-Received: from localhost ([153.61.198.255])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cde6d03adafsm6596544a12.23.2026.11.23.22.00.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Nov 2026 22:00:49 -0800 (PST)
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 24 Nov 2026 06:00:49 +0000
-Message-Id: <DN37NBGPJJG9.2DSVDCKS3UYTV@gmail.com>
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "syzbot" <syzbot+b6f8640465bdf47ca708@syzkaller.appspotmail.com>,
- <akpm@linux-foundation.org>, <andrii@kernel.org>, <bpf@vger.kernel.org>,
- <brauner@kernel.org>, <daniel@iogearbox.net>, <jack@suse.cz>,
- <jmorris@namei.org>, <linux-fsdevel@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
- <linux-security-module@vger.kernel.org>, <netdev@vger.kernel.org>,
- <paul@paul-moore.com>, <penguin-kernel@I-love.SAKURA.ne.jp>,
- <serge@hallyn.com>, <syzkaller-bugs@googlegroups.com>,
- <takedakn@nttdata.co.jp>, <jhs@mojatatu.com>, <netdev@vger.kernel.org>,
- <tomoyo-users_en@lists.sourceforge.net>, <viro@zeniv.linux.org.uk>
-Subject: net: act_gate bug. was: [syzbot] [tomoyo?] [mm?] INFO: rcu detected
- stall in security_file_ioctl (9)
-In-Reply-To: <6b051681.58b41460.7037.0590.GAE@google.com>
-References: <6b051681.58b41460.7037.0590.GAE@google.com>
-Content-Transfer-Encoding: 8bit
+        d=1e100.net; s=20260707; t=1795500243; x=1796105043;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=CZLbDNzMabVN7KHk/I04b5Jq/BM2bGCSumT8JlDjLdw=;
+        b=QI1ZwsdOXMGXAaLs5GScTfAL0+WFASigVgQm7T4MudarN/NgFk+5YBlrQ+Kn5kldrt
+         sPzpiNNBmJCUCMoMLCzGoLEPRy8JNGED5YVYjg9l5kT1sN3I/M1X/XAL5ZAdIBE+tzcJ
+         M2Lk5mrwa/FI1ew+zKBO0DTgpHWkzxW1xH9X/86Usv7+ss50ndQ4kW9hFdw+6tu/58vn
+         DuXt/qNDtkNO7zlbZcJ/w3TzvvzWC9CL9J2IIymnaZhRK0pb/P4bz0Nnbk9cwiE3I/qt
+         /7MmQNOwEnO8zBdUTQKvyFkKfXwNM2jPi4MG6t2hEq1x0cQ7RN/6lltRtt16sVQZ8067
+         kJOg==
+X-Gm-Message-State: APuU4Z8GpFr22bxSCVo+4+I/PhL9MLRHA79dBQrMwewRc5f2yXtdkdEV
+	V/Yk9+ulrlNpcDnaEVmOZWPhW1k20ApwMrMhEh1yX/vpdYn1SzFOJxsbgb6Ar/3b5owMLq4zw3Z
+	SmjAkM3s=
+X-Gm-Gg: AZFdTZfkdYz6E8gpGD/7/plH5IPaaVaJg4rGBneoiFsznhfEK2QUVMNa6vI51wAto4n
+	SkjjkaEhGQytwLPxAIOiLeI7ivmBXoSZx5hYNzGhdHaRDr1DWgosdadUY6xiC6ENLYKefJNoQhP
+	AZUa8BemOo5cnzlekfY/3ZT7EUmXPiISNqd1X6vyU0K/vrBRjyO58GyOl+o0TaWkfZTNod3ZIhC
+	8J2JLS3W8bWtOE4srdeH/rTV4k43ZR4+uT0wkxgnJY4UPbPYuA2oe17ovKoYmpLG5IXPBEvbjnq
+	4wr1aNWN53Pwy5/Iw+9oWB4gG12kG3zOPx1zbtmzvTmY5XV/VcuZKpxwIrq4XDG/J5r3mGHV7uA
+	mA1pzwWdCbiNmVz0szUxpACuLu6cLPIAAN1RUgkW6FMWKSj2umE02Gwn1ebuhOIT+Fzx6EVyBxd
+	Gujh9hoEzegfT4np3z4IYN1ok+OvqSGgBqWMluBjH/Sb+/U2ZU9Q5y1Qr+gLt7PhorrA71RdFrg
+	PSnIykIhotmDI0pmARk1qShzG6qeuBuqqMI1y6xPR+nlToxcoCApJ6YDEpz6HEDFHIUlb+WifR0
+	ttzWAac2pGoV0Mn5zImGJcGu3KsK49fcWHGmGwXk9Ap57VeJDwjWs6Fi+HpAvS7JWGcUdDR3SQ/
+	3fFZYY2BmKZCqie6xyD91pN+BEcw=
+X-Received: by 2002:a17:902:eccf:b0:2e9:77c0:c7ab with SMTP id d9443c01a7336-2f03f1277f8mr132813155ad.29.1795500243500;
+        Mon, 23 Nov 2026 22:04:03 -0800 (PST)
+Received: from alpine05.ht.home (107-190-31-93.cpe.teksavvy.com. [107.190.31.93])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2f03f0c42a6sm64215985ad.23.2026.11.23.22.04.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Nov 2026 22:04:03 -0800 (PST)
+From: Emil Tsalapatis <emil@etsalapatis.com>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	daniel@iogearbox.net,
+	Emil Tsalapatis <emil@etsalapatis.com>
+Subject: [PATCH bpf-next v1 0/4] bpf: Use kmalloc for local storage if possible
+Date: Tue, 24 Nov 2026 06:03:53 +0000
+Message-ID: <20261124060357.11700-1-emil@etsalapatis.com>
+X-Mailer: git-send-email 2.54.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -108,90 +98,60 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Mon, Nov 23, 2026 at 08:45 PM syzbot <syzbot+b6f8640465bdf47ca708@syzkaller.appspotmail.com> wrote:
-> rcu: 	         hardirqs   softirqs   csw/system
-> rcu: 	 number:     5264          0            0
-> rcu: 	cputime:      138      52351           25   ==> 52490(ms)
+Local storage currently only goes through kmalloc_nolock() to allocate
+new memory. This is needlessly restrictive, because the calling context
+may allow for spinning on the zone lock, or even sleeping. Exclusively
+using kmalloc_nolock() has the downside that the call may fail where a
+different variant would succeed, e.g., under heavy contention on the
+ZONE_NORMAL zone lock combined with high hugepage usage in the system
+draining ZONE_DMA32 below the watermark where a ZONE_NORMAL allocation
+can allocate from it. This scenario has been observed in production
+environments.
 
-It's not tomoyo, mm or bpf. Looks like act_gate.
-Zero new softirqs in 52 sec, so one hrtimer_run_softirq() doesn't return.
+Add more granular context checking during local storage allocation, and
+do either a GFP_KERNEL kmalloc sleepable allocation, a GFP_NOWAIT
+nonsleepable kmalloc allocation, or a kmalloc_nolock() allocation. This
+requires plumbing the aux metadata of the program through the local
+data allocation helpers, and inspecting at runtime the context's
+preemption/nmi state along with the sleepability of the call.
 
-> RBP: ffff88807ed35538 R08: ffffffff91be1bbf R09: 1ffffffff237c377
-> R10: dffffc0000000000 R11: fffffbfff237c378 R12: ffff8880b8228600
-> R13: ffffffff89fd0480 R14: ffff8880b8228600 R15: 1ffff1101704514a
+The logic is effectively:
 
-The registers with lockdep struct sizes:
+  if (aux && bpf_prog_can_sleep(aux->prog)) {
+          ptr = kzalloc(size, GFP_KERNEL | __GFP_RETRY_MAYFAIL);
+  } else if (IS_ENABLED(CONFIG_PREEMPT_COUNT) && can_spin_in_alloc() &&
+             size <= KMALLOC_MAX_CACHE_SIZE) {
+          ptr = kmalloc(size, GFP_NOWAIT | __GFP_NOMEMALLOC | __GFP_ZERO);
+          if (!ptr)
+                  ptr = kmalloc_nolock(size, __GFP_ZERO, NUMA_NO_NODE);
+  } else {
+          ptr = kmalloc_nolock(size, __GFP_ZERO, NUMA_NO_NODE);
+  }
 
-  reg       value             points to
-  --------  ----------------  --------------------------------------
-  R14       ffff8880b8228600  cpu_base
-  R15 << 3  ffff8880b8228a50  clock_base[HRTIMER_BASE_TAI_SOFT].seq
-  RBP       ffff88807ed35538  kmalloc-512 + 0x138, tcf_gate->hitimer
+Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
 
-act_gate has the only soft hrtimer that can be on CLOCK_TAI.
-bpf_timer_init() rejects that clock.
+Emil Tsalapatis (4):
+  bpf: Add call for selecting kmalloc or kmalloc_nolock at call time
+  bpf: Plumb local storage context
+  bpf: Add sleepable local storage
+  selftests/bpf: Test kmalloc variant selection for task storage
 
-TCA_GATE_CYCLE_TIME is an unchecked u64. In gate_timer_func():
+ include/linux/bpf.h                           |   8 ++
+ include/linux/bpf_local_storage.h             |   3 +-
+ kernel/bpf/bpf_cgrp_storage.c                 |   9 +-
+ kernel/bpf/bpf_inode_storage.c                |   9 +-
+ kernel/bpf/bpf_local_storage.c                |  53 ++++++--
+ kernel/bpf/bpf_task_storage.c                 |   9 +-
+ kernel/bpf/syscall.c                          |  27 +++-
+ net/core/bpf_sk_storage.c                     |  17 ++-
+ .../bpf/prog_tests/task_storage_sleepable.c   |  94 +++++++++++++
+ .../bpf/progs/task_storage_sleepable.c        | 126 ++++++++++++++++++
+ 10 files changed, 319 insertions(+), 36 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/task_storage_sleepable.c
+ create mode 100644 tools/testing/selftests/bpf/progs/task_storage_sleepable.c
 
-  n = div64_u64(ktime_sub_ns(now, base), cycle);
-  close_time = ktime_add_ns(base, (n + 1) * cycle);
+-- 
+2.52.1
 
-With base = 0 and cycle = U64_MAX, n is 0 and close_time is -1.
-The timer restarts in the past and __hrtimer_run_queues() runs it again.
-It's there since
-commit a51c328df310 ("net: qos: introduce a gate control flow action").
-
-Jamal,
-taprio's INT_MAX limit doesn't fit. tdc uses cycle-time of 600 sec.
-The diff saturates the sum instead.
-Here is a potential fix:
-
-diff --git a/net/sched/act_gate.c b/net/sched/act_gate.c
-index 711cf24..5422d60 100644
---- a/net/sched/act_gate.c
-+++ b/net/sched/act_gate.c
-@@ -45,8 +45,9 @@ static void gate_get_start_time(struct tcf_gate *gact,
- 				const struct tcf_gate_params *param,
- 				ktime_t *start)
- {
--	ktime_t now, base, cycle;
--	u64 n;
-+	u64 cycle = param->tcfg_cycletime;
-+	ktime_t now, base;
-+	u64 rem;
- 
- 	base = ns_to_ktime(param->tcfg_basetime);
- 	now = gate_get_time(gact);
-@@ -56,10 +57,9 @@ static void gate_get_start_time(struct tcf_gate *gact,
- 		return;
- 	}
- 
--	cycle = param->tcfg_cycletime;
--
--	n = div64_u64(ktime_sub_ns(now, base), cycle);
--	*start = ktime_add_ns(base, (n + 1) * cycle);
-+	/* cycle is an unchecked u64, the sum must not wrap into the past */
-+	div64_u64_rem(ktime_sub(now, base), cycle, &rem);
-+	*start = ktime_add_safe(now, cycle - rem);
- }
- 
- static void gate_start_timer(struct tcf_gate *gact, ktime_t start)
-@@ -107,15 +107,8 @@ static enum hrtimer_restart gate_timer_func(struct hrtimer *timer)
- 
- 	now = gate_get_time(gact);
- 
--	if (ktime_after(now, close_time)) {
--		ktime_t cycle, base;
--		u64 n;
--
--		cycle = p->tcfg_cycletime;
--		base = ns_to_ktime(p->tcfg_basetime);
--		n = div64_u64(ktime_sub_ns(now, base), cycle);
--		close_time = ktime_add_ns(base, (n + 1) * cycle);
--	}
-+	if (ktime_after(now, close_time))
-+		gate_get_start_time(gact, p, &close_time);
- 
- 	gact->next_entry = next;
- 
