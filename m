@@ -1,54 +1,106 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.7
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.179
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795501635;
-	b=VokzVe8vCax1RqpTuqqNOaEbNgoG/R3mZCLmfGhy4o2IgohDBp/gtTH9mSc73gF5WiY3
-	 5GgYpVKkssg/PRtkaHTEoy/giJv6LyvokfTBWERULMdX3ugxZZcsIfeaO5nDpDotaEuX0
-	 e9DI/l8HKAxFbWl0CaYVHEX4WsoWx3lfIH2gKeRtDGW2yTXinSmh64PwoLS/7FFRtpuYv
-	 VqSFOuYGA9adXnbGyh6FVrjng7X1VfXdsWJnIc8yAqmL/jGs3A0lCrHisX88xyuvyLZdp
-	 dLtlv/gtbzsvF/nA0iKTQQ/Oxluobtk2x5WCYwmsBkY7fgXA0V6yKjtqRpKkMvc9Nsg==
+	t=1795501683;
+	b=p7YKpCk50olV7ARMvb/0aNNpDOX+8k9tScrd4soa5WCB+9vdA5Ro7O6btgl8/JDvW4/Y
+	 akr9TpgM0HTuwATAslCOVgdmdYIkCT4oF+eNNbBkWO8e651LXg8WfAbByjJ9p0eLgWde4
+	 A1kkx/mnPU7hSyl8BAq1lODhsUYLqYA2iL3BZNit5aZAAI4lTsGBQVWembwyZ1gQpxe/X
+	 5ODMOWWDZ5Pi8+iDnYfSlh2HLx1FXPWt0N1oPSyvGu6mp6pH2Nzvp2ziKOlYG2SDE1yiW
+	 vIfefYY11ItcqZmyHpbR9EFZlOIqbgpz5RTS8YIXpZcUMaQ31WIx48OM9dmr01ifN6g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795501635;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=7u094NZKZxpETVB03vTt5m2yLYD6kPFSRwEM5jWpjdA=;
-	b=UHG6FV6Rgnd/5h+ZGQq6WX/tb5QIOZIGOy0hnT3ED6VJTgY6DG2JPuJa22WiYxGsPTjc
-	 oaVBKTeTjTecmvTZfWOCs2XU5wQziXONcmMXevVHkem2xkXB5FC88lo+VJ9CdS+ht7H9K
-	 huVX60aFa2+TWT3DiKwSStkfmLJDaEZRcenxXC52QWmqFvBMrarX9ammrTDotcp3wb0yZ
-	 kvKNemuQfMlVZQk0U9GavTl2bY+fV8LrebSKMJHIM0fa9UqFvBo17fw7rtL6P0OQBjpKH
-	 ap9ieWeJ75vexZZPnjHJsKNelcOUtzu9cc2HsW92PWW5bCPFjvjyffhnV4YKJn3Oing==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795501683;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
+	 References:Content-Transfer-Encoding:MIME-Version;
+	bh=8CAifW3Lq2rK8dqR915PsF3RJe0oEqOH/K9Z6lx0UBA=;
+	b=Z5X+aF2DRkHDG9lcBB5z9553E9pzPJostt2fKTy65zuT8nz6cK9Cx41ybn5ZKCaVuLaV
+	 zqoParmjksXsPfBy/zRCpEjpRWbSKG0Q+5n5oztOghPj071g4DnV4WPnQsLgXxD9zh5cI
+	 eAI8lCov9vk1dbycUqS2SkURrgbQp2RcF6WUbTuFDO9fa2dx63uxxXceaXgONP8m7EWDc
+	 lQojZgPcXAC3d0GaSbrsB5mRq5UjlYrB6x1qtfRK1v8zuJ7ibJd38x757CNg/8nfLs9WB
+	 vGBRxo9EqiO1aqEbnytsPrBXFdCuM9GbT9oK4I0iPX8bFE517HXUjoYqQUWyM60RdAA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Gh5wSmnL;
-	arc=none smtp.remote-ip=95.215.58.7
-Received: from mta1.migadu.com (out-7.mta1.migadu.com [95.215.58.7])
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=WVxso20Q;
+	arc=none smtp.remote-ip=209.85.210.179
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39044606A31E
-	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 06:27:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 39044606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ECBA606A31E
+	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 06:28:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0ECBA606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Gh5wSmnL
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=473BHmUcpoTKfEKxqqh8pcmuw4bO0dBRaaAPnB0eK70=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1795501633; v=1; x=1796106433;
- b=Gh5wSmnLFmCRHN4BGff7kZfKIiLvS5PAGUz6ExmleynNnCer02szrsjnDVBZzSKPcPmTcz1+
- NynYpWjjXmLjbYeCbaoAKmqP5crQ7wSWzBanfAAeM7Zw2JQtKZl6DxHCg+O56u7pGhwmZv6V09e
- 2ftwTAORAx96bmja1ZFz2TkI=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 948f5afaef9c9964;
-	Tue, 24 Nov 2026 06:27:13 +0000
-X-Mizu-Trace-ID: 948f5afaef9c9964
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <fd8bf876-6e10-4183-96da-8778f8c4ca3f@linux.dev>
-Date: Tue, 24 Nov 2026 14:27:03 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=WVxso20Q
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-8a070781f63so1864937b3a.1
+        for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 22:28:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795501682; x=1796106482; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=8CAifW3Lq2rK8dqR915PsF3RJe0oEqOH/K9Z6lx0UBA=;
+        b=WVxso20Qjjyqp7QfrtJDoYzErRHcAWmWsSS0WJPEmulzXkDXBAzkuDEHa9MmlCxO9L
+         Mnc0ZBoxnmIdVluyj4NQ3UKIzfiNopiGitcsr2FTVGqxkEb+uHQ6YIrP5dxen7uC4iy5
+         qRo3hors8bgy/TTDzJHgZ+wYblP3vZkwzN1SdI5GGbpV2PXlyL5T4bcffoXlEaxGWnxL
+         V5pdbk+3Y4hPxW+xZPpCqrHld72Oj+41govyY5cnTMjnq8h2xMGpqbdMSWEIkb4yDQpL
+         i9aPrdZsX4i8q3Im5FT3UL3PfvXlhlCdFw+oIQeknoQiwDV0I/Z50sNfUQgMdUkK05Id
+         b7wg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795501682; x=1796106482;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=8CAifW3Lq2rK8dqR915PsF3RJe0oEqOH/K9Z6lx0UBA=;
+        b=pUgTzauxLAue6cbtaZjnL0TJ5q6lWuXfnX38zYJ7vqjmOP8ixxOw6kPCNCVd2s9IMM
+         7qnGmEqNlX5qI/e2Y0yac0UWgUKeUCqjwenKhdWZmUNDwhvHBpk/VdDU6YIsdgzgPR/t
+         KD/aMtc+s7ZoqkoQo55euAZI0YXfNIcwd0LxH4ShgbXr7tp4WfDFHHcKx0nzTBPMwMgM
+         2xaS+hZBv6v9ET71rnboNmdoQu4bkDdKOaim02Nko2mlNFWyrxaMgneo9CfqfaL+9SNP
+         fkvjoTxAjmIdRvvkqljZhH4lkq/EQ1S1FjRD+gK73x6X+B5MJUM8fETk4kaCWtGr/cqw
+         O8Dg==
+X-Forwarded-Encrypted: i=1; AL+hErGi1YG2zpQfQO/E6s+e0P0pevxwecwYyZtY0/Cck8qPEqpV866jEgDh84R0fh3BU04E2Jo=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/afr4ycpYVFo8QJXP80a005Xv5Iao6yZOxfEkqd7wsFmD5iz1o
+	3hcYojKQsoiWse4v6drqu6BJHZafk3drsQGWmEkLL6PXIHEicfsJTcmW
+X-Gm-Gg: AZFdTZcuVv3yBoEqHO9JJh12zFlioJUV9DtQ1Ygotl8n6y/HVJDdVbrulC/rxxV9MgM
+	o2DS55LiEvj+5Pw8xxbYa+JwqVPI1azT1sJND09OJYxjEYlKksGmw+1YsI/5Fahqntd+Y8b/ujY
+	1YSRbvB4PigqXwJ5G4jyPyJnazSq3wNLoo1TPemyYO9D/+EqDlaNjEqJHa9Sgg2yYgvahXqXWUu
+	MYLq2gBg9bpHMk2SJFVQMQJR88OpVw0KaDq5rxRhBXi+M5uXzWdcezZJyvHfuuEIlFHBzRpZ/oH
+	o8TwPTpXopIr7PJi/+uNPdhM+bh/mwOJLDa+7aDBgEhY8aPXSMr8Q5DbyqrJnzkhveg9Qt/qaCv
+	81104N6RJjk4e4lW36FxQgTIUFRGtBUII0oDKO03wg8339Xeb26I4EF2teoS05hIYF+GqTiiQD5
+	e8cZArMMvcXsIgHumf/6J7Zc6MQ+U16GXWqAjfKnSb46nIgRDcNSfGVal/5WD+M8+6tJdaK5X0x
+	nuj1p/+dy14RhPDDzuu3yXI3jFZDA644FWCnp3NKCUCBlgWBc3+lPjNEDHWQdqTI8yCGCYmYCUf
+	9jM9KJYuFAQAPU3ET1aoqUTYa7OcFXtwBqxDqGCTETkdtTg7sR3kZqt8+ni8eukiCXIP/cHZQwO
+	njKzU2pFaYKgBkbWMos66//yAujzmMH1ulwEG5i2vpnXjOunnvmJEXb4=
+X-Received: by 2002:a05:6a00:410e:b0:87c:e6aa:30ec with SMTP id d2e1a72fcca58-8c87d31f4ccmr11608144b3a.49.1795501682157;
+        Mon, 23 Nov 2026 22:28:02 -0800 (PST)
+Received: from localhost ([153.61.198.251])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8c872e45756sm6666168b3a.27.2026.11.23.22.28.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Nov 2026 22:28:01 -0800 (PST)
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 24 Nov 2026 06:28:01 +0000
+Message-Id: <DN3885A9PVWV.2FTTIEAKU4QXI@gmail.com>
+Cc: "Puranjay Mohan" <puranjay@kernel.org>, <bpf@vger.kernel.org>, "Puranjay
+ Mohan" <puranjay12@gmail.com>, "Andrii Nakryiko" <andrii@kernel.org>,
+ "Daniel Borkmann" <daniel@iogearbox.net>, "Martin KaFai Lau"
+ <martin.lau@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar
+ Kartikeya Dwivedi" <memxor@gmail.com>, "Mykyta Yatsenko"
+ <mykyta.yatsenko5@gmail.com>, <kernel-team@meta.com>, "Liam R. Howlett"
+ <liam@infradead.org>, "Suren Baghdasaryan" <surenb@google.com>, "Vlastimil
+ Babka" <vbabka@kernel.org>, "Shakeel Butt" <shakeel.butt@linux.dev>, "Pedro
+ Falcato" <pfalcato@suse.de>, "David Hildenbrand" <david@kernel.org>, "Jann
+ Horn" <jannh@google.com>, <linux-mm@kvack.org>, "Chris Mason"
+ <mason@kernel.org>
+Subject: Re: [PATCH bpf v6 2/3] bpf: switch task_vma iterator from mmap_lock
+ to per-VMA locks
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+In-Reply-To: <awSELWmIo2LA3bM8@gremlin>
+References: <20260408154539.3832150-1-puranjay@kernel.org> <20260408154539.3832150-3-puranjay@kernel.org> <awGZWsCp6v63H_py@gremlin> <DN267JUKDRNS.2VMV07CQ58R4X@gmail.com> <awSELWmIo2LA3bM8@gremlin>
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -58,100 +110,14 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v3 4/9] bpf: Add log support for cgroup prog
- link_create
-To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
- andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
- martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
- jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
- rostedt@goodmis.org, mhiramat@kernel.org, mathieu.desnoyers@efficios.com,
- kpsingh@kernel.org, matt@bobrowski.net, shuah@kernel.org,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
- martin.lau@kernel.org, mason@kernel.org
-References: <20261123152743.19629-5-leon.hwang@linux.dev>
- <ec5343ff7b660c9126b72574cd89cbd54772bd4291d4af16f1b9e39f16939398@mail.kernel.org>
-Content-Language: en-US
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <ec5343ff7b660c9126b72574cd89cbd54772bd4291d4af16f1b9e39f16939398@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
-On 24/11/26 00:04, bot+bpf-ci@kernel.org wrote:
->> bpf: Add log support for cgroup prog link_create
-> 
-> TL;DR: The new bpf_log() calls in cgroup attach run under cgroup_mutex and
-> cgroup_bpf_mutex, so a copy_to_user() fault on the user log buffer may stall
-> other cgroup operations. Consider logging after unlock.
-> 
->> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
->> --- a/kernel/bpf/cgroup.c
->> +++ b/kernel/bpf/cgroup.c
-> 
-> [ ... ]
-> 
->> @@ -1045,23 +1060,33 @@ static int __cgroup_bpf_attach(struct cgroup *cgrp,
->>  	atype = bpf_cgroup_atype_find(type, new_prog->aux->attach_btf_id);
->>  	if (atype < 0)
->>  		return -EINVAL;
->> -	if (revision && revision != cgrp->bpf.revisions[atype])
->> +	if (revision && revision != cgrp->bpf.revisions[atype]) {
->> +		bpf_log(log, "Cgroup revision mismatch: expected %llu, actual %llu.\n",
->> +			revision, cgrp->bpf.revisions[atype]);
->>  		return -ESTALE;
->> +	}
-> 
-> [ ... ]
-> 
->> @@ -1143,13 +1168,14 @@ static int cgroup_bpf_attach(struct cgroup *cgrp,
->>  	cgroup_bpf_lock_hierarchy();
->>  	ret = __cgroup_bpf_attach(cgrp, prog, replace_prog, link, type, flags,
->> -				  id_or_fd, revision);
->> +				  id_or_fd, revision, log);
->>  	cgroup_bpf_unlock_hierarchy();
->>  	return ret;
-> 
-> Can these bpf_log() calls block other cgroup users while the locks are
-> held?
-> 
-> cgroup_bpf_attach() takes cgroup_mutex and cgroup_bpf_mutex through
-> cgroup_bpf_lock_hierarchy() before calling __cgroup_bpf_attach(), and
-> the new messages are emitted from inside it (and from get_prog_list()
-> via insert_pl_to_hlist()):
-> 
-> cgroup_bpf_attach()
->   cgroup_bpf_lock_hierarchy()
->   __cgroup_bpf_attach()
->     bpf_log()
->       bpf_verifier_vlog()
->         copy_to_user(log->ubuf + ..., log->kbuf, ...)
-> 
-> log->ubuf is the user supplied log_buf, so if that page is not resident
-> (swapped out, or backed by FUSE or userfaultfd), copy_to_user() can sleep
-> in the fault for as long as the caller chooses.  While it sleeps,
-> cgroup_mutex and cgroup_bpf_mutex remain held, so cgroup mkdir/rmdir,
-> migration, BPF attach/detach, BPF_PROG_QUERY and the cgroup bpf release
-> work would all wait.
-> 
-> Commit 40aec6bab02e ("bpf, cgroup: Protect cgroup_bpf state with its own
-> mutex") split these paths out from cgroup_mutex to avoid hung tasks, and
-> before this patch the attach path did not touch user memory under these
-> locks.
-> 
-> This isn't a lock ordering problem, since cgroup_mutex -> mmap_lock
-> already exists, but would it be better to record the message and emit it
-> from cgroup_bpf_link_attach() after cgroup_bpf_unlock_hierarchy()?
-I think it's okay to call bpf_log() inside those locks' critical
-section, even though copy_to_user() could unlikely trigger page fault.
+On Mon, Nov 23, 2026 at 10:36 AM Lorenzo Stoakes (ARM) <ljs@kernel.org> wrote:
+> Probably then mm doing this is the right way to fix it, so let me have a look at
+> this and send a patch.
 
-I didn't have good idea to address such concern. Probably, in
-cgroup_bpf_attach(), prepare a local buffer before
-cgroup_bpf_lock_hierarchy(), pass the buffer to __cgroup_bpf_attach() in
-order to store the log messages, then call bpf_log() after
-cgroup_bpf_unlock_hierarchy() if __cgroup_bpf_attach() returns error.
+Thanks.
 
-Thanks,
-Leon
+> But yeah, let's also revisit this open code and have the VMA API give you what
+> you need properly as a follow-up.
 
+Yeah. true.
