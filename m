@@ -1,54 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.206
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.246
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795487326;
-	b=470jD7JzT1jwZVt/614klV9JbB2psBPjIeJ4eDaxZ05wBVwNdXqKyQdmWfy64h+UhZK8
-	 TtgwqcvpijALNCL0M6w78qj1Zfbhe1g1VC3ulk6KYxCmX7hUyQvVvPVLbks0jjLWPsgqO
-	 DGNsbU1wuHDmRcSHVIMgAUOelFSbD3I/FbGKv/8LEP8YjtseT0tujFeAOWlSjqwUVwoD4
-	 UMBbjgHYAuDcflqUUaPI/wrGNa9cp2PoZOEO1HI6zeK/bLsempC9Mlsdnw3ZrPfkWjQ0/
-	 GWyK3Vvvij6tesyPLopJoThK0sWT/EGFZs8/w2FoPpjlGuHTscXMtLTooZZW8F8EWJw==
+	t=1795487800;
+	b=4y+PeXYQhJ1XHnMXV6RjcALO2axRqT4Ig6OEg5BYOAkVva7iCcgwlxpQ+Ziyhp6HS4Ea
+	 idwYDVDQjXn1dqEMv6+YGHtXyB8YMlFvKkhVwRjN1LkbeB74YSrLUvfqebra1m4nOjQcU
+	 qcg0ZQrNYzlyvX/Kc8Wiz+3vrw1vWLY90JJ74K1EfXCSvqix0q0gAOA9DKHClI8j0dmAF
+	 7TZolw1U4keSM1mA5yHRNh6AkpVPrzMpsGcLtMV7SJ73QMTXiUnYEHX/SNlyPXosgAyOV
+	 aBSoWLSWhyYEeSA6Lt7qtqQxQgJsP0ejaGMefkziIWJigkgUGjp7S0/tZj7uCaS4GkQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795487326;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795487800;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
 	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
 	 Content-Type:Content-Transfer-Encoding;
-	bh=jWQ9oCUe8dQcy4ZXx1Lvb8FfXfIF5K4CXki6DLWYMDE=;
-	b=Vub2oHGhm99xHTALFVHeJc+q1E5QjdV2Gt218MmEcLOQlfC+FhiaflHQdqJuR9CaCLL/
-	 AkaDvRXWYN0xUP8ndX5A5wlkduESgi2hM6z+eyLVQlrtTtUzmIWsCtAoY01CU/lKJINJO
-	 Fcc6SwVqmFhpWaezhRIa9suyexDHbKkwrTi+apSxs6gJnmNJKwY4KVtoyAYm6udu10+ju
-	 KY1J4Q74mNGh9Zxhn7Ys5PPaxGSKzIooMJ5LkW3BiaSjqsAASxWgEDO1vXQPSjtVuoIw5
-	 /oN9CmhvurxAq0PRAKt/nj1qqJBL2DSjyWBD+K5PDlIybLLcxdRr3ZFU6hL19CFchew==
+	bh=r+8Ngo0gK43HrNVOTTX+GCIR7fu3LWCqYzJwfEwKm9k=;
+	b=VuxOQuv+0yj8Vuh7ckdxLlzuPlNTxi3lmlFWs6uExOzfgi9sBfhRhLOip18mI7k1TR0u
+	 2UeifOMTsgpWe3A3y/S9gP8Hvryp1qjYfaM+SIppnk2gL6A0QoS5fc1Ca1+Fi2li5Wte5
+	 gJXTNXqpFjAbmZLKUJFpPgMfvK/x9vtTvusmgmF7oantEA6GwemOXczeyVKfA51f27q5y
+	 FGyORTcvbgZ60wBiUbN+9+SguoBiow45mJ18X9cXO9a25sTNlK6XjgIEtRsaYHkCgiuvt
+	 j7iG7wqTFSVP9oweh0uIg3KNWBrctaL8N6ngKfZdTSY+aEvRwf28MswEJxobJHURKLw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="QBxdv/hD";
-	arc=none smtp.remote-ip=91.218.175.206
-Received: from mta0.migadu.com (out-206.mta0.migadu.com [91.218.175.206])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=W4lX+Gt1;
+	arc=none smtp.remote-ip=95.215.58.246
+Received: from mta1.migadu.com (out-246.mta1.migadu.com [95.215.58.246])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D929606A321
-	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 02:28:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8D929606A321
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A11C606A321
+	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 02:36:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2A11C606A321
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=QBxdv/hD
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=W4lX+Gt1
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=rbAkWnSYTM9mjjasFPW8Smsf+DAoZjkmvAVq1CXIXUI=;
+DKIM-Signature: a=rsa-sha256; bh=RVldUkVQy9+eJanimaczsU6B9NEYR39s/tQb0uSpwXY=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1795487323; v=1; x=1796092123;
- b=QBxdv/hDlru2pgV2e5cV48O9iRFiG6YsDHYSeNc5t/Aq1/KEyxsd4rkstoGtHPVhGzrlaJPF
- swo3YEewm4r53D48Jo3TmK+fuJv/GaI1R+V9F57m/CLL63LrdO8H+Jwg1zXKJDg6tL3DWW+BVu9
- qbWOygz7CBgfBAg+o2AgQMmw=
+ t=1795487798; v=1; x=1796092598;
+ b=W4lX+Gt1lDDTMqAt6abzg5S8ORq9trJR43ccrD9rrflOfwQndER1y5dMohbCdWdDMhGO09wZ
+ kruRcB4wdvfEGXfFVr7DR6leOarqfTAz9coO0DK6aUMDY1EdMqSH56+3xchL4W0EX7NJkneCC0b
+ K9fh3HB01uKq31fSYgDnlFkY=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 4c2eda220562a159;
-	Tue, 24 Nov 2026 02:28:43 +0000
-X-Mizu-Trace-ID: 4c2eda220562a159
+Received: by smtp.migadu.com with ESMTPS id 3975d8e5a96d4352;
+	Tue, 24 Nov 2026 02:36:37 +0000
+X-Mizu-Trace-ID: 3975d8e5a96d4352
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <7c51f0df-461a-463c-afff-16644f65c107@linux.dev>
-Date: Mon, 23 Nov 2026 18:28:39 -0800
+Message-ID: <9469ded7-6a6b-4753-9165-a5224660529f@linux.dev>
+Date: Mon, 23 Nov 2026 18:36:30 -0800
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -61,76 +61,110 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH bpf-next 2/2] kbuild, bpf: Remove pahole version checks
  below v1.24
-To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
-Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
- eddyz87@gmail.com, kernel-team@fb.com, martin.lau@kernel.org,
- mason@kernel.org, ihor.solodrai@linux.dev
-References: <20261123231058.2538362-1-yonghong.song@linux.dev>
- <dc257c60f91ba87c244a6bf9a9d7b424adfd17629c6926085c87cd2188772df3@mail.kernel.org>
+To: Alan Maguire <almagui@kernel.org>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman
+ <eddyz87@gmail.com>, kernel-team@fb.com
+References: <20261123231053.2538168-1-yonghong.song@linux.dev>
+ <20261123231058.2538362-1-yonghong.song@linux.dev>
+ <a29d9ea3-1d36-46e8-914a-32753afb0725@kernel.org>
 Content-Language: en-GB
 From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <dc257c60f91ba87c244a6bf9a9d7b424adfd17629c6926085c87cd2188772df3@mail.kernel.org>
+In-Reply-To: <a29d9ea3-1d36-46e8-914a-32753afb0725@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
 
 
-On 11/23/26 3:41 PM, bot+bpf-ci@kernel.org wrote:
->> kbuild, bpf: Remove pahole version checks below v1.24
-> TL;DR: Commit message only: claiming the resulting config is unchanged looks
-> inaccurate, since PAHOLE_HAS_BTF_TAG becomes y for clang builds without BTF,
-> though with no functional effect today.
->
->> kbuild, bpf: Remove pahole version checks below v1.24
->>
+On 11/23/26 3:18 PM, Alan Maguire wrote:
+> On 11/23/26 11:10 PM, Yonghong Song wrote:
 >> The previous patch makes CONFIG_DEBUG_INFO_BTF require pahole v1.24, so
 >> the Kconfig checks for an older pahole always pass with
 >> CONFIG_DEBUG_INFO_BTF.
+>>
 >> Remove CONFIG_PAHOLE_HAS_LANG_EXCLUDE (pahole v1.24), which is always
 >> set with CONFIG_DEBUG_INFO_BTF. Drop it from the dependency of
 >> CONFIG_RUST on !CONFIG_DEBUG_INFO_BTF, and always pass
 >> --lang_exclude=rust in scripts/Makefile.btf, which is only included
 >> with CONFIG_DEBUG_INFO_BTF.
+>>
 >> CONFIG_PAHOLE_HAS_BTF_TAG (pahole v1.23) is still needed, since
 >> btf_type_tag is only used with clang, but it no longer needs the pahole
 >> version. Every user of it also checks CONFIG_DEBUG_INFO_BTF, so make it
 >> depend on CONFIG_CC_IS_CLANG only.
+>>
 >> The pahole flags and the resulting config are unchanged, except that
 >> CONFIG_PAHOLE_HAS_LANG_EXCLUDE is gone.
-> Is the last sentence of the commit message accurate?
+>>
+>> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+> one suggestion below, but
 >
-> The new definition changes the resulting config for clang builds without
-> BTF:
+> Acked-by: Alan Maguire <almagui@kernel.org>
 >
->      Before:
->      config PAHOLE_HAS_BTF_TAG
->          def_bool PAHOLE_VERSION >= 123
->          depends on CC_IS_CLANG
->
->      After:
->      config PAHOLE_HAS_BTF_TAG
->          def_bool CC_IS_CLANG
->
-> With LLVM=1 and pahole missing or older than v1.23, PAHOLE_VERSION is
-> below 123, so PAHOLE_HAS_BTF_TAG was n before.  Now it is y, and
-> CONFIG_PAHOLE_HAS_BTF_TAG=y is written to .config and the generated
-> autoconf.h and rustc_cfg even though CONFIG_DEBUG_INFO_BTF is n.
->
-> This has no functional effect today, since both users (compiler_types.h
-> and trace_event_update_with_eval_map()) also test CONFIG_DEBUG_INFO_BTF.
->
-> Would it be better to use "def_bool DEBUG_INFO_BTF && CC_IS_CLANG" so the
-> generated config stays identical, or to reword the commit message to say
-> that CONFIG_PAHOLE_HAS_BTF_TAG is now also set in clang configurations
-> without BTF?
+>> ---
+>>   init/Kconfig         |  2 +-
+>>   lib/Kconfig.debug    | 12 +-----------
+>>   scripts/Makefile.btf |  2 +-
+>>   3 files changed, 3 insertions(+), 13 deletions(-)
+>>
+>> diff --git a/init/Kconfig b/init/Kconfig
+>> index c8a7cfa60a6e..ca7f20462d0c 100644
+>> --- a/init/Kconfig
+>> +++ b/init/Kconfig
+>> @@ -2065,7 +2065,7 @@ config RUST
+>>   	depends on !MODVERSIONS || GENDWARFKSYMS
+>>   	depends on !GCC_PLUGIN_RANDSTRUCT
+>>   	depends on !RANDSTRUCT
+>> -	depends on !DEBUG_INFO_BTF || (PAHOLE_HAS_LANG_EXCLUDE && !LTO)
+>> +	depends on !DEBUG_INFO_BTF || !LTO
+>>   	depends on !CFI || HAVE_CFI_ICALL_NORMALIZE_INTEGERS_RUSTC
+>>   	select CFI_ICALL_NORMALIZE_INTEGERS if CFI
+>>   	depends on !KASAN || CC_IS_CLANG
+>> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+>> index 9479034afe5a..c6123d52576e 100644
+>> --- a/lib/Kconfig.debug
+>> +++ b/lib/Kconfig.debug
+>> @@ -409,22 +409,12 @@ config DEBUG_INFO_BTF
+>>   	  DWARF type info into equivalent deduplicated BTF type info.
+>>   
+>>   config PAHOLE_HAS_BTF_TAG
+>> -	def_bool PAHOLE_VERSION >= 123
+>> -	depends on CC_IS_CLANG
+>> +	def_bool CC_IS_CLANG
+>>   	help
+>>   	  Decide whether pahole emits btf_tag attributes (btf_type_tag and
+>>   	  btf_decl_tag) or not. Currently only clang compiler implements
+>>   	  these attributes, so make the config depend on CC_IS_CLANG.
+>>
+> While we're in the area, should we fix this to reflect that gcc has BTF tag
+> support now?
 
-Okay, since CONFIG_DEBUG_INFO_BTF is not involved with PAHOLE_HAS_BTF_TAG,
-I will leave it as is in the next revision.
+I am not an expert for gcc BTF tag thing. I guess some testing are needed if
+we want to removing 'depends on CC_IS_CLANG'. This can be a follow-up.
 
->
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
->
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/45289030741
+>> -config PAHOLE_HAS_LANG_EXCLUDE
+>> -	def_bool PAHOLE_VERSION >= 124
+>> -	help
+>> -	  Support for the --lang_exclude flag which makes pahole exclude
+>> -	  compilation units from the supplied language. Used in Kbuild to
+>> -	  omit Rust CUs which are not supported in version 1.24 of pahole,
+>> -	  otherwise it would emit malformed kernel and module binaries when
+>> -	  using DEBUG_INFO_BTF_MODULES.
+>> -
+>>   config PAHOLE_HAS_INLINE
+>>   	def_bool PAHOLE_VERSION >= 132
+>>   	help
+>> diff --git a/scripts/Makefile.btf b/scripts/Makefile.btf
+>> index 02ff1702e1e8..8cd8c88d4580 100644
+>> --- a/scripts/Makefile.btf
+>> +++ b/scripts/Makefile.btf
+>> @@ -20,7 +20,7 @@ pahole-flags-$(call test-ge, $(pahole-ver), 131) += --btf_features=layout
+>>   
+>>   endif
+>>   
+>> -pahole-flags-$(CONFIG_PAHOLE_HAS_LANG_EXCLUDE)		+= --lang_exclude=rust
+>> +pahole-flags-y						+= --lang_exclude=rust
+>>   
+>>   btf-inline := $(CONFIG_DEBUG_INFO_BTF_INLINE)
+>>   ifneq ($(btf-inline),)
 
