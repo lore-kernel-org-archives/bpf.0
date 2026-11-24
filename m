@@ -1,101 +1,47 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.176
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795538094;
-	b=ZF4ufFo3gd2UspGyrzmH0qGuMtgSnYlJGp/wgebN5kGf0Ath1Btyn8nF/l5YQ4wKmPBv
-	 6lL10EKTiBFt+uMYcrO77JjuIOVWEUiFkbAC5OxgiC+kSZRYJQefDiO6u2X7aaHe6FjI4
-	 fXvyOopLHxRcXbZdKGGLOSdNpMg7s32Y8y3Cx4k03lDM2eWv9zrOOCDEglz2tron6sCAU
-	 gFGJIQzQLghttELN3mjRTuvVziIjKT8H6Ziq9zMvgga8m+PH5VSWPuY6dSk/28biWuZt5
-	 VpNDcdM/7Yl1Rc3ESDcOXDDf6QhqkcY5AtSz366ZrGl2N19Lc9I4zxiTj3fOHummd+Q==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795538094;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=Kl1lMLuqhZH+LLqHtJT6QI0oIm+dpJplZfZi0YBu//s=;
-	b=OjE/SgrXfhSfgKVZsl2Eq0wTPEQy9Zv5kJi/hB0oHoeBMm7jkBCuI+DN7aJZOYU9RKB2
-	 m7vYIifWu0MH+6aZBvs1c5yrIIIYDubqXa9SMWrLm8vFxYp5Zi+9DGIusAWMtDkniAfOi
-	 034/GFtsV0FLXu+ER3T+kxVcT7yQ8MOyZ/1nxSCqdwagyFZLXar3INCBYBGyNFlbJy+vz
-	 JjqRmyLe5H4DSzCJ4S3DEIjO+4B23yt6ojujJtD0SigRF0TT4ZlzOY26o3w3iwz1OhrJ5
-	 pcyds53sUxnlGXNqllLw8NIHpmfeQ57oVaYcUsZ91icZgJuyaGubzaTPJrWizHtDsGg==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=TTfD3o0B;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.176
-Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795539494;
+	b=N85mZikJBLYjv7Iu1M4X3NXCjBWpkmgLZHmWoYo7QEzQD8NCoivOgucD+FmP2u3YoAZd
+	 45Hr9Kvh3eCrOES/F1PlaPE8Lou8+LpRrGAfV3htmN3PkgP5Pa3iXvd+9WyATmvL1jKXz
+	 ZwD6uByqZKB0QWIPT1noEN79/8DWF0VZbhJpPkw1n/+QLVc1X5JvYyGlpQHsIkZf+O7XF
+	 M7soungqfmKCihktenCEL+S+movl8msoCTA1m1tgDEzf0zwsfU4tv1tRPDkstTQtWosNS
+	 CgkNy3PecludW1f9vI2xKitHeyLXCMa/gFiAL2jBTVhiLBoEBGnp3z0Aqw0qqDxdIJw==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795539494;
+	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:Content-Language:To:Cc:References:From:Autocrypt:Organization:
+	 In-Reply-To:Content-Type:Content-Transfer-Encoding;
+	bh=7bzqAqpmFimjeJFcxVgTHaPyYVyV1TyY7rhQFKp6yio=;
+	b=tCtPfp6gpCw9wKffKQP/+8BFxsxY2toGOJSQpUMoMef3o8TxHEfKSFf0DG2wF7xMSJdh
+	 B/Clo2ZfM69UwELqrx0AC0z5ToB4FpGBQc5ZPnhywRdu7A6MQU3wzDOhAMPLdm8V6HWK7
+	 FZOcW5nE878CE/6N6wIRNH0KKgIeE/h/SrJ6s/8tXZ+tNKZMmuw5uEPscsInbDSSD81Ab
+	 e3PciyECUb2ym/bzMHZmDWcjwPwtOtcSb/kCRs+q0LMgCdFM5spWYy+kdnuQ+K/JRkyMN
+	 y/lL3PAPgQS3xcnrFDtPi6jVnJLkIjWP1Raetuy3hYe3DD08tdsxI3LA9Ghx8fFl0Sg==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=WvYVBtuT;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F091B606A323
-	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 16:34:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F091B606A323
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52333606A33D;
+	Tue, 24 Nov 2026 16:58:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=TTfD3o0B
-Received: by mail-qt1-f176.google.com with SMTP id d75a77b69052e-533202fe429so948411cf.0
-        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 08:34:53 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795538093; cv=none;
-        d=google.com; s=arc-20260327;
-        b=MvOxtDG/Hyh6jfLyVQEETiY5YeMwz3taRAjPkwk3qOzAk1ADrCxybDAa76Mr3J6NVH
-         RbC1ntZxt6Rwn+1Luho8s2Nz0waXnkNO2+XozJ7xAF0EfvzxXDMO542ysRunAVjF4HnQ
-         X1HwSGGfXEWxBBiCjojyKjtNTcb89cTjt19Dh2b9R6Aqjnwh5CmYrMvSbA/QkIgzUUqu
-         picp6pX9xTX/6Yj+2ADZf1psiIOBq8ZgB8px2/1Cu6rqOOZeB6L9+tXGClV3Vh8gH1YY
-         E3SFtPhpILfSSQNp7QEeriEZXznVEw7Bfx/KHRSXS0oiA2A+9WcbO7A38cLHYR1WmiaX
-         lMuw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=Kl1lMLuqhZH+LLqHtJT6QI0oIm+dpJplZfZi0YBu//s=;
-        fh=Zvr3pbt75tb+eAsq09QFBaRCSsAqZnbSLLzWt8RRUio=;
-        b=SMU7SiNJyqcagDT7ZX2IWA9BpYQD8Xchev2Fnyoyh4RrLmFztv5zeLLXAyi1Lg7604
-         1nggyugSLraf/IeVDsTUli6vqcTuW0MI5nUlvpjx5Z8M5hfxW+A0+0wLh9AesXO0QHtz
-         C8ptxe5qxzE43gu252oEOTyPq8txBjP24PzMRc/zeRmBvTA1RsInE6OGDBKUl4nFuK9t
-         90zSRltiWft48mXfYZV5ZjDgS5hE0enszKF9Y7a18nqmXioxXikhGNL9nn2cvLto8JJY
-         WiBTFP9KgPrXkwYC2q90s2wrlWueq+ay+0MA+j3I6xt/Qbp/kBzl2SbPbRaDIrIilqbL
-         0PRA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795538093; x=1796142893; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=Kl1lMLuqhZH+LLqHtJT6QI0oIm+dpJplZfZi0YBu//s=;
-        b=TTfD3o0BLhOt6X12nwfcIRGVYb9Tg6G0UpEGPt06nCVhs3EsfF9sZRAiyiYtMmlDXs
-         va/lM5ylYAkLE9JrjT9aBh8u9um5C/Aiabv/RVXBEvh4Ry6uz+n/mZKLchIW0wUwUKJf
-         S9lnaf8ctnqeRyWRpCOysIX/jW/XAWDNMPOVjhTASxwjsn2JDkamO6yA+In3FFPD3s4t
-         z8mybQii4457OpqE1phzL3POgdHqbEuIgmYlDo3X5wbXm4mzhtOQCV3r3AeXrvd8P0Dp
-         +jkirTLgTpgytyL9hge009KHT5Sd3nlecoLqnplQ4NsT9QWnl5SZEi4TZ3KbNaYdUqX5
-         GJng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795538093; x=1796142893;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Kl1lMLuqhZH+LLqHtJT6QI0oIm+dpJplZfZi0YBu//s=;
-        b=2ZXVQSQpKKFFTuuGqIhOAmlOAeIc8TnskUrzkXjbiDLr1H/EyCL+MYms9EpIz7o4FT
-         Mdpo2Q2rJiM0YeVoYOwiS+At9Zg5FhwwFU+BjlwbuZVBeDthE1e6NhM4H+AGbIMSzCPg
-         +W6I3kcos8wPfxYgEEfJfo9k7PpdDq0sCEj5eQsK10mhOkDzcjoCtgOIPiXTQM2suYbH
-         oMnHzhJCP0GEKp8K3Pl/npxVaa9AFSvzKNLSyEttv2+ogMAdojp+kbt20qM6ttIQ2gUi
-         vcPquFWgbdBqSSvJg5d723rbIMvkeTr2sAO+znUuTxA9aX+Wttw6gELLslgmc+zrE7jI
-         mswg==
-X-Forwarded-Encrypted: i=1; AL+hErGwaBzlg1JLm38Ca9t63Pc2V9AN06FJEa7tCFUngo3SkdKxmYNjk0esYI5PJrQVCJYtp0I=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8onhA09WkkgQuO3qOoVfdF+7DZIWzP7KEsz+Eldg8SupThenbZ
-	mWroxabYMSYa5u/gJzUEoMqd/qjsqYnjiiHgrNT/Cyjc8wKCUlwGCKy3s4Y1/2HvxdNhcGDZCR7
-	bJsu8LkPFeGlVjUsnmdYJbfm49XFi2mIc7SvP0Ast
-X-Gm-Gg: AZFdTZclan9i51ob/kb9wGKomQFoxupVTXJdsSluxOT6QNKOJrhGE/v/OaShq80ClMI
-	7AshFfxfIZHGG+aKbToDT92UZ1Da4Hb5dPpPgfQVlJxmJdzvpvyKFaSXl3ASutR07J3YNIz4ykP
-	nnGmUEEdwKVl4hnE4VqWenfIt63/LBjSFZoyzeaxfVzif3P+iMePthX+WPesByJF5ZiZIOvkxep
-	OgkmtRnXZhLOmt8ajGfzZ8Jny1SZNnqMI6R2K1ajUj8jQGOl+BoIOVH3StMRFAqe9uSBSE/85vs
-	t/kvWCbtdkJ2RKj2Lsfi1DIOc/NoEkefKqCSO/Gok3KTYR45/xluvjyyJN4iEbomM8payLzN/lY
-	bXK/z7DUUjBampLc0ikQ7BNma5qDq/8deo+n2xG4dt9lp2zkvx1/KswVVR6EQGvB5T9ahkolZ2Z
-	7IlWipy+V9w+4kga61NnKKgkus0H8=
-X-Received: by 2002:a05:622a:5c13:b0:535:30a:76c7 with SMTP id
- d75a77b69052e-55d88102d7dmr59797711cf.3.1795538092021; Tue, 24 Nov 2026
- 08:34:52 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=WvYVBtuT
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CDB31F000C6;
+	Tue, 24 Nov 2026 16:58:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795539494;
+	bh=7bzqAqpmFimjeJFcxVgTHaPyYVyV1TyY7rhQFKp6yio=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=WvYVBtuTFXAF5q1MbcgyTZ6v/USmCbK7qJaXXQnPjFqspRJKqHZPYiEf/vD1YH0Y6
+	 gYgD+2nWq9q++UnvbZ9dcF80jj3KaCsDwJiaJnlpZ6G0lNXGQIY6mcpFxxJQXNMgIh
+	 ODDpbFjZGyzo2VkF4TVAQpWEbkGYkZyx0MZXtYpO0/HI8ah5Y+aRMTX0DbaNi8AKB+
+	 P6g4oOSJdhHqpQOLj6O6QgwGmZyn20/bPfRroUq0IkseV5wcmjk20Pzf4DMJ1IO1OV
+	 IvqdgrVdi0gGmDt0+RS77LFgHGn8FfmvTZ0RRIju5dKkHB9cU68pl6dF42XAdkPXyc
+	 3JWEXGH3R1ddA==
+Message-ID: <0f4420d2-c4cd-4b93-9841-20d95d98d9e3@kernel.org>
+Date: Tue, 24 Nov 2026 17:58:05 +0100
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -105,50 +51,98 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261124-vma-read-lock-mmdrop-async-v1-1-257f99f551de@kernel.org>
- <awWLCZ-jBjSD7V3M@pedro-suse.tail5790ac.ts.net> <CAJuCfpGk6eYK43Unxo+O4ML5=GM_siZ9owp6oa9fO0ipZXVg-g@mail.gmail.com>
- <CAJuCfpEd1rz3P7fB7W_mHkyzbpq9TscRE+QNwvHdYME=WJj6cw@mail.gmail.com>
- <awWz3nc_b8x3mIXq@gremlin> <CANk7y0gAxY18Ew+6j5YsqrOsf5Dx+v5M78r7_8JLXh5RHZj4qA@mail.gmail.com>
-In-Reply-To: <CANk7y0gAxY18Ew+6j5YsqrOsf5Dx+v5M78r7_8JLXh5RHZj4qA@mail.gmail.com>
-From: Suren Baghdasaryan <surenb@google.com>
-Date: Tue, 24 Nov 2026 08:34:40 -0800
-X-Gm-Features: Aa3M54psUndAWw1N5lTEQVLz0Ca1-n1kspbSD8lWK-ihjsexo1mFnquPILpy9Cs
-Message-ID: <CAJuCfpFuDCUPTUi3SuAhmbtw5tubRZ0+YEY3PotjyJ8Or8pdQQ@mail.gmail.com>
-Subject: Re: [PATCH] mm/vma: drop mm asynchronously in vma_start_read()
-To: Puranjay Mohan <puranjay12@gmail.com>
-Cc: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>, Pedro Falcato <pfalcato@suse.de>, Ingo Molnar <mingo@redhat.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>, 
-	Vincent Guittot <vincent.guittot@linaro.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
-	Valentin Schneider <vschneid@redhat.com>, K Prateek Nayak <kprateek.nayak@amd.com>, 
-	Kees Cook <kees@kernel.org>, David Hildenbrand <david@kernel.org>, 
-	"Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
-	Michal Hocko <mhocko@suse.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Shakeel Butt <shakeel.butt@linux.dev>, Jann Horn <jannh@google.com>, 
-	Alexei Starovoitov <ast@kernel.org>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org, Chris Mason <mason@kernel.org>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird Beta
+Subject: Re: [PATCH net 08/10] mptcp: pm: don't let listeners pin their netns
+Content-Language: fr
+To: netdev-bot+sashiko@kernel.org
+Cc: edumazet@kernel.org, davem@davemloft.net, kuba@kernel.org,
+ pabeni@redhat.com, willemb@google.com, horms@kernel.org,
+ martineau@kernel.org, geliang@kernel.org, cpaasch@openai.com, fw@strlen.de,
+ netdev@vger.kernel.org, mptcp@lists.linux.dev, dcaratti@redhat.com,
+ mason@kernel.org, stable@vger.kernel.org, ncardwell@google.com,
+ kuniyu@google.com, kafai@fb.com, daniel@iogearbox.net, ast@kernel.org,
+ martin.lau@kernel.org, bpf@vger.kernel.org
+References: <20261123-net-mptcp-misc-fixes-7-4-rc5-v1-8-278042217e8d@kernel.org>
+ <179553041337.3135.9610172277728846515@kernel.org>
+From: Matthieu Baerts <matttbe@kernel.org>
+Autocrypt: addr=matttbe@kernel.org; keydata=
+ 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
+ lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
+Organization: NGI0 Core
+In-Reply-To: <179553041337.3135.9610172277728846515@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Nov 24, 2026 at 8:06=E2=80=AFAM Puranjay Mohan <puranjay12@gmail.co=
-m> wrote:
->
-> On Tue, Nov 24, 2026 at 9:28=E2=80=AFPM Lorenzo Stoakes (ARM) <ljs@kernel=
-.org> wrote:
-> >
-> > On Tue, Nov 24, 2026 at 07:51:42AM -0800, Suren Baghdasaryan wrote:
-> > > Actually, VMAs are allocated from a SLAB_TYPESAFE_BY_RCU slub. With
-> > > that RCU unlocking move you don't need other_mm copy and the comment
-> > > that comes with it. VMA won't be freed until RCU lock is dropped.
-> >
-> > Yeah but they can be reassigned? They won't be _freed_ until a grace pe=
-riod but
-> > they can go back to the slab and then allocated elsewhere  right?
-> >
->
-> Yes, they can go back to the slab and become a different VMA.
+Hello,
 
-Yeah, you are right about that. So, we either have to keep the RCU
-unlock in place to keep other_mm comment valid (my personal
-preference) or update the comment next to other_mm to explain the new
-reason it is needed. Either way is fine with me.
+On 24/11/2026 15:26, netdev-bot+sashiko@kernel.org wrote:
+> - [High] The netns leak this patch claims to fix can still be triggered
+>   through the SYN-cookie path.
+
+(...)
+
+> Doesn't that leak the namespace the same way as before this patch?
+
+Yep! But this is not a regression: before this patch, these children
+also held a netns reference, and the listener itself always pinned the
+netns.
+
+(...)
+
+> Could the reference be taken only for MP_JOIN children that get attached
+> to an msk? Another option would be to reject non-MP_JOIN cookie ACKs on a
+> pm_listener in mptcp_subflow_init_cookie_req().
+
+The second option is already pending on the MPTCP ML, for a separate
+*pre-existing* issue. It will be sent with the next batch:
+
+
+https://lore.kernel.org/20261121-mptcp-cmason-fixes-v2-31-00327fd1de1f@kernel.org
+
+So no need to change this patch, it can be applied as is.
+
+Cheers,
+Matt
+-- 
+Sponsored by the NGI0 Core fund.
+
