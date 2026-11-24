@@ -1,100 +1,98 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.51
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=148.163.158.5
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795546630;
-	b=2GXBPo70tKmkVJmOVCogAY8KW6O3Fq7qx8arLEN1By0poGu24v0AdWWDgnwlgCnnnFhT
-	 Iy7ZFEZ281C+jbQ626bh1SZoHZ1ozREW21ciW9EHVyik68vzyjyOx6YPNo149MWr5ZaE0
-	 hGPv6yZrj7j/B6ce7vuexAGK7jkclW9H9gjUIEJPXCdgv/aH1hJ/+GGBeyTpeHwMBUIDK
-	 MA43CoB8S+X/AI/YI0SifM4KcEiudh9XWASrjtGTh4rpm+25jlQ8kEM2DpTgo7fsCzd3r
-	 IoNJFFi/jBjIEph96nzcbV0c7BHkVBQHMtWBeY9zHyf45ckJKCZodEqEHGCZHIFpwGw==
+	t=1795546686;
+	b=EvLT/WGSmR7vb3HF3zj/z4xorWTbmRS9YQ5oeGXXQnvAq8wDjbZ0JIwPdU8xrd07nHYT
+	 5XZb9MXngjSHW/xr8bJLR5KMTWzxvnRQgBrdUaXjPPXwvdhg0QRAMsc2dXf23BFOI6BK4
+	 vRviyOC1MfmmPv8u2pZ5136X0Gg94zaVl+fRiy/TycmfF9Qc0K7Mz+RIBWB/n+0ITadm9
+	 9eh0H0ONcuK7lEKxpCxZjsb1gexByjVcsYSytfnSGhG9KpTS6YTS1ngn4SKpa2KPYt8uk
+	 Cd0MILAtB66YatPYpMwIM0l85KAX/1JBmnWrTx2ZGN/usxO9uYj5mRrg/zHe94VVqHQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795546630;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=arzni2V7CrMLgh1PEHwqbV/RWJ1P6YxymRnMbqwvePM=;
-	b=Ak2+tmmUpIfUq+HgPsY9VED0VtqUTJEkejcSTH9+lJwZcU4y0+xbMaQ3YZ+M7nVik5uk
-	 60cQkoev68UAFFL7Vn/zt945HQzWV87QkFRIgsYYQWphtWXs1CknzkDCniGq6qcIT4MFb
-	 HBjX3WHvIYY3/uM4uUch0ZM4qBm62Xs6WtIM/Wru+N0uEXwTQxFN3szj2mydGFXKcoceG
-	 aPPixiBER6dBxTOZq4OH+I6D0cc6rycaE8x5Lpx94Xpz+VS7maOHDKwOfPWvlodMwR1Sk
-	 fTmJdrFxXj2UOR8s6FcfH4mG6ofRfIdfzcWriqFtbiQijR5kNRA41XnZeI6/pmW5sjg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795546686;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:Received:
+	 Received:Received:Received:Received:Message-ID:Subject:From:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date:
+	 MIME-Version:User-Agent:X-TM-AS-GCONF:X-Proofpoint-Reinject:
+	 X-Proofpoint-ORIG-GUID:X-Proofpoint-Spam-Info:X-Proofpoint-GUID:
+	 X-Authority-Analysis:X-Proofpoint-Spam-Details-Enc:
+	 X-Proofpoint-Virus-Version:X-Proofpoint-Spam-Details;
+	bh=uqq04Dy6isK/nibhKSp5arYzUNNXHVOftTNvu6kl/OA=;
+	b=WJ73aw6ylyPK4X6DHB2I2qVG+h9pZIYMOar+jqAU8y1Cg0lTfxh2wqlPygLCGB6+lcCk
+	 OQ1x04U/UElsV56PRIh3Ml40OrC+xhJbuyvbPdear3HJWMMZ4O368sahmSl/3u64vwz/2
+	 safvhhmFKqLFwMY6QaLFJqctjJpaDKhGGpEAm/ecZzXt3V+Kr3YSY0Ga6RDPM2cIWlhnM
+	 bNk756dTN028PFe4+emmk7ih0iVX9e8OrT8U/r9J4tbwBfumw6NolYmGY5ZsyI5J8JsR3
+	 GKPjkPhwc1UBPRh7KwiBDUgULLIUcWU+6nN2mF12aZ0cFx1z77yFxPwa+YVfvx1uhMQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Hphrqmhn;
-	arc=none smtp.remote-ip=209.85.216.51
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=linux.ibm.com;
+	spf=pass smtp.mailfrom=linux.ibm.com;
+	dkim=pass header.d=ibm.com header.i=@ibm.com header.a=rsa-sha256 header.s=pp1 header.b=HfV3u0oY;
+	arc=none smtp.remote-ip=148.163.158.5
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E673606A326
-	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 18:57:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0E673606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FF6E606A321;
+	Tue, 24 Nov 2026 18:58:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3FF6E606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Hphrqmhn
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-3ada4c06b7bso2588900a91.2
-        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 10:57:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795546629; x=1796151429; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=arzni2V7CrMLgh1PEHwqbV/RWJ1P6YxymRnMbqwvePM=;
-        b=HphrqmhnFR6ceVJnnr/kHMTyQArxBxTQQMxHXWQBXvUpnd0mopwa5nph77tZLWcR+f
-         f+aGEN1hVgFAhXGuATZk+HJakseSOSMwnThINi9mMyQim7ddvjAjdlCCfGxxETUdYq21
-         ggzb/aG9I/pOBlMvZsMW8pjsuqbB/YGIpij6+c4/E11UGNSZFMK9vbfRW+QySoRQgc+7
-         lW4DgB8aDyn6zY4e7hw+17dI8liB5BBLFM/5kdWShHl8JOT9y/ZMPNfJ1riwVEe5RvQe
-         f0/hKObHkjQTqspjMa5cBCl9rNp8+RQeln/CdiTz5KaraLdVN9bBhhXScLxo3PEZS7WE
-         qvxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795546629; x=1796151429;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=arzni2V7CrMLgh1PEHwqbV/RWJ1P6YxymRnMbqwvePM=;
-        b=sEiEZWXAqaIP9LZ+SKeeKSyngCpnUNhwkZZGDnLjI/KZWcuXCIy3Si2KNLEUKOf07O
-         ZSJejQU3BLa1N5+zu+40tRaPwOf3vZeYIdmW1GOEM1vS2DmFHE58+0YLIdnSjMn3g4Yw
-         opYwVsrnRnMlFctFrp76pVoMHwS6g92pacNkKdgJSRtwz2UYEbqQdLv4J4tKuy32H1bv
-         DsEQGQlFsYsyeDty2+wqSZ3r5dT9fvGw8VVCirU1kbWy0NtvuhASihzbb2zZDBrTROkS
-         WfESKH72ieziuxFiiX0RzDdj1pe45FGHEaJuNLEpZRa71Wk8P7SzwHJttezAoO95YCqq
-         8mhg==
-X-Forwarded-Encrypted: i=1; AL+hErGUHSskw1K2T/WPuf6oCbH8Pe02xDaG2Ebp1yV7FpqEqtUDTvURIWR9VfFTtG7b6jsKvfM=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+ZbW3nFQa1OyozyMn32grqq7i5xBJiiF9zkAX7PnG2gBzXJaYW
-	YHpDhJiyQOwSPt2gehdwLvXfMH0XoyU6/MnbWSky+Tf96oMZX3gBykhC
-X-Gm-Gg: AZFdTZdlWCg73JYnYsVgDDLsNrSfWPfkSlqf8RLkF3pNgVlwIz9q4Aj28RlPZIq+fXY
-	pnZmwU5dCyH2Z7BrPRP3dfpoc0CH3QAJCTfVvAY8vY/7mkJIm67HBru4PDr243QEwdttYroN5eK
-	Uv79DxfMLbIW2y/AVXgCsv3Tl0B+rFIpkg3ZryAo14wZ5ZP9QY3y2je+NyN1etF4GtQOmNjAV/1
-	Awbq6mM5coJ3/+IaBDXVm2+BmZMEUkJHCTmBa0TjqTekKM+c1lJ4gVk7dSli4J6RPa8eENbQVca
-	s1xD3RKdz1SGG2S6AqQ3Anb3/r81i5RiLh6g8A6ntMkXloDFkbnYz/AQ6mgulXTqvlxalts5CFh
-	zOkd/XPkPpXjQb4lbgHIrGU0CajStY7bsrHP4Ww59IklLFDkWa2fx9wmMhePkOlqKiF9OObbNes
-	QDxofs7YzhC1ODzfp0umd88TJFHRpfZxGVl+h4JF9193m8gkQHAz8SAqm3KF5PRQ7q8eP/Ly7N2
-	r0+bfaUw32ODOQyW9HPnaWhxYz3jayyJbZVAdgddoETosMlkI3PTCE9NiBkn8Ss/RdDB99Uphin
-	fatp/knivASmZ0SSZbUED4Ici2N/8VDMBfiUmMi9wFPJL25/4WdUmNl5f5EXR1VL
-X-Received: by 2002:a17:90a:d2cf:b0:3aa:f2c4:12e9 with SMTP id 98e67ed59e1d1-3b41c7c22b4mr13144995a91.3.1795546629335;
-        Tue, 24 Nov 2026 10:57:09 -0800 (PST)
-Received: from cps-manycore-1 ([147.46.174.222])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b405ec698dsm26499487a91.14.2026.11.24.10.57.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Nov 2026 10:57:08 -0800 (PST)
-From: Sechang Lim <rhkrqnwk98@gmail.com>
-To: "Paul E. McKenney" <paulmck@kernel.org>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
-	Joel Fernandes <joelagnelf@nvidia.com>,
-	Josh Triplett <josh@joshtriplett.org>,
-	Boqun Feng <boqun@kernel.org>,
-	Uladzislau Rezki <urezki@gmail.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Lai Jiangshan <jiangshanlai@gmail.com>,
-	Zqiang <qiang.zhang@linux.dev>,
-	rcu@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: [PATCH] rcu: Mark rcu_read_unlock_special() notrace
-Date: Tue, 24 Nov 2026 18:56:51 +0000
-Message-ID: <20261124185659.1370644-1-rhkrqnwk98@gmail.com>
-X-Mailer: git-send-email 2.56.1
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.a=rsa-sha256 header.s=pp1 header.b=HfV3u0oY
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6AOIYld43227618;
+	Tue, 24 Nov 2026 18:57:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=uqq04D
+	y6isK/nibhKSp5arYzUNNXHVOftTNvu6kl/OA=; b=HfV3u0oYsHK/2oysOj7z7w
+	d/1edf/+i3BrSGx8kohgNwUJx3hS97CxKYZaqldB7DXk17NXBgKCtupb6asdpLnN
+	W0BsbYY11JMsYv652cyBGcYMiF7aEsPYRQD+d82CbP1F3A/0FXkKSF0ri1aagOnA
+	A6xBx9jHsZ3K2XH6prPoF/46EGIXu2JrhJd0iOVHc+tYh9HstEQDMfgFch0P+de4
+	wGHTEcPdW4l5t4OhWn8iHXkIK9K19nBzIK/tM1vzVKhPXL/ISXCDSXRrFwJ1WNu9
+	dLATIKrkr8gfkFcFePD/gsW/08nd+XuGFGz+kN2589qmZgiREA/zZdXYKd2ojFtw
+	==
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4j34g18taa-1
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Tue, 24 Nov 2026 18:57:46 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.11/8.18.1.11) with ESMTP id 6AOIZW7J3101401;
+	Tue, 24 Nov 2026 18:57:45 GMT
+Received: from smtprelay03.wdc07v.mail.ibm.com ([172.16.1.70])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4j3p0vkvhn-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 24 Nov 2026 18:57:45 +0000 (GMT)
+Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
+	by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6AOIurgx31195846
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 24 Nov 2026 18:56:54 GMT
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id EA14D58056;
+	Tue, 24 Nov 2026 18:57:44 +0000 (GMT)
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 2C1A558052;
+	Tue, 24 Nov 2026 18:57:44 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.4.47])
+	by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 24 Nov 2026 18:57:44 +0000 (GMT)
+Message-ID: <d22a4eafc73dcb6d2c80862f422fe69d54e79f4b.camel@linux.ibm.com>
+Subject: Re: [PATCH v2 06/13] ima: handle errors from resolving the real
+ inode
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Christian Brauner <brauner@kernel.org>,
+        Amir Goldstein
+ <amir73il@gmail.com>, linux-fsdevel@vger.kernel.org
+Cc: Chris Down <chris@chrisdown.name>, Miklos Szeredi
+ <mszeredi@redhat.com>,
+        linux-unionfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-mm@kvack.org
+In-Reply-To: <20261116-work-ovl-d_real-v2-6-90564c4ae347@kernel.org>
+References: <20261116-work-ovl-d_real-v2-0-90564c4ae347@kernel.org>
+	 <20261116-work-ovl-d_real-v2-6-90564c4ae347@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 24 Nov 2026 13:57:43 -0500
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -104,45 +102,68 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Evolution 3.58.3 (3.58.3-2.fc43) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-ORIG-GUID: yZjGn-DEeq1kE4tVMh88FNtfLffg03sv
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMTI0MDA3MyBTYWx0ZWRfX61M3IaFKEsaH
+ 7mS6MNfRj/IINRdNIeW6tGSQh3Ue5NbtgMDCNRXnLJ5OBU41aPp0+wD1i+vutgxz/3h/j9mJs5G
+ Kea5URj1fxQhihtFOZid/BAAI03/vXQ=
+X-Proofpoint-GUID: NedgcETWwMWTjELFHod-RGSG4ukHSub7
+X-Authority-Analysis: v=2.4 cv=c8M+0h9l c=1 sm=1 tr=0 ts=6b05de2a cx=c_pps
+ a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
+ a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=RzCfie-kr_QcCd8fBx8p:22 a=VwQbUJbxAAAA:8
+ a=VnNF1IyMAAAA:8 a=lMkFumaAjUwUa6GXabIA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTI0MDA3MyBTYWx0ZWRfXyr1nQkXtkjai
+ DyvG50RFNvMZx7HXm6G4R2VhVPWuhpDl0ODZObKFI/5i9UjVKCRWDNEtYSBwO5tR18KcDHXxbjS
+ WeC8RQlng8HO9axVheyKPB/GnxVt127Z7IbLPYelZK9I9G09/Q+VnYJPoDLQyl80iQTsQJHRbGF
+ JYrcAG4FYcRLeWBrTy81y2EXqZ+jT9zu5ZQoHnG7iLDSE9L980eeEWLawlLzTDPqHXA1Mhbw1Qm
+ 1QQqDxnUDyJNXMssDkwH/MD6ocinO5NE4vU258iOrRj0CCJnu4XKi8oB0UnO5s/y7Q3J9o5+N/e
+ nE/aH7AaB4PGybrLyST/CIMwLQaOOiFWe9FGTSvm/Mt4NRQNNfD+pATTeprrWDUCjG4UPWnCTov
+ sSb3/51afK0h8df7UmmItmgeHTWtIxX4F9NjEBaq9M0GN6z8AU0TqTfCCEdB1UFWgkp2t+BOj0Q
+ oCK32Ok7gkRButWmKQw==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
+ definitions=2026-11-24_05,2026-11-23_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 clxscore=1011 malwarescore=0 suspectscore=0 bulkscore=0
+ priorityscore=1501 phishscore=0 adultscore=0 spamscore=0 lowpriorityscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2611040001 definitions=main-2611240073
 
-The BPF trampoline calls rcu_read_unlock() on its exit path. If the
-task was preempted in the RCU read-side critical section, this ends up
-in rcu_read_unlock_special(). When a BPF fentry or fexit program is
-attached to rcu_read_unlock_special() itself, the trampoline runs again
-before ->rcu_read_unlock_special is cleared, calls rcu_read_unlock()
-again, and recurses until the stack overflows:
+On Mon, 2026-11-16 at 10:44 +0100, Christian Brauner wrote:
+> d_real() is about to be able to fail for D_REAL_DATA. So switch IMA
+> from d_real_inode() to d_real_data_inode() and deal with the error.
+>=20
+> Currently, if overlayfs fails to resolve the data of a file it hands
+> back the overlayfs inode. process_measurement() then sees
+> real_inode =3D=3D inode, skips the detection of changes in the backing fi=
+le
+> and returns the cached verdict. That's the wrong default. With
+> metacopy and verity this isn't limited to files nobody opened yet
+> either. A metadata-only copy-up of an open file makes overlayfs validate
+> the verity digest of the data again on the next D_REAL_DATA lookup and
+> that can fail.
+>=20
+> So if the inode hosting the data can't be resolved in
+> process_measurement() we can't tell whether the data changed. Treat it
+> like a change and clear IMA_DONE_MASK and measured_pcrs so the file is
+> evaluated again. The metadata check for EVM stays independent of that.
+>=20
+> This is a no-op until d_real() can actually fail.
+>=20
+> Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
 
-  BUG: TASK stack guard page was hit at ffffc90001657ff8
-  ...
-   bpf_trampoline_6442575622+0x5e/0xac
-   rcu_read_unlock_special+0x5/0x490
-   __rcu_read_unlock+0x9c/0x120
-   rcu_read_unlock_migrate+0x93/0x220
-   bpf_trampoline_6442575622+0x5e/0xac
-   rcu_read_unlock_special+0x5/0x490
-   ...
+The patch, itself, looks fine, but I'm not able to reproduce the error.
 
-Mark rcu_read_unlock_special() notrace.
+The existing IMA overlay tests are working with and without this patch set.=
+  The
+tests check:
+* test 1: checks file signature is copied
+* test 2: checks backing file signature is copied up to overlay
+* test 3: detects modified backing file
 
-Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
----
- kernel/rcu/tree_plugin.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
 
-diff --git a/kernel/rcu/tree_plugin.h b/kernel/rcu/tree_plugin.h
-index ae5d21bae7bc..a887ab69f486 100644
---- a/kernel/rcu/tree_plugin.h
-+++ b/kernel/rcu/tree_plugin.h
-@@ -746,7 +746,7 @@ static bool rcu_unlock_needs_exp_handling(struct task_struct *t,
-  * notify RCU core processing or task having blocked during the RCU
-  * read-side critical section.
-  */
--static void rcu_read_unlock_special(struct task_struct *t)
-+static notrace void rcu_read_unlock_special(struct task_struct *t)
- {
- 	unsigned long flags;
- 	bool irqs_were_disabled;
--- 
-2.56.1
-
+Mimi
