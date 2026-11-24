@@ -1,103 +1,116 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.174
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=195.135.223.130
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795525447;
-	b=3+X7gSJ6+SvhahEj9TkIYaU8ieKKL413whm0o2UaD7m2fZxL1YrKSQRNGQjUQZPWD+Zl
-	 U1PdoImg7fU9OFuW1Hy5KcQ10/ti1S4DnsSvHywhbTNyY+sxawO6Ls6fZWL5n7HWB8bfB
-	 0E3SqlGBXs8+jZYclpo5qrqLPk210CScoYyHpFz7xBM0es8OrIAzmCcNZ67/wVvBjZBmE
-	 X5K9W06ESPziCrMzxPJbVupe94Uie+i7ZpyvV1TwfDYMp9cMTuaUpsj5RTnvLW4bu+MFD
-	 p5+iVeIniKSusmFKNazf90RHHFic76WELuwpCP9/VKNJYVaLEAiqRve4YACurreje1g==
+	t=1795525485;
+	b=Biz5jnfyzM9SnJUsPcbHCCu9JSn7vDGYRl1qDZ/ZuYX7zmlsIRGYQQnPs4iMRIJQmhk7
+	 Lqaz5c9og53aQX9JC37NwlYOIwcYnpF5rXCzoaShCpsEqYOuo5p3y6wWvC0JMlw5xDstV
+	 jYwTLW0LCxuwEcUjO06zAlyZUoKjrwHLk9hSVU+GQ9valGZDHWhb/g4b3n3lRQPxW/QC4
+	 EfQHGbumRbKE+oSPXssCRVUGmCK020kKhAJ7RLgQ6peDyLnulQ41EGF87HbhYu9eYX9Pz
+	 LhFzwQSlKLKKbgOYlp3YRCeck3O0Pc/mQdMvNWwo8JgzMPgUH8yEQZMci72vPp43Mfw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795525447;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=+rKxb7dU0UMEzCyAusf6VPpzW2HyfM8DXyzbe16sF6o=;
-	b=Mf9mX2S0Ef2Tblg6OsJGJQ/l3M5oV5oH4m9pTW5fLyDnCzfYW8Si7lT6bIQErC0GM3pJ
-	 ha84Jjo7QLjzIAu/6SeBBjbvyYvSlOL32NhKzpiUzq5eGN7IBNiPAuzdzLmGQ9bE/3Vkk
-	 qsyAl4TRL0Wkp9+O3O9njmxs5hRxPo2GyUb2bPZMi1sEaLX+Xf/iXHaK4kKy29aUBYHfH
-	 Lq0zSxKSZQrFtWb95vsWoW4VRTI/nU6UAbdD8WJHWTGFYUdtHK1kNU0zvgsBrWXDlViDT
-	 3qpFcCojBYjJnulf7DVq5YYD0PohkFUR8BrI+EtCEl+VcHgAcNz9EL1nk40vdgq12jQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795525485;
+	h=DMARC-Filter:Received:DKIM-Signature:DKIM-Signature:DKIM-Signature:
+	 DKIM-Signature:Received:Received:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To:
+	 X-Rspamd-Queue-Id:X-Spam-Level:X-Rspamd-Server:X-Rspamd-Action:
+	 X-Spam-Flag:X-Spamd-Result:X-Spam-Score;
+	bh=MGLlsaUUSwBgOFasvcC4m8G1HbbNWKywwDMCQ+xfhD8=;
+	b=yY79upYOVKMnMr51RqJI+s9bB5q1JLFbCBPJ7eoMvcCug0VESh3Huktswz/L5QtjryRQ
+	 /G3jG2C8aMrDsEbZiVWSHtByoQ3/eFjT4ce4ZoEyVZj1xDQCl15d8jVigrDj9o8HiebLB
+	 RJdZBabqYwfRXqKpTecx8XV9ruF9/EifHMumYKINhhQO7Zst58vsBfHEJnH1jkAovy0uY
+	 Q5yMWu0C6iB7GGiARTt8g30h0GyW0x9CZcLhGqJWeVim30kq+6aXL54NT5EY17U/g3kqM
+	 Y157XkE0hxfAanPFpr/EjYCuMoy0zDJvdmf8awVKXq0K0eOMz/b6khErPQSpjIAzxwA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="I+N/sQ09";
-	arc=none smtp.remote-ip=209.85.210.174
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=suse.de;
+	spf=pass smtp.mailfrom=suse.de;
+	dkim=pass header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b=d6hKvlJg;
+	dkim=pass header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=o2pbox66;
+	dkim=pass header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b=d6hKvlJg;
+	dkim=neutral header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=o2pbox66;
+	arc=none smtp.remote-ip=195.135.223.130
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BC8B606A321
-	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 13:04:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5BC8B606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6DDC606A326;
+	Tue, 24 Nov 2026 13:04:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B6DDC606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=I+N/sQ09
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-8b29b83fdf1so2282084b3a.2
-        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 05:04:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795525446; x=1796130246; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=+rKxb7dU0UMEzCyAusf6VPpzW2HyfM8DXyzbe16sF6o=;
-        b=I+N/sQ09fQuEQXJ9fyOuMfHGIQhhtYbdQQDKkIKriD2d/WQsO6T3VxQv+IRpSS9W3t
-         bQGCb0qtr8bc94vBDzm6kOAtFgmzqOZM/i8oroHGAXR0hGtW4Fj0cq35JB6NhDBmS9uR
-         x6oA84jtUd+1jvyOWLoWa7vEQg4euFUJ5LIUMvKnt6q1UanGPTNGcDMRvSPLsGXg85XO
-         DfZ6uDgXDyXj5wJOD9ClSQPEOsLjpfg2Lu7q+2nmeVjyHxKAp/xQOItLtJfwKWmzkqpQ
-         1Fe8CVOcnYGT62DLvBRxI5bIVljfJX1fc5sJuR3bEsOaCQ3H/dYavYYb2aPjl46jbpbr
-         VqLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795525446; x=1796130246;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=+rKxb7dU0UMEzCyAusf6VPpzW2HyfM8DXyzbe16sF6o=;
-        b=kPXfttOKQiNvNeQDsC8RRAGWRAr9wazKKU1FXd7mQ9WTxJ/L9qrKPvLPU5nG15rhWP
-         6vwzLnXGRVYufTAFEGASHSvlKjwVgwL7uQts+UosdrQGk+hmEJqxnAe1Ec/ViZF5tPjx
-         7dot+OfmttVu7VFJc/qNa+YynVNJ+7PIFv4DcjWZboIfwEHtp+prqX24Z/f8QJuZtKCs
-         iq91efpfaFPIz6aXhbK0jyQh1QFGPN1ZGye9pE9eedQy/cEao6mAOQabg9SZR6t8QrnV
-         LWdoyDq2mwLiygVziah41PcIiLwuGYWofAX+LuPGkPj4dfOd3JmmzwoSaZtdEElsQ2ho
-         f8vw==
-X-Forwarded-Encrypted: i=1; AL+hErGhS+76mqVZ8X09C3aQklIR01S11Ka6voiQAHaTLFxWyzmCfx3GkKgZ0Zd/1wT4USd1cO8=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+9zPcqmJcIpWbrW4FmCZ9iQA6j/u6gOxj5HOZfg4NhflQkjT3a
-	xGN1qehqDzHwxo8XIZeT+h9/U0UEbFMYlN5GeeuilW58pVRBHEnh6L2+
-X-Gm-Gg: AZFdTZdUAFvW4iujFKPWZg7j5+6wLTYULVVDeUVBFCIdhgp1MeXEJf6yjsHLnVfZoU/
-	DL2SYfpNu9ybMdZC0SYVB3Ov+O13BxEdXOHcMtsxx8GVG4I5YKOxwzAYt1xrrrPHfE+5pXu807h
-	Z72XKhGW3YgIt0cW2JanXibTLF2Gq9HCke6s8mAoSCm3xbTFhnVQegzzHQBZSkAdC+4eNcJMbr3
-	t1316+HQiRuhlepNr0m+Ql9UaDz31Qb431RFQZhpBWHxZ4kz8VYbqaFoXpGwZZ28S+Cpln/aXYZ
-	fa5HOlj+1R+57g2Nd0jFTK3kJzFdHyPAWZSzWoowEVFByNyffRDcanaAUBd/MaxdVCBNaLImPCH
-	YgkdIKDjycVgF312GUw30fJ1s8t/k0gUANUMRRjXHL5tBfOB6roMLvlSZDht71+tdzLKV3f1ryj
-	j158gC3A8FS95l+VbU6gZc2MVYNHVtP1dtar4brzuwleUKscdYTvuJilW0NhZu3hav5ZV1gtvg+
-	ECfcaiX29kXDSpwG5VLRMNTjfRhIdg8X0yOqEoAgynltzG+buFpDBsm0ST/GV4uQ+cQY39PKC9g
-	OY2F/44d1J0ehR7TW/5os4u0cxgWyY4Q4Dgk1h3pBFIaScChnMlVTo/rrpjUB8irC5XbNq61/GR
-	aW+kzPgy6tbZv
-X-Received: by 2002:a05:6a20:c992:b0:3e1:88d6:60e6 with SMTP id adf61e73a8af0-4014a27f154mr12795163637.10.1795525445647;
-        Tue, 24 Nov 2026 05:04:05 -0800 (PST)
-Received: from d20be28ee783.tail196be.ts.net (vldb.skku.ac.kr. [115.145.173.180])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8c872e45eccsm7194090b3a.31.2026.11.24.05.04.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Nov 2026 05:04:05 -0800 (PST)
-From: Kyuwon Cho <kyuwoncho18@gmail.com>
-To: Magnus Karlsson <magnus.karlsson@intel.com>,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc: Stanislav Fomichev <sdf@fomichev.me>,
-	=?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Willem de Bruijn <willemb@google.com>,
-	Simon Horman <horms@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	netdev@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: [PATCH bpf] xsk: keep the charged page count when pinning a umem fails
-Date: Tue, 24 Nov 2026 22:03:59 +0900
-Message-ID: <179552079829.1290967.12345053263834529704@gmail.com>
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b=d6hKvlJg;
+	dkim=pass header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=o2pbox66;
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.a=rsa-sha256 header.s=susede2_rsa header.b=d6hKvlJg;
+	dkim=neutral header.d=suse.de header.i=@suse.de header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=o2pbox66
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id D5391221D0;
+	Tue, 24 Nov 2026 13:04:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1795525482; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=MGLlsaUUSwBgOFasvcC4m8G1HbbNWKywwDMCQ+xfhD8=;
+	b=d6hKvlJgG4X7khE+jq9at3VtIrBK87hyEDrBYy47SpMqyBgQyCGtWYEJB2QxO4UP0dEynx
+	HjMVntQ+5DCCgsmIa+ciX7ASPhoddYx8/NpY+DyRzyEOwxLhm6r1dhG2ZUHEju5VFoFd3z
+	EogkhkBofC6765TNqpTrNAp6xukXKfw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1795525482;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=MGLlsaUUSwBgOFasvcC4m8G1HbbNWKywwDMCQ+xfhD8=;
+	b=o2pbox66290zEHTPTnLGRnEyF5M3kv9q1MZs1eYZssGtRnTpu9DoDG0/d4VS1CplMZajUS
+	JEagk2uRr0Os3XDg==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=d6hKvlJg;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=o2pbox66
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1795525482; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=MGLlsaUUSwBgOFasvcC4m8G1HbbNWKywwDMCQ+xfhD8=;
+	b=d6hKvlJgG4X7khE+jq9at3VtIrBK87hyEDrBYy47SpMqyBgQyCGtWYEJB2QxO4UP0dEynx
+	HjMVntQ+5DCCgsmIa+ciX7ASPhoddYx8/NpY+DyRzyEOwxLhm6r1dhG2ZUHEju5VFoFd3z
+	EogkhkBofC6765TNqpTrNAp6xukXKfw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1795525482;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=MGLlsaUUSwBgOFasvcC4m8G1HbbNWKywwDMCQ+xfhD8=;
+	b=o2pbox66290zEHTPTnLGRnEyF5M3kv9q1MZs1eYZssGtRnTpu9DoDG0/d4VS1CplMZajUS
+	JEagk2uRr0Os3XDg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 0DDE913505;
+	Tue, 24 Nov 2026 13:04:41 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id 0+wrM2iLBWuQKQAAD6G6ig
+	(envelope-from <pfalcato@suse.de>); Tue, 24 Nov 2026 13:04:41 +0000
+Date: Tue, 24 Nov 2026 13:04:39 +0000
+From: Pedro Falcato <pfalcato@suse.de>
+To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+Cc: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Juri Lelli <juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
+	Dietmar Eggemann <dietmar.eggemann@arm.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
+	Valentin Schneider <vschneid@redhat.com>, K Prateek Nayak <kprateek.nayak@amd.com>, 
+	Kees Cook <kees@kernel.org>, David Hildenbrand <david@kernel.org>, 
+	"Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
+	Mike Rapoport <rppt@kernel.org>, Michal Hocko <mhocko@suse.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Suren Baghdasaryan <surenb@google.com>, 
+	Shakeel Butt <shakeel.butt@linux.dev>, Jann Horn <jannh@google.com>, 
+	Puranjay Mohan <puranjay@kernel.org>, Alexei Starovoitov <ast@kernel.org>, linux-mm@kvack.org, 
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, Chris Mason <mason@kernel.org>, 
+	stable@vger.kernel.org
+Subject: Re: [PATCH] mm/vma: drop mm asynchronously in vma_start_read()
+Message-ID: <awWLCZ-jBjSD7V3M@pedro-suse.tail5790ac.ts.net>
+References: <20261124-vma-read-lock-mmdrop-async-v1-1-257f99f551de@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -107,112 +120,115 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261124-vma-read-lock-mmdrop-async-v1-1-257f99f551de@kernel.org>
+X-Rspamd-Queue-Id: D5391221D0
+X-Spam-Level: 
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Rspamd-Action: no action
+X-Spam-Flag: NO
+X-Spamd-Result: default: False [-13.51 / 50.00];
+	SUSE_INTERNAL_BYPASS(-9.00)[];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	ARC_NA(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[28];
+	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[suse.de:+];
+	TO_DN_SOME(0.00)[];
+	DNSWL_BLOCKED(0.00)[2a07:de40:b281:104:10:150:64:97:from,2a07:de40:b281:106:10:150:64:167:received];
+	RCVD_COUNT_TWO(0.00)[2];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	MISSING_XM_UA(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	R_RATELIMIT(0.00)[to_ip_from(RLxemws8ixnqptfze8914thf37)];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim,suse.de:email,imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo]
+X-Spam-Score: -13.51
 
-xdp_umem_reg() charges umem->npgs pages to the user's locked_vm before
-it pins the umem. When pin_user_pages() pins fewer pages than asked,
-xdp_umem_pin_pages() overwrites umem->npgs with the pinned count so that
-xdp_umem_unpin_pages() releases only those, and xdp_umem_unaccount_pages()
-then gives back only that many. The rest of the charge is never returned.
+On Tue, Nov 24, 2026 at 12:26:19PM +0000, Lorenzo Stoakes (ARM) wrote:
+> Commit bee9ef4a40a2 ("bpf: switch task_vma iterator from mmap_lock to
+> per-VMA locks") open-codes a lock_next_vma() implementation that does
+> roughly the same thing in bpf_iter_task_vma_find_next(), only without
+> fallback to an mmap_lock.
+> 
+> This is because bpf_iter_task_vma_find_next() can be called from
+> non-sleepable contexts.
+> 
+> However, lock_vma_under_rcu() gave no guarantee as to which contexts it is
+> safe to be called from, and indeed it turns out this assumption is unsafe.
+> 
+> Since commit 9bbffee67ffd ("mm: fix a UAF when vma->mm is freed after
+> vma->vm_refcnt got dropped"), this call chain is possible on x86:
+> 
+> lock_vma_under_rcu()
+>   -> vma_start_read()
+>     -> mmdrop()
+>       -> __mmdrop()
+>         -> mm_free_pgd()
+>           -> pgd_free()
+>             -> pgd_dtor()
+>               -> spin_lock(&pgd_lock)
+> 
+> Thus, a plain spin_lock() can occur when lock_vma_under_rcu() is
+> called. Since bpf_iter_task_vma_find_next() can be called in softirq
+> context, this can deadlock, for example:
+> 
+> pgd_alloc()
+>   -> spin_lock(&pgd_lock)
+>     <softirq>
+>     bpf_iter_task_vma_next()
+>       -> lock_vma_under_rcu()
+>         ...
+> 	  -> spin_lock(&pgd_lock) [ DEADLOCK ]
+> 
+> Alexei Starovoitov also pointed out that a BPF program attached to
+> trace_contention_end() can similarly cause a deadlock:
+> 
+>   pgd_alloc()
+>     spin_lock(&pgd_lock)
+>       queued_spin_lock_slowpath()
+>         trace_contention_end()          <- pgd_lock is held
+>           tp_btf/contention_end prog
+>             bpf_iter_task_vma_next()
+>               lock_vma_under_rcu()
+>                 vma_start_read()
+>                   mmdrop(other_mm)      <- last put takes pgd_lock again
+> 
+> Resolve the issue by having vma_start_read() use mmdrop_async() instead of
+> mmdrop() so the work is deferred to a work queue.
+> 
+> Make mmdrop_async() an internal mm function, defined in mm/internal.h, to
+> avoid abuse elsewhere (kernel/fork.c includes this header, so still retains
+> access).
+> 
+> Commit 0b16f8bed19c ("mm: change vma_start_read() to drop RCU lock on
+> failure") accounted for the fact that the RCU lock had to be dropped for
+> this operation, which is no longer applicable.
+> 
+> For the sake of a backported fix, retain this behaviour, however drop the
+> RCU lock last and remove the now irrelevant comment.
 
-A short pin happens when the tail of the umem area is not mapped. With
-RLIMIT_MEMLOCK at 16 pages, three registrations of an 8-page area whose
-last 4 pages are unmapped leave the user able to register only 4 pages,
-for as long as the user has a process running.
+Is there any particular reason for unlocking the RCU comment last? after the mmdrop_async().
 
-Unpin the pinned pages directly and leave umem->npgs as charged.
+> 
+> Reported-by: Chris Mason <mason@kernel.org>
+> Fixes: bee9ef4a40a2 ("bpf: switch task_vma iterator from mmap_lock to per-VMA locks")
+> Cc: stable@vger.kernel.org
+> Link: https://lore.kernel.org/all/DN267JUKDRNS.2VMV07CQ58R4X@gmail.com/
+> Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
 
-Fixes: c0c77d8fb787 ("xsk: add user memory registration support sockopt")
-Reported-by: Sashiko <sashiko-bot@kernel.org>
-Closes: https://lore.kernel.org/all/20260421172951.A7052C2BCB5@smtp.kernel.org/
-Signed-off-by: Kyuwon Cho <kyuwoncho18@gmail.com>
----
-The issue was found by an LLM-guided test generator that we are
-developing as a research prototype; Sashiko had flagged the same leak
-in its review of an AUTOSEL backport. A reproducer, which runs as any
-user:
+Acked-by: Pedro Falcato <pfalcato@suse.de>
 
-#define _GNU_SOURCE
-#include <errno.h>
-#include <linux/if_xdp.h>
-#include <sched.h>
-#include <stdio.h>
-#include <string.h>
-#include <sys/mman.h>
-#include <sys/resource.h>
-#include <sys/socket.h>
-#include <unistd.h>
-
-static int reg(char *addr, long len)
-{
-	struct xdp_umem_reg mr = {
-		.addr = (unsigned long)addr, .len = len, .chunk_size = 2048,
-	};
-	int fd = socket(AF_XDP, SOCK_RAW, 0);
-	int ret = setsockopt(fd, SOL_XDP, XDP_UMEM_REG, &mr, sizeof(mr)) ? -errno : 0;
-
-	close(fd);
-	return ret;
-}
-
-int main(void)
-{
-	long pg = sysconf(_SC_PAGESIZE);
-	struct rlimit rl = { 16 * pg, 16 * pg };
-	char *a;
-
-	/* no CAP_IPC_LOCK, CAP_NET_RAW for AF_XDP */
-	if (unshare(CLONE_NEWUSER | CLONE_NEWNET) || setrlimit(RLIMIT_MEMLOCK, &rl))
-		return perror("setup"), 1;
-
-	for (int i = 0; i < 3; i++) {
-		/* 8 pages, the last 4 unmapped: pin_user_pages() pins 4 */
-		a = mmap(NULL, 8 * pg, PROT_READ | PROT_WRITE,
-			 MAP_PRIVATE | MAP_ANONYMOUS | MAP_POPULATE, -1, 0);
-		munmap(a + 4 * pg, 4 * pg);
-		printf("short umem: %s\n", strerror(-reg(a, 8 * pg)));
-		munmap(a, 4 * pg);
-	}
-
-	a = mmap(NULL, 16 * pg, PROT_READ | PROT_WRITE,
-		 MAP_PRIVATE | MAP_ANONYMOUS | MAP_POPULATE, -1, 0);
-	printf("16-page umem: %s\n", strerror(-reg(a, 16 * pg)));
-	return 0;
-}
-
-Without the patch, the 16-page registration fails with ENOBUFS: the
-three short ones leave 12 of the 16 pages charged. With it, it
-succeeds.
-
-The patch was written with LLM assistance; we reviewed and tested it.
-
- net/xdp/xdp_umem.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
-
-diff --git a/net/xdp/xdp_umem.c b/net/xdp/xdp_umem.c
-index cd8643360eb3..15ef424e2765 100644
---- a/net/xdp/xdp_umem.c
-+++ b/net/xdp/xdp_umem.c
-@@ -109,17 +109,14 @@ static int xdp_umem_pin_pages(struct xdp_umem *umem, unsigned long address)
- 
- 	if (npgs != umem->npgs) {
- 		if (npgs >= 0) {
--			umem->npgs = npgs;
--			err = -ENOMEM;
--			goto out_pin;
-+			unpin_user_pages(umem->pgs, npgs);
-+			npgs = -ENOMEM;
- 		}
- 		err = npgs;
- 		goto out_pgs;
- 	}
- 	return 0;
- 
--out_pin:
--	xdp_umem_unpin_pages(umem);
- out_pgs:
- 	kvfree(umem->pgs);
- 	umem->pgs = NULL;
 -- 
-2.43.0
-
+Pedro
