@@ -1,63 +1,88 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=220.197.31.3
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.46
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795539635;
-	b=eNMy+rLdwywC/i4adjiGMs8PFfJhrc0P6lbnBnZ1gQfQ0LHOrx9L+px7gDpUqM0ZlQXf
-	 OiE2qMxfiK8uYId3joCkXCnTEZQo6/F9XduWnXnmaEZ/tue/7tzfcXDK0bSKBL5j+0yIZ
-	 6zNGxCnIMcMVCOPJ7nTTDlj1p4zg3vSdOe4RaF/s5Ndf8zekbFQtWAPvlxUK2U8gSF7CS
-	 FJT89mR6VPIlV0fVyfWsLq7MPHKtpfNRUxyXKY0fDs93Ae/907cS/GxZ1FGwZWYLeiFhG
-	 /clctj1nmnp4rpMPFTI0Ts4UCf+Q9MoDuXcnbmQIDnux5AzcUFdUbwBilNF/tV9MPvg==
+	t=1795540102;
+	b=L5jK/5mF5uepOL9KFMbS26aMjjThGaFmTSOe58rZ9JzYf980tZjxc2EQqzvTjN80lDeJ
+	 KLhaRYixd2iVUQdLYSmW77oQgjRKtRqjrUGCefPltyqXwC6cZiKIuYtam087a6k7pPpBt
+	 2wAZ8eAI8UNRYWFMCtELJVwSYn0RzmYMyRBy8/tSiCt/qlSIveDnkoZz8qSrhfqvExeCt
+	 vUBTtuiWTgyauWRJu9IfQFdje5Wuf/8G737CPlhPIGk3cGZgeVekR9b8SXnyHa9/GlWqj
+	 93G5AIlGrC2KZfXpSJkyvtqlbXPOuToETDFoJrk5gg2N5gyrHEROPcdHpFsWzBZZEcA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795539635;
-	h=DMARC-Filter:DKIM-Signature:Date:From:To:Cc:Subject:X-Priority:
-	 X-Mailer:In-Reply-To:References:X-NTES-SC:Content-Transfer-Encoding:
-	 Content-Type:MIME-Version:Message-ID:X-Coremail-Locale:X-CM-TRANSID:
-	 X-CM-SenderInfo:X-Coremail-Antispam;
-	bh=iSE097qs5amEEzY+7NrdkPvKPcVGOsY6eSfsx/Vcccs=;
-	b=h+EqPKSPMdjFF8G0COP9g+lY9BRAeNCTuTVdxaxhv+S6xG6fwN9fbsiCMkEDWnAcnNCD
-	 7qsdOjt+W2QwCE8lyTiXEuq+J1tt0oLMqs/HoE9ia/M0vwr7PE2QlDuCoEsqoo6Io+kH+
-	 Y4eY8U+sqV6aK5yR4gXPjpi0K0tGd3xVCwAeN7nmEzqmECPSDnd0yn3Uf3KwlNQK4PX1F
-	 P9/c4yYG3MuahYpFGcYbzGRZudAEWpmslsdvs2f2FUmaiupEg5RpjXFd52kmZdJadqwHF
-	 us55ivDWL4b0EwrZ1KW4yoFnvWWHOznowTw9OEPKQOk3anJOqrBLNa9O2Ge8/2KEVIA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795540102;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:Subject:Date:
+	 Message-Id:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	 X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:X-Developer-Signature:
+	 X-Developer-Key;
+	bh=TWXolZYP1Z+2EZDxyUjBWCyGS5K2HLa5zZp9rspSSag=;
+	b=TpmhFcmUffPHTuPYCpIEwj/qbI7a7m3FAJnxaZNEJ+sfOGbtjffrG4LhYpFOajPW9v2x
+	 okVnHPdeWAG2z8hh3I435OTeYCVGv5/CN4CtdE6JY2MNkfgSyyNQmOFIBhJct72rljOVd
+	 UGjnjRFkMfAeeS1QuQ4oE642QHWZ2PbkBePcuRXmsjq4mYVn2eU0oohug6ZD/P3PA2chl
+	 popGmvWucBIk2dvWaO/pUBcdNFH6LQhyGKFpifj7oxlEWWpxA45063TtX5VqB1GwKg/ak
+	 I4VK74YH5Uy5qX/3xd956o6knIV2mzkElt6FrJqGoj3oRyi1zUTMO9R0i5Klp7LPN0g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=163.com;
-	spf=pass smtp.mailfrom=163.com;
-	dkim=pass header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=phC+5if7;
-	arc=none smtp.remote-ip=220.197.31.3
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.3])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=VkKBzSvw;
+	arc=none smtp.remote-ip=209.85.210.46
+Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F5F2606A326
-	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 17:00:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8F5F2606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A81AD606A32A
+	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 17:08:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A81AD606A32A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=phC+5if7
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=Date:From:To:Subject:Content-Type:MIME-Version:
-	Message-ID; bh=iSE097qs5amEEzY+7NrdkPvKPcVGOsY6eSfsx/Vcccs=; b=p
-	hC+5if7Yzgu7AT/qkiCpcMmjF1YNMSvnifgDl5Txbecgo97K93E1+rcYmOfXORV0
-	FwLbAI+cYLVkIdBMma9pZ6jXfUJmO0/XhaTOVEmSFl+wSKmiaLdK14prBIskJMtq
-	nYFlD9Phm5juaeGrWKvvRJYfgtjEbqJ/5YX3aHyb7s=
-Date: Wed, 25 Nov 2026 00:59:14 +0800 (CST)
-From: "Yun Lu" <luyun_611@163.com>
-To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-Cc: daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
-	memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
-	yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
-	ihor.solodrai@linux.dev, yatsenko@meta.com, bpf@vger.kernel.org
-Subject: Re:Re: [PATCH bpf-next v4 0/6] bpf: Fix async callback
- use-after-free on map deletion
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version 2023.4-cmXT build
- 20260511(2e539873) Copyright (c) 2002-2026 www.mailtech.cn 163com
-In-Reply-To: <DN25XEMY8JO1.249FAY7XQUC31@gmail.com>
-References: <20261119033051.196177-1-luyun_611@163.com>
- <DN25XEMY8JO1.249FAY7XQUC31@gmail.com>
-X-NTES-SC: AL_Qu2SB/mYtk0u4iaaYOkamU4Ugeo5WMa5s/Um1YBUc98FnxrO4wAgUFVKBnH04e6lAj6AshGybwZHzuRTeqd/ho6V8vGyrYs+d8turN0Xlg==
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=VkKBzSvw
+Received: by mail-ot1-f46.google.com with SMTP id 46e09a7af769-845788309b4so2299992a34.1
+        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 09:08:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795540100; x=1796144900; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=TWXolZYP1Z+2EZDxyUjBWCyGS5K2HLa5zZp9rspSSag=;
+        b=VkKBzSvweeFrNKCq5GLSLZh18zOZjd5R1uGh94QycuiiCdnGqloBq8AE3sZWA0nbql
+         /aA9eizbc61yYCDlI+xnmhJVqQvr6lzThG1y6dbPwrAyVF23yn/dPWD4VstY5bA0jko2
+         02avCFmpUOVFO7cYpb6YU/auW/JUY53cCPaCZuURRALJyZmTNdmTcaHFg5F19c2G8b2h
+         Jr8MLbvXrjwkUBCulzoqzBiMUV+QIEAf9m8fJs8KE4mdoXUhpm+4k5S/PbqXgg7sNWGK
+         uFpQaaq+FsTCIS6ddqe8/RsyQRXbpTKaILBV1FXflxz3vjpHf/UdYWCWTxbtBif/W7uR
+         +2SQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795540100; x=1796144900;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=TWXolZYP1Z+2EZDxyUjBWCyGS5K2HLa5zZp9rspSSag=;
+        b=ODzIk/17dW5tPEs1fY1ARoRwvwjqMsucDMwBL40hH+KkrDI/YADK3c5hpy/oIy/PBx
+         YwzjTgtxaNoVptZQiijM8BbxzMTGgPFYw8aDfMR/FsRxoxDBf1+J2/d/9nF18xzGhS83
+         7FevRv7eti5RMPq2/N4o5rVmgLZJwMKGVLd6AhdR8aqRBYRb8eL9pjq0lPXvSOJhH1Es
+         xr+PAxb4BgSrxSAIU/YbL4wMvSppvAfBkmyJRlJ8GA4j6YwEzE7KYzLCcddEDEEjWKKF
+         0QljQ/n41vzlWY48KkAOkla2zBFYKv7bc9edyP3O/vAz0a//8zZF568J4oPvwyDxn+uu
+         VzIA==
+X-Gm-Message-State: APuU4Z+/r8/VDE8fSMYZtLGEBAydYGLpQHWNfCfXN5U7G6uaDJ66x4fN
+	+TAA1WnzJa/oUZ2Qj5ZIIuN8lR4CTXV6Tivha3Ki8guPfSfDS8cx9vpx
+X-Gm-Gg: AZFdTZc3X9FChGptEsWQZx8/J11wHdCmx/5oE5oZTo3jrUOXMJO32UA2cM6qJvtzuCY
+	fwl+jf76P+YSuFQ9L2IFe9rer280oDQPw9riInRXm6yFX7YF1K88V0YCZ6EkoC4uNQt8LhKzOo8
+	4QdVod7OSDBC1jXkTaeepnft2QQkQkID2YwbHQ2YptiYs7d1s9MKMARuvtQUMoh8qK6Kz/GNMzs
+	wfImenPVALo0VrT9Sr+t3X+JBJjI9cYC079l1o99OoTjA2e2DL7Xxx4MvV7K5h/0f4YUZUlmne8
+	XQbPsfHf236IphkCksk27azSMh9uGqwPsvwGaPtwWf5WukXUSNOS60L8ZcUtKsYB9WktSraIuNN
+	YoUy5CRfb57xTXrcO13A5/DNtlteOx4QCcBcmBECCSKhgUu2BCMkQsfKb05ybC1PNnDVP3XXMtf
+	7GQG4PO31sklyX9FgZMkeTRFadGzFkxBAWPbLIozrSJeXVQxbSkQU4N81fondziFHMUSVGfpnN7
+	eyCFAYBYAfI+EOu3JsjTepxqkpnId4aH7SiGnIZmo+bA/AmawGCVNl4iuessOt+LkTh0mxSyHTU
+	xyfvoKIhW6MWoGQcJOHe
+X-Received: by 2002:a05:6830:2696:b0:862:c062:392c with SMTP id 46e09a7af769-86315963a1bmr17825248a34.14.1795540100303;
+        Tue, 24 Nov 2026 09:08:20 -0800 (PST)
+Received: from localhost ([2a03:2880:30ff:42::])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-8631690f53dsm10307376a34.19.2026.11.24.09.08.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Nov 2026 09:08:20 -0800 (PST)
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+Subject: [PATCH bpf-next 0/2] selftests/bpf: Fix flaky
+ verifier_arena_large/big_alloc3
+Date: Tue, 24 Nov 2026 09:08:07 -0800
+Message-Id: <20261124-arena_big_alloc3-v1-0-141c26210bff@meta.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -67,104 +92,50 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-ID: <58d3cf4e.9eca.1a20e7f514e.Coremail.luyun_611@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID:hygvCgD3n6BiwgVrn949AA--.415W
-X-CM-SenderInfo: pox130jbwriqqrwthudrp/xtbC7ALks2sFwmLYwgAA3t
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAHfEBWsC/x3MUQqFIBAF0K0M9zuhsejDrUSE5lgDYaERQbT3B
+ +8s4LyoUlQqHL0ocmvVI8MRN4Rl83kVoxGOYFs7MNve+CLZz0HX2e/7sXQmxpRs7JhD36IhnEW
+ SPv9yRDiTyfJcmL7vB7v+vWlsAAAA
+X-Change-ID: 20261124-arena_big_alloc3-ddff2d311b40
+To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
+ daniel@iogearbox.net, kernel-team@meta.com, eddyz87@gmail.com, 
+ ihor.solodrai@linux.dev
+Cc: Mykyta Yatsenko <yatsenko@meta.com>
+X-Mailer: b4 0.16-dev
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1795540098; l=1183;
+ i=yatsenko@meta.com; s=20260324; h=from:subject:message-id;
+ bh=CTGVWVVbyctWyu+b1J+chTtrmZnm7r9SHriGNRu2m9g=;
+ b=8wcX57lmVonYofuD1TOXVjP7FoErQMeAWBKCaHrUv6iTp/4v10w1sA8DRQiqEuD1Qj9HqAOmy
+ UcK0FLnk8RKDusUvcS1izpaRZgbySQjCUJgmCv/PzSsauODxqewx2m9
+X-Developer-Key: i=yatsenko@meta.com; a=ed25519;
+ pk=1zCUBXUa66KmzfjNsG8YNlMj2ckPdqBPvFq2ww3/YaA=
 
-CkF0IDIwMjYtMTEtMjMgMDg6Mjc6MTcsICJBbGV4ZWkgU3Rhcm92b2l0b3YiIDxhbGV4ZWkuc3Rh
-cm92b2l0b3ZAZ21haWwuY29tPiB3cm90ZToKPk9uIFdlZCwgTm92IDE4LCAyMDI2IGF0IDA3OjMw
-IFBNIFl1biBMdSA8bHV5dW5fNjExQDE2My5jb20+IHdyb3RlOgo+PiAtIFJlamVjdCB6ZXJvIHVz
-ZXJjbnQgaW4gdGhlIHNoYXJlZCBzZXR0ZXIgKFNhc2hpa28pLCBvcmRlciB0aGUgY2hlY2sKPj4g
-ICBhZnRlciBsb29rdXAgd2l0aCBhIGZ1bGwgYmFycmllciwgYW5kIGFkZCBhIHdxIHJlZ3Jlc3Np
-b24gZm9yIHJldXNlLgo+Cj5icGZfdGFza193b3JrX2FjcXVpcmVfY3R4KCkgaGFzIHRoZSBzYW1l
-IHR3byByZWFkcyB3aXRob3V0IGEgYmFycmllci4KPk9uIGFybTY0IHRoZSAybmQgbG9hZCBjYW4g
-cGFzcyB0aGUgMXN0Ogo+Cj4gIGJwZl9tYXBfdmFsdWVfaXNfbGlua2VkKCkgICAgICAgZmluZHMg
-dGhlIGVsZW1lbnQgaW5zZXJ0ZWQgYWdhaW4KPiAgYXRvbWljNjRfcmVhZCgmbWFwLT51c2VyY250
-KSAgICByZXR1cm5zIHRoZSBvbGQgbm9uemVybyBjb3VudAo+Cj5UaGUgdXJlZiB3YWxrIG1pc3Nl
-ZCB0aGUgZWxlbWVudCwgc28gbm90aGluZyBjYW5jZWxzIHRoaXMgdGFzayB3b3JrLgo+VGFzayB3
-b3JrIGlzIGFsbG93ZWQgaW4gaW5uZXIgbWFwcyBhbmQgY3R4LT5wcm9nIGRvZXNuJ3QgaG9sZCB0
-aGVtLgo+VGhlIGNhbGxiYWNrIGNhbiBydW4gb24gYSBmcmVlZCBtYXAsIGxpa2UgdGhlIHRpbWVy
-IGluIE1hbmkncyBmaXg6Cj5odHRwczovL2xvcmUua2VybmVsLm9yZy9icGYvMjAyNjEwMjctYnBm
-LXRpbWVyLWZyZWVkLW1hcC12MS0xLTMwNDAyYjBlZTk5YkBjb2x1bWJpYS5lZHUvCj4KPj4gLSBV
-c2UgdGhlIGV4aXN0aW5nIG1hcCBsb29rdXAgYW5kIG1vdmUgdGhlIHdxL3RpbWVyIGNoZWNrIHRv
-IHRoZSBzaGFyZWQKPj4gICBzZXR0ZXIgKEFsZXhlaSkuCj4KPlRoYXQgbG9va3VwIHdhcyBteSBz
-dWdnZXN0aW9uLCBzb3JyeS4gYnBmLWNpIHdhcyByaWdodCBvbiB2Mi4KPkl0IGNoYW5nZXMgdGhl
-IGV2aWN0aW9uIG9yZGVyIGluIExSVSBtYXBzOgo+Cj4gIGJwZl90aW1lcl9zZXRfY2FsbGJhY2so
-JnZhbC0+dGltZXIsIGNiKQo+ICAgIGJwZl9tYXBfdmFsdWVfaXNfbGlua2VkKG1hcCwgdmFsKQo+
-ICAgICAgaHRhYl9scnVfbWFwX2xvb2t1cF9lbGVtKG1hcCwga2V5KQo+ICAgICAgICBfX2h0YWJf
-bHJ1X21hcF9sb29rdXBfZWxlbShtYXAsIGtleSwgdHJ1ZSkKPiAgICAgICAgICBicGZfbHJ1X25v
-ZGVfc2V0X3JlZigpCj4KPkEgdGltZXIgY2FsbGJhY2sgZ2V0cyB2YWwgd2l0aG91dCBhIGxvb2t1
-cC4KPkl0IGNhbiBjYWxsIHRoZSBzZXR0ZXIgaW4gZWFjaCBwZXJpb2QsIGxpa2UgdGltZXJfY2Iy
-KCkgaW4gdGltZXJfbWltLmMuCj5UaGVuIGFuIGlkbGUgZWxlbWVudCBsb29rcyBob3QgYW5kIGVs
-ZW1lbnRzIGluIHVzZSBnZXQgZXZpY3RlZC4KPlNlZSBjb21taXQgNTBiMDQ1YThjMGNjICgiYnBm
-LCBscnU6IGF2b2lkIG1lc3Npbmcgd2l0aCBldmljdGlvbgo+aGV1cmlzdGljcyB1cG9uIHN5c2Nh
-bGwgbG9va3VwIikuCj4KPj4gLSBHaXZlIHNsb3QgZGV0YWNobWVudCB0byB0aGUgZmlyc3QgaW52
-YWxpZGF0b3IgYW5kIHJldXNlIHRoZSBleGlzdGluZwo+PiAgIHRhc2std29yaywgd3EgYW5kIHRp
-bWVyIHNlbGZ0ZXN0cy4KPgo+Tm93IHRoZSAybmQgY2FuY2VsbGVyIHJldHVybnMgd2l0aCBhIGRl
-YWQgY2IgaW4gdGhlIHNsb3Q6Cj4KPiAgQ1BVIDA6IHVwZGF0ZSBmcm9tIHN5c2NhbGwgICBDUFUg
-MTogcHJvZywgc2FtZSBhcnJheSBlbGVtZW50Cj4gIHhjaGcoJmNiLT5tYXAsIE5VTEwpIHdpbnMK
-PiAgcHJlZW1wdGVkCj4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgYnBmX21hcF91cGRh
-dGVfZWxlbSgpCj4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB4Y2hnKCZjYi0+bWFw
-LCBOVUxMKSBsb3NlcywgcmV0dXJuCj4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgYnBm
-X3RpbWVyX2luaXQoKSAgICAgICAgICAtRUJVU1kKPiAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICBicGZfdGltZXJfc2V0X2NhbGxiYWNrKCkgIC1FTk9FTlQKPiAgV1JJVEVfT05DRShhc3lu
-Yy0+Y2IsIE5VTEwpCj4KPlRvZGF5IHhjaGcoJmFzeW5jLT5jYiwgTlVMTCkgZW1wdGllcyB0aGUg
-c2xvdCBmaXJzdCBhbmQgaW5pdCByZXR1cm5zIDAuCj5UYXNrIHdvcmsgZ2V0cyAtRUJVU1kgaW4g
-dGhlIHNhbWUgd2luZG93Lgo+WW91IHJlcGxpZWQgdGhhdCBjbXB4Y2hnKCkgcmFjZXMgd2l0aCB0
-aGUgcGVuZGluZyBXUklURV9PTkNFKCk6Cj5odHRwczovL2xvcmUua2VybmVsLm9yZy9icGYvODQy
-ODYyNjMtNTExMS00MzU4LThiOTAtOWU5ZDg2ZDg0NmNiQDE2My5jb20vCj5JdCBkb2Vzbid0IHdo
-ZW4gYm90aCBjYW5jZWxsZXJzIHVzZSBjbXB4Y2hnKCksIGxpa2UgaW4gdjIuCj5ndWFyZChyY3Up
-IGtlZXBzIGNiIGFsaXZlLCBzbyBpdHMgYWRkcmVzcyBjYW4ndCBjb21lIGJhY2suCgpIaSBBbGV4
-ZWksCgpUaGFua3MgZm9yIHRoZSBjbGFyaWZpY2F0aW9uIGFuZCB0aGUgZXhhbXBsZSBjb2RlLiBV
-c2luZyBjbXB4Y2hnKCkKaW4gYm90aCBjYW5jZWxsZXJzIHJlc29sdmVkIG15IGNvbmNlcm5zIGFi
-b3V0IHRoZSBwZW5kaW5nIHN0b3JlLiAKCkmhr3ZlIGFwcGxpZWQgeW91ciBjaGFuZ2VzIGludG8g
-djUsIGFuZCB0aGUgcmVncmVzc2lvbiB0ZXN0cyBhbmQKQVJSQVkgY29uY3VycmVudCBjYW5jZWxs
-YXRpb24gY2hlY2tzIHBhc3NlZC4gSaGvbGwgcG9zdCBpdCBzaG9ydGx5LgoKLS0tClRoYW5rcywK
-WXVuIEx1CgoKPkFsbCB0aHJlZSBvbiB0b3Agb2YgdGhlIHNlcmllcywgaGVscGVycy5jIGNvbXBp
-bGVzIGJ1dCBJIGRpZG4ndCBydW4gaXQ6Cj4KPmRpZmYgLS1naXQgYS9rZXJuZWwvYnBmL2hlbHBl
-cnMuYyBiL2tlcm5lbC9icGYvaGVscGVycy5jCj5pbmRleCAwMjlmNjBiLi42Njk2NTM5IDEwMDY0
-NAo+LS0tIGEva2VybmVsL2JwZi9oZWxwZXJzLmMKPisrKyBiL2tlcm5lbC9icGYvaGVscGVycy5j
-Cj5AQCAtMTE1NSw4ICsxMTU1LDEyIEBAIHN0YXRpYyB2b2lkICptYXBfa2V5X2Zyb21fdmFsdWUo
-c3RydWN0IGJwZl9tYXAgKm1hcCwgdm9pZCAqdmFsdWUsIHUzMiAqYXJyX2lkeCkKPiBzdGF0aWMg
-Ym9vbCBicGZfbWFwX3ZhbHVlX2lzX2xpbmtlZChzdHJ1Y3QgYnBmX21hcCAqbWFwLCB2b2lkICp2
-YWx1ZSkKPiB7Cj4gCXUzMiBpZHg7Cj4rCXZvaWQgKmtleSA9IG1hcF9rZXlfZnJvbV92YWx1ZSht
-YXAsIHZhbHVlLCAmaWR4KTsKPiAKPi0JcmV0dXJuIG1hcC0+b3BzLT5tYXBfbG9va3VwX2VsZW0o
-bWFwLCBtYXBfa2V5X2Zyb21fdmFsdWUobWFwLCB2YWx1ZSwgJmlkeCkpID09IHZhbHVlOwo+Kwkv
-KiBJdCdzIG5vdCBhIHVzZSBvZiB0aGUgZWxlbWVudC4gRG9uJ3Qgc2V0IHRoZSByZWYgYml0IG9m
-IExSVSBub2RlLiAqLwo+KwlpZiAobWFwLT5vcHMtPm1hcF9sb29rdXBfZWxlbV9zeXNfb25seSkK
-PisJCXJldHVybiBtYXAtPm9wcy0+bWFwX2xvb2t1cF9lbGVtX3N5c19vbmx5KG1hcCwga2V5KSA9
-PSB2YWx1ZTsKPisJcmV0dXJuIG1hcC0+b3BzLT5tYXBfbG9va3VwX2VsZW0obWFwLCBrZXkpID09
-IHZhbHVlOwo+IH0KPiAKPiBlbnVtIGJwZl9hc3luY190eXBlIHsKPkBAIC0xNzc0LDEzICsxNzc4
-LDE1IEBAIHN0YXRpYyB2b2lkIGJwZl9hc3luY19jYW5jZWxfYW5kX2ZyZWUoc3RydWN0IGJwZl9h
-c3luY19rZXJuICphc3luYykKPiAJZ3VhcmQocmN1KSgpOwo+IAkvKiBPcmRlciB1bmxpbmsgYmVm
-b3JlIHJlYWRpbmcgYXN5bmMtPmNiLCBpbmNsdWRpbmcgYW4gZW1wdHkgc2xvdC4gKi8KPiAJc21w
-X21iKCk7Cj4tCS8qIEFjcXVpcmUgYW55IGludmFsaWRhdGlvbiBwdWJsaXNoZWQgYmVmb3JlIHRo
-ZSBzbG90IHdhcyBjbGVhcmVkLiAqLwo+LQljYiA9IHNtcF9sb2FkX2FjcXVpcmUoJmFzeW5jLT5j
-Yik7Cj4tCS8qIE9ubHkgdGhlIGZpcnN0IGludmFsaWRhdG9yIGRldGFjaGVzIGNiIGFuZCBkcm9w
-cyB0aGUgbWFwJ3MgcmVmZXJlbmNlLiAqLwo+LQlpZiAoIWNiIHx8ICF4Y2hnKCZjYi0+bWFwLCBO
-VUxMKSkKPisJY2IgPSBSRUFEX09OQ0UoYXN5bmMtPmNiKTsKPisJaWYgKCFjYikKPiAJCXJldHVy
-bjsKPiAKPi0JV1JJVEVfT05DRShhc3luYy0+Y2IsIE5VTEwpOwo+KwkvKiBDYWxsYmFja3MgdGhh
-dCBydW4gYWZ0ZXIgdGhpcyBzZWUgTlVMTCBhbmQgcmV0dXJuLiAqLwo+KwlXUklURV9PTkNFKGNi
-LT5tYXAsIE5VTEwpOwo+KwkvKiBUaGUgb25lIHdobyBkZXRhY2hlcyBjYiBkcm9wcyB0aGUgbWFw
-J3MgcmVmZXJlbmNlLiAqLwo+KwlpZiAoY21weGNoZygmYXN5bmMtPmNiLCBjYiwgTlVMTCkgIT0g
-Y2IpCj4rCQlyZXR1cm47Cj4gCj4gCWJwZl9hc3luY191cGRhdGVfcHJvZ19jYWxsYmFjayhjYiwg
-TlVMTCwgTlVMTCk7Cj4gCS8qCj5AQCAtNDkxOCw2ICs0OTI0LDkgQEAgc3RhdGljIHN0cnVjdCBi
-cGZfdGFza193b3JrX2N0eCAqYnBmX3Rhc2tfd29ya19hY3F1aXJlX2N0eChzdHJ1Y3QgYnBmX3Rh
-c2tfd29yawo+IAkJcmV0dXJuIEVSUl9QVFIoLUVOT0VOVCk7Cj4gCX0KPiAKPisJLyogT3JkZXIg
-dGhlIGxvb2t1cCBiZWZvcmUgdGhlIHJlYWQgb2YgdXNlcmNudC4gU2VlIF9fYnBmX2FzeW5jX3Nl
-dF9jYWxsYmFjaygpLiAqLwo+KwlzbXBfbWIoKTsKPisKPiAJLyoKPiAJICogSWYgbm8gcHJvY2Vz
-cyBvciBicGZmcyBpcyBob2xkaW5nIGEgcmVmZXJlbmNlIHRvIHRoZSBtYXAsIG5vIG5ldyBjYWxs
-YmFja3Mgc2hvdWxkIGJlCj4gCSAqIHNjaGVkdWxlZC4gVGhpcyBkb2VzIG5vdCBhZGRyZXNzIGFu
-eSByYWNlIG9yIGNvcnJlY3RuZXNzIGlzc3VlLCBidXQgcmF0aGVyIGlzIGEgcG9saWN5Cj5AQCAt
-NTI0NSwxMCArNTI1NCwxMCBAQCB2b2lkIGJwZl90YXNrX3dvcmtfY2FuY2VsX2FuZF9mcmVlKHZv
-aWQgKnZhbCkKPiAKPiAJLyogUHJldmVudCBlbnRyeSB0byBSVU5OSU5HIGJlZm9yZSBjbGVhcmlu
-ZyB0aGUgc2xvdC4gKi8KPiAJc3RhdGUgPSB4Y2hnKCZjdHgtPnN0YXRlLCBCUEZfVFdfRlJFRUQp
-Owo+LQkvKiBPbmx5IHRoZSBmaXJzdCBGUkVFRCB0cmFuc2l0aW9uIGRldGFjaGVzIGN0eCBhbmQg
-b3ducyB0aGUgbWFwJ3MgcmVmLiAqLwo+Kwkodm9pZCljbXB4Y2hnKCZ0d2stPmN0eCwgY3R4LCBO
-VUxMKTsKPisJLyogT25seSB0aGUgZmlyc3QgRlJFRUQgdHJhbnNpdGlvbiBvd25zIHRoZSBtYXAn
-cyByZWYuICovCj4gCWlmIChzdGF0ZSA9PSBCUEZfVFdfRlJFRUQpCj4gCQlyZXR1cm47Cj4tCVdS
-SVRFX09OQ0UodHdrLT5jdHgsIE5VTEwpOwo+IAo+IAlpZiAoc3RhdGUgPT0gQlBGX1RXX1NDSEVE
-VUxFRCkgewo+IAkJLyogcnVuIGluIGlycV93b3JrIHRvIGF2b2lkIGxvY2tzIGluIE5NSSAqLwo+
-Cj5wdy1ib3Q6IGNyCg==
+big_alloc3 allocates 1025 arena pages in a nonsleepable program. That
+allocation does not reclaim, so it can fail when memory is low. BPF CI
+sees this as a FAIL on aarch64. When the allocation fails, the test
+cannot do its check, so the correct result is SKIP, not OK or FAIL.
+
+Patch 1 lets test_loader report SKIP at run time: __skip() with a
+__retval() right after it, like __success __retval(0).
+Patch 2 uses it in big_alloc3 and runs verifier_arena_large serially.
+
+Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
+---
+Mykyta Yatsenko (2):
+      selftests/bpf: Let __skip() report SKIP for a return value
+      selftests/bpf: Fix flaky verifier_arena_large/big_alloc3
+
+ tools/testing/selftests/bpf/prog_tests/verifier.c  |  3 +-
+ tools/testing/selftests/bpf/progs/bpf_misc.h       |  6 ++++
+ .../selftests/bpf/progs/verifier_arena_large.c     |  9 +++++-
+ tools/testing/selftests/bpf/test_loader.c          | 35 ++++++++++++++++++++--
+ 4 files changed, 49 insertions(+), 4 deletions(-)
+---
+base-commit: 966e9d6e515bdd60f401b16eabc10eadca5f7885
+change-id: 20261124-arena_big_alloc3-ddff2d311b40
+
+Best regards,
+--  
+Mykyta Yatsenko <yatsenko@meta.com>
+
