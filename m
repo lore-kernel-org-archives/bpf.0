@@ -1,101 +1,59 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.172
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795509346;
-	b=XmPxhURhPjPOZCjZeaQMbo2fu8Yh7ReEuONZ5p5YDuqJwY8KWVdmRtKaCjCMplaiU9H9
-	 zu+mjK38S42hE//AnnaiYJVjrMTUll6daKXbaq4GgmcTV7M2XOYhRP0IHTclztpjYDM8C
-	 uTg0qZE7f7uXkQMSAyAgzp2oNltO95zKVPmMG9/sTWfQHWQAgDCnbzVhbKsrrl3LiEdXb
-	 lfXA+ngkscjanVsMleDYNDC5OhixbHn1JjYS+3Hx0CVXNlCyRzFLzWw1i5OrgJ+CyzkT7
-	 7WRpMp1F9xaaBaFDzZgLotpkKmgNk/GL/qhFKl9wyFEyK+EPeUaPMuzLEp0IV441Oxw==
+	t=1795509473;
+	b=Bx5JivkD8ENBE9gYuKoxhWHbApjyst1qGDrYvmAatS9fppdUAsIOxyYi3OAj9/vukgcP
+	 nHF2szYY6C28+5ERYFweGXj3SvOTAViaem8J4dK4M5sepPrRKiS73xzi+adB2pSgcIFSJ
+	 eYCODd8hD0jfBAkdQBTO4KcNSaw1GynYt30oy/q/+jGN976IQ55YTTBKBYc98zZ7SUHWh
+	 Ef+aSghAt6TQTbC7JVIWmbpdU/5/ZVjegESI/1g4KRJBXAON1+L7YdELlioCPtfKQwvGq
+	 I99plbMJhgSguNmMs2C8Xx7XXXZzn8ERYFtbtSAdUmbMn/qBYxFNSyCeVas1f3E3C+w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795509346;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=CvPBfBZyrWo/IURjWNoOSH2bYaPSh+KUwqyaCMmfae4=;
-	b=x3Sz37t/LEfYaQUpsHQWAc6wcHn88p0+/fK4Bo3rRqwlMMdt0tqz1ol2QCscA5+jIWOo
-	 5Vg5qzF9vQcLKx2UurBc9pwwloc51XqfsSOkOxdjt8w+9OP+TFSunnC3iasfPZyMD2Vjv
-	 /Ce30fTCmQUXoh78dM6+M73eA1H87oqlLzZJ88ihv561SJFHIwitApAZpNSjc1k20XYoA
-	 DsnN+pKj3nDKWgxG4UD9olMF0x8pOmfZuXyz//tIbGp3EZ2L+851sk8tPz+InjW66TMez
-	 TMXUA/j70iF1NJqTuz/dpNq2Y5n7eUlmZaOo8XVd+44MQ1DmP8t+FRgYF9+081JMOZg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795509473;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:
+	 In-Reply-To:References:Auto-Submitted:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=oj2zs7YpNjut+Fle9NDI2/nVbuq1xcuWOh/20pAlrQ0=;
+	b=bPggl9rswxz+svg+eRmf+Z3knA0mi5RCdtEPpyPvmQZKUxcKd3hasfHZm837wTC179d/
+	 WAo8E93UX44jcweCsv0Y36Uc7uNnmZzgfqaX3YMR4CXvtJh4h9qRmk2dfRc9uFe+OqZnW
+	 BjstxHDGrvYjMuJB0ruF3huUdB8LOYccyWekLpQg2EdaTSaO++zEkx+KEg1ta/qav4v+A
+	 U0Z8/AjmeduW1nLUVnuDh4jYKsR5oWIyQQZoCD375cMNM2m42ZIxKDv5BKbBnCY+7ZAr2
+	 cvTvhmN0T/kwIhO6d/F0Y9AdmTFO81g4fWbt8Qw4tBNiJGGp+7G0SXB+3c1NcJp3VKw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=BiDm7SXd;
-	arc=none smtp.remote-ip=74.125.82.172
-Received: from mail-dy1-f172.google.com (mail-dy1-f172.google.com [74.125.82.172])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=WcuoUEi3;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D82BF606A327
-	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 08:35:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D82BF606A327
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83F58606A322;
+	Tue, 24 Nov 2026 08:37:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=BiDm7SXd
-Received: by mail-dy1-f172.google.com with SMTP id 5a478bee46e88-3282db206d3so1993144eec.0
-        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 00:35:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795509344; x=1796114144; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=CvPBfBZyrWo/IURjWNoOSH2bYaPSh+KUwqyaCMmfae4=;
-        b=BiDm7SXd0FZcFuAA7mPowtUz3t+gCus/FpUals00iUR4Rxq1X/PCGRPOVzYmxWGTNb
-         xlKvf0OVES+TriacQ3hV0ZEpcmwwBCvZN5n4FftfaDUe+hT4ovb7jSxT1LNNHHOak3pS
-         D94SVu4y6lKy7GPZoPb3xfKghkpcWBO0EuzHJJh+uNQYhmtpAqLwJTPf2ku2BV8xEkzF
-         XFH6DrPQyG7BeJ5VCd8vSnflV1pG0X5XLhLbVX+t+kPpaav0nFulscHdrO3hoTO8ORmf
-         sBpbcmVViHjrmYtufIy+YhsFVKodxa7IhJsjzSmUR8RCH031avwKieiIHIRnHgTgDFan
-         1itA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795509344; x=1796114144;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=CvPBfBZyrWo/IURjWNoOSH2bYaPSh+KUwqyaCMmfae4=;
-        b=HPQ3mllE7CY1+2G6ZPvSVeMnrsPAx9iYNoTARy4vsI9Wyfaum2usVMVuKt/rp9Rvoo
-         GF6bbcVXp+dHAVH5vicBFZsqo55pPjSHHmzIaFjI16A/kREjLsNTRtkkR1854LWGUN84
-         ZqFCeuP54BgH8eUYh12Zk0Cm9g7d3GbO4wW71JoEB13wqiEGUrYR9syowViQTJobBh9z
-         TWL7fvmBEBEYTSyL1dhKwt/6tcy5SE4c1j/3L8B3IUzC4nW2OSyRs8ECAY8LYS9Pl9F9
-         s5AUTraS7Y0YF/XYv8GkRCGbZbz3n30rO6rY0IMnsqdH+jXjyUmjkACrpMfH8AqEKKLn
-         xmEg==
-X-Forwarded-Encrypted: i=1; AL+hErFo6sTZcNG7WP+Hy5sxMQAZvNqfE2EiSw7wXZxFrk0RW26B8+JD+ZCIy1KXquLkyy/8XVQ=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9UDiHGmXf50feo8AGeWIEAUxsaa0yCHyybpicarMBmMuhXuMcw
-	cy5IQZ2JYkC21AnmDRotCWOigSjzdcOc5kz5H3I9Ud4g+FnawAIejMkr
-X-Gm-Gg: AZFdTZfLhrGuMzwbpCsbnxXqxrcFyNv9h7mIMHCe/4F6gBlkNctZCWp5MLRvpzWkwWn
-	19KHRS0TL2siqbof+DwhWq5UhYk6XjlMz7btIeiYCXN99PdxKuh9t3OeScNLODiVR3dAuYlgd4J
-	MpIIHC7JwfAfQStloLJTiMNJcSC6kU1lk3iYDzvM0PXWil+zAfGtUo1NEBK8sqTdLA9X8vS01Ya
-	5tFTnIjedi0V5N8+RSRGwTxCAEMSTkOHOsy3uTT0AB+rrEUVMYV8jCB6Opsfv4ZUrLdog1Td1UO
-	36JnorOCV6n/C6hOTv6bnsIBm1znH1IhfHe0MU2UhTbilapawf2rVgo7/Fd+AGxj7U5mX+/7QHe
-	HUqnOMGYwWFE8wOVXvKD2AQ13X/qfgDcxiC5PEFwkRBg9+yRk2SiUVNfhwonfcjwaHBo7sekiaH
-	COy/cV646mPfg+9qNefG6G7SB0lsQfj2d1olFnnPD5k5BL1j/izgyBJCmud2oYrZCoiupVDMc7C
-	VS7jXS1OE+57lJfPWYjF3UFA9zR+CzphFG2gmFFuYwTXBmMHIBwDRu169/bRVkb+bhJIhSu85ln
-	3D9mF6dnAc0OVvopPC3uIkLcqgsALMRklJIFadDaeuGGCMtZXrSWs8EmFo7o+BMt85DHqlQZeb2
-	wYM2ox+zASf7I+uoR9bgE4KXlH85AdyIuM7oirWbFa9ZuNKftO5ScWuOLEgm7kW/25afddVkDiF
-	0jlRk+OiQuFCI8A6Tn9Q4=
-X-Received: by 2002:a05:7301:c016:b0:386:5adb:ac01 with SMTP id 5a478bee46e88-3865adbb1aemr14055119eec.24.1795509343906;
-        Tue, 24 Nov 2026 00:35:43 -0800 (PST)
-Received: from localhost.localdomain ([38.114.108.154])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-38566cd40c5sm50849718eec.10.2026.11.24.00.35.39
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 24 Nov 2026 00:35:42 -0800 (PST)
-From: Jason Xing <kerneljasonxing@gmail.com>
-To: magnus.karlsson@intel.com,
-	maciej.fijalkowski@intel.com,
-	sdf@fomichev.me,
-	davem@davemloft.net,
-	edumazet@kernel.org,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org
-Cc: netdev@vger.kernel.org,
-	bpf@vger.kernel.org,
-	Jason Xing <kerneljasonxing@gmail.com>,
-	stable@vger.kernel.org
-Subject: [PATCH net] xsk: fill in header offsets for TX checksum offload
-Date: Tue, 24 Nov 2026 16:35:20 +0800
-Message-ID: <20261124083520.45547-1-kerneljasonxing@gmail.com>
-X-Mailer: git-send-email 2.50.1
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=WcuoUEi3
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1ABF41F000D0;
+	Tue, 24 Nov 2026 08:37:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795509472;
+	bh=oj2zs7YpNjut+Fle9NDI2/nVbuq1xcuWOh/20pAlrQ0=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=WcuoUEi3CxP/6vjQSlWwJSA5F4NV9NKiBJ3Qu3F+/PwvycBkEXzRGWQ+bLqZO3gLR
+	 jF7rtAzacJRJSQEF5LIcALYNRT7wVVil1h+RvVXSyH6hggEMlaR09Vr1UN7e1Gjhri
+	 pgwRYoaLq5z/RPPH4VgYjqlfjl4iXApPpXIfi8gA9XiLgJHOhViUqnyT8BHfi6vYyb
+	 BsJHSJyiwlcSDQlU2+wnpGSjdbNvJQte4nFR5vh1e+JQLVV+dWiRVj9htVxC6vZFfH
+	 dLAqFOW51GpRPARqrFhpzGRGGwuZc1ia9f6n5C2pDMpN8+XXl+kUEodGXEaEsQe2eM
+	 1ttnGuh3aJsXw==
+From: netdev-bot+sinfo@kernel.org
+To: Jason Xing <kerneljasonxing@gmail.com>
+Cc: magnus.karlsson@intel.com, maciej.fijalkowski@intel.com, sdf@fomichev.me,
+ davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
+ horms@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
+ stable@vger.kernel.org
+Subject: Re: [PATCH net] xsk: fill in header offsets for TX checksum offload
+Date: Tue, 24 Nov 2026 08:37:51 +0000
+Message-ID: <179550947159.3294.6288731111531309964@kernel.org>
+In-Reply-To: <20261124083520.45547-1-kerneljasonxing@gmail.com>
+References: <20261124083520.45547-1-kerneljasonxing@gmail.com>
+Auto-Submitted: auto-generated
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -105,97 +63,26 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-An XDP_TXMD_FLAGS_CHECKSUM request is turned into an skb carrying
-CHECKSUM_PARTIAL by xsk_skb_metadata() where csum_start/csum_offset/
-ip_summed are set, which will be handled in the csum offload like
-ice_tx_csum(). Drivers like ICE do read network_header/transport_header
-fields which actually point to the wrong place, leading to wrong action.
+Hi!
 
-The frame layout comes from user space, and request.csum_start is
-already the offset of the L4 header from the start of the frame, so the
-transport header is known exactly. Only the L2 length has to be found,
-by parsing the Ethernet header and, when present, the VLAN tag stack.
-skb_header_pointer() is used for that, so it works for frames whose data
-is not in the linear part of the skb. Also, initialize skb->protocol
-because of some drivers (e.g. mana_start_xmit()) using it.
+This is an automated message. This series looks like a fix, but its
+commit messages seem to be missing some information:
 
-A frame whose csum_start points into the L2 header disagrees with its
-own metadata, so it is rejected and dropped instead of being handed to
-the driver with a layout it cannot use.
+ - How the issue was discovered, e.g. hit in production, hit during
+   development, syzbot report, manual code inspection, LLM or static
+   analysis tool scan.
 
-Only Ethernet framing is parsed while other device types keep existing
-behaviour.
+ - Whether the issue was actually triggered, or is only theoretical
+   (e.g. found by LLM and not proven at runtime). If it was triggered
+   please include the symptoms, like the stack trace or kernel messages.
 
-Fixes: 48eb03dd2630 ("xsk: Add TX timestamp and TX checksum offload support")
-Cc: stable@vger.kernel.org
-Suggested-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Signed-off-by: Jason Xing <kerneljasonxing@gmail.com>
----
-V1
-Previous discussions: https://lore.kernel.org/all/arKm5gCaERk6MaGA@boxer/
-The patch is based on Maciej suggestion: 1) do not rely on mac header that
-probe in AF_PACKET uses, 2) use skb_header_pointer and walk vlan tags to
-inspect the accurate location of each field that existing drivers
-possibly use.
----
- net/xdp/xsk.c | 33 +++++++++++++++++++++++++++++++--
- 1 file changed, 31 insertions(+), 2 deletions(-)
+Please do not repost the series just to address the above. Instead,
+reply to this email with the missing information, so that reviewers
+can take it into account.
 
-diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-index 52d538160e0a..7c846f02972e 100644
---- a/net/xdp/xsk.c
-+++ b/net/xdp/xsk.c
-@@ -11,6 +11,8 @@
- 
- #define pr_fmt(fmt) "AF_XDP: %s: " fmt, __func__
- 
-+#include <linux/if_arp.h>
-+#include <linux/if_vlan.h>
- #include <linux/if_xdp.h>
- #include <linux/init.h>
- #include <linux/sched/mm.h>
-@@ -1027,10 +1029,37 @@ static int xsk_skb_metadata(struct sk_buff *skb, void *buffer,
- 
- static int xsk_skb_sw_csum(struct sk_buff *skb, struct xsk_buff_pool *pool)
- {
--	if (unlikely(pool->tx_sw_csum &&
--		     skb->ip_summed == CHECKSUM_PARTIAL))
-+	struct ethhdr eth_buf, *eth;
-+	int nhoff = ETH_HLEN;
-+	__be16 proto;
-+
-+	if (unlikely(skb->ip_summed != CHECKSUM_PARTIAL))
-+		return 0;
-+
-+	if (unlikely(pool->tx_sw_csum))
- 		return skb_checksum_help(skb);
- 
-+	if (unlikely(skb->dev->type != ARPHRD_ETHER))
-+		return 0;
-+
-+	eth = skb_header_pointer(skb, 0, sizeof(*eth), &eth_buf);
-+	if (unlikely(!eth))
-+		return -EINVAL;
-+
-+	proto = eth->h_proto;
-+	if (eth_type_vlan(proto)) {
-+		proto = __vlan_get_protocol(skb, proto, &nhoff);
-+		if (unlikely(!proto))
-+			return -EINVAL;
-+	}
-+
-+	if (unlikely(skb_checksum_start_offset(skb) < nhoff))
-+		return -EINVAL;
-+
-+	skb->protocol = proto;
-+	skb_set_network_header(skb, nhoff);
-+	skb_set_transport_header(skb, skb_checksum_start_offset(skb));
-+
- 	return 0;
- }
- 
+*IMPORTANT*: If you do repost (for other reasons) - please include
+the relevant info in the cover letter or commit messages.
 -- 
-2.43.7
-
+The evaluation is done by an LLM so it may be wrong, if you think
+that is the case please reply and explain.
