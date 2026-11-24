@@ -1,54 +1,47 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=69.171.232.181
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795477749;
-	b=C5jQsx3vr7mQ3nxy9u3clmgqVfb66Mc2N2USIC6tqPyw750MriVLzYbwBG0ogWc2QrZA
-	 WNI/prEDV/mnK+4D3ythzfzxcYywW+49SbpVxzy9ntHxVElqrbIRoh1IbhOCYpM/ef8Ac
-	 98Pn9LQG6cG4GxCHG8o3Ep5WyoRkOacYKiTr/z5i4nNiEIOutu4Xyjtd6ADb3IP2ozqkq
-	 pjv/wN87aHHqruoXHnr2n7IzVO9VfhPJJJjGn7vJGVTIMhtJYAP/PQsEvO5T17K8J0ItC
-	 eZeVIQq2VGRcObCjU7G/BUNCAevQpjP0yFwrQVumoRAX0zQ2LrY3avW9voS7XgUXMeA==
+	t=1795478728;
+	b=NR6kcn3q8E1rp9aC+csuf5ajz6JoXTNx35eMElmmVpfoXl7gS9fFYLw4l43BP3N07SPY
+	 Kvxtb9b/ZIUn0sGuqoRwqopBNqNVcvXhBJWSw97yydCZ2TPYjPFfDaA9fHHUrXjrqHkbK
+	 nE9O1gqQkOjSnTglq9pJCgpa4KSIPTihfxZ3jT+UZwtB/d8lx5FDNJxgq5qjuepd7JwMf
+	 Y90yMPYBgF9rgZ7QByjC7TQTeM7PnKOoPuEWbq6xu1Lqtwl5gRowuW+rjGKlMlYR+FJdr
+	 Y6TtCogw3+ysii1lsrME2nOZTpCOLB5CYT0wKMUvxaimQSdXhuFy99X4fX//GyRCyYw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795477749;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=XvAgZF6CkwRKo3VMFZxbR36QgXiqw9zi2A6dGkoweNA=;
-	b=k7Ryw1+mRBXUMnZXqSOkpAGiMPaOY1DP7aIAi7DNeAJli8P6JTKHxDiRKVchlpWzmGsL
-	 wIH93BGblEUXGMEYibdXdsZJOIWj+0Vy4wzQJMARRiAmUEdrBKU91gDRwF2Crv9duCpaC
-	 h3SU86gYmVqOJ9PPuL3/GUNZiPwmcBWj/veXv4GYca6pfBbkuRVQn4PTSZ1iSbHE1bGMf
-	 o2PoXqgs2UlP31VuDPqtAWo+CuPd57i2Md/AqH9LIlKD5udzSnz8b9I+nssWtJXDIObMc
-	 a/3WExj6oDuRCDbU1V0uq/v2a+wEqy+ZWLHIjuhsuP7t7AOs/Hq2l9mU1SY9vheJC4w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795478728;
+	h=DMARC-Filter:Received:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=+jrMj9cTwBpFasM+MTAFt7wSrL6hMS2Qjw7+3nEY9Pw=;
+	b=jEztZBSohGOn4grD9VrEjaGUE+gGLEZiEJBDNOrkTOQUVSnlfXASFzxPs+mrrrBr5oky
+	 oaML0/nAW8/B9gmCyOUsudjampqW/UvBV9/yw9/0SaupuqTqbs/HFE92pMoobStkFghAz
+	 w/PC/EYxhWRbz3Enh1OvRgaEH/uWhKqhR6WqDdvs1kG+YWjND1GoNgFazJkoS/bCnhtA2
+	 p4jUp5qW5Cmgq+Bdi7gfcBumeBpDZgP7p3T0iXFLp5BXlSr7cpT1GlXGmTnRQ5Zp2mRc/
+	 tuW6zBnPDw9KgnY3hllwpYI/EVuSMbIvZyzRHgdD+FyEBZNO+xnV4YhXsuvUn13BkwA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=foft4ovj;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=fail header.from=linux.dev;
+	spf=fail smtp.mailfrom=linux.dev;
+	arc=none smtp.remote-ip=69.171.232.181
+Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE9C7606A31E;
-	Mon, 23 Nov 2026 23:49:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=foft4ovj
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03F301F000C6;
-	Mon, 23 Nov 2026 23:49:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795477749;
-	bh=XvAgZF6CkwRKo3VMFZxbR36QgXiqw9zi2A6dGkoweNA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=foft4ovjFmNERzm+RAv+xWpfSO5wFzXeA0DrrAVZ6tOR7ovm78/E5KWERujlMYq/X
-	 Y8arbrbGoK90ZC3t4uMkSgIy7+xxwHOsgRctIsGR9k45sa+s9uOFBk46OaPeiFvtF8
-	 v/Z/qWFAZCm6slfIfs7Z1PfCyTNJoYUxXHj1Radbk6nsWF9pgI4iRNtRtYXpH2sAkv
-	 6q9U8MYJfG1fy01Ux6Jna7v5iOoK/xKb7DjC88fvr7VKgY4kIbft8UwvEgUzRaf9KV
-	 7G9tkA+3hZOb2WsHOT0qrjdjIZwZOutEUsGIwXGncft595bJUDJbVyXa4kTwgX6qSu
-	 Ohe9HrrUdGX8w==
-From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-To: Jiri Olsa <jolsa@kernel.org>
-Cc: Naveen N Rao <naveen@kernel.org>, "David S. Miller" <davem@davemloft.net>, Peter Zijlstra <peterz@infradead.org>, Steven Rostedt <rostedt@goodmis.org>, Ingo Molnar <mingo@redhat.com>, x86@kernel.org, linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCHv2 1/2] kprobes: Increase the kprobe hash table size
-Date: Tue, 24 Nov 2026 08:49:05 +0900
-Message-ID: <undine-1795477745290490698-99e2fcc5c9b45beb@undined.local>
-X-Mailer: UndineD 0.1
-In-Reply-To: <20261122200239.1481088-2-jolsa@kernel.org>
-References: <20261122200239.1481088-1-jolsa@kernel.org> <20261122200239.1481088-2-jolsa@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B054606A31E
+	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 00:05:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0B054606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
+Received: by devvm50310.atn0.facebook.com (Postfix, from userid 128203)
+	id 84A6C5989F91B; Mon, 23 Nov 2026 16:05:14 -0800 (PST)
+From: Yonghong Song <yonghong.song@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	kernel-team@fb.com
+Subject: [PATCH bpf-next v6 0/2] libbpf: Fix CO-RE relocations of unsigned 32-bit enum values
+Date: Mon, 23 Nov 2026 16:05:14 -0800
+Message-ID: <20261124000514.2955878-1-yonghong.song@linux.dev>
+X-Mailer: git-send-email 2.53.1
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -58,112 +51,77 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, 22 Nov 2026 21:02:38 +0100, Jiri Olsa <jolsa@kernel.org> wrote:
-> The kprobe hash table has 64 buckets, so with many probes registered
-> each get_kprobe() call walks a long chain. With 20000 probes that is
-> more than 300 entries per bucket on average, and every entry is a
-> separate struct kprobe, so the walk is mostly cache misses.
-> 
-> get_kprobe() is not called just once per registered probe. On x86 the
-> registration path calls it for each address it has to check around
-> the new probe: get_optimized_kprobe(), __recover_probed_insn(),
-> __recover_optprobed_insn() and arch_check_optimized_kprobe() all do
-> one lookup per byte or per decoded instruction, and most of these
-> lookups miss, which means walking the whole chain. It is also called
-> from the breakpoint and ftrace handlers on every probe hit.
-> 
-> Increase KPROBE_HASH_BITS from 6 to 12, which gives 4096 buckets and
-> cuts the chains to about 5 entries for 20000 probes and about 12
-> entries for 50000 probes.
-> 
-> Time to register the probes with the kprobe_many_example sample
-> module [1] (insmod with nr_functions=20000 and nr_functions=50000)
-> in a KVM guest, mean of 5 runs, for different KPROBE_HASH_BITS
-> values. The table memory is the size of the static kprobe_table on
-> 64-bit:
-> 
->   bits   buckets   table memory   20000 probes   50000 probes
->      6        64          512 B         4.71 s        29.99 s
->      8       256           2 KB         2.05 s         9.90 s
->     10      1024           8 KB         1.39 s         4.63 s
->     12      4096          32 KB         1.30 s         3.64 s
->     14     16384         128 KB         1.28 s         3.41 s
->     16     65536         512 KB         1.28 s         3.38 s
-> 
+For a BPF_CORE_ENUMVAL_VALUE relocation, libbpf sign-extends the value
+of a 32-bit enumerator even if the enum is unsigned. A value in
+[0x80000000, 0xffffffff], e.g., DCACHE_PRIVATE of enum dentry_flags,
+then doesn't match the zero-extended value clang emits, and the whole
+object is refused. And a target value in that range is patched
+sign-extended.
 
-Thank you for conducting the testing and evaluation. The results show
-a trend similar to that of a study I previously carried out[1].
+Patch 1 extends a 32-bit enum value according to the kflag of its enum,
+i.e., sign-extends it if the enum is signed (kflag 1), and zero-extends
+it otherwise (kflag 0), for both the local and the target value. The
+kernel builds the same relo_core.c, so it gets the fix too.
 
-[1] https://qiita.com/mhiramat/items/1bbeb309ee5dfbc979ce (Japanese
-article)
+GCC emits every 32-bit enum value sign-extended, since its
+__builtin_preserve_enum_value() returns int, so a GCC object with an
+unsigned enum value in [0x80000000, 0xffffffff] is now refused. That
+needs to be fixed in GCC.
 
-> With 12 bits the registration of 20000 probes is 3.6 times faster
-> and the registration of 50000 probes is 8.2 times faster than with
-> the current 6 bits. 12 bits is where the curve flattens: compared
-> to 10 bits it is still 21% faster for 50000 probes (6% for 20000),
-> while going further to 16 bits gains only 1.5% for 20000 probes and
-> 7% for 50000 probes, for a table 16 times bigger (512KB vs 32KB).
-> 
+Patch 2 tests the unsigned enum values. With GCC, the test is skipped
+if the target BTF has the unsigned enum.
 
-I personally think 6 bits is too small, maybe up until 9 bits (4KB)
-will be OK.
+Changelog:
+  v5 -> v6:
+    - v5: https://lore.kernel.org/bpf/20261120214957.868409-1-yonghong.so=
+ng@linux.dev/
+    - Extend a 32-bit enum value according to the kflag of its own enum
+      in bpf_core_calc_enumval_relo(), instead of zero-extending the
+      values in bpf_core_calc_relo() (patch 1).
+    - Don't take a target value with the kflag 0 as signed if the local
+      enum is signed, and drop its test (patch 3).
+    - Don't accept the sign-extended form of an unsigned enum value
+      emitted by GCC (patch 1), and skip the test with GCC instead
+      (patch 2).
+  v4 -> v5:
+    - v4: https://lore.kernel.org/bpf/20261120165540.2074139-1-yonghong.s=
+ong@linux.dev/
+    - Keep the sign extension in bpf_core_calc_enumval_relo(), and
+      zero-extend the 32-bit values of unsigned enums once in
+      bpf_core_calc_relo(). This drops btf_enum_value() from
+      include/linux/btf.h and the three helpers in relo_core.c. No
+      change in behavior (patch 1).
+  v3 -> v4:
+    - v3: https://lore.kernel.org/bpf/20261119232647.3392045-1-yonghong.s=
+ong@linux.dev/
+    - Take a 32-bit target enum value as signed if the target enum has
+      the kflag 0 but the local enum is signed, for the BTF of kernels
+      without enum signedness (patch 1).
+    - Test it with a target BTF whose enums have the kflag cleared
+      (patch 3).
+  v2 -> v3:
+    - v2: https://lore.kernel.org/bpf/20261119051443.1902163-1-yonghong.s=
+ong@linux.dev/
+    - Fold patch 3 into patch 1 and patch 4 into patch 2 to avoid test
+      failures when bisecting.
+  v1 -> v2:
+    - v1: https://lore.kernel.org/bpf/20261118161053.1768878-1-yonghong.s=
+ong@linux.dev/
+    - Accept the sign-extended enum values emitted by GCC (patch 3), and
+      make the new test work with GCC (patch 4).
 
-> The cost is the size of the static table, which grows from 64 to
-> 4096 hlist heads, that is from 512 bytes to 32KB on 64-bit. The
-> functions that walk the whole table (module notifier, arming or
-> optimizing all probes, the debugfs list) are slow paths that take
-> kprobe_mutex and now scan 4096 buckets.
+Yonghong Song (2):
+  libbpf: Fix CO-RE relocations of unsigned 32-bit enum values
+  selftests/bpf: Test CO-RE relocations of unsigned 32-bit enum values
 
-What I still fail to understand is the use case for employing such a large
-number of Kprobes simultaneously. If the goal is to trace individual
-functions, Fprobes are already available and offer better scalability.
-Personally, while I might occasionally deploy around 100 probes, I cannot
-conceive of a scenario requiring 1,000 or more. Would you have actual
-usecase maybe from eBPF?
+ tools/lib/bpf/relo_core.c                     |  9 +++++---
+ .../selftests/bpf/prog_tests/core_reloc.c     |  2 ++
+ .../selftests/bpf/progs/core_reloc_types.h    |  8 +++++++
+ .../bpf/progs/test_core_reloc_enumval.c       | 23 +++++++++++++++++++
+ 4 files changed, 39 insertions(+), 3 deletions(-)
 
-If this change is intended solely to improve performance for an extremely
-unlikely use case, I would, at the very least, make the size configurable
-via Kconfig.
+--=20
+2.53.1-Meta
 
-Since this change affects all architectures, those working with small,
-embedded-system chips might be reluctant to "pay" 32 KB for a use case
-that is highly unlikely to ever occur.
-
-Thank you,
-
-> 
-> The sample module was posted as the last patch of the kprobes
-> lookup cost series [1] only to demonstrate the testing, it is not
-> merged and is not going to be.
-> 
-> [1] https://lore.kernel.org/bpf/20261109195827.1091410-1-jolsa@kernel.org/
-> 
-> Suggested-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> ---
->  kernel/kprobes.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/kernel/kprobes.c b/kernel/kprobes.c
-> index f14f7ff45961..47ce0bfb7298 100644
-> --- a/kernel/kprobes.c
-> +++ b/kernel/kprobes.c
-> @@ -50,7 +50,7 @@
->  #include <asm/errno.h>
->  #include <linux/uaccess.h>
->  
-> -#define KPROBE_HASH_BITS 6
-> +#define KPROBE_HASH_BITS 12
->  #define KPROBE_TABLE_SIZE (1 << KPROBE_HASH_BITS)
->  
->  #if !defined(CONFIG_OPTPROBES) || !defined(CONFIG_SYSCTL)
-> -- 
-> 2.56.1
-> 
->
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
