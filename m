@@ -1,99 +1,69 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.51
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.19
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795533187;
-	b=q4ZuZbQMf0bWTrlQk9oIDwu7Vv2K05S4yVvz57kymEKiNrO/m+ONfRx3GKx+vaTxKEzV
-	 zSp9J0gR0POzRC+ONSkXWe1fl2u+lp5eQPH3jhU8GTEvIY8AvYSIq4rZg8DJakhZgVWo4
-	 Z8fJ92EDJE3Kt0vDW8hDaTZQF8U6btsUOnGnW20v7REzQ77dusIVUt6j5FBAlHpI13zMk
-	 2uZbBsbkWfmk4q7bCk3xRgVAexCdm2rKOd3Rl4nmw0XlEVxMb9/XZj59FRgqMYK1DOEi2
-	 oWEv8W83q95LZP3xBu1AgvG69/a5tSYEjeTXNIET7X1GkNJVFzPilzLFUmwdvc9x2Yg==
+	t=1795533932;
+	b=R5aBabC/OxNLdy0AAKEmE40TGCIAbXDC0xLuWpIL+a/sEG3yQaweB8xK4nv+o8mInKN0
+	 x8yYJPEVGPbiSOp+nNSX48IxA6kSQYHRs3QtcEJT+CAG+utXKqB+Ge2/YyQUWsaU6Qsr7
+	 Ip09wyI+l5ZpM4aM/U8xBKizME1P9iMsIcu/LfQWC5zM0DTT29CxGks8eYDU1wZdZ3mXX
+	 1BSE1s0/38zkUJVFn/Irc7uAzTaeXl063WSdKvPoAf0viRGoVXNrQq/hKPDFF4G2wnZi4
+	 9jGFJaQFmdqT2cR+N1Dp+GlWTDoksqG4MuV9RX/Xn7SlNtzFwjYZO1qoFfgZxRofElA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795533187;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	a=rsa-sha256; c=relaxed/relaxed; t=1795533932;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Message-ID:Date:
+	 MIME-Version:User-Agent:Subject:To:Cc:References:From:
+	 Content-Language:Autocrypt:In-Reply-To:Content-Type:
 	 Content-Transfer-Encoding;
-	bh=oSIagrRM61aKNDSM8lSa+5lNFq6nePeRvO38ASVlUbo=;
-	b=ZENYyixcnp6eMK6GlSS1hWYTu+E8TGLRZoaixRbs9+iFDVxwtxesmRu1im5UMnnkytU7
-	 OkskZStKlof2HVKwECuMTFnfQJVMUWKePZv3xoccbHRVjCSZJPw/5D+cBdWmMXD/88BrI
-	 Us5ZeX51990UZd31+TlXo25XH+xUVeTw30Dekp4BENNkpaePrZGqEzZHLs9JIvmGN20LJ
-	 dUdiareG/Dbfah0xK2DtG2jCWoYyUOfuW6HHulMrCGvxIrCiCfeSGk3iI4Cc0AUgyQZIO
-	 oSv8GTGnxGe+pNsk9+QJgiBcKkJ6UpBOO2zwyW41BhydfkcJa7RcRPJyLa0VgHQm4eA==
+	bh=btHphTAK6ohuPbBz+dF6c5OB060P3Vypyg9wmHrMU9M=;
+	b=p67tJ4sxGPR0SyAvKZhUycrRR9v9a0RrZB+btMSTDCL2q2VW4E6khskgZL3rlVco1tJY
+	 La4VFYoYuhudVDTmj5UCOYZK4qwcpE3jyZxTqCTV4EZ4pai9w02kD5j2/WPNyaZF1QcIe
+	 1kw4waL3zWQVgyxtAE7BgSgYsSN+EEfubYlzOTMyd+KEfo54E1uVqkaU8TjMytd1s6Wbb
+	 pWeQsZJ1VFh41ygDcnL5QXEPCPnpTmPymauBiw974IvacK/xspA9apVQgJa51vqN6DSG+
+	 /rknRFxg542O2t8XqaVTVjqyHMWMrREobw8LNxdfepP4wKYPVgLY/6cMlTYr1l6Oo0A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=blackwall.org;
-	spf=none smtp.mailfrom=blackwall.org;
-	dkim=pass header.d=blackwall.org header.i=@blackwall.org header.a=rsa-sha256 header.s=google header.b=luFFhWBn;
-	arc=none smtp.remote-ip=209.85.221.51
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b="h2Q/EGjZ";
+	arc=none smtp.remote-ip=198.175.65.19
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88DD6606A691
-	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 15:13:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 88DD6606A691
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=blackwall.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A80D606A31E;
+	Tue, 24 Nov 2026 15:25:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8A80D606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=blackwall.org header.i=@blackwall.org header.a=rsa-sha256 header.s=google header.b=luFFhWBn
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-491846221ffso3960243f8f.3
-        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 07:13:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall.org; s=google; t=1795533185; x=1796137985; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=oSIagrRM61aKNDSM8lSa+5lNFq6nePeRvO38ASVlUbo=;
-        b=luFFhWBnvJasuPduGXDLmcyKDdLH9NnCPVQ9aQyfP2EnOlw3gn545repZ/+MzWDiY2
-         T4iHI7kqLCdfRhSISFfIFeaiquVZlZQuXA38S3kHeIYxdNwM+SJ07xcXyyNVHiZpaajF
-         wMK8D6UcNgSGLCNA1s5vADQif883i1buZt/PM6pdSsBY9g8Zh+rh6FAzcyD53e4vpx48
-         Yi8PEo7LCqqHcnPveb5TjQsOjVxykDJa5PHpyWR041h809n9mobzfyt1+KVbJE6EnsG0
-         Hlw5tagWS3zDIXCLfn693UCABVzx/yI62mN7imPk1twMeGIosXKfPsxY2xInYY2i+L3R
-         Rzhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795533185; x=1796137985;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=oSIagrRM61aKNDSM8lSa+5lNFq6nePeRvO38ASVlUbo=;
-        b=zdnNmRxb0E49Vfc/kGQpG0udGDkyRFggpS/e70LQ1Yx3eY45Nc6vdUgaHkcxTP0hV8
-         ziw0/RQXD7tK/SQhIMLUfxQHpUb4vsfAgBd8MkFBvn13fpgOHUn8c/rkjypbuRzDKY4a
-         OBw7lMbIhM0o21TzuxnlLCOM3z4Y3QbvqQwuPT02By0IfiuT7irpMjKvF2I495G7EY3f
-         LxvqqssuYSEN0futpEB18E15B7kIo3eJypYxNHVE0EVitMfSQ2DnLXaRS1pC66lL81++
-         s6MqNUR7KdcAUWxph4P21llLaC/RePwhs0D2f5u3YPL3VhbocQjjIW90ALJnxk4Anm6Z
-         4gAA==
-X-Gm-Message-State: APuU4Z/dzI7XMopC3V2aU7jBtahXr/2On19ns2NWOKCU5VxWduQIvFnd
-	bW8/gwXTvMqmHXo5/haLGPnQkAgpjkIWEAJSBvufEvsjDJEUSQBKY7URGa4jwP49tYdwOYOYQro
-	PdPjULCApSg==
-X-Gm-Gg: AZFdTZfBZD5GDktkUXdueCbrE7Ag/YADW47/PogtRwgmvWco4VARdKkb/uFamsqILZ4
-	3jfeZmkqb0JNAg3Q/yhD6josceWD0CCoQXyJL5q/RwKsNvwM8hFxGAK7TXHDOfDvajtOM/Ivw7I
-	W6Wgtp5ql/CUHLKNSx9WibWNLN2D1auA2q9/XC2cOLfDbhrSGO+I2i/6oAZ8bAYAmH8uIeHedb6
-	RERZNVkbnA1Npf89EpOS8/+YKvBpFNc7uRq5OIvYe0m4NUy6pdiCRhPyZ5yrYV4Ve9nrUr27YI3
-	/06OMXckv9BeGbl72hMCU98Hw6OlaOKD1/Oz0dM/O3n2UKYUOiOBN706xupnEVmNadQS4kC6Uid
-	BCgW2OvzpIqKTgivm1jmw1Oa0k+d0pNOMT5FZVJ6Gqq7O/Blc/jdhWc0WI5Gp/DCIPWFBIuz9AQ
-	iRcSnnjMQiRKgZIeJ6rx8Sd6jtUZ+aROU3wW9tRTd+zSfZsMQ4/Wbo9/joiDMc9E0jSgl805RF3
-	l6urLIdLXPjPqZPujIUmmd5e8WRDSCb+MN/+JXdUhu53QxgnEpgQEaa/VJ3Ob46bZpA/dASmqMK
-	0XyadbDd3DEvCZM3TbyLBatkdva3CTQq8+ivg9aU9PQFBwGLJfI=
-X-Received: by 2002:a05:600c:1d8c:b0:4a1:c5eb:b445 with SMTP id 5b1f17b1804b1-4bb88820436mr309578445e9.35.1795533184836;
-        Tue, 24 Nov 2026 07:13:04 -0800 (PST)
-Received: from localhost (78-154-14-127.ip.btc-net.bg. [78.154.14.127])
-        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-4bb906640a2sm229067635e9.0.2026.11.24.07.13.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Nov 2026 07:13:03 -0800 (PST)
-From: Nikolay Aleksandrov <razor@blackwall.org>
-To: bpf@vger.kernel.org
-Cc: Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	netdev@vger.kernel.org,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Stanislav Fomichev <sdf.kernel@gmail.com>,
-	Nikolay Aleksandrov <razor@blackwall.org>
-Subject: [PATCH RFC bpf-next 4/4] selftests/bpf: test netkit socket assignment to a transparent proxy
-Date: Tue, 24 Nov 2026 17:12:44 +0200
-Message-ID: <20261124151244.1423343-5-razor@blackwall.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20261124151244.1423343-1-razor@blackwall.org>
-References: <20261124151244.1423343-1-razor@blackwall.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=h2Q/EGjZ
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1795533932; x=1827069932;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=VoZnG4/Zmf85feJ91RzB+8Y7XiJQJA34orV55heIZhA=;
+  b=h2Q/EGjZaAp4pCAR6vwQqkORrFTqMvjLmXMwG98Mj5lHmGLfSPikrKKZ
+   UOyl/B4yJuWimH/fpNpIBmnLEL0KNqC7p0ElAr6q0eMIOzmJOyz1o+F73
+   YNh1VXG/fTAzcQ0160E1f/XdfudIdH/IP0CGqzpFEE8oeOoMBQ2gmzYjg
+   xoWhwUxhBERS19S9o1B1yoSFFVW+/2axBcTmJNwZJm0VxBeYJp/QcnNB8
+   7vwamF9odt8YLFZ/AV3djXBHqRehrSjGdlUU9/0kgkfZhtoEb4EUoB1zS
+   1WFfqWjw6f7FHlrd4HYY7takSTmdnFJvzHA+zoIB4UBHnEZdHzOwAczti
+   Q==;
+X-CSE-ConnectionGUID: J6ljxaLLRwaCATPGyv7eig==
+X-CSE-MsgGUID: y1ytumulQLGdKO9tYsiQhg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11976"; a="4431081"
+X-IronPort-AV: E=Sophos;i="6.27,231,1787036400"; 
+   d="scan'208";a="4431081"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2026 07:25:31 -0800
+X-CSE-ConnectionGUID: FgZA4N8EQtW0+VpBoyKjxQ==
+X-CSE-MsgGUID: ST24igQJSUSuqdRCulpDoQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,231,1787036400"; 
+   d="scan'208";a="11793927"
+Received: from sghuge-mobl2.amr.corp.intel.com (HELO [10.125.110.20]) ([10.125.110.20])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2026 07:25:29 -0800
+Message-ID: <077779c3-aac7-49c5-8887-0d4266caa2d6@intel.com>
+Date: Tue, 24 Nov 2026 07:25:27 -0800
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -103,326 +73,97 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v1 1/3] x86/mm: Resolve BPF exception fixups for
+ user address faults under SMAP
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Borislav Petkov <bp@alien8.de>, bpf@vger.kernel.org,
+ Puranjay Mohan <puranjay@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Eduard Zingerman <eddyz87@gmail.com>, Emil Tsalapatis
+ <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>,
+ Dave Hansen <dave.hansen@linux.intel.com>, Andy Lutomirski
+ <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
+ Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+ kkd@meta.com, kernel-team@meta.com, x86@kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20261009024925.3169077-1-memxor@gmail.com>
+ <20261009024925.3169077-2-memxor@gmail.com>
+ <20261009041346.GHashp-hYpLl-o-l3M@fat_crate.local>
+ <DM0ESVBT9553.2S1RWK1W7M8WW@gmail.com>
+ <a08e55c4-26dd-4502-9cca-b063387a0e06@intel.com>
+ <CAP01T77AiqVjyTJbHYqXe2v_h+PYzFEe3DeVTc1nyZVnzOfd5w@mail.gmail.com>
+From: Dave Hansen <dave.hansen@intel.com>
+Content-Language: en-US
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+In-Reply-To: <CAP01T77AiqVjyTJbHYqXe2v_h+PYzFEe3DeVTc1nyZVnzOfd5w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Attach a netkit peer program that assigns TCP SYNs and UDP datagrams for
-a non-local service address to a transparent host socket on another
-port. Check for IPv4 and IPv6 that the datagram reaches the proxy socket
-and that the connection is accepted with the original destination. Only
-the SYN is assigned, the rest of a TCP connection uses the normal
-lookup, so no TCP data is exchanged.
+On 11/23/26 09:23, Kumar Kartikeya Dwivedi wrote:
+> It would be equivalent of doing copy_from_kernel_nofault() in the
+> normal kernel.
 
-Clone each assigned packet to the host netkit device while the netkit
-program is still running. A tcx egress program on that device tries to
-assign the proxy socket to the clone and checks for -EOPNOTSUPP. The
-clone has no socket, so if the netkit gate accepted any skb while the
-netkit program runs, the helper would return 0. Skip the subtests when
-the kernel does not provide netkit.
+... and running afoul a userspace address. So, no, it's not equivalent.
+These accesses are more wild than anything else we have in the kernel.
 
-Signed-off-by: Nikolay Aleksandrov <razor@blackwall.org>
----
- .../bpf/prog_tests/sk_assign_netkit.c         | 189 ++++++++++++++++++
- .../selftests/bpf/progs/sk_assign_netkit.c    |  95 +++++++++
- 2 files changed, 284 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/sk_assign_netkit.c
- create mode 100644 tools/testing/selftests/bpf/progs/sk_assign_netkit.c
+So I kinda reject this bit of the reasoning that's been presented quite
+frequently.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sk_assign_netkit.c b/tools/testing/selftests/bpf/prog_tests/sk_assign_netkit.c
-new file mode 100644
-index 000000000000..59dc204318ca
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/sk_assign_netkit.c
-@@ -0,0 +1,189 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <uapi/linux/if_link.h>
-+#include <net/if.h>
-+#include <test_progs.h>
-+#include "network_helpers.h"
-+#include "netlink_helpers.h"
-+#include "sk_assign_netkit.skel.h"
-+
-+#define NS_HOST "sk_assign_host"
-+#define NS_POD "sk_assign_pod"
-+#define HOST_DEV "nk_host"
-+#define POD_DEV "nk0"
-+#define SERVICE_ADDR4 "198.18.0.99"
-+#define SERVICE_ADDR6 "2001:db8:99::99"
-+#define SERVICE_PORT 18080
-+#define PROXY_PORT 15001
-+#define TEST_DATA "test"
-+#define IO_TIMEOUT_MS 1000
-+
-+struct iplink_req {
-+	struct nlmsghdr n;
-+	struct ifinfomsg i;
-+	char buf[512];
-+};
-+
-+static int transparent_socket(int fd, void *opts)
-+{
-+	int one = 1;
-+
-+	return setsockopt(fd, SOL_IP, IP_TRANSPARENT, &one, sizeof(one));
-+}
-+
-+static int create_netkit(void)
-+{
-+	struct rtnl_handle rth = { .fd = -1 };
-+	struct rtattr *linkinfo, *data;
-+	struct iplink_req req = {};
-+	int err;
-+
-+	err = rtnl_open(&rth, 0);
-+	if (err)
-+		return err;
-+
-+	req.n.nlmsg_len = NLMSG_LENGTH(sizeof(req.i));
-+	req.n.nlmsg_flags = NLM_F_REQUEST | NLM_F_CREATE | NLM_F_EXCL;
-+	req.n.nlmsg_type = RTM_NEWLINK;
-+	addattrstrz(&req.n, sizeof(req), IFLA_IFNAME, HOST_DEV);
-+	linkinfo = addattr_nest(&req.n, sizeof(req), IFLA_LINKINFO);
-+	addattrstrz(&req.n, sizeof(req), IFLA_INFO_KIND, "netkit");
-+	data = addattr_nest(&req.n, sizeof(req), IFLA_INFO_DATA);
-+	addattr32(&req.n, sizeof(req), IFLA_NETKIT_MODE, NETKIT_L2);
-+	addattr_nest_end(&req.n, data);
-+	addattr_nest_end(&req.n, linkinfo);
-+
-+	errno = 0;
-+	err = rtnl_talk(&rth, &req.n, NULL);
-+	if (err && errno)
-+		err = -errno;
-+	rtnl_close(&rth);
-+	return err;
-+}
-+
-+static bool setup_netkit(int family, const char *dest)
-+{
-+	const char *host = family == AF_INET ? "10.88.0.1" : "fd88::1";
-+	const char *pod = family == AF_INET ? "10.88.0.2" : "fd88::2";
-+	const char *dad = family == AF_INET6 ? "nodad" : "";
-+	int prefix = family == AF_INET ? 24 : 64;
-+
-+	SYS(fail, "ip link set %s netns %s", POD_DEV, NS_POD);
-+	SYS(fail, "ip link set %s up", HOST_DEV);
-+	SYS(fail, "ip -n %s link set %s up", NS_POD, POD_DEV);
-+	SYS(fail, "ip addr add %s/%d dev %s %s", host, prefix, HOST_DEV, dad);
-+	SYS(fail, "ip -n %s addr add %s/%d dev %s %s", NS_POD, pod, prefix,
-+	    POD_DEV, dad);
-+	SYS(fail, "ip -n %s route add default via %s", NS_POD, host);
-+	SYS(fail, "ip route add local %s dev lo", dest);
-+	return true;
-+fail:
-+	return false;
-+}
-+
-+static void run_netkit(int family, int type)
-+{
-+	static const struct network_helper_opts opts = {
-+		.timeout_ms = IO_TIMEOUT_MS,
-+		.post_socket_cb = transparent_socket,
-+	};
-+	const char *dest = family == AF_INET ? SERVICE_ADDR4 : SERVICE_ADDR6;
-+	int server = -1, client = -1, accepted = -1;
-+	struct netns_obj *host = NULL, *pod = NULL;
-+	struct sk_assign_netkit *skel = NULL;
-+	struct sockaddr_storage expected;
-+	unsigned int ifindex;
-+	struct nstoken *tok;
-+	socklen_t len;
-+	int err;
-+
-+	host = netns_new(NS_HOST, true);
-+	if (!ASSERT_OK_PTR(host, "host_netns"))
-+		return;
-+	pod = netns_new(NS_POD, false);
-+	if (!ASSERT_OK_PTR(pod, "pod_netns"))
-+		goto cleanup;
-+	err = create_netkit();
-+	if (err == -EOPNOTSUPP || err == -ENODEV) {
-+		printf("%s:SKIP: CONFIG_NETKIT is unavailable\n", __func__);
-+		test__skip();
-+		goto cleanup;
-+	}
-+	if (!ASSERT_OK(err, "create_netkit") || !setup_netkit(family, dest))
-+		goto cleanup;
-+
-+	server = start_server_str(family, type, NULL, PROXY_PORT, &opts);
-+	if (!ASSERT_OK_FD(server, "start_server"))
-+		goto cleanup;
-+	skel = sk_assign_netkit__open();
-+	if (!ASSERT_OK_PTR(skel, "skel_open"))
-+		goto cleanup;
-+	skel->rodata->service_port = SERVICE_PORT;
-+	skel->rodata->proxy_port = PROXY_PORT;
-+	if (!ASSERT_OK(sk_assign_netkit__load(skel), "skel_load"))
-+		goto cleanup;
-+	ifindex = if_nametoindex(HOST_DEV);
-+	skel->links.assign_proxy = bpf_program__attach_netkit(
-+		skel->progs.assign_proxy, ifindex, NULL);
-+	if (!ASSERT_OK_PTR(skel->links.assign_proxy, "attach_netkit"))
-+		goto cleanup;
-+	skel->links.egress_assign = bpf_program__attach_tcx(
-+		skel->progs.egress_assign, ifindex, NULL);
-+	if (!ASSERT_OK_PTR(skel->links.egress_assign, "attach_tcx_egress"))
-+		goto cleanup;
-+	if (!ASSERT_OK(make_sockaddr(family, dest, SERVICE_PORT, &expected,
-+				     &len), "make_sockaddr"))
-+		goto cleanup;
-+
-+	tok = open_netns(NS_POD);
-+	if (!ASSERT_OK_PTR(tok, "open_pod"))
-+		goto cleanup;
-+	client = connect_to_addr(type, &expected, len, NULL);
-+	close_netns(tok);
-+	if (!ASSERT_OK_FD(client, "connect_client"))
-+		goto cleanup;
-+	if (type == SOCK_DGRAM) {
-+		char buf[sizeof(TEST_DATA) - 1];
-+
-+		if (!ASSERT_EQ(send(client, TEST_DATA, sizeof(buf), 0),
-+			       sizeof(buf), "send_client") ||
-+		    !ASSERT_EQ(recv(server, buf, sizeof(buf), 0),
-+			       sizeof(buf), "recv_server") ||
-+		    !ASSERT_MEMEQ(buf, TEST_DATA, sizeof(buf), "proxy_payload"))
-+			goto cleanup;
-+	} else {
-+		socklen_t actual_len = sizeof(struct sockaddr_storage);
-+		struct sockaddr_storage actual = {};
-+
-+		accepted = accept(server, NULL, NULL);
-+		if (!ASSERT_OK_FD(accepted, "accept") ||
-+		    !ASSERT_OK(getsockname(accepted, (void *)&actual,
-+					   &actual_len), "getsockname") ||
-+		    !ASSERT_EQ(actual_len, len, "original_address_len") ||
-+		    !ASSERT_MEMEQ(&actual, &expected, len, "original_dst"))
-+			goto cleanup;
-+	}
-+	ASSERT_OK(skel->bss->proxy_err, "assign_and_clone");
-+	ASSERT_EQ(skel->data->egress_ret, -EOPNOTSUPP, "egress_rejected");
-+cleanup:
-+	sk_assign_netkit__destroy(skel);
-+	if (accepted >= 0)
-+		close(accepted);
-+	if (client >= 0)
-+		close(client);
-+	if (server >= 0)
-+		close(server);
-+	netns_free(pod);
-+	netns_free(host);
-+}
-+
-+void test_sk_assign_netkit(void)
-+{
-+	if (test__start_subtest("tcpv4"))
-+		run_netkit(AF_INET, SOCK_STREAM);
-+	if (test__start_subtest("tcpv6"))
-+		run_netkit(AF_INET6, SOCK_STREAM);
-+	if (test__start_subtest("udpv4"))
-+		run_netkit(AF_INET, SOCK_DGRAM);
-+	if (test__start_subtest("udpv6"))
-+		run_netkit(AF_INET6, SOCK_DGRAM);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/sk_assign_netkit.c b/tools/testing/selftests/bpf/progs/sk_assign_netkit.c
-new file mode 100644
-index 000000000000..1837486de4b3
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/sk_assign_netkit.c
-@@ -0,0 +1,95 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include "vmlinux.h"
-+#include <asm-generic/errno-base.h>
-+#include <bpf/bpf_endian.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_tracing_net.h"
-+
-+#define SKIP_PACKET 1
-+
-+const volatile __u16 service_port;
-+const volatile __u16 proxy_port;
-+int proxy_err;
-+int egress_ret = SKIP_PACKET;
-+
-+static __always_inline int assign_proxy_sock(struct __sk_buff *skb)
-+{
-+	void *data_end = (void *)(long)skb->data_end;
-+	void *data = (void *)(long)skb->data;
-+	struct bpf_sock_tuple tuple = {};
-+	struct bpf_sock *sk;
-+	__u8 proto;
-+	__u32 len;
-+	void *l4;
-+	int ret;
-+
-+	if (skb->protocol == bpf_htons(ETH_P_IP)) {
-+		struct iphdr *iph = data + ETH_HLEN;
-+
-+		if (iph + 1 > data_end || iph->ihl != 5)
-+			return SKIP_PACKET;
-+		proto = iph->protocol;
-+		l4 = iph + 1;
-+		tuple.ipv4.dport = bpf_htons(proxy_port);
-+		len = sizeof(tuple.ipv4);
-+	} else if (skb->protocol == bpf_htons(ETH_P_IPV6)) {
-+		struct ipv6hdr *ip6h = data + ETH_HLEN;
-+
-+		if (ip6h + 1 > data_end)
-+			return SKIP_PACKET;
-+		proto = ip6h->nexthdr;
-+		l4 = ip6h + 1;
-+		tuple.ipv6.dport = bpf_htons(proxy_port);
-+		len = sizeof(tuple.ipv6);
-+	} else {
-+		return SKIP_PACKET;
-+	}
-+	if (proto == IPPROTO_TCP) {
-+		struct tcphdr *th = l4;
-+
-+		if (th + 1 > data_end || th->dest != bpf_htons(service_port) ||
-+		    !th->syn || th->ack)
-+			return SKIP_PACKET;
-+		sk = bpf_sk_lookup_tcp(skb, &tuple, len, BPF_F_CURRENT_NETNS, 0);
-+	} else if (proto == IPPROTO_UDP) {
-+		struct udphdr *uh = l4;
-+
-+		if (uh + 1 > data_end || uh->dest != bpf_htons(service_port))
-+			return SKIP_PACKET;
-+		sk = bpf_sk_lookup_udp(skb, &tuple, len, BPF_F_CURRENT_NETNS, 0);
-+	} else {
-+		return SKIP_PACKET;
-+	}
-+	if (!sk)
-+		return -ENOENT;
-+	ret = bpf_sk_assign(skb, sk, 0);
-+	bpf_sk_release(sk);
-+	return ret;
-+}
-+
-+SEC("netkit/peer")
-+int assign_proxy(struct __sk_buff *skb)
-+{
-+	int ret;
-+
-+	ret = assign_proxy_sock(skb);
-+	if (ret == SKIP_PACKET)
-+		return NETKIT_PASS;
-+	if (!ret)
-+		ret = bpf_clone_redirect(skb, skb->ifindex, 0);
-+	if (ret) {
-+		proxy_err = ret;
-+		return NETKIT_DROP;
-+	}
-+	return NETKIT_PASS;
-+}
-+
-+SEC("tcx/egress")
-+int egress_assign(struct __sk_buff *skb)
-+{
-+	if (egress_ret == SKIP_PACKET)
-+		egress_ret = assign_proxy_sock(skb);
-+	return TCX_PASS;
-+}
-+
-+char LICENSE[] SEC("license") = "GPL";
--- 
-2.47.3
+>> Also, can you talk a bit about the code generation on the BPF side here?
+>> Are the instructions covered by the exception table handler all pure MOV's?
+> 
+> That is correct. Each extable entry covers a single load into a
+> register. mov for 4 and 8 byte loads, movzx for 1 and 2 byte loads, and
+> movsx/movsxd for the sign-extending ones. On a fault, ex_handler_bpf()
+> zeroes the destination register and skips the instruction.
 
+I think that's also important to call out in the changelogs. Because the
+"zero the register" behavior doesn't necessarily work for the whole ISA.
+
+This all makes me really nervous.
+
+Do we at least require that these super specialized programs have the
+bpf_prog_info->gpl_compatible bit set?
