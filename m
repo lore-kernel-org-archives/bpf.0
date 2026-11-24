@@ -1,101 +1,157 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.174
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795542569;
-	b=elMlCyHICXI9c7J6U8mDZivr2NJTf4Qpj8ROFotZDlIksZ7sjiauQKSk5GZXVMs9fyjO
-	 UJN0MypOc+EEJ6mqsFZjRJK+UaCtlXHl3IMlcbGudwMiQl7YXK+wymcmRnP+yrzbWqJWk
-	 IA+N44PPzfNdrSrJSaK6EwfGHm1e29PS4bpMFX20HR2H9zjPu/hwJkoPh/c5PPinKMYmE
-	 xydYAcOJ6HEMLFQ/DbvyzVULm8Sj0bjcvCDnKxIGnk2KXwlCfFJgLbBTf2SON9wFxhy6T
-	 QvPb0lSU5s3DN5PFdpVyVpcJPC39PgqMZ2KAAqH8D10+pIKaH0CAGsKGKzh2ZE5TjjQ==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795542569;
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.53
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795543115;
+	b=hFi1agHzvtpE1E25AqIc5jr2tyZb7ncARbf3i40R9ddbtF6aPlcYtBB+QMviY00w/PHX
+	 IGOfJyjqDI97mQa9dwQhoRvHseJKW4xpmuOIlmu7qKxM+2HFf89PuINT+diQyWg36q3mO
+	 etbhvyTl4JIZYUbRdK1Ugf/t2RmxyuMSd0JHv+K7saKLxrFTd/c6OncwbtuEDBSfSobOD
+	 Sv18FeBZoSLdQ4PWX65jKNDo8n0Jd7Wa+ls0PslrCDZmH2xo36noUEnEE63w3qOaagXdT
+	 s+PbXb2PkojIPCarzg1psY10yPtezBFtcLeMOjSE6XFyNfC0XT6sTGA4bz0fhVM3QEQ==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795543115;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=rZpsKsMasCu0VG55k4IFjBDsARDNBPmeWnpoFmnC3rQ=;
-	b=L9YtdM+Llo8r9HDHvJ5KhphQqeh1VI7XRIiiQZLV0oAJlODAXzeXd2n8S88yyCZ8Kwk6
-	 P5HXWJCdsCaICDoE3dx9FyjSLwCOSxspX7yA8vJTA0BOiKXRJUN/2hltsLwdy2jG+BqPA
-	 LGtkRC2fpIUBU1wEBGT7b8/HvYAB2NWduhaFAHTpCMxMqGcmqMwyCWk9pyh3EHIVDfUTs
-	 77LD6tVoYvVNA9wrfiX27Opc8f8YpK0diNfUS6LhnCxnktTFp8oftD4U2MzRFueXMrdHh
-	 GYsBkKWfD+mGpNV4e/y08HtcXcNfqgsBDTFU7uv9XjLJrL4G/DaRNgprWj8ufzG92pg==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=e7UYrUF4;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.174
-Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=aQUx3TL65pMyWzlf2bMKB3xiAtfdB/7ZATJytxZbwVM=;
+	b=pylmI/pV1Ve7zSg1RSRv2jCaG/IE8bYd4bxXIV+IOnJYHK8lRufcbpex3ECSl3RR95EV
+	 gCYltEcVyHSUVD5PBDpf8cdM/iGDfRUNUHN7m5DNemZp3ozTcXC3opK3J/yIDCQTq38kO
+	 FJrvKayGcC9nRKMAZYqQkgmp2htMrKAf3zSM4+HDKLF9glgyJaPN/isjCQWbGsg0kPGrQ
+	 uNvcuUCATVc2e+sFwTZUw2W4B7Ofw6e7g1HOcVVm5MOTZxk5q+nj5pZe3R2jS3EVNtn/R
+	 w1vxVSYHcHvkSv7HhNr8OwhvwS2rRsoDwSzJVeFd9rGK1gpw4RJE9JgMrYJTNM2236w==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=cloudflare.com;
+	spf=pass smtp.mailfrom=cloudflare.com;
+	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=CaJCF+Ut;
+	arc=none smtp.remote-ip=209.85.218.53
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17C06606A31E
-	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 17:49:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 17C06606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF2DD606A323
+	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 17:58:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BF2DD606A323
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=e7UYrUF4
-Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-533202fe429so983121cf.0
-        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 09:49:27 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795542567; cv=none;
-        d=google.com; s=arc-20260327;
-        b=Ddh+/82rnV8zGqgr/71lpXsr5OYtLbwDXO18b04k6UXG2XAyPJPohbC2T+yrMTTysC
-         TiEWxehDLtENFiL/w0Z2CN7/eaylHAs//4OOfLDsWGp4MHB3AJxpoCitiuhrpBnWfjQP
-         ztQ/KV6nthw7qdS9bs+Y4W5TaVYlpmjLIq0Bl59Bk9fTTnDJtfmy6r8luHhY6cEKL1BD
-         7P55bgKRegrvdaUZbCo1fFBWX54ImMeuJ0gn+Nwr23ysgLpKVDWI4KvB7QzArFhK/B2d
-         EobwKhh7lyKlJrkVQT4IcjHkoafIDyWDuNWS8PDasLJsNCKd8C5IqwHVR2tlbwDgVS2Y
-         aHRg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=rZpsKsMasCu0VG55k4IFjBDsARDNBPmeWnpoFmnC3rQ=;
-        fh=dTPXIyzbB3BK+8S0OGzIg9RXIlfe7Z/OZMJQ4L0Z9BE=;
-        b=S9/X7+vxvvAjMjVqm6GEPF19rcdQWUklScWlimBviGQJwgq6EFZC7mY9Nkd/MFOqZe
-         OW2ZeN6qPzgaRdNQbx1eftv0fFn5NmCNMq4vcajI7fuOSGH7skpp/uWy4ppTi7HCkhOf
-         /7EIdTKZSIUEa8Q3Y31dltQsVR9YoadeY2/ZVdEtVlqcoP7g9Au1IzMNrCrwgoZ0YzD0
-         cqUHxXO87XEzsR1+IssMsqi5MccLO255GlDkHUZiJfQpvzSw/OuQako8tTPMArRKsGl9
-         cWdArWRj+iWJGIKO2ELthBXzfwWVNH0hQI0sQYNv+aSrPtnAjjHQ/eo5AgSoiwOi6Q7f
-         rIzw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=CaJCF+Ut
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-c50cc7540b7so674195566b.0
+        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 09:58:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795542567; x=1796147367; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=rZpsKsMasCu0VG55k4IFjBDsARDNBPmeWnpoFmnC3rQ=;
-        b=e7UYrUF4nKBxaC4jgXXgDe3ZHrbdY4HWtnith9cwWZ5pPz2rLq2vrIC1LAn7Bqtsn+
-         qRPXxsQL6IUeSY4EqKzAPkao+gInkgCliPsaW6eapl7cul2FUcBTg/EkOYIKRYDSj4P6
-         M0w2/jLe0ObjVWu9Vp569S59fawsJ6IhiF+k1yRM1qhp6QRb1EGhBuNgrjdYc4IJ3nys
-         n30s4RRkTEzz0BLshm2yaYf9HGiI12deEVOMMk/qcTkCr6vxyvy+ajm/2kcPSMgGpiAz
-         x9uFRLvarokBWXFGSJ6NWWFAY57w03jxyEo90ZmKtqp+G1R9VhLof92MbJKOi4LuM17q
-         lN6w==
+        d=cloudflare.com; s=google09082023; t=1795543113; x=1796147913; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=aQUx3TL65pMyWzlf2bMKB3xiAtfdB/7ZATJytxZbwVM=;
+        b=CaJCF+Ut4+fp0euaRNosEJ0+zYbVC5DJBYCBoaCM/Ta7mZpi0TIN0doFHLGqpMAYv3
+         KL9LzXaZcL8wmGKubksSn9bjdSC8If/vVxCKIVQPzCdgmJx4ogqShBYcPZfpB1pL/mAI
+         RPip0q3RfpT5bNMxbzG0vloKfFYX3+uJ486DKYs+rJUylupPn518FsodC7ao4/egBijf
+         zPXtyDx4iv8+WGY9jBX+EBbaDv2eclRZxitXE2GqPu9ITLdTxr9mRk1ahoip+gwIXPP4
+         CH8GQjTP3d+IJrNuz1iU9u/Z8JOm5Y7g3StzHMTQFot6WFFpysnohxOWN+rP9cxk4jia
+         dyWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795542567; x=1796147367;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=rZpsKsMasCu0VG55k4IFjBDsARDNBPmeWnpoFmnC3rQ=;
-        b=mBDYqrwYnXrCDo7G5iL3YPXn1eix6fVlSYjY0qX+RuFBkbRJN/swpqpYrFDIBvMLmY
-         LwsQPNcPnYgDlrmV5vK9nG1iBkRdlZztYY4ZWSYiUOdut3DXeyx0DfUSGH5egNlkY11R
-         hK/IK9EkEUwZjN4h35mta6Lvbz46eSVlkSl5tin55DCFIW0hXY5v2jTNOOrzGCBeIWms
-         EoURXw5UNFjLEmACfv1jNKpk1CpKgRY30WJ92kHHWT559kT6PGOSVItcnc+HwsjFr9PT
-         9D0n+IQTRzi62p2lSypzdEF3y7XxfHY+f+sZkri1XK5nfX/mmiCKqFRg7OROLuwwcoW7
-         BA9Q==
-X-Forwarded-Encrypted: i=1; AL+hErHA2rmOEfE5+s3ucx3Xcotcn0sn0IXEJ5lYTe0pq4n0zPv5nSf0eSgBmCD4eYnIcN074Gw=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+X+0CLh7YAq4ban4A5+kqCW927/wtZfteaGC457u3naXSYFBwE
-	ddmg82BXNXAgB4ZSMDUCzqwgjryE2M26iEoE6VmQJ79eBQa6YkT2u1VJRiHkON4Org1uSPgxUul
-	2aeEdbLtFtP+CUWlUp8Kd8n760TM+jN6hRV5vltEa8LJIw+2wyeY6xJLtHHY=
-X-Gm-Gg: AZFdTZeLbo5lJngiyq5yYRo2X+7jHDgMMm3xtCpfn5rex0n03SoYHMgvoOWHEqMuuJV
-	M5DdMalUYTmvKxtOkJJNAkooJi6AC4o7yclvzai+URdPB7dCKhDUjJ2ev9Z5kfC2izEHxqQDOg9
-	KJ2eeNwqkleZ4PfUgQ6KOF/fhMiBt4tiAbLDRD40Be0t7tbhaiHh0LY4yu2YQrxGWKRZjAKq8FX
-	m8AsxvoL9mvdyMnyAi7WplhgQmMpWnXEWfK9Md/yQ5UzfrNcpvhlNw3xl1V9m4EKQhfixXHEh3i
-	svH2teMnVXiUNKGMSPwWSmJNHKopy0nlyXXem61Bz01haBRb+Jv5nwrJqCDJDbtIaGeOsaGyUQ3
-	05epEn3gkMiawoYhzL18alux11PilsHfmpXkpb/Gwjps5TBmS1Qqm5D5a225JrrWDZMv11buOSV
-	Gw4suglQcfTqsl+7o9GKY+O0k0ha6/wHg3gEoDSBT/9+uPOxeB
-X-Received: by 2002:a05:622a:1f14:b0:545:7949:80a5 with SMTP id
- d75a77b69052e-55d890663bamr62644371cf.12.1795542566115; Tue, 24 Nov 2026
- 09:49:26 -0800 (PST)
+        d=1e100.net; s=20260707; t=1795543113; x=1796147913;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=aQUx3TL65pMyWzlf2bMKB3xiAtfdB/7ZATJytxZbwVM=;
+        b=i+uVWDATlSjEFNPZNGdPBJaIIz86ZdZP/3NG2zKGYPHa7i480Xv1InlpiysEtOyZXv
+         j/8EhVt/OxD+RDTG8cURKyI5hPTyMCFMmJfqS95qdED/8MtKZ5/rFZWO6mDiIK0RAyWH
+         D7h0RUhjC6ZmLWf5ZovRxylEGr6ZFdsubzDM/BgYFhdgJQKQVBcKHW5PyWbL9I+Y0WKP
+         noXVR2KytAuyzJ7+qj2Sox5UNxvFiITzD50RckVeSnXoj3po8WqerukJ1S+/xd9Tm0iP
+         15Fi/XamCRh57VOybyrd5AC78yM2depd8jTqgTil4Rc50GVSZM+m0hTUlYcEBGb9UFUm
+         ZZaA==
+X-Forwarded-Encrypted: i=1; AL+hErGrqGcf8l0cD7qtHNCnvvblD+f+ZSdz9bhF1FkBf4DXS4ssCo2veb0r3o0vVQ13l0pR3mc=@vger.kernel.org
+X-Gm-Message-State: APuU4Z99NI04Xe3mRloya5+0sYV4aU0AHW5Hpyrw/CAIqUSX9qK5Ex9g
+	Sb4zNG+McbJ5p7U0rI11eEh9tahjlaxnf1dmOEML495AaHChw+2bJtVItCugfCyMkOc=
+X-Gm-Gg: AZFdTZeuT8z1gfEmaX+bdzxyvpVW6Uy00EykNDcZZQjjeDs/OzGsGgMrfmkBb24PSYP
+	4NfxpPvi1bVjNLjhzk0yTCtR68vIWAG59ro8zpPWraD1NXuQG5fiNFD9l6NO9V1CXFw9TZNNAo0
+	x5GU1KRAXVObjU9nHl/3sNOEXbwj37VY7qS8dhMus24JAB/QUOCx1CTxiVFyJM9dDrebgej2DYu
+	ugRGtQLMuC/p3+30AKFaAYql0x5FJQEp3rzfVkP8OFutLQnbZ1rskz6v3Qni8BMs9fePfME0nuL
+	cE0DDTsm83ILy31wsCxycG1aNUbGvAGevUpQryt3vvUhT4mu7MiZ5x6YH3rVsRZ8WvIF8XCv9GH
+	u82GAv3BfJBWqaeMTowKcAo2FjmIrdnbmpBt2AAEuSeg8lTJLVaLcMGpqYPI3kqArXzG6PQV7h+
+	+04DTXGHBtu1R/sQBoTi/imomn5F7p0+hdg05Y5LMeBVe0pf+OKHAlFLTdhJ7azCYyyhF7XxZum
+	g1vYGKac8HWKJ0JxEBztIPSdbaV9G/kyQlylc+XnDIbE3pOQyqHxOVAP7uX4QfMaYzXEVG/paZA
+	DVs9Q2QgxNwiHMG60ncu9uCAlccuMZLBVRwq5TbMyOg6fus=
+X-Received: by 2002:a05:6402:42c2:b0:6ba:90e0:cc06 with SMTP id 4fb4d7f45d1cf-6ba90e0cdc0mr7601394a12.28.1795543112897;
+        Tue, 24 Nov 2026 09:58:32 -0800 (PST)
+Received: from L9JK9NPFH9 ([2a09:bac6:37ad:1e5a::306:5])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6ba3711ad52sm7205762a12.35.2026.11.24.09.58.27
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Tue, 24 Nov 2026 09:58:32 -0800 (PST)
+From: Tianyi Gao <tianyi@cloudflare.com>
+To: netdev@vger.kernel.org,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Eric Dumazet <edumazet@kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Simon Horman <horms@kernel.org>,
+	David Keogh <dkeogh@amazon.com>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	David Woodhouse <dwmw2@infradead.org>,
+	Dragos Tatulea <dtatulea@nvidia.com>,
+	Nimrod Oren <noren@nvidia.com>,
+	Alasdair McWilliam <alasdair@mcwilliam.dev>,
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Magnus Karlsson <magnus.karlsson@intel.com>,
+	David Ahern <dsahern@kernel.org>,
+	Ido Schimmel <idosch@nvidia.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Breno Leitao <leitao@debian.org>,
+	=?UTF-8?q?Asbj=C3=B8rn=20Sloth=20T=C3=B8nnesen?= <ast@fiberby.net>,
+	Danielle Ratson <danieller@nvidia.com>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	bpf@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	kernel-team@cloudflare.com,
+	nh-open-source@amazon.com,
+	Stephen Hemminger <stephen@networkplumber.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	"Remy D. Farley" <one-d-wide@protonmail.com>,
+	Amery Hung <ameryhung@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Andy Roulin <aroulin@nvidia.com>,
+	Anil Kaushik <anilkaushikwireless@gmail.com>,
+	Demos Ra <demosthenes.ra@gmail.com>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Hangbin Liu <hangbin.liu@linux.dev>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Joe Damato <joe@dama.to>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Li RongQing <lirongqing@baidu.com>,
+	Louis Scalbert <louis.scalbert@6wind.com>,
+	Marc Kleine-Budde <mkl@pengutronix.de>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Martin Karsten <mkarsten@uwaterloo.ca>,
+	Matt Bobrowski <mattbobrowski@google.com>,
+	Michael Bommarito <michael.bommarito@gmail.com>,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	Runyu Xiao <runyu.xiao@seu.edu.cn>,
+	Song Liu <song@kernel.org>,
+	Thorsten Leemhuis <linux@leemhuis.info>,
+	Wang Zhan <wang.zhan@smartx.com>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Zhou Qiuyue <n0ps1edzz@gmail.com>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Jeff Layton <jlayton@kernel.org>,
+	Tianyi Gao <tianyi.gao@linux.dev>,
+	Tianyi Gao <tianyi@cloudflare.com>
+Subject: [PATCH net-next v3 00/11] net: extra TX headroom for local egress
+Date: Tue, 24 Nov 2026 17:58:13 +0000
+Message-ID: <20261124175824.60470-1-tianyi@cloudflare.com>
+X-Mailer: git-send-email 2.56.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -105,114 +161,188 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261124-vma-read-lock-mmdrop-async-v1-1-257f99f551de@kernel.org>
- <awWLCZ-jBjSD7V3M@pedro-suse.tail5790ac.ts.net> <CAJuCfpGk6eYK43Unxo+O4ML5=GM_siZ9owp6oa9fO0ipZXVg-g@mail.gmail.com>
- <CAJuCfpEd1rz3P7fB7W_mHkyzbpq9TscRE+QNwvHdYME=WJj6cw@mail.gmail.com>
- <awWz3nc_b8x3mIXq@gremlin> <CANk7y0gAxY18Ew+6j5YsqrOsf5Dx+v5M78r7_8JLXh5RHZj4qA@mail.gmail.com>
- <CAJuCfpFuDCUPTUi3SuAhmbtw5tubRZ0+YEY3PotjyJ8Or8pdQQ@mail.gmail.com>
- <awXHR007d8MlhJUC@gremlin> <20261124093328.3ba2e066e5d5081c69e0e667@linux-foundation.org>
-In-Reply-To: <20261124093328.3ba2e066e5d5081c69e0e667@linux-foundation.org>
-From: Suren Baghdasaryan <surenb@google.com>
-Date: Tue, 24 Nov 2026 09:49:13 -0800
-X-Gm-Features: Aa3M54rJtgRgH_rcKNgpafDHAbKng8SpV3uhoRslOvIjTwkRWkSfaO8JY91K7G8
-Message-ID: <CAJuCfpEmFEX5iqLw_c94a97rVrC+xBWpKnO4rVpeDgkUfAPq7Q@mail.gmail.com>
-Subject: Re: [PATCH] mm/vma: drop mm asynchronously in vma_start_read()
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>, Puranjay Mohan <puranjay12@gmail.com>, 
-	Pedro Falcato <pfalcato@suse.de>, Ingo Molnar <mingo@redhat.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>, 
-	Vincent Guittot <vincent.guittot@linaro.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
-	Valentin Schneider <vschneid@redhat.com>, K Prateek Nayak <kprateek.nayak@amd.com>, 
-	Kees Cook <kees@kernel.org>, David Hildenbrand <david@kernel.org>, 
-	"Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
-	Michal Hocko <mhocko@suse.com>, Shakeel Butt <shakeel.butt@linux.dev>, Jann Horn <jannh@google.com>, 
-	Alexei Starovoitov <ast@kernel.org>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org, Chris Mason <mason@kernel.org>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Tue, Nov 24, 2026 at 9:33=E2=80=AFAM Andrew Morton <akpm@linux-foundatio=
-n.org> wrote:
->
-> On Tue, 24 Nov 2026 17:23:35 +0000 "Lorenzo Stoakes (ARM)" <ljs@kernel.or=
-g> wrote:
->
-> > On Tue, Nov 24, 2026 at 08:34:40AM -0800, Suren Baghdasaryan wrote:
-> > > On Tue, Nov 24, 2026 at 8:06=E2=80=AFAM Puranjay Mohan <puranjay12@gm=
-ail.com> wrote:
-> > > >
-> > > > On Tue, Nov 24, 2026 at 9:28=E2=80=AFPM Lorenzo Stoakes (ARM) <ljs@=
-kernel.org> wrote:
-> > > > >
-> > > > > On Tue, Nov 24, 2026 at 07:51:42AM -0800, Suren Baghdasaryan wrot=
-e:
-> > > > > > Actually, VMAs are allocated from a SLAB_TYPESAFE_BY_RCU slub. =
-With
-> > > > > > that RCU unlocking move you don't need other_mm copy and the co=
-mment
-> > > > > > that comes with it. VMA won't be freed until RCU lock is droppe=
-d.
-> > > > >
-> > > > > Yeah but they can be reassigned? They won't be _freed_ until a gr=
-ace period but
-> > > > > they can go back to the slab and then allocated elsewhere  right?
-> > > > >
-> > > >
-> > > > Yes, they can go back to the slab and become a different VMA.
-> > >
-> > > Yeah, you are right about that. So, we either have to keep the RCU
-> > > unlock in place to keep other_mm comment valid (my personal
-> > > preference) or update the comment next to other_mm to explain the new
-> > > reason it is needed. Either way is fine with me.
-> >
-> > I think let's just change the comment?
-> >
-> > Andrew could you change:
-> >
-> >        * stable and can be freed in the narrow window after vma->vm_ref=
-cnt
-> >
-> > ->
-> >
-> >        * stable and can be reused in the narrow window after vma->vm_re=
-fcnt
-> >                            ^
-> >                            |
-> >                            just this freed -> reused :)
-> >
->
-> np.
->
-> --- a/mm/mmap_lock.c~mm-vma-drop-mm-asynchronously-in-vma_start_read-fix
-> +++ a/mm/mmap_lock.c
-> @@ -300,7 +300,7 @@ err:
->  err_unstable:
->         /*
->          * If vma got attached to another mm from under us, that mm is no=
-t
-> -        * stable and can be freed in the narrow window after vma->vm_ref=
-cnt
-> +        * stable and can be reused in the narrow window after vma->vm_re=
-fcnt
->          * is dropped and before rcuwait_wake_up(mm) is called. Grab it b=
-efore
->          * releasing vma->vm_refcnt.
->          */
+This is v3 of the series that David Keogh posted as an RFC [1].
+v1 is [2], v2 is [3].
 
-Sorry for being pedantic :)
-There is also this comment later on:
+Locally generated UDP, raw and AF_PACKET packets, and AF_XDP packets in
+copy mode, get only the headroom that needed_headroom asks for. If an
+XDP or TC program needs more, the skb is reallocated or copied for every
+packet. This happens in three cases:
 
-        other_mm =3D vma->vm_mm; /* use a copy as vma can be freed after
-we drop vm_refcnt */
+- An XDP program on a veth peer needs XDP_PACKET_HEADROOM (256 bytes).
+  The peer copies the packet.
+- A program at TC egress adds headers. The skb is reallocated.
+- A namespace sends through a veth pair, and a program at TC egress of
+  another device, such as the host uplink, adds headers. The skb is
+  reallocated on that device.
 
-That should be replaced too with:
+(patches 1-2, from David Keogh) This series adds tx_extra_headroom to
+struct net_device. It is added only where a locally generated skb is
+allocated.
 
-        other_mm =3D vma->vm_mm; /* use a copy as vma can be reused
-after we drop vm_refcnt */
+Each case sets tx_extra_headroom in its own way, to keep the new UAPI
+minimal:
 
-Again, just replacing "freed" to "reused".
-Thanks!
+- (patches 3-5) The kernel sets it when XDP is attached to the peer of
+  a veth or netkit device. New skbs on the device then reserve enough
+  headroom for XDP_PACKET_HEADROOM.
+- (patches 6-8) Add a BTF decl tag "tx_extra_headroom:<bytes>" as
+  UAPI. A tcx egress program declares it, and the verifier reads it at
+  load.
+- (patches 9-11) Add a VETH_INFO_TX_EXTRA_HEADROOM UAPI for headers that
+  another device pushes, such as the host uplink. It is like
+  IFLA_NETKIT_HEADROOM for netkit [4]. The CNI plugin sets it at veth
+  creation, as Cilium does with netkit [5].
 
-> _
->
+tx_extra_headroom is the sum of the extra headroom that each case
+requires, limited to 512 bytes. For example, a program at TC egress
+pushes a header, and XDP on the peer then still needs
+XDP_PACKET_HEADROOM in front of it. The kernel recalculates
+tx_extra_headroom when XDP or a tcx program is attached or detached.
+
+For all three cases, one option is to raise needed_headroom instead.
+This causes a regression for TCP and forwarding, because
+needed_headroom is also the minimum that ip_finish_output2() and
+ip_forward() require.
+
+Patch 3 depends on commit f564749b3b26 ("net: record XDP programs
+propagated to lower devices"), which is only in net-next, so the series
+targets net-next. Patches 6-8 change tcx and the verifier. An Ack from
+the BPF maintainers on them would be appreciated.
+
+Performance:
+
+All tests run on a Xeon E5-2640 v4 with a ConnectX-4 Lx NIC, on
+net-next at d6816d9a93b6. Details of the artifacts are in [6].
+
+The first table shows the regression when needed_headroom is raised
+to 256 on both ends of a veth pair. XDP runs on the namespace side:
+
+test                                 net-next       needed_headroom 256
+netns sends TCP to host              32.1 Gbit/s    30.8 Gbit/s
+host forwards 1400B UDP into netns   0.583 Mpps     0.366 Mpps
+
+The second table shows the gain from tx_extra_headroom in all three
+cases, with 1400-byte UDP payloads. All numbers come from one kernel
+with this series applied, with tx_extra_headroom off and on. Between
+two kernels, the code layout alone changed the rate by up to 13%.
+Off uses a benchmark-only patch for the XDP case [6], the push program
+without its decl tag, and a veth pair without
+VETH_INFO_TX_EXTRA_HEADROOM:
+
+test                                          off          on
+host to netns, generic XDP_PASS in netns      0.237 Mpps   0.283 Mpps
+host to netns, generic XDP_DROP in netns      0.386 Mpps   0.465 Mpps
+host to netns, 20-byte push at TC egress      0.385 Mpps   0.468 Mpps
+netns to uplink, 20-byte push on the uplink   0.190 Mpps   0.219 Mpps
+
+Out of scope:
+
+- Auto-tuning for the second and third cases [7].
+- Backlinking the originating netdev to set tx_extra_headroom for the
+  third case [8].
+- Native XDP on veth. veth_convert_skb_to_xdp_buff() still copies
+  these packets. A follow-up veth patch changes this for XDP_PASS and
+  XDP_DROP.
+
+Changes:
+
+v3:
+- Mount bpffs on /sys/fs/bpf in tx_extra_headroom.py if needed.
+  NIPA's VMs boot without it (Paolo).
+- Mention in 3/11 and in the documentation that native XDP on veth
+  still copies locally generated packets (Sashiko).
+- Document which packets get tx_extra_headroom, and the -EEXIST
+  failure for two decl tags (Sashiko).
+- Bind in copy mode with xdp_helper -t (Sashiko).
+- Add the maximum of tx-extra-headroom to rt-link.yaml (Sashiko).
+- Check the value set at veth creation at tcx ingress of the peer
+  (Sashiko).
+
+v2 [3]:
+- Drop "configurable" from the series title and rework the cover
+  letter.
+- Drop IFLA_TX_EXTRA_HEADROOM (Willem, Stephen).
+- Set tx_extra_headroom on veth XDP attach (Stephen), from the BPF decl
+  tag "tx_extra_headroom:<bytes>" on tcx attach (Dragos, Willem), and
+  with VETH_INFO_TX_EXTRA_HEADROOM at veth creation.
+- Turn the LL_ALLOC_SPACE() and LL_ALLOC_SPACE_EX() macros into static
+  inline functions (Willem).
+- Test the veth attribute with YNL only (Jakub).
+
+v1 [2]:
+- Add the veth XDP case and the needed_headroom regression data to the
+  cover letter.
+- Remove LL_RESERVED_SPACE_EXTRA(), which has no user.
+- Replace the RFC data-path selftests with a test of a push at TC
+  egress.
+- Add tests of generic XDP on a veth peer and of setting both ends of
+  a veth pair.
+
+RFC: [1]
+
+[1] https://lore.kernel.org/all/20261015235335.4162993-1-dkeogh@amazon.com/
+[2] https://lore.kernel.org/all/cover.1794020868.git.tianyi@cloudflare.com/
+[3] https://lore.kernel.org/all/20261119013830.36935-1-tianyi@cloudflare.com/
+[4] https://git.kernel.org/torvalds/c/b9ed315d3c4c
+[5] https://github.com/cilium/cilium/blob/4a5cd2a20e31/pkg/datapath/connector/netkit.go#L63-L67
+[6] https://github.com/tgao-cf/tx-extra-headroom-bench/tree/main
+[7] https://lore.kernel.org/all/20261108214356.95406-1-tianyi@cloudflare.com/
+[8] https://lore.kernel.org/all/20261110201250.95225-1-tianyi@cloudflare.com/
+---
+David Keogh will post a TCP test as a reply to this series.
+
+The iproute2 patch for VETH_INFO_TX_EXTRA_HEADROOM will be posted after
+this series is accepted.
+
+David Keogh (2):
+  net: add tx_extra_headroom and netdev_get_alloc_headroom()
+  net: reserve extra TX headroom for local egress
+
+Tianyi Gao (9):
+  net: set tx_extra_headroom of the peer on XDP attach
+  selftests: net: add flag to send a frame in xdp_helper
+  selftests: net: add tx_extra_headroom test
+  bpf, tcx: Set tx_extra_headroom from a decl tag on egress programs
+  selftests: net: tx_extra_headroom: test a push at TC egress
+  selftests/bpf: Test the tx_extra_headroom decl tag
+  veth: add VETH_INFO_TX_EXTRA_HEADROOM
+  netlink: specs: rt-link: add veth attributes
+  selftests: net: tx_extra_headroom: test the veth attribute
+
+ Documentation/netlink/specs/rt-link.yaml      |  16 +
+ .../networking/net_cachelines/net_device.rst  |   1 +
+ Documentation/networking/netdevices.rst       |  49 ++
+ drivers/net/veth.c                            |  44 ++
+ include/linux/bpf.h                           |   1 +
+ include/linux/netdevice.h                     |  40 +-
+ include/net/tcx.h                             |   6 +
+ include/uapi/linux/veth.h                     |   5 +-
+ kernel/bpf/tcx.c                              |  24 +
+ kernel/bpf/verifier.c                         |  31 ++
+ net/core/dev.c                                |  44 ++
+ net/ipv4/ip_output.c                          |   2 +-
+ net/ipv4/raw.c                                |   2 +-
+ net/ipv6/ip6_output.c                         |   2 +-
+ net/ipv6/raw.c                                |   2 +-
+ net/packet/af_packet.c                        |   7 +-
+ net/xdp/xsk.c                                 |   6 +-
+ tools/net/ynl/Makefile.deps                   |   3 +-
+ .../selftests/bpf/prog_tests/verifier.c       |   2 +
+ .../bpf/progs/verifier_tx_extra_headroom.c    |  40 ++
+ tools/testing/selftests/net/Makefile          |   1 +
+ tools/testing/selftests/net/lib/xdp_helper.c  |  85 +++-
+ .../selftests/net/tx_extra_headroom.bpf.c     | 138 ++++++
+ .../selftests/net/tx_extra_headroom.py        | 437 ++++++++++++++++++
+ 24 files changed, 964 insertions(+), 24 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_tx_extra_headroom.c
+ create mode 100644 tools/testing/selftests/net/tx_extra_headroom.bpf.c
+ create mode 100755 tools/testing/selftests/net/tx_extra_headroom.py
+
+
+base-commit: c2621b518b38ed38e280e008aa33e6c2d302f8cc
+-- 
+2.56.0
+
