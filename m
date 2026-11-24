@@ -1,56 +1,87 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.42
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795535976;
-	b=ags+VaVIcY2req7nrWb02VWRcB/EYz6WZtX5tS6ijKVtbdWZy86IezX6wVd9aqYOpfX7
-	 Ye1ICk0xLDIbkwTgTxIXJssGD1naUYcaMoANCV93CADXoZoEd0JvOuLIvPNQoGqJOYxjs
-	 O9Q/PYRJAlRXqbaXb6VBZGtCtUmC9QZMSMxn9xpkuho4GQlbXe8aYNd4Xc6UhwezAa8a+
-	 hYBC//H2KnT1ufcoaqQ6kgNwsfoVbUpqCvhoNBQ+A6lwzsBUWNfEEUILfZReYDZ6DagGl
-	 oGKaHWxWJbn67khizDjx9lrUPX7gaft414KD1VvKr08Q+r6geWWjSuJAiGi0ZdQo1YQ==
+	t=1795536292;
+	b=092So9vhBVqqu5OjUOwgQHbZEwFiMx3rIUsDqs6oiRbgNA2E15n1vROAe21xkva4S6cQ
+	 7dryueWz/KnUZL0Agt3W+lO08+SRUSNmvkZfj+ugfpl9ECtONqxLYNtICM7PRennT9nYE
+	 uQQU/d3h/gjOCvpuiao+1JLNd7DFp29bjFbXNuRmLY9W8ejhFuswoKYchtCSKoXVPyQSn
+	 gbmx4agIf27HEfAk35EpcngW6HTyMKAeVLXJHxXS5arSPq3m9MaOawmG47t7kpIsFNrkx
+	 yahHGpRAOLm0Jd4ptAF2ClFSOka1GH9fzInmHOz3wLGWmf8lMxGja7HFeBOAZoAVl6g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795535976;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=On1gIz+YL4CJ+Ow3aY8SIrgBX00chlAenVFVGFX/E7E=;
-	b=DE9LLOvZar1wR9W+Kn380Axj/hvVLd4aKcWl0TqpqEoSjArGxKy0lFQ7K4pCnRWBcw/f
-	 iPyCHp6hd3XonMfs3J/bHLpIh46Qu+12eL/Syyp4CgORQCt7ue73ZqiYJl3kEP8R7z9G9
-	 uo2wflF8mZv3c6mQRuHNFMbiqzRbUoQCRDiawU++lVgmQp4wNJr2+oEhfRlF2WJaTdO+y
-	 U2axxSxnj8LfQYuQwd3XDhchsRrvrhzacLu/1Wu7SkEM1mPtg6FFKvi+yiJqgv6Jcuytk
-	 UhYiLzOiZ85YRJpm2IinFJGvmyTvIalGimcVYkfK0X2p4f+9I6HbGqe4GsGkW36Lkfg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795536292;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Message-ID:Date:MIME-Version:User-Agent:Subject:Content-Language:To:
+	 References:From:In-Reply-To:Content-Type:Content-Transfer-Encoding;
+	bh=KezQ9tNMTEpbIH1UNsI1azAaM3sJdlBpXzC0uPhlAnQ=;
+	b=IhDkVgj9JkSKimG+IIg9TM7bOE88aoOMy5VerHXNBIRqJ4tSqzQ3huxiJNwaY9GbODVg
+	 UIswtdmJUpOYN3wtYq7gP02ijoEvM4n50I6BKSTQI7erSxoVmCc3ygSJwjy8yTCkLxpem
+	 HNCy/tEuJiqHCayRigqb/4XV0MJKqU2VCCT4mQcEGN0SmIWguQf8gAstcZZM0UsJIpkQw
+	 tbO9bPG1ftexGe/oDkM8qn/4uJiXh5Pw+lXq7tkDBCDixFJwg2bUS2Y9vZf/Z54rLlAjQ
+	 /xk6n2I8mGEPejDF1JmMC52vi7dB15uWWElNOsLTQxlqWDBlBGk5KarnpXO/cQSHRYg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=emhRHpeg;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=none header.from=blackwall.org;
+	spf=none smtp.mailfrom=blackwall.org;
+	dkim=pass header.d=blackwall.org header.i=@blackwall.org header.a=rsa-sha256 header.s=google header.b=H9x9EGYk;
+	arc=none smtp.remote-ip=209.85.128.42
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD100606A321
-	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 15:59:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA0BB606A321
+	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 16:04:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CA0BB606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=blackwall.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=emhRHpeg
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42A4C1F000C0;
-	Tue, 24 Nov 2026 15:59:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795535976;
-	bh=On1gIz+YL4CJ+Ow3aY8SIrgBX00chlAenVFVGFX/E7E=;
-	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=emhRHpegooLeaP63NARVExb7WnPuJmk9RSz8pKDJkrpVRZIIKerGoS7GyCryU8rUA
-	 V0ZE2J/fPhKv9orl9NyZjvyMg98F3fOAWPCsVcysHnJDPB4/kIYKaNFrmFJjGcxBT8
-	 gt9BsgL+/POkRZLySVstEIrWD9+Y8d13miGGv4jxmh1Jy+qAPtS8GHpw3IbuZ5EGO5
-	 Cgov4QYMJ/tdg6RsP8PyvUOxwSYXqmXZc8gcX8O0Qq97Ese7oDQQmg+CKJSrOFilnB
-	 V/YuPAxIw6buk1PY4ZBsIqF5NwafuWu2GlYhqVtUBcwIv4lqnpcv+WLINySQFjEKNx
-	 YnuNcOYzV05Jw==
-Message-ID: <sashiko-outbox-231505@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH RFC bpf-next 3/4] bpf: support bpf_sk_assign in netkit
- tx path
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Nikolay Aleksandrov" <razor@blackwall.org>, bpf@vger.kernel.org
-In-Reply-To: <20261124151244.1423343-4-razor@blackwall.org>
-References: <20261124151244.1423343-1-razor@blackwall.org>
- <20261124151244.1423343-4-razor@blackwall.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 24 Nov 2026 15:59:35 +0000
+	dkim=pass (2048-bit key) header.d=blackwall.org header.i=@blackwall.org header.a=rsa-sha256 header.s=google header.b=H9x9EGYk
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4bb6057b333so22161265e9.3
+        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 08:04:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=blackwall.org; s=google; t=1795536290; x=1796141090; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from:references
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=KezQ9tNMTEpbIH1UNsI1azAaM3sJdlBpXzC0uPhlAnQ=;
+        b=H9x9EGYkczeeZK05aMn4VjlhU9YdFldQbjYtVqMu5/ir/O2dVv72A/hjCBoYVhkzlZ
+         S0SILDC/kuHGmBYiq9eKfLFC20dYGC40nBEldfK4ix3w+FNm8+IPrFL6w34zAlnCRC1G
+         KXcLO2PGipCXQpgyPUkRVmh7KHppZGU5PF1bw6P7tJDtSFpHQteZoX0fRmrTUAava8JM
+         rdEg7CJaeXTLNdbM6mgQqP1AVCNCNWIS1BNyzfA63R8QgAohmb3N15EqcDeD6TgVBtFR
+         Kfgsr9IAxtGK7PJsK4wgW4BL4crlAAMdBlek+D3k8JU+Q6BhUBoMM7b5dRK8IfNZCl8p
+         IL1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795536290; x=1796141090;
+        h=content-transfer-encoding:content-type:in-reply-to:from:references
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=KezQ9tNMTEpbIH1UNsI1azAaM3sJdlBpXzC0uPhlAnQ=;
+        b=x97d5QG86NTvF1u3eXgBmKtQgM1YBXTLw1jzo4lQNZOXaazyDdg+vRlA9jkG4T1YrK
+         zs3zqgHsfAOyDlDt6gNPXvs0qSNuASMD9N7kfcM7QTh4/0V1CeTk1D2Cys2ykfROrbpN
+         htpYu2XZ3tiNYlZS1cw6FXSVX3fbtjgbFEmRL3GOgV6cuLyHdDet8gA7UfPQvOvPvGtF
+         0XIn9ZEKj6bJN/WXlEzKipjzOCnJTqRjRO4MDzb0YK6wHStY5IoQa9Bz5n6T0LLApdKt
+         6Pk7Zj2Z+Fybr73eKSx0ioJFSPPupBauaK4kBLaX60ZrYF22mHwUjutKvhIZzZONcoTn
+         WN9A==
+X-Forwarded-Encrypted: i=1; AL+hErHVLtFJFrCv30tbkztQi1b6QAacQZBkkn3iBn3vy6m5QUV/2MUNbvlW1F5D/q0ZaiSFuIw=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+NNJkxr07ugUF42nm0nY4e71S8QgMrP2tpl1Uh2p80CrJj4OXi
+	yj76gpEFN5kWQ+Ha4yfW54epVA1gXaLGRZjL8hBMlxP9cqiEbVPWB//e+ZN4OHOlgjw=
+X-Gm-Gg: AZFdTZfRzFkgJcrPjHKszTamzGhpYpf3GqFwKH2H0am713cTTr4dFqFcz+34WnLnAlJ
+	1yPxWai1opK2HNBmbfPYoreGdTeWVKaS3Q4dea2eJgcWfU50FYG4XckRmOa001dbHpMBJXAvzwq
+	r7EEDQb+dJVWrb4jP3qx9d4MBF2ckpF3x3iXh3sE/9hnf0vDxuYY4+sLBzV+BUwGdDZ325QWpoZ
+	ZsMwI4FXmdxn+r6PtWVmcr3FzlY1HBNI5TpuyK9tbcDetOUpGBMw1SjBrrhWUKpG9i/XbIz7b3m
+	UswCGQ6KX5sdf8zmjG+bjxF0i1kBv1RjG8RorhxBpC+7AAr2VtYylC0+G7hNBpFQEGhWv30NOYm
+	Cj4nUoen1LExHEfjomfZ0sFXK22b52Q5CM8Qoebwx+FpkDYrJb6EydlfHWbzeooWcBgB8FgAUIa
+	DhUSgvW0sXcfrmpKykd9u0N36c41KKbpubKC7WHNYyH80z6tFBCtJJT0CoAaHU5rAkfmBgH0gOo
+	boYsfmECFvW9kvOAOgzx4ljfj/E0hQPkxRNQkWc+X/LXy9jBKK0lJlztHneDfkeHUKhSwhGVhIk
+	g3+dHAWpX2pdwPz0uv67RgAB9/UatTyDVIni23/DG23SzS9Eyu82qBZoGYmJppH9VjjZtA0FMJj
+	f80Kl
+X-Received: by 2002:a05:600c:1c11:b0:4a1:e57b:667c with SMTP id 5b1f17b1804b1-4bb8881c357mr345245525e9.26.1795536290208;
+        Tue, 24 Nov 2026 08:04:50 -0800 (PST)
+Received: from [192.168.0.161] (78-154-14-127.ip.btc-net.bg. [78.154.14.127])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb8d4f9aa8sm405101745e9.4.2026.11.24.08.04.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 Nov 2026 08:04:48 -0800 (PST)
+Message-ID: <384d2102-c2e8-4363-ba4d-24c045524410@blackwall.org>
+Date: Tue, 24 Nov 2026 18:04:48 +0200
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -59,126 +90,33 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC bpf-next 3/4] bpf: support bpf_sk_assign in netkit tx
+ path
+Content-Language: en-US, bg
+To: sashiko-reviews@lists.linux.dev, bpf@vger.kernel.org
+References: <20261124151244.1423343-1-razor@blackwall.org>
+ <20261124151244.1423343-4-razor@blackwall.org>
+ <sashiko-outbox-231505@kernel.org>
+From: Nikolay Aleksandrov <razor@blackwall.org>
+In-Reply-To: <sashiko-outbox-231505@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issues to consider:
-- [High] bpf: missing L3/L4 protocol validation in bpf_sk_assign() and
-  inet_steal_sock()
-- [High] bpf: prefetched socket in netkit_xmit() not orphaned on forward
-  or xnet
---
+On 24/11/2026 17:59, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 2 potential
+> issues to consider:
+> - [High] bpf: missing L3/L4 protocol validation in bpf_sk_assign() and
+>    inet_steal_sock()
+> - [High] bpf: prefetched socket in netkit_xmit() not orphaned on forward
+>    or xnet
+> --
+[snip]
 
-commit 7a81b1ade7d996de1fa2508363693501dc7fc20e
-Author: Nikolay Aleksandrov <razor@blackwall.org>
+Both are pre-existing and noted in the cover letter. They're not introduced by
+this set.
 
-bpf: support bpf_sk_assign in netkit tx path
+Cheers,
+  Nik
 
-This commit enables bpf_sk_assign() for BPF programs running in the netkit
-transmit path by tracking the active skb in bpf_net_context and taking a
-reference on the assigned socket via sock_pfree_ref.
-
-> diff --git a/drivers/net/netkit.c b/drivers/net/netkit.c
-> index 75a1a561e5aab..d32d98cad6f65 100644
-> --- a/drivers/net/netkit.c
-> +++ b/drivers/net/netkit.c
-> @@ -53,15 +53,25 @@ static __always_inline int
->  netkit_run(const struct bpf_mprog_entry *entry, struct sk_buff *skb,
->  	   enum netkit_action ret)
->  {
-> +	struct bpf_net_context *bpf_net_ctx =3D bpf_net_ctx_get();
->  	const struct bpf_mprog_fp *fp;
->  	const struct bpf_prog *prog;
-> +	struct sk_buff *prev =3D NULL;
-> =20
-> +	if (bpf_net_ctx->ri.kern_flags & BPF_RI_F_NETKIT_SK_ASSIGN)
-> +		prev =3D bpf_net_ctx->sk_assign_skb;
-> +	bpf_net_ctx->sk_assign_skb =3D skb;
-> +	bpf_net_ctx->ri.kern_flags |=3D BPF_RI_F_NETKIT_SK_ASSIGN;
->  	bpf_mprog_foreach_prog(entry, fp, prog) {
->  		bpf_compute_data_pointers(skb);
->  		ret =3D bpf_prog_run(prog, skb);
->  		if (ret !=3D NETKIT_NEXT)
->  			break;
->  	}
-> +	if (prev)
-> +		bpf_net_ctx->sk_assign_skb =3D prev;
-> +	else
-> +		bpf_net_ctx->ri.kern_flags &=3D ~BPF_RI_F_NETKIT_SK_ASSIGN;
->  	return ret;
->  }
-
-[Severity: High]
-What happens if an skb with a prefetched socket is forwarded before
-reaching the peer's local IP receive path, or enters netkit_xmit()
-already carrying a prefetched socket?
-
-On NETKIT_PASS, __netif_rx(skb) feeds __netif_receive_skb_core() on the
-peer, which runs generic XDP, TC ingress (such as act_mirred or
-sch_frag), VLANs, and rx_handlers (such as bridge or macvlan) before
-ip_rcv().  Neither skb_scrub_packet(), __dev_queue_xmit(), nor
-netkit_prep_forward() orphans a prefetched socket.
-
-If the peer forwards the skb into another network namespace (for example
-via a macvlan, VLAN, or act_mirred), inet_steal_sock() and
-inet6_steal_sock() steal skb->sk without checking net_eq(sock_net(sk),
-net), delivering the packet to a socket in the wrong namespace.  If a
-frag_list skb carrying a prefetched socket reaches ip_do_fragment() or
-ip6_fragment() (via bridge netfilter or sch_frag), fragmentation sets
-frag->destructor =3D sock_wfree without charging sk_wmem_alloc,
-underflowing sk_wmem_alloc and freeing sk while still in use.  And if TC
-ingress assigns an unreferenced sock_pfree socket and forwards the skb
-into netkit_xmit(), __netif_rx() queues it to the backlog past the RCU
-read-side critical section, causing a use-after-free.
-
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index 3206b40887c5e..a8e7b46bd648e 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -8132,21 +8132,28 @@ static const struct bpf_func_proto bpf_tcp_gen_sy=
-ncookie_proto =3D {
-> =20
->  BPF_CALL_3(bpf_sk_assign, struct sk_buff *, skb, struct sock *, sk, u64,=
- flags)
->  {
-> +	bool from_netkit =3D netkit_runs_skb(skb);
-> +
->  	if (!sk || flags !=3D 0)
->  		return -EINVAL;
-> -	if (!skb_at_tc_ingress(skb))
-> +	if (from_netkit) {
-> +		if (!sk_fullsock(sk) || (!sk_is_tcp(sk) && !sk_is_udp(sk)) ||
-> +		    (skb->sk && !skb->destructor))
-> +			return -EOPNOTSUPP;
-> +	} else if (!skb_at_tc_ingress(skb)) {
->  		return -EOPNOTSUPP;
-> +	}
-
-[Severity: High]
-Can bpf_sk_assign() attach a socket whose address family or L4 protocol
-does not match the packet in skb?
-
-The from_netkit check allows any full TCP or UDP socket (AF_INET or
-AF_INET6), and when the packet enters ip_rcv() or ipv6_rcv() on the peer,
-the IP layer dispatches to tcp_v4_rcv(), udp_rcv(), tcp_v6_rcv(), or
-udpv6_rcv() based on the packet header.  Those handlers call
-inet_steal_sock() or inet6_steal_sock(), which return the prefetched
-fullsock without checking sk_family or sk_protocol:
-
-include/net/inet6_hashtables.h:inet6_steal_sock() {
-	...
-	sk =3D skb_steal_sock(skb, refcounted, &prefetched);
-	if (!sk)
-		return NULL;
-
-	if (!prefetched || !sk_fullsock(sk))
-		return sk;
-	...
-}
-
-If a netkit program assigns an AF_INET TCP socket or a UDP socket to an
-IPv6 TCP packet, tcp_v6_rcv() -> tcp_v6_do_rcv() steals it and computes
-tcp_inet6_sk(sk), causing type confusion and out-of-bounds slab accesses.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261124151244.1423=
-343-1-razor@blackwall.org?part=3D3
