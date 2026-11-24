@@ -1,57 +1,79 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795494475;
-	b=Uqs2b9HyhJFpvL402AS5IFlCYh476VA5ZI4TqzvPZMGtKqPDzNAp8PcvmyJ09WERqNeS
-	 ZdE3X5+hIWD25xq2wy1cyI0SHmXsXNnpNNHY5oiDtCodmGrXEdMqBdbWEn0h35fJciztL
-	 cvvtO0E6Rfbpwvjd2UsCq1tkR3j69npS4dJN3PlDVTm/P6VnawG81w8JwgH1wcRgDhEyF
-	 Kl4RpKlGe9mRW0nbi6SjRREs8raSHww78Jc8Ctcz9f0l8yocT2KSJqr2Q24Jbj4otdEZH
-	 WBXTD0foOp75qEcaC3k2QUo0JyxyiBURPhDNg8VVGmKp0LcTlkkcA5HM+SYf6Zda+pw==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795494475;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=3sgsCRjafLAvDvi+MwXgezmCR0GxlUJYMcxTCDAZpxQ=;
-	b=kOhnnBuDzfxgqdtLw+FG6snKLNfrrRb7IXQdFWz5ImtLboWaBIxJq4TwTmto7FCPlzEk
-	 SXEg6QudxY3qorbJY1zyGDrFW+d19NMHfsM/jxfvV5TDheMDeqTL3R6a7aXIZyTw+vI4m
-	 WL5G0urgpBQn7RBv7W5Pr4QO1FmaO0wkScXAlUweQnaKCgSxtoCoy1lT+b6E+CY20o+Xl
-	 xoRaCsmWCdSpU9monrcbfh4CnagXv2i3A2KJKohuv6fNKOIl0/PijlCOJwASXHtkKjttO
-	 ealrZipG1QP/uh+FZhLiAhmajmlvC2n+1siJiEKn0qXw39oWntIkjA9uHjTzQzm3/ug==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Vyt1Hbqy;
-	arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795494490;
+	b=c8cMlBegV6D/WhBK/duJqEzTeDVjziBQDmY6auyEv3/cGNYRaT3Wcq5Dn/KauCesf6Xk
+	 ztQJMYpEOqgkSufURkUHfxSB5j5DfsOhcIMo++1ATEs2SKUhFkbTk/kvwUcBJvW84GNJP
+	 CDwO8Wd5t6hdfnBkeje5kvPe0f6UpuM542Y3S69+JDtoWnaiz3mp7aoxBaaBVB1/VtPWb
+	 gMh6EpEFf/qd2N+XItyUKyiFUisO8NO2v7JYrPjQrvx983g4OX84V/4V5fRCbGswqTcVs
+	 dHYysRTuvGmLEcJMZ2XEEwnGOTS24JzQYSDdEBBupVkhY9zVEcVTYoFrTlgLfR/Ne+g==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795494490;
+	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:Message-Id:X-B4-Tracking:
+	 X-Change-ID:To:Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:
+	 X-Endpoint-Received:X-Original-From:Reply-To;
+	bh=hHypU3MBVkNWDt86hCOzcgVyrJp5GfhS4aRCatM/mXA=;
+	b=0kCc/erfUpH3CNOUWnReqYMejChkpac9DvgI2PtfSV2hV6P5ccDq6fYXgtPoRG6Yb4ZX
+	 QD3RuHWm2Dff42Ox1BFw7jbYotIicHtWyb7UIRB54cY1pICWYWH22a9VFEsB/P4D0uc/E
+	 x5DeZcgMvoVPncywplKtKUC5zOv/9nEd18nHge6gsIYIi4EU4ooCt6zYXp/kPFeslf9u2
+	 bIDqAZhjHTTc+JTvvbmmW9raYnvsYyU636jFEDbpDTE9nyRE+scT4qYhxZNL1yN+L/otY
+	 g9EZfhu5FTDNEUKLcvhxMbCsfSZGUfscMUVAZRGfsvdiSg8rLQC9/hxJ074xXblTtyQ==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=aSFlgDoZ;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85D1A606A322
-	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 04:27:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94C90606A322;
+	Tue, 24 Nov 2026 04:28:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Vyt1Hbqy
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18DF11F000E1;
-	Tue, 24 Nov 2026 04:27:55 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=aSFlgDoZ
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
+ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
+	t=1795494490;
+	b=UKr/2yefYvf8zEJWMswOe88AJh9NT9IcsrZxW4hjtaonfG5fiRcIlGg2zfZj8vY1eQLI
+	 fzwmptqVeK8uW4e0atTagiFEll3998gye84RLA3UmxinRB5NH563xVNzp5EZLU5QLl3pg
+	 69vSLAj3vBIiNfcNLt+zfhnEXc1cUgjMVDQmuyaHK/TODBBfAk+6YmxeRM+lMQdgce8je
+	 8oJPx2exeovqdqH8Kay1sug6J6hvM5OdS2T2zdyxZRptIuS/wwrtv6uy3TBGcxjsJ5ezz
+	 y3nqOoI+5ZDHN9STHdC6hyIRd9JMdDLUSAuAitzbl7821jOaXSxcawRiVZI312Fwpcw==
+ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1795494490;
+	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:
+	 X-Mailer:X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To;
+	bh=hHypU3MBVkNWDt86hCOzcgVyrJp5GfhS4aRCatM/mXA=;
+	b=ip5yRvq6K/TxY+bmUQd+dbJKMYgFX4h1sn/nF7Y5RQPeYmHscBsIXeFpHkK2PbmvZruk
+	 k7nUzmJ64opgtVQymLSfIbncNCCSi7FVrOnLWXUZGQIvBKzx4JEPvpEOFW5umsvyyRS1P
+	 d1jJBViz/ROfBHQD1qnkQ78glbZ9PJ3DcZ/81xzvEzVkLJrQGcAZissMgI67FjBwLFLgk
+	 nH22HcpCAe/T8Hy26uw/B1F53DTBhBYNOD71Gx5BH3ruKfv12d4xJN+DlXSt8o9CI2xqa
+	 b80lUc4JmM4mvwuyGpWaz7z6ZgAs7rU2BRHEuV+DYbbw/f2Rlnf2UU1GVAJDmjUdDGQ==
+ARC-Authentication-Results: i=1; smtp.kernel.org; 
+	arc=none smtp.remote-ip=100.80.115.77
+Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id D4B951F000C0;
+	Tue, 24 Nov 2026 04:28:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795494475;
-	bh=3sgsCRjafLAvDvi+MwXgezmCR0GxlUJYMcxTCDAZpxQ=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Vyt1HbqyfqSOzmKkJCieakSjf0qaVQrD7buX7S4czsvtZYGLJuvVOa9nQkjLdUKNf
-	 1zAKz2lmVAjsTjEPVBbfDRDF1WqujmioF1ilfRVsSNDbEHgxsFg5Ccc0yA1rIPs33X
-	 N4DVWp+1m8VFi8FaCTPU+4tRpI7jzAFNt+bDRQk8LD3g+qE0ae5VR010bopLuAtwA4
-	 vLU2Z+7hBgz8J45akgl7zfBE9v4CRsRl7WolQXihJuXKe8fm3HP/R2Av7m5TiosizQ
-	 shrXM72/eFJJ7/BoCq+UQUKQnaeJw4QqNrfZ2IhEM0Zmbwf/O5feQuhK6xd90Ljt3X
-	 udOliaYVUDWgg==
-Message-ID: <sashiko-outbox-230501@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next] net: gro: skip the checksum of fraglist GRO
- packets
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Rosen Penev" <rosenp@gmail.com>
-Cc: =?utf-8?b?b3BlbiBsaXN0OkJQRiBbTUlTQ106S2V5d29yZDooPzogYnxfKWJwZig/?=
- =?utf-8?b?OiBifF8p?= <bpf@vger.kernel.org>
-In-Reply-To: <20261123042735.139550-1-rosenp@gmail.com>
-References: <20261123042735.139550-1-rosenp@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 24 Nov 2026 04:27:54 +0000
+	s=k20260515; t=1795494490;
+	bh=hHypU3MBVkNWDt86hCOzcgVyrJp5GfhS4aRCatM/mXA=;
+	h=From:Date:Subject:To:Cc:Reply-To;
+	b=aSFlgDoZdG9N5b4sSNFzP7MnymePgoLrGInaGQPme/48U7p9EII1/EjiYoJHT5nh1
+	 2ua11qCZRFFe6EWrsGytCrZpSHWnhuRBtjQJpnMPVHLSW7Hy9JcMyONyU32Hg0SQjb
+	 dQ4GzxBup9aIB6Ds8ytksA9HF5FMIVzUuI93DLr8dLxBK577uWfdm5WPhpjudygWaE
+	 0usksAu065TzVY6R4cxez1WT1BhEPwF2zBK0uz7HWjpfV3ZUblHCO3qFO9vV/hFOVw
+	 1eCZcGUhwu+ELd83lgBEIbVj8bZWOgKmFw0wvLXpakX3tGllucvpankanyWPzGm3dz
+	 0dBA16SBucklg==
+Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
+	by lkml.kernel.org (Postfix) with ESMTP id 335EA4C88A;
+	Tue, 24 Nov 2026 04:28:03 +0000 (UTC)
+From: Suyuan Wang via B4 Relay <devnull+shyckless.gmail.com@kernel.org>
+Date: Tue, 24 Nov 2026 04:28:02 +0000
+Subject: [PATCH net] qede: Don't advertise XDP features on VFs without XDP
+ support
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -60,216 +82,83 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20261124-qede-vf-xdp-v1-1-6fd99227d178@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAFESBWsC/yWMQQrCMBQFr1Le2g9JiCJeRVxo/qt+F7EmbSmU3
+ t2oyxmYWVFZjBWnbkXhbNVeuYHfdUiPa75TTBsjuHDwPkR5UylzL4sO4pz6/TGlGJVoxVDY2/K
+ 7nZE54vKXdbo9mcbvB9v2AU/A5ad0AAAA
+X-Change-ID: 20261124-qede-vf-xdp-00d158cc44de
+To: john.fastabend@gmail.com, pabeni@redhat.com, davem@davemloft.net, 
+ daniel@iogearbox.net, andrew+netdev@lunn.ch, edumazet@kernel.org, 
+ hawk@kernel.org, ast@kernel.org, kuba@kernel.org
+Cc: netdev@vger.kernel.org, lorenzo@kernel.org, bpf@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, sdf@fomichev.me
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1795494482; l=2042;
+ i=shyckless@gmail.com; s=default; h=from:subject:message-id;
+ bh=vQr3uhj8nir4mygw+a8Vo5cg0xdsW+ekBDQFJzRYxlk=;
+ b=lccUFniknjtEaGIRnCUPoKnsqeDfSk0tVWSy5f0m4CGQE4Oz8pusaHVqxEGqoy/LrGLkyA2eW
+ 4S5jj63+juYCBCK/B/NDKcq+RWol+4WGDCd1krEANM9AFA2l9E5c7Mq
+X-Developer-Key: i=shyckless@gmail.com; a=ed25519;
+ pk=pMtccVGiWES3bV+7YBFuBclkvq2n2HBHQ5azaBrK2lY=
+X-Endpoint-Received: by B4 Relay for shyckless@gmail.com/default with
+ auth_id=1498
+X-Original-From: Suyuan Wang <shyckless@gmail.com>
+Reply-To: shyckless@gmail.com
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issues to consider:
-- [High] ipv6: gro: stale ipv6hdr pointer dereference in
-  tcp6_gro_receive()
-- [High] net: gro: CHECKSUM_NONE fraglist GRO skbs break GSO on
-  NETIF_F_GSO_FRAGLIST devs
-It also noticed 2 related pre-existing issues this patch does not
-introduce:
-- [High] tcp: missing protocol check in tcp_add_backlog() allows
-  cross-family coalesce [1]
-- [High] tcp: gro: stale CHECKSUM_COMPLETE on fraglist in
-  tcp4/6_gro_complete() [2]
---
+From: Suyuan Wang <stevewong@hust.edu.cn>
 
-commit fa341d1e23410a4c1023b2a324454cb1f2e9afbb
-Author: Rosen Penev <rosenp@gmail.com>
+A VF without XDP support gets qede_netdev_vf_ops, which has neither
+.ndo_bpf nor .ndo_xdp_xmit, but qede_init_ndev() still sets
 
-net: gro: skip the checksum of fraglist GRO packets
+	ndev->xdp_features = NETDEV_XDP_ACT_BASIC | NETDEV_XDP_ACT_REDIRECT |
+			     NETDEV_XDP_ACT_NDO_XMIT;
 
-This commit skips software TCP checksum validation during fraglist GRO and
-leaves the merged skb with CHECKSUM_NONE, teaching __skb_checksum_complete()
-to verify each frag_list segment individually on demand and moving
-tcp_add_backlog()'s checksum check ahead of skb_condense().
+for every device. The devmap code only allocates dev->xdp_bulkq when
+the device has .ndo_xdp_xmit, but the XDP redirect paths use
+NETDEV_XDP_ACT_NDO_XMIT to decide whether they can call bq_enqueue(),
+which dereferences dev->xdp_bulkq. So an XDP program running on another
+device can redirect a frame to such a VF, through a devmap or
+bpf_redirect(), and bq_enqueue() then dereferences a NULL xdp_bulkq.
 
-> diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c
-> index f2a5c8f3bf9d7..67897435291ae 100644
-> --- a/net/ipv4/tcp_ipv4.c
-> +++ b/net/ipv4/tcp_ipv4.c
-> @@ -1919,14 +1919,6 @@ enum skb_drop_reason tcp_add_backlog(struct sock *=
-sk, struct sk_buff *skb)
->  	int delta;
->  	int err;
-> =20
-> -	/* In case all data was pulled from skb frags (in __pskb_pull_tail()),
-> -	 * we can fix skb->truesize to its real value to avoid future drops.
-> -	 * This is valid because skb is not yet charged to the socket.
-> -	 * It has been noticed pure SACK packets were sometimes dropped
-> -	 * (if cooked by drivers without copybreak feature).
-> -	 */
-> -	skb_condense(skb);
-> -
->  	tcp_cleanup_skb(skb);
-> =20
->  	if (unlikely(tcp_checksum_complete(skb))) {
-> @@ -1937,6 +1929,17 @@ enum skb_drop_reason tcp_add_backlog(struct sock *=
-sk, struct sk_buff *skb)
->  		return SKB_DROP_REASON_TCP_CSUM;
->  	}
-> =20
-> +	/* Verify the checksum first: a TCP fraglist GRO skb left unverified
-> +	 * can only be checked while its packets are still on its frag_list.
-> +	 *
-> +	 * In case all data was pulled from skb frags (in __pskb_pull_tail()),
-> +	 * we can fix skb->truesize to its real value to avoid future drops.
-> +	 * This is valid because skb is not yet charged to the socket.
-> +	 * It has been noticed pure SACK packets were sometimes dropped
-> +	 * (if cooked by drivers without copybreak feature).
-> +	 */
-> +	skb_condense(skb);
-> +
->  	/* Attempt coalescing to last skb in backlog, even if we are
->  	 * above the limits.
->  	 * This is okay because skb capacity is limited to MAX_SKB_FRAGS.
+Only set the XDP features when the device uses ops with XDP support,
+that is on a PF or on a VF with xdp_supported.
 
-[Severity: High]
-This problem wasn't introduced by this patch, but can tcp_add_backlog()
-coalesce ETH_P_IPV6 and ETH_P_IP packets together when an AF_INET6 socket
-disconnects and reconnects to an IPv4-mapped peer [1]?
+Found with a static analysis tool and checked by hand.
 
-If tcp_v6_rcv() looks up the socket before userspace disconnects and
-reconnects it to an IPv4-mapped address while holding the socket lock, both
-the in-flight IPv6 packet and subsequent IPv4 packets are queued via
-tcp_add_backlog().  Neither the checks right below nor
-tcp_skb_can_collapse_rx() verify tail->protocol =3D=3D skb->protocol before
-skb_try_coalesce().  When __release_sock() drains the backlog into
-tcp_v4_do_rcv(), a stale IPv6 packet coalesced onto an IPv4 tail bypasses
-the skb->protocol check and injects stale payload, sequence numbers, or FIN
-flags into the IPv4 stream, while an IPv4 packet coalesced onto a stale
-IPv6 tail is dropped with it.
+Fixes: 66c0e13ad236 ("drivers: net: turn on XDP features")
+Cc: stable@vger.kernel.org
+Co-developed-by: Kaixuan Li <kaixuan.li@ntu.edu.sg>
+Signed-off-by: Kaixuan Li <kaixuan.li@ntu.edu.sg>
+Signed-off-by: Suyuan Wang <stevewong@hust.edu.cn>
+---
+Compile tested on x86_64 (W=1, no new warnings). I don't have qede
+hardware.
+---
+ drivers/net/ethernet/qlogic/qede/qede_main.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-> diff --git a/net/ipv4/tcp_offload.c b/net/ipv4/tcp_offload.c
-> index b84fcd07c7230..d38eaf24c3c58 100644
-> --- a/net/ipv4/tcp_offload.c
-> +++ b/net/ipv4/tcp_offload.c
-[ ... ]
-> @@ -465,7 +476,9 @@ INDIRECT_CALLABLE_SCOPE int tcp4_gro_complete(struct =
-sk_buff *skb, int thoff)
->  		skb_shinfo(skb)->gso_type |=3D SKB_GSO_FRAGLIST | SKB_GSO_TCPV4;
->  		skb_shinfo(skb)->gso_segs =3D NAPI_GRO_CB(skb)->count;
-> =20
-> -		__skb_incr_checksum_unnecessary(skb);
-> +		/* not verified, see skb_gro_flist_skip_csum() */
-> +		if (skb->ip_summed !=3D CHECKSUM_NONE)
-> +			__skb_incr_checksum_unnecessary(skb);
-> =20
->  		return 0;
->  	}
+diff --git a/drivers/net/ethernet/qlogic/qede/qede_main.c b/drivers/net/ethernet/qlogic/qede/qede_main.c
+index 7ed17faced54..19d13ef27d10 100644
+--- a/drivers/net/ethernet/qlogic/qede/qede_main.c
++++ b/drivers/net/ethernet/qlogic/qede/qede_main.c
+@@ -890,8 +890,11 @@ static void qede_init_ndev(struct qede_dev *edev)
+ 
+ 	ndev->hw_features = hw_features;
+ 
+-	ndev->xdp_features = NETDEV_XDP_ACT_BASIC | NETDEV_XDP_ACT_REDIRECT |
+-			     NETDEV_XDP_ACT_NDO_XMIT;
++	/* qede_netdev_vf_ops has no XDP callbacks */
++	if (!IS_VF(edev) || edev->dev_info.xdp_supported)
++		ndev->xdp_features = NETDEV_XDP_ACT_BASIC |
++				     NETDEV_XDP_ACT_REDIRECT |
++				     NETDEV_XDP_ACT_NDO_XMIT;
+ 
+ 	/* MTU range: 46 - 9600 */
+ 	ndev->min_mtu = ETH_ZLEN - ETH_HLEN;
 
-[Severity: High]
-Does leaving SKB_GSO_FRAGLIST packets as CHECKSUM_NONE break GSO handling
-on egress devices with NETIF_F_GSO_FRAGLIST (and similarly in
-tcp6_gro_complete())?
 
-include/linux/netdevice.h:netif_needs_gso() {
-	return skb_is_gso(skb) && (!skb_gso_ok(skb, features) ||
-		unlikely((skb->ip_summed !=3D CHECKSUM_PARTIAL) &&
-			 (skb->ip_summed !=3D CHECKSUM_UNNECESSARY)));
-}
 
-Because netif_needs_gso() returns true for CHECKSUM_NONE even when
-skb_gso_ok() is true, validate_xmit_skb() forces software GSO on virtual
-devices advertising NETIF_F_GSO_FRAGLIST | NETIF_F_FRAGLIST (such as
-bridges, veth, VLANs, or VRFs).  In tcp4_gso_segment() (and
-tcp6_gso_segment()):
 
-net/ipv4/tcp_offload.c:tcp4_gso_segment() {
-	...
-	if (skb_shinfo(skb)->gso_type & SKB_GSO_FRAGLIST) {
-		struct tcphdr *th =3D tcp_hdr(skb);
-
-		if ((skb_pagelen(skb) - th->doff * 4 =3D=3D skb_shinfo(skb)->gso_size) &&
-		    !(skb_shinfo(skb)->gso_type & SKB_GSO_DODGY))
-			return __tcp4_gso_segment_list(skb, features);
-
-		skb->ip_summed =3D CHECKSUM_NONE;
-	}
-
-	if (unlikely(skb->ip_summed !=3D CHECKSUM_PARTIAL)) {
-		...
-		th->check =3D 0;
-		skb->ip_summed =3D CHECKSUM_PARTIAL;
-		__tcp_v4_send_check(skb, iph->saddr, iph->daddr);
-	}
-
-	return tcp_gso_segment(skb, features);
-}
-
-Unmodified fraglist GRO skbs are immediately split by
-__tcp4_gso_segment_list() at the first virtual device instead of passing
-through as a GSO aggregate.  Worse, if the geometry was modified after GRO
-(for example by bpf_skb_pull_data()), tcp4_gso_segment() overwrites
-th->check with a pseudo-header checksum, sets CHECKSUM_PARTIAL, and calls
-tcp_gso_segment(), which sees skb_gso_ok(skb, features |
-NETIF_F_GSO_ROBUST) =3D=3D true and returns NULL without segmenting the skb,
-transmitting the broken fraglist skb unsegmented with an invalid
-th->check.
-
-[Severity: High]
-This problem wasn't introduced by this patch, but when packets arrive with
-CHECKSUM_COMPLETE, does __skb_incr_checksum_unnecessary() leave a stale
-single-segment skb->csum on the coalesced fraglist skb (and similarly in
-tcp6_gro_complete()) [2]?
-
-Each segment was already validated by skb_gro_checksum_validate() in
-tcp4_gro_receive(), which converted CHECKSUM_NONE to CHECKSUM_UNNECESSARY
-but left CHECKSUM_COMPLETE intact.  Because
-__skb_incr_checksum_unnecessary() only acts on CHECKSUM_NONE and
-CHECKSUM_UNNECESSARY, a CHECKSUM_COMPLETE fraglist skb keeps skb->csum from
-the first segment while skb->len spans the entire aggregate, causing
-later checksum checks in conntrack or local delivery to fail and drop the
-packet.
-
-> diff --git a/net/ipv6/tcpv6_offload.c b/net/ipv6/tcpv6_offload.c
-> index eec3778855eb8..9c5709b2bf721 100644
-> --- a/net/ipv6/tcpv6_offload.c
-> +++ b/net/ipv6/tcpv6_offload.c
-[ ... ]
-> @@ -56,10 +59,23 @@ static void tcp6_check_fraglist_gro(struct list_head =
-*head, struct sk_buff *skb,
->  static __always_inline struct sk_buff *tcp6_gro_receive(struct list_head=
- *head,
->  							struct sk_buff *skb)
->  {
-> +	const struct ipv6hdr *iph =3D skb_gro_network_header(skb);
-> +	unsigned int off =3D skb_gro_offset(skb);
->  	struct tcphdr *th;
-> =20
-> -	/* Don't bother verifying checksum if we're going to flush anyway. */
-> +	th =3D skb_gro_header(skb, off + sizeof(*th), off);
-> +	if (unlikely(!th))
-> +		goto flush;
-> +
-> +	if (unlikely(skb->dev->features & NETIF_F_GRO_FRAGLIST))
-> +		tcp6_check_fraglist_gro(head, skb, th);
-> +
-> +	/* Don't bother verifying checksum if we're going to flush anyway.
-> +	 * __skb_checksum_complete() can only verify the packets of a fraglist
-> +	 * skb without extension headers.
-> +	 */
->  	if (!NAPI_GRO_CB(skb)->flush &&
-> +	    !(skb_gro_flist_skip_csum(skb) && iph->nexthdr =3D=3D IPPROTO_TCP) =
-&&
->  	    skb_gro_checksum_validate(skb, IPPROTO_TCP,
->  				      ip6_gro_compute_pseudo))
->  		goto flush;
-
-[Severity: High]
-Can iph->nexthdr dereference freed memory after skb_gro_header()?
-
-iph is loaded via skb_gro_network_header(skb) before skb_gro_header() pulls
-the TCP header.  If off + sizeof(*th) exceeds frag0_len, skb_gro_header()
-falls back to skb_gro_header_slow() -> pskb_may_pull(), which can release
-the frag0 page or reallocate skb->head, leaving iph dangling when
-iph->nexthdr is read.  Fetching skb_gro_network_header(skb) after
-skb_gro_header() avoids the stale pointer.
-
-[1] https://sashiko.dev/#/bug/linux-54f30cb5-2d86-46d9-b2c9-c25a0adaef88
-[2] https://sashiko.dev/#/bug/linux-b1b0f506-a36b-4c96-bc55-812755610e6c
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261123042735.1395=
-50-1-rosenp@gmail.com?part=3D1
