@@ -1,101 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.171
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.179
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795535178;
-	b=SUYNDua/Gjy1Hx2E8GNn1sCD9VUq9RWVrOek2LCaAtLtiJs2TX/NzxHKr37aztj9zo1p
-	 ZF2wcR5SaEqs7LunUSgGfsfyM0sIluyfY5I39JTAizz/YNFXNHHZv945dMc8ya1xsa2bQ
-	 JM25aGqlEmET04vsel8SxCK5V959LlutfmK3myotvb9X95hrzjEgnfaXQV/wn78Ypzpj2
-	 X8Uv21CHFjNghYmW6RLTQGLJKbX1GDseL9BNaALD7npffRgjLrrpeFd9LSoz45gQnTH3S
-	 nVTVzMdf2+nlPwMdHS5hMm/ICQcASVtrCgBUnXH22oIUw5DhkkmIs3lWf5ryJFsRqHg==
+	t=1795535516;
+	b=yV0V9KNJDRXtTBi/VH7KTZ6dDN0d0YeZ3JTAxf0MafPnA6bqGcuCQiRAjAH8ZTBmuqIm
+	 2/XJ2Kv88IXyW3DTa+GosClFEUPUn+hKAbXWE0ZuZWat+vpGGpCMG8xoPs3Z8xIH3oV5F
+	 ezeOC5txjtztN8F95yNUt+71t5STwLZfkho49aSgyp/aHsng1McXi5+GFBD4weuMjaqms
+	 oBVJQ4QqayKQtplplVrT+Y/RJgIBIMaaH4wAmz0R4mJPAtUxzydtFMEc6R+1V7NTbGI12
+	 mCcXdXLIEQ6IM362Bq/l3x3q3F6ZkHXSrY7eEWqCawXWTUhrqeAsExS9mjEtuEt7zxQ==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795535178;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795535516;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
 	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
 	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=SOapY5CEQdlHxqSl9JrLPR3I2czhVi36uOATqS9W/YU=;
-	b=Wydn/gx5iHPwy9EcSSqdmbfUQj8FH3vMNrLzILyC7GessebR4C+RgUhbmGo+lm3uK55l
-	 +QS6c5JEePp/WcEF0JBXTRImPlbEMpJuGUVPun/pFwKG/1k0NcxMXe8t471/0knDtix/c
-	 f3lj4d4FICU4BKeYT8oBTL0G7d2cIdzye9y7ZRiHZawTXdViLhQ8T57RkRzwKHIG6Hu7A
-	 6KNwTs8IkPT9rDoqe94E4BG7MfUGYvUNYm1a4CzdDe0r/bDMf0tGIAOutkHzoP3SStFal
-	 gwGVmjnxBKtdDtT5hVNRFVGgNYbGBgXth2BJl7AoAS51Gh+QOtN4RcpPhTenSXlV/2w==
+	bh=7151zgqNmppt1FWLTyRdRTu2s96pKFEly/RuS9gjWeY=;
+	b=a7fkwBgajPC8hottz1aLiqVmloOrosJQGy3C6kJKVf8ZaOYVM8g/J+fq+iHgacQPURYk
+	 catOyfcMduikxr2egj7heLyYYH1GgNZzCtjkt/Aa5u4zvxS5xJAS/m5XQaXaIzhEZLUWN
+	 pFu+NWj+bMgtHyk1Q7uBMR+hnLxgXKEW6gtXMe+GbozOwqCAhb5sBcVh1joaNxK34CzxG
+	 STK/Ci6RCJqMD2hKQI0uZV9NX3GfzRx/CqYxCjHaaJQHM2KpdVzvDNZdw53GiQPbSivik
+	 Lk2tfsLb4Pv5YM6kVm8bHB6bMpDr0yF727vEvVppTdd0ZNYNkzpAYxeNCl8AkVHtSoQ==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=esU7yeLt;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.171
-Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=gYnNBYPL;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.179
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 611FB606A327
-	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 15:46:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 611FB606A327
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5774606A33F
+	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 15:51:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E5774606A33F
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=esU7yeLt
-Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-55c7445cf85so842171cf.1
-        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 07:46:17 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795535176; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=gYnNBYPL
+Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-55c7445cf85so844531cf.1
+        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 07:51:55 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795535515; cv=none;
         d=google.com; s=arc-20260327;
-        b=U0GBtuP0dV0c2QNGFMYSo4V7AuHkdRHKWohOpi7547hG8i0a7GYYrEPx9EooDnOWJL
-         gPEk8LOdqzq7aBj2MHuOPB+0XumLrGlxxfNL78MCEUUqFcBujTA3bFqi9xjk6Jo7dv0+
-         pOPJ0dI/pbj8DhTkBChwDDPyAZgvlVBr0T+udRx/8cUDP+6i8EkljpkSDGeEL66R2s+C
-         fX5lsDmpJaT2sRyylOupnaQ31Yb4vrTszVEBiwg9jfoxLntoG7wNI6gp9Hex2hmiShXe
-         BkQhrQ16BZZR6RMzHtDKXEhaqp8mkqfbrFSl0iO7Am3YwsuhsUIIJOucGdMufQ7y88lr
-         WaKw==
+        b=JzB2heNdZD4d/DUFDnTenOfHauc87h19PiCRiDo7eO+WQTP9Cyr60pixVTn2gnpbcA
+         kL2ppPX7XZolNvV/7/h7DTL5526KDM8W1/gCgSs5v0pYcLjO55wGuA3NHZBCHnEcWwK+
+         C8VQS4B7rvW9PWfYowxyfcQOv9Ou0C2pcGEwU7avdbnKo12bH4YQRbHGkYIKxhyeOhAW
+         XnshxQPV+TqxPXogjh8xX0JWa474aqfB5qdhW9XpYVGNEsBd2/CuHTFnQrX3xqlyG+DP
+         irSRDvW7FuOGS+RaK0T680sHbXFm8rXuIPwEj2YOHz9g/2it3FHwyKd9vNsLr92uX/nW
+         7xXA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=SOapY5CEQdlHxqSl9JrLPR3I2czhVi36uOATqS9W/YU=;
-        fh=mJUo3+ziKhytYNeVPoa2SGj5P0hYy8+XgzS4nGl+IVI=;
-        b=gNIqa1ZrFwr4oTS11WVQoY+ZoLCUOC7GkO7yYYU4qIcEqmwZCYTxGm8CfrMfVdxcwP
-         jemVEcY+A9052z8GbL4VyPmHdPAw79EfQ+EFzYNcqM2pZHdf1OAbzGsbK9uf2Yldhsvb
-         D03uaE+3xcsClSpUIw4Gojtik6XY/+Z8XbM6IIL5OOuAklSrWZ4z13tEQHghz2fzkHJM
-         //Dwf6TKXFIcX1PdBoIOCs0i3TngCTfrUXSaohwgP2XLnq6poCCowdK9CaSnEP3GEI8b
-         gQyGC0znhcyZRJdi95yrwKpNXcwFp/fBS/1JypPQqgkGON8yF3Vo4Uzu6SfyC++DLiGx
-         +1RQ==;
+        bh=7151zgqNmppt1FWLTyRdRTu2s96pKFEly/RuS9gjWeY=;
+        fh=WHdc3jo5t5xiVK8e0qbr8+qMYnZlD480JOuNmPpsiDk=;
+        b=arlh1QhJ/6RtC1Kq8x3RSPRhWaoh0HR/kIz2yALee7OutrLshCn5NTd729O9f3nskq
+         KNwUGzXx5g+9LxyyRU/1aEC8ygpohgzJH062ZwfgPy9QiNCri1U2cGIKbrRyap2wsWpQ
+         PBzpv1EZPQXSqV/AFRg4usw4/eAAEhtKflEqWlSApnLjlEEPsONZCChPuq1NSljTCdt+
+         r4C4oEQlIsZjN/T0s9eMKBDvNn8O6dXgYfRcffu/toEJ8hqWnVAFto+pHHqNEsdrt6T5
+         Bsn7UPclrsmW+jWrM9vgd+4zOL7FNCgyhxl3JS/Bp73A96muMJpp0E7Jil8ervSdKhCp
+         hFfg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795535176; x=1796139976; darn=vger.kernel.org;
+        d=google.com; s=20260707; t=1795535515; x=1796140315; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=SOapY5CEQdlHxqSl9JrLPR3I2czhVi36uOATqS9W/YU=;
-        b=esU7yeLt0A3qCM3mlu0xOTw9SC/PfBCz4ES1uqtiBgcLCvu8EPdvhhtkENZswX2dBI
-         27GCY8pkJKMRd0c5rHWF/Ly2PldBkEJbr2gcWMljLkNqA8b1hmoK+PHKq7XHF+9mhMPB
-         H8gh5cDxN/lslmNEGaOlJTY3QXCtheFFH6zeB7MsY+gU7FvozzGXEjtZGdD6/xodTAWt
-         vjIBiKTI4wrMjNx8VUdzjJFyi6wV2w/wIRgNaZpMBUH9d/se0fv/7uS8CBIsjfl6MDyl
-         qefokasVhLMvvDvqh4fXI/Ucp+TWswTqzpRDvje8XylCUqIC568nsIlArQ+mQXOxJwXK
-         gIfQ==
+        bh=7151zgqNmppt1FWLTyRdRTu2s96pKFEly/RuS9gjWeY=;
+        b=gYnNBYPL7+Vso9fth4O30mUOQnoyOn3TOxaH9pHwo3lJTeahoBTFFJ5Q4/9eecco3H
+         Ei5saRYpH5syTy8Ucfen49s3IrZ6ufTDp7Jou0Th3k2HyFxIJKuquydsppJKH4SGMEjF
+         HTZubH7A6s2bHrdMaC4HirlYiCHKQcI902r4H/ZRXJY6fz8xJvDKDtYJePSACZsBHv14
+         bMjd8WVjudy7rk63YHILKKkSr7ncJl9G/Xme/p6omTSsGdT9GmVnoeXf25YlOiog8Woe
+         rWBB4pd/bzw+HjhbkCcGqhITw0ZbFKeDkdfijEEYca3CYnWtfdJte6D3j1fC27fTgu9B
+         zdFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795535176; x=1796139976;
+        d=1e100.net; s=20260707; t=1795535515; x=1796140315;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=SOapY5CEQdlHxqSl9JrLPR3I2czhVi36uOATqS9W/YU=;
-        b=oTa2Ay51BwhqPGMqK+NFXLEAQWQLuaprp8shM8LT9Ms5vvx+i0c/Od3oicsJzDp7RR
-         eOTI2HbS1N8xh5AX0Lt7oovLHJ/MkObuoURUmCQBjUbGU2WY04gvR8ADZIlrZVW2cW3g
-         h1lfWePNQ09FYKfNuHvDuX5hyPgI4JoJ5y3j2So4yEkaUmCshFyFjxK1qE9z9QuyTL9F
-         d62Cet0oB2Sh4YRUEVA61a2qrFHFFiTbwBJJ4u+h1KnKwy+7SbjqH4PakLITPibjX0Cf
-         kLWKK/wUaU9zccvTiuhaRvouE2fmgMCFqPXBGfa35KUO18a46i8F2NvWsKB69IwqCrCJ
-         3CIA==
-X-Forwarded-Encrypted: i=1; AL+hErE16/LBp6Ut3++DYkrewthr9B1wu3XZ9j5l76t6RtILMuNR5f9PxEsWctYho5TqEFwxQYg=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8vW7ImfFFLtTEJel2dM8JAJW70b2k6ORUvBfdpKaJA4cbeyDhN
-	UHZSia1LfroYJlh2xUyIfEBmUkYSsU8mgeoFodwl0v3AaDRr/8GXDPPJxEWNVLgHHybWn9WINFI
-	go/Ir0FTBvBUQCUC/ItAMZV9GsR7w3JsxyyvbMAcc
-X-Gm-Gg: AZFdTZf8lL4Of69E7Zpg9F1HRVPceXwLHfH0w66kuVDP6I2HHpo81nSN19AJRWhBLSY
-	piVrzBIT161Ab7wvpLUmNAFQzbJ1OYz2v2Af+sS/Q/DcSobwmFmvDy2tA5nkgMsmey4en3JLUKR
-	uBkOyDL4pCYjBuMUgwYxujz0vH7o1ZT1q2i4GS6TDooSm6KpQ8ZpCCE++bS36ld3cT3rivReZMr
-	wym3jFdI3/Yt8pSqieouWoAfcHYXzsXdsNqqUDc9pMe0JE0sYSWzZegWmpmaCfm07rIPwBP3tJb
-	cOgJXwM8wfxrxu9F7e9mAK50vwjT/n7WvHayOVkj5OT+ivN0nJQwBEvwojGmlo4bgJ37JcpYLpS
-	dYIsiHZb0ipmx+N+OmTR5Y7rdA4iaWWl6gv0OLKnI3dS6UAvU41psvJINchse8/9hbJezX18Dud
-	Cr+mG0hZkPlsOkFR4w0BIlygC4c4c=
-X-Received: by 2002:a05:622a:1dc9:b0:536:353e:8d2a with SMTP id
- d75a77b69052e-55d87fe2e61mr49432961cf.1.1795535175538; Tue, 24 Nov 2026
- 07:46:15 -0800 (PST)
+        bh=7151zgqNmppt1FWLTyRdRTu2s96pKFEly/RuS9gjWeY=;
+        b=OYketgYu5cJeqyIulJfTpOHQuOeT1LlfDn5uxX4UP6f0JSnpUQgQHwI1DPMqir3hD4
+         mxqZJvAWBd40SYkN89Oal+ckPB6J+jfSa987+UfZkYlz5HD4GYnLRp6qkqEmoyWDL7gT
+         o70gak9ORS4ZxrzWx6Q6q7H1SVTfcZ9gJSwyBN6Uub+dVfAErH3QiwQP1S0Ie9SvWl8G
+         XmCl2Jq+l1/p4dEbUv3SzKrIuiQkVSfbBrN0Vg/9EMuaUbShCQEWa+0tzzZX1ud6CPaf
+         AXE9QcrrZOlEE0X0l/fFhgPB2Ai4Zg1gpnOkwP5yrS/B+VYiNm/S2ajdMA15e56DS/hf
+         hpbw==
+X-Forwarded-Encrypted: i=1; AL+hErHAMFssHRI+nwUam55ESy3EdMea0W4PmERQWWBr72g4ANyUAVfXj25n7bcKGdJE6vmLeR4=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+H5PM8BYg4RMx6ESqlggv5uNnSau/gn+1dYHen2xEh3eTAVz+4
+	rWWvqtbE27Nml/X3ixNUss3Oe7qjKGeb2uglr7AAaXNBGV4E7G4BZHH8GJ6AB+8FfxOgXMG7IHx
+	m8zI8RLv0EmrRNBefJGQmAD/A5aUOfZCteFMmRkTu
+X-Gm-Gg: AZFdTZdk+zXCh21x+ojX8JD5ZgxwGumuUqcT7MVHS1RIBghKwMmQXo/ttfeMaDMCXKl
+	a/XsFZKHmoZdRQg5bY74JbinOpLh4xexAHzZG14lSu4PJirsogyUAJ0HFzEeBXbotY5QsUpntjL
+	gTF2Zd4VFVOmtyeR23/GV8qiewEk1VPm5/fsJ4F57R7sabEniC0LVfmljjtjPavTnc4rboeoryA
+	uKoAj8WYqpT+WyTxalnOF8Wki/qopQegLBlPBvgnPEmyOAk2fkEcHvo17IfZX+eafghvGJRx+Qw
+	3kAgE6rfR4vTQ4H8fOfjWLaASAfzTztcNAGfWzrxEKJd3XeOxhYjTNDW5/RC1RxJ0i9edbiFII0
+	AN+ILakKHMLdZgxWyMVdd1qW2n4V/1sdmuYRpxa9sfpKvKRTPqGNbk7AqysP1Grk4nTkOUfWcNP
+	omj7PqArEPhITDX9gs+/V/a6rKkOs=
+X-Received: by 2002:a05:622a:4819:b0:54b:648d:9ab5 with SMTP id
+ d75a77b69052e-55d8903863bmr55786151cf.11.1795535514050; Tue, 24 Nov 2026
+ 07:51:54 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -105,12 +105,13 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261124-vma-read-lock-mmdrop-async-v1-1-257f99f551de@kernel.org> <awWLCZ-jBjSD7V3M@pedro-suse.tail5790ac.ts.net>
-In-Reply-To: <awWLCZ-jBjSD7V3M@pedro-suse.tail5790ac.ts.net>
+References: <20261124-vma-read-lock-mmdrop-async-v1-1-257f99f551de@kernel.org>
+ <awWLCZ-jBjSD7V3M@pedro-suse.tail5790ac.ts.net> <CAJuCfpGk6eYK43Unxo+O4ML5=GM_siZ9owp6oa9fO0ipZXVg-g@mail.gmail.com>
+In-Reply-To: <CAJuCfpGk6eYK43Unxo+O4ML5=GM_siZ9owp6oa9fO0ipZXVg-g@mail.gmail.com>
 From: Suren Baghdasaryan <surenb@google.com>
-Date: Tue, 24 Nov 2026 07:46:04 -0800
-X-Gm-Features: Aa3M54rJps960eQ4ANiw2FEhSY-XIlXfbwKX87yDblku-U5-CQ5DzHJjVlODTLI
-Message-ID: <CAJuCfpGk6eYK43Unxo+O4ML5=GM_siZ9owp6oa9fO0ipZXVg-g@mail.gmail.com>
+Date: Tue, 24 Nov 2026 07:51:42 -0800
+X-Gm-Features: Aa3M54qQPEWg8Xv6M1FeAv2Yk0G2ClZoOWgLEIXc3iRWC6ZsNwo9TmRawceulIU
+Message-ID: <CAJuCfpEd1rz3P7fB7W_mHkyzbpq9TscRE+QNwvHdYME=WJj6cw@mail.gmail.com>
 Subject: Re: [PATCH] mm/vma: drop mm asynchronously in vma_start_read()
 To: Pedro Falcato <pfalcato@suse.de>
 Cc: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
@@ -128,100 +129,109 @@ Cc: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>, Ingo Molnar <mingo@redhat.com>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Nov 24, 2026 at 5:04=E2=80=AFAM Pedro Falcato <pfalcato@suse.de> wr=
-ote:
+On Tue, Nov 24, 2026 at 7:46=E2=80=AFAM Suren Baghdasaryan <surenb@google.c=
+om> wrote:
 >
-> On Tue, Nov 24, 2026 at 12:26:19PM +0000, Lorenzo Stoakes (ARM) wrote:
-> > Commit bee9ef4a40a2 ("bpf: switch task_vma iterator from mmap_lock to
-> > per-VMA locks") open-codes a lock_next_vma() implementation that does
-> > roughly the same thing in bpf_iter_task_vma_find_next(), only without
-> > fallback to an mmap_lock.
+> On Tue, Nov 24, 2026 at 5:04=E2=80=AFAM Pedro Falcato <pfalcato@suse.de> =
+wrote:
 > >
-> > This is because bpf_iter_task_vma_find_next() can be called from
-> > non-sleepable contexts.
+> > On Tue, Nov 24, 2026 at 12:26:19PM +0000, Lorenzo Stoakes (ARM) wrote:
+> > > Commit bee9ef4a40a2 ("bpf: switch task_vma iterator from mmap_lock to
+> > > per-VMA locks") open-codes a lock_next_vma() implementation that does
+> > > roughly the same thing in bpf_iter_task_vma_find_next(), only without
+> > > fallback to an mmap_lock.
+> > >
+> > > This is because bpf_iter_task_vma_find_next() can be called from
+> > > non-sleepable contexts.
+> > >
+> > > However, lock_vma_under_rcu() gave no guarantee as to which contexts =
+it is
+> > > safe to be called from, and indeed it turns out this assumption is un=
+safe.
+> > >
+> > > Since commit 9bbffee67ffd ("mm: fix a UAF when vma->mm is freed after
+> > > vma->vm_refcnt got dropped"), this call chain is possible on x86:
+> > >
+> > > lock_vma_under_rcu()
+> > >   -> vma_start_read()
+> > >     -> mmdrop()
+> > >       -> __mmdrop()
+> > >         -> mm_free_pgd()
+> > >           -> pgd_free()
+> > >             -> pgd_dtor()
+> > >               -> spin_lock(&pgd_lock)
+> > >
+> > > Thus, a plain spin_lock() can occur when lock_vma_under_rcu() is
+> > > called. Since bpf_iter_task_vma_find_next() can be called in softirq
+> > > context, this can deadlock, for example:
+> > >
+> > > pgd_alloc()
+> > >   -> spin_lock(&pgd_lock)
+> > >     <softirq>
+> > >     bpf_iter_task_vma_next()
+> > >       -> lock_vma_under_rcu()
+> > >         ...
+> > >         -> spin_lock(&pgd_lock) [ DEADLOCK ]
+> > >
+> > > Alexei Starovoitov also pointed out that a BPF program attached to
+> > > trace_contention_end() can similarly cause a deadlock:
+> > >
+> > >   pgd_alloc()
+> > >     spin_lock(&pgd_lock)
+> > >       queued_spin_lock_slowpath()
+> > >         trace_contention_end()          <- pgd_lock is held
+> > >           tp_btf/contention_end prog
+> > >             bpf_iter_task_vma_next()
+> > >               lock_vma_under_rcu()
+> > >                 vma_start_read()
+> > >                   mmdrop(other_mm)      <- last put takes pgd_lock ag=
+ain
+> > >
+> > > Resolve the issue by having vma_start_read() use mmdrop_async() inste=
+ad of
+> > > mmdrop() so the work is deferred to a work queue.
+> > >
+> > > Make mmdrop_async() an internal mm function, defined in mm/internal.h=
+, to
+> > > avoid abuse elsewhere (kernel/fork.c includes this header, so still r=
+etains
+> > > access).
+> > >
+> > > Commit 0b16f8bed19c ("mm: change vma_start_read() to drop RCU lock on
+> > > failure") accounted for the fact that the RCU lock had to be dropped =
+for
+> > > this operation, which is no longer applicable.
+> > >
+> > > For the sake of a backported fix, retain this behaviour, however drop=
+ the
+> > > RCU lock last and remove the now irrelevant comment.
 > >
-> > However, lock_vma_under_rcu() gave no guarantee as to which contexts it=
- is
-> > safe to be called from, and indeed it turns out this assumption is unsa=
-fe.
-> >
-> > Since commit 9bbffee67ffd ("mm: fix a UAF when vma->mm is freed after
-> > vma->vm_refcnt got dropped"), this call chain is possible on x86:
-> >
-> > lock_vma_under_rcu()
-> >   -> vma_start_read()
-> >     -> mmdrop()
-> >       -> __mmdrop()
-> >         -> mm_free_pgd()
-> >           -> pgd_free()
-> >             -> pgd_dtor()
-> >               -> spin_lock(&pgd_lock)
-> >
-> > Thus, a plain spin_lock() can occur when lock_vma_under_rcu() is
-> > called. Since bpf_iter_task_vma_find_next() can be called in softirq
-> > context, this can deadlock, for example:
-> >
-> > pgd_alloc()
-> >   -> spin_lock(&pgd_lock)
-> >     <softirq>
-> >     bpf_iter_task_vma_next()
-> >       -> lock_vma_under_rcu()
-> >         ...
-> >         -> spin_lock(&pgd_lock) [ DEADLOCK ]
-> >
-> > Alexei Starovoitov also pointed out that a BPF program attached to
-> > trace_contention_end() can similarly cause a deadlock:
-> >
-> >   pgd_alloc()
-> >     spin_lock(&pgd_lock)
-> >       queued_spin_lock_slowpath()
-> >         trace_contention_end()          <- pgd_lock is held
-> >           tp_btf/contention_end prog
-> >             bpf_iter_task_vma_next()
-> >               lock_vma_under_rcu()
-> >                 vma_start_read()
-> >                   mmdrop(other_mm)      <- last put takes pgd_lock agai=
-n
-> >
-> > Resolve the issue by having vma_start_read() use mmdrop_async() instead=
- of
-> > mmdrop() so the work is deferred to a work queue.
-> >
-> > Make mmdrop_async() an internal mm function, defined in mm/internal.h, =
-to
-> > avoid abuse elsewhere (kernel/fork.c includes this header, so still ret=
-ains
-> > access).
-> >
-> > Commit 0b16f8bed19c ("mm: change vma_start_read() to drop RCU lock on
-> > failure") accounted for the fact that the RCU lock had to be dropped fo=
-r
-> > this operation, which is no longer applicable.
-> >
-> > For the sake of a backported fix, retain this behaviour, however drop t=
-he
-> > RCU lock last and remove the now irrelevant comment.
+> > Is there any particular reason for unlocking the RCU comment last? afte=
+r the mmdrop_async().
 >
-> Is there any particular reason for unlocking the RCU comment last? after =
-the mmdrop_async().
+> Yeah, I think moving the RCU unlocking was unnecessary (unlock as soon
+> as possible is in general advisable) and we could just remove the
+> comment. Both versions however seem correct to me.
 
-Yeah, I think moving the RCU unlocking was unnecessary (unlock as soon
-as possible is in general advisable) and we could just remove the
-comment. Both versions however seem correct to me.
-
->
-> >
-> > Reported-by: Chris Mason <mason@kernel.org>
-> > Fixes: bee9ef4a40a2 ("bpf: switch task_vma iterator from mmap_lock to p=
-er-VMA locks")
-> > Cc: stable@vger.kernel.org
-> > Link: https://lore.kernel.org/all/DN267JUKDRNS.2VMV07CQ58R4X@gmail.com/
-> > Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
->
-> Acked-by: Pedro Falcato <pfalcato@suse.de>
-
-Reviewed-by: Suren Baghdasaryan <surenb@google.com>
+Actually, VMAs are allocated from a SLAB_TYPESAFE_BY_RCU slub. With
+that RCU unlocking move you don't need other_mm copy and the comment
+that comes with it. VMA won't be freed until RCU lock is dropped.
 
 >
-> --
-> Pedro
+> >
+> > >
+> > > Reported-by: Chris Mason <mason@kernel.org>
+> > > Fixes: bee9ef4a40a2 ("bpf: switch task_vma iterator from mmap_lock to=
+ per-VMA locks")
+> > > Cc: stable@vger.kernel.org
+> > > Link: https://lore.kernel.org/all/DN267JUKDRNS.2VMV07CQ58R4X@gmail.co=
+m/
+> > > Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+> >
+> > Acked-by: Pedro Falcato <pfalcato@suse.de>
+>
+> Reviewed-by: Suren Baghdasaryan <surenb@google.com>
+>
+> >
+> > --
+> > Pedro
