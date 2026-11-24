@@ -1,45 +1,87 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=195.10.208.55
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795564150;
-	b=0fUnQcNowPcykCD0hPNotktd9PPPP+FSk+6RFarjKKU2F0Ne2z9kg+hd6GU7IcS9nqXk
-	 x2jkI00XMpNu8zvB4149pa9+3uXloJFPFr+oYNFxxaBwTaX/sPScyKFf7TjTN+4g/gjOM
-	 7oErfW6qWL+Ja7WETvFGWjF96/BRXOAVXUGH5DVqW0WJ8gktXmSishNvtytqWCJ2V0Tgf
-	 xFtdQtlmDh3mJQZ0f9cfDEGKw6nT39TFg+JjchiMjhEnfS8oROLrNN30Gj8GQygeoLJ67
-	 NMHiaxQBVwc+gqrM6f40hBiS2CxkPpmU41yMRyegUYaDgiGSVY8l2SGGMaygjBk0gbA==
+	t=1795564662;
+	b=U+m/4bAk4V1ottUCVom0qNCNYX+akeUUScuMxCpWvg32HT0VTvZlcULeTGmGNzPAq8/P
+	 i9DF1azuwIqW8nJF5OXvwFZp3G/p47/5jOQZC4glR+u5b+Rx8PWBL1/c8FJN6p9a2BFaP
+	 wAw8k9oOyNYtwGPgDLkEfFn6y7/1GurA6BASBbPjJOCDYfF4P9ai7HyMLA4Zm/eg2r4rl
+	 8SQoBxHR7dHaGqX4XSi+lw/TvJHl/ZB0zJ1zKFzJ3944NKPch/nR7hydix5Oj0lN7vimr
+	 qw0kSLruJBSggO8eVGPCqbkX1+xmSZ8s8lTyq/FFK+qyUZmmOkfhnt65s2+DitoH/lw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795564150;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=lKDulksU0CH8kWxQ0HqONqWmjOATVYmG6DnvF0rQk9k=;
-	b=Df01HCrWPj0Q3n4nrHlyeIFmA1p3p9yVy60+ZJBob5EbtGfuritfBcOjC+yewkVM1LSw
-	 /MlGV0vlauKUrfziVM8ypgF4yPwx17F7r4iEi7stkLlVXOL9on1t/jamDbItqcCHiTfjo
-	 YRpmNGxvJ4LBDzl1EjcjBcSijuOw4iUjMxuCkmpHb2PGS35QT+dDBn/9E4Q7N83tSgwXG
-	 uvJMCeXLPEVhTxxXnUeTxs+4Fw3puo9BeOekLr0/ScBgpX0dn6BZE6+w87wkzm+57Hiyx
-	 boj4Z/Oh0iwlc+pu906GwuSYAmZp5C8qiuwpqjwtTg1216p9TYdeytx8VtvP/iMgyWw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795564662;
+	h=DMARC-Filter:Received:DKIM-Signature:From:To:Cc:Subject:Date:
+	 Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding:
+	 X-Rspamd-Queue-Id;
+	bh=xflsaRVWDw/j7j7UccdvzcudLLakoQDeNNfP3M0KnZA=;
+	b=Dsx7CUYQ5y8rDuYNwv6jVdwtvTl7FKdhKj1z7RK4pywAMdomALnM0mCH6BkDa3ByG4l2
+	 uTSZZpZgfltggb1unlbcy5r5+7UJGp4oBNcCOqXwfiIHcw/RN1R2UiF93NL46Y6q/xmEy
+	 Waoos3U6/QfyH/uAxosybTBs1CMvmIWMnN3MtPgHk1L879lXttIsWtNEbmOp3sOrzj1DD
+	 45+SwzinBJLF5dhEAZcm+/gLFF0qRDJV46/QR3D3FmOkyhozhmi1YIivHTaDQmSIUrXFZ
+	 TKweCSUxCy2Xs5XvscQdyG7IsY5YqaI26kuq3hfEXhB8wqMvhtuzOKDjVGfxoZTPMiw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IlpI7jOH;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=none header.from=mandelbit.com;
+	spf=pass smtp.mailfrom=mandelbit.com;
+	dkim=pass header.d=mandelbit.com header.i=@mandelbit.com header.a=rsa-sha256 header.s=MBO0001 header.b=m0LXNtcq;
+	arc=none smtp.remote-ip=195.10.208.55
+Received: from mout-b-110.mailbox.org (mout-b-110.mailbox.org [195.10.208.55])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2371606A31E;
-	Tue, 24 Nov 2026 23:49:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79E5D606A33A;
+	Tue, 24 Nov 2026 23:57:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 79E5D606A33A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mandelbit.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mandelbit.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IlpI7jOH
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A1521F000CA;
-	Tue, 24 Nov 2026 23:49:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795564149;
-	bh=lKDulksU0CH8kWxQ0HqONqWmjOATVYmG6DnvF0rQk9k=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=IlpI7jOHHg6tzDJtT7dUsw9yL6fpvZ9HKK1m6TkLc2LiZZ3UD8SsdCYQOPTGUoh4Z
-	 NipXRVpiqDCGW1FPX4Aj+JWvOWuaH7yh47kJrzJMMgWYxRGBiXlzu1T/MZUWUC4g0W
-	 vMNK/n0rsVJnt4+MwUB+9ab95GUxpkKWlaQFELGgsxYF/A92uqHyYjG81QXhlUvaqv
-	 UyJ18+lF5X1JslR+TZbpCj/oUXLo5lcdp3gbMbe0ryI4vzplir4QZl2zv7zCVHIKE6
-	 KKnfsBtZ25FkDGwWmWDCI+A50sHcwbB23XU+Xd+0/5dBGydMv0HgkDtdDiR3r5CDs1
-	 IEQtda9ZYTz+A==
-Content-Type: multipart/mixed; boundary="===============2510359726493679342=="
+	dkim=pass (2048-bit key, unprotected) header.d=mandelbit.com header.i=@mandelbit.com header.a=rsa-sha256 header.s=MBO0001 header.b=m0LXNtcq
+Received: from smtp102.mailbox.org (smtp102.mailbox.org [IPv6:2001:67c:2050:b231:465::102])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519MLKEM768 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mout-b-110.mailbox.org (Postfix) with ESMTPS id 4jZ09R5LgBzNlvx;
+	Wed, 25 Nov 2026 00:57:31 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mandelbit.com;
+	s=MBO0001; t=1795564651;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=xflsaRVWDw/j7j7UccdvzcudLLakoQDeNNfP3M0KnZA=;
+	b=m0LXNtcq/2LbG2mD4m4VlkgfRKYFwbKS/LegkgV5FqAKEfNUnpXH6AYKH0aXmTdyE9b2+c
+	gC1afL98daHcBi3pOUfh+7mqjbwj88WPe1LMzrhWLLeZKTGPwJx3fhhkHUktBAStTyMmjp
+	J4mBpbHtO0hm7kJv1vSYwc43fP5nFs4FC6ur3FybafSu2uzX75vQBHLwPGpg79Dee3zK2a
+	eb9PAHj6CN/3V+AlE3mqV1Ur6A9b9nR8wu7MKjx4feskHUoxBXG+lojxwUqxQeZPOgoPRB
+	vQAq0RxWmF0yNes0CCba1hLUi2SV+0oDs+7IQht2dv8hzwi9Lw59H42sAK3pzw==
+Authentication-Results: outgoing_mbo_mout;
+	dkim=none;
+	spf=pass (outgoing_mbo_mout: domain of antonio@mandelbit.com designates 2001:67c:2050:b231:465::102 as permitted sender) smtp.mailfrom=antonio@mandelbit.com
+From: Antonio Quartulli <antonio@mandelbit.com>
+To: intel-wired-lan@lists.osuosl.org
+Cc: Antonio Quartulli <antonio@mandelbit.com>,
+	Tony Nguyen <anthony.l.nguyen@intel.com>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Janis Edvarts Lacis <janislacis06@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Sriram Yagnaraman <sriram.yagnaraman@ericsson.com>,
+	Kurt Kanzenbach <kurt@linutronix.de>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	Joe Damato <joe@dama.to>,
+	Sven Auhagen <sven.auhagen@voleatech.de>,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: [PATCH net v5 0/6] igb: fix runtime PM resume issues
+Date: Wed, 25 Nov 2026 00:57:15 +0100
+Message-ID: <20261124235723.1135808-1-antonio@mandelbit.com>
+X-Mailer: git-send-email 2.56.1
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,63 +91,86 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <fd2115bde2e78440a8c28b057e22f7a7a3064cb74e9030b92ee2f4498ea6046a@mail.kernel.org>
-In-Reply-To: <20261124-work-exec-update_lock-v1-18-e489035395b8@kernel.org>
-References: <20261124-work-exec-update_lock-v1-18-e489035395b8@kernel.org>
-Subject: Re: [PATCH RFC 18/19] vfork: wake up the parent once the child has left the mm
-From: bot+bpf-ci@kernel.org
-To: brauner@kernel.org,jannh@google.com
-Cc: torvalds@linux-foundation.org,linux-fsdevel@vger.kernel.org,acme@kernel.org,linux-perf-users@vger.kernel.org,bpf@vger.kernel.org,selinux@vger.kernel.org,kees@kernel.org,linux-mm@kvack.org,linux-security-module@vger.kernel.org,apparmor@lists.ubuntu.com,david@kernel.org,brauner@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Tue, 24 Nov 2026 23:49:07 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: 4jZ09R5LgBzNlvx
 
---===============2510359726493679342==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+igb can be runtime suspended when the link goes down (with
+power/control set to auto). Resuming it calls functions that need RTNL
+without holding it (patches 2 and 4), XDP and XSK changes race with a
+resume (patch 5), and devices that can't signal a wake-up are suspended
+anyway, so their port stays down when the link comes back (patch 6).
 
-> vfork: wake up the parent once the child has left the mm
+Patch 1 fixes the XSK pool disable path when the device has fewer rings
+than the stack has queues: a NULL dereference with VFs (a single Tx
+queue on 82576), or after a fallback from MSI-X to MSI on resume. Patch
+3 keeps such queues while they still have an XSK pool, so that the pool
+can still be disabled.
 
-TL;DR: Commit message only: it cites "[1]" for the 2.5.56 change but has no
-matching link; the review asks for the history.git URL to be added.
+Tested with the 82576 emulated by QEMU, including, with test-only hooks,
+a runtime resume and a simulated system sleep (the suspend/resume
+callbacks called directly, as the test kernel has no CONFIG_SUSPEND)
+with the device forced to come back with MSI and a single queue.
+Patches 1 and 3 were tested with a zero-copy AF_XDP socket: closing it
+after enabling a VF oopses (queue 1, stock igb and v3) or warns and
+leaks (queue 2, v4), and warns after a resume forced to use MSI (v4);
+patch 5 by closing a socket and attaching an XDP program while runtime
+suspended. Not tested: real hardware and PME wake-up, a real system
+sleep, the MSI-X allocation failure itself, the window before the work
+item runs, SR-IOV with runtime PM, and a device that can wake up. Not
+run under KASAN.
 
->     vfork: wake up the parent once the child has left the mm
->
->     A task that called vfork() sleeps until the child has released the mm in
->     mm_release(). But exec_mmap() releases the old mm, then waits for
->     exec_update_lock and only then switches to the new mm. And exit_mm()
->     releases the mm and only then drops it. So the parent is woken up while
->     the child is still on its mm.
->
->     It wasn't meant to be that way. When mm_release() was added in 2.2 it
->     was called after the task had been switched away from the mm. exec only
->     moved it in front of the switch in 2.5.56 because deactivate_mm() and
->     the write to the child tid address need the old mm (cf. [1]).
->
->     The release has to stay where it is as it can sleep in a page fault for
->     as long as userspace likes. So take the wakeup out of mm_release(). Wake
->     up the parent in exec_mmap() once the task has switched to its new mm
->     and in exit_mm() once it has dropped the mm.
->
->     While at it, fix the comment above mm_release(). It hasn't been called
->     after the mm was removed from the task since 2.5.56.
->
->     Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
+Sashiko also found two pre-existing issues in the XSK queue disable/
+enable paths (the Tx NAPI isn't stopped when Rx and Tx don't share a
+vector; a failed buffer reallocation leaves the queue half torn down);
+they will be fixed separately.
 
-This isn't a bug, but the changelog cites "(cf. [1])" for the 2.5.56 change
-that moved mm_release() in front of the mm switch, and there is no
-"[1]: https://..." line or Link: tag anywhere in the message.
+igc has the same issues (see the notes); Joe Damato offered to test on
+igc, so its fix will be sent separately.
 
-The previous commit in the series, d0c33c04297e ("exit: don't take the mmap
-lock in exit_mm()"), uses the same "(cf. [1])" form and does end with a
-"[1]: https://git.kernel.org/pub/scm/linux/kernel/git/history/history.git/..."
-line.
+Changes in v5:
+- new patch 3: keep the stack's Rx queues that still have an XSK pool
+  (Janis)
+- patch 4: cancel the work item before a suspend (Sashiko)
+- new patch 5: resume the device before changing XDP or XSK settings
+  (Sashiko)
+- patch 6: check pci_dev_run_wake() when scheduling the suspend
+  (Sashiko)
 
-Could the history.git link for the 2.5.56 change be added here as well?
+Changes in v4:
+- patch 1: also handle queues with an Rx but no Tx ring, as with VFs:
+  tear down the Rx ring and skip only the Tx part (Sashiko); subject
+  changed from "don't disable rings ..." to "don't touch rings ..."
 
+Changes in v3:
+- new patch 1
+- patch 2: set the real queue counts on system sleep resume and from a
+  work item on runtime resume, and drop packets for queues the device
+  doesn't have until then (Janis, Sashiko)
+- patch 3 (now 4): link the NAPIs from the same work item
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+Changes in v2:
+- patch 2 (v2 patch 1): keep setting the queue counts in __igb_open(),
+  only skipping them on resume (Sashiko)
+- mention the tested hardware in the commit messages
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/45508356147
---===============2510359726493679342==--
+v4: https://lore.kernel.org/netdev/20261120210134.133238-1-antonio@mandelbit.com/
+v3: https://lore.kernel.org/netdev/20261119140412.163202-1-antonio@mandelbit.com/
+v2: https://lore.kernel.org/netdev/20261116153041.3002666-1-antonio@mandelbit.com/
+v1: https://lore.kernel.org/netdev/20261113105835.3821433-1-antonio@mandelbit.com/
+
+Antonio Quartulli (6):
+  igb: don't touch rings that don't exist when disabling an XSK pool
+  igb: fix RTNL assertion when resuming from runtime suspend
+  igb: keep the stack's Rx queues that still have an XSK pool
+  igb: link queues to NAPIs under RTNL after runtime resume
+  igb: resume the device before changing XDP or XSK settings
+  igb: only allow runtime PM if the device can wake up
+
+ drivers/net/ethernet/intel/igb/igb.h      |   1 +
+ drivers/net/ethernet/intel/igb/igb_main.c | 144 +++++++++++++++++-----
+ drivers/net/ethernet/intel/igb/igb_xsk.c  |  37 ++++--
+ 3 files changed, 143 insertions(+), 39 deletions(-)
+
+-- 
+2.56.1
+
