@@ -1,110 +1,103 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.174
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795525204;
-	b=xsd5cjfTxbqp50lPooXiXYlLFJwMbHP5Jv8vhrt2uXvfw+l9K0bc5o4k8alG4LcLeFar
-	 9VmTH/ZkaS8RomDCKn9OIt8OhawSv7qJZI6UqQm1h4W440X2WmW8+d5sHmWOfzVZSwgDc
-	 9eQxwPq1MNFSv1SfXyKOOPG9P5ttihKgBkSsoHdhITMvUFX4X5aev8bkq/alrYfF+t21S
-	 +qm2ogZ0gQOx6xXioGpC3IVJXCvx083aXSeA5P2Y9eAjQx6L32jHCnTjdosgktTUEXRK+
-	 DgGUdWB0EpW1I0vVoNdREx49b0jDDz8PbpJM8ybyDhqTE+mhtM4gVDwn6BjuktsQtqw==
+	t=1795525447;
+	b=3+X7gSJ6+SvhahEj9TkIYaU8ieKKL413whm0o2UaD7m2fZxL1YrKSQRNGQjUQZPWD+Zl
+	 U1PdoImg7fU9OFuW1Hy5KcQ10/ti1S4DnsSvHywhbTNyY+sxawO6Ls6fZWL5n7HWB8bfB
+	 0E3SqlGBXs8+jZYclpo5qrqLPk210CScoYyHpFz7xBM0es8OrIAzmCcNZ67/wVvBjZBmE
+	 X5K9W06ESPziCrMzxPJbVupe94Uie+i7ZpyvV1TwfDYMp9cMTuaUpsj5RTnvLW4bu+MFD
+	 p5+iVeIniKSusmFKNazf90RHHFic76WELuwpCP9/VKNJYVaLEAiqRve4YACurreje1g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795525204;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:MIME-Version:Content-Type:
+	a=rsa-sha256; c=relaxed/relaxed; t=1795525447;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=71BoVSHnE+GD+Dgl6FXGb+jcMgjjSfPvCEpcdkQChEA=;
-	b=HF21hN101rY8uVx+ZGk+DxpY50TADwheJrb+opcEj1Cr6/mUBNWwf632xYmT7ZkIS2Dx
-	 I80X4ulEVlsZqN0xscBlV1aWZPIY7SmO1psQ7D1Idful32gD3ZWjXWV56B9BnsweGFBqG
-	 lmCxzv62FnF5G1y9kGoqh4hJPtqVotbt1M/7WA6kl/7bdnYijS+RUDWjJfHwRxbOfD8ey
-	 SEs+NUnuLhLItjb2vXqw7JoX5Qd6+avZnlfn4x7MmdVDZjziRCFEC0T1rbLG2idy7KkuJ
-	 7LlivEtY+hidPhxO7pT7LzCBsi16eP0pWqclsXN0PW8XO1pDQcnNqe5Bm/w2elwCoEA==
+	bh=+rKxb7dU0UMEzCyAusf6VPpzW2HyfM8DXyzbe16sF6o=;
+	b=Mf9mX2S0Ef2Tblg6OsJGJQ/l3M5oV5oH4m9pTW5fLyDnCzfYW8Si7lT6bIQErC0GM3pJ
+	 ha84Jjo7QLjzIAu/6SeBBjbvyYvSlOL32NhKzpiUzq5eGN7IBNiPAuzdzLmGQ9bE/3Vkk
+	 qsyAl4TRL0Wkp9+O3O9njmxs5hRxPo2GyUb2bPZMi1sEaLX+Xf/iXHaK4kKy29aUBYHfH
+	 Lq0zSxKSZQrFtWb95vsWoW4VRTI/nU6UAbdD8WJHWTGFYUdtHK1kNU0zvgsBrWXDlViDT
+	 3qpFcCojBYjJnulf7DVq5YYD0PohkFUR8BrI+EtCEl+VcHgAcNz9EL1nk40vdgq12jQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=E86WLCWj;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="I+N/sQ09";
+	arc=none smtp.remote-ip=209.85.210.174
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0EA8606A322;
-	Tue, 24 Nov 2026 13:00:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BC8B606A321
+	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 13:04:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5BC8B606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=E86WLCWj
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B07E1F000EB;
-	Tue, 24 Nov 2026 12:59:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795525203;
-	bh=71BoVSHnE+GD+Dgl6FXGb+jcMgjjSfPvCEpcdkQChEA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=E86WLCWjW/dY4qNrjCcvSgN4bRHl901N+otwhHt70E0TMaHKYQSW5I7hgi+LAGxfq
-	 ZxNXgrh4lDpc6FDf/Ynrj5beVp71XcI3kUJbPuyDC4L1kF+VdDMWhEaviqH8TeWdtT
-	 ui4VnFe4H8joiI1mUVh/PJymfuXR6hUdk5HyA07d5ojk+4UV+16icOSL07RlUFMNZ0
-	 mx536iKYMFFus57c2465mz+u5d3TSknYeFbxhIdG1UalTGK8RID02MDxV8BE3BBhWD
-	 TKo/PI5cNDXZUzeAxaaPYg1+VuMIHiTA9Wvzf9HoyVw45e9tab4/NjtsVR9P9euQQi
-	 GyQNqx6hdrYeA==
-From: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=I+N/sQ09
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-8b29b83fdf1so2282084b3a.2
+        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 05:04:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795525446; x=1796130246; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=+rKxb7dU0UMEzCyAusf6VPpzW2HyfM8DXyzbe16sF6o=;
+        b=I+N/sQ09fQuEQXJ9fyOuMfHGIQhhtYbdQQDKkIKriD2d/WQsO6T3VxQv+IRpSS9W3t
+         bQGCb0qtr8bc94vBDzm6kOAtFgmzqOZM/i8oroHGAXR0hGtW4Fj0cq35JB6NhDBmS9uR
+         x6oA84jtUd+1jvyOWLoWa7vEQg4euFUJ5LIUMvKnt6q1UanGPTNGcDMRvSPLsGXg85XO
+         DfZ6uDgXDyXj5wJOD9ClSQPEOsLjpfg2Lu7q+2nmeVjyHxKAp/xQOItLtJfwKWmzkqpQ
+         1Fe8CVOcnYGT62DLvBRxI5bIVljfJX1fc5sJuR3bEsOaCQ3H/dYavYYb2aPjl46jbpbr
+         VqLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795525446; x=1796130246;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=+rKxb7dU0UMEzCyAusf6VPpzW2HyfM8DXyzbe16sF6o=;
+        b=kPXfttOKQiNvNeQDsC8RRAGWRAr9wazKKU1FXd7mQ9WTxJ/L9qrKPvLPU5nG15rhWP
+         6vwzLnXGRVYufTAFEGASHSvlKjwVgwL7uQts+UosdrQGk+hmEJqxnAe1Ec/ViZF5tPjx
+         7dot+OfmttVu7VFJc/qNa+YynVNJ+7PIFv4DcjWZboIfwEHtp+prqX24Z/f8QJuZtKCs
+         iq91efpfaFPIz6aXhbK0jyQh1QFGPN1ZGye9pE9eedQy/cEao6mAOQabg9SZR6t8QrnV
+         LWdoyDq2mwLiygVziah41PcIiLwuGYWofAX+LuPGkPj4dfOd3JmmzwoSaZtdEElsQ2ho
+         f8vw==
+X-Forwarded-Encrypted: i=1; AL+hErGhS+76mqVZ8X09C3aQklIR01S11Ka6voiQAHaTLFxWyzmCfx3GkKgZ0Zd/1wT4USd1cO8=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+9zPcqmJcIpWbrW4FmCZ9iQA6j/u6gOxj5HOZfg4NhflQkjT3a
+	xGN1qehqDzHwxo8XIZeT+h9/U0UEbFMYlN5GeeuilW58pVRBHEnh6L2+
+X-Gm-Gg: AZFdTZdUAFvW4iujFKPWZg7j5+6wLTYULVVDeUVBFCIdhgp1MeXEJf6yjsHLnVfZoU/
+	DL2SYfpNu9ybMdZC0SYVB3Ov+O13BxEdXOHcMtsxx8GVG4I5YKOxwzAYt1xrrrPHfE+5pXu807h
+	Z72XKhGW3YgIt0cW2JanXibTLF2Gq9HCke6s8mAoSCm3xbTFhnVQegzzHQBZSkAdC+4eNcJMbr3
+	t1316+HQiRuhlepNr0m+Ql9UaDz31Qb431RFQZhpBWHxZ4kz8VYbqaFoXpGwZZ28S+Cpln/aXYZ
+	fa5HOlj+1R+57g2Nd0jFTK3kJzFdHyPAWZSzWoowEVFByNyffRDcanaAUBd/MaxdVCBNaLImPCH
+	YgkdIKDjycVgF312GUw30fJ1s8t/k0gUANUMRRjXHL5tBfOB6roMLvlSZDht71+tdzLKV3f1ryj
+	j158gC3A8FS95l+VbU6gZc2MVYNHVtP1dtar4brzuwleUKscdYTvuJilW0NhZu3hav5ZV1gtvg+
+	ECfcaiX29kXDSpwG5VLRMNTjfRhIdg8X0yOqEoAgynltzG+buFpDBsm0ST/GV4uQ+cQY39PKC9g
+	OY2F/44d1J0ehR7TW/5os4u0cxgWyY4Q4Dgk1h3pBFIaScChnMlVTo/rrpjUB8irC5XbNq61/GR
+	aW+kzPgy6tbZv
+X-Received: by 2002:a05:6a20:c992:b0:3e1:88d6:60e6 with SMTP id adf61e73a8af0-4014a27f154mr12795163637.10.1795525445647;
+        Tue, 24 Nov 2026 05:04:05 -0800 (PST)
+Received: from d20be28ee783.tail196be.ts.net (vldb.skku.ac.kr. [115.145.173.180])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8c872e45eccsm7194090b3a.31.2026.11.24.05.04.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Nov 2026 05:04:05 -0800 (PST)
+From: Kyuwon Cho <kyuwoncho18@gmail.com>
 To: Magnus Karlsson <magnus.karlsson@intel.com>,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Cc: Stanislav Fomichev <sdf@fomichev.me>,
+	=?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
 	"David S. Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@kernel.org>,
 	Jakub Kicinski <kuba@kernel.org>,
 	Paolo Abeni <pabeni@redhat.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Willem de Bruijn <willemb@google.com>,
+	Simon Horman <horms@kernel.org>,
 	Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Jesper Dangaard Brouer <hawk@kernel.org>,
 	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-	Alexander Duyck <alexanderduyck@fb.com>,
-	Saeed Mahameed <saeedm@nvidia.com>,
-	Tariq Toukan <tariqt@nvidia.com>,
-	Mark Bloch <mbloch@nvidia.com>,
-	Leon Romanovsky <leon@kernel.org>,
-	Michael Chan <michael.chan@broadcom.com>,
-	Pavan Chebbi <pavan.chebbi@broadcom.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <shuah@kernel.org>,
-	bpf@vger.kernel.org,
-	netdev@vger.kernel.org
-Cc: Stuart Clark <stuclar@meta.com>,
-	=?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Simon Horman <horms@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Mina Almasry <almasrymina@google.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	kernel-team@meta.com,
-	Dimitri Daskalakis <dimitri.daskalakis1@gmail.com>,
-	Bobby Eshleman <bobbyeshleman@meta.com>,
-	Mohsin Bashir <mohsin.bashr@gmail.com>,
-	Kees Cook <kees@kernel.org>,
-	Breno Leitao <leitao@debian.org>,
-	Maxime Chevallier <maxime.chevallier@bootlin.com>,
-	Tao Cui <cuitao@kylinos.cn>,
-	Vadim Fedorenko <vadim.fedorenko@linux.dev>,
-	"Mike Marciniszyn (Meta)" <mike.marciniszyn@gmail.com>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Martin Karsten <mkarsten@uwaterloo.ca>,
-	Nikolay Aleksandrov <razor@blackwall.org>,
-	David Wei <dw@davidwei.uk>,
-	Pavel Begunkov <asml.silence@gmail.com>,
-	linux-rdma@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH net-next 15/15] Documentation: networking: Describe AF_XDP RX in the device's layout
-Date: Tue, 24 Nov 2026 13:56:50 +0100
-Message-ID: <20261124125654.183091-15-bjorn@kernel.org>
-X-Mailer: git-send-email 2.56.1
-In-Reply-To: <20261124112707.118678-1-bjorn@kernel.org>
-References: <20261124112707.118678-1-bjorn@kernel.org>
+	netdev@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: [PATCH bpf] xsk: keep the charged page count when pinning a umem fails
+Date: Tue, 24 Nov 2026 22:03:59 +0900
+Message-ID: <179552079829.1290967.12345053263834529704@gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -114,154 +107,112 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-For applications, XDP_UMEM_DRV_LAYOUT changes who owns a chunk and
-when, what the XDP program may read and write, which verdicts it may
-return, and how chunks come back. None of it is documented yet.
+xdp_umem_reg() charges umem->npgs pages to the user's locked_vm before
+it pins the umem. When pin_user_pages() pins fewer pages than asked,
+xdp_umem_pin_pages() overwrites umem->npgs with the pinned count so that
+xdp_umem_unpin_pages() releases only those, and xdp_umem_unaccount_pages()
+then gives back only that many. The rest of the charge is never returned.
 
-Describe for application writers the setup and its errors, the
-program, receiving and giving chunks back, need_wakeup, devices that
-need DMA syncs, and how TX shares the chunks.
+A short pin happens when the tail of the umem area is not mapped. With
+RLIMIT_MEMLOCK at 16 pages, three registrations of an 8-page area whose
+last 4 pages are unmapped leave the user able to register only 4 pages,
+for as long as the user has a process running.
 
-Signed-off-by: Björn Töpel <bjorn@kernel.org>
+Unpin the pinned pages directly and leave umem->npgs as charged.
+
+Fixes: c0c77d8fb787 ("xsk: add user memory registration support sockopt")
+Reported-by: Sashiko <sashiko-bot@kernel.org>
+Closes: https://lore.kernel.org/all/20260421172951.A7052C2BCB5@smtp.kernel.org/
+Signed-off-by: Kyuwon Cho <kyuwoncho18@gmail.com>
 ---
- Documentation/networking/af_xdp.rst | 114 +++++++++++++++++++++++++++-
- 1 file changed, 113 insertions(+), 1 deletion(-)
+The issue was found by an LLM-guided test generator that we are
+developing as a research prototype; Sashiko had flagged the same leak
+in its review of an AUTOSEL backport. A reproducer, which runs as any
+user:
 
-diff --git a/Documentation/networking/af_xdp.rst b/Documentation/networking/af_xdp.rst
-index 538e71adb759..4e37a6074a52 100644
---- a/Documentation/networking/af_xdp.rst
-+++ b/Documentation/networking/af_xdp.rst
-@@ -429,7 +429,9 @@ There is also an option to set the headroom of each single buffer in
- the UMEM. If you set this to N bytes, it means that the packet will
- start N bytes into the buffer leaving the first N bytes for the
- application to use. The final option is the flags field, but it will
--be dealt with in separate sections for each UMEM flag.
-+be dealt with in separate sections for each UMEM flag. With the
-+XDP_UMEM_DRV_LAYOUT flag, chunks are pages that the device fills in
-+its own layout, see the "Device Buffer Layout" section.
+#define _GNU_SOURCE
+#include <errno.h>
+#include <linux/if_xdp.h>
+#include <sched.h>
+#include <stdio.h>
+#include <string.h>
+#include <sys/mman.h>
+#include <sys/resource.h>
+#include <sys/socket.h>
+#include <unistd.h>
+
+static int reg(char *addr, long len)
+{
+	struct xdp_umem_reg mr = {
+		.addr = (unsigned long)addr, .len = len, .chunk_size = 2048,
+	};
+	int fd = socket(AF_XDP, SOCK_RAW, 0);
+	int ret = setsockopt(fd, SOL_XDP, XDP_UMEM_REG, &mr, sizeof(mr)) ? -errno : 0;
+
+	close(fd);
+	return ret;
+}
+
+int main(void)
+{
+	long pg = sysconf(_SC_PAGESIZE);
+	struct rlimit rl = { 16 * pg, 16 * pg };
+	char *a;
+
+	/* no CAP_IPC_LOCK, CAP_NET_RAW for AF_XDP */
+	if (unshare(CLONE_NEWUSER | CLONE_NEWNET) || setrlimit(RLIMIT_MEMLOCK, &rl))
+		return perror("setup"), 1;
+
+	for (int i = 0; i < 3; i++) {
+		/* 8 pages, the last 4 unmapped: pin_user_pages() pins 4 */
+		a = mmap(NULL, 8 * pg, PROT_READ | PROT_WRITE,
+			 MAP_PRIVATE | MAP_ANONYMOUS | MAP_POPULATE, -1, 0);
+		munmap(a + 4 * pg, 4 * pg);
+		printf("short umem: %s\n", strerror(-reg(a, 8 * pg)));
+		munmap(a, 4 * pg);
+	}
+
+	a = mmap(NULL, 16 * pg, PROT_READ | PROT_WRITE,
+		 MAP_PRIVATE | MAP_ANONYMOUS | MAP_POPULATE, -1, 0);
+	printf("16-page umem: %s\n", strerror(-reg(a, 16 * pg)));
+	return 0;
+}
+
+Without the patch, the 16-page registration fails with ENOBUFS: the
+three short ones leave 12 of the 16 pages charged. With it, it
+succeeds.
+
+The patch was written with LLM assistance; we reviewed and tested it.
+
+ net/xdp/xdp_umem.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
+
+diff --git a/net/xdp/xdp_umem.c b/net/xdp/xdp_umem.c
+index cd8643360eb3..15ef424e2765 100644
+--- a/net/xdp/xdp_umem.c
++++ b/net/xdp/xdp_umem.c
+@@ -109,17 +109,14 @@ static int xdp_umem_pin_pages(struct xdp_umem *umem, unsigned long address)
  
- SO_BINDTODEVICE setsockopt
- --------------------------
-@@ -761,6 +763,116 @@ processing. Note that the Tx batch API guarantees that it will provide
- a batch of Tx descriptors that ends with full packet at the end. This
- to facilitate extending a zero-copy driver with multi-buffer support.
+ 	if (npgs != umem->npgs) {
+ 		if (npgs >= 0) {
+-			umem->npgs = npgs;
+-			err = -ENOMEM;
+-			goto out_pin;
++			unpin_user_pages(umem->pgs, npgs);
++			npgs = -ENOMEM;
+ 		}
+ 		err = npgs;
+ 		goto out_pgs;
+ 	}
+ 	return 0;
  
-+Device Buffer Layout
-+====================
-+
-+In zero-copy mode, the driver fills one UMEM frame per buffer, at the
-+UMEM headroom, and needs a receive path of its own for AF_XDP. With
-+the XDP_UMEM_DRV_LAYOUT UMEM flag, the device places buffers in UMEM
-+chunks as it places them in the pages of its page pool: several
-+buffers may share a chunk, a packet may span chunks, and the device
-+picks the offsets. The XDP program reads and writes packets in place,
-+in the UMEM, but the kernel stores none of its own structures in the
-+chunks.
-+
-+The UMEM backs the page pools of the bound queue through a memory
-+provider, so the driver needs no AF_XDP code. A driver supports the
-+mode if it runs native XDP with XDP_REDIRECT, takes its receive
-+buffers from a page pool of netmem that allows such providers, and
-+can restart a queue.
-+
-+Setting up
-+----------
-+
-+* Register the UMEM with XDP_UMEM_DRV_LAYOUT, aligned chunks of
-+  PAGE_SIZE, and no headroom. The UMEM must hold more chunks than the
-+  queue keeps posted to the device and in its page pool cache, 128
-+  chunks with 4K pages, or the bind fails with ENOSPC. The first
-+  number depends on the driver, the ring size and the MTU.
-+
-+* Attach a native XDP program to the device itself through netlink,
-+  not through a BPF link or an upper device such as a bond, before the
-+  bind. The bind fails with ENOENT without one. The program cannot be
-+  detached while the UMEM backs the queue (EBUSY).
-+
-+* Put chunks on the FILL ring before the bind. The bind starts the
-+  queue with the chunks it finds there, and the queue drops packets
-+  while it has none.
-+
-+* Bind with XDP_USE_NEED_WAKEUP, as only a wakeup restarts a queue
-+  that used up the FILL ring, and with XDP_USE_SG to receive packets
-+  that span chunks. A bind without XDP_USE_NEED_WAKEUP fails with
-+  EINVAL. XDP_COPY fails with EOPNOTSUPP, as does a device
-+  without native XDP_REDIRECT or queue management. One socket per
-+  queue receives: a second socket with an RX ring gets EBUSY, and so
-+  does any socket with an RX ring once the receiving socket is gone.
-+  Sockets that share the UMEM with XDP_SHARED_UMEM may transmit.
-+
-+The XDP program
-+---------------
-+
-+The program works on the packet in place, in the UMEM: direct packet
-+access, bpf_xdp_load_bytes(), bpf_xdp_store_bytes(), dynptrs,
-+bpf_xdp_adjust_head(), bpf_xdp_adjust_tail(), bpf_xdp_adjust_meta()
-+and the RX metadata kfuncs work as with pages, on every buffer of the
-+packet. What the program writes is in the UMEM for the application to
-+see. The kernel keeps its own data, such as the fragment list of a
-+packet that spans buffers, in kernel memory, so the application cannot
-+change what the kernel relies on. The application may still change
-+the packet at any time, also while the program runs: two reads of the
-+same bytes may differ.
-+
-+Buffers of the bound queue may only go to its receiving socket. Every
-+verdict but XDP_REDIRECT drops the packet, XDP_PASS included, and
-+redirects to anything but the receiving socket fail.
-+
-+Redirect through an XSKMAP entry that holds the receiving socket.
-+
-+Receiving
-+---------
-+
-+A FILL entry lends a whole chunk to the kernel, by its address. Each
-+buffer of a packet becomes one RX descriptor that points at the data,
-+anywhere in a chunk, and XDP_PKT_CONTD chains the buffers of a packet
-+as described in the multi-buffer section. Metadata that the program
-+wrote is in front of the first buffer, where the program put it; a
-+packet whose metadata does not fit in front of its first buffer, in
-+the same chunk, is dropped.
-+
-+The kernel gives a chunk back with XDP_RX_CHUNK_FREE in the options of
-+an RX descriptor:
-+
-+* On a descriptor with data, the flag means that the kernel is done
-+  with the chunk of that descriptor. The application owns the whole
-+  chunk again.
-+
-+* A descriptor with length zero, at the address of a chunk, only gives
-+  that chunk back. The kernel posts one when the device let go of the
-+  chunk after its last buffer reached the socket. Such a descriptor is
-+  never part of a packet.
-+
-+A chunk may go on the FILL ring again once it came back and the
-+application is done with all its buffers. The kernel never gives back
-+single buffers, so a packet that the application holds keeps its
-+chunk. Chunks whose buffers all stayed in the kernel, as for dropped
-+packets, stay lent.
-+
-+The kernel asks for a wakeup on the FILL ring only while it has run
-+out of FILL entries; recvmsg() or poll() then restarts the queue. With
-+preferred busy polling, the application's poll runs the queue's NAPI.
-+
-+Devices that need DMA syncs work as they do with page pools: the
-+kernel syncs a chunk for the device when the FILL ring lends it, and
-+the driver syncs each buffer for the CPU before the program runs.
-+
-+Transmitting
-+------------
-+
-+Sockets in this mode transmit in copy mode. A buffer that the
-+application received may go on the TX ring. Its chunk may go on the
-+FILL ring only once the chunk came back and every TX descriptor that
-+points into it is on the COMPLETION ring.
-+
- Sample application
- ==================
- There is a xdpsock benchmarking/test application that can be found at
+-out_pin:
+-	xdp_umem_unpin_pages(umem);
+ out_pgs:
+ 	kvfree(umem->pgs);
+ 	umem->pgs = NULL;
 -- 
-2.56.1
+2.43.0
 
