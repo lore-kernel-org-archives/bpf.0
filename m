@@ -1,61 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.127
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795526790;
-	b=1dd97NsC/gyLHM7UjhJ7i/ccF5oBkTxqymCGpW9Jtjq/WOdDQr/tBC18ix8uhZs5vcRC
-	 TkCXZcyAFXPzF/jw40zHWhn/hOGpaUuXR94FNfx0TbRRchEHsEMqKsAu1MUH7bv1e7+b0
-	 Mb2JKI/vHuarjDLYIDEh63NweW6wd5UznSVUsdvDgg9k94G7SHhuI9UBRSw86TaFYEi5o
-	 9W6iykbJV1Zt8iK3UqUupeB2SDR9RSHvnfHzixDa0u5P1CB9UNIdvncDUio0xN5n/dLBM
-	 0sckGxr5kdlxyenyXw2fIZ2kwgrghYXBONApN1hmjkp/9Y6eU1zyqspqj9cP6ow6sNw==
+	t=1795527708;
+	b=dME6WbFC0AUpCG004xG1DnDlIPBf8ojad7hQhAU3JkrnHUK+fTSiXh5AhdU7OgNquCnV
+	 QKc2hpFXbrw0eazqFbKVYFUwrzeZ8AwDZr0hawkQ/oz0uC3gNxj11hzhCmnMI9bjFKAAV
+	 MW84b+lEQ4O1oa/wqdiIH7GqEyn9bWn58KThomuSXlzu3F23ujuwwtdBrnwqMcMLk0Tg6
+	 vF17QJJ54uPd3iP6bdcX0jFVN2n5v419ZqFXeU5yxyZpMlW2lhNU2yhmRJ7DLkYU6bQcX
+	 TcRt2OTqOO4N3Fcf/9Dhsitw8DiDfEqAs6Wh8kobNpf3CdCEwZ2jOfzYyW+1j2IXBZg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795526790;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=BUFMmdOEluzkiFS1/VYvQjPKeZ2ocL8nf6EPYzQ1tVA=;
-	b=3eHJ3pJ4wPPYXoLPEYq+tl8W+vcaj3WoxyYi7KBaRRaYEIV8P0BcSOusTWUew66tulIP
-	 pd3JHSKXEUPHS85filh3uXYovZfaWLdPp8/NNl2BYzTKejRykE3LRTYijfanuB+eSl4kZ
-	 fFd9GoZu4wATrzCwWbESLryijRoRg58iDYZX2AcL0RrMS+G+xTkts/4km7VgQES8otor9
-	 E74A/Z2TnAC9Dt1huvA3KytuOpopRVyGIam9F/t3yJuiVsTGah1P/DAEJ2GQoCDhMi2XF
-	 jtjI7EKyZvAyXiBYqHFTaodGWoxv6avD2iW1vO1JpHdpdY8RQzgXw7Nf0gZU2iFom1g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795527708;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:Date:Subject:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:Message-Id:X-B4-Tracking:
+	 X-Change-ID:To:Cc:X-Mailer;
+	bh=mATZzJIHu6yt8XD7wpZlPFJzWv/fQBeRjT0G1Txh/Qs=;
+	b=CySFdtijCUX+XZRgJMdV8HPyPxYgR5BjefrwlGYK3CF+P/8cU+mSJsHxT9Bz3RFq0sYK
+	 1QmjeEc3pdYTqHwWmiXWGV0typBtV2eou8Ej1zWdp2ACq4gY8/dvCp85bwAtJPySmgcFz
+	 Oz/ENV9c5ubPbJZULSdzNouYG6CX3tnSA1ezf7BpPaxfLG+1tKGfqqZPnC++BK0ocF2x3
+	 /27Hd9WrvifOq+YPTuoHcXb+qeWQZBJpuZnTRg05iFgHVUzPHZd1FoYbaZJaL0dXgawcP
+	 PJc3df7+rkDJQCtG1Hk40a1DOpGZ3CyO+iBGqXFzvtpRdnvKM2+3aeoum9LCUKabmjw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VgR0xoAW;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=AWsjD24M;
+	arc=none smtp.remote-ip=95.215.58.127
+Received: from mta1.migadu.com (out-127.mta1.migadu.com [95.215.58.127])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49425606A336;
-	Tue, 24 Nov 2026 13:26:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46034606A6B4
+	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 13:41:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 46034606A6B4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VgR0xoAW
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B6A01F000C0;
-	Tue, 24 Nov 2026 13:26:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795526790;
-	bh=BUFMmdOEluzkiFS1/VYvQjPKeZ2ocL8nf6EPYzQ1tVA=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=VgR0xoAWJuy9cj3Xzg/3436wkn4wGgTYr9Ek6hrvI1e8Hn0fVa4uTPhdeUPwhOTTh
-	 b5U+fIbAkEqSeNpvUpCAG+fZpr+WJWkseTLMiEYEuJS9UEbAoeS2u2j3Ug1id9wzIB
-	 gU0C9g44INMyloE2qrE0w0/sqaJ9XF/zmz10+69vkwjtxHhosNRprX/6qIs/mbKyDO
-	 e0mso1Q8UGjW/TDSXicpUxkDDFIfvj/oEojBrKEebfCr8TRN4KrkiSh0KPVwBtHpC2
-	 WgsFSC7a1eeb24Q+WmAnTUl3If2xT0InhUsJSCBqYigauFGFqHsdrH0wuv2VjUVil+
-	 bGU9sVvY9pANQ==
-Subject: Re: [PATCH net v2 4/5] vmxnet3: drop XDP frames that do not fit in
- one rx buffer
-From: netdev-bot+sashiko@kernel.org
-To: filzador@gmail.com
-Cc: ronak.doshi@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
- netdev@vger.kernel.org, bpf@vger.kernel.org, andrew+netdev@lunn.ch,
- davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
- ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
- john.fastabend@gmail.com, sdf@fomichev.me, u9012063@gmail.com
-Date: Tue, 24 Nov 2026 13:26:28 +0000
-Message-ID: <179552678888.3135.8339153303682923721@kernel.org>
-In-Reply-To: <20261123124855.1021-5-filzador@gmail.com>
-References: <20261123124855.1021-5-filzador@gmail.com>
-X-sashiko-severity: Low
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=AWsjD24M
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=lG1NKyQUrSoB367kFlxf8SnY+K7LrS0Pb3rtvPqARQM=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1795527705; v=1; x=1796132505;
+ b=AWsjD24MFhVZQwtmonGr2eNU0yMPb10ZdSVh3cHHTN21ACFbskAESiVGvJYJ6Dddp7ReZ+wH
+ jZ2vBXmuo3OYil3KcMaQZcSb+jHaWVPyxwBujNUeP+Sndu7MGL/tGREZcUraRtHWHM9rXUtUgTW
+ iq3OqHWsOHSjxlX0+/UKLkVI=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by mta10.migadu.com with ESMTPS id 3ad78350b41956a4;
+	Tue, 24 Nov 2026 13:41:45 +0000
+X-Mizu-Trace-ID: 3ad78350b41956a4
+X-Migadu-Flow: FLOW_OUT
+From: Hangbin Liu <hangbin.liu@linux.dev>
+Date: Tue, 24 Nov 2026 21:41:16 +0800
+Subject: [PATCH net-next] bonding: check XDP support before enslaving
+ changes state
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -65,116 +60,135 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20261124-bond_xdp_fix-v1-1-e67983924324@kylinos.cn>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yWMwQqDMBBEf0XmbMDE6qG/UkSMWdvtYZUkSkD89
+ 27b0/BmmHciUWRKuFcnIh2ceBUFW1eYX5M8yXBQhmtcb627Gb9KGEvYxoWLaZeOfN+1mg30skX
+ S+qd7QCgboZIx/Je0+zfN+WvDdX0AiVNhw3oAAAA=
+X-Change-ID: 20261124-bond_xdp_fix-3f5eb6533f50
+To: Jay Vosburgh <jv@jvosburgh.net>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Jesper Dangaard Brouer <hawk@kernel.org>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Stanislav Fomichev <sdf@fomichev.me>
+Cc: Hangbin Liu <hangbin.liu@linux.dev>, netdev@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+ Hangbin Liu <hangbin.liu@linux.dev>
+X-Mailer: b4 0.16.0
 
-Thank you for your contribution! Sashiko AI review found more severe
-issue(s) in other patches of this series. This mail is only an FYI, in case
-you want to address the nit picks below when you respin.
+From: Hangbin Liu <liuhangbin@kylinos.cn>
 
-Low priority / nit picks for your consideration:
+The XDP capability checks in bond_enslave() - ndo_bpf/ndo_xdp_xmit
+presence and the slave XDP program count - run only after the slave
+has been opened, linked and published to the datapath. On failure the
+slave may already be bond->curr_active_slave or reachable through
+bond->slave_cnt and the upper device list, so a lot of state has to be
+undone, and bond_xdp_xmit() can observe the slave before its
+capability was ever verified.
 
-- [Low] In vmxnet3_rq_rx_complete() (drivers/net/vmxnet3/vmxnet3_drv.c),
-  the patch adds an early exit inside the `rcd->eop && rcd->err` branch:…
-- [Low] The patch changes the initialiser in vmxnet3_rq_rx_complete()
-  (drivers/net/vmxnet3/vmxnet3_drv.c:1618) from `bool skip_page_frags =…
+Move both checks to the validation section at the top of
+bond_enslave(), before the first state change, so a rejected slave
+returns directly with nothing mutated. The dev_xdp_propagate() setup
+stays in place and still uses the err_dec_slave_cnt error path.
 
---
+Moving the checks alone is not enough. Without a bond xdp_prog they
+are skipped, and a slave without ndo_xdp_xmit can be enslaved while
+the bond still advertises NETDEV_XDP_ACT_NDO_XMIT built from the
+other slaves. __xdp_enqueue() then accepts frames and the bulk-queue
+flush hands them to bond_xdp_xmit(), which may pick the new slave and
+call a NULL ndo_xdp_xmit in softirq context.
 
-vmxnet3: drop XDP frames that do not fit in one rx buffer
+Check the selected slave in bond_xdp_xmit() and fail the frame with
+-ENXIO instead. The check happens at xmit time, so it also covers
+frames enqueued before bond_xdp_set_features() clears the flag, and
+the bulk-queue flush path that never rechecks xdp_features.
 
-With XDP enabled, a frame with sop set but not eop can land in a page_pool
-head buffer. It then falls through to the skb path and crashes. This patch
-drops such frames and skips their body buffers. It also starts each poll
-with skip_page_frags set when no frame is in progress, and avoids counting
-a dropped frame twice when its last body buffer has rcd->err set.
+Signed-off-by: Hangbin Liu <liuhangbin@kylinos.cn>
+---
+Target this patch to net-next as it depends on f564749b3b26 ("net: record
+XDP programs propagated to lower devices"). Please tell me if anyone
+think it should be post to net.
 
-> diff --git a/drivers/net/vmxnet3/vmxnet3_drv.c b/drivers/net/vmxnet3/vmxnet3_drv.c
-> index e8be95c1d9f8e..66f677391bbbc 100644
-> --- a/drivers/net/vmxnet3/vmxnet3_drv.c
-> +++ b/drivers/net/vmxnet3/vmxnet3_drv.c
-> @@ -1614,7 +1614,8 @@ vmxnet3_rq_rx_complete(struct vmxnet3_rx_queue *rq,
->  		adapter->rx_prod_offset, adapter->rx_prod2_offset
->  	};
->  	u32 num_pkts = 0;
-> -	bool skip_page_frags = false;
-> +	/* A frame dropped at its head may continue in the next poll. */
-> +	bool skip_page_frags = !rq->rx_ctx.skb;
+For Sashiko: please ignore the bond's promiscuity/allmulti/ns maddrs
+leak issue when xdp setup failed. It will be addressed in another patch.
+---
+ drivers/net/bonding/bond_main.c | 33 ++++++++++++++++-----------------
+ 1 file changed, 16 insertions(+), 17 deletions(-)
 
-[Severity: Low]
-This initializer runs on every poll in vmxnet3_rq_rx_complete(), with or
-without XDP. Does it also change behaviour on the non-XDP rx path?
+diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
+index 776afdb9df43..0149bd7764e7 100644
+--- a/drivers/net/bonding/bond_main.c
++++ b/drivers/net/bonding/bond_main.c
+@@ -1951,6 +1951,20 @@ int bond_enslave(struct net_device *bond_dev, struct net_device *slave_dev,
+ 		return -EPERM;
+ 	}
+ 
++	if (bond->xdp_prog) {
++		if (!slave_ops->ndo_bpf || !slave_ops->ndo_xdp_xmit) {
++			SLAVE_NL_ERR(bond_dev, slave_dev, extack,
++				     "Slave does not support XDP");
++			return -EOPNOTSUPP;
++		}
++
++		if (dev_xdp_has_own_prog(slave_dev)) {
++			SLAVE_NL_ERR(bond_dev, slave_dev, extack,
++				     "Slave has XDP program loaded, please unload before enslaving");
++			return -EOPNOTSUPP;
++		}
++	}
++
+ 	/* set bonding device ether type by slave - bonding netdevices are
+ 	 * created with ether_setup, so when the slave type is not ARPHRD_ETHER
+ 	 * there is a need to override some of the type dependent attribs/funcs.
+@@ -2314,15 +2328,7 @@ int bond_enslave(struct net_device *bond_dev, struct net_device *slave_dev,
+ 		unblock_netpoll_tx();
+ 	}
+ 
+-	if (!slave_dev->netdev_ops->ndo_bpf ||
+-	    !slave_dev->netdev_ops->ndo_xdp_xmit) {
+-		if (bond->xdp_prog) {
+-			SLAVE_NL_ERR(bond_dev, slave_dev, extack,
+-				     "Slave does not support XDP");
+-			res = -EOPNOTSUPP;
+-			goto err_dec_slave_cnt;
+-		}
+-	} else if (bond->xdp_prog) {
++	if (bond->xdp_prog) {
+ 		struct netdev_bpf xdp = {
+ 			.command = XDP_SETUP_PROG,
+ 			.flags   = 0,
+@@ -2330,13 +2336,6 @@ int bond_enslave(struct net_device *bond_dev, struct net_device *slave_dev,
+ 			.extack  = extack,
+ 		};
+ 
+-		if (dev_xdp_has_own_prog(slave_dev)) {
+-			SLAVE_NL_ERR(bond_dev, slave_dev, extack,
+-				     "Slave has XDP program loaded, please unload before enslaving");
+-			res = -EOPNOTSUPP;
+-			goto err_dec_slave_cnt;
+-		}
+-
+ 		res = dev_xdp_propagate(slave_dev, &xdp);
+ 		if (res < 0) {
+ 			/* ndo_bpf() sets extack error message */
+@@ -5681,7 +5680,7 @@ static int bond_xdp_xmit(struct net_device *bond_dev,
+ 		xdp_convert_frame_to_buff(frame, &xdp);
+ 
+ 		slave_dev = bond_xdp_get_xmit_slave(bond_dev, &xdp);
+-		if (!slave_dev) {
++		if (!slave_dev || unlikely(!slave_dev->netdev_ops->ndo_xdp_xmit)) {
+ 			err = -ENXIO;
+ 			break;
+ 		}
 
-Before this patch, two head-buffer drops set only the poll-local
-skip_page_frags: the netdev_alloc_skb_ip_align() failure and the
-dma_map_single() failure.
+---
+base-commit: a4c450594f5d1dc0fc4daacfb95d40554d99dead
+change-id: 20261124-bond_xdp_fix-3f5eb6533f50
 
-Suppose the poll ended before the body completion became visible. The next
-poll then started with skip_page_frags = false and ctx->skb == NULL, and the
-body completion would hit this in the non-sop branch:
+Best regards,
+--  
+Hangbin Liu <liuhangbin@kylinos.cn>
 
-    BUG_ON(ctx->skb == NULL && !skip_page_frags);
-
-That problem seems to predate 54f00cce1178. With this change the non-XDP
-case is fixed as well. Orphan body completions at the start of a poll are
-now skipped silently instead of triggering the BUG_ON.
-
-The subject, the Fixes: tag and this sentence in the commit message all
-present the change as XDP-only:
-
-  "drop such frames: count them in drop_total, reuse the head buffer and
-  skip the body buffers, as the existing allocation failure path does."
-
-Could the commit message say that the existing allocation failure path had
-the same cross-poll problem, and that non-XDP rx behaviour changes too? The
-non-XDP issue looks older than the Fixes: commit, so this would help
-stable backport triage.
-
-[ ... ]
-
-> @@ -1662,10 +1663,27 @@ vmxnet3_rq_rx_complete(struct vmxnet3_rx_queue *rq,
->  		       rxd->len != rbi->len);
->  
->  		if (unlikely(rcd->eop && rcd->err)) {
-> +			/* The last body buffer of a frame already dropped */
-> +			if (!rcd->sop && skip_page_frags)
-> +				goto rcd_done;
-
-[Severity: Low]
-Does this skip assume that every path setting skip_page_frags has already
-counted the frame in drop_total?
-
-The head-buffer drops do increment drop_total. Those are the new XDP
-oversize drop, the netdev_alloc_skb_ip_align() failure and the
-dma_map_single() failure.
-
-The two body-buffer drops later in vmxnet3_rq_rx_complete() set
-skip_page_frags without touching drop_total:
-
-    if (unlikely(!new_page)) {
-        rq->stats.rx_buf_alloc_failure++;
-        dev_kfree_skb(ctx->skb);
-        ctx->skb = NULL;
-        skip_page_frags = true;
-        goto rcd_done;
-    }
-
-The dma_map_page() failure branch right after it does the same.
-
-Before this patch, suppose the final body completion of such a frame had
-rcd->eop && rcd->err set. vmxnet3_rx_error() then counted the frame once in
-drop_err and drop_total.
-
-With this check, does that frame go uncounted in both? drop_total feeds
-rx_dropped in vmxnet3_get_stats64() and the ethtool drop counters.
-
-Would it make sense to increment drop_total in those two body-path failure
-branches? Another option is to limit this skip to drops that were already
-counted.
-
->  			vmxnet3_rx_error(rq, rcd, ctx, adapter);
->  			goto rcd_done;
->  		}
-
-[ ... ]
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261123124855.1021-1-filzador%40gmail.com
