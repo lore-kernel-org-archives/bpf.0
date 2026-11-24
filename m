@@ -1,45 +1,55 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795502447;
-	b=O6dAubE4fv9vnwmBiV9yebLoRKNmnf4yxB62xqBx9M1kqv6iCT854LumhvjJtkCYqKx6
-	 KA0/mVoq9/k/ZzLoNa5DrrJjNKcotnXerMTzOh6s6tXULtR+2+04hpzFj/HNNo5OcyTtb
-	 rWTk3NlJPQtxXKjSguLcZRkE+/bnl3ABwyF1zHU6SXC2JIuwBjnjbRbOTMfYYsUmaeXtR
-	 AInecCoeyySCht66IddMXcAxKt5ADGlLMDvuAKuSG+dziUqRz5UbHSa6HsCWdEGq5HVMo
-	 WYl5b2WqCnpP0gX3nQWZvhd6kmn1Gw+6JxkY/k2tzldHBsrf2aNKVXWtTEUn4BjHZfQ==
+	t=1795502516;
+	b=mgIkvTLazWefD6U/RKkvXvzIC7nUzPhTCYXYsipm8vQ2YFbs5gtPAdWMnOc3e9nZrB1L
+	 iDjuvisjo3vF510eq1Z4Bgc2u4bPOuFeYU4l50JcZ2k/GduKPk9BZuGpC+zqOsG6nonar
+	 RL5zhCgqT74gC7aCZ3e3YLavU4sv7dPFr4RBe/SHYBzM7haSeoARuI3nXJd+crw1KrqXP
+	 qkoxkCLE21jBQb9elVwz1/HwfYXJJvWJWtT8chnyHmn2YUwQVSLotJEvDUQRD8spqDVdb
+	 fUEo8BLmmUzb2fZLRtTmIpX3m9S54IAKtGWKyfEECpb7MLfxm9L5ylf/wX1PQvTXiXA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795502447;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=ix10EPurMP9nTUTWxPxsWj9Pt6bfZAmxBCz9Chwa4IA=;
-	b=HjdSuOJuHP0BUAGzGQjsEE4C1KRU6+N4+COFkycoDmYoEBYatcC0Al8fXTcubKpu5vna
-	 H+Vkzxk2J2muADKgtI6ig+u4RBej8StGl7Li26CxYx2qOY3tbjpb4fOJfWqPh9h96405A
-	 /XMt8Gl1toQmyZXXXLHh4TPz+4hXyuM2Rg1EHcIqz5p9KZ/7e8383HpZ5r/LoeO0uMTKP
-	 DMu6VVq5nZpKpJeP0BFLeR9xPnXJiars/4+u+IW9pFmUagMLUIko3VI7JSO3lKeMFNRv7
-	 ILG0VIo6jgiqSRwzwxqEiwXShsOU78p1r5qwpsNMSFKuQYLKj0DZ74l7iNKbThsQVQw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795502516;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=0MTKVnxWcKYuk0Iai4ZAjEaKmzIPrFCLRJdlgwxvUFQ=;
+	b=FnfiDx82Zf8u56hLq8FSwn0d1+tR1EXxIpCa0go5UF8unq+5VZN1HLjKYEdqZMOwN3yY
+	 tTaa2xKnKoAL27sh03Kou1Vd82zhbdwOTzj7OAdURg1LO/vEA7zxqWPlC7vOEweRb8qb5
+	 Zlw6KG6Je5QryksnKufp7RMzYr4XpgLKGNdsgt3vctKB94FkcJKuQajLcZpjLdYeb2GCZ
+	 Ar9yP3lMKDpnsc/qRqztRkMT1tx8gNRo1+vFNMTgtqX40jWdmj4MSe2uKWkalsgx4AclV
+	 N+T1B8+PA/fUYj4/CRockuwAqMtwvJPZeiykRinI3VNwL4VC2kC0nEJxBuXsDBrINEw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BYyX2SIN;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CsXw0n9X;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04628606A32C
-	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 06:40:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51465606A31E
+	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 06:41:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BYyX2SIN
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF2341F000C6;
-	Tue, 24 Nov 2026 06:40:44 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CsXw0n9X
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64C8B1F000CF;
+	Tue, 24 Nov 2026 06:41:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795502446;
-	bh=ix10EPurMP9nTUTWxPxsWj9Pt6bfZAmxBCz9Chwa4IA=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=BYyX2SINveEgQLl0E08yaqQ+rECqExJrGrMXg0SYFGh4V+DSASUt0QzF5f/PSqq9f
-	 y4v8HryIwUAgGrUzpKQQa+BxJNdgIlUNiOrK4IVIc9S921E+oj3zPuwnpdV5BEeZRW
-	 HQB8jcolX3ei+htu9WSn5dxicGSQbojyL+Hquq6SnOBjJZhRudLe2yy9RlXlqT4j8e
-	 Nfz1PnACHN3Ag0UqltGBq5B9M5QDQMPWFH7fGJWDiV9b43C64tYV3dPzI42wkcexLg
-	 XYMqy+b50TEMnls6yKJzOuk5OyjtfysxMQKSRN0NJc5Y9piAeE7DVBVhs+k743FmDT
-	 aniKdsGLzpGJA==
-Content-Type: multipart/mixed; boundary="===============4855473302756357577=="
+	s=k20260515; t=1795502515;
+	bh=0MTKVnxWcKYuk0Iai4ZAjEaKmzIPrFCLRJdlgwxvUFQ=;
+	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
+	b=CsXw0n9XMTxgARSrZRaAj0eiPkpAO9ddmNxhS3axF+6BibUS+c1VQlH1o9PV6lrNU
+	 LTBA1S4HLTmlYuWVbEUPxrwyfWecXrhrD6P/nSitpH96mz1RQutXj4uHbV1bO9sTRm
+	 HFuDnCPkejXhTLn/CWj+64DupNCPy0E2WkzFyLScAyImZrFed0EpEJePBBhx5IsJh0
+	 jrA0hDG6qZ30l35KvGt+QqaldSK3tVeWIwxJe5s2KIeRnc2vSBqlyWsioSq4pKy5Xa
+	 5kVW0rNuHvwSBA8ZU5U+U4tU1DpsLTDJ+6QNlF1K/kQR9l7pwfQY6L9a+UCdKvdQQx
+	 hGueDP3IWo21w==
+Message-ID: <sashiko-outbox-230606@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v1 3/4] bpf: Add sleepable local storage
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Emil Tsalapatis" <emil@etsalapatis.com>, bpf@vger.kernel.org
+In-Reply-To: <20261124060357.11700-4-emil@etsalapatis.com>
+References: <20261124060357.11700-1-emil@etsalapatis.com>
+ <20261124060357.11700-4-emil@etsalapatis.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 24 Nov 2026 06:41:54 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -48,72 +58,46 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Message-Id: <2a5c47baff2a0980ba271807cf9b4ba773c09a093f62aaf39cfd17cdd434a630@mail.kernel.org>
-In-Reply-To: <20261124060357.11700-4-emil@etsalapatis.com>
-References: <20261124060357.11700-4-emil@etsalapatis.com>
-Subject: Re: [PATCH bpf-next v1 3/4] bpf: Add sleepable local storage
-From: bot+bpf-ci@kernel.org
-To: emil@etsalapatis.com,bpf@vger.kernel.org
-Cc: ast@kernel.org,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,daniel@iogearbox.net,emil@etsalapatis.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Tue, 24 Nov 2026 06:40:44 +0000 (UTC)
 
---===============4855473302756357577==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue to consider:
+- [Low] bpf: missing __GFP_NOWARN in sleepable
+  bpf_local_storage_alloc_mem()
+--
 
-> bpf: Add sleepable local storage
+commit 6a9b8094f2dfaf87e47ddf985c894923ff71ad36
+Author: Emil Tsalapatis <emil@etsalapatis.com>
 
-TL;DR: The new sleepable GFP_KERNEL | __GFP_RETRY_MAYFAIL local storage
-allocation lacks __GFP_NOWARN, so under memory pressure it may print allocator
-warnings and stack dumps on handled failures. Intentional?
+bpf: Add sleepable local storage
 
-> diff --git a/kernel/bpf/bpf_local_storage.c b/kernel/bpf/bpf_local_storage.c
+This commit uses bpf_map_kzalloc() with GFP_KERNEL | __GFP_RETRY_MAYFAIL
+to allocate local storage when called from a sleepable BPF program in a
+sleepable context.
+
+> diff --git a/kernel/bpf/bpf_local_storage.c b/kernel/bpf/bpf_local_storag=
+e.c
+> index 28eaee5c66ce8..74dfebf180970 100644
 > --- a/kernel/bpf/bpf_local_storage.c
 > +++ b/kernel/bpf/bpf_local_storage.c
-
-[ ... ]
-
-> @@ -69,6 +69,10 @@ static bool selem_linked_to_map(const struct bpf_local_storage_elem *selem)
->  static void *bpf_local_storage_alloc_mem(struct bpf_local_storage_map *smap,
+> @@ -69,6 +69,10 @@ static bool selem_linked_to_map(const struct bpf_local=
+_storage_elem *selem)
+>  static void *bpf_local_storage_alloc_mem(struct bpf_local_storage_map *s=
+map,
 >  					size_t size, bool sleepable)
 >  {
 > +	if (sleepable)
 > +		return bpf_map_kzalloc(&smap->map, size,
 > +				       GFP_KERNEL | __GFP_RETRY_MAYFAIL);
 > +
-
-Should this mask also include __GFP_NOWARN?
-
-A failure here is already handled: __bpf_selem_alloc() uncharges and
-returns NULL, and bpf_*_storage_get() returns NULL to the program.
-Without __GFP_NOWARN, a program creating local storage under memory
-pressure can make the allocator print warnings (slab_out_of_memory()
-and warn_alloc() with a stack dump).
-
-The previous path did not warn, since bpf_map_kmalloc_maylock() ends up
-using GFP_NOWAIT or kmalloc_nolock(), both of which imply __GFP_NOWARN.
-The GFP_KERNEL path local storage had before 5063e7758899 ("bpf: Use
-kmalloc_nolock() universally in local storage") passed
-"gfp_flags | __GFP_NOWARN", and other GFP_KERNEL | __GFP_RETRY_MAYFAIL
-allocations in kernel/bpf (arena.c, bpf_ringbuf_area_alloc(),
-__bpf_map_area_alloc()) also add __GFP_NOWARN.
-
-A sleepable program calling bpf_task_storage_get() with
-BPF_LOCAL_STORAGE_GET_F_CREATE reaches this via
-bpf_local_storage_update()->__bpf_selem_alloc()->
-bpf_local_storage_alloc_mem().  Is the omission intentional?
-
 >  	return bpf_map_kmalloc_maylock(&smap->map, size, __GFP_ZERO);
 >  }
 
-[ ... ]
+[Severity: Low]
+Should this bpf_map_kzalloc() call also pass __GFP_NOWARN?  Without it, an
+allocation failure under memory pressure or higher-order fragmentation
+triggers a warn_alloc() stack dump in dmesg, even though
+bpf_local_storage_update() handles a NULL return gracefully.
 
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/45338923700
---===============4855473302756357577==--
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261124060357.1170=
+0-1-emil@etsalapatis.com?part=3D3
