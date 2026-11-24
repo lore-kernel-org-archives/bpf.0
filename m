@@ -1,55 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795560946;
-	b=Wi45Yo4G6drNvtOL7zz9+QRomu754da8jTgTB4Y8pfu15Ld81V5aOUMFmfGbSW2oJKMw
-	 N+oKQqYSUHydVRohhzFrziOKwCpqeikCuwCnVl+raQYYpA2s8kOvCVZh+a/vSglR1zs3O
-	 zTCPD+3pzAiZn0wvBNNFbQvs+xN5nGJEKnsRUDubGi5XjHT+9YPBV825RYXpoIoD2s1mx
-	 ar388XE7iHSC7E29Rty2exPnzqvf5EZn4BjqZXqt3Kx1PfG4lhFCpO/P2/lyumkeFhP/z
-	 /HZhFdGuZ/cITFsLn59G2MzSpaCGEMIiMq4FQKCng3Irk5I8bwFAsHYqwwcnboys9AA==
+	t=1795560963;
+	b=0cVZjhuEGEqvGm3NJnSJkEH2hn+Jr8zAB8Qc48zsmNQH8I7L5qATIbmgfD4Jl7xNKoFW
+	 vh4izmDnL8m1I1+4k5v8c4SkZg9ojCb94w2RsNa9sYVbQtcOkm8DovyV/gl6l87Wz0/ez
+	 ClxzP7TpCx74VihGxQFpst5NRuxPuket/QHy9kyjBswi21z7ocI7u5CCu80/p6O3Etec1
+	 YPRHOy6vs7qRo5GLko3VLFoME3AKeuF+g3HQTVwndqsx0+t1WUq598KM2dHrdx3Gnryf2
+	 7pI5cyT3Y5Rw5+nHXhhZG4ywiWZTCyflT4dK6+4OikqrCicw8DPTs24A6JtV/AEN/Ww==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795560946;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795560963;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=paK+J2HRq1Gqd98vL2jePpocwwMPdfkXzN8XzWJgC/c=;
-	b=Q2gyKcHLybbQEmuIIPTKwa3QPAEmmW4UqRwWDuNoPgMUsEORRWmjU69/tt3Yli4Gx3Y+
-	 vPjIqcWdmPDLgpdl2cWKYwDP/6offpYCDl+REUBNjD6B4P5xtELt28dSI4vD9icr0IY4s
-	 p6n947pYEFpIRedXZm1w6e+cN/TszRYBuwK1p8X2Z3TIAoVf+H2+3j8CffW/mimmNvQzs
-	 +fL8JOLZ1XUy7m0K6ujA+VhWZmW6Ecl+5hegInLLvbl9t5oJ2Edv88eo1mgPer+XfDZzd
-	 NMfL7dUDa3MRUu5ZWaJnqqm+yF1h3LscRKZxojoHX4DFHXwWahLRKe6+Fo+B5VnCJZg==
+	bh=6Sr3fuIxW6c36EzlN3fVwHbLq2oWm6lvo3miJtGPY74=;
+	b=yBbUSWugzx3HzkO8sMUoJar14oYMolvpKuscifj3LGcv2l1zoQFNii3ZOHsg9p4TIid6
+	 Bbokrt2yzxEppO2/Rt7nUtt+CtiwMfBVLEzMM3g6bZl4H1urE6WfxnirIX60CjZDKH12V
+	 xJz22Vrq+cm39peXKjel/Y12ER/bY70OoHreV7ezIKPGMEG+u+afwTeb+FdMQtXZoRyx8
+	 rPuu3ttLjVTe62wmdYL106ensyhM5XWkweIO0k8qZulvuVrev2jgMvx8YI1F9NPkaS4pd
+	 RDr1ltLGrnsE7UHbljr/MR1QUJldLOEsXR16V/gF5GibqQoGzYNsTvmpxwOS1ihPb9g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BN8hGYhk;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lFHL1rml;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DDF9606A31E
-	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 22:55:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04A5B606A31E
+	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 22:56:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BN8hGYhk
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BF781F000D0;
-	Tue, 24 Nov 2026 22:55:46 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lFHL1rml
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F61D1F000CA;
+	Tue, 24 Nov 2026 22:56:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795560946;
-	bh=paK+J2HRq1Gqd98vL2jePpocwwMPdfkXzN8XzWJgC/c=;
+	s=k20260515; t=1795560962;
+	bh=6Sr3fuIxW6c36EzlN3fVwHbLq2oWm6lvo3miJtGPY74=;
 	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=BN8hGYhkotEeAMGWEuMpciLwdQ8L+y/VILx/K0Bjk1sXSSZk+EMzjpxMayHx3BE8o
-	 85to9eDu9auRDkVFShXTJ2jOz7E04951+N4TFQ4KtisvPY3kvzEYVqFsXkYgjMwdTn
-	 f9Rs+hgeZ49wV15ArzjwPDhqmA16TJrfCGuyiqxefMzz3ZAEI856WOAYX0j2uV2jKk
-	 I2J4mQ4OalfONokpuhT2p6xddJEQy9Qgfk1XJYkkp+EAehIM7oXm6aqsJpTN1G+mL8
-	 y6DSNMtjqTmgPtQ3BdxpA9KecRQSpyE6RYviyUf2Z3XxdMzWgH2FuhLTDW1aq06f+e
-	 ZArs7IAZBdTrQ==
-Message-ID: <sashiko-outbox-232175@kernel.org>
+	b=lFHL1rml2w7KgLRDG7BxGXaDvPImBxPpopx9hAzgNJ/tRvFDMH1E+Nzj6bB5G7MFg
+	 efYGZ4tIdvRrCLP1J2w5+ZgZezUQiEz1EJNNdBjbBEiTLQPMTHOyC0ZKhVoACuz2NH
+	 c8HrzNMSAQJe/gKwlfpZIHt/5TLkrGUqYq30H7zhrleDBrNlhN6D9kJx+HKTDRclkl
+	 i9/Gw86Uso54UtSKXb6GojKIDH6xDoA1HxowGaOwKbVuU/dWHtZegozpOxgUdfnPod
+	 IzQ44n4S+Ob0dQ0WE7jb4CW5LsWkAC9AXzBHSm2om3UxzQ4g/Vu8kbnbvdW5V4joj+
+	 ymiYnWBwqWY5Q==
+Message-ID: <sashiko-outbox-232176@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v2 3/4] bpf: Align devmap values to 8 bytes
+Subject: Re: [PATCH bpf-next v2 2/4] bpf: Align lpm_trie map values to 8
+ bytes
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Tobias Philipp" <tphilipp@gmail.com>, bpf@vger.kernel.org
-In-Reply-To: <20261124225055.87344-4-tphilipp@gmail.com>
+In-Reply-To: <20261124225055.87344-3-tphilipp@gmail.com>
 References: <20261124225055.87344-1-tphilipp@gmail.com>
- <20261124225055.87344-4-tphilipp@gmail.com>
+ <20261124225055.87344-3-tphilipp@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 24 Nov 2026 22:55:45 +0000
+Date: Tue, 24 Nov 2026 22:56:01 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -61,38 +62,42 @@ Precedence: list
 
 Thank you for your contribution! Sashiko AI review found 1 potential
 issue to consider:
-- [Low] bpf: non-standard multi-line comment style in struct
-  bpf_dtab_netdev
+- [Low] bpf: non-standard multi-line comment style in trie_alloc()
 --
 
-commit b6749200cfd19f384e3c763bbc57d732deab6c99
+commit 7745369351fba1841a655972ae45f1b4be10934b
 Author: Tobias Philipp <tphilipp@gmail.com>
 
-bpf: Align devmap values to 8 bytes
+bpf: Align lpm_trie map values to 8 bytes
 
-This commit aligns struct bpf_dtab_netdev::val to 8 bytes so that devmap
-values match the verifier's 8-byte map-value alignment assumption and avoid
-alignment faults on 64-bit load-acquire instructions.
+This commit rounds lpm_trie's data_size up to a multiple of 8 bytes when
+computing the value offset and node size so that map values are 8-byte
+aligned.
 
-> diff --git a/kernel/bpf/devmap.c b/kernel/bpf/devmap.c
-> index 1b8f0d7f84552..0ef24e3f9f0c9 100644
-> --- a/kernel/bpf/devmap.c
-> +++ b/kernel/bpf/devmap.c
-> @@ -70,7 +70,10 @@ struct bpf_dtab_netdev {
->  	struct bpf_prog *xdp_prog;
->  	struct rcu_head rcu;
->  	unsigned int idx;
-> -	struct bpf_devmap_val val;
-> +	/* Returned to BPF programs as the map value, which the verifier
-> +	 * assumes to be 8-byte aligned.
+> diff --git a/kernel/bpf/lpm_trie.c b/kernel/bpf/lpm_trie.c
+> index 4d6f25db9ba12..44ad5c1630006 100644
+> --- a/kernel/bpf/lpm_trie.c
+> +++ b/kernel/bpf/lpm_trie.c
+
+[ ... ]
+
+> @@ -597,8 +597,14 @@ static struct bpf_map *trie_alloc(union bpf_attr *at=
+tr)
+> =20
+>  	raw_res_spin_lock_init(&trie->lock);
+> =20
+> -	/* Allocate intermediate and leaf nodes from the same allocator */
+> -	leaf_size =3D sizeof(struct lpm_trie_node) + trie->data_size +
+> +	/* Allocate intermediate and leaf nodes from the same allocator.
+> +	 * The key bytes are padded to a multiple of 8 bytes, because the
+> +	 * verifier assumes that map values are 8-byte aligned. Objects from
+> +	 * bpf_mem_alloc are 8-byte aligned, so data[] must be as well.
 > +	 */
-> +	struct bpf_devmap_val val __aligned(8);
->  };
 
 [Severity: Low]
-This isn't a bug, but BPF multi-line comments place the opening /* on its
-own line with the comment text starting on the next line.
+This isn't a bug, but BPF multi-line comment style puts the opening /* on
+its own line before the comment text.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261124225055.8734=
-4-1-tphilipp@gmail.com?part=3D3
+4-1-tphilipp@gmail.com?part=3D2
