@@ -1,94 +1,61 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.31
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795525736;
-	b=daLyjQZxH0qOdcb5EvMBaf3Sgr53DbHyzQM2KZVZ3ZH9+9Z5AdGjIyVj5N3l1YYRiyNx
-	 fTY2HXIpda7Oinq9WuaCcSZMQ+e7PFsaxY30lvToRysrZu6Eg5YGi/UpruNX1yuui6Xbt
-	 4q2k4xHHaWyIM5LYqCRsE/RIvrUDmsBmZp1vdQ/lModVUmp/k/jtKBRcGWWMcT3maicio
-	 twrDaOWiAcQXGDcrl2xLw934ThT8y/ocpJU/ShhBTyYBOimHp6PVsebgfVgSSNHj76xR2
-	 5IoZ2pa29wf/w7aADlBsgxjnQLGfmNNE7XWK9z3TlDny/fSWbvF4SnJP516xN8wB/kA==
+	t=1795526789;
+	b=IRBSSbOy4gJtHu/ET2pDjqZHfndF7GUu+pnZmfiZL6kqmGlB8Rpr9H3uhQ4nwg3gKrxO
+	 bvB/cZBTb4BZZxSD4vvGsCnOPkkGvXlMr3L+Oqt32iUe3YeWI2bBIpDUq61UpQW4I1sdQ
+	 FHNBfBCHKiNL5jz/0fw8VqJRZLfTuubHtW7Q5OowvT/bCqHaRdZdvPZzYF/D59uYPEweD
+	 9nGTIUi5MauB6ZILE4CqSSfoVHd88V/o5fHGwi4V8EzS3daDi2tPTohwRFOsEpSjz7csF
+	 jfc21eWr7K5+I39eQF89q2WBKQmpIf+/kXKwLouPtFjRfPJSFpatz1fFFvnMTr314IA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795525736;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=ZAJFkeBY0BZ1OPlmDSlGAxEEUMWDR+RmAqL5xjV6gRU=;
-	b=GADTIpGxOogVzCLq0hEg9LH1VMBxdI6u6XFmuFVoA4+ykMSFSisVODc3+X7YodNqaMhp
-	 6YYrkBsY3KTC6KWKkprLTk5+XyUSh+Yooe5Loz40FFkh0Tchi9d1Uhv2KPnKY0n8gyYFF
-	 GPYQz9oAP0wJPAilbhsVegvtDBb4uiQLNa3Kd2c4MuBfFtosPDbBIoDJ9Hbh8UOpK5nqy
-	 0usFrtso/uvmkmQ/obW+xiygt+7MckLmfXaFS47hT4qaSqMsh97wn5c4Okm1jlpoQ7F3D
-	 UIyLf3i13y56p/Q/wYxbIl0t5fPSO4skmDsI1K/s3xHd4vRb0OzvsrkaCLYUJ5ZkbPw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795526789;
+	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
+	 In-Reply-To:References:X-sashiko-severity:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=+iD7n72HFOyZmZK5XExAtuSfPQKnaovwWr876cE3qyI=;
+	b=D1ylVZUrVi0hbjgjLo2ov1fpCciNVKx4omaKoN8QmnQqiwCRMUEFCsQS/bvEO9qvkABJ
+	 1nmpBCO6pRLnEIrbTVYBO0RsABudjZp4dZ7CtN1ccI+PJ3tlY8YK1K1PLlND32FN1mFqQ
+	 amjUYEaxLxiEVAo2CpFvcMIK5xc1DpCxV/R96rHp5csBuUevxphRABJzKchLMtzgyQAA8
+	 SwG+QOVUiHQ2p12zanxImF1RlQ89nBGMVhZjmYhkwDm3+ovQ+HE6S3UqpCLPqXmS81oyk
+	 eZB9hFDasFjqRZHsBEoo+NdyybYVmSd53nfrDllNN/QyhTVEHHjRWaA8en1EA4XgZKA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=SpadUEwm;
-	arc=none smtp.remote-ip=95.215.58.31
-Received: from mta1.migadu.com (out-31.mta1.migadu.com [95.215.58.31])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="gbEj/tdd";
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4462E606A31E
-	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 13:08:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4462E606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 192AC606A31E;
+	Tue, 24 Nov 2026 13:26:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=SpadUEwm
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=fuZhFuYOPr0oewf5ZwksCl2L3uxSF9dVzjuhFkRLtXE=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1795525734; v=1; x=1796130534;
- b=SpadUEwmyDkvAYAqWTSsZ1ceMQuk7K736e1kJy1PX5kon8+rApg8y6Ob4/PyThZ6Mju8oWOG
- 8eevL9j8QwBDFVel88hNg9vRragCQMY2s42vkRTkx3FefIS7iN5Fp+yXom+AcR17DZfuHjIWUrB
- HDZRfmws4Ed+enLHd9ufQXWg=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 5aa0fa67673d0461;
-	Tue, 24 Nov 2026 13:08:54 +0000
-X-Mizu-Trace-ID: 5aa0fa67673d0461
-X-Migadu-Flow: FLOW_OUT
-From: Xuanqiang Luo <xuanqiang.luo@linux.dev>
-To: netdev@vger.kernel.org
-Cc: "David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Matthieu Baerts <matttbe@kernel.org>,
-	Mat Martineau <martineau@kernel.org>,
-	Geliang Tang <geliang@kernel.org>,
-	David Ahern <dsahern@kernel.org>,
-	Ido Schimmel <idosch@nvidia.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Neal Cardwell <ncardwell@google.com>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	Pablo Neira Ayuso <pablo@netfilter.org>,
-	Florian Westphal <fw@strlen.de>,
-	Phil Sutter <phil@nwl.cc>,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	mptcp@lists.linux.dev,
-	netfilter-devel@vger.kernel.org,
-	coreteam@netfilter.org,
-	Xuanqiang Luo <luoxuanqiang@kylinos.cn>
-Subject: [PATCH net-next v1 6/6] tcp: do not call bpf_skops_write_hdr_opt() unless needed
-Date: Tue, 24 Nov 2026 22:06:31 +0900
-Message-ID: <20261124130631.1886963-7-xuanqiang.luo@linux.dev>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20261124130631.1886963-1-xuanqiang.luo@linux.dev>
-References: <20261124130631.1886963-1-xuanqiang.luo@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=gbEj/tdd
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3BC31F000C4;
+	Tue, 24 Nov 2026 13:26:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795526788;
+	bh=+iD7n72HFOyZmZK5XExAtuSfPQKnaovwWr876cE3qyI=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=gbEj/tddu9/KzK9pc5AjqNXjxcTmpeMeGVEjHNaX1jtWJDhSBHdrocH2vY9PN9ZuH
+	 LsXsAxTza7Xq7VS2UaUJtqOMdProtgDfjvtD6OG0qJKImXysYGJZkxGJoI+uwen1H8
+	 wQSbkRfocpQSPQWU/W3gJZdCKBdUFvsfK98iPHm3k3UGOdTyifzhwauOYm8/GmVfdS
+	 SqlfCJk3JXQT8txKlnFmAjT/aCmh28hbImBHXu3LY5jXo9BqTrUT5HcEOM02w/u2Q8
+	 Ubbl3sWMUG3Wi+t5W5Oq9iJC7i27J8NnW1idyhqBJfRaSH2SsqWtlNdYFwZM8dG/Xu
+	 0HxwtjRSQvzkw==
+Subject: Re: [PATCH net v2 2/5] vmxnet3: keep the previous XDP program when
+ attaching fails
+From: netdev-bot+sashiko@kernel.org
+To: filzador@gmail.com
+Cc: ronak.doshi@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
+ netdev@vger.kernel.org, bpf@vger.kernel.org, andrew+netdev@lunn.ch,
+ davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
+ ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+ john.fastabend@gmail.com, sdf@fomichev.me, u9012063@gmail.com
+Date: Tue, 24 Nov 2026 13:26:27 +0000
+Message-ID: <179552678713.3135.6451619234057473485@kernel.org>
+In-Reply-To: <20261123124855.1021-3-filzador@gmail.com>
+References: <20261123124855.1021-3-filzador@gmail.com>
+X-sashiko-severity: High
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -98,70 +65,174 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-From: Xuanqiang Luo <luoxuanqiang@kylinos.cn>
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue(s) to consider.
 
-__tcp_transmit_skb() calls bpf_skops_write_hdr_opt() for every skb. The
-function returns at once if no BPF program reserved room for TCP options
-(opts->bpf_opt_len == 0), which is the common case.
+Critical: 0 · High: 1 (1) · Medium: 0 · Low: 0
 
-It has a struct bpf_sock_ops_kern on its stack. With
-CONFIG_STACKPROTECTOR_STRONG=y, its stack canary is set up and checked
-even when it has nothing to do.
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
 
-Test opts.bpf_opt_len in its callers instead.
+- [High] The new err_restore path in vmxnet3_xdp_set()
+  (drivers/net/vmxnet3/vmxnet3_xdp.c:100-109) puts old_bpf_prog back…
 
-$ scripts/bloat-o-meter -t vmlinux.old vmlinux.new
-add/remove: 0/0 grow/shrink: 2/2 up/down: 28/-196 (-168)
-Function                                     old     new   delta
-tcp_make_synack                             2006    2020     +14
-__tcp_transmit_skb                          4114    4128     +14
-tcp_options_write.isra                      1699    1651     -48
-bpf_skops_write_hdr_opt.isra                1206    1058    -148
-Total: Before=24067405, After=24067237, chg -0.00%
+Pre-existing issues:
+- [High] This problem wasn't introduced by this patch, but the
+  err_restore path added here only restores software state:…
 
-Signed-off-by: Xuanqiang Luo <luoxuanqiang@kylinos.cn>
----
- net/ipv4/tcp_output.c | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
+--
 
-diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
-index c2022fc9ad52..3c0be5a675ea 100644
---- a/net/ipv4/tcp_output.c
-+++ b/net/ipv4/tcp_output.c
-@@ -538,9 +538,6 @@ static void bpf_skops_write_hdr_opt(struct sock *sk, struct sk_buff *skb,
- {
- 	u8 first_opt_off, nr_written = 0, max_opt_len = opts->bpf_opt_len;
- 
--	if (likely(!max_opt_len))
--		return;
--
- 	first_opt_off = tcp_hdrlen(skb) - max_opt_len;
- 
- 	if (cgroup_bpf_enabled(CGROUP_SOCK_OPS) &&
-@@ -1731,7 +1728,8 @@ static int __tcp_transmit_skb(struct sock *sk, struct sk_buff *skb,
- 	}
- 
- 	/* BPF prog is the last one writing header option */
--	bpf_skops_write_hdr_opt(sk, skb, NULL, NULL, 0, &opts);
-+	if (unlikely(opts.bpf_opt_len))
-+		bpf_skops_write_hdr_opt(sk, skb, NULL, NULL, 0, &opts);
- 
- #if IS_ENABLED(CONFIG_IPV6)
- 	if (likely(icsk->icsk_af_ops->net_header_len == sizeof(struct ipv6hdr)))
-@@ -4146,8 +4144,9 @@ struct sk_buff *tcp_make_synack(const struct sock *sk, struct dst_entry *dst,
- 	rcu_read_unlock();
- #endif
- 
--	bpf_skops_write_hdr_opt((struct sock *)sk, skb, req, syn_skb,
--				synack_type, &opts);
-+	if (unlikely(opts.bpf_opt_len))
-+		bpf_skops_write_hdr_opt((struct sock *)sk, skb, req, syn_skb,
-+					synack_type, &opts);
- 
- 	skb_set_delivery_time(skb, now, SKB_CLOCK_MONOTONIC);
- 	tcp_add_tx_delay(skb, tp);
+vmxnet3: keep the previous XDP program when attaching fails
+
+This patch changes vmxnet3_xdp_set() so the old program's reference is
+released only after the device has been reactivated. If
+vmxnet3_rq_create_all() or vmxnet3_activate_dev() fails, the new
+err_restore path puts the old program back in adapter->xdp_bpf_prog and
+restores the redirect-target feature.
+
+> diff --git a/drivers/net/vmxnet3/vmxnet3_xdp.c b/drivers/net/vmxnet3/vmxnet3_xdp.c
+> index 5f470499e6002..45259b236ebd7 100644
+> --- a/drivers/net/vmxnet3/vmxnet3_xdp.c
+> +++ b/drivers/net/vmxnet3/vmxnet3_xdp.c
+
+[ ... ]
+
+> @@ -84,17 +82,31 @@ vmxnet3_xdp_set(struct net_device *netdev, struct netdev_bpf *bpf,
+>  	if (err) {
+>  		NL_SET_ERR_MSG_MOD(extack,
+>  				   "failed to re-create rx queues for XDP.");
+> -		return -EOPNOTSUPP;
+> +		goto err_restore;
+>  	}
+>  	err = vmxnet3_activate_dev(adapter);
+>  	if (err) {
+>  		NL_SET_ERR_MSG_MOD(extack,
+>  				   "failed to activate device for XDP.");
+> -		return -EOPNOTSUPP;
+> +		goto err_restore;
+>  	}
+>  	clear_bit(VMXNET3_STATE_BIT_RESETTING, &adapter->state);
+>  
+> +out:
+> +	if (old_bpf_prog)
+> +		bpf_prog_put(old_bpf_prog);
+>  	return 0;
+> +
+> +err_restore:
+> +	/* On error the core drops its reference to the new program and
+> +	 * keeps the old one attached: the driver must keep the old one.
+> +	 */
+> +	vmxnet3_xdp_exchange_program(adapter, old_bpf_prog);
+
+[Severity: High]
+The comment says the core keeps the old program attached on error. Does
+that hold for every caller of ndo_bpf?
+
+An XDP link detach goes through bpf_xdp_link_release() or
+bpf_xdp_link_detach(), then dev_xdp_detach_link(). That function ignores
+the driver's return value:
+
+net/core/dev.c:dev_xdp_detach_link() {
+    ...
+	bpf_op = dev_xdp_bpf_op(dev, mode);
+	WARN_ON(dev_xdp_install(dev, mode, bpf_op, NULL, 0, NULL));
+	dev_xdp_set_link(dev, mode, NULL);
+	return 0;
+}
+
+On that path, vmxnet3_xdp_set() is called with new_bpf_prog == NULL and
+old_bpf_prog == P, so need_update is true on a running device.
+
+Suppose vmxnet3_rq_create_all() or vmxnet3_activate_dev() fails. Then
+err_restore puts P back into adapter->xdp_bpf_prog and keeps the
+reference. The core, however, has already cleared its record of the
+program.
+
+What releases that reference afterwards? vmxnet3 has no other
+bpf_prog_put(). At unregister, dev_xdp_uninstall() skips modes that have
+no program in the core:
+
+	prog = dev_xdp_prog(dev, mode);
+	if (!prog)
+		continue;
+
+So ndo_bpf is never called again, and P and its maps stay pinned until
+another program is attached.
+
+Can P also keep running on received traffic? QUIESCED stays set, so a
+later vmxnet3_close() skips quiesce. On the next open,
+vmxnet3_open()->vmxnet3_activate_dev()->vmxnet3_rq_init() would see
+vmxnet3_xdp_enabled() and run P, while ip link shows no XDP program.
+
+Before this patch, the driver dropped P and left xdp_bpf_prog NULL on
+this path, which matched the core's forced detach.
+
+This looks unchanged later in the series. The later commit "vmxnet3:
+keep the XDP program across device resets" does not touch err_restore.
+
+Should a call with new_bpf_prog == NULL always leave the driver without
+the program and without its reference, even when it fails?
+
+> +	if (old_bpf_prog)
+> +		xdp_features_set_redirect_target(netdev, false);
+> +	else
+> +		xdp_features_clear_redirect_target(netdev);
+> +	return -EOPNOTSUPP;
+
+[Severity: High]
+This is a pre-existing issue, not one introduced by this patch, but
+err_restore only restores software state.
+
+By the time err_restore runs, the following has already happened:
+
+- vmxnet3_quiesce_dev() has disabled NAPI on every rx queue, freed the
+  IRQs and set QUIESCED.
+- vmxnet3_reset_dev() has reset the device.
+- The rx rings have been destroyed. If vmxnet3_rq_create_all() is what
+  failed, its err_out path destroys them a second time.
+
+The function then returns with netif_running() still true. The interface
+stays up with no RX or TX. The restored program does not actually run
+until the interface is taken down and brought back up.
+
+vmxnet3_change_mtu() runs the same sequence and closes the device when
+these steps fail:
+
+out:
+	clear_bit(VMXNET3_STATE_BIT_RESETTING, &adapter->state);
+	if (err)
+		vmxnet3_force_close(adapter);
+
+Can later operations misbehave on an interface left in this state?
+
+vmxnet3_suspend() sees netif_running() and calls napi_disable() on NAPI
+instances that are already disabled:
+
+	for (i = 0; i < adapter->num_rx_queues; i++)
+		napi_disable(&adapter->rx_queue[i].napi);
+
+That would loop forever in napi_disable_locked() and hang system suspend.
+
+There is also a failure after vmxnet3_rq_create_all() fails.
+vmxnet3_resume() and a pending vmxnet3_reset_work() both call
+vmxnet3_activate_dev() without re-creating the rings. vmxnet3_rq_init()
+would then write through rq->buf_info[0][i] while buf_info[0] is NULL.
+
+vmxnet3_reset_work() can already be waiting at this point. It sets
+RESETTING before rtnl_lock(), so it can be queued (by tx_timeout or a
+TQERR/RQERR event) and wait for RTNL while vmxnet3_xdp_set() runs.
+vmxnet3_xdp_set() never sets RESETTING itself.
+
+Should vmxnet3_xdp_set() call vmxnet3_force_close() on these failures,
+as vmxnet3_change_mtu() does?
+
+>  }
+>  
+>  /* This is the main xdp call used by kernel to set/unset eBPF program. */
+
 -- 
-2.43.0
-
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261123124855.1021-1-filzador%40gmail.com
