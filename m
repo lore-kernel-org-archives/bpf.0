@@ -1,64 +1,103 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.180
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795562093;
-	b=0ZPijMnRSlo/+E+EUROjCZzMY0sydHwKzj7XJEjYQSDZfavFuDequ9124vrfpg9pE649
-	 QUa7xv8iAuglGxFEepRNetcTVUwFLjvxfVQX7U9m+mmF46qKxlFhaOTx/y88EH/FXsoK2
-	 mLWYtoOdkZuhMZigbKXsfwLYaLYMcanoJTb2qE3uybDqNsc6sc3ori75PNMANKUYL1o3W
-	 sWE62wqVma6gqdD9XPj5IA9crBSQ7UCwPiMUdY3w2TbmEEtIX3+jh0caEcEOfWJvq77b+
-	 Da9jTmlkLSCHg6Zs56EZU6PujmI6QbBfu+aWoiwKCbCfjJjcKu/W4xxmzwgWzJaPdLA==
+	t=1795562883;
+	b=1LkwY+7MvipRwXCjgNxoGvwSHxfoGJzX+ovqFs64IvcHEjO0KUyx7iGWL3TZHg1UcK8t
+	 9Bv5nib8vyMdfPcbA/gXrKTl55N1TiyPyTxHaa6uyx7bS7iYd/DbfxkQ4wM6HoFYQtyd5
+	 waC0uKm2l1zIoJ4/Wix8GHM+Wt5D60P/0MC9aOy32241DBY3G6ykkpdr1djqUOSzgKEvy
+	 AwyOqKHEHczP04xuxaodcQGO+tcmfqCeUuZzEdomrF60uqS8Tb4wCACUrHKuZSCKG776S
+	 lWlxdMuGT6dzkDC3VPAlTvwh60ejwT3yqV+N96Q+hwDokQYoKZkoDZHzkU22mq85YpQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795562093;
-	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
-	 Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding:
-	 X-Virus-Scanned;
-	bh=kVMqQyKRPOrNXj1KvHYDyDDl5HK15qVM/bRTtBFwrmA=;
-	b=0KO2vHBGSuc52Ha36A/+GKjtKif5oa6YUyHQw+udT4rpWKWcWxW3i1strD6y5WHQNijE
-	 vNJSJxyNzxDm96nPr3gN8QU/Sufe5Mg2Yu1mVDk/chSqS5T7pzdyeKaSFzc341OWu5PJZ
-	 RjYMIZXWLLIkSCj+XlNUo0ReMv2AyN3/U27dL+S7fGULQo17WEEoyU3ph2MJrbPpIK+ZW
-	 ZFos/zdkYkjGsf21VTHP5NXW2EYnOCnT6v2Z+DZa2+hTxnvZeVVMJYkcl3nPbq98RWZyQ
-	 F7Ps1jHAVBkOS3V+9htMt4dOqyrmKihOz1YeosoEiYfeg40Q7KpvTlBOxU0JTxoPz7A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795562883;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
+	 References:Content-Transfer-Encoding:MIME-Version;
+	bh=FdD8nsrRzbhjr4E3zr0vV9y7hTxHd4p7KVaJoR4GPPc=;
+	b=BsG7jzVGV6HAgdhb8R9y5Dey/VcrAHFx1Y2x6E5g95fmSc1M2r+zHrRAHJGoD8VncrV5
+	 EeAhEjHK+X6pf+fJ55ySPPdOMlA8KB0+KdgcrrnCDiyuWfFGIsMo6SS7KpxpgZ+IPpmUM
+	 LzZBukpUs9m32CyEgNVCiZ32X8ayFqFdEJwbgl7ic+Q64cRNbD/6kK2vrbvuxCWN6XS6c
+	 buvhQXFuHzbm11nIrGjXvoG5NVeKg0Wok0QJz25U6yH4b5UUkprrIWrkZQ9mQRYSZlEM9
+	 T49tY0Db37GnWNftjBNyXjBCxQE4rM9OIdcqOikUKkesneraMwkKjOYAbbjUxLS+SNQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=iogearbox.net;
-	spf=pass smtp.mailfrom=iogearbox.net;
-	dkim=pass header.d=iogearbox.net header.i=@iogearbox.net header.a=rsa-sha256 header.s=default2302 header.b=YvDRTU21;
-	arc=none smtp.remote-ip=213.133.104.62
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=z+nyoquG;
+	arc=none smtp.remote-ip=209.85.214.180
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3540C606A31E
-	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 23:14:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3540C606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE9A0606A31E
+	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 23:28:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EE9A0606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=iogearbox.net header.i=@iogearbox.net header.a=rsa-sha256 header.s=default2302 header.b=YvDRTU21
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
-	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References;
-	bh=kVMqQyKRPOrNXj1KvHYDyDDl5HK15qVM/bRTtBFwrmA=; b=YvDRTU21cYzciOAatQjfw+KkRs
-	YJ+IRWtmcNa7JdKFadWRUUPnEFaVSOmbIyjMRJH8m0eDFMZgLDJmtfZSCz9HtkPhUmRRfC3e0pm+6
-	XhagMDvhFKC50Hyjj7rUboeAmhTKc5f5tHGG2Um23Crt6DJSyVV9Ul6l4s/j5quBWsRaQNV7S2720
-	sjsge2cZUYSIpC6o6lBpX7SfVCFD/rNWtwYeWKzuGs8HVeIwHSydVc4lscimKac0tLQAMWd+5THVG
-	u5V+RIId3ZfOncjL4DBMLtXE06bPANNtnE/PAVKMIycWIdJvp4DDvKa6PwbB1rnBM4rS59pdOE6tS
-	UAZOV91A==;
-Received: from localhost ([127.0.0.1])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1xVzim-000PyE-1O;
-	Wed, 25 Nov 2026 00:14:44 +0100
-From: Daniel Borkmann <daniel@iogearbox.net>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	will@kernel.org,
-	memxor@gmail.com
-Subject: [PATCH bpf-next 0/5] Follow-up fixes for arm64 insn encoder
-Date: Wed, 25 Nov 2026 00:14:38 +0100
-Message-ID: <20261124231443.3424414-1-daniel@iogearbox.net>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=z+nyoquG
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2f046b0adc0so27837095ad.1
+        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 15:28:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795562882; x=1796167682; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=FdD8nsrRzbhjr4E3zr0vV9y7hTxHd4p7KVaJoR4GPPc=;
+        b=z+nyoquGn02pafXKCrdr3Klc70j/V2CGP1tfLUWX99+u6+I8AQM4rTPVVJOLTTCqk4
+         KZq3fqF7MnYuoS/E5OP6DCEl1dNF2FXUNQKnCa33epliUESnZbONB1veRdgYsTmHe2lG
+         qm4cU0xVdcxJwS6PQUHUUNTde92u1yhhObcq0W1n4ACHAnWrNPptnbyY0ad9VsEOHoKy
+         AtTyAxOfPBTuljEBcmxOk/ue26foe2Q7q86H+e/qn3BI/gKKw3zPsE5y3xWA/AVWZeI1
+         7GKaH9yyK+uUPZbcKAOEJYMmzScNmB8t36p8LCSrpUFg7Z78wnS29XN3esVKd9VllLeP
+         /pyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795562882; x=1796167682;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=FdD8nsrRzbhjr4E3zr0vV9y7hTxHd4p7KVaJoR4GPPc=;
+        b=ykje1CMeRKzt71cYQyazyqe1A4m+far9h1A9RQll+vY3mDTkQ1zD0ChpOsOmBNAfk4
+         hCWZUhnXyaIb1aY1l14aZvpvtD/xmyRYl/xKvLGwBc39f7Iw3GLN+9lLWlC0jglGtPay
+         N5BLiOD4tMjkkoadi+z0zLSWJp/drN2CXZL2QVY3rKPqlQBahawhFwCeaRqK9+X/wNkX
+         xzDv6SSOosBHiTUNScDj/EpXxFGxrSaaD6rIxfobVxiFewQVLDlFS15sGOXLjz4EWstP
+         as7Of1dvg2lh6WZjy//ePzhrsUBSZM1Ml3hcWfz0H9c+WKl5z8H9AfwwXDMvUoHTAfAh
+         gDoQ==
+X-Forwarded-Encrypted: i=1; AL+hErE6zTBxwjqGunUcVIchsmfZQ3dRvXWvVsP5LZCGdvfnlaVBXUYB0u+ZrKzNX6X4FBTLL8Y=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+o7X4iGtywtQlMD68wT1XcTx63PJyUTOc2M4A1nEz9GOnUsFTh
+	AtLNXdpHgEQFlMTfXTWk+qMzRgZoTO6y1dH2vTlX338KfTqXj/55U6aZ
+X-Gm-Gg: AZFdTZdU2xin1CONpn8TgdnoZoncJdh+B9P3TLFkgwV4GRlVkRiWhmL+jcQ1lYjCfqN
+	9RbrlGrQdgTnLUsT+Kx/yKhVhScOvGZ8nAEBHr6Irrn1gfjQfZO7qflE54x+6Afj46cojowzeHa
+	cVB3d9epNxhMTOwCTro+7vRWT80ojCuDIG5zYyHjPzt7ajD2cA+OMDm2BmHH89h2yOTDcX9k23N
+	xXvce7rWUK8eURwuWxWH/w7VCnEVdfy+CK/r/AiSLshb1OPoxKgPxAPstqAr/DeqRb+tZFpTL89
+	x2S+CleJvjqyd7h2+iytSKbeavJct/8iNS0F26ZAYhJsTdbpzZleA961dOMDsPREQiSeZ7N9FT2
+	8i84Adi4ykmXirqQbjom8w+PyVGXNoCmaQ0PLRQy+JzNKOfL1HctDwiC46zT1gDGL+suM/YRdEk
+	cMKMBjXCSNyHdkbFo6sbyfy/7+bdQiT3GLWY+eGr7ejA6/kZrfC7349NThQ2q+u2rClRSElwgoV
+	NyNRqnx4D8ybuCK/WWM8fODIs8iSl4jy/w4bIl3xstjMbWC7aG8MNIlf3CUsm0kVlY8YgWY0Z9r
+	tumK1xQ3X+TWOtsGfOEtxq3V8tC60keaFysjHkFoYIF6WoGnRrcfD2/JvJwePkZhVqReh1aIJU9
+	FWJH1U/bnyWRJXCQRmW/xKMzLkViqMhPY9g==
+X-Received: by 2002:a17:902:e80b:b0:2ed:ef1:f78 with SMTP id d9443c01a7336-2f03f11824amr157910985ad.21.1795562882035;
+        Tue, 24 Nov 2026 15:28:02 -0800 (PST)
+Received: from localhost ([153.61.198.244])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2f03f105b66sm76166185ad.51.2026.11.24.15.28.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 Nov 2026 15:28:01 -0800 (PST)
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 24 Nov 2026 23:28:01 +0000
+Message-Id: <DN3TX43KWXO5.JWLJ9HO1C9K7@gmail.com>
+Cc: "Gwanhyun Lee" <gwanhyunlee@gmail.com>, "Kuniyuki Iwashima"
+ <kuniyu@google.com>, "David S. Miller" <davem@davemloft.net>, "Jakub
+ Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>, "Simon
+ Horman" <horms@kernel.org>, "John Fastabend" <john.fastabend@gmail.com>,
+ "Jakub Sitnicki" <jakub@cloudflare.com>, "Jiayuan Chen"
+ <jiayuan.chen@linux.dev>, <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net] tcp: avoid NULL skb dereference in zerocopy receive
+ with sockmap
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Junyoung Jang" <graypanda.inzag@gmail.com>, "Eric Dumazet"
+ <edumazet@kernel.org>, "Neal Cardwell" <ncardwell@google.com>
+In-Reply-To: <20261124230228.3868519-1-graypanda.inzag@gmail.com>
+References: <20261124230228.3868519-1-graypanda.inzag@gmail.com>
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -68,26 +107,20 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: Clear (ClamAV 1.4.6/28193/Tue Nov 24 07:27:44 2026)
 
-Follow-up against bpf-next to address [0] and also a few other findings in
-the insn encoder.
+On Tue, Nov 24, 2026 at 03:02 PM Junyoung Jang <graypanda.inzag@gmail.com> wrote:
+> Check tcp_recv_skb() before using its result in both paths. Also stop
+> before advancing beyond the last skb in sk_receive_queue. Neither
+> check consumes data in the sockmap ingress queue.
 
-  [0] https://lore.kernel.org/bpf/a7605e34-15d4-4bc2-a424-fbab47d20bea@iogearbox.net/
+This should be fixed on bpf side. Other readers trust copied_seq too:
 
-Daniel Borkmann (5):
-  arm64, insn: Reject ADRP offsets that wrap in the encoder
-  arm64, insn: Reject a status register for the exclusive loads
-  arm64, insn: Drop the unused outer shareable barrier types
-  arm64, insn: Widen the ADRP offset helpers to the reach of ADRP
-  arm64, insn: Reject offsets out of reach in aarch64_set_branch_offset()
+  reader                             with stale copied_seq
+  ---------------------------------  ----------------------------
+  tcp_recvmsg_locked()               WARN "TCP recvmsg seq # bug"
+  tcp_read_sock()                    frees new skbs
+  tcp_collapse()                     BUG_ON(offset < 0)
+  tls_strp_load_anchor_with_queue()  WARN_ON_ONCE(!first)
 
- arch/arm64/include/asm/insn.h   |  9 ++---
- arch/arm64/kernel/alternative.c |  4 +--
- arch/arm64/lib/insn.c           | 62 +++++++++++++++++++++++----------
- 3 files changed, 49 insertions(+), 26 deletions(-)
 
--- 
-2.43.0
-
+pw-bot: cr
