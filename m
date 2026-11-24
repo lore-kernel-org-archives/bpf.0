@@ -1,104 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.245
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795501548;
-	b=rCLXki1ojLsQIjQVB2bZw6jZ97CTGpNZz1OnHLOqrKN0EUbvwqjMw14QyR/kMBbPnUNS
-	 JNp1+Qp7sZXoR9P/g3sl0jMGXVmVMMXOBu7dDwB9UKN14/2BWQpTjhpWqGahn6pVRHRUL
-	 toMCr5CqPyRmUv8U1CLpocBTXpq3HjLcWgjmx3rWTpE6ElXG9YTwjqy71GZ8lH8DHyJY0
-	 Hpx/ajVdjVpTmClUjsRbSeWZ1gda6chfNMFqDfAtQ7ISaM7Rum8nKV/hTtQZY/NJsBDnb
-	 2P6BBK/jPFl2ouxbDMazDzy38DleYUS6eGbXUe9RkfoZ9Z3sVs6cLaUtuoXkY1QBLfA==
+	t=1795501566;
+	b=tnVBX2njsHibRQPPCYcRFE2ZEj4tCQKyKkhkZQjRQLymi2y1uFEQzJE73cT6pHnUj47N
+	 EzNWom/NJ+q5ZF58bvPJ8NgB8fw0OBNtHoYlDwdT8bFrGiUpqpOl34w9isllH8Fw+UOth
+	 Nrgl8Vb7ehgZOOYCc/ScqysMvDLf4d7H9/WJq9CTRWzfECXUoFY4zQSDWrfvPld2vxJa9
+	 7XcJ45JpeqOLppWlSBsDc+UrVuefNBkz/2cpdYcG1Hk9KVu8HASCMxFi1EOtfOj5zatXd
+	 5Llr/dkkxw7e8v0G2xcjpEgjyHPIof1GW0nmSpnsT3mqVtr5mCE4rna35EiXFS/JpjQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795501548;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
-	 References:Content-Transfer-Encoding:MIME-Version;
-	bh=mpGQvJviYasWyAsTrcg7sxjiOrvcQ5Fx+ssD1xXfttI=;
-	b=bWfC/3MPnvtoJ5i5BHPlif3TPIkdgD3A87vqRWkeJdq/exx/inlh/ixoOmMw0m7qpVWA
-	 HRPPE24B64+4XCLAXS7fdLSkUmqLV3unOlmTnbcZ2c0fbaH6khQmlSMCVzAC9xUfonlgC
-	 4+g/3dj4ovBV9nLax8COYEyqxTQ9Z3JxGyaOeej9EUgMoEF4FHhOfLS/P8IE8TWQzvdA+
-	 OtxiWHP36XbdwJUaHu+VrRCmf2RPkEOwSNdm3oit+3w0ODfMMAUNM7h1CQzzl6XvjgZyP
-	 hQ/pdXD/WbCm+/WWF2155D82o3zv/WonEpuIAuTZoJJl+xzMTI4ce6WfTZYgnYR0zoA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795501566;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=449gIxytb/HnDdGvFu4T1xW9ukKcixFJk9Iaz+yC4MQ=;
+	b=WM8YhxR7B+UKRaInrhrgt50rTCQDF8YXbgic8eL0lvgNkKNB7zh++Q9OgGcTJ0a1XGtv
+	 8lup/oDqFKGfx66psiA8VGrgrEyEd/Yp21JBfJN1rv+0pvVa0M5QH9XPei4S7UJS1PT1S
+	 F/2RwSzDD0gxUBMVH7ZcWW7zYyUEnEnocltQkUY0G2T4Oy7q8ooo8B/axA+5OnPp8nPRw
+	 YxSpWzD50hGTAIEl9wAufVbAeT+RGNgeV3PgSuR3rrpzUvYfKOcDd1CEaelg0hVICgyqc
+	 xZnsXgwjjNcZVei/X0+Yofr1BS2Rg7wLATcRwppwb6cYS8mxmSzVkmPO4M4iTBBLNGQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=fVbxuTR7;
-	arc=none smtp.remote-ip=209.85.214.171
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=YiY8PMaG;
+	arc=none smtp.remote-ip=95.215.58.245
+Received: from mta1.migadu.com (out-245.mta1.migadu.com [95.215.58.245])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C200D606A336
-	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 06:25:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C200D606A336
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79D46606A321
+	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 06:26:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 79D46606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=fVbxuTR7
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2f04bea9a93so35071055ad.3
-        for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 22:25:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795501547; x=1796106347; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=mpGQvJviYasWyAsTrcg7sxjiOrvcQ5Fx+ssD1xXfttI=;
-        b=fVbxuTR7ZvuW+s7OVdaHHBV+7uPpbE/pl8CKCM5mFwmDpYqUn5GAUER+witBpDuc1E
-         pLrpfLGFEPeOstvVIaYTpDqMLXxVKhD23tM/jotQvTEJ2Uz7KveP5a7/oXAfoA/x6tAf
-         ywKEojGyO7UoKutiDgj6/sTXSaxXGIIN/YmSQ40ymKzAKx7K/GmOn/+lbfty6ikWTuHX
-         8kQMP1GdKMwYdt2Kq+Hb+sYWnSK/B9/wnKbkL2qyPyYd0DT/17Bsvle8xxMncSLot1th
-         QkOqBpAyYBUSW8bMER00RQ6IjQrVb/lz8eJME4+ZqGo6goHIxKKVLk6j+mBhwotfCWVQ
-         4rcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795501547; x=1796106347;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=mpGQvJviYasWyAsTrcg7sxjiOrvcQ5Fx+ssD1xXfttI=;
-        b=IK1LuqVW2huO75XRDsLbDoGydRWmco6xQcOJTxBdjg8Ba+pKufXm1ia70pAGjOMUMU
-         JpzS48nmnBJJYQfHixbxMQ6HhHavNLRSmz2t9Ktu5zeW+gIPxLsh54/P9fZhyGZcfwEx
-         VGKQLs5bYFPEnJhyOIDDEY0GrWQQYeOeCSDwdEGRXsrmHERJSRuqulxWI/Pj8Ob5wzyf
-         YzTDyIMOiwNtpWzd5dZkJOVevEqF//P8X03MUhm/QgKpRY+/ZysBF075hPO1eN1sLUj6
-         XLES6GNfcXD3mYix6BOqZ7dG3Nl4MkIjxruzLzD2zwcidYCwWI1PcU4/zzEt9aeu6xD+
-         teIA==
-X-Forwarded-Encrypted: i=1; AL+hErF7U5dlZhzBJBq++wms5A/Wt8i6k9ux7on/5WVYc7vmm8y6yGD48NujZ5l31IcCFf3AbFk=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+iCCSwP2Roak0bCQxC93reAP/YKDIPrcOE0v7N/LYF+++Z77B3
-	yeUW0JYIkpdKrdjh1ONCLbcZ4HjRD7mzhbpq9oRmAfKwDh8i0BH/lDJI
-X-Gm-Gg: AZFdTZcbuEaXZZ8hB3fqztl8aL6Iw8gfjai25PQnuqBGb1mSXKkkUZOOFkQ8MjTFfIG
-	KekU7uNJc/VQTqngzl+2T1npeiZQvzkSECRqlaVoFdFxF8q9alRafYndb083xOVqTi/UCn7FXEt
-	FlCE1B2N1HyAbyma7y4gcdDGfY+7ZKjP20te1MJ1TiJce1cK5C90LIeTVuwVXhU+87l+Hf4iLIW
-	nsjeowSDWpr9mX02D0jHba6+u5+CiWmOzLt+GklrgDl4s+Fs3t4kf0tE0OgjOp8uaPaKcXUF90d
-	uuOY0CO5Q8DOiXisM8Ce0NPFFaLqYVfCB7PdxSmLdHgVBVpF+vrITH9+DGRoWygVWcuxgQB6zLY
-	Sfjqm9VfibHUXn7aEqbFAldl9WnYPSLhZVqNFfwAOFFlGIhP2iLG0gv3jLUAF1zZY0Sdt5u6EX8
-	t3Yr4Xa7ifaztKNOBRx5wWEhdS8bG8r1HUvMr4CM0D5vdpHmZD91iLNp3tgsCB27pp5gBQ7IWBO
-	qKEcKClmw7mx5Q4OEI2sRcpNYI+D1+U1GwqSZVw+oZtv3C/TWw7O+WdukGgD7IpLiJgfhDxytp1
-	BFGUK5wEmopGvUwafLQOZn/x0PnznTq9dzzN72a0Nkh29VHOIrkYqr47n+uYMKc0mjlbQLzOY0W
-	N8XOI/OJLXphQJ1o1rlxnPEfItQBbOMitLg==
-X-Received: by 2002:a17:902:dacc:b0:2ed:472:b9d6 with SMTP id d9443c01a7336-2f03efb1397mr149727415ad.2.1795501546773;
-        Mon, 23 Nov 2026 22:25:46 -0800 (PST)
-Received: from localhost ([153.61.198.248])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2f03f191464sm65713305ad.1.2026.11.23.22.25.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Nov 2026 22:25:46 -0800 (PST)
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 24 Nov 2026 06:25:45 +0000
-Message-Id: <DN386F271FUR.35EWQWGMEMX7K@gmail.com>
-Cc: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, <bpf@vger.kernel.org>,
- "Puranjay Mohan" <puranjay@kernel.org>, "Andrii Nakryiko"
- <andrii@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Eduard
- Zingerman" <eddyz87@gmail.com>, "Emil Tsalapatis" <emil@etsalapatis.com>,
- "Ihor Solodrai" <ihor.solodrai@linux.dev>, "Dave Hansen"
- <dave.hansen@linux.intel.com>, "Andy Lutomirski" <luto@kernel.org>, "Peter
- Zijlstra" <peterz@infradead.org>, "Thomas Gleixner" <tglx@kernel.org>,
- "Ingo Molnar" <mingo@redhat.com>, <kkd@meta.com>, <kernel-team@meta.com>,
- <x86@kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v1 1/3] x86/mm: Resolve BPF exception fixups
- for user address faults under SMAP
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Borislav Petkov" <bp@alien8.de>
-In-Reply-To: <20261123185124.GAawSLLMoWwJ71nq5j@fat_crate.local>
-References: <20261009024925.3169077-2-memxor@gmail.com> <20261009041346.GHashp-hYpLl-o-l3M@fat_crate.local> <DM0ESVBT9553.2S1RWK1W7M8WW@gmail.com> <20261122200848.GBawNL0FcQoK918YDI@fat_crate.local> <CAP01T746W=8FFiJJUM3H-Qv09uRO6-XEi9B-8pjSgtpAPBx4EA@mail.gmail.com> <20261123003036.GCawOJLKK1iX47XTDm@fat_crate.local> <CAP01T77EgbuyhP=zU9L1hwYL6rHaSbrqQZGJR_+9AQgSWLe7Nw@mail.gmail.com> <20261123025529.GDawOrIQcDOPhgWwF6@fat_crate.local> <CAP01T75Qps8bKFZAU2gN-3UJTB1aWw46NG5c-sm6K028rSc9sA@mail.gmail.com> <DN2E8Q9V38IF.3O738M7NGLSAL@gmail.com> <20261123185124.GAawSLLMoWwJ71nq5j@fat_crate.local>
-Content-Transfer-Encoding: 8bit
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=YiY8PMaG
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=0ckwT1MNxjCaUKr8B7kPL7bLosNZahWjCYvLItqr8CY=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1795501563; v=1; x=1796106363;
+ b=YiY8PMaG7++Ddb0Ee2gLc0tCXOFupKJxrViHjNQbiRerL32gCCK0orcnLxhnkdUoWQYpYPmL
+ pDEfSSDR3HxImIkpEDnvf+EdMTBhZ5JKmamM7HZJu3BQ7MyZ2W7zbVivpP4dRLlapGntm64aAEB
+ HUGqCcDo6Ju8dFKibQwo1gvc=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 588e070f590522ee;
+	Tue, 24 Nov 2026 06:26:03 +0000
+X-Mizu-Trace-ID: 588e070f590522ee
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <2d330be7-3d8a-40e7-a5f5-3a24c7e434e3@linux.dev>
+Date: Tue, 24 Nov 2026 14:25:54 +0800
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -108,51 +58,53 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v3 0/9] bpf: Add log support for tracing
+ link_create
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
+Cc: Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>, Steven Rostedt
+ <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ KP Singh <kpsingh@kernel.org>, Matt Bobrowski <matt@bobrowski.net>,
+ Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ netdev@vger.kernel.org
+References: <20261123152743.19629-1-leon.hwang@linux.dev>
+ <DN308UHY5QHQ.8CJOFGAHVVTR@gmail.com>
+Content-Language: en-US
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <DN308UHY5QHQ.8CJOFGAHVVTR@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, Nov 23, 2026 at 10:51 AM Borislav Petkov <bp@alien8.de> wrote:
-> Look here, our mails crossed last night:
->
-> https://lore.kernel.org/r/20261123043409.GFawPCQT2M-hz0mvZP@fat_crate.local
+On 24/11/26 08:12, Alexei Starovoitov wrote:
+> On Mon, Nov 23, 2026 at 07:27 AM Leon Hwang <leon.hwang@linux.dev> wrote:
+>>  .../selftests/bpf/prog_tests/cgroup_link.c    | 324 ++++++++
+>>  .../selftests/bpf/prog_tests/iter_link.c      | 156 ++++
+>>  .../selftests/bpf/prog_tests/tracing_link.c   | 741 ++++++++++++++++++
+>>  .../selftests/bpf/progs/tracing_link_ctx.c    |  17 +
+>>  .../selftests/bpf/progs/tracing_link_multi.c  |  36 +
+>>  .../selftests/bpf/test_kmods/bpf_testmod.c    |   5 +
+> 
+> 1279 lines of selftests for log messages ?
+> This is way too much.
+> 
+> pw-bot: cr
+> 
+> One row per attach path is enough. It checks that the log gets there.
+> The base kernel leaves the log empty, so all four rows fail on it.
+> Something like this:
 
-hmm. I thought my diff answered it already, but ok. Here the answers spelled out.
+Okay, will update the selftests like this.
 
-> 1. How reliable is is_bpf_text_address() and what happens if someone manages
->    to pull off a hack which bypasses it? In that case, SMAP is basically
->    disabled. And yes, "no one can hack this", "can't ROP-chain around it" and
->    whatever else is not a good answer. This silly function becomes the last
->    and only line of defense.
+Thanks,
+Leon
 
-SMAP stays enabled in that case too.
-The fixup doesn't touch CR4.SMAP or AC, and it doesn't retry the load.
-ex_handler_bpf() writes 0 into the destination register and moves
-regs->ip past the load. User memory is not read.
-A jump straight to that load with a user address in the register
-gets zero too.
-The range check gives the same result today: zero and no oops.
-My diff has no is_bpf_text_address(). It checks the type of the extable
-entry of the faulting insn.
-
-> 2. Is the rest of the arch code going to get "if is_bpf..." sprinkled around
->    it because of some other performance argument?
->
->    Because long time ago there was a pile of patches which did sprinkle "if
->    (xen)" and they didn't go anywhere. The point being, special-casing
->    something completely unrelated is not going to fly.
-
-The diff has one check, and it's on the type of the extable entry.
-error_context() does the same for #MC with ex_get_fixup_type().
-fixup_exception() has EX_TYPE_BPF already.
-
-> 3. What do I tell the next userspace program type set which wanna do "if
->    is_Y_program" in the #PF handler? I take them too? Because I should not
->    question their design either and who do I think I am to question that?
-
-A JITed bpf prog is not a user space program.
-It's kernel text in ring 0 with an extable, like a module.
-The bar is the extable: kernel text, an entry for the faulting insn,
-and a type that says "load from any address, skip it on a fault".
-That's an inlined get_kernel_nofault(). It isn't specific to bpf.
-If you prefer a generic type instead of EX_TYPE_BPF, that works for me.
-Then get_kernel_nofault() can use it too, and
-copy_from_kernel_nofault_allowed() can drop its user address checks
-under SMAP.
+> [...]
