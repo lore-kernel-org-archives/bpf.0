@@ -1,76 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.206
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795483699;
-	b=lIUwg84VrnGe9DCmz/uO6Vd87HiRl5XVUyHdbsKeOhj3VyTzWXvoZn5V+TrGrk1laaL0
-	 03mRD51F0vJojULPfVOdaL6aUWeFqBmHKcMDx1BV02+ag/XSg9vh7YoPa+Hvk29iHlmiv
-	 SwS2vSbSsEfmMRPpFHyDUzjaOifWmGc4yMtBGJd46yHfX4MprIVjyP9VgjyLKE4QYEack
-	 giPDh5RTH/et427+2t+scxQvlvON6P77xWMOlYo2yfBWK8Z0fwvhemZGVUmqLCESvCXDC
-	 XdDMZ78AP9OLAwOgxYM7cqrwjBITGpyee0QojKGizii8Qmg+crRF3rE3SC+N1pE0/Pw==
+	t=1795487326;
+	b=470jD7JzT1jwZVt/614klV9JbB2psBPjIeJ4eDaxZ05wBVwNdXqKyQdmWfy64h+UhZK8
+	 TtgwqcvpijALNCL0M6w78qj1Zfbhe1g1VC3ulk6KYxCmX7hUyQvVvPVLbks0jjLWPsgqO
+	 DGNsbU1wuHDmRcSHVIMgAUOelFSbD3I/FbGKv/8LEP8YjtseT0tujFeAOWlSjqwUVwoD4
+	 UMBbjgHYAuDcflqUUaPI/wrGNa9cp2PoZOEO1HI6zeK/bLsempC9Mlsdnw3ZrPfkWjQ0/
+	 GWyK3Vvvij6tesyPLopJoThK0sWT/EGFZs8/w2FoPpjlGuHTscXMtLTooZZW8F8EWJw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795483699;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=rR3LoSS/CnHxEjvm/yoRjwsCnx6t2+6QYn8uLZ0saD0=;
-	b=tMN4xXCS0H7P3ZTQ2JSV9aB6CnVRmzvjG5HOgoYMmuDGXT9PB0eWoVZg1tUIpBNsiL2a
-	 VxgN4hvAaNffHE1kuF1poJKfuq2lP+zaS1in/svrTQk0mIQqsyw7bl/xzYX5VmrZaeW9P
-	 C4CBbsTxwuaX+ekIxTwOEgPmOGL/rbOHaYHovDVs1DHXBed9J1O4aNpqVt0go6mC7XUeJ
-	 DiZ3s54XwTEAkCUP72C3tisgZhKQW3+tv6SKLIUXax215qauuiBjC3KqMdiLJQyeZwG8r
-	 otQa0aLURaAtXthtWyYCOR/KMKt1H6iLUDvkoQLEiZoxwau382tr7yPS1BfoSvXX7yA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795487326;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=jWQ9oCUe8dQcy4ZXx1Lvb8FfXfIF5K4CXki6DLWYMDE=;
+	b=Vub2oHGhm99xHTALFVHeJc+q1E5QjdV2Gt218MmEcLOQlfC+FhiaflHQdqJuR9CaCLL/
+	 AkaDvRXWYN0xUP8ndX5A5wlkduESgi2hM6z+eyLVQlrtTtUzmIWsCtAoY01CU/lKJINJO
+	 Fcc6SwVqmFhpWaezhRIa9suyexDHbKkwrTi+apSxs6gJnmNJKwY4KVtoyAYm6udu10+ju
+	 KY1J4Q74mNGh9Zxhn7Ys5PPaxGSKzIooMJ5LkW3BiaSjqsAASxWgEDO1vXQPSjtVuoIw5
+	 /oN9CmhvurxAq0PRAKt/nj1qqJBL2DSjyWBD+K5PDlIybLLcxdRr3ZFU6hL19CFchew==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MhiLjCcn;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="QBxdv/hD";
+	arc=none smtp.remote-ip=91.218.175.206
+Received: from mta0.migadu.com (out-206.mta0.migadu.com [91.218.175.206])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id 512B7606A31E;
-	Tue, 24 Nov 2026 01:28:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D929606A321
+	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 02:28:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8D929606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MhiLjCcn
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 5186A1F000C4;
-	Tue, 24 Nov 2026 01:28:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795483699;
-	bh=rR3LoSS/CnHxEjvm/yoRjwsCnx6t2+6QYn8uLZ0saD0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=MhiLjCcnHp95T7HuSLpsxG3/eXdkRaSIRPl4sr8N1U5eHtYO0TTNagpfp9FvmkyLY
-	 poVwlubetpPDij/MC3k1nK/9BUf5UjQy69XH3Y/lHA+UmTSurdUcg8YSSYFXRbKlTD
-	 jcbh79HqiPBRN4crGCI4oilTmV8umW0Wa4zCjU7Akv5fnudGwO1FhYCxPW8ulDClTP
-	 6fMW/Dcsm2g3xZssBeJt/iJjwdDF3L/cHmN6TjWY3Hoes81OGCWTlNSXOZmWrEz+K0
-	 9hcKPTnRxdqfj1RyZC5Qoh8kkYy8ExXwELZeyHET1akIkufbVIPoo5520mFH4jAWpG
-	 gH3wNwAHcfRDA==
-Date: Tue, 24 Nov 2026 03:28:15 +0200
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: linux-fsdevel@vger.kernel.org
-Cc: bpf@vger.kernel.org, containers@lists.linux.dev,
-	linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-	linux-security-module@vger.kernel.org,
-	Aleksa Sarai <aleksa@amutable.com>,
-	Alexander Mikhalitsyn <alex@amutable.com>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Andy Lutomirski <luto@amacapital.net>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Christian Brauner <brauner@kernel.org>,
-	David Howells <dhowells@redhat.com>,
-	Eric Biggers <ebiggers@kernel.org>,
-	Giuseppe Scrivano <giuseppe@scrivano.org>,
-	Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
-	Jeff Layton <jlayton@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Josef Bacik <josef@toxicpanda.com>, Kees Cook <kees@kernel.org>,
-	KP Singh <kpsingh@kernel.org>,
-	Lennart Poettering <lennart@poettering.net>,
-	Neal Gompa <neal@gompa.dev>, Oleg Nesterov <oleg@redhat.com>,
-	Paul Moore <paul@paul-moore.com>,
-	Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
-	Serge Hallyn <sergeh@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Zygmunt Krynicki <zygmunt.krynicki@canonical.com>
-Subject: Re: [RFC PATCH v7 00/26] userland: Userland containers
-Message-ID: <awToL2PFNKVgIfqs@kernel.org>
-References: <20261122193539.3334213-1-jarkko@kernel.org>
- <awTmJIErjasO4lqq@kernel.org>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=QBxdv/hD
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=rbAkWnSYTM9mjjasFPW8Smsf+DAoZjkmvAVq1CXIXUI=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1795487323; v=1; x=1796092123;
+ b=QBxdv/hDlru2pgV2e5cV48O9iRFiG6YsDHYSeNc5t/Aq1/KEyxsd4rkstoGtHPVhGzrlaJPF
+ swo3YEewm4r53D48Jo3TmK+fuJv/GaI1R+V9F57m/CLL63LrdO8H+Jwg1zXKJDg6tL3DWW+BVu9
+ qbWOygz7CBgfBAg+o2AgQMmw=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 4c2eda220562a159;
+	Tue, 24 Nov 2026 02:28:43 +0000
+X-Mizu-Trace-ID: 4c2eda220562a159
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <7c51f0df-461a-463c-afff-16644f65c107@linux.dev>
+Date: Mon, 23 Nov 2026 18:28:39 -0800
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -80,48 +58,79 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <awTmJIErjasO4lqq@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next 2/2] kbuild, bpf: Remove pahole version checks
+ below v1.24
+To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
+Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+ eddyz87@gmail.com, kernel-team@fb.com, martin.lau@kernel.org,
+ mason@kernel.org, ihor.solodrai@linux.dev
+References: <20261123231058.2538362-1-yonghong.song@linux.dev>
+ <dc257c60f91ba87c244a6bf9a9d7b424adfd17629c6926085c87cd2188772df3@mail.kernel.org>
+Content-Language: en-GB
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <dc257c60f91ba87c244a6bf9a9d7b424adfd17629c6926085c87cd2188772df3@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Tue, Nov 24, 2026 at 03:19:36AM +0200, Jarkko Sakkinen wrote:
-> On Sun, Nov 22, 2026 at 09:35:13PM +0200, Jarkko Sakkinen wrote:
-> > SYSCALLS
-> > ========
-> > 
-> > Two new system calls are proposed:
-> > 
-> > 1. userland_open(): open an opaque staircase-initialized container
-> >    object (modeled on Intel SGX enclave initialization with separate
-> >    build and live states) with no embryonic state, opting selected
-> >    shared namespaces in via an allow-list instead of unshare semantics.
-> > 2. userns_set_idmap(): configure all UID, GID, and project ID map
-> >    extents for a container user namespace in a single atomic system
-> >    call.
-> 
-> I played on patching systemd and userns_set_idmap() alone does already
-> a lot of good. I'm figuring out userland_open() integration next.
-> 
-> For the test implementation I probe the opcode's and dependening on that
-> use either "userland path" or "fallback path".
-> 
-> This auto-probing is done so that I can commit the patches to my kernel
-> test harness, which already has systemd, and try them out when built
-> against userland-enabled kernel (via LINUX_OVERRIDE_SRCDIR):
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd-test.git/tree/?h=main
-> 
-> The project builds a hybrid ISO, which is a bootable bootc/composefs
-> based operating system, and has toolbx bundled i.e., a reasonable test
-> environment for all of this. It is also device-installable via "npx
-> @puu/install"
-> 
-> I had to level the harness up a lot so that I could realistically test
-> lockdown-hibernate but it is is also pretty good emulation environment
-> for any possible container features.
 
-Kernel is ukified and systemd-boot is used as the boot loader i.e., for
-kernel testing purposes corresponds to something like Silverblue except
-not using GRUB.
 
-Br, Jarkko
+On 11/23/26 3:41 PM, bot+bpf-ci@kernel.org wrote:
+>> kbuild, bpf: Remove pahole version checks below v1.24
+> TL;DR: Commit message only: claiming the resulting config is unchanged looks
+> inaccurate, since PAHOLE_HAS_BTF_TAG becomes y for clang builds without BTF,
+> though with no functional effect today.
+>
+>> kbuild, bpf: Remove pahole version checks below v1.24
+>>
+>> The previous patch makes CONFIG_DEBUG_INFO_BTF require pahole v1.24, so
+>> the Kconfig checks for an older pahole always pass with
+>> CONFIG_DEBUG_INFO_BTF.
+>> Remove CONFIG_PAHOLE_HAS_LANG_EXCLUDE (pahole v1.24), which is always
+>> set with CONFIG_DEBUG_INFO_BTF. Drop it from the dependency of
+>> CONFIG_RUST on !CONFIG_DEBUG_INFO_BTF, and always pass
+>> --lang_exclude=rust in scripts/Makefile.btf, which is only included
+>> with CONFIG_DEBUG_INFO_BTF.
+>> CONFIG_PAHOLE_HAS_BTF_TAG (pahole v1.23) is still needed, since
+>> btf_type_tag is only used with clang, but it no longer needs the pahole
+>> version. Every user of it also checks CONFIG_DEBUG_INFO_BTF, so make it
+>> depend on CONFIG_CC_IS_CLANG only.
+>> The pahole flags and the resulting config are unchanged, except that
+>> CONFIG_PAHOLE_HAS_LANG_EXCLUDE is gone.
+> Is the last sentence of the commit message accurate?
+>
+> The new definition changes the resulting config for clang builds without
+> BTF:
+>
+>      Before:
+>      config PAHOLE_HAS_BTF_TAG
+>          def_bool PAHOLE_VERSION >= 123
+>          depends on CC_IS_CLANG
+>
+>      After:
+>      config PAHOLE_HAS_BTF_TAG
+>          def_bool CC_IS_CLANG
+>
+> With LLVM=1 and pahole missing or older than v1.23, PAHOLE_VERSION is
+> below 123, so PAHOLE_HAS_BTF_TAG was n before.  Now it is y, and
+> CONFIG_PAHOLE_HAS_BTF_TAG=y is written to .config and the generated
+> autoconf.h and rustc_cfg even though CONFIG_DEBUG_INFO_BTF is n.
+>
+> This has no functional effect today, since both users (compiler_types.h
+> and trace_event_update_with_eval_map()) also test CONFIG_DEBUG_INFO_BTF.
+>
+> Would it be better to use "def_bool DEBUG_INFO_BTF && CC_IS_CLANG" so the
+> generated config stays identical, or to reword the commit message to say
+> that CONFIG_PAHOLE_HAS_BTF_TAG is now also set in clang configurations
+> without BTF?
+
+Okay, since CONFIG_DEBUG_INFO_BTF is not involved with PAHOLE_HAS_BTF_TAG,
+I will leave it as is in the next revision.
+
+>
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/45289030741
+
