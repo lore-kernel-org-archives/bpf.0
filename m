@@ -1,72 +1,48 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795546283;
-	b=QmydLIAK52qmjiXy27vtWPQATMGq/fdIZpM7/JRgqRoWJVHHhCLxPY+iXq+OI9T3Cy7L
-	 EdMT6QUYd1Kfzmx4PAsQLV04VEXYtFdQw7OauvyrwqW6VbcdI6mltSLpXpj2pSvKG7F9V
-	 hN91QxVumUgJnp1NvsIb9I7ZpNmH0QfxmP/nRX6Qo8wugV2IDcu5faxOxTbUMfQ0ezXYL
-	 h4mOeizoFCo/joIBs++BadNqmCvmYkrfNMBQzLvI0VSXf3OC+3p2xOP5UQzcurTaoNN6S
-	 MHV+F2r3+nGffEAEsWGv7/Bix+owq9gZ3m1DcYCVeGIQbhp0+lxKsNmD7FsJS/sgHLA==
+	t=1795546623;
+	b=H9dV44hm5ojAk4LSsTGx7fylftCAQeLUi5kb/effs190Z11kFU9O75/cb22ACWYWdliU
+	 cSlBj3jk8LwbBdLrrgkdYu1KO+KegisSVP4q7FcEASAevzPw6st1THd+vlRbzoANXdWSW
+	 +7LYXheezf8M/4T6cHg7jSSCJIISesOZy71c6ugN2ACtlMwJNPbq46Sr4ZMWAGsFBn+j/
+	 Ct342ZtPHSzPilv+oJ8wseZh4hr1DDxeQEcPcXIZJKWTzTADgWsJSKIef+DupbcsPYBSX
+	 ukY/KhhvMS97CO0cbBVFit0vLKyKaBCEDhPq2L4RT4TuBtnJqgfJux8KepCclq0F/BQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795546283;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:
-	 Content-Transfer-Encoding:In-Reply-To;
-	bh=L6NqhcU1tLVcfEpjY2Ck1sJrOKIOcHdxKOQPUwApeeM=;
-	b=RpExgYp3dsJor+hBIrWcnVe7lP52swtXbBCzqr2TAtC7BuRDKiruQdQtxkDpTfKIG7Ml
-	 ZgJa0IIndB+rq3I0b0jBgUMHrYtbpBKOKe+bYLwm+oxNsZYqzNynolzuCL1Fqk8S8tfGV
-	 LRAY8EdmYNsxE7e+EUh725i7zy124ddxTMlaSCCSuOoD8V8D4ZLvHb3LPpIxrKS7eq+Ch
-	 3xfp5pswXulA0r4DlBpTRYwg+qfGBwIIqtVPSs+1dlPOzh2AqCx3vxIekxGV94lsT4D4k
-	 +RDlQuLrMz+b1F49qdUOPNk4ai5b12EAqkCzc7G4HCr9lRLPddwxPMXmVzsljvxpIiQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795546623;
+	h=Received:DKIM-Signature:From:Date:Subject:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:
+	 X-Mailer:X-Developer-Signature:X-Developer-Key;
+	bh=K75Fomuhl/TeDSAhojtFFsF9TENIiJs0NQdhbNDZn+8=;
+	b=4pVcSWlPlo0lY3LdLGzWMp8l3dWUknFFnPcK8sRkej7vjZEmgnzWMYtpTESrFq4Vy7eb
+	 Gxxs6vXeV9cwIT6+WW9yr98N/JK/lVx/j5p8Jj+pCKvj1cDqgnLLlTslRAvVehnnFcOeY
+	 fC5CmPzbWV3kfSGcf7sNLcSvHiSAGerGRZu2XxPVRQdmw6x5QWZJkohwUXNAU3dZhwxcK
+	 fx0diwrVh8zWd2omih9JHKp5H4p3EjTCqxbUu2Q5bJOSanKSPu8mfZy8NztCFZVz8bNEN
+	 BGflzd7IngruFyxU7ZDFBaOiyhASO8HXMsSwPFY5BPYuDuF7DJbsnpXOidu9hIdx9hw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=I3kfl4NR;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="D3dPwe1/";
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7125606A31E;
-	Tue, 24 Nov 2026 18:51:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83431606A31E;
+	Tue, 24 Nov 2026 18:57:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=I3kfl4NR
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D33B71F000C0;
-	Tue, 24 Nov 2026 18:51:15 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=D3dPwe1/
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6135A1F000D0;
+	Tue, 24 Nov 2026 18:56:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795546282;
-	bh=L6NqhcU1tLVcfEpjY2Ck1sJrOKIOcHdxKOQPUwApeeM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=I3kfl4NR9qEuuyy0EjdjDi7dgww4iRyl8pwU8q9GJgU35EDQQZO5ws/pf0MvK3OzB
-	 bYSZhRJ7hqHJsrjKKU7Eaam2n28TfeXl0ZyEuNKTTv0z5w1fI3UgjqtemhH4+LX3lZ
-	 +KkFX2UfhQ6Iud3xifvU8gfvbZ7n8zqpfIi1+A/csWvw6qnVntjlm2EAh/3sLZ4Y/6
-	 u7Zlq9w3FY3w1maR1Ag+Vdj7n1RzSh84grOnwKsb4tvEcAWdtLIxP+PE9wnTmHCdRd
-	 1VmKb6nJqO05uf6Ud2X3rtpeg0ol4IBoOT6HeGKnBdKThZdSF9/wjz5N4MDHQEPtQO
-	 N8TehsE9SnokQ==
-Date: Tue, 24 Nov 2026 18:51:12 +0000
+	s=k20260515; t=1795546622;
+	bh=K75Fomuhl/TeDSAhojtFFsF9TENIiJs0NQdhbNDZn+8=;
+	h=From:Date:Subject:To:Cc;
+	b=D3dPwe1/1qD1ZZgtB2coXTHOK1EaWGzIMeeU4TukjN+rtf5chKTy+Br7BuJctDfT0
+	 dLN89Kpf9dQINhB28PCvc3lQGwlyGRmczLhATl3VsJJZ3iOY+zjQw6K7rBE0BfEt1z
+	 6lm7b0KKUpb7LZU2EWw6/e8NGK9eeV49VpzAEJQlkbwsI+gKa/6FsDVYHiXUW3ioGV
+	 mYeTqpbEYFNeAiDKNnjwLMvuuaycvPu8y9HD0sEJDAkIMsw5sQDP1Q6BndT0MCnzOG
+	 qBVhPcG1CW9fZlfUJUzoiMEM8cFz/ibu8WSjYSwDNERaJFTeE0BfIkVH7fcUELy/MV
+	 rrANpkd8sVdPA==
 From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
-Cc: Suren Baghdasaryan <surenb@google.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Puranjay Mohan <puranjay12@gmail.com>, 
-	Pedro Falcato <pfalcato@suse.de>, Ingo Molnar <mingo@redhat.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>, 
-	Vincent Guittot <vincent.guittot@linaro.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
-	Valentin Schneider <vschneid@redhat.com>, K Prateek Nayak <kprateek.nayak@amd.com>, 
-	Kees Cook <kees@kernel.org>, David Hildenbrand <david@kernel.org>, 
-	"Liam R. Howlett" <liam@infradead.org>, Mike Rapoport <rppt@kernel.org>, Michal Hocko <mhocko@suse.com>, 
-	Shakeel Butt <shakeel.butt@linux.dev>, Jann Horn <jannh@google.com>, 
-	Alexei Starovoitov <ast@kernel.org>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org, Chris Mason <mason@kernel.org>, stable@vger.kernel.org
-Subject: Re: [PATCH] mm/vma: drop mm asynchronously in vma_start_read()
-Message-ID: <awXbVeK7F2DmgL-9@gremlin>
-References: <awWLCZ-jBjSD7V3M@pedro-suse.tail5790ac.ts.net>
- <CAJuCfpGk6eYK43Unxo+O4ML5=GM_siZ9owp6oa9fO0ipZXVg-g@mail.gmail.com>
- <CAJuCfpEd1rz3P7fB7W_mHkyzbpq9TscRE+QNwvHdYME=WJj6cw@mail.gmail.com>
- <awWz3nc_b8x3mIXq@gremlin>
- <CANk7y0gAxY18Ew+6j5YsqrOsf5Dx+v5M78r7_8JLXh5RHZj4qA@mail.gmail.com>
- <CAJuCfpFuDCUPTUi3SuAhmbtw5tubRZ0+YEY3PotjyJ8Or8pdQQ@mail.gmail.com>
- <awXHR007d8MlhJUC@gremlin>
- <20261124093328.3ba2e066e5d5081c69e0e667@linux-foundation.org>
- <CAJuCfpEmFEX5iqLw_c94a97rVrC+xBWpKnO4rVpeDgkUfAPq7Q@mail.gmail.com>
- <498284d2-70e4-4b6e-978b-98a2b9e1e74d@kernel.org>
+Date: Tue, 24 Nov 2026 18:56:46 +0000
+Subject: [PATCH v2] mm/vma: drop mm asynchronously in vma_start_read()
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -76,90 +52,209 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <498284d2-70e4-4b6e-978b-98a2b9e1e74d@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20261124-vma-read-lock-mmdrop-async-v2-1-8139b5cf24bb@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAA/43NTQqDMBBA4auEWTvFCVrRVe9RXKTJRIM/kUkJF
+ fHupZ6g27f43gGJJXCCTh0gnEMKcYVO6UKBHc06MAYHnQJd6juRrjAvBoWNwznaCZfFSdzQpH2
+ 1+DIVNdaRJV9CoWAT9uFz4c++UDCG9I6yX69Mv/oXmwkJdd34tvV1TY4fE8vK8y3KAP15nl9ea
+ lnIxQAAAA==
+X-Change-ID: 20261124-vma-read-lock-mmdrop-async-ba417cd1c1f0
+To: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
+ Juri Lelli <juri.lelli@redhat.com>, 
+ Vincent Guittot <vincent.guittot@linaro.org>, 
+ Dietmar Eggemann <dietmar.eggemann@arm.com>, 
+ Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, 
+ Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>, 
+ K Prateek Nayak <kprateek.nayak@amd.com>, Kees Cook <kees@kernel.org>, 
+ David Hildenbrand <david@kernel.org>, 
+ "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
+ Mike Rapoport <rppt@kernel.org>, Michal Hocko <mhocko@suse.com>, 
+ Andrew Morton <akpm@linux-foundation.org>, 
+ Suren Baghdasaryan <surenb@google.com>, 
+ Shakeel Butt <shakeel.butt@linux.dev>, Pedro Falcato <pfalcato@suse.de>, 
+ Jann Horn <jannh@google.com>, Puranjay Mohan <puranjay@kernel.org>, 
+ Alexei Starovoitov <ast@kernel.org>
+Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+ ljs@kernel.org, Chris Mason <mason@kernel.org>, stable@vger.kernel.org
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5425; i=ljs@kernel.org;
+ h=from:subject:message-id; bh=+GlkRGCdNbNl6lPRsAZ0GstxY0HQDDSVM2C8Wjvm9gk=;
+ b=owGbwMvMwCV2fu7ZrsZH9SKMp9WSGLJZ735h09sQtFmBeXrXw5mxXfOCP9XkSc/Y/p157addx
+ rcdv0u96ChlYRDjYpAVU2R5/kV8f5BI2LzOC/5uMHNYmUCGMHBxCsBEhBYyMixZuUTd+eS+hMP3
+ MzaI8sfytiYvrJHZLFhgfmyNeOSdxMcM/1SkTs3heCliXSxXf8zjqcvU6wsXyalc/jT/7WX2aeu
+ kVnMCAA==
+X-Developer-Key: i=ljs@kernel.org; a=openpgp;
+ fpr=E7F417BF5214569E89D04F46CF9DCD8A81E27F14
 
-On Tue, Nov 24, 2026 at 07:35:39PM +0100, Vlastimil Babka (SUSE) wrote:
-> On 11/24/26 18:49, Suren Baghdasaryan wrote:
-> > On Tue, Nov 24, 2026 at 9:33 AM Andrew Morton <akpm@linux-foundation.org> wrote:
-> >>
-> >> On Tue, 24 Nov 2026 17:23:35 +0000 "Lorenzo Stoakes (ARM)" <ljs@kernel.org> wrote:
-> >>
-> >> > On Tue, Nov 24, 2026 at 08:34:40AM -0800, Suren Baghdasaryan wrote:
-> >> > > On Tue, Nov 24, 2026 at 8:06 AM Puranjay Mohan <puranjay12@gmail.com> wrote:
-> >> > > >
-> >> > > > On Tue, Nov 24, 2026 at 9:28 PM Lorenzo Stoakes (ARM) <ljs@kernel.org> wrote:
-> >> > > > >
-> >> > > > > On Tue, Nov 24, 2026 at 07:51:42AM -0800, Suren Baghdasaryan wrote:
-> >> > > > > > Actually, VMAs are allocated from a SLAB_TYPESAFE_BY_RCU slub. With
-> >> > > > > > that RCU unlocking move you don't need other_mm copy and the comment
-> >> > > > > > that comes with it. VMA won't be freed until RCU lock is dropped.
-> >> > > > >
-> >> > > > > Yeah but they can be reassigned? They won't be _freed_ until a grace period but
-> >> > > > > they can go back to the slab and then allocated elsewhere  right?
-> >> > > > >
-> >> > > >
-> >> > > > Yes, they can go back to the slab and become a different VMA.
-> >> > >
-> >> > > Yeah, you are right about that. So, we either have to keep the RCU
-> >> > > unlock in place to keep other_mm comment valid (my personal
-> >> > > preference) or update the comment next to other_mm to explain the new
-> >> > > reason it is needed. Either way is fine with me.
-> >> >
-> >> > I think let's just change the comment?
-> >> >
-> >> > Andrew could you change:
-> >> >
-> >> >        * stable and can be freed in the narrow window after vma->vm_refcnt
-> >> >
-> >> > ->
-> >> >
-> >> >        * stable and can be reused in the narrow window after vma->vm_refcnt
-> >> >                            ^
-> >> >                            |
-> >> >                            just this freed -> reused :)
-> >> >
-> >>
-> >> np.
-> >>
-> >> --- a/mm/mmap_lock.c~mm-vma-drop-mm-asynchronously-in-vma_start_read-fix
-> >> +++ a/mm/mmap_lock.c
-> >> @@ -300,7 +300,7 @@ err:
-> >>  err_unstable:
-> >>         /*
-> >>          * If vma got attached to another mm from under us, that mm is not
-> >> -        * stable and can be freed in the narrow window after vma->vm_refcnt
-> >> +        * stable and can be reused in the narrow window after vma->vm_refcnt
->
-> But this is talking about the mm, not the vma, so the motivation to change
-> that was wrong? (it's not a typesafe cache). Moreover...
->
-> >>          * is dropped and before rcuwait_wake_up(mm) is called. Grab it before
-> >>          * releasing vma->vm_refcnt.
-> >>          */
-> >
-> > Sorry for being pedantic :)
-> > There is also this comment later on:
-> >
-> >         other_mm = vma->vm_mm; /* use a copy as vma can be freed after
-> > we drop vm_refcnt */
-> >
-> > That should be replaced too with:
-> >
-> >         other_mm = vma->vm_mm; /* use a copy as vma can be reused
-> > after we drop vm_refcnt */
-> >
-> > Again, just replacing "freed" to "reused".
->
-> Nah let's not overthink this. It's freed back to the allocator first. Which
-> naturally allows it to be reused, yes. It doesn't matter if the underlying
-> page can be freed or not. UAF is a UAF.
+Commit bee9ef4a40a2 ("bpf: switch task_vma iterator from mmap_lock to
+per-VMA locks") open-codes a lock_next_vma() implementation that does
+roughly the same thing in bpf_iter_task_vma_find_next(), only without
+fallback to an mmap_lock.
 
-Let me just send a v2 that puts the rcu_read_unlock() back where it was, I don't
-really want to get into some long debate about nitpicky details. I just have too
-much to do sorry.
+This is because bpf_iter_task_vma_find_next() can be called from
+non-sleepable contexts.
 
---
-Cheers, Lorenzo
+However, lock_vma_under_rcu() gave no guarantee as to which contexts it is
+safe to be called from, and indeed it turns out this assumption is unsafe.
+
+Since commit 9bbffee67ffd ("mm: fix a UAF when vma->mm is freed after
+vma->vm_refcnt got dropped"), this call chain is possible on x86:
+
+lock_vma_under_rcu()
+  -> vma_start_read()
+    -> mmdrop()
+      -> __mmdrop()
+        -> mm_free_pgd()
+          -> pgd_free()
+            -> pgd_dtor()
+              -> spin_lock(&pgd_lock)
+
+Thus, a plain spin_lock() can occur when lock_vma_under_rcu() is
+called. Since bpf_iter_task_vma_find_next() can be called in softirq
+context, this can deadlock, for example:
+
+pgd_alloc()
+  -> spin_lock(&pgd_lock)
+    <softirq>
+    bpf_iter_task_vma_next()
+      -> lock_vma_under_rcu()
+        ...
+	  -> spin_lock(&pgd_lock) [ DEADLOCK ]
+
+Alexei Starovoitov also pointed out that a BPF program attached to
+trace_contention_end() can similarly cause a deadlock:
+
+  pgd_alloc()
+    spin_lock(&pgd_lock)
+      queued_spin_lock_slowpath()
+        trace_contention_end()          <- pgd_lock is held
+          tp_btf/contention_end prog
+            bpf_iter_task_vma_next()
+              lock_vma_under_rcu()
+                vma_start_read()
+                  mmdrop(other_mm)      <- last put takes pgd_lock again
+
+Resolve the issue by having vma_start_read() use mmdrop_async() instead of
+mmdrop() so the work is deferred to a work queue.
+
+Make mmdrop_async() an internal mm function, defined in mm/internal.h, to
+avoid abuse elsewhere (kernel/fork.c includes this header, so still retains
+access).
+
+Commit 0b16f8bed19c ("mm: change vma_start_read() to drop RCU lock on
+failure") accounted for the fact that the RCU lock had to be dropped for
+this operation, which is no longer applicable.
+
+Remove the now-defunct comment on the 'heavy operation', but leave
+examining that to a follow up.
+
+Reported-by: Chris Mason <mason@kernel.org>
+Fixes: bee9ef4a40a2 ("bpf: switch task_vma iterator from mmap_lock to per-VMA locks")
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/all/DN267JUKDRNS.2VMV07CQ58R4X@gmail.com/
+Reviewed-by: Suren Baghdasaryan <surenb@google.com>
+Acked-by: Pedro Falcato <pfalcato@suse.de>
+Reviewed-by: Vlastimil Babka (SUSE) <vbabka@kernel.org>
+Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+---
+v2:
+* Put the rcu_read_unlock() back where it was, a follow-up can address
+  anything else here.
+
+v1:
+https://lore.kernel.org/r/20261124-vma-read-lock-mmdrop-async-v1-1-257f99f551de@kernel.org
+---
+ kernel/fork.c  | 16 ----------------
+ mm/internal.h  |  3 +++
+ mm/mmap_lock.c | 19 +++++++++++++++++--
+ 3 files changed, 20 insertions(+), 18 deletions(-)
+
+diff --git a/kernel/fork.c b/kernel/fork.c
+index 5efceb8d58a7..4d5866c83481 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -744,22 +744,6 @@ void __mmdrop(struct mm_struct *mm)
+ }
+ EXPORT_SYMBOL_GPL(__mmdrop);
+ 
+-static void mmdrop_async_fn(struct work_struct *work)
+-{
+-	struct mm_struct *mm;
+-
+-	mm = container_of(work, struct mm_struct, async_put_work);
+-	__mmdrop(mm);
+-}
+-
+-static void mmdrop_async(struct mm_struct *mm)
+-{
+-	if (unlikely(atomic_dec_and_test(&mm->mm_count))) {
+-		INIT_WORK(&mm->async_put_work, mmdrop_async_fn);
+-		schedule_work(&mm->async_put_work);
+-	}
+-}
+-
+ static inline void free_signal_struct(struct signal_struct *sig)
+ {
+ 	taskstats_tgid_free(sig);
+diff --git a/mm/internal.h b/mm/internal.h
+index de4593b3e3b6..cc95019c7e4b 100644
+--- a/mm/internal.h
++++ b/mm/internal.h
+@@ -1671,4 +1671,7 @@ static inline bool can_spin_trylock(void)
+ /* char-mem.c */
+ bool file_is_dev_zero(const struct file *file);
+ 
++/* mmap_lock.c */
++void mmdrop_async(struct mm_struct *mm);
++
+ #endif	/* __MM_INTERNAL_H */
+diff --git a/mm/mmap_lock.c b/mm/mmap_lock.c
+index 073c5125b424..d28bbc3ba734 100644
+--- a/mm/mmap_lock.c
++++ b/mm/mmap_lock.c
+@@ -306,11 +306,10 @@ static struct vm_area_struct *vma_start_read(struct mm_struct *mm,
+ 	 */
+ 	other_mm = vma->vm_mm; /* use a copy as vma can be freed after we drop vm_refcnt */
+ 
+-	/* __mmdrop() is a heavy operation, do it after dropping RCU lock. */
+ 	rcu_read_unlock();
+ 	mmgrab(other_mm);
+ 	vma_refcount_put(vma);
+-	mmdrop(other_mm);
++	mmdrop_async(other_mm);
+ 
+ 	return NULL;
+ }
+@@ -560,6 +559,22 @@ void __mm_reset_vma_seqcounts(struct mm_struct *mm)
+ }
+ EXPORT_SYMBOL(__mm_reset_vma_seqcounts);
+ 
++static void mmdrop_async_fn(struct work_struct *work)
++{
++	struct mm_struct *mm;
++
++	mm = container_of(work, struct mm_struct, async_put_work);
++	__mmdrop(mm);
++}
++
++void mmdrop_async(struct mm_struct *mm)
++{
++	if (unlikely(atomic_dec_and_test(&mm->mm_count))) {
++		INIT_WORK(&mm->async_put_work, mmdrop_async_fn);
++		schedule_work(&mm->async_put_work);
++	}
++}
++
+ #ifdef CONFIG_LOCK_MM_AND_FIND_VMA
+ #include <linux/extable.h>
+ 
+
+---
+base-commit: 913390e679e23e3a45643028ee7f992889094051
+change-id: 20261124-vma-read-lock-mmdrop-async-ba417cd1c1f0
+
+Cheers,
+-- 
+Lorenzo Stoakes (ARM) <ljs@kernel.org>
+
