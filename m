@@ -1,58 +1,58 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795499109;
-	b=uWO2TyqddpJj1S0b2VJEll5XAIlkWkIBqQjUef6k2Mxzgx/OX47mNKMjR107hHpb5quE
-	 llhZRYm1bxkiAA2sZDZaykQjDFd7/gJe4TMQ7mFlZCVgGNUcy4S944Z5WLMcesy+1kZ+A
-	 vXcXSTEGufuE9nmZvelffKQbz06OMkgC+BJW1rjHvIRpmBJCbZLQbuIibLxtF1FqSkaev
-	 bORouSfJkzD9+8Js4yahkV8P6WlgXDrk9ul+9IMs4v/z3Yn7pmBOGoEb07kFQnodJcRTI
-	 PqsD+rDnHK1f9eB/hpoMOGoH4e18F/dl9NWr5QShN5T4nGvDBxzHztRpG2Zc82EFvsg==
+	t=1795499110;
+	b=SW/hWYBczWZeWDi6nuRTEPkgIkT0u9qlUu7BsplCyeOb7dyOOzJvc+QenGc2DHkgA9Gs
+	 Pb3QjWfgOG5tc1O7qJ5YOxQl/XbJES+vIcvDRWnj98aXTzLsv9W00HoItr9fSOsxZ5O2B
+	 iMONbSLB4OYWChREgMG4ecNmgMonVVZ4ViVwxVavKHRfR35Fqn7jLtWAwF/vPU3i8cot0
+	 ZTDam4HUh/yHti24KJAKv5oGUobVYJWk9l9jmoc9PXMTUMkOjUSseK7iV4q8PsONatF3L
+	 9zMIyZSKvHzVi6zGxGXw/ebNMfU3XDBEJ7DynYeOjJY2OPVOJ91U4Nqm+cGxyE01wlw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795499109;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795499110;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=aRffa5QGJyeDL2fDxuIlhM+fU5kvvSRm5hMdsycYtrw=;
-	b=fYMMJdxjZMNB8vJoxWsSHprzBnsBRy7PlV+c5BCy2c4DzmsjfLWlvBF9yZQdvH+uGmv2
-	 xn5Vk4lmRYR+6lueDJLyZwYfCtTQ49/1Nw4PksK9xFKWX+VjnSR1kKrIOgLz7dU23gci5
-	 2fU3hvG5yd9NZczgHN1eyHU2htLfUq57NDw4JJM9QmXyt0+8ZEix8bowsKjmo6dT/61gx
-	 yJHTbnqz2psKV2EqjBrTKIj8Q/EVOc8GFNtSrYoXV5dRn2mF3YIt3vKU23BzfrNpAyJNM
-	 0gjieD5nZ+7ztMjD8yirHr1fhoTYxLBE3wLPafKqYX/dXb5JnJIIDm6fSr+fqhn/MCg==
+	bh=b7hzx4hdT/aWGEHT3B9cp/wHj65qJWImONpb6FDPul4=;
+	b=u/zsycF9hspY3XuYZ7XsjiBKw7Hy4GmU4CrkfaJwtuPcnHxISkeXKgDWEcraWmuO+cQR
+	 RcUKA/U29xeHz0+48Y2w/X0W+P0p2cOBS1HReKMuMmBlcCsM+ztr+EHS3cRZZRyqSJkxl
+	 6kVbraDEalsQa+Q726Vue3vozthm1r1aMyEbSEqCROrx1vciaRtOzIqqcWxjLdHAx3Dl+
+	 x78NhElnZgH31djSKArnWUCiTU6GfSxlrR5RNqKELkP0GaHA6wLgbknFiqBEItsg0yV7q
+	 wPuYOB/aln6KGVgSPEgCJPSGjQHxp3OnzfuDUsnK6XTRCDbMhwbW9Sg81o5t7ITTZbw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eJ54UdvX;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Vrcodb3p;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F2B4606A31E;
-	Tue, 24 Nov 2026 05:45:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7A7C606A333;
+	Tue, 24 Nov 2026 05:45:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eJ54UdvX
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B09C1F000C6;
-	Tue, 24 Nov 2026 05:45:08 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Vrcodb3p
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBBA81F000C0;
+	Tue, 24 Nov 2026 05:45:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795499109;
-	bh=aRffa5QGJyeDL2fDxuIlhM+fU5kvvSRm5hMdsycYtrw=;
+	s=k20260515; t=1795499110;
+	bh=b7hzx4hdT/aWGEHT3B9cp/wHj65qJWImONpb6FDPul4=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=eJ54UdvXTIbCw6STyIHaf4Jsz7ZjHQmIkuCxT4ozyeVyAJPnm5BWF30vBfvRpLq2N
-	 gQl229cL36hQlq3hnPUDagQzdMNmg0FkU/qc6PSEq6IKnYomQS89oRESJD13yFqKYG
-	 9/BHYtL48HIzxWvGxHT1AhXxAXvKYeopoIyWpJDwC8gRpNp8u5tU5u615fT2sAC84O
-	 jNmNn9KmF2s288MhIGEP3DZF/OU0hxIGTGy93ktgsgUg4pWEN3smxvNGjrs0Nax4G1
-	 DqFgbYTVjGV1k9ivno02YFSIMEazoJ6CU0sVd2tfzJnrv+WKOOkztDPuwHKjaN98P+
-	 d4r2VgGdYbBIQ==
+	b=Vrcodb3pExD7IvnRJ++M28lf/71cgaIy6O2yMrMX+tiJ+/bLMLI4faFbjLWyK86Ks
+	 46creBgmZY87nJiZm6InSM58VnczzVQRyMZ6FR9fRN8e9yyxkPHRH+5pBUvlIf6pyJ
+	 CdWf5m9tTKjNw3f52dmZ/LXNNqW5esRVeGZFwh5sm7eOG9L/Ds5caUNvGYUncpvPIN
+	 tSAKk/EE48riNy34lxLJwcjgyNYj+BoJC8xztgprVFN7ilYuYbY20BvyXW4nobZcuz
+	 1Cza7+lCS0pN7x4ldEVOBTIFr33kuZ2WGJF7OnLEiq4/X34p8gmiYAvZYQZE+Gez9z
+	 ZdRYQNxKRNRHg==
 Subject:
- Re: [PATCH net v12 1/2] tun: run the socket filter from tun_net_xmit()
+ Re: [PATCH net v12 2/2] selftests: net: add TAP socket filter attach tests
 From: netdev-bot+sashiko@kernel.org
 To: clementwei90@163.com
 Cc: netdev@vger.kernel.org, bpf@vger.kernel.org,
  willemdebruijn.kernel@gmail.com, jasowangio@gmail.com, andrew+netdev@lunn.ch,
  davem@davemloft.net, kuba@kernel.org, ast@kernel.org,
  alexei.starovoitov@gmail.com, andrii@kernel.org, weirongguang@kylinos.cn
-Date: Tue, 24 Nov 2026 05:45:08 +0000
-Message-ID: <179549910801.3135.11117955228755728713@kernel.org>
-In-Reply-To: <20261123054209.89946-2-clementwei90@163.com>
-References: <20261123054209.89946-2-clementwei90@163.com>
-X-sashiko-severity: Low
+Date: Tue, 24 Nov 2026 05:45:09 +0000
+Message-ID: <179549910931.3135.4958196655811648969@kernel.org>
+In-Reply-To: <20261123054209.89946-3-clementwei90@163.com>
+References: <20261123054209.89946-3-clementwei90@163.com>
+X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
@@ -65,169 +65,181 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found more severe
-issue(s) in other patches of this series. This mail is only an FYI, in case
-you want to address the nit picks below when you respin.
+Thank you for your contribution! Sashiko AI review found 2 potential
+issue(s) to consider.
 
-Low priority / nit picks for your consideration:
+Critical: 0 · High: 0 · Medium: 1 · Low: 1
 
-- [Low] The commit message does not mention that the classic filter's
-  runtime and attach semantics change.
-- [Low] The commit message understates the bug it fixes, and the subject
-  line is misleading.
-- [Low] This Fixes-tagged patch (Fixes: 54f968d6efdb, from 2012) also
-  removes EXPORT_SYMBOL_GPL(sk_attach_filter) and…
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
+
+- [Medium] The selftest misses the half of the bug where the queue is
+  left unpublished.
+- [Low] None of the new tests check whether the cBPF program actually
+  runs on packets.
 
 --
 
-tun: run the socket filter from tun_net_xmit()
+selftests: net: add TAP socket filter attach tests
 
-This commit moves the classic BPF program installed by TUNATTACHFILTER
-off the per-queue socket (sk_filter) and onto the device
-(tun->cbpf_prog), and runs it directly from tun_net_xmit(). A per-queue
-nofilter flag replaces the re-attach of the user filter in tun_attach(),
-and the exports of sk_attach_filter() and sk_detach_filter() are removed.
+This commit adds kselftests in tools/testing/selftests/net/tun.c for
+TUNATTACHFILTER and TUNDETACHFILTER on a multi-queue TAP device. They cover
+re-attaching a queue after the original filter buffer becomes unreadable,
+bad lengths and bad programs with and without attached queues, a filter
+set before any queue is attached, and IFF_NOFILTER handling. Every check
+is made through TUNGETIFF and TUNGETFILTER.
 
-> tun: run the socket filter from tun_net_xmit()
->
-> TUNATTACHFILTER copies only the sock_fprog header, so tun->fprog.filter
-> points into the address space of the process that issued the ioctl, and
-> tun_attach() reads it again whenever a queue is attached to a persistent
-> device. That read can fail, and with the inverted check below the
-> failure was not fatal either: the queue was attached without a filter,
-> while a successful read returned early and left the queue unpublished.
-
-[Severity: Low]
-Is "whenever a queue is attached to a persistent device" accurate? In
-the baseline tun_attach(), the re-attach block depends only on
-tun->filter_attached and not on IFF_PERSIST:
-
-    if (!skip_filter && (tun->filter_attached == true)) {
-        lock_sock(tfile->socket.sk);
-        err = sk_attach_filter(&tun->fprog, tfile->socket.sk);
-        release_sock(tfile->socket.sk);
-        if (!err)
-            goto out;
-    }
-
-TUNATTACHFILTER sets filter_attached whether or not IFF_PERSIST is set.
-That means the inverted check is also reached in two more cases:
-
-  - adding a queue to a live, non-persistent multiqueue TAP through
-    tun_set_iff()
-  - every TUNSETQUEUE with IFF_ATTACH_QUEUE, because tun_set_queue()
-    always passes false for skip_filter:
-
-    ret = tun_attach(tun, file, false, tun->flags & IFF_NAPI,
-                     tun->flags & IFF_NAPI_FRAGS, true);
-
-In those cases a successful filter read makes TUNSETIFF or TUNSETQUEUE
-return success for a queue that was never published.
-
-A failed read on a detached tfile leaves err negative. TUNSETQUEUE then
-reports failure for a queue that was in fact attached, without a filter.
-
-Could the commit message describe the full scope? It matters when
-deciding on backports.
-
-The subject line also looks misleading. The baseline tun_net_xmit()
-already ran the filter through sk_filter_reason(). What changes is where
-the program is stored: per-socket sk_filter before, per-device
-tun->cbpf_prog now.
-
-> diff --git a/drivers/net/tun.c b/drivers/net/tun.c
-> index d4870bdc156f4..fe3e197997098 100644
-> --- a/drivers/net/tun.c
-> +++ b/drivers/net/tun.c
+> diff --git a/tools/testing/selftests/net/tun.c b/tools/testing/selftests/net/tun.c
+> index 34de2580e32ec..ac326193867b0 100644
+> --- a/tools/testing/selftests/net/tun.c
+> +++ b/tools/testing/selftests/net/tun.c
 
 [ ... ]
 
-> @@ -1096,10 +1089,20 @@ static netdev_tx_t tun_net_xmit(struct sk_buff *skb, struct net_device *dev)
->  		goto drop;
->  	}
->
-> -	if (tfile->socket.sk->sk_filter) {
-> -		drop_reason = sk_filter_reason(tfile->socket.sk, skb);
-> -		if (drop_reason)
-> +	/* Classic filter set with TUNATTACHFILTER.  A queue attached with
-> +	 * IFF_NOFILTER does not run it.
-> +	 */
-> +	prog = rcu_dereference(tun->cbpf_prog);
-> +	if (prog && !READ_ONCE(tfile->nofilter)) {
-> +		/* A filter returning 0 drops the packet, any other value is
-> +		 * the length to keep.  pskb_trim() does nothing when that
-> +		 * length is larger than the skb.
-> +		 */
-> +		len = bpf_prog_run_clear_cb(prog->prog, skb);
-> +		if (!len || pskb_trim(skb, len)) {
-> +			drop_reason = SKB_DROP_REASON_SOCKET_FILTER;
->  			goto drop;
-> +		}
->  	}
->
->  	len = run_ebpf_filter(tun, skb, len);
+> @@ -548,6 +550,362 @@ TEST_F(tun, reattach_close_delete)
+>  	EXPECT_EQ(tun_delete(self->ifname), 0);
+>  }
+>  
+> +/* accept: return skb->len.  Three instructions on purpose, so that the
+> + * length read back through TUNGETFILTER tells it apart from a rejected
+> + * program that is shorter.
+> + */
+> +static const struct sock_filter filter_accept[] = {
+> +	BPF_STMT(BPF_LD | BPF_W | BPF_LEN, 0),
+> +	BPF_STMT(BPF_ALU | BPF_ADD | BPF_K, 0),
+> +	BPF_STMT(BPF_RET | BPF_A, 0),
+> +};
 
 [Severity: Low]
-Should the commit message mention that the classic filter behaves
-differently at runtime now?
 
-The old sk_filter_reason() call goes through sk_filter_trim_cap(). Before
-it runs the program, that function does three things:
+Do any of the new tests check that the classic filter actually runs on
+packets?
 
-  - drops skb_pfmemalloc() skbs for sockets without SOCK_MEMALLOC
-    (SKB_DROP_REASON_PFMEMALLOC)
-  - runs BPF_CGROUP_RUN_PROG_INET_INGRESS
-  - calls security_sock_rcv_skb() (SKB_DROP_REASON_SECURITY_HOOK)
+filter_accept is the only valid program the tests use. It returns
+skb->len, so it can never show a drop or a trim. None of the new tests
+write a frame to the TAP fds or read one back.
 
-It also sets skb->sk while the program runs and uses
-bpf_prog_run_save_cb().
+Every assertion reads either the IFF_NOFILTER bit from TUNGETIFF or the
+fprog header from TUNGETFILTER. TUNGETIFF builds that bit from its own
+expression in tun_chr_ioctl():
 
-The new code only calls bpf_prog_run_clear_cb() and pskb_trim(). Filtered
-queues therefore lose the pfmemalloc drop, the LSM hook and those drop
-reasons. Losing the cgroup hook changes nothing, because the tun socket
-is AF_UNSPEC.
+	if (tfile->nofilter || !rcu_access_pointer(tun->cbpf_prog))
+		ifr.ifr_flags |= IFF_NOFILTER;
 
-The attach side changes as well. The old sk_attach_filter() path charged
-bpf_prog_size(prog->len) against net.core.optmem_max in
-__sk_filter_charge() and returned -ENOMEM above that limit.
+The companion commit "tun: run the socket filter from tun_net_xmit()" adds
+the execution site as a separate check in tun_net_xmit():
 
-The new tun_attach_filter() uses bpf_prog_create_from_user(), which has
-no such limit. TUNATTACHFILTER now accepts filters it used to reject.
+	prog = rcu_dereference(tun->cbpf_prog);
+	if (prog && !READ_ONCE(tfile->nofilter)) {
+		len = bpf_prog_run_clear_cb(prog->prog, skb);
+		if (!len || pskb_trim(skb, len)) {
 
-This is a UAPI ioctl path in a Fixes-tagged patch. Could the changelog
-list these differences, or explain why they are not needed?
+Would these tests still pass if tun_net_xmit() never ran cbpf_prog, ran it
+on IFF_NOFILTER queues, or ignored its verdict or trim length?
+
+The test comments say a queue "still gets the filter", "must not get the
+filter", or is covered by it. reattach_filter_without_user_buffer already
+says its checks "cannot tell an installed filter from no filter". That
+limit applies to the other new tests as well.
+
+A test could send a frame through a rejecting or truncating program on a
+TAP queue, then read it back or confirm it was dropped. That would cover
+the datapath and the IFF_NOFILTER bypass.
+
+There is also a smaller inaccuracy. The comment above
+attach_filter_clears_nofilter_queue says:
+
+  A later TUNATTACHFILTER covers every queue of the device, including one
+  that was attached with IFF_NOFILTER.
+
+tun_attach_filter() only clears nofilter for the active queues:
+
+	for (i = 0; i < tun->numqueues; i++) {
+		tfile = rtnl_dereference(tun->tfiles[i]);
+		WRITE_ONCE(tfile->nofilter, false);
+	}
+
+A queue opened with IFF_NOFILTER and then detached keeps nofilter set.
+TUNGETIFF keeps reporting IFF_NOFILTER for it until TUNSETQUEUE attaches
+it again. Should the comment refer to the active queues only?
 
 [ ... ]
 
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index 53c042b267ab6..fdd7fd8542747 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -1565,7 +1565,6 @@ int sk_attach_filter(struct sock_fprog *fprog, struct sock *sk)
->
->  	return 0;
->  }
-> -EXPORT_SYMBOL_GPL(sk_attach_filter);
->
->  int sk_reuseport_attach_filter(struct sock_fprog *fprog, struct sock *sk)
->  {
-> @@ -11775,7 +11774,6 @@ int sk_detach_filter(struct sock *sk)
->
->  	return ret;
->  }
-> -EXPORT_SYMBOL_GPL(sk_detach_filter);
+> +	/* The queue gets that program again, from the device */
+> +	EXPECT_EQ(tun_attach(self->fd, self->ifname), 0);
+> +
+> +	flags = tun_get_iff_flags(self->fd);
+> +	EXPECT_GE(flags, 0);
+> +	EXPECT_EQ(flags & IFF_NOFILTER, 0);
+> +}
+> +
+> +/* A program configured while no queue is attached must cover the queues that
+> + * are attached afterwards.
+> + */
+> +TEST_F(tun, attach_filter_without_queues_then_attach)
+> +{
+> +	short flags = 0;
+> +
+> +	EXPECT_EQ(tun_detach(self->fd, self->ifname), 0);
+> +	EXPECT_EQ(tun_detach(self->fd2, self->ifname), 0);
+> +
+> +	ASSERT_EQ(filter_attach(self->fd, filter_accept,
+> +				ARRAY_SIZE(filter_accept)), 0);
+> +
+> +	EXPECT_EQ(tun_attach(self->fd, self->ifname), 0);
+> +
+> +	flags = tun_get_iff_flags(self->fd);
+> +	EXPECT_GE(flags, 0);
+> +	EXPECT_EQ(flags & IFF_NOFILTER, 0);
+> +}
 
-[Severity: Low]
-This isn't a bug, but does the export removal belong in a Fixes-tagged
-patch? The fix itself does not need it.
+[Severity: Medium]
 
-Nothing in-tree breaks. The only remaining callers are SO_ATTACH_FILTER
-and SO_DETACH_FILTER in net/core/sock.c. However, a stable branch that
-picks this up because of the Fixes tag would also lose two exported core
-networking symbols.
+Should attach_filter_without_queues_then_attach also check
+IFF_DETACH_QUEUE after the re-attach?
 
-Could the export removal go to net-next as a separate patch, so the fix
-stays minimal?
+The companion commit "tun: run the socket filter from tun_net_xmit()"
+describes two failure modes of the old check in tun_attach(). In the
+first, a failed read of the user buffer attached the queue without a
+filter. In the second, "a successful read returned early and left the
+queue unpublished".
+
+reattach_filter_without_user_buffer is the only test that checks
+IFF_DETACH_QUEUE. Its buffer is PROT_NONE, so it only exercises the
+failed read case.
+
+In this test filter_accept is in readable .rodata. On the baseline
+kernel, TUNSETQUEUE(IFF_ATTACH_QUEUE) therefore takes the early return in
+tun_attach():
+
+	/* Re-attach the filter to persist device */
+	if (!skip_filter && (tun->filter_attached == true)) {
+		lock_sock(tfile->socket.sk);
+		err = sk_attach_filter(&tun->fprog, tfile->socket.sk);
+		release_sock(tfile->socket.sk);
+		if (!err)
+			goto out;
+	}
+
+That path returns 0 before tun_enable_queue() and before tun->tfiles[] is
+published. TUNGETIFF then reports IFF_DETACH_QUEUE set, because
+tfile->detached is still set. It also reports IFF_NOFILTER clear, because
+sk_filter is set.
+
+Doesn't that let all three assertions here pass on the unfixed kernel
+while the queue stays disabled?
+
+The final re-attach in attach_filter_bad_keeps_program_without_queues has
+the same gap. That test still fails on the baseline kernel, but only
+because of its earlier bad length and bad program checks.
+
+Adding this after the tun_attach() helper call in both tests would cover
+the unpublished queue case:
+
+	EXPECT_EQ(flags & IFF_DETACH_QUEUE, 0);
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261123054209.89946-1-clementwei90%40163.com
