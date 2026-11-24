@@ -1,84 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.74.67.63
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795516851;
-	b=WBLRvKpEZGu3zRvz60exHGKHfHjRh+i4wF5bK9rpjKwomx+3tkPHKoB9rnuIp3DYwtOI
-	 lMueIjeLcd3KmWaWIfaPqeN4ZeesiGVEBevgeMXpBkdmagL8tf0zemEMutH3Iu8cggrsK
-	 Bhxfnk5Xulg9WWjf0SvseusDXmBWG4BrMYzITZaMMxImGPj98RwnTVA9rLi8FcBV0BKIz
-	 AB++tdKFZXHaqaBvXrJ/6PHQ9vcfXkFQZ2FlUIMSgZPvRudB4AqSSpxUK2+rzfzv7zour
-	 2sbsdMs7mGCLFJgS5KOg7XYkXtKMMJG6MDZlvDZqeSWemHrYKJ8KUvvR/0AM5UuCeSw==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795516851;
-	h=DMARC-Filter:Received:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:
-	 DKIM-Signature;
-	bh=WFelugwLNPTLGIsm1EbRuqynel4zd3FFYDI8cAMlECY=;
-	b=o5K+LzWLwTlydHEqZbBsNmolJxyl3CcdmOqr7L4MFvhmLeR2zC69TsFhcbWK85g7Jthb
-	 Euldhzf9jBPFvdqhnoorpt3VhgWd8ynZNXsPtaLbvE6F67anniJlj72r1QKyFrQ1rrtgv
-	 pG4sFeOO3nVUjFbS7h0YecmzUgXTQhfHU2xLFhiA2VGftcE9NayUfaHT2J4pamlLAJ4Mw
-	 zmWpIoiRcGvlOY10qUHwJH3k7FadSwN379Gg60mpjoUu9gqFnzTVlfHGs9TmuJmT+GciT
-	 nba3+UMrM3kegb65ApzVC40e/O6P+U0P2gxg8HF6RQldT4g61TGRgTZr9zXQSoQVXaw==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=poczta.fm;
-	spf=pass smtp.mailfrom=poczta.fm;
-	dkim=pass header.d=poczta.fm header.i=@poczta.fm header.a=rsa-sha256 header.s=dk header.b=STm0VC+e;
-	arc=none smtp.remote-ip=217.74.67.63
-Received: from smtpo63.interia.pl (smtpo63.interia.pl [217.74.67.63])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A89D606A326
-	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 10:40:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0A89D606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=poczta.fm
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=poczta.fm
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=poczta.fm header.i=@poczta.fm header.a=rsa-sha256 header.s=dk header.b=STm0VC+e
-Received: from localhost (unknown [80.68.231.31])
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.193.24
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795519303;
+	b=QWPMillFxGerous1YlJTU0qMhKiE/DR+vMv/D6Rb3yPGl9loIkk//iOmW9+FmoBF8eif
+	 45WHRXR8n0Tb+oYQH4Lf4BWCy0zn9L34R0yEu8EbdPYXbRgn9zTIPvjdZBLaXhZBMuS4h
+	 2sTPPCJz4PxTZLcSVbK+hu+XGlGtTxmPVelrOHyKrEpGPCqHQJgaJD6C8w9QDoEZooXVm
+	 BnZ7cX6N4owUTGflwARWPK0THyLKnTteyNBxl8NrQ5FLxWNdMFec8nWyXkLUjb9eyA8e+
+	 kz2XCuCRgRr8Mo/LAI0YvJhECqrpiNKM3MeGKz8qXQNn8GahClB6g2wUN0q5l2Jmteg==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795519303;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:
+	 X-MS-Exchange-Authentication-Results:Received-SPF:Received:Received:
+	 Received:Message-ID:Date:MIME-Version:User-Agent:Subject:To:CC:
+	 References:Content-Language:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:X-Originating-IP:X-ClientProxiedBy:
+	 X-EOPAttributedMessage:X-MS-PublicTrafficType:
+	 X-MS-TrafficTypeDiagnostic:X-MS-Office365-Filtering-Correlation-Id:
+	 X-MS-Exchange-SenderADCheck:X-MS-Exchange-AntiSpam-Relay:
+	 X-Microsoft-Antispam:X-Microsoft-Antispam-Message-Info:
+	 X-Forefront-Antispam-Report:
+	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
+	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
+	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
+	 X-MS-Exchange-CrossTenant-Network-Message-Id:
+	 X-MS-Exchange-CrossTenant-Id:
+	 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp:
+	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
+	 X-MS-Exchange-CrossTenant-FromEntityHeader:
+	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
+	bh=GhkIy80LgNxhqyYtNoMyhLZo1myuAOAZ1+zZiB+9cqg=;
+	b=eL/gwfRKar5gcFUFgoaEzxv82yCET3dBrgWZXNSy6u9bk0hjt1MIq33GBRywnTHKtYeP
+	 C4MxNc0SarmhFTJ0PPyJdZ1r4x/sYqj8FSJx1zSLIx3+uvdSCb6jBVKAUcr+noALGFVg6
+	 yron4inh7VAKLpZyrTPve/QQSr0KancDaOD08aA1urh9HQWlAx8jIf6Y8jm+ggLzSY6+f
+	 fRJHUNCYrTdxhP/aqcSpsRFfNAxFR6qBj56Jz8mXaTBU6uLTave6/VLdd3y/Cx2RDk46C
+	 TxpSH7nGzZWIjMFuIIlNmH77Yn5eVftsBG2/R+66BHCH9Jq8VSMg0qUFzMgtT8jx3Og==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=nvidia.com;
+	spf=fail smtp.mailfrom=nvidia.com;
+	dkim=pass header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=cMEK7JGa;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.193.24
+Received: from CH1PR05CU001.outbound.protection.outlook.com (mail-northcentralusazon11010024.outbound.protection.outlook.com [52.101.193.24])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by poczta.interia.pl (INTERIA.PL) with ESMTPSA;
-	Tue, 24 Nov 2026 11:40:46 +0100 (CET)
-From: Slawomir Stepien <sst@poczta.fm>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	"David S . Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>
-Cc: bpf@vger.kernel.org,
-	netdev@vger.kernel.org,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	Tianyi Gao <tianyi@cloudflare.com>,
-	Octavian Purdila <tavip@google.com>,
-	=?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-	Lorenzo Bianconi <lorenzo@kernel.org>,
-	Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>,
-	Magnus Karlsson <magnus.karlsson@intel.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Simon Horman <horms@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org,
-	Slawomir Stepien <sst@poczta.fm>
-Subject: [PATCH v8 bpf 7/7] selftests/bpf: Grow test_run and generic XDP frags after a test run
-Date: Tue, 24 Nov 2026 11:40:16 +0100
-Message-ID: <20261124104016.532341-8-sst@poczta.fm>
-X-Mailer: git-send-email 2.56.0
-In-Reply-To: <20261124104016.532341-1-sst@poczta.fm>
-References: <20261124104016.532341-1-sst@poczta.fm>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94B0F606A33D
+	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 11:21:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 94B0F606A33D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=cMEK7JGa
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=K7mX+n0cphmhz9OfFTYripDCy+1Ul3x36/+aZ4wVb28uLOoACDKWUl4MPnaRCv6+28dyfA+pzrYfs2Myxy+Bga4MO2GTQ0iSw31Wz2fdG8rBohmNk+uSmD/XONTg2FmUirTVQoSkLgP4u5vhSVOSqOL+gIJvoTdQzpybwjkxQDQ+S4pEtnv19cHGs+gQ3iX6TH0v9wuH8D0uRa7zSbZ+JTG7wnIZ80TxVd/SZvf314g4G4JTufPr4kjJr6u1iKjJbuorvt0YUYh6A1djBT9MLvGVlh7CinXAbHWJt8JdskoUZPTXtaPmVOAcL6mG5SMisubpTU7VlCVmVsAPMQJ6dw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GhkIy80LgNxhqyYtNoMyhLZo1myuAOAZ1+zZiB+9cqg=;
+ b=oEJFHAUwaeIxkuKfK1hJc2zfbxh+iuUVoWjts6Ov+78uH1/T2FNGkF0fyZFnBBAJSqrRMKOlb5ueJa5yfi2El0j6ghREFXzA4tSWcR+SzGMnOiqmgCMRqTdIiycsXK1iOipP8PF55UDw1kSMIbPjpyHnsAW95ZB0eYpizWKHdjRjN7waH/IqtD6AefAnj0F1FPnFB975QjuxSfpE+92c49SqGF7NHWIYg/ZLYIZOy+OdsAJitPGRFxqBlUJ6Aocdfy0O7WAxSpb00qXqU0Dmy4jnn2a5jsAb2aNg3k2BUarrKhf7BQ7Tic0yMUccWffl8HKG61ZPsrAuOXB02aK37g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=163.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GhkIy80LgNxhqyYtNoMyhLZo1myuAOAZ1+zZiB+9cqg=;
+ b=cMEK7JGafGz/tuxq1JWrbJglL+4J1twS9M2zkjFL0zZ+8p4uAvyPe2hi+MsPVbYvJdYFDO3g7ZG27HPhy5V4r+EKEc1As/Pqz3eRv61OCmBvsxsbsra9K+f8xz7CIUR3T02A14niGAIAJEo5lih3JRkojrH6Qby0kKeUMvW0wUp3DsAzjLgSTl+vNEd9gIfmwu9tsLVQI+Yna+++OciLz2O8wLCjeC0kP3FoF8e96WEKHTzwYfX7pZNYJf8xJL1vX4K1GD/iS/VftrwH12Nd2k9OL1vbFGHt9NQ9ltHHfoQExtLAJfNM5gLTq6qlUJo8jTpdqHlZoqyYgC3MaP2Oxw==
+Received: from PH7P220CA0162.NAMP220.PROD.OUTLOOK.COM (2603:10b6:510:33b::31)
+ by IA3PR12MB259910.namprd12.prod.outlook.com (2603:10b6:208:70e::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.639.10; Tue, 24 Nov
+ 2026 11:21:39 +0000
+Received: from PH7PEPF00000005.namprd04.prod.outlook.com
+ (2603:10b6:510:33b:cafe::15) by PH7P220CA0162.outlook.office365.com
+ (2603:10b6:510:33b::31) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.662.6 via Frontend Transport; Tue, 24
+ Nov 2026 11:21:38 +0000
+X-MS-Exchange-Authentication-Results: mx.microsoft.com 1; spf=pass (sender IP
+ is 216.228.117.161) smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ PH7PEPF00000005.mail.protection.outlook.com (10.167.243.36) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.21.662.3 via Frontend Transport; Tue, 24 Nov 2026 11:21:37 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.57; Tue, 24 Nov
+ 2026 03:21:21 -0800
+Received: from [10.221.136.252] (10.126.231.37) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.57; Tue, 24 Nov
+ 2026 03:21:18 -0800
+Message-ID: <ee2e279b-0127-4d69-b0d8-a76ff2da8857@nvidia.com>
+Date: Tue, 24 Nov 2026 12:21:15 +0100
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -88,228 +104,175 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=poczta.fm; s=dk;
-	t=1795516849; bh=WFelugwLNPTLGIsm1EbRuqynel4zd3FFYDI8cAMlECY=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=STm0VC+ek9TIpVheZ/4/x7tmiA49norvQ4c89q3dZVCOPjkQHkaqblXoWksmCvCnF
-	 S4dVfPnlFS1z6h5HhN1mbIl5UaLOaWQH+192OmRdOQU8dOBBieKbx0zh/lxx7uqynv
-	 gaDjivdClbYsufi500tdav8Pez1By1JOtJEawJ8s=
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v7 1/2] bpf: Fix kfunc implicit arg inject type
+ detection to prevent invalid pointer deref
+To: <chenyuan_fl@163.com>, <bpf@vger.kernel.org>
+CC: <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+	<martin.lau@linux.dev>, <eddyz87@gmail.com>, <yonghong.song@linux.dev>,
+	<ihor.solodrai@linux.dev>, <memxor@gmail.com>, Yuan Chen
+	<chenyuan@kylinos.cn>
+References: <20261123055708.684107-1-chenyuan_fl@163.com>
+ <20261123055708.684107-2-chenyuan_fl@163.com>
+Content-Language: en-US
+From: Nirmoy Das <nirmoyd@nvidia.com>
+In-Reply-To: <20261123055708.684107-2-chenyuan_fl@163.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH7PEPF00000005:EE_|IA3PR12MB259910:EE_
+X-MS-Office365-Filtering-Correlation-Id: 18a369a2-1b29-486f-b897-08df4a1d1af1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|7416014|36860700016|1800799024|82310400026|23010399003|261026140227099003|261102123227099003|4143699003|261022105027099003|11063799006|261021121427099003|261022075727099003|56012099006|261009223027099003|261026121527099003|261028144727099003|261021123027099003|10067099003|22082099003|18002099003|6133799003|13003099007|3023799007;
+X-Microsoft-Antispam-Message-Info:
+	aMz5Geo4dV+e6+UG6zd3/u+D0RuyJdAN9reY6rgdJkeaRkmvRuKZfBlgPWrKj1i0cO/UBDNZUyvwtY5G5j3YTPcZrFr+aml5KfNh8KUhV8Z8QYIjB0mBEJKZ3OPoTZ8U3PJXdOPI+PcZJ6G7HBtTKJlE00k8aF9d2E9IbbQVwFGhHb7PPPLEvHT3TVQcHgOuQTxfP+Kqss1JEHp0xnHjRpv0ZxWD24N2Np8JX9OuMkLuH7lVAajaIKBmddfdk5jJgZid3P3qQ9dIdvt918I8s0WfB7DTkxQEyftnv7KnpUDpdr+gpfyXnN3stH+p2XzueJMZSvqpTbwymnEtHVdPydxbyj1WtDtabKUMK3wPgPgEv6VsIg1JMbBPuMsOWk7Gj0LXzosyALeeLE5UaCcmrmF0EsvxK2PVugQ04KCqJkGIuwwc+tO7jHZs3rG1jcxiRXlc/HKWufTkP4SHr9zoNMGkx3M3WkfDJ03zBRJXGXrAfwBOn+X34/NM6fGCXRXH2yA+e1UUKhF0Rg3+uZk3HwP142S6XXRLGdluae2pkmhaXe9C5xIPpstVSvvhXMwPyfKsZvi2rZlJ5J3cZlvsYWdxObshHmrIIus3+Tipac8hrLkfFM3tmREDxgWZcMioGLeMn/bziNnQgxoSh4rXXHtMwZnGAd1eaaAgkL3LkVScHyCDnxVg3gh4ZZgOXR0/Ld6B2yE0TXxPPisTgjPOog==
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(376014)(7416014)(36860700016)(1800799024)(82310400026)(23010399003)(261026140227099003)(261102123227099003)(4143699003)(261022105027099003)(11063799006)(261021121427099003)(261022075727099003)(56012099006)(261009223027099003)(261026121527099003)(261028144727099003)(261021123027099003)(10067099003)(22082099003)(18002099003)(6133799003)(13003099007)(3023799007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	o6+OOiJVq6enQLofCtD1sAKh/UV2y/lf0pxXYD9LN7SGyqA/Fkki5q10/dXyUXRVIElzUzQWjoM7t8iP/5ES/smK2nsFzujMq5OOkSNaufv4+ScO7L2TbqL46EaihHgCU43JrKnc6xTN5IhVh+C/0FFUHSJezFmg1PuSlOu2owJAtmF1+1Rq4d7vkCG6YYG2cuonUah5sSjsB9xsPgY/Me/PKlg8lok8LKS0XE3Fqw4rCs2ybb3evKQ8q2YlJlRCE+S4QQCArq5LEV9KebKhemd7Yj0P5vxKaz9XbsPrgn8XsfJj7XQqIU1Baxzdocg72u3fuudcrfhC3/qNuhLILUd7TXXTOEbCkuq1ZOTxAEzQAhCvZ0YtBTlnEL/hFufNqjuzTIZeLBAoDFtuwcXw2JRg/tWbzhb1QYfFA7OtpLnl/mPNCKLhYB8rhXVryEQw
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Nov 2026 11:21:37.5457
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 18a369a2-1b29-486f-b897-08df4a1d1af1
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	PH7PEPF00000005.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA3PR12MB259910
 
-Add two xdp_adjust_tail subtests for frag_size of the rxq info a
-program runs with:
+Hi Yuan,
 
-- xdp_adjust_frags_tail_grow_ingress_ifindex grows the last frag of a
-  9000 byte test_run packet with ingress_ifindex set to a veth device.
-  test_run allocates PAGE_SIZE frags, so the grow must succeed.
 
-- xdp_adjust_frags_tail_grow_lo_after_test_run does a test run, then
-  sends a UDP packet a bit larger than a page over lo with a generic XDP
-  frags program attached, or is skipped with 64K pages. Generic XDP
-  copies the packet into a page_pool head page and a frag, which can be
-  a part of a page, so growing the frag must fail with -EOPNOTSUPP. The
-  program asks for more than any tailroom, so nothing is written even
-  when the grow is allowed.
+Can you please review 
+https://sashiko.dev/#/message/20261123055708.684107-1-chenyuan_fl%40163.com 
+findings
 
-Signed-off-by: Slawomir Stepien <sst@poczta.fm>
----
- .../bpf/prog_tests/xdp_adjust_tail.c          | 138 ++++++++++++++++++
- .../test_xdp_adjust_frags_tail_grow_lo.c      |  25 ++++
- 2 files changed, 163 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/test_xdp_adjust_frags_tail_grow_lo.c
+I see similar finding with my AI reviewer too. I have tested the series 
+which is avoiding the issue as expected.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c b/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c
-index be0c36871911..ead6c0be960e 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c
-@@ -4,6 +4,7 @@
- #include <linux/if_link.h>
- #include <net/if.h>
- #include "xdp_dummy.skel.h"
-+#include "test_xdp_adjust_frags_tail_grow_lo.skel.h"
- 
- static void test_xdp_adjust_tail_shrink(void)
- {
-@@ -406,6 +407,139 @@ static void test_xdp_adjust_frags_tail_shrink_after_generic(void)
- 	xdp_dummy__destroy(skel);
- }
- 
-+/*
-+ * test_run allocates PAGE_SIZE frags, so a program may grow the last one up
-+ * to the end of its page, also when ingress_ifindex picks the rxq info of
-+ * another device.
-+ */
-+static void test_xdp_adjust_frags_tail_grow_ingress_ifindex(void)
-+{
-+	const char *file = "./test_xdp_adjust_tail_grow.bpf.o";
-+	struct xdp_md ctx = { .data_end = 9000 };
-+	struct netns_obj *ns = NULL;
-+	struct bpf_program *prog;
-+	struct bpf_object *obj;
-+	__u8 *buf = NULL;
-+	int err, ifindex;
-+	LIBBPF_OPTS(bpf_test_run_opts, topts,
-+		.ctx_in = &ctx,
-+		.ctx_size_in = sizeof(ctx),
-+	);
-+
-+	if (getpagesize() != 4096) {
-+		test__skip();
-+		return;
-+	}
-+
-+	obj = bpf_object__open(file);
-+	if (!ASSERT_OK_PTR(obj, "open"))
-+		return;
-+
-+	prog = bpf_object__next_program(obj, NULL);
-+	if (!ASSERT_OK(bpf_object__load(obj), "load"))
-+		goto out;
-+
-+	ns = netns_new("xdp_adjust_tail_ns", true);
-+	if (!ASSERT_OK_PTR(ns, "netns_new"))
-+		goto out;
-+
-+	SYS(out, "ip link add veth_xat0 type veth peer name veth_xat1");
-+	ifindex = if_nametoindex("veth_xat0");
-+	if (!ASSERT_GT(ifindex, 0, "veth ifindex"))
-+		goto out;
-+	ctx.ingress_ifindex = ifindex;
-+
-+	buf = malloc(16384);
-+	if (!ASSERT_OK_PTR(buf, "alloc buf 16Kb"))
-+		goto out;
-+	memset(buf, 1, 16384);
-+
-+	/* Test case add 10 bytes to last frag */
-+	topts.data_in = buf;
-+	topts.data_out = buf;
-+	topts.data_size_in = 9000;
-+	topts.data_size_out = 16384;
-+	err = bpf_prog_test_run_opts(bpf_program__fd(prog), &topts);
-+
-+	ASSERT_OK(err, "9Kb+10b");
-+	ASSERT_EQ(topts.retval, XDP_TX, "9Kb+10b retval");
-+	ASSERT_EQ(topts.data_size_out, 9000 + 10, "9Kb+10b size");
-+out:
-+	free(buf);
-+	netns_free(ns);
-+	bpf_object__close(obj);
-+}
-+
-+/*
-+ * The frags generic XDP gets from skb_pp_cow_data() can be parts of a
-+ * page_pool page, so its rxq info must not allow growing them. test_run
-+ * must not change that for lo.
-+ */
-+static void test_xdp_adjust_frags_tail_grow_lo_after_test_run(void)
-+{
-+	struct sockaddr_in addr = {
-+		.sin_family = AF_INET,
-+		.sin_addr.s_addr = htonl(INADDR_LOOPBACK),
-+		.sin_port = htons(9),
-+	};
-+	struct test_xdp_adjust_frags_tail_grow_lo *skel;
-+	struct netns_obj *ns = NULL;
-+	static char payload[60000];
-+	int fd = -1, lo, i, len, prog_fd;
-+	LIBBPF_OPTS(bpf_test_run_opts, topts,
-+		.data_in = &pkt_v4,
-+		.data_size_in = sizeof(pkt_v4),
-+		.repeat = 1,
-+	);
-+
-+	/* larger than the head generic XDP copies the packet into */
-+	len = getpagesize() + 500;
-+	if (len > (int)sizeof(payload)) {
-+		test__skip();
-+		return;
-+	}
-+
-+	skel = test_xdp_adjust_frags_tail_grow_lo__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "skel open_and_load"))
-+		return;
-+
-+	ns = netns_new("xdp_adjust_tail_ns", true);
-+	if (!ASSERT_OK_PTR(ns, "netns_new"))
-+		goto out;
-+
-+	SYS(out, "ip link set dev lo up");
-+	lo = if_nametoindex("lo");
-+	if (!ASSERT_GT(lo, 0, "lo ifindex"))
-+		goto out;
-+
-+	/* a test run in this netns, before generic XDP sees a packet on lo */
-+	prog_fd = bpf_program__fd(skel->progs.xdp_grow_frags);
-+	ASSERT_OK(bpf_prog_test_run_opts(prog_fd, &topts), "test_run");
-+
-+	if (!ASSERT_OK(bpf_xdp_attach(lo, prog_fd, XDP_FLAGS_SKB_MODE, NULL),
-+		       "attach generic XDP"))
-+		goto out;
-+
-+	/*
-+	 * a linear skb with little headroom: generic XDP copies it into a
-+	 * page_pool head page and a frag
-+	 */
-+	fd = socket(AF_INET, SOCK_DGRAM, 0);
-+	if (ASSERT_GE(fd, 0, "socket"))
-+		ASSERT_EQ(sendto(fd, payload, len, 0, (struct sockaddr *)&addr,
-+				 sizeof(addr)), len, "sendto");
-+	for (i = 0; i < 100 && skel->data->grow_ret == 1; i++)
-+		usleep(10000);
-+	bpf_xdp_detach(lo, XDP_FLAGS_SKB_MODE, NULL);
-+
-+	ASSERT_EQ(skel->data->grow_ret, -EOPNOTSUPP, "grow frag on lo");
-+out:
-+	if (fd >= 0)
-+		close(fd);
-+	netns_free(ns);
-+	test_xdp_adjust_frags_tail_grow_lo__destroy(skel);
-+}
-+
- void test_xdp_adjust_tail(void)
- {
- 	int page_size = getpagesize();
-@@ -426,4 +560,8 @@ void test_xdp_adjust_tail(void)
- 		else
- 			test_xdp_adjust_frags_tail_grow_4k();
- 	}
-+	if (test__start_subtest("xdp_adjust_frags_tail_grow_ingress_ifindex"))
-+		test_xdp_adjust_frags_tail_grow_ingress_ifindex();
-+	if (test__start_subtest("xdp_adjust_frags_tail_grow_lo_after_test_run"))
-+		test_xdp_adjust_frags_tail_grow_lo_after_test_run();
- }
-diff --git a/tools/testing/selftests/bpf/progs/test_xdp_adjust_frags_tail_grow_lo.c b/tools/testing/selftests/bpf/progs/test_xdp_adjust_frags_tail_grow_lo.c
-new file mode 100644
-index 000000000000..207346b14ad8
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_xdp_adjust_frags_tail_grow_lo.c
-@@ -0,0 +1,25 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+
-+/* 1 until the program saw a packet with frags */
-+int grow_ret = 1;
-+
-+SEC("xdp.frags")
-+int xdp_grow_frags(struct xdp_md *xdp)
-+{
-+	void *data_end = (void *)(long)xdp->data_end;
-+	void *data = (void *)(long)xdp->data;
-+
-+	if (grow_ret != 1 || bpf_xdp_get_buff_len(xdp) <= data_end - data)
-+		return XDP_PASS;
-+
-+	/*
-+	 * More than the tailroom of any frag, so nothing is written: the
-+	 * result only tells if frag_size of the rxq allows a grow at all.
-+	 */
-+	grow_ret = bpf_xdp_adjust_tail(xdp, 0x10000);
-+	return XDP_PASS;
-+}
-+
-+char _license[] SEC("license") = "GPL";
--- 
-2.56.0
 
+Regards,
+
+Nirmoy
+
+On 23.11.26 06:57, chenyuan_fl@163.com wrote:
+> From: Yuan Chen <chenyuan@kylinos.cn>
+>
+> When a module kfunc declares an implicit struct bpf_prog_aux * argument,
+> the verifier must identify it so the kernel injects env->prog->aux into
+> the correct register at runtime.  The original check used
+> is_kfunc_arg_prog_aux() which calls btf_types_are_same() to compare the
+> module BTF type against vmlinux.
+>
+> Root Cause
+>
+> This issue was triggered by pahole 1.30 generating module BTF with
+> incorrect type information, which caused the kernel's distilled base BTF
+> deduplication for modules to fail.  As a result, the module retained its
+> own copy of struct bpf_prog_aux with a different BTF ID than vmlinux's
+> definition.  While pahole 1.31 fixed the BTF generation issue, the kernel
+> must be robust against such inconsistencies: a BTF mismatch should result
+> in a clean rejection, not a kernel crash or information disclosure.
+>
+> When the distilled base dedup fails and btf_types_are_same() cannot match
+> the module's bpf_prog_aux type against vmlinux's, is_kfunc_arg_prog_aux()
+> returned false and the code fell through silently without setting
+> arg_prog.  The kfunc then received whatever value was in the argument
+> register and dereferenced it as a bpf_prog_aux pointer, leading to:
+>
+>    BUG: kernel invalid pointer dereference, address: 00000000000009e2
+>    RIP: bpf_prog_get_assoc_struct_ops+0xa/0xc0
+>    RDI: 0x000000000000046d (stale register value)
+>
+> In the observed crash the stale value was the process PID, causing a
+> dereference within the unmapped NULL page.  However, an attacker able to
+> control the register value -- for example by writing a BPF program that
+> explicitly sets the argument register before calling a KF_IMPLICIT_ARGS
+> kfunc -- could redirect the dereference to arbitrary kernel memory,
+> turning this into an information disclosure.  The fix ensures the
+> verifier either validates and injects the correct bpf_prog_aux pointer,
+> or rejects the program outright -- no silent fallthrough that could be
+> exploited.
+>
+> Crash Stack Trace
+>
+>    PID: 1133     TASK: ffff8881057d3900  CPU: 3    COMMAND: "test_progs"
+>     #0 machine_kexec at ffffffff812f6e26
+>     #1 __crash_kexec at ffffffff8145a788
+>     #2 crash_kexec at ffffffff8145ac24
+>     #3 oops_end at ffffffff812bb67c
+>     #4 page_fault_oops at ffffffff813053a1
+>     #5 exc_page_fault at ffffffff828e60a1
+>     #6 asm_exc_page_fault at ffffffff810012a6
+>        [exception RIP: bpf_prog_get_assoc_struct_ops+10]
+>        RIP: ffffffff815c024a  RSP: ffffc90001b57e48  RFLAGS: 00010283
+>        RAX: ffff8881057d3900  RBX: ffffc90001b57e68  RCX: ffff8881057d3900
+>        RDX: 0000607d4d1768b8  RSI: 000000000000046d  RDI: 000000000000046d
+>     #7 bpf_kfunc_multi_st_ops_test_1_assoc at ffffffffc0013a85 [bpf_testmod]
+>     #8 bpf_trace_run2 at ffffffff814f8332
+>     #9 __traceiter_sys_enter at ffffffff81415f45
+>    #10 trace_syscall_enter at ffffffff81416735
+>    #11 do_syscall_64 at ffffffff828e06a1
+>
+> Fix
+>
+> Split the combined is_kfunc_arg_ignore() || is_kfunc_arg_implicit() check
+> in get_kfunc_arg_type() so that an implicit argument that was not
+> recognized by is_kfunc_arg_prog_aux() is rejected with -EFAULT instead of
+> silently skipped.  The non-bpf_prog_aux implicit arguments handled by
+> bpf_fixup_kfunc_call() (obj_new, percpu_obj_new, obj_drop,
+> percpu_obj_drop, refcount_acquire, list_push, rbtree_add) are explicitly
+> allowed.
+>
+> All other KF_IMPLICIT_ARGS kfuncs take a struct bpf_prog_aux * argument,
+> which is matched by the preceding is_kfunc_arg_prog_aux() check and
+> injected through insn_aux_data.arg_prog, so they never reach the new
+> rejection path.
+>
+> Suggested-by: Eduard Zingerman <eddyz87@gmail.com>
+> Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+> Fixes: 64e1360524b9 ("bpf: Verifier support for KF_IMPLICIT_ARGS")
+> Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
+> ---
+>   kernel/bpf/verifier.c | 20 +++++++++++++++++++-
+>   1 file changed, 19 insertions(+), 1 deletion(-)
+>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -14055,8 +14055,26 @@ get_kfunc_arg_type(struct bpf_verifier_env *env, struct bpf_call_arg_meta *meta,
+>   	if (is_kfunc_arg_prog_aux(meta->btf, &args[arg]))
+>   		return ARG_PTR_TO_PROG_AUX;
+>   
+> -	if (is_kfunc_arg_ignore(meta->btf, &args[arg]) || is_kfunc_arg_implicit(meta, arg))
+> +	if (is_kfunc_arg_ignore(meta->btf, &args[arg]))
+>   		return ARG_IGNORE;
+> +
+> +	if (is_kfunc_arg_implicit(meta, arg)) {
+> +		/*
+> +		 * These kfuncs have non-prog_aux implicit arguments that
+> +		 * bpf_fixup_kfunc_call() patches up after verification.
+> +		 */
+> +		if (is_bpf_obj_new_kfunc(meta->func_id) ||
+> +		    is_bpf_percpu_obj_new_kfunc(meta->func_id) ||
+> +		    is_bpf_obj_drop_kfunc(meta->func_id) ||
+> +		    is_bpf_percpu_obj_drop_kfunc(meta->func_id) ||
+> +		    is_bpf_refcount_acquire_kfunc(meta->func_id) ||
+> +		    is_bpf_list_push_kfunc(meta->func_id) ||
+> +		    is_bpf_rbtree_add_kfunc(meta->func_id))
+> +			return ARG_IGNORE;
+> +		verbose(env, "%s unrecognized implicit argument, possible BTF mismatch\n",
+> +			reg_arg_name(env, argno));
+> +		return -EFAULT;
+> +	}
+>   
+>   	t = btf_type_skip_modifiers(meta->btf, args[arg].type, NULL);
+>   
