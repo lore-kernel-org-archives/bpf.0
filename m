@@ -1,54 +1,94 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.120
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.81
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795525638;
-	b=KayScZuZ/ojsf4GXqTHleIJI+ZchYDJ5ivXLxWGkFbhFHGCn/3mrAAWJTlOMuhUYI5sb
-	 qNe+awgoX0O8RBjfdQL2ME3lFH5E2QBg4ulSYfajRghv2d244OXNCqg5JlqlQFGL7lOH7
-	 bngZPM2d4TAuYn/uZY5OUvEpj+/nFKNihTNwFC1HSRS05XsW7BknbHLSsBayRgB0fM9yY
-	 ga5/kHiQOsMkIqqJmNrzi0zzYKuaLvaMMJfsFpZteafoqnq9MM3VEWQrfsYhqm8wnSzr3
-	 75Ttjx5Wpk+Wvy6x/Ez3ZPvlhBNIYMmO+dvtH3C28ZdsoAlsPIK43pcd6WP4XjKDBfw==
+	t=1795525644;
+	b=NEqZ+cZVUxkX8hJ9dNAnUrD02rU+gp0gz5L23leldrL50nQiBWlHDIpJEwdnxmyEyzlR
+	 qk/SxCnD4shVt22yET2nC2E4ehFxEDT4pyX4Cv7C42dzxJcIDlwagfe45BpGxVUUxfznM
+	 VWJQpGdI2eBBT2mTOwsFiqNVv7k9Aphs4mPwUkppxJGXoxvfaWIo5n90DKBTHYZ4T/rgu
+	 HcLBn8LYvjtMBpCKPYVEinmvNv7qXuTAfzKGqbiqeQAsMUtkG6bin59POYchzyES1Ao+C
+	 VfJ4EhIPQbp+ip4KlvLT7i5APX97yqRQdcYSWe2DxKar+NMnUYa6Frpf5kd13KF3AmA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795525638;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795525644;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Cc:Subject:To:References:From:In-Reply-To:Content-Type:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=OGZXgnfgRgczMbRxdKzz5YNMHRIhhkydTMZM2uhd6is=;
-	b=5odoC2DkMhrGQ2DPA7ot01SMPoYeu1dMw/kl42O54ylMn29v4vOnAp7Qr335g0ffKHvq
-	 XDIAeuN65tXs0cW7K5Hy9WL+o0PX59xXwkKUtgsRverzv1GBiEsVzlDrOfYeNBUEz7p29
-	 py/hI6YNoajHxDe9IXNtkaUwjdNrJpeuCXfn9dz/eyIFuzhx6m2uaGSJEyMu4PHfDo2O+
-	 nGlnxRniRnBnuAVcHoeMxpL2+SVzbG9JCL/JuXBbos1rYGLBo5iSydOahTOGaOtMYmmSi
-	 sfDHKT9T3g55YZ/FO6YoX86KM4UgaZyGSjUd1wsoJioIHM6KFEPW71/oVNMgC/Y7Dsg==
+	bh=IRYpCfBdDG6Cmr83IE6+7sfFsL5aqFoYzM91s2U+Ui4=;
+	b=fnAH3u587KC62bciVZoECk9RzZAhKvqIA6Qf/FCPiOoP+bEcTJcVKOpwEvJGFrXXrOTY
+	 SISUPl5d4226QEA9IjUp3UKX4jQQas2o6A4LBLzmymR3abnc6rSE2M8MPX/44Tlox76tI
+	 a4yRriIVMKIpQD6RscxModTzefmT0G3H2ri6LAHYxtT2JlFV/isrGoY+rLrt18BjA2BmF
+	 Ltt4o6tAju6nx0oph9pLWPIKkqCtGXqTRdJliDVe7/3QC+XQnSjLUDqxMmHhryhD1Dunl
+	 aHziNjnq2761NEm7uODFWglkz4ubeih0mqJdYNvV+800goHWJe8BxCyWR0Rrm4PSRKQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=A18EvcUC;
-	arc=none smtp.remote-ip=95.215.58.120
-Received: from mta1.migadu.com (out-120.mta1.migadu.com [95.215.58.120])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=mWmTa9W1;
+	arc=none smtp.remote-ip=91.218.175.81
+Received: from mta0.migadu.com (out-81.mta0.migadu.com [91.218.175.81])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BB28606A321
-	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 13:07:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4BB28606A321
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AFE0606A32E
+	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 13:07:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0AFE0606A32E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=A18EvcUC
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=mWmTa9W1
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=n3QCrIbcPMvCGHu60XljvMPoh4Nl+HXMssIukfe4cX0=;
+DKIM-Signature: a=rsa-sha256; bh=ibxHueNdSa+6jCrSJ3z2vsx/BayuZQYl+Vp2C26ROrY=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1795525635; v=1; x=1796130435;
- b=A18EvcUCcAsc5b5sW8FrRWkWIUwnhlal65rFjgyFiT9VRRcoJvhqrd/f6KOo0kun2erkrP7c
- jGU6GEBzq7E4aZHHHSrhw2+g4caOUnyLiEdYEvp9nxpLejjQIuBR5Mig6IpPStIXa6Z3VC/Ny0L
- fjF2t+ro9ShF6ottCDZvxIPs=
+ t=1795525642; v=1; x=1796130442;
+ b=mWmTa9W1frQ4KZOaQVSRoT4jwZR66FJGn/QwpxXTM2dYuIUDObFaF4E1BAeUzNCGmTOb6Cqj
+ b9ZzjvMISIJaDBpc3SVXSNnBJYB75d97itUSIztRB6k2vvdMqXoIlwyqnzN3MG48rvEmRddEUFM
+ nnmDkcTOTMuCHSK12r/CZQQo=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 8ce8cdb92deed85a;
-	Tue, 24 Nov 2026 13:07:15 +0000
-X-Mizu-Trace-ID: 8ce8cdb92deed85a
+Received: by smtp.migadu.com with ESMTPS id 9c346e1770fb1ab7;
+	Tue, 24 Nov 2026 13:07:21 +0000
+X-Mizu-Trace-ID: 9c346e1770fb1ab7
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <e0df6f55-aae9-4abd-8434-f6b75e42a972@linux.dev>
-Date: Tue, 24 Nov 2026 21:06:56 +0800
+From: Xuanqiang Luo <xuanqiang.luo@linux.dev>
+To: netdev@vger.kernel.org
+Cc: "David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Matthieu Baerts <matttbe@kernel.org>,
+	Mat Martineau <martineau@kernel.org>,
+	Geliang Tang <geliang@kernel.org>,
+	David Ahern <dsahern@kernel.org>,
+	Ido Schimmel <idosch@nvidia.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Neal Cardwell <ncardwell@google.com>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	Pablo Neira Ayuso <pablo@netfilter.org>,
+	Florian Westphal <fw@strlen.de>,
+	Phil Sutter <phil@nwl.cc>,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	mptcp@lists.linux.dev,
+	netfilter-devel@vger.kernel.org,
+	coreteam@netfilter.org,
+	Xuanqiang Luo <luoxuanqiang@kylinos.cn>
+Subject: [PATCH net-next v1 1/6] tcp: avoid a stack canary in __tcp_select_window()
+Date: Tue, 24 Nov 2026 22:06:26 +0900
+Message-ID: <20261124130631.1886963-2-xuanqiang.luo@linux.dev>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20261124130631.1886963-1-xuanqiang.luo@linux.dev>
+References: <20261124130631.1886963-1-xuanqiang.luo@linux.dev>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -58,180 +98,125 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: cui.tao@linux.dev, bpf@vger.kernel.org, tj@kernel.org,
- hannes@cmpxchg.org, mkoutny@suse.com
-Subject: Re: [RFC PATCH v14 3/4] selftests/bpf: add iocost cost model test
-To: sashiko-reviews@lists.linux.dev
-References: <20261118131029.797007-1-cui.tao@linux.dev>
- <20261118131029.797007-4-cui.tao@linux.dev>
- <sashiko-outbox-221050@kernel.org>
-From: Tao Cui <cui.tao@linux.dev>
-In-Reply-To: <sashiko-outbox-221050@kernel.org>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Hello,
+From: Xuanqiang Luo <luoxuanqiang@kylinos.cn>
 
-在 2026/11/18 21:41, sashiko-bot@kernel.org 写道:
-> Thank you for your contribution! Sashiko AI review found 2 potential
-> issues to consider:
-> - [Medium] selftests/bpf: iocost_test_env() hardcodes /sys/fs/cgroup
->   without mounting
-Right, the tests access /sys/fs/cgroup without mounting anything there,
-so they depend on the host's mount state and would see the tmpfs that
-setup_classid_environment() leaves behind.  The next posting mounts
-cgroup2 at /sys/fs/cgroup inside the private mount namespace that
-iocost_test_env() creates, tolerating EBUSY, and skips the tests when
-the mount fails.
-> - [Low] selftests/bpf: open_nullb_dev() callers check -errno instead of
->   fd
-That's a real gap.  open_nullb_dev() can return -1 with errno unset,
-and the callers then pass 0 to ASSERT_OK() and keep using fd -1.  The
-next posting returns a proper negative error code from the helper and
-checks the fd itself with ASSERT_GE(devfd, 0).
+__tcp_select_window() passes the address of two locals to
+mptcp_space(), but only for MPTCP subflows.
 
-And another one:
-bpf-ci points this, the setns() unwind on the skip path may reset test_progs' cwd to "/"
+With CONFIG_STACKPROTECTOR_STRONG=y, this forces a stack canary in
+__tcp_select_window() for all TCP sockets.
 
-Right, mntns_install() sets the pwd to the root of the new namespace on
-the way back, so a skip moves the process to "/".  The next posting
-saves the cwd before unshare() and fchdir()s back to it after setns().
+Return both values in a small structure instead.
 
-Thanks,
-Tao
+While we are at it, do not compute tcp_space() and tcp_full_space()
+for MPTCP subflows, their values were overwritten.
 
-> --
-> 
-> commit 7c8a11566574f6e4224eb8a8a97b22da0b3eb991
-> Author: Tao Cui <cuitao@kylinos.cn>
-> 
-> selftests/bpf: add iocost cost model test
-> 
-> This commit adds two BPF struct_ops iocost cost models and selftests that
-> attach them to a configfs-created null_blk device and verify model
-> selection, IO pricing, tracepoint firing, and device removal.
-> 
->> diff --git a/tools/testing/selftests/bpf/prog_tests/iocost_model.c b/tools/testing/selftests/bpf/prog_tests/iocost_model.c
->> new file mode 100644
->> index 0000000000000..0fbaeb7c5b7ef
->> --- /dev/null
->> +++ b/tools/testing/selftests/bpf/prog_tests/iocost_model.c
-> [ ... ]
->> +/* open the nullb device node, creating it manually when udev hasn't */
->> +static int open_nullb_dev(const char *name, int flags)
->> +{
->> +	char path[32], syspath[64], devtok[32];
->> +	unsigned int maj, min;
->> +	dev_t dev;
->> +	struct stat st;
->> +	int fd;
->> +
->> +	snprintf(syspath, sizeof(syspath), "/sys/block/%s/dev", name);
->> +	if (read_file_token(syspath, devtok, sizeof(devtok)) ||
->> +	    sscanf(devtok, "%u:%u", &maj, &min) != 2)
->> +		return -1;
->> +	dev = makedev(maj, min);
->> +
->> +	snprintf(path, sizeof(path), "/dev/%s", name);
->> +	fd = open(path, flags);
->> +	if (fd >= 0 && fstat(fd, &st) == 0 && S_ISBLK(st.st_mode) &&
->> +	    st.st_rdev == dev)
->> +		return fd;
->> +	if (fd >= 0) {
->> +		/* a stale node from a previous run, drop and recreate */
->> +		close(fd);
->> +		fd = -1;
->> +	}
->> +	if (unlink(path) && errno != ENOENT)
->> +		return -1;
->> +	if (mknod(path, S_IFBLK | 0600, dev))
->> +		return -1;
->> +	fd = open(path, flags);
->> +	if (fd < 0)
->> +		unlink(path);
->> +	return fd;
->> +}
-> 
-> [Severity: Low]
-> Can ASSERT_OK(devfd < 0 ? -errno : 0, ...) in serial_test_iocost_model()
-> and serial_test_iocost_model_streams() pass when open_nullb_dev() fails?
-> 
-> If read_file_token() hits EOF without setting errno, sscanf() fails to
-> match two tokens, or unlink(path) succeeds and leaves errno at 0 after
-> the second open() fails, open_nullb_dev() returns -1 with errno == 0.
-> The callers then pass 0 to ASSERT_OK() and proceed to call
-> posix_fadvise(), read(), pread(), and close() on fd -1.  Using
-> ASSERT_OK_FD(devfd, ...) in the callers (or returning a negative error
-> code from open_nullb_dev()) would catch any failure directly.
-> 
-> [ ... ]
->> +static bool iocost_test_env(void)
->> +{
->> +	static bool ready;
->> +	struct statfs sf;
->> +	int orig_ns = -1, supported;
->> +	bool ok = false;
->> +
->> +	if (geteuid() != 0) {
->> +		printf("%s:SKIP:needs root\n", __func__);
->> +		test__skip();
->> +		return false;
->> +	}
->> +
->> +	if (statfs("/sys/fs/cgroup", &sf) ||
->> +	    sf.f_type != CGROUP2_SUPER_MAGIC) {
->> +		printf("%s:SKIP:needs cgroup v2 at /sys/fs/cgroup\n",
->> +		       __func__);
->> +		test__skip();
->> +		return false;
->> +	}
-> [ ... ]
->> +	/*
->> +	 * Isolate the configfs and cgroup mounts from the host. A
->> +	 * failed setup unwinds the namespace so that a later retry does
->> +	 * not stack private namespaces.
->> +	 */
->> +	orig_ns = open("/proc/self/ns/mnt", O_RDONLY);
->> +	if (unshare(CLONE_NEWNS) ||
->> +	    mount(NULL, "/", NULL, MS_REC | MS_PRIVATE, NULL)) {
->> +		printf("%s:SKIP:cannot make mounts private: %s\n",
->> +		       __func__, strerror(errno));
->> +		test__skip();
->> +		goto out;
->> +	}
->> +	mkdir("/sys/kernel/config", 0755);
->> +	(void)mount("none", "/sys/kernel/config", "configfs", 0, NULL);
-> 
-> [Severity: Medium]
-> Will all three iocost tests skip when /sys/fs/cgroup is not already a
-> cgroup2 mount or after an earlier cgroup v1 test runs in the same
-> test_progs process?
-> 
-> iocost_test_env(), cgroupfs_has_controller(), readback_model(),
-> write_cost_model(), and the io.cost.qos writes all access /sys/fs/cgroup
-> directly without mounting cgroup2 there, while cgroup_setup_and_join() in
-> tools/testing/selftests/bpf/cgroup_helpers.c mounts cgroup2 at /mnt
-> (CGROUP_MOUNT_PATH).  In addition, setup_classid_environment() in
-> cgroup_helpers.c mounts tmpfs at /sys/fs/cgroup (CGROUP_MOUNT_DFLT) and
-> cleanup_classid_environment() leaves that tmpfs mounted:
-> 
-> tools/testing/selftests/bpf/cgroup_helpers.c:setup_classid_environment() {
-> 	...
-> 	if (mount("tmpfs", CGROUP_MOUNT_DFLT, "tmpfs", 0, NULL) &&
-> 	    errno != EBUSY) {
-> 		log_err("mount cgroup base");
-> 		return 1;
-> 	}
-> 	...
-> }
-> 
-> When a test using setup_classid_environment() runs before
-> serial_test_iocost_model*, statfs("/sys/fs/cgroup", &sf) sees TMPFS_MAGIC
-> instead of CGROUP2_SUPER_MAGIC and skips the tests.  Using the cgroup2
-> mount managed by cgroup_helpers.c (via get_root_cgroup() or
-> write_cgroup_file("", ...) / read_cgroup_file("", ...)), or mounting
-> cgroup2 inside the private mount namespace created by iocost_test_env(),
-> would avoid relying on the host's /sys/fs/cgroup mount state.
-> 
+$ scripts/bloat-o-meter -t vmlinux.old vmlinux.new
+add/remove: 0/0 grow/shrink: 0/3 up/down: 0/-51 (-51)
+Function                                     old     new   delta
+mptcp_space                                   87      86      -1
+tcp_connect                                 5892    5876     -16
+__tcp_select_window                          706     672     -34
+Total: Before=24068967, After=24068916, chg -0.00%
+
+Signed-off-by: Xuanqiang Luo <luoxuanqiang@kylinos.cn>
+---
+ include/net/mptcp.h   | 13 +++++++++++--
+ net/ipv4/tcp_output.c | 14 ++++++++++----
+ net/mptcp/subflow.c   |  9 ++++++---
+ 3 files changed, 27 insertions(+), 9 deletions(-)
+
+diff --git a/include/net/mptcp.h b/include/net/mptcp.h
+index ad7005b574bb..95ebcfd5950d 100644
+--- a/include/net/mptcp.h
++++ b/include/net/mptcp.h
+@@ -126,6 +126,12 @@ struct mptcp_pm_ops {
+ 	void (*release)(struct mptcp_sock *msk);
+ } ____cacheline_aligned_in_smp;
+ 
++/* Result of mptcp_space(). */
++struct mptcp_space_info {
++	int space;
++	int full_space;
++};
++
+ #ifdef CONFIG_MPTCP
+ void mptcp_init(void);
+ 
+@@ -144,7 +150,7 @@ static inline bool rsk_drop_req(const struct request_sock *req)
+ 	return tcp_rsk(req)->is_mptcp && tcp_rsk(req)->drop_req;
+ }
+ 
+-void mptcp_space(const struct sock *ssk, int *space, int *full_space);
++struct mptcp_space_info mptcp_space(const struct sock *ssk);
+ bool mptcp_syn_options(struct sock *sk, const struct sk_buff *skb,
+ 		       unsigned int *size, struct mptcp_out_options *opts);
+ bool mptcp_synack_options(const struct request_sock *req, unsigned int *size,
+@@ -291,7 +297,10 @@ static inline bool mptcp_skb_can_collapse(const struct sk_buff *to,
+ 	return true;
+ }
+ 
+-static inline void mptcp_space(const struct sock *ssk, int *s, int *fs) { }
++static inline struct mptcp_space_info mptcp_space(const struct sock *ssk)
++{
++	return (struct mptcp_space_info){ };
++}
+ static inline void mptcp_seq_show(struct seq_file *seq) { }
+ 
+ static inline int mptcp_subflow_init_cookie_req(struct request_sock *req,
+diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
+index 08d0d4a639fe..c2022fc9ad52 100644
+--- a/net/ipv4/tcp_output.c
++++ b/net/ipv4/tcp_output.c
+@@ -3391,12 +3391,18 @@ u32 __tcp_select_window(struct sock *sk)
+ 	 * fluctuations.  --SAW  1998/11/1
+ 	 */
+ 	int mss = icsk->icsk_ack.rcv_mss;
+-	int free_space = tcp_space(sk);
+-	int allowed_space = tcp_full_space(sk);
++	int free_space, allowed_space;
+ 	int full_space, window;
+ 
+-	if (sk_is_mptcp(sk))
+-		mptcp_space(sk, &free_space, &allowed_space);
++	if (sk_is_mptcp(sk)) {
++		struct mptcp_space_info info = mptcp_space(sk);
++
++		free_space = info.space;
++		allowed_space = info.full_space;
++	} else {
++		free_space = tcp_space(sk);
++		allowed_space = tcp_full_space(sk);
++	}
+ 
+ 	full_space = min_t(int, tp->window_clamp, allowed_space);
+ 
+diff --git a/net/mptcp/subflow.c b/net/mptcp/subflow.c
+index 00677fb3efcd..d22ee068f599 100644
+--- a/net/mptcp/subflow.c
++++ b/net/mptcp/subflow.c
+@@ -1532,13 +1532,16 @@ bool mptcp_subflow_data_available(struct sock *sk)
+  * as far as mptcp peer is concerned that data is still inflight.
+  * DSS ACK is updated when skb is moved to the mptcp rx queue.
+  */
+-void mptcp_space(const struct sock *ssk, int *space, int *full_space)
++struct mptcp_space_info mptcp_space(const struct sock *ssk)
+ {
+ 	const struct mptcp_subflow_context *subflow = mptcp_subflow_ctx(ssk);
+ 	const struct sock *sk = subflow->conn;
++	struct mptcp_space_info info;
+ 
+-	*space = __mptcp_space(sk);
+-	*full_space = mptcp_win_from_space(sk, READ_ONCE(sk->sk_rcvbuf));
++	info.space = __mptcp_space(sk);
++	info.full_space = mptcp_win_from_space(sk, READ_ONCE(sk->sk_rcvbuf));
++
++	return info;
+ }
+ 
+ static void subflow_error_report(struct sock *ssk)
+-- 
+2.43.0
 
