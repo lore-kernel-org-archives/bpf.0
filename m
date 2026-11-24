@@ -1,58 +1,58 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=51.159.188.251
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795534521;
-	b=FC8W4OsyLozwOOHHKqDI6qjMsnfWIP08jumJ6+fYrowYU48LaFhXtDbc7FzGcZBydPfO
-	 Vg+AocibyLAcHUMS0wfq/j/HAFLqw+3DpBDivmrjLz2MJ6Pxb6oK7Esctovy06fkCKS71
-	 KKx9jdomwB8wejC1q6TpGmf1xJ5FOXPOmU+DdBvERmKh3BXZCCVEJSVMWFENol4FEnNFg
-	 b+0XRX0aizsCqMUkbILDhQIEzXtddqCzJG0eaySFFQGPb5lJr5Da8uCA5zfFGvMnS5UH4
-	 tI9XRU1IdNRFlfGpggq6w4SppXA326y/ixdVuSgitmoD7chYlZ+IrgeYcpgq/aEHgEg==
+	t=1795534522;
+	b=qLgGtjXjp0OXFWvaFS5jSeN/R2yh0yROHPW4NfcnBZbMKiENt1MyGkLnRXZ0nVkzvaTX
+	 I2Wk+r7eI5zlR2F+RnUDNwWauNXYONeKOmM31kFrPlARVCiQCc049TErR0tYjuMCl1ERg
+	 vz1X6G+iFtSlvioKShOjOci4Z/bcqy+IvGlOVW1LEGxXqDlDFQPSnyQQs1vGrFyTZkIIz
+	 fc1aeluIQ+MAu7OAXoTvEba6+yWVKg7RQJ57JYCNqoPW4nburIgOZQ7vPz/JufaY+OX2C
+	 a1mdP/yjTVSmPmoY/qWW3t9mVJ6JwUJWhBDex7+IZ816s6VH20BskP5/ePGhBNzABzQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795534521;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795534522;
 	h=DMARC-Filter:DKIM-Signature:Received:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Subject:From:To:Cc:In-Reply-To:References:
 	 Date:Message-Id:X-Mailer:X-Developer-Signature:X-Developer-Key:
 	 X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:X-AntiAbuse:
 	 X-Get-Message-Sender-Via:X-Authenticated-Sender:X-Source:
 	 X-Source-Args:X-Source-Dir;
-	bh=OWtUdVBz8qUGghSmb09UZ9Y11SwaNY7ioITPlbeQQXA=;
-	b=OFV8twF5qdvzcfGC074L3qzMeXAUCRShwcslLYs0O2aEbENz2HRPB0LGtP1PPF7xqbSG
-	 jjHziHca2DdTIy6AblNAZf1A1eXKN68zXKYHv+rZRg7YkB2BRv6wIFdyyLD8Fv89+RHmb
-	 5fXOdXJ03ghAMFL3GZsRWpP7xI4VuLIBQWVwdjspCmePBNMxgdh07pO9DQI+raU59g8hL
-	 LvF0g1hdOfYs6ulAGO3Nav5d2OdpKkyMDUq8u6OStoNYGu50DlyKKRybEEilF1lyHEwAm
-	 LBGGwWxaVHF3eBflhqkP02PHgoRH3XrqKz7SkBDXtu4fj9xE+gWODfcUtcMhJgQEqzQ==
+	bh=6bbY7vd5NwL+6Vriv6mfb0SsFpRp1+XhUCVFLucctF8=;
+	b=m3KZwa5wbqBvmFbYpY7oPk7tO83C8g7YBemCX2qYTXH5pSr172lSwD+sxOyC4AVda1E6
+	 ytTMjHCHIvREkjmTnBScPOJnUvCvvDS0MPVYMU4UO0xAzo2Mm04ENDTQRCZhiKMfB/PYl
+	 bb2VSD7pMrAzxKDPIuQPi9c4P+aDn0+4UTF8p37ozHSujowV/G/QbPmhbm7iBkfwBH3WC
+	 Cg7PpvMmDusAwwl6zrqQXLuQW2sRJ7staoCWXMfmXX/L6jji4Bk9MS/KGNceCk3meXrWn
+	 K+zPukAhDKSyLPdUF2aQ7M1ws8UgfOmlQI9jeMUPY3fMOAzDAvYCYZJF1wgbbd/yO1A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=oss.cyber.gouv.fr;
 	spf=pass smtp.mailfrom=oss.cyber.gouv.fr;
-	dkim=pass header.d=oss.cyber.gouv.fr header.i=@oss.cyber.gouv.fr header.a=rsa-sha256 header.s=default header.b=CfSTrQx0;
+	dkim=pass header.d=oss.cyber.gouv.fr header.i=@oss.cyber.gouv.fr header.a=rsa-sha256 header.s=default header.b="aBt7/SVn";
 	arc=none smtp.remote-ip=51.159.188.251
 Received: from oss.cyber.gouv.fr (oss.cyber.gouv.fr [51.159.188.251])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 438D0606A695;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A246B606A69D;
 	Tue, 24 Nov 2026 15:35:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 438D0606A695
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A246B606A69D
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.cyber.gouv.fr
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.cyber.gouv.fr
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oss.cyber.gouv.fr header.i=@oss.cyber.gouv.fr header.a=rsa-sha256 header.s=default header.b=CfSTrQx0
+	dkim=pass (2048-bit key) header.d=oss.cyber.gouv.fr header.i=@oss.cyber.gouv.fr header.a=rsa-sha256 header.s=default header.b=aBt7/SVn
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=oss.cyber.gouv.fr; s=default; h=Message-Id:Date:References:In-Reply-To:Cc:
 	To:From:Subject:Content-Transfer-Encoding:Content-Type:MIME-Version:Reply-To:
 	Sender:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
 	Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=OWtUdVBz8qUGghSmb09UZ9Y11SwaNY7ioITPlbeQQXA=; b=CfSTrQx0YNO5M+mIfdIU7xDE5r
-	ZOiHdwnftvKPB2wu598tCIs7cwiA6O2qw29n85cOgpD0r80iNzYmr39sz+Py0BBrn5kyMr+bGhWGl
-	lFECR3wqGcyoIQxKw6hlkkx9RkHvVPOejQFcOXU3pPykqUMaQRaXPDZXOP1+2QhUrjEFUlygQpQZT
-	BgXnrX9pFplXsGeYSvnLdKQHrG5WGPVrdDHXNIEPBO6oMai2CJ8Yt6fMk9mzeOvhSpm+y5fJyA3HF
-	FlJlJShLg2i2bM2WbVz/EHqWRFsd+iOeeqbDwtm5ZubyC6o6SrJmMgU1VXAVR9AAPRxf8W9ggPITj
-	IXh65JiA==;
+	bh=6bbY7vd5NwL+6Vriv6mfb0SsFpRp1+XhUCVFLucctF8=; b=aBt7/SVnG14O2pw5dAtI5LeXRY
+	BeGnBCVKy+UaS3LMm7tAJChuW8UrsAWrXdCcQ2skzTcx7sW+lDnNOLQR4CYfngntx3uobE2D9wOUN
+	s8SVS/KjGVCHz1viyoSy2rH7OBs8uc8xHs0XPv7Gb3SwHaT62YSY4eiOKQVeruBsvlx9BHWHMig+q
+	M+Wus+FBctP2+JFfvYsU3bvr/f0CENsg4goVG8eNEq6BuYk8JGqlrG5ph7PVmgSC0ThQqUlHqYBq7
+	jklsbc8xaSZQhzMXkb3Oz6KV/pyLGMUVC2MhT16lwscw/UGlOWqPQeYBdDFjOvDOi+bZJkf5yO/ds
+	pN3t8l7w==;
 Received: from laubervilliers-658-1-215-187.w90-63.abo.wanadoo.fr ([90.63.246.187]:31657 helo=archlinux.local)
 	by pf-012.whm.fr-par.scw.cloud with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.100.1)
 	(envelope-from <nicolas.bouchinet@oss.cyber.gouv.fr>)
-	id 1xVsY8-00000002UiG-1wMm;
-	Tue, 24 Nov 2026 16:35:14 +0100
+	id 1xVsYD-00000002UiG-3P9U;
+	Tue, 24 Nov 2026 16:35:20 +0100
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -64,8 +64,8 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH -next -v2 6/8] lockdown: bound the status string with
- scnprintf
+Subject: Re: [PATCH -next -v2 8/8] selftests/lsm: add lockdown securityfs
+ test
 From: Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>
 To: Cai Xinchen <caixinchen1@huawei.com>
 Cc: nicolas.bouchinet@oss.cyber.gouv.fr, xiujianfeng@huawei.com, 
@@ -73,19 +73,19 @@ Cc: nicolas.bouchinet@oss.cyber.gouv.fr, xiujianfeng@huawei.com,
  kalevi@kolttonen.fi, linux-security-module@vger.kernel.org, 
  linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  bpf@vger.kernel.org, lujialin4@huawei.com
-In-Reply-To: <20261110132818.2231593-7-caixinchen1@huawei.com>
+In-Reply-To: <20261110132818.2231593-9-caixinchen1@huawei.com>
 References: <20261110132818.2231593-1-caixinchen1@huawei.com>
- <20261110132818.2231593-7-caixinchen1@huawei.com>
+ <20261110132818.2231593-9-caixinchen1@huawei.com>
 Date: Tue, 24 Nov 2026 16:34:52 +0100
-Message-Id: <179553449232.44882.7100598310208785962.b4-review@b4>
+Message-Id: <179553449235.44882.11974736188520062001.b4-review@b4>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=851;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2176;
  i=nicolas.bouchinet@oss.cyber.gouv.fr; h=from:subject:message-id;
- bh=RI4dTUfu5aSv1gvAJosEDlAJhl802JnfIZc4LrB9OtE=;
- b=owGbwMvMwCU2peIRu9mVXWKMp9WSGLJZ1y3afCTtfFZpVMDLLl5HgbMPFlsyCr5b946NIyd3X
- 7WdYdCxjlIWBjEuBlkxRZZNbuf6ZucqP3L53XYQZg4rE8gQBi5OAZiItgojwzKVb4/2/rhxK4Mp
- ZbXb9pA5C5T/rM2fof3XaSrD5i9/094xMrxbtTvSLNlhz6qduVW6u7KzKpfO/H76woKQ97mlz5z
- NXJgA
+ bh=ZaDtPDq1+Lz/VS4CLkHW2wkDkVO14tUCWhnwfCttqoU=;
+ b=owGbwMvMwCU2peIRu9mVXWKMp9WSGLJZ1y3u/Ka0U+SeZV7J1n1qSZs+iQiKKZwMt9AQeGmzu
+ e+BqFVYRykLgxgXg6yYIssmt3N9s3OVH7n8bjsIM4eVCWQIAxenAEyki4GRoSNjTn3BLLPsj9XX
+ QxdEqzZq3oy4E/6wdIf5fDmZPvO1yowMa99Eyxh4eW+0XPpwdcuSF42u0QqdTcbLnq/58ltr1al
+ oVgA=
 X-Developer-Key: i=nicolas.bouchinet@oss.cyber.gouv.fr; a=openpgp;
  fpr=FB48DC6D172A3DE30BA94B0DA548BF06BE454ED7
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
@@ -99,21 +99,60 @@ X-Source:
 X-Source-Args: 
 X-Source-Dir: 
 
-On Tue, 10 Nov 2026 21:28:16 +0800, Cai Xinchen <caixinchen1@huawei.com> wrote:
-> Use scnprintf() instead of sprintf() when composing the lockdown status
-> string in lockdown_read().  The current set of levels fits well within the
-> 80 byte buffer, but sprintf() provides no protection if more or longer
-> labels are added later.  scnprintf() makes the buffer bounds explicit.
-> 
-> Store the level label strings in named arrays and point the matching
-> lockdown_reasons[] entries at them.  Their sizes are compile-time
-> constants, so a BUILD_BUG_ON() can verify that the status buffer is large
-> enough for all level labels, their trailing spaces, and the brackets
-> around the active one.
-> 
-> [...]
+On Tue, 10 Nov 2026 21:28:18 +0800, Cai Xinchen <caixinchen1@huawei.com> wrote:
+> diff --git a/tools/testing/selftests/lsm/common.c b/tools/testing/selftests/lsm/common.c
+> index 927dce4f04cb2..e7d5cdb101375 100644
+> --- a/tools/testing/selftests/lsm/common.c
+> +++ b/tools/testing/selftests/lsm/common.c
+> @@ -50,23 +51,39 @@ int read_proc_attr(const char *attr, char *value, size_t size)
+> [ ... skip 26 lines ... ]
+> +		int err = errno;
+>  
+> -	if (red <= 0 || red == size)
+> +		close(fd);
+> +		errno = err;
+>  		return -1;
 
-Reviewed-by: Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>
+Here you change the return value of read_sysfs_lsms function, leading to
+hypothetical test failure, take the
+lsm_list_modules_test.c:correct_lsm_list_modules test as an example, in a scenario
+where the size parameter is not sufficient for the read string, your
+function will return 0, thus passing the test (obviously, it is
+currently at `_SC_PAGESIZE` and should not fail). The previous
+read_sysfs_lsms function returned -1.
+
+Nitpick, in this scenario, you also read one less character than the
+previous function.
+
+>
+> diff --git a/tools/testing/selftests/lsm/lockdown_test.c b/tools/testing/selftests/lsm/lockdown_test.c
+> new file mode 100644
+> index 0000000000000..fed050551cff2
+> --- /dev/null
+> +++ b/tools/testing/selftests/lsm/lockdown_test.c
+> @@ -0,0 +1,230 @@
+> [ ... skip 206 lines ... ]
+> +	}
+> +	if (geteuid() != 0)
+> +		SKIP(return, "requires root");
+> +	if (status_writable())
+> +		SKIP(return, "cannot open %s for writing: %s",
+> +		     LOCKDOWN_PATH, strerror(errno));
+
+Could you synthesize those checks in a FIXTURE_SETUP ?
+
+> [ ... skip 10 lines ... ]
+> +	ASSERT_EQ(0, write_status(next));
+> +
+> +	ASSERT_EQ(0, read_file(LOCKDOWN_PATH, after, sizeof(after)));
+> +	ASSERT_EQ(0, get_active_level(after, level, sizeof(level)));
+> +	ASSERT_STREQ(next, level);
+> +}
+
+Since this testsuite is not included by default, because, as specified in
+the Makefile, it will change the machine state, you might move the
+upgrade test before the same_level and no_downgrade tests. Hence those
+two will never be at a none state.
 
 -- 
 Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>
