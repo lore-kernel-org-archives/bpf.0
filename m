@@ -1,47 +1,63 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=220.197.31.2
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795507318;
-	b=xoAIruIbTBSZsIVJDqKj8JBRYCx9zxkgQFxR0IQ+N10W75IRK/93DUqnAreqxctiwUco
-	 2nz7n8rpjwzGFiu1qvRI8NfCKCvbBmknTRe2VbcMLva38NKGWBLOG50ay1GJnmZiPWis1
-	 rFeJzOrvpMQyT+lNnZLGORibSpqNLKhnQ/yvPTsVVeYMkQO7G0+02SojH710zxj2A3hyH
-	 S09pJxZxUBQJQsOJWNDWXFiNr7jnIPj1CmyG7xsHkY3NqZJzw32LwwWwuXSZk8Ef7GRAQ
-	 cvO3qEebhmFtk/QWsRK4OMqbMdUlD7TQEbS+C3OBIIdhMeFJUaTDWECBA0QMuY53dXg==
+	t=1795507334;
+	b=O0+Pww9nE4alDiebtVQy9Tt3Ohxsl4EpuatltuSNM/7n7M9QZS2ezL+QfO7JWq06YuDy
+	 JQUS0xtR0PCJMSUwCMqvhRYe92NfH1dLXK47p34P4anTYUZdOx8On0OoKbUALtRUwl9jb
+	 6l5x8ul/TQgBWOyjYtFWaHI+Mc2lviOw+HuGG9Tic2o0jc4EwPmmEegblA0PXcbbARgcE
+	 lTYzgxR0rlPNdnZA9GAkE9QR4wvuRogtgLL+xNFdinXYuwtfN7aozI8cf1vwfZcRBkoH0
+	 re4zwbIHjtevOvSbslMBUXk17AUNsy6VUNvj3Lk1zwCTqP2dUnsFCzrrZENgU5puadQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795507318;
-	h=DMARC-Filter:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding:X-CM-TRANSID:
-	 X-Coremail-Antispam:X-CM-SenderInfo;
-	bh=1hk9uBpP77tVS+Fe7y11eb/ZPjQfE9lY4fYSE16WzKg=;
-	b=zy/wd+4qichHzZufQUhuy4pXHRwJB93j+xybO8jKBHmf7NQLrzCGABzQfzXSStMe7gYu
-	 ww3VOlY6h8wTTIf4kJqt7oBPh2XnN7baU8JlSvQQ8J8/ZCdGfC3UtGVNnNu2VXE5X0uMz
-	 wGtT6aqQwwo+d3EwGXiRXfXNfiVi9lMTubrJ6geQ+Ems3I3UE0gPuydbziYfQQZ9WB2Th
-	 rfd9sN1u1josjb2fj/2okkJCLSIRz3SvMuYI7laQIGopnaQPXHG+vr1SPIkRg5c7i3WBL
-	 ImxLSp22wgrWavDSEnv0Q+TAHuoq4BKuzT3b+NUCf+nUmlPg/yYOGR4q9gkbbcRnovg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795507334;
+	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
+	 In-Reply-To:References:X-sashiko-severity:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=+pKXu3qkgJSPLozlW00PL8TqTAeUCLEtzNRMzovbU6c=;
+	b=eIwfVzdsYJw+gbWjZ+0IEjxey77V4uM0KVN4qemWHlDPWI2MyD14aWMmndSXdQR5cllX
+	 SCZXt1Z6tCQ3KOvRveWy2Rq8B3WlO1Jf5o0FcjqCWa/5e5IoVq9wOvve6t1cQ4N6F269l
+	 aN0Gkxm1FP82E22fbqtxLQ5jnYCkUZVObvRW+Aqz8w6zD5IY2dEZ4jJoijNlC9FIbkY2/
+	 0OLpZIwGXW8Aw59P/C5br1YDbXXFUGfKrnh5tWCMVmabfH0HHNpy8yKLNKnmItjbJObRK
+	 AByM1feJ9vpAI4HM4Q+Gam24fT0FQ+989PDWHSH2V8aKO66EHEL8BrbzhNEYSN/mWcw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=163.com;
-	spf=pass smtp.mailfrom=163.com;
-	dkim=pass header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=UIyaA7gL;
-	arc=none smtp.remote-ip=220.197.31.2
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fXMTKtGL;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F347D606A31E;
-	Tue, 24 Nov 2026 08:01:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F347D606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AEF0606A31E;
+	Tue, 24 Nov 2026 08:02:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=UIyaA7gL
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=Message-ID:Date:MIME-Version:Subject:To:From:
-	Content-Type; bh=1hk9uBpP77tVS+Fe7y11eb/ZPjQfE9lY4fYSE16WzKg=;
-	b=UIyaA7gLghQWUukv6OANfAH5rkL157Wpv1LgnTB1o7XpmCWivtPE7zBBTpe/fx
-	nAPmK/3g93Ti77+ocYY1xC7sETAClYFgDPQk58/8wg5aWwk3+l3kOj+tksrm4wsf
-	jGr9qnHDYp91SE0qohn4g10iRvF4i/QHvlMLydZKfVkPE=
-Message-ID: <47389671-2a71-4a6b-8ed3-9c1fb4de0557@163.com>
-Date: Tue, 24 Nov 2026 16:00:49 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fXMTKtGL
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFDA41F000C0;
+	Tue, 24 Nov 2026 08:02:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795507334;
+	bh=+pKXu3qkgJSPLozlW00PL8TqTAeUCLEtzNRMzovbU6c=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=fXMTKtGLNHeemfUWTOrZ53U0gq5PMgpFosjoZDra4ZDVlRXrcCfAOWlJ26RXadcWF
+	 26QoawHDjPyR0sYYJ4kD5wa+k8f8Zjvqce6ieocTLZlm6ag1kE3uLgMFL4UpIOUVRy
+	 GftvWGWABuBaXVL3OQYLiMlMKBHH9K6AnTKOruEH8eKkKCEOfEb7WjWNCvn2imBVXk
+	 MMFwVDJH2/d2c/baEABqtfxDV+Xt8SuHPxbMRAb4Ajbd/blAwS4YL8kzgkLKldinrB
+	 8iTUxHzNhBhUrtQOU205fMBjj3KhaHl2/mf2uxdhOr/vaY7bcdzFEWxpnhp+uiKsnm
+	 qXi4DNMmKhTNA==
+Subject: Re: [PATCH net] net: stmmac: retry a failed RX refill from a timer
+From: netdev-bot+sashiko@kernel.org
+To: Anandu.Padinhare@electrifex.com
+Cc: maxime.chevallier@bootlin.com, andrew+netdev@lunn.ch, davem@davemloft.net,
+ edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
+ mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com, ast@kernel.org,
+ daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
+ sdf@fomichev.me, cfsworks@gmail.com, rmk+kernel@armlinux.org.uk,
+ david.wu@rock-chips.com, stable@vger.kernel.org, netdev@vger.kernel.org,
+ linux-stm32@st-md-mailman.stormreply.com,
+ linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org
+Date: Tue, 24 Nov 2026 08:02:12 +0000
+Message-ID: <179550733234.3135.14826070962327647886@kernel.org>
+In-Reply-To: <MA0PR01MB921746F36D90C7080287ACC9FD782@MA0PR01MB9217.INDPRD01.PROD.OUTLOOK.COM>
+References: <MA0PR01MB921746F36D90C7080287ACC9FD782@MA0PR01MB9217.INDPRD01.PROD.OUTLOOK.COM>
+X-sashiko-severity: Medium
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -51,217 +67,263 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net v12 2/2] selftests: net: add TAP socket filter attach
- tests
-To: netdev-bot+sashiko@kernel.org
-Cc: netdev@vger.kernel.org, bpf@vger.kernel.org,
- willemdebruijn.kernel@gmail.com, jasowangio@gmail.com,
- andrew+netdev@lunn.ch, davem@davemloft.net, kuba@kernel.org, ast@kernel.org,
- alexei.starovoitov@gmail.com, andrii@kernel.org, weirongguang@kylinos.cn
-References: <20261123054209.89946-3-clementwei90@163.com>
- <179549910931.3135.4958196655811648969@kernel.org>
-Content-Language: en-US
-From: Rongguang Wei <clementwei90@163.com>
-In-Reply-To: <179549910931.3135.4958196655811648969@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:PigvCgBXQSkxRAVrMfi+Hw--.23973S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW3ArW7ur47Wry5Kr4fJrWxCrg_yoW3GF1xpF
-	WFga45tr1vqFWUXwn7ZrWUXFy3ZrsrGF45uw1kK345uFn8ury3uay3KFWj9an3Ar4vvws0
-	kF4j939xCw4DAFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07U5sqAUUUUU=
-X-CM-SenderInfo: 5fohzv5qwzvxizq6il2tof0z/xtbC4RI5pGsFRDK7EAAA3d
 
+Thank you for your contribution! Sashiko AI review found 2 potential
+issue(s) to consider.
 
+Critical: 0 · High: 0 (2) · Medium: 1 · Low: 1
 
-on 2026/11/24 13:45, netdev-bot+sashiko@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 2 potential
-> issue(s) to consider.
-> 
-> Critical: 0 · High: 0 · Medium: 1 · Low: 1
-> 
-> If you believe none of the issues are legitimate, please reply to each
-> issue of Medium severity or higher and explain why the AI is wrong.
-> If any of them are legitimate and you plan to respin, please let patchwork
-> know by including "pw-bot: cr" as a separate line at the end of your reply
-> (one such reply per series is enough).
-> 
-> - [Medium] The selftest misses the half of the bug where the queue is
->   left unpublished.
-> - [Low] None of the new tests check whether the cBPF program actually
->   runs on packets.
-> 
-> --
-> 
-> selftests: net: add TAP socket filter attach tests
-> 
-> This commit adds kselftests in tools/testing/selftests/net/tun.c for
-> TUNATTACHFILTER and TUNDETACHFILTER on a multi-queue TAP device. They cover
-> re-attaching a queue after the original filter buffer becomes unreadable,
-> bad lengths and bad programs with and without attached queues, a filter
-> set before any queue is attached, and IFF_NOFILTER handling. Every check
-> is made through TUNGETIFF and TUNGETFILTER.
-> 
->> diff --git a/tools/testing/selftests/net/tun.c b/tools/testing/selftests/net/tun.c
->> index 34de2580e32ec..ac326193867b0 100644
->> --- a/tools/testing/selftests/net/tun.c
->> +++ b/tools/testing/selftests/net/tun.c
-> 
-> [ ... ]
-> 
->> @@ -548,6 +550,362 @@ TEST_F(tun, reattach_close_delete)
->>  	EXPECT_EQ(tun_delete(self->ifname), 0);
->>  }
->>  
->> +/* accept: return skb->len.  Three instructions on purpose, so that the
->> + * length read back through TUNGETFILTER tells it apart from a rejected
->> + * program that is shorter.
->> + */
->> +static const struct sock_filter filter_accept[] = {
->> +	BPF_STMT(BPF_LD | BPF_W | BPF_LEN, 0),
->> +	BPF_STMT(BPF_ALU | BPF_ADD | BPF_K, 0),
->> +	BPF_STMT(BPF_RET | BPF_A, 0),
->> +};
-> 
-> [Severity: Low]
-> 
-> Do any of the new tests check that the classic filter actually runs on
-> packets?
-> 
-> filter_accept is the only valid program the tests use. It returns
-> skb->len, so it can never show a drop or a trim. None of the new tests
-> write a frame to the TAP fds or read one back.
-> 
-> Every assertion reads either the IFF_NOFILTER bit from TUNGETIFF or the
-> fprog header from TUNGETFILTER. TUNGETIFF builds that bit from its own
-> expression in tun_chr_ioctl():
-> 
-> 	if (tfile->nofilter || !rcu_access_pointer(tun->cbpf_prog))
-> 		ifr.ifr_flags |= IFF_NOFILTER;
-> 
-> The companion commit "tun: run the socket filter from tun_net_xmit()" adds
-> the execution site as a separate check in tun_net_xmit():
-> 
-> 	prog = rcu_dereference(tun->cbpf_prog);
-> 	if (prog && !READ_ONCE(tfile->nofilter)) {
-> 		len = bpf_prog_run_clear_cb(prog->prog, skb);
-> 		if (!len || pskb_trim(skb, len)) {
-> 
-> Would these tests still pass if tun_net_xmit() never ran cbpf_prog, ran it
-> on IFF_NOFILTER queues, or ignored its verdict or trim length?
-> 
-> The test comments say a queue "still gets the filter", "must not get the
-> filter", or is covered by it. reattach_filter_without_user_buffer already
-> says its checks "cannot tell an installed filter from no filter". That
-> limit applies to the other new tests as well.
-> 
-> A test could send a frame through a rejecting or truncating program on a
-> TAP queue, then read it back or confirm it was dropped. That would cover
-> the datapath and the IFF_NOFILTER bypass.
-> 
-> There is also a smaller inaccuracy. The comment above
-> attach_filter_clears_nofilter_queue says:
-> 
->   A later TUNATTACHFILTER covers every queue of the device, including one
->   that was attached with IFF_NOFILTER.
-> 
-> tun_attach_filter() only clears nofilter for the active queues:
-> 
-> 	for (i = 0; i < tun->numqueues; i++) {
-> 		tfile = rtnl_dereference(tun->tfiles[i]);
-> 		WRITE_ONCE(tfile->nofilter, false);
-> 	}
-> 
-> A queue opened with IFF_NOFILTER and then detached keeps nofilter set.
-> TUNGETIFF keeps reporting IFF_NOFILTER for it until TUNSETQUEUE attaches
-> it again. Should the comment refer to the active queues only?
-> 
-> [ ... ]
-> 
->> +	/* The queue gets that program again, from the device */
->> +	EXPECT_EQ(tun_attach(self->fd, self->ifname), 0);
->> +
->> +	flags = tun_get_iff_flags(self->fd);
->> +	EXPECT_GE(flags, 0);
->> +	EXPECT_EQ(flags & IFF_NOFILTER, 0);
->> +}
->> +
->> +/* A program configured while no queue is attached must cover the queues that
->> + * are attached afterwards.
->> + */
->> +TEST_F(tun, attach_filter_without_queues_then_attach)
->> +{
->> +	short flags = 0;
->> +
->> +	EXPECT_EQ(tun_detach(self->fd, self->ifname), 0);
->> +	EXPECT_EQ(tun_detach(self->fd2, self->ifname), 0);
->> +
->> +	ASSERT_EQ(filter_attach(self->fd, filter_accept,
->> +				ARRAY_SIZE(filter_accept)), 0);
->> +
->> +	EXPECT_EQ(tun_attach(self->fd, self->ifname), 0);
->> +
->> +	flags = tun_get_iff_flags(self->fd);
->> +	EXPECT_GE(flags, 0);
->> +	EXPECT_EQ(flags & IFF_NOFILTER, 0);
->> +}
-> 
-> [Severity: Medium]
-> 
-> Should attach_filter_without_queues_then_attach also check
-> IFF_DETACH_QUEUE after the re-attach?
-> 
-> The companion commit "tun: run the socket filter from tun_net_xmit()"
-> describes two failure modes of the old check in tun_attach(). In the
-> first, a failed read of the user buffer attached the queue without a
-> filter. In the second, "a successful read returned early and left the
-> queue unpublished".
-> 
-> reattach_filter_without_user_buffer is the only test that checks
-> IFF_DETACH_QUEUE. Its buffer is PROT_NONE, so it only exercises the
-> failed read case.
-> 
-> In this test filter_accept is in readable .rodata. On the baseline
-> kernel, TUNSETQUEUE(IFF_ATTACH_QUEUE) therefore takes the early return in
-> tun_attach():
-> 
-> 	/* Re-attach the filter to persist device */
-> 	if (!skip_filter && (tun->filter_attached == true)) {
-> 		lock_sock(tfile->socket.sk);
-> 		err = sk_attach_filter(&tun->fprog, tfile->socket.sk);
-> 		release_sock(tfile->socket.sk);
-> 		if (!err)
-> 			goto out;
-> 	}
-> 
-> That path returns 0 before tun_enable_queue() and before tun->tfiles[] is
-> published. TUNGETIFF then reports IFF_DETACH_QUEUE set, because
-> tfile->detached is still set. It also reports IFF_NOFILTER clear, because
-> sk_filter is set.
-> 
-> Doesn't that let all three assertions here pass on the unfixed kernel
-> while the queue stays disabled?
-> 
-> The final re-attach in attach_filter_bad_keeps_program_without_queues has
-> the same gap. That test still fails on the baseline kernel, but only
-> because of its earlier bad length and bad program checks.
-> 
-> Adding this after the tun_attach() helper call in both tests would cover
-> the unpublished queue case:
-> 
-> 	EXPECT_EQ(flags & IFF_DETACH_QUEUE, 0);
-> 
-The assertion is missing, yes, but I would leave the test as it is.
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
 
-The early return that returns success without publishing the queue is the
-code patch 1 deletes. With it gone, tun_attach() has a single success path:
-returning 0 means the queue was added to tun->tfiles[] and tfile->detached
-was cleared, so on the patched kernel this test cannot pass with a queue
-that stayed disabled. reattach_filter_without_user_buffer() also asserts
-that the queue is not left with IFF_DETACH_QUEUE after a re-attach.
+- [Medium] net: stmmac: stmmac_rx() runs receive loop before
+  stmmac_rx_refill() on retry
+- [Low] The new block comment above stmmac_rx_refill_needed()
+  (stmmac_main.c lines 268-271) says: "The RX DMA suspends without an…
 
-Adding the check here would only guard against reintroducing the code the
-series removes, so I did not include it. I'll pick it up if the series
-needs another revision anyway.
+Pre-existing issues:
+- [High] Suspend/resume while an RX refill is failing hands unpopulated
+  and stale descriptors back to the DMA.
+- [High] stmmac_setup_tc_block_cb() can leave a channel's DMA RX
+  interrupt masked, which stalls RX on that channel.
 
+--
+
+net: stmmac: retry a failed RX refill from a timer
+
+This commit adds a per-channel timer to stmmac. When a poll leaves at most
+STMMAC_RX_REFILL_THRESH slots with the DMA, the timer schedules RX NAPI
+10 ms later, so a refill that failed in page_pool is retried without
+waiting for an RX interrupt. The timer is cancelled after rx_napi is
+disabled, and stmmac_enable_all_queues() re-arms it if the ring is still
+short of buffers.
+
+Link: https://lore.kernel.org/netdev/20260331195927.3353cc6d@kernel.org/
+Link: https://lore.kernel.org/netdev/20260402174049.0ac088cc@kernel.org/
+
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> index a685ce4638f61..ad9873aaf2dba 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+
+[ ... ]
+
+> @@ -263,6 +265,32 @@ static void stmmac_verify_args(void)
+>  		pr_warn("stmmac: module parameter 'flow_ctrl' is obsolete - please remove from your module configuration\n");
+>  }
+>  
+> +/* The RX DMA suspends without an interrupt once it has used all its buffers,
+> + * so a refill that failed for lack of memory would never be retried. Retry it
+> + * from a timer when few slots are left with the DMA.
+> + */
+
+[Severity: Low]
+This isn't a bug, but is the first sentence of this comment accurate for
+dwmac4?
+
+In dwmac4_dma.h, DMA_CHAN_INTR_ABNORMAL includes DMA_CHAN_INTR_ENA_RBU.
+That macro is part of DMA_CHAN_INTR_DEFAULT_MASK, which is written to
+DMA_CHAN_INTR_ENA. dwmac4_dma_interrupt() then gets the RBU status but
+only counts it:
+
+	if (unlikely(intr_status & DMA_CHAN_STATUS_RBU))
+		x->rx_buf_unav_irq++;
+
+The sentence is true for dwxgmac2, where XGMAC_DMA_INT_DEFAULT_EN has no
+RBUE, and for dwmac1000. The commit message also says the RBU interrupt
+"is not enabled on every core and kernel version".
+
+Could the comment say that RBU is not enabled on every core, or is not
+used to drive the refill, rather than that there is no interrupt?
+
+> +static bool stmmac_rx_refill_needed(struct stmmac_priv *priv, u32 queue)
+> +{
+> +	struct stmmac_rx_queue *rx_q = &priv->dma_conf.rx_queue[queue];
+> +
+> +	return CIRC_SPACE(rx_q->cur_rx, rx_q->dirty_rx,
+> +			  priv->dma_conf.dma_rx_size) < STMMAC_RX_REFILL_THRESH;
+> +}
+
+[ ... ]
+
+> @@ -328,8 +360,17 @@ static void stmmac_enable_all_queues(struct stmmac_priv *priv)
+>  			continue;
+>  		}
+>  
+> -		if (queue < rx_queues_cnt)
+> +		if (queue < rx_queues_cnt) {
+> +			/* Disabling the queues cancelled any pending refill
+> +			 * retry, but the ring may have been kept as it was.
+> +			 * Check it while no poll can run.
+> +			 */
+> +			bool refill = stmmac_rx_refill_needed(priv, queue);
+
+[Severity: High]
+This is a pre-existing issue, but does the "ring may have been kept as it
+was" case also need to cover stmmac_resume() after a failed refill?
+
+When stmmac_rx_refill() stops at a page_pool allocation failure, the
+slots in [dirty_rx, cur_rx) keep buf->page == NULL. The DMA write-back
+has already overwritten their buffer address words (RDES0/RDES1 on
+dwmac4).
+
+If the system suspends at that point, stmmac_suspend() leaves the ring as
+it is, and resume does:
+
+stmmac_resume()
+  stmmac_reset_queues_param()
+    stmmac_reset_rx_queue()
+      rx_q->cur_rx = 0;
+      rx_q->dirty_rx = 0;
+  stmmac_clear_descriptors()
+    stmmac_clear_rx_descriptors()
+      stmmac_init_rx_desc()
+        dwmac4_rd_init_rx_desc()
+          dwmac4_set_rx_owner(p, disable_rx_ic);
+  stmmac_hw_setup()
+    stmmac_init_dma_engine()
+      stmmac_set_queue_rx_tail_ptr(priv, rx_q, chan,
+                                   rx_q->buf_alloc_num);
+  stmmac_enable_all_queues()
+
+Nothing in this sequence rewrites the buffer addresses from buf_pool.
+Every descriptor gets the OWN bit, and the tail pointer gives the whole
+ring to the DMA.
+
+Could the DMA then write received frames to addresses taken from old
+write-back data? Those may be garbage, or the stale DMA address of a page
+already returned to the stack or page_pool.
+
+When stmmac_rx() later reaches such a slot, it would call
+dma_sync_single_for_cpu() on a stale buf->addr and page_address() on a
+NULL buf->page, and pass the result to xdp_prepare_buff() and
+napi_build_skb().
+
+The new check here does not see this case. Resume has just set cur_rx
+and dirty_rx to the same value, so stmmac_rx_refill_needed() returns
+false and no retry is armed.
+
+Even if a retry were armed, stmmac_rx_dirty() would return 0, so
+stmmac_rx_refill() would not fill the NULL slots before the DMA uses
+them.
+
+> +
+>  			napi_enable(&ch->rx_napi);
+> +			if (refill)
+> +				stmmac_rx_refill_timer_arm(ch);
+> +		}
+
+[Severity: High]
+This is a pre-existing issue, but can stmmac_setup_tc_block_cb() leave the
+channel's DMA RX interrupt masked? The new re-arm logic does not cover
+that case.
+
+Consider this sequence:
+
+CPU1 (RX interrupt and NAPI)
+stmmac_napi_check()
+  stmmac_disable_dma_irq(priv, priv->ioaddr, chan, 1, 0);
+  __napi_schedule()
+stmmac_napi_poll_rx()
+  work_done == budget, so the IRQ re-enable is skipped
+
+CPU2 (CAP_NET_ADMIN adds a tc u32 or flower offload rule)
+stmmac_setup_tc_block_cb()
+  __stmmac_disable_all_queues()
+    napi_disable()    <- sets NAPI_STATE_DISABLE
+
+Then __napi_poll() in net/core/dev.c does this:
+
+	if (unlikely(napi_disable_pending(n))) {
+		napi_complete(n);
+		return work;
+	}
+
+The core completes NAPI itself and napi_disable() returns. The only place
+the RX IRQ is re-enabled, in stmmac_napi_poll_rx(), never runs:
+
+	if (work_done < budget && napi_complete_done(napi, work_done)) {
+		...
+		stmmac_enable_dma_irq(priv, priv->ioaddr, chan, 1, 0);
+
+stmmac_enable_all_queues() then calls napi_enable(). It arms the refill
+timer only when stmmac_rx_refill_needed() is true, which is usually not
+the case because stmmac_rx() has refilled the ring.
+
+The open, resume and XDP setup paths call stmmac_enable_all_dma_irq() or
+schedule a poll. stmmac_setup_tc_block_cb() does neither.
+
+On dwmac4, the RBU interrupt recovers the channel once the ring fills.
+dwxgmac2 also uses dwmac510_tc_ops, but RBUE is not in
+XGMAC_DMA_INT_DEFAULT_EN.
+
+With per-channel MSI, or with RX-only traffic, would the dwxgmac2 channel
+stay dead until the interface is reopened?
+
+Would scheduling rx_napi after napi_enable() in this path fix both this
+stall and the refill case?
+
+[ ... ]
+
+> @@ -6164,6 +6205,8 @@ static int stmmac_napi_poll_rx(struct napi_struct *napi, int budget)
+>  	u64_stats_update_end(&rxq_stats->napi_syncp);
+>  
+>  	work_done = stmmac_rx(priv, budget, chan);
+> +	if (unlikely(stmmac_rx_refill_needed(priv, chan)))
+> +		stmmac_rx_refill_timer_arm(ch);
+>  	if (work_done < budget && napi_complete_done(napi, work_done)) {
+>  		unsigned long flags;
+>  
+
+[Severity: Medium]
+Once memory is available again, does the retry poll deliver the frame
+that is already waiting in the ring?
+
+When the ring has run completely dry, stmmac_rx() stops on the last
+descriptor the DMA completed, at rx_q->cur_rx. It stops there because
+the next entry equals rx_q->dirty_rx:
+
+	next_entry = STMMAC_NEXT_ENTRY(rx_q->cur_rx,
+				       priv->dma_conf.dma_rx_size);
+	if (unlikely(next_entry == rx_q->dirty_rx))
+		break;
+
+The refill only runs after the receive loop, at the end of stmmac_rx().
+The timer-driven poll that finally succeeds then does this:
+
+stmmac_rx_refill_timer()
+  napi_schedule(&ch->rx_napi)
+stmmac_napi_poll_rx()
+  stmmac_rx()
+    receive loop breaks at once on next_entry == rx_q->dirty_rx,
+    count == 0
+    stmmac_rx_refill()    <- succeeds, dirty_rx catches up to cur_rx
+  stmmac_rx_refill_needed()    <- false, timer not re-armed
+  napi_complete_done(napi, 0)
+
+The DMA wrote the descriptor at cur_rx before it suspended, and it
+resumes at the entry after it. It will not raise another RX interrupt
+for that descriptor, and nothing else schedules a poll.
+
+So the frame stays in the ring until another packet arrives on that
+queue. If the frame spans several descriptors, the same applies to its
+last segment, with the partial skb kept in rx_q->state.skb. On a quiet
+queue that can take a long time, and this is the recovery path the
+patch adds.
+
+There is a smaller effect while allocations keep failing. Every 10 ms
+retry calls stmmac_rx_status() again on the same descriptor at cur_rx
+before it breaks. Any per-frame counters that call updates in
+priv->xstats are counted again on each retry.
+
+Could stmmac_rx() go back through the receive loop when the refill has
+made room? Or could stmmac_napi_poll_rx() schedule another poll when
+the refill advanced dirty_rx? Another option would be to refill before
+the receive loop when the ring is full. Which of these fits the ring
+accounting from commit 0bb05e6adfa9 best?
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/MA0PR01MB921746F36D90C7080287ACC9FD782%40MA0PR01MB9217.INDPRD01.PROD.OUTLOOK.COM
