@@ -1,49 +1,66 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=213.133.104.62
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795561807;
-	b=PZBNDVdEzz2iuwLFT8nynkN+N9rshAGpFNdnMVrwqQGYSGBFK+GKu2yFPue25ovkAJYy
-	 mdG29IP91uPDSbG08CvwwZprrj8HAT2DLYxmJ3OzohvUD5577soht59JnCM3YLOOghhMw
-	 YShqyBAiW+2ksDX2ay3PsErXmtDR0rMRGxRcb1+/TRY2crvCx1/J97Gf7AYCaEn2NryUt
-	 X9hiblVXWeD9NeRtFzAAte42PiexOriDJff8XAsKNx7reJbOBNRqCed2vC31MNBVrhZJY
-	 IJAnl23wawZhTxIK703aaoXQhHDXtpEu5IjMcrabMZNYJHfmaI2+HvpyHzwpOaM9bqw==
+	t=1795562093;
+	b=y60zk1C28hk2UBOu1qowe8YMnG7LYkqDVAcRcVM1uu8ZIWUr5w2VxKMgmQwbiVUI3xsx
+	 gK2bmugvtcDPWTG/QAyEMZl1A5DXXJpUCFTjxyYz8EL+59vu6A7gefpVlAGe1zvNgGZIZ
+	 GtIaK5FMo20ONKddQoiCY9PZMltJmyjbdgAVbgFp/2d3DXyfGFvUkSk50kwyjdvSIFb7c
+	 99EABFO8RgEwiALQ6JvfUppmw1D23qi0Whef76+X6F0FOHkykckeZxex8emB6N8nOMuHy
+	 52ZHnZJF7zCdqNHP5JgIj3823ExdWawA58SBffe0JbZ/26d/8l2vksLfA2ADYhVM25w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795561807;
-	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
-	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc;
-	bh=rN/sV7IyT8KjUBI96vkK7PxN3EFFy/69U9dWXOK0UeA=;
-	b=YTP6eY+LMAcfe2OkgtmvXrA7MqbG7OK1X6jzokncgKziuL5DNOAXcVceaHbPqCkY5SJ6
-	 eXoJPgDbacvGfz2oUqh1LNpwzAJzY9fDWtvO1NVcKYcwdzLEB7GOvJZBouXkIWY/YKo2z
-	 CFQ26EjxFUjvHLT9eaIgCO5NxnxCE/c53o5Cr/kaPKz+ZqPYohdIhIdWKHlFGNdlQjS2X
-	 P74Y4MOy4bGqsi0uoI4pmdcA/sTjUh0LiTj7Pnm8W8l5YpuQ6vuEeG9pM/UZl/h2Y/YZN
-	 ENsDERLUohNxcsqo3vsc3Z2kZe+lTW/UVklpBerSpnIpTkHmoL8NcpoguKzQ26h0m6Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795562093;
+	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
+	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding:X-Virus-Scanned;
+	bh=TS2F8/2yujXcpiNAXOp1mX31dDWHRuDyL2ha9CygunU=;
+	b=ePvCSHonUuwfwxYD9ePDKsMEeDooH4QazD5P3xg+fAzsJ+dpgRw5MEsNIhJjm7NpHuwW
+	 BwMQCmNpTI8SNZEi1gae3hCUdGNaBNWhbEQWDi6UCjbI8zY+VimGLKkI+JE0avVNJ3R1w
+	 YDOwAiTr/3REXQPL75pGp49h6xYdtLUjwA5uvzFjRgMLYBvCEElsOl6Efsjj44sj/UdM+
+	 eAKCmR8wSiyCEBc0SuyYXOChWTUlMuYe9860UR4uawyMNuRUvLESTlespbD6aqNSz8Le5
+	 UnLhlecT9ajKugL09f9lAUl9nGxSSTnv/7OE65ieDFYE3NrqsyAgE5l59yG/ql9t4Nw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lY1l3cJ+;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=iogearbox.net;
+	spf=pass smtp.mailfrom=iogearbox.net;
+	dkim=pass header.d=iogearbox.net header.i=@iogearbox.net header.a=rsa-sha256 header.s=default2302 header.b="kQ/0h1Y5";
+	arc=none smtp.remote-ip=213.133.104.62
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E298E606A321
-	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 23:10:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3F28606A323
+	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 23:14:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A3F28606A323
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lY1l3cJ+
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E5DA1F000C0;
-	Tue, 24 Nov 2026 23:10:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795561806;
-	bh=rN/sV7IyT8KjUBI96vkK7PxN3EFFy/69U9dWXOK0UeA=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=lY1l3cJ+3Y9PtQyRxP3jaRI/hHvaoT8axdNKllnay0y8p8x25UMHS7CMg0Svnt9eZ
-	 1xRCTBNQhG1SMPna+d7WlslrVx+pSSuGo8UoUrk+4CHWxKGCj9+WaoleUbtgRN0v8x
-	 DrwiDl0weELiMTjI5QYTFOGYQMaUNNz/sapjVBfSUnzqiu9bct3QveXqpDHM21y9zO
-	 wnpYIlYeFVquFEfPZIwYv8necEC65GlFE3dEmjLOT6FCMkFEgcs9lCCujGfM9TeFVp
-	 xXrTT1+SOY3du/mn1uNSduw4VfTlXgeO+ATwyr4HIMUeFkc5oC1S28RpxDStnOio2z
-	 lGN52ubKQwiiw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 773B73808209;
-	Tue, 24 Nov 2026 23:10:06 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.a=rsa-sha256 header.s=default2302 header.b=kQ/0h1Y5
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
+	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
+	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=TS2F8/2yujXcpiNAXOp1mX31dDWHRuDyL2ha9CygunU=; b=kQ/0h1Y5LlM3vxrFsMsk1U7pZ+
+	Mum9/VakzwYF8trh0IG6J382cPX87n2b4EwG68JfOiquiRmKTGld9BbD1/a5vgMRg0KuJLYE+cE+J
+	mhh71E/oATxT6fN3h47AqOjMufeVSXaYdOjVOB48k+fV7yX3fLwKv3hHoEczCsTuAnxs9iPMdj9ct
+	lSF9qBbo12oekQSWrCJShMV0OgStF+3LPp8hbTwKAp4MdhlZNYHy0n/LnEXadwgg7Uc1y4+I8k9T+
+	AVSyNnNv3pTZ0TGda9u6pBkwwxDjYzP11w770s+LvNlGlveqLLklzVRo71y8bw1EGXqTKVfIN3D/q
+	7Njd3oDw==;
+Received: from localhost ([127.0.0.1])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1xVzin-000PyQ-1v;
+	Wed, 25 Nov 2026 00:14:45 +0100
+From: Daniel Borkmann <daniel@iogearbox.net>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	will@kernel.org,
+	memxor@gmail.com
+Subject: [PATCH bpf-next 2/5] arm64, insn: Reject a status register for the exclusive loads
+Date: Wed, 25 Nov 2026 00:14:40 +0100
+Message-ID: <20261124231443.3424414-3-daniel@iogearbox.net>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20261124231443.3424414-1-daniel@iogearbox.net>
+References: <20261124231443.3424414-1-daniel@iogearbox.net>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -54,47 +71,51 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v2 0/2] Set the minimum required pahole version
- to
- v1.24
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <179556180527.106325.13942817178545155085.git-patchwork-notify@kernel.org>
-Date: Tue, 24 Nov 2026 23:10:05 +0000
-References: <20261124024629.3871056-1-yonghong.song@linux.dev>
-In-Reply-To: <20261124024629.3871056-1-yonghong.song@linux.dev>
-To: Yonghong Song <yonghong.song@linux.dev>
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
- daniel@iogearbox.net, eddyz87@gmail.com, kernel-team@fb.com
+X-Virus-Scanned: Clear (ClamAV 1.4.6/28193/Tue Nov 24 07:27:44 2026)
 
-Hello:
+aarch64_insn_gen_load_store_ex() encodes @state into Rs for every
+type. LDXR and LDAXR have no status register, their Rs field is
+(1)(1)(1)(1)(1), so a @state other than the zero register gives a
+CONSTRAINED UNPREDICTABLE encoding: UNDEFINED, a NOP, or executing
+as if the bits were set. Return AARCH64_BREAK_FAULT instead, as for
+the register overlaps of the stores.
 
-This series was applied to bpf/bpf-next.git (master)
-by Andrii Nakryiko <andrii@kernel.org>:
+Before/after for ldxr x0, [x1] with x2 as the status register:
 
-On Mon, 23 Nov 2026 18:46:29 -0800 you wrote:
-> The requirements table in Documentation/process/changes.rst lists pahole
-> v1.26 as the minimal version, for kfuncs with KF_IMPLICIT_ARGS, which
-> resolve_btfids now handles without pahole. CONFIG_DEBUG_INFO_BTF, on the
-> other hand, still accepts pahole v1.22.
-> 
-> Patch 1 sets the minimal version to v1.24 in Kconfig and changes.rst, so
-> that the kflag of an enum in vmlinux and module BTF is meaningful: 0 for
-> an unsigned enum and 1 for a signed enum. Patch 2 removes
-> CONFIG_PAHOLE_HAS_LANG_EXCLUDE, which is always set with
-> CONFIG_DEBUG_INFO_BTF now.
-> 
-> [...]
+  c8427c20  ldxr x0, [x1] with Rs = x2
+  d4202000  brk #0x100
 
-Here is the summary with links:
-  - [bpf-next,v2,1/2] lib/Kconfig.debug: Set the minimum required pahole version to v1.24
-    https://git.kernel.org/bpf/bpf-next/c/138ede2edc50
-  - [bpf-next,v2,2/2] kbuild, bpf: Remove CONFIG_PAHOLE_HAS_LANG_EXCLUDE
-    https://git.kernel.org/bpf/bpf-next/c/4006ad28b7cf
+The BPF JIT is the only user of the encoder, through A64_LDXR(), and
+passes the zero register, so neither it nor any other kernel code is
+affected.
 
-You are awesome, thank you!
+Found by checking the encoders against Arm's A64 ISA XML (2026-09).
+
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+---
+ arch/arm64/lib/insn.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/arch/arm64/lib/insn.c b/arch/arm64/lib/insn.c
+index 9e4917e68061..1b4525c50504 100644
+--- a/arch/arm64/lib/insn.c
++++ b/arch/arm64/lib/insn.c
+@@ -751,6 +751,15 @@ u32 aarch64_insn_gen_load_store_ex(enum aarch64_insn_register reg,
+ 		return AARCH64_BREAK_FAULT;
+ 	}
+ 
++	/* The loads have no status register, Rs is (1)(1)(1)(1)(1) */
++	if ((type == AARCH64_INSN_LDST_LOAD_EX ||
++	     type == AARCH64_INSN_LDST_LOAD_ACQ_EX) &&
++	    state != AARCH64_INSN_REG_ZR) {
++		pr_err("%s: invalid status register %d for a load\n", __func__,
++		       state);
++		return AARCH64_BREAK_FAULT;
++	}
++
+ 	insn = aarch64_insn_encode_ldst_size(size, insn);
+ 
+ 	insn = aarch64_insn_encode_register(AARCH64_INSN_REGTYPE_RT, insn,
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.43.0
 
