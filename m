@@ -1,100 +1,107 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.179
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795478975;
-	b=FCFiuXEcLWJfTrpB+PDWe/nKuEo/mNBlDOkcnt/1z3+ocK9m6CQEtbYpo9ueXLlc0K+r
-	 LLQOznFht2GqUuBSQ33Z4srZz0XUg8r9A7/H5mqPeQMIeFHNSNSqyhR5H3noKc0oATrVx
-	 OVIIX2m802rK1CrZ2/mZP55Q6hto0r4wpWkeNAPoDQuLZd4zOVBP7Q2n6qBE8Z4s/CCqa
-	 EILRlJYHTiHDPOdDFrUVr/pb2N1bVadTkaTdl0toZgDMOy8/h19juMSXCnNsXyfocc8Ny
-	 DYEyBBPmUdGNMu4uYe17S0quMRuopSidxWHhnGNIbY/rP21qL0s0iG6FHN78IDJLFFw==
+	t=1795479171;
+	b=cYjqp0n/R2PegMdSDGLmgpcH4v0Dd+W136nZja1bozfPN9R0K/4NT4PgUuQLBmAlnD/0
+	 +41sOq2msVvYFzSUrlAOh8bAD2FmMbUMuG8mIrgfNP5HLcmtS3xzyhIR3jsbjEr0ZuWj1
+	 x+T5A34PAa9d50NoH4QnUFFEmgERT3jJTQiEji7LXlU+Qo+VLeEWmw/5eVL+nOO3ZiJj+
+	 s5zALsgy9Rh9fwpUZSq/w/ahDuSHLGHXtbtd8jWMW3b4GLQpbIc13/J6WNteQMlJ2t82N
+	 vbXKZkfP1R9/EPZLHl1LlkYcLGg0sjeRjvsWNwV/toutKfhHkZNaymOSbme/T+8gBKQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795478975;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795479171;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 Content-Type:Date:Message-Id:From:To:Cc:Subject:In-Reply-To:
 	 References:Content-Transfer-Encoding:MIME-Version;
-	bh=E/4cjgmZrvsEDLvCrqONn7jSN+CoIj9kGy+TZqvJBHY=;
-	b=xmAHMs45pQYq44gsB+u2WhAxxDS6ldvV5tpclnDpB5piNKbWVCuz/m8hM4yYD94/Vkv/
-	 cs7bIvMpkrhDSCgl4gnuqOG7CFFmXzltLpoiUi6UY80SXcG8T8yKUWuca3XpLzN80oWmH
-	 K8zYkuymhVcCOSrhcpn7Xpz6vdZGN6albfKPBB/uzz3vepNEoijWXVBmMzXTYa3c0roJm
-	 1WVJTiP3nrVyV2+iz6QIhxwa5zaeGzT5GETIIrCGUnhUOj4o0iVPQGMHY6Nb/kL8kV0lQ
-	 5bavFDOwJVSyM93dGav+GGGJRIKLHW0UAegwUiJfvKU6JEWe6LbIk9AQt3fRX0AlmpA==
+	bh=7bDIHXXIM4LNEtaYASA3zw1NmzIi1pMS/QPwvnMhMAg=;
+	b=JmLfLBwqyTalNC+mrFFGwUxWl8xB9VyLxCsSYXr68lk270RdgeWPawgYwQmRPfFXdXZg
+	 +dnSn5KkdBjb+aZBtlcrkYtdTKmiEKjabEgRiPPhmN6M92sXPOu6WqL5Qwl9z9jlW6zQ/
+	 WSp+IYx2iviGOmebuCKgwTzi2RKHO/mPeXi3wGzFXUOWpCU5iJh7veg8ggNiu48rfc1Fh
+	 b2+lfh5UEc95FbBuMY8f81quq/boo4EHY4eizj1NyUxuvZuNxryYIoEpSMO3SXqFDBFN4
+	 8JAfwWh+jZmY0AiLCpRWUZxUuqfUIJf3jGmZqqjxN+yneWZt4FQPUbxiXMwVCe65dyQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=pDt2tmkr;
-	arc=none smtp.remote-ip=209.85.214.171
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=EvzGf6z3;
+	arc=none smtp.remote-ip=209.85.210.179
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9397606A31E
-	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 00:09:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B9397606A31E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F63B606A321
+	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 00:12:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6F63B606A321
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=pDt2tmkr
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2f04ad2c46dso21366865ad.2
-        for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 16:09:34 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=EvzGf6z3
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-8b67f25e6e1so1866527b3a.0
+        for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 16:12:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795478974; x=1796083774; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1795479171; x=1796083971; darn=vger.kernel.org;
         h=mime-version:content-transfer-encoding:references:in-reply-to
          :subject:cc:to:from:message-id:date:content-type:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=E/4cjgmZrvsEDLvCrqONn7jSN+CoIj9kGy+TZqvJBHY=;
-        b=pDt2tmkrFCg6Y17UawlM165SOXL1vJgFG5mOPhPlm4nLhxwMRDba+gstMunrqCPPjN
-         HrSOYhuJP4BdtZ3U3FW7TQ5v/xUVo/VYBewKLEu81jB5pxDY9U8foDC6WpeL5DKp6kSO
-         Ik0CTfPholQbVMypjBlQx13gK/TZmI6VfGfSFA7Eo7JiOZ+nm+4gqYhTk4ytzLDaspOu
-         No8kDr8BjXm4ijRu/21Mvf3prXvydH+B5HjLKOgsFxjxcGWsMauF5PVKPlp62u0uIucP
-         eDo0rew4M97n3WZbHuDHbyPzyspr0cZqWyfHwG5+aXAW8sZXoI/ofVFPYyaGNYgAx56J
-         hhSQ==
+        bh=7bDIHXXIM4LNEtaYASA3zw1NmzIi1pMS/QPwvnMhMAg=;
+        b=EvzGf6z3rhg+QVwRCNjiqtCEZQCgcOG6ShYMP0kcI8BIeTc+i+i1MBX1jcLv86gWPK
+         nyHsqBHq/6w7+m9DsSBPB+vW2wMewdPpAMBY2hX/Uls7uEq7FEl0qbsUwWhAxBAwrC+W
+         +S5cCZa8peiG/UWSsGfsCamGsA2WW+N0Ng8wgEG/f8tHfVjaETAJGRpi4zoOJVmSk2Fk
+         yMKdj6HtQbbkDpc8+pkb4cP7A8uDYL+GEkEZIYMBDAuTLKWDOZC5Yh+kvlrf0QrZ3MgU
+         xHDFWEv+uQAg/q+KqS+6yXIIvnoFUGR0Y1VT7IFBmxqe7g1OrYn/zB5z2DbJlOn0IIOF
+         B+dA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795478974; x=1796083774;
+        d=1e100.net; s=20260707; t=1795479171; x=1796083971;
         h=mime-version:content-transfer-encoding:references:in-reply-to
          :subject:cc:to:from:message-id:date:content-type:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=E/4cjgmZrvsEDLvCrqONn7jSN+CoIj9kGy+TZqvJBHY=;
-        b=2Scp5WoKgqku9mZkRF9hX1FGXCl4zEjbduDkr0pExXBhcRtsU0+X1apP3v9Nvz6Vkc
-         zcl1Kvu6Ex5U/Ky4jHZ29FpIlb4CXgaPcHeIRoqd1nMRnEdUhE+cnEHDiMBHGlgfDoqm
-         pwtP19bgrxZUmyMP42/IbQ5ndAKkI8HFk4Zd3b8NC1eexTqYPForGVXEfmW7x9dMf+/n
-         6Yswp21wLooCW3KSELdh1PKxsFkSoSefs+gOq8DKX7RaOsAouDAJC11vpf8EBJdLR2vJ
-         JsWiKRc7BMuaYeyrOhfzvdQfVgq+fQTsd2Vq3ok2z8rM3iFSpWGdaP4lOsf0EZXBFJ+c
-         g1/w==
-X-Forwarded-Encrypted: i=1; AL+hErEy6OrKcxeSD8JhYf7K/MMi3jUfyKc8vCwWOJwkGkwbRcKq7dNf58+YMKz8c0Ilqa7wzaA=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9xeDX3L5n6i4iOmmAo+NFwUUOn3DTMFb6XxJQ/zUOwmvleVUiA
-	9odL07SxuT9NcjtAvrfLOs96Gpg/l89cJcRfEld4/UEuEy4dj6IMMYxN
-X-Gm-Gg: AZFdTZdxDf8Wn68LCBxyy9xcddiCnF0y4KXDiWRul8T2WYLP+5vah9atmBAv55goM0K
-	NHWWq/1hO1fsk2Aofs5liqTuzF/6kINu3Eg4yLR1XVDMla0r5N7TtLWV7qfT6NU33ZYuQ/6vfxU
-	i/kvS9VtqrZ1gkK9F1DEaPyoZPCr95i2iGxnoieZzubjWyEsJ/ydk2CSb4smU1xFxy9IZZRVhaW
-	QQz2NlRMvO6zenAT3nf+nOGSGoqMkrS4K1ngiRI3T7kFi7gnS9H2Z5l1LGG2E1hQQu45T7eDSeC
-	E2O52UHSJ8xNQi3bDu/1eM4bikCXnYhmGMzLZ20wsr9wIP/tt33Ky/rAG/oY1XYAla1Etq5ci0U
-	J9HA8rDVgCblde83z5HM0Qmu4nyJWQApik5+Vvug5W7iwNnCxpLKRFjYQn1j5Z6pRtYz6d65oIv
-	Esd4hLVOX+JZ+Tw6j+RjbxvwodY8F/fmK5ipKPdlSY5x3buWiPGvGwQMkDP0Nkb1QPHSKNseVMl
-	j5BHxHlQbWK5SehKm5qXXpDMX+1INPu6iuDdONMx3GhHJkeHC0n0Wqw9XsSnjXpYrj16qmDO0hZ
-	vPih9NPWQTmET2IIsT7bWGS8TfbL+AZUic301dcszz0spUu2qFY+5b5reShPnljXJ8KqOJFEf3k
-	f4tGETh4TcWbXcIwoOGXAX0p8pioo2Vc9b2Q=
-X-Received: by 2002:a17:903:19cb:b0:2f0:3b78:29fa with SMTP id d9443c01a7336-2f03f1df637mr136503295ad.50.1795478973914;
-        Mon, 23 Nov 2026 16:09:33 -0800 (PST)
-Received: from localhost ([153.61.198.240])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2f04ed9620esm51747835ad.26.2026.11.23.16.09.33
+        bh=7bDIHXXIM4LNEtaYASA3zw1NmzIi1pMS/QPwvnMhMAg=;
+        b=Z2TTIMqaqrPKEI5QmUxKYOPu2r/dckx8W3yJ8uyJFa3Lk8GuTIiw4iB8++SwMZ/m/J
+         w/uZ67puJdTBb5yJU7kV+LFXV3T9sinbnQ13PCifVqrbhRlnEvJkQ90tDiTlqFK3foOW
+         d59e8OwJMPcr1O66KCBv1H6DYKQd+ICgOISWQHYVvKd+u7Vl1Mx+3ZUBUPPJI0pwnS0v
+         pPRE30YpE+Qj2BBRFqpNCq8PosXVJwnRp8gDebwheii42gUiQX2n4zxNLjXox+UwyR5J
+         ZgGIUXeGM3ax9Lfojej7SKZ8jhTjo9B1oABwtxFH/eYxqdvm7AOhaZCscN4y27dAgtH2
+         tgqA==
+X-Forwarded-Encrypted: i=1; AL+hErEJiinTQXr9+XNFVOPzrnvVeUi/L4zv1IK4ESwMbDdP2GlvZBIl+6NOJao4zkMMRs3XnnA=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+SHlL8h6WkgCl4WvyLV/Z3CGed3yFNTTQgFApeh6g25e6BVpll
+	0PU4KtDTzsvCAt3wemCWi9UhbbZ+vmrMBKEMq4coDTqIxn/gHNh4dTpq
+X-Gm-Gg: AZFdTZcXFgGh+rL658E7WFRDonru6S91W1xtqbmDmpBR2gDVE7SFRMlGdUhQiN2lUQu
+	xdgI40FZ7kAey+vmTt9b8lrDIVCTHFH6zCQ1Fb7WZPdK2kqWOjAWshfQWStAxyfKCFYhiXfyfV1
+	J5apkYD02JqoIBYG4pbrhQo+ym2UQBZOyJ4S2zurnQnxiceT77lRqPd6FI/PW6K+UwyHa9eFiHw
+	CBZiTleIDoDZvhnfa83E/bMpfqjpAx+BdANwc1+tnMtpmXt0iRnFuvcdLIUVW2YBArnjBxU7Wfj
+	wFctsHt9uezsm5IpHAHk90dbYIhQQaoNACSBmGaJ9niypvdP8pxj+P+Q/wxe1yU4Uo4Zukl8xhf
+	88fdeNqkwucpNnFk0tt11MVvT+5B1fFrXZh7/oK45PI9LrHnqcvZyBVeMcTKq50ycPvELS69aSL
+	121N/dR1PZVIFDYLChgL2p1pFmumfQ/F3uBJ8zHMwl3L7gNBAYbIzkaYGvPeyiYo/sHytDWVnto
+	UJiq6MkTvb4ed91TC14j1Z1kE1wD2mQWtgjs0YHo04UJ5YVJD6t2K6NBMg/VbfpM8U3Fgk4o3Ug
+	j+dWT4QSbSn+IKSzB1ofI9S38pqB1Jl+Rjdmo1i+fTX7Fh2NdZRnyX9G5ZJaeHoS5UHJV3jujmV
+	SXkKRAxU7wpQRatguw0CBqC8cd/TX2tyLiA==
+X-Received: by 2002:a05:6a00:368b:b0:89e:b12e:7eda with SMTP id d2e1a72fcca58-8c8792c36afmr11522943b3a.7.1795479170548;
+        Mon, 23 Nov 2026 16:12:50 -0800 (PST)
+Received: from localhost ([153.61.198.243])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8c873b278f0sm6298093b3a.51.2026.11.23.16.12.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Nov 2026 16:09:33 -0800 (PST)
+        Mon, 23 Nov 2026 16:12:50 -0800 (PST)
 Content-Type: text/plain; charset=UTF-8
-Date: Tue, 24 Nov 2026 00:09:32 +0000
-Message-Id: <DN306D66I504.3FVD9L4Y73WQH@gmail.com>
+Date: Tue, 24 Nov 2026 00:12:47 +0000
+Message-Id: <DN308UHY5QHQ.8CJOFGAHVVTR@gmail.com>
 From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Alan Maguire" <almagui@kernel.org>
-Cc: <daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>,
- <memxor@gmail.com>, <martin.lau@linux.dev>, <song@kernel.org>,
- <yonghong.song@linux.dev>, <jolsa@kernel.org>, <emil@etsalapatis.com>,
- <ihor.solodrai@linux.dev>, <nathan@kernel.org>, <ndesaulniers@google.com>,
- <morbo@google.com>, <justinstitt@google.com>, <a.s.protopopov@gmail.com>,
- <bpf@vger.kernel.org>
-Subject: Re: [PATCH bpf-next] resolve_btfids: Match the arm64 NOP opcode for
- LLVM 24 in text_mc
-In-Reply-To: <dbf929f8-5ff9-43ec-9eb3-380936ea6568@kernel.org>
-References: <20261118194030.4103149-1-almagui@kernel.org> <DMYT224YKW0Z.2NAT6FTR68NQE@gmail.com> <dbf929f8-5ff9-43ec-9eb3-380936ea6568@kernel.org>
+To: "Leon Hwang" <leon.hwang@linux.dev>, <bpf@vger.kernel.org>
+Cc: "Daniel Borkmann" <daniel@iogearbox.net>, "John Fastabend"
+ <john.fastabend@gmail.com>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
+ Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
+ <memxor@gmail.com>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu"
+ <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa"
+ <jolsa@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>, "Ihor
+ Solodrai" <ihor.solodrai@linux.dev>, "Steven Rostedt"
+ <rostedt@goodmis.org>, "Masami Hiramatsu" <mhiramat@kernel.org>, "Mathieu
+ Desnoyers" <mathieu.desnoyers@efficios.com>, "KP Singh"
+ <kpsingh@kernel.org>, "Matt Bobrowski" <matt@bobrowski.net>, "Shuah Khan"
+ <shuah@kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-trace-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <netdev@vger.kernel.org>
+Subject: Re: [PATCH bpf-next v3 0/9] bpf: Add log support for tracing
+ link_create
+In-Reply-To: <20261123152743.19629-1-leon.hwang@linux.dev>
+References: <20261123152743.19629-1-leon.hwang@linux.dev>
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -106,16 +113,98 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-On Mon, Nov 23, 2026 at 02:26 PM Alan Maguire <almagui@kernel.org> wrote:
->> But should we go further and skip unknown names? Like:
->
-> It works for me, fixing the original issue, so if you want to apply
-> it feel free to add
->
-> Tested-by: Alan Maguire <almagui@kernel.org>
->
-> The optional approach that's in-tree currently maybe gives a bit more
-> up-front diagnostic info for failures, but either approach works for me.
+On Mon, Nov 23, 2026 at 07:27 AM Leon Hwang <leon.hwang@linux.dev> wrote:
+>  .../selftests/bpf/prog_tests/cgroup_link.c    | 324 ++++++++
+>  .../selftests/bpf/prog_tests/iter_link.c      | 156 ++++
+>  .../selftests/bpf/prog_tests/tracing_link.c   | 741 ++++++++++++++++++
+>  .../selftests/bpf/progs/tracing_link_ctx.c    |  17 +
+>  .../selftests/bpf/progs/tracing_link_multi.c  |  36 +
+>  .../selftests/bpf/test_kmods/bpf_testmod.c    |   5 +
 
-Thanks for testing.
-I guess let's keep .optional for now.
+1279 lines of selftests for log messages ?
+This is way too much.
+
+pw-bot: cr
+
+One row per attach path is enough. It checks that the log gets there.
+The base kernel leaves the log empty, so all four rows fail on it.
+Something like this:
+
+diff --git a/tools/testing/selftests/bpf/prog_tests/link_log.c b/tools/testing/selftests/bpf/prog_tests/link_log.c
+new file mode 100644
+index 0000000..4f7e71a
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/link_log.c
+@@ -0,0 +1,72 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <test_progs.h>
++
++/* One row per attach path. It checks that the log gets there. */
++static const struct {
++	const char *name;
++	enum bpf_prog_type type;
++	enum bpf_attach_type attach_type;
++	const char *func;
++	struct bpf_link_create_opts opts;
++	int err;
++	const char *msg;
++} tests[] = {
++	{ "tracing", BPF_PROG_TYPE_TRACING, BPF_TRACE_FENTRY, "bpf_fentry_test1",
++	  { .target_btf_id = 1 }, -EINVAL, "target_btf_id" },
++#ifdef __x86_64__
++	{ "tracing_multi", BPF_PROG_TYPE_TRACING, BPF_TRACE_FENTRY_MULTI, NULL,
++	  { .tracing_multi = { .ids = (const __u32[]){ ~0U }, .cnt = 1 } },
++	  -EINVAL, "4294967295" },
++#endif
++	{ "iter", BPF_PROG_TYPE_TRACING, BPF_TRACE_ITER, "bpf_map",
++	  { .iter.len = 4 }, -EINVAL, "iter_info_len" },
++	{ "cgroup", BPF_PROG_TYPE_CGROUP_SKB, BPF_CGROUP_INET_EGRESS, NULL,
++	  { .cgroup.expected_revision = 2 }, -ESTALE, "revision" },
++};
++
++static void run_test(int i, int cg)
++{
++	const struct bpf_insn insns[] = {
++		BPF_MOV64_IMM(BPF_REG_0, 0),
++		BPF_EXIT_INSN(),
++	};
++	struct bpf_link_create_opts opts = tests[i].opts;
++	char buf[128] = {};
++	LIBBPF_OPTS(bpf_log_opts, log_opts, .buf = buf, .size = sizeof(buf), .level = 1);
++	LIBBPF_OPTS(bpf_prog_load_opts, load_opts,
++		    .expected_attach_type = tests[i].attach_type);
++	int prog_fd, fd;
++
++	if (tests[i].func)
++		load_opts.attach_btf_id =
++			libbpf_find_vmlinux_btf_id(tests[i].func, tests[i].attach_type);
++	prog_fd = bpf_prog_load(tests[i].type, NULL, "GPL", insns, ARRAY_SIZE(insns),
++				&load_opts);
++	if (!ASSERT_OK_FD(prog_fd, "bpf_prog_load"))
++		return;
++
++	opts.sz = sizeof(opts);
++	opts.log_opts = &log_opts;
++	fd = bpf_link_create(prog_fd, tests[i].type == BPF_PROG_TYPE_CGROUP_SKB ? cg : 0,
++			     tests[i].attach_type, &opts);
++	if (fd >= 0)
++		close(fd);
++	ASSERT_EQ(fd, tests[i].err, "err");
++	ASSERT_HAS_SUBSTR(buf, tests[i].msg, "log");
++	ASSERT_EQ(log_opts.true_size, strlen(buf) + 1, "true_size");
++	close(prog_fd);
++}
++
++void test_link_log(void)
++{
++	int i, cg;
++
++	cg = test__join_cgroup("/link_log");
++	if (!ASSERT_OK_FD(cg, "join_cgroup"))
++		return;
++
++	for (i = 0; i < ARRAY_SIZE(tests); i++)
++		if (test__start_subtest(tests[i].name))
++			run_test(i, cg);
++	close(cg);
++}
