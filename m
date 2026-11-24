@@ -1,50 +1,59 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=66.220.155.178
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795488410;
-	b=mDgnyZ1lmo6X25jQDXSvzDEsRHR9uGulghAzpneZtiT4zrz+k0kbe5hvh+kvNZfjZWXh
-	 adum4tzO2SpaCQvw/W+Z0jMz7ToBJrbNiMbGVB5scwRfZFdpnso/FJVZ1bA2w7qj0nX5b
-	 vC0Vnrw3kmPoNzCjahUs5P75eX7oXzW9ObuWyAazRHXo+gmVq4VVVNH6CbSfbNHFOiLxI
-	 r4clvGdM4ukVEBLF47iQi11US6BjXJm20ExY8gbhKo2g1u7ZVbyU++IoSqIMPBOYMrGZb
-	 O1U92dLlHNvIbyUEf4TV+TBehEF76se1gAWdvMjSqr9yz9BHj4zbZrVmJBllWJp5wdg==
+	t=1795489420;
+	b=shmJf1o/0wgJC/JdIcOn7Ng/2eYw/acyR+sJcGGv3/Z4J1+jCDozzhj0wVlFw3NFoltS
+	 EFVj1/TKWbBepRczyPDCCDYwB+l47KF6yE7Umxg/dUM7KKgKuPoxWv08kpvXfn0cGikeN
+	 6473G9oxacRoNyC+ynzQHuOvhvJvWdTTi/jeSoC6fO4NVf3FzZb4HxiWfU4Tz4On3Z7RU
+	 0S6su2Q5fdbsnWNv6o9/j9RH9aQcXZ9hY269xZvqq3Eb6JeKxTWoQPSk3rQ8V2QpZyqnl
+	 Qw+ubjPRVP1rMmOfo3dAZhlB8GQprLkQcpGu33Qx+pyo0Sb7/wdJZYo75LqFzhZUBxQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795488410;
-	h=DMARC-Filter:Received:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=ARErnA0JvN0xgM7JabWK+2zf/VLQftOCcE/zdFs4d64=;
-	b=1HKBDNx7CfWsh9V4loagWlFGI3YBFe4mc4+wEy46SRXX1e0LOEQpvCkgvKR4iPXjmuu1
-	 UpJeN0CkY5SY+ndx1YqUAUvRcIWe6x7r/rOF6x/Dbitz+4DnYZuw+HjaJTlIAB89lH2ef
-	 pzZg+qv0TD+jIVoLiga440/BC+YS0tlmMCKVZAC3ZwovxvV2yTIRKnX/dQOPfwUAdxlC9
-	 SwUdPQ9ZKWhttETSuo2NHF1T6FGe2gAzAvf/sYEOr3ZnnfaSNLt1OCYDps2oFBAbagngk
-	 /F1PfXKrj2MVY98/r9dvyo4dfahHMwgA5dAb86ZqCFr2jiIITuy3JaxdP3hYnRz/SDg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795489420;
+	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
+	 In-Reply-To:References:X-sashiko-severity:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=QtOO178Xl6HCtpiOteX/ptXW459o9pIRF2Md167GErQ=;
+	b=i5q19CYV8geCvli8ssHFnibO86sOMArlbH+JBFR/EzCl1kuqF8+g3+jRq3WpRrsf15iy
+	 FbShdTvcEkBlZTYM2BsVyyspvaWVU+XfawSUEbAQxwApF2creKuH/54V/N00B6VorKk+m
+	 /nYqj169jdrWZ/h14+hiQc7+OYiWbny+bw0r0vt7eMiK1tGlPvS6tZjV6pJtMrseQ1tEz
+	 /Jv0iw0uosnvumhwowCOvr+pTuJsIHNTwSks82UhgODSqjvJ/6Cg78X6orDuHRCMew09V
+	 bnG9iLgkYx9IjcgQ1G199fJddGXjCEIyA9b4rJRCRDX+9l0oaCccVTgHCdEbaRcuUhQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=fail header.from=linux.dev;
-	spf=fail smtp.mailfrom=linux.dev;
-	arc=none smtp.remote-ip=66.220.155.178
-Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=c8Hgok7H;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54288606A31E
-	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 02:46:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 54288606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
-Received: by devvm50310.atn0.facebook.com (Postfix, from userid 128203)
-	id 5B07159991A54; Mon, 23 Nov 2026 18:46:39 -0800 (PST)
-From: Yonghong Song <yonghong.song@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	kernel-team@fb.com,
-	Alan Maguire <almagui@kernel.org>
-Subject: [PATCH bpf-next v2 2/2] kbuild, bpf: Remove CONFIG_PAHOLE_HAS_LANG_EXCLUDE
-Date: Mon, 23 Nov 2026 18:46:39 -0800
-Message-ID: <20261124024639.3872475-1-yonghong.song@linux.dev>
-X-Mailer: git-send-email 2.53.1
-In-Reply-To: <20261124024629.3871056-1-yonghong.song@linux.dev>
-References: <20261124024629.3871056-1-yonghong.song@linux.dev>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B910D606A31E;
+	Tue, 24 Nov 2026 03:03:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=c8Hgok7H
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B02331F000C4;
+	Tue, 24 Nov 2026 03:03:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795489420;
+	bh=QtOO178Xl6HCtpiOteX/ptXW459o9pIRF2Md167GErQ=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=c8Hgok7HkJgGYEstz6ua34gOCO2URWkpB6P9ViYTpCgnFOxb5m7Sx2F/am7iCwWA2
+	 pX9aX7R8jNMh6EZp94jDqfj1w+UuBn/BtvdBsM/cqosa019/6bcctUcQBXAo/Y5Aju
+	 5e6TubAQCdTLwwdRIFZMUf3Drs8s2YrlE+AVf4PGQfBvHapDaLvBF9T3cCBMOLOV8d
+	 lTsHvsnFAEwQhR1uLQNcKZ4pJkriA5pKVDGGTWT3xRKEvJkbZ+Zie09RCKVSTsG8gX
+	 GkqNbCHbk+xmffxOtfCw/5b9Cgx/8WGkAg8RTF40gG9bcFsOU9MODgtPI1pvOM2XrE
+	 GN2370hlM1R7Q==
+Subject:
+ Re: [PATCH net] net: keep skbs with a prefetched socket out of gro_cells gro
+From: netdev-bot+sashiko@kernel.org
+To: razor@blackwall.org
+Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@kernel.org,
+ kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, ast@kernel.org,
+ kafai@fb.com, joe@wand.net.nz, daniel@iogearbox.net, bpf@vger.kernel.org
+Date: Tue, 24 Nov 2026 03:03:39 +0000
+Message-ID: <179548941922.3135.9577858774980848901@kernel.org>
+In-Reply-To: <20261121160204.4024204-1-razor@blackwall.org>
+References: <20261121160204.4024204-1-razor@blackwall.org>
+X-sashiko-severity: High
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -54,75 +63,116 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
 
-The previous patch makes CONFIG_DEBUG_INFO_BTF require pahole v1.24, so
-CONFIG_PAHOLE_HAS_LANG_EXCLUDE (pahole v1.24) is always set with
-CONFIG_DEBUG_INFO_BTF.
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue(s) to consider.
 
-Remove it. CONFIG_RUST now depends on !CONFIG_DEBUG_INFO_BTF ||
-!CONFIG_LTO, and scripts/Makefile.btf, which is only included with
-CONFIG_DEBUG_INFO_BTF, always passes --lang_exclude=3Drust.
+Critical: 0 · High: 1 · Medium: 0 · Low: 0
 
-The pahole flags and the resulting config are unchanged, except that
-CONFIG_PAHOLE_HAS_LANG_EXCLUDE is gone.
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
 
-Acked-by: Alan Maguire <almagui@kernel.org>
-Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
----
- init/Kconfig         | 2 +-
- lib/Kconfig.debug    | 9 ---------
- scripts/Makefile.btf | 2 +-
- 3 files changed, 2 insertions(+), 11 deletions(-)
+- [High] The fix is incomplete.
 
-diff --git a/init/Kconfig b/init/Kconfig
-index c8a7cfa60a6e..ca7f20462d0c 100644
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -2065,7 +2065,7 @@ config RUST
- 	depends on !MODVERSIONS || GENDWARFKSYMS
- 	depends on !GCC_PLUGIN_RANDSTRUCT
- 	depends on !RANDSTRUCT
--	depends on !DEBUG_INFO_BTF || (PAHOLE_HAS_LANG_EXCLUDE && !LTO)
-+	depends on !DEBUG_INFO_BTF || !LTO
- 	depends on !CFI || HAVE_CFI_ICALL_NORMALIZE_INTEGERS_RUSTC
- 	select CFI_ICALL_NORMALIZE_INTEGERS if CFI
- 	depends on !KASAN || CC_IS_CLANG
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 9479034afe5a..1d35a99d6cb5 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -416,15 +416,6 @@ config PAHOLE_HAS_BTF_TAG
- 	  btf_decl_tag) or not. Currently only clang compiler implements
- 	  these attributes, so make the config depend on CC_IS_CLANG.
-=20
--config PAHOLE_HAS_LANG_EXCLUDE
--	def_bool PAHOLE_VERSION >=3D 124
--	help
--	  Support for the --lang_exclude flag which makes pahole exclude
--	  compilation units from the supplied language. Used in Kbuild to
--	  omit Rust CUs which are not supported in version 1.24 of pahole,
--	  otherwise it would emit malformed kernel and module binaries when
--	  using DEBUG_INFO_BTF_MODULES.
--
- config PAHOLE_HAS_INLINE
- 	def_bool PAHOLE_VERSION >=3D 132
- 	help
-diff --git a/scripts/Makefile.btf b/scripts/Makefile.btf
-index 02ff1702e1e8..8cd8c88d4580 100644
---- a/scripts/Makefile.btf
-+++ b/scripts/Makefile.btf
-@@ -20,7 +20,7 @@ pahole-flags-$(call test-ge, $(pahole-ver), 131) +=3D -=
--btf_features=3Dlayout
-=20
- endif
-=20
--pahole-flags-$(CONFIG_PAHOLE_HAS_LANG_EXCLUDE)		+=3D --lang_exclude=3Dru=
-st
-+pahole-flags-y						+=3D --lang_exclude=3Drust
-=20
- btf-inline :=3D $(CONFIG_DEBUG_INFO_BTF_INLINE)
- ifneq ($(btf-inline),)
---=20
-2.53.1-Meta
+--
 
+net: keep skbs with a prefetched socket out of gro_cells gro
+
+This patch makes gro_cells_receive() send skbs that carry a prefetched
+socket from bpf_sk_assign() to netif_rx() instead of the GRO cell. The
+goal is to stop GRO from clearing skb->sk and skb->destructor on merged
+skbs, which leaks one socket reference per merged skb.
+
+> diff --git a/net/core/gro_cells.c b/net/core/gro_cells.c
+> index 31352cac355ce..4e8b9c3cd7da0 100644
+> --- a/net/core/gro_cells.c
+> +++ b/net/core/gro_cells.c
+
+[ ... ]
+
+> @@ -26,7 +27,8 @@ int gro_cells_receive(struct gro_cells *gcells, struct sk_buff *skb)
+>  
+>  	skb_unset_transport_header(skb);
+>  
+> -	if (!gcells->cells || skb_cloned(skb) || netif_elide_gro(dev)) {
+> +	if (!gcells->cells || skb_cloned(skb) || netif_elide_gro(dev) ||
+> +	    unlikely(skb_sk_is_prefetched(skb))) {
+
+[Severity: High]
+Is matching only skb->destructor == sock_pfree enough here? An skb that
+got its socket from bpf_sk_assign() can still reach gro_cells_receive()
+with a different destructor that owns one sk_refcnt reference per skb.
+
+One path: bpf_sk_assign() at tc ingress attaches a non-refcounted socket,
+such as a TCP listener or a UDP socket. It sets sock_pfree and takes no
+reference. ip_rcv_core() keeps it. Then an NFQUEUE rule matches the outer
+ipip/gre/esp packet, and __nf_queue() converts it:
+
+net/netfilter/nf_queue.c:__nf_queue() {
+    ...
+	if (skb_sk_is_prefetched(skb)) {
+		struct sock *sk = skb->sk;
+
+		if (!sk_is_refcounted(sk)) {
+			if (!refcount_inc_not_zero(&sk->sk_refcnt))
+				return -ENOTCONN;
+
+			/* drop refcount on skb_orphan */
+			skb->destructor = sock_edemux;
+		}
+	}
+    ...
+}
+
+After an NF_ACCEPT reinject, the packet is decapsulated. With !xnet,
+skb_scrub_packet() does not orphan it, so the skb arrives here with
+skb->sk set and destructor == sock_edemux. skb_sk_is_prefetched() now
+returns false, and the skb is queued for GRO.
+
+skb_gro_receive() then clears both fields on each merged skb without
+calling sock_edemux():
+
+net/core/gro.c:skb_gro_receive() {
+    ...
+	/* sk ownership - if any - completely transferred to the aggregated packet */
+	skb->destructor = NULL;
+	skb->sk = NULL;
+    ...
+}
+
+The frag_list merge path in the same function does the same thing.
+gro_list_prepare() still allows the merge because p->sk == skb->sk.
+
+Wouldn't each merged skb then leak the reference that __nf_queue() took?
+That is the same socket and netns teardown leak described in the commit
+message.
+
+The tree already has a general rule for this in skb_prepare_for_gro():
+
+include/net/sock.h:skb_prepare_for_gro() {
+	if (skb->destructor != sock_wfree) {
+		skb_orphan(skb);
+		return;
+	}
+	skb->slow_gro = 1;
+}
+
+veth_xdp_rcv_skb() calls it before napi_gro_receive(). Could
+gro_cells_receive() divert or orphan any skb that still has skb->sk set
+with a destructor other than sock_wfree, rather than checking for
+sock_pfree only? Checking skb->sk directly would be one way to do it.
+
+Separately, the "sk ownership - if any - completely transferred to the
+aggregated packet" comments in skb_gro_receive() look wrong for
+destructors that hold one reference per skb (sock_pfree on refcounted
+sockets, sock_edemux, sock_efree).
+
+>  		res = netif_rx(skb);
+>  		goto unlock;
+>  	}
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261121160204.4024204-1-razor%40blackwall.org
