@@ -1,48 +1,48 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795491608;
-	b=3JRXmP/gfBOrqvthFOu1QuSzh2/9L4c0TIkYZOxLM395KatebdBXej3OQ9JIWukYAL2H
-	 vYcqA/WOiwmFOhKYHd+sjb9WkAw7ErdnrQav+RomFld4U9XUTLlI8UogHuxOrFqz9XPZt
-	 21JCduSfuSFJvRc/1hyBmPFLA6wZrWyzFaU18Tufz6RY7jCh6vqbl7lQfi10b2Lqr3m8j
-	 AttQFbiIO50iKeZehsGmFF5nAkPF7SmIC6qG6mHVKI1nsL6wy+OZoyA6FPyrWeG9IWOeZ
-	 GWXq7QVXFmyRZchMC18vGpdnuq/nBNbAqmEMlfGbxwPMrAma2TpwUDDSQHdEz+N97Fw==
+	t=1795491609;
+	b=p/awllZP2kIJjJKvc0Z5tP6cTmuEVyX1wpeiWskb/r+/RKUwe3ZNudMfN/EAfxSREi56
+	 E0b1JKf0sl7GZmR9laWchAOFbtTGb4Xeu3kVemqH0cGrPgizrWdnIrEK6M5jd2XEJKYl8
+	 Ef39rJERmjasBH8VseveD8v1QVaTbhJW/TpK/hT14pxcAPVBdbtsSVvCPUPFYQm20jI1E
+	 Q6bCKubOeYoSPbgpI1/DWV7hGqd+siDhh5EqUVn9kwP77QFTAhxac4qw5aXvCoe6h84Oz
+	 G0evCKz/ev052+fUL8/DvG7L+1LGnCa08r37VWLI2pnz12lvFWCEqezOD2hRr2zH1jg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795491608;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795491609;
 	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
 	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
 	 In-Reply-To:To:Cc;
-	bh=80VJVRJBJqxbGSPQ1nkPWhTQF+vX/ubKZUQ1ZjcOP/k=;
-	b=jvcFEQ97GYmVlomzlns+f+N4XDKTg7Z4oSzmMqY+KG5zgF3nT8fB+MSHqX22XCvOZExX
-	 UOWbfw8IuIybo+zPZY4P45yu8W68DWZGNAws7ZBuf2xA771UeXj29lrNPihSaLCcc/u4V
-	 wvJI+uzTXAq/2NqEAce+YYZHhGJL2kdXMORLYnwD1j9b5D0/agoh1OH3ee6TjPgburnb+
-	 ntu6vS+1LEpgUT0GzUu2hBvNvVRToSR4ilw8A+/P0Titi8zxRGvJmou8dGmMSJ3H6UI+m
-	 2MI27EqNG/8rtxSyfayj+5HXr0Kf3UfbAies/eo1hDeteUUipApWmgInzfBP8GdauAQ==
+	bh=RY/pscAY0kqIVuCD/VQ32rz7Pi/um+3HxodO4+2UNto=;
+	b=LSim6T0K/yRNsObXCum7K1+craNeS47TONCx/M7v3Bg6ftjY+nhpDgqSVyN0EaYhpeB0
+	 BFkL/U8M/hK55N152OTwjZ07lMuV+gEeeYumBiJDGIjl6O09JNxfHFYSfjV0H0ThETQhX
+	 olNSX6rvnGagj4RayRBRwmVo0tSUjKSBTecOk+8GaMcL1dKgxeK6Qw+qvR6NeXXc9W4pH
+	 qlgPHVhCOGb85fHuWrytaltED5GLYptI3WXYANsfJWNi6iFnwG/EIVxdeYLwItnxr0Q4x
+	 KYNs1p/Is2rLnH1CLDO6Qu0PBR6zDEIvtESUr5cp0SNFWM3DsyYhi+CBc3WNcNfuKXQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Gjs92gUg;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Ux1GbTh3;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A6DD606A322;
-	Tue, 24 Nov 2026 03:40:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30AC7606A33E;
+	Tue, 24 Nov 2026 03:40:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Gjs92gUg
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DF441F000C0;
-	Tue, 24 Nov 2026 03:40:07 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Ux1GbTh3
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD8E31F000D0;
+	Tue, 24 Nov 2026 03:40:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795491607;
-	bh=80VJVRJBJqxbGSPQ1nkPWhTQF+vX/ubKZUQ1ZjcOP/k=;
+	s=k20260515; t=1795491608;
+	bh=RY/pscAY0kqIVuCD/VQ32rz7Pi/um+3HxodO4+2UNto=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=Gjs92gUgNNp5Bqc3Hinf5LjAh7GKB/StMeBUHrhUOvfiHBQJzNnk1aIMurdtTo3E3
-	 pTIL0iMD1medrr73Ot4/3ztIDoVxnhV11skOfDxnHnz6NhargzBFVO6B+xhBdz20Y9
-	 vxGU8HgjhBe+ZxRk3/9klP73vKyNBUUoWLZfgxB3hDig22vJ1OoDdX1MMXAYo0szNT
-	 J8URdTVsqKeylOBOHyr+u3Vrn+gEcrCiTeYDGmSIq4Bib7k11s9dRclh1Nx4QhLgOo
-	 qfS7TKwclbOsqJ3i+KVZ2ibscJS6oX39TYwYWvs+teMII+uYFzBALpTf65hqpeKzuy
-	 YxeWVxW7cqZ3g==
+	b=Ux1GbTh3CA/X/Qf0RuADeg3n1CUz3oQVOAoxxrkWnv3sfv7CXBR/uSuXyTr5UGYjv
+	 Modlqm5XxzUWgrvw5Q/kz8hicAmZ+wrFKOAkvMoJIKYCWtWgkvMVP4Xl3Nts2PuM5r
+	 OnEwtaydO2QtLM3PbXHbaeARqwi+N2RZ5es7WQ9LOqkIp8/flDCdiluZKQijp0hQKB
+	 DI069/jcUJJ8NLWMnkBxGl93/QTSZG/vNCvnN5F+PVvsYwYkBFVn6/lvbvIrTZwl0t
+	 FjbDg5XfOM6PjkbOtYyzNBPcjenBNKZKFY5jLSs8hyCaOsr3d7Zj/E5OED9h8YNqHf
+	 jYgzA5xf9y13w==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3439439302D7;
-	Tue, 24 Nov 2026 03:40:07 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B442D39302D7;
+	Tue, 24 Nov 2026 03:40:08 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -54,45 +54,39 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v3 0/3] bpf: Use an on-stack pt_regs in the raw
- tracepoint helpers
+Subject: Re: [PATCH bpf-next] selftests/bpf: Fix
+ file_reader/on_open_non_sleepable_first on overlayfs
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <179549160602.3263417.12646666318418449263.git-patchwork-notify@kernel.org>
-Date: Tue, 24 Nov 2026 03:40:06 +0000
-References: <20261120-bpf-raw-tp-regs-preempt-v3-0-ec109009a5d2@gmail.com>
-In-Reply-To: <20261120-bpf-raw-tp-regs-preempt-v3-0-ec109009a5d2@gmail.com>
-To: Mike Bazov <mike.bazov@gmail.com>
-Cc: song@kernel.org, jolsa@kernel.org, ihor.solodrai@linux.dev,
- ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
- memxor@gmail.com, martin.lau@linux.dev, yonghong.song@linux.dev,
- emil@etsalapatis.com, kpsingh@kernel.org, matt@bobrowski.net,
- rostedt@goodmis.org, mhiramat@kernel.org, mathieu.desnoyers@efficios.com,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org
+ <179549160725.3263417.1033641608398909493.git-patchwork-notify@kernel.org>
+Date: Tue, 24 Nov 2026 03:40:07 +0000
+References: <20261120-file-reader-overlayfs-v1-1-81aa7f3041d1@gmail.com>
+In-Reply-To: <20261120-file-reader-overlayfs-v1-1-81aa7f3041d1@gmail.com>
+To: Hang Zhengyang <hang.zhengyang1010@gmail.com>
+Cc: andrii@kernel.org, eddyz87@gmail.com, ihor.solodrai@linux.dev,
+ ast@kernel.org, daniel@iogearbox.net, memxor@gmail.com, martin.lau@linux.dev,
+ song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
+ emil@etsalapatis.com, shuah@kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
 
 Hello:
 
-This series was applied to bpf/bpf-next.git (master)
+This patch was applied to bpf/bpf-next.git (master)
 by Alexei Starovoitov <ast@kernel.org>:
 
-On Fri, 20 Nov 2026 12:59:10 +0200 you wrote:
-> bpf_perf_event_output(), bpf_get_stackid() and bpf_get_stack() of raw
-> tracepoint and tracing programs share three per-CPU pt_regs slots,
-> picked by a nest counter. These programs can be preempted, and tasks
-> then leave the slots out of order, so a sample or stack trace of one
-> task gets the registers of another. Patch 3 fills in a pt_regs on the
-> stack of each helper instead and removes the slots.
+On Fri, 20 Nov 2026 14:59:02 +0800 you wrote:
+> From: Hang Zhengyang <hang.zhengyang1010@gmail.com>
+> 
+> on_open_non_sleepable_first fails every time when the test_progs binary
+> is on overlayfs, as under /home and /tmp in a virtme-ng guest:
+> 
+>   run_test:FAIL:err unexpected err: actual 4 != expected 0
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf-next,v3,1/3] bpf: Don't WARN when bpf_perf_event_output() nests too deep
-    https://git.kernel.org/bpf/bpf-next/c/53a0f597cf4d
-  - [bpf-next,v3,2/3] bpf: Limit nesting of mmap_read_trylock() in BPF helpers
-    https://git.kernel.org/bpf/bpf-next/c/c38e4eb110a1
-  - [bpf-next,v3,3/3] bpf: Use an on-stack pt_regs in the raw tracepoint helpers
-    https://git.kernel.org/bpf/bpf-next/c/3dda220338a6
+  - [bpf-next] selftests/bpf: Fix file_reader/on_open_non_sleepable_first on overlayfs
+    https://git.kernel.org/bpf/bpf-next/c/f5931061c005
 
 You are awesome, thank you!
 -- 
