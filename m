@@ -1,63 +1,113 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.41
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795530413;
-	b=m7aP1Yyc8iJDoPUbRVy+mAI5BGZt5ZWswMa7+mZuuvTnXLrfODsT3Xglp4PoOSiI7/Dt
-	 u2nBW1NDu/LIxMkX1RTHqZ8OpMrr7lr/VjDjwgo1VqpA3o3/qa+gVUBbCgGT/Z73ZD4r4
-	 fEGPML7RDFHO6/h8B4XCZP3GSZG6/JljWmXVuC4LC5OTEK45ehwDGmDlDx3h5InLOuP29
-	 flPP6f+cx4xevpnhFjfD7tRDHRHUrA/dji/f6fjo6mt7Y8vglpqgXjOY4jRGYZL82STK0
-	 JGqrZPFZDuEPXFHkUD51ddow3U+ONjrEvWw0OUncSONlKXU4SfQDP2ky9n9OIPWxXnA==
+	t=1795530702;
+	b=dNX9pFmHYSBOyuYxIBhrZK5Y3MWoXbQbyA2gzABjwqFKckAlYv7MhmwTmWA71hk+29pQ
+	 mzTi8QfaFVoeMEmBEaSF8xF2CmBTO+VwPwzX57EI/j43j3+EXNcVQ0w7HFwaaIxdHKTDf
+	 ig+VK+qK3lXcjyv2rCX+mem4fyjsuESwLnl7pSc7Zt2OcDBEPRmWVzWyGsJYTKF/9Nbb0
+	 b1J+PbbZ6lIPpN5b6rqaEtAYtCIEjN/6hblTwoLMGcpGggw9ZD9TZeK+uSn304SdPTb1o
+	 DxSOXBU14eYYtRP4ktnHnt1tNafxoM5xcXFrzowZFyDBp0CAZJ1hsuJcKTT9kSIIaaw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795530413;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=mTwBFRyFSROWCnCFCSSel89ouxGBgoxE6b1oZnyUXq4=;
-	b=wE9dX2kk6M7avozW0o+Je6gCmHzmv3nUHYQDmOd1jNQ/aOq5blqh/ga/HVa2m8G81rnP
-	 3mzvVTZod9Chl1W3imuj9pVCdcdZ2xmM5VnF31jYqLjpg+VO7BkPYYGmpGfoszkZWt7JF
-	 1+6qyrcMdeULMG7rguLLTnMYgpPG10sgJnWZCYuON8R5h+LTyfC4yEahES8V747GU3Etq
-	 h2DD6VNHJwCbZwDyUMK7k2Ea5mzQ7M46KKnES5XCP55TVwF3S+jdxaeyQvncjiCmyljvJ
-	 yWSvt07nvnzlm9y1Sfm5wKdmfo10++Ryn4vOQodfxDmvUsB7YYQ0/6iazu/WvJ9v1IQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795530702;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=jS+nnfUP/mk+uzq1WRMmZ1+p5s6g2KJ+Zyoi13aubO8=;
+	b=VdA/DOBfiYSC584S28WWVO8bO3SGIZjvsn6n9UnARIOfYNh7vHQVS6hxHO5bb/wkza0X
+	 umWbsYDbLMIg2An8MLU2IS+bpz6QQDIfIMmGHBxqrqCfCmKoaBmmXeBH5vbsh5N1D57ui
+	 /ui+4/PILX5oN+EHp9QfdfCHsXmCAd7Y11s3+65a99YNi9e0mQyShUQnnx733Z54Q3Nz1
+	 WBGj9fzDS91Mu4/fZ6MP1AMYYfDYDWDAg+xma53/M7ydLtBfN5ystaDzwBXzW54xnhkJZ
+	 304JR8JqhncJyXrnQKgXNQ4TVxoDsn75yAjHCitWSg4zJW1D5KohEpjdr665sZahBww==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=n5UEACMU;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=pC5sINY7;
+	arc=none smtp.remote-ip=209.85.216.41
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99B17606A321;
-	Tue, 24 Nov 2026 14:26:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49095606A326
+	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 14:31:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 49095606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=n5UEACMU
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0CC91F000C6;
-	Tue, 24 Nov 2026 14:26:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795530413;
-	bh=mTwBFRyFSROWCnCFCSSel89ouxGBgoxE6b1oZnyUXq4=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=n5UEACMURgjfpgLFKrsVZFmC2awe4D2PQaskzHFD4iJKlNUhanPH9qPBzrspXZY91
-	 baGS4Fj1wT/jhTrGgr7T1gMIx0J3gfqmR77tS6normc8sU1b6DqOcRfcJJ1YgxX9hb
-	 OT5lNHfWt0gW3ayaKFpt/Pi55o0akAfLOAe+1s/I8SRbMktmNzMAKx+UwcCA264ZtM
-	 snimwJfXoSB3HZeOoF5i+K2nfaLIteU4laOZv3YWc3kyo8xdD0g6i3XmkehtZMxa+U
-	 Es/BMhvxtxpu3zTaohOPN1BTmL0Kh67iz83EfFLMYmRWG0r5WehR6lLFK3cG4Cbvgf
-	 kTEwORPTf0lYg==
-Subject: Re: [PATCH net 04/10] mptcp: fix use-after-free of the subflow
- context on the delegated list
-From: netdev-bot+sashiko@kernel.org
-To: matttbe@kernel.org
-Cc: edumazet@kernel.org, davem@davemloft.net, kuba@kernel.org,
- pabeni@redhat.com, willemb@google.com, horms@kernel.org, martineau@kernel.org,
- geliang@kernel.org, cpaasch@openai.com, fw@strlen.de, netdev@vger.kernel.org,
- mptcp@lists.linux.dev, dcaratti@redhat.com, mason@kernel.org,
- stable@vger.kernel.org, ncardwell@google.com, kuniyu@google.com, kafai@fb.com,
- daniel@iogearbox.net, ast@kernel.org, martin.lau@kernel.org,
- bpf@vger.kernel.org
-Date: Tue, 24 Nov 2026 14:26:51 +0000
-Message-ID: <179553041150.3135.10012593386905502123@kernel.org>
-In-Reply-To: <20261123-net-mptcp-misc-fixes-7-4-rc5-v1-4-278042217e8d@kernel.org>
-References: <20261123-net-mptcp-misc-fixes-7-4-rc5-v1-4-278042217e8d@kernel.org>
-X-sashiko-severity: Low
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=pC5sINY7
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-3ae2b7e1e17so2983343a91.3
+        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 06:31:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795530701; x=1796135501; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=jS+nnfUP/mk+uzq1WRMmZ1+p5s6g2KJ+Zyoi13aubO8=;
+        b=pC5sINY79C+4AgNwYCHtQsgbceJxN2JL/o7ODQlGs+RCFyL09S5SBB3jb8+RV/zu4c
+         uReUsgjhRD4YOTORigQTo1Hg93FhrKwIUBX/UFc54VdocQzI8ijqZYMAv2Fk60+F4r+c
+         zc2B+VML47gQVM+c4GoDFitRViVwlIptdpnSB7ROGeeMOsEUGjjOsserxv+ourBDy4ZM
+         lzy0PbaK2lRCbLFkXrW0LsnCL1d5wIRcXdcEJyL2x9mDvbmG9NZQmiiEPdNmz6Ssq9pZ
+         ky8TZNgnZznEB6JP9HnTyhI9osqEu1BF5MF/jPp9VdywsrtelmCPrpZbFWuRqNxUpgiy
+         Zqbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795530701; x=1796135501;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=jS+nnfUP/mk+uzq1WRMmZ1+p5s6g2KJ+Zyoi13aubO8=;
+        b=im/pSw0cQOni+dQ5Vj9IaSc99/HR7fHmj4yFF4BJE+OPGbQVZ7dk08IWHxOoHbX7Rq
+         rncsTSO+9CfYz4pFyobxq3MxRnMfNvR9kKARPVLAvxYHlmp+vgrjX0jVpSAD6c2VZWXh
+         8q7kiWwtDsH4PKJNfdTHd7Zy4HTP0ZeAaPls8JLfSflWKm4gx64VW3rAj+VfS5M24pQQ
+         /QcxeorvmDZgDA6JmBdAqF9LZpuQX7bz1y6N+YPz3bji8X2WH5EvOgAPu1wUtnQ010lv
+         MnKUdsbp9VuNGaExuHyO0XK6kEmfX0175qwTrTkk53NHKyrikZnsrzvwys7Ajb+mkBQ1
+         0S1g==
+X-Forwarded-Encrypted: i=1; AL+hErFaTpc/5zeGf9g+9T/ta7/aw3jod1wJ2b+DQ5S6zVp+jsQ4gzc3vBWWzSBjQAy7OJnnBEw=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8Yh7fbYVv2P4YaE67+/769Oi32I/1MW1BJs4rSOYiiWlLKaZoY
+	eXYIgKE73rgzhH1mBeqD5yWWjEZhkPMVLrXOMMbiycxEcxF5A/uGN1Hi
+X-Gm-Gg: AZFdTZeWb8r8a6s6cT+jDEArIRjbvBbmMycPYfS/tWi+x854TlX0B/1OfAPi/apSGOh
+	I+SSz+GWHklb/Vxz01wu1nB8gbfwqDOs0ugXom+aUDXo1N/ERG3XrFk7yQYBDJFKU54/A5dDaol
+	EIk5o+FVUNqfu2628erZ6HM2iDeYK2M2UrDXpzjrna4s/QER20NYZ9xiYr18D0U683pryGVQyN3
+	Bck1c6enkVEUsr8tTJSs3XIDQolGeGWeDmeUMN+mgNxU2agc4S5+LDMX0XWy0sgC3bmfzQc7Fk2
+	GbmZYJQhJmikpgMLrku1tWSmbtcq47rKkrXlQ5e3N1pkdkejriI0PP0eqTpcY59OfSprFTA3W2x
+	nwgeUhExGchSWxN4QRBbbUN91FYrYIMZkVZWcz/X+1kbkCCPEQ7EdXuidVLLqWrrqNA7QRqad/P
+	ibSKRcQ6XAMnr1eHQysIhkhKXpYIzY8w+pbRkf7agNuJAFPUE1plHcLAl1bGTLqvpWfefImsbsc
+	27QVOrIRct+VLlfTmfoPjqiavzcHD97gK07/UhtTFCPygtmrMEIDgq7ttL6aea21wdVKNNa8hLT
+	4tbu/6YfpsAjg/m6Q5vIcb+W2ADpmZA2rGXNroz75P0sTAG8yTuKYMfM/pbuMSI6w1e4PZu5cPU
+	wh64JtDlnJtA=
+X-Received: by 2002:a17:90b:4d10:b0:3ae:533e:7e40 with SMTP id 98e67ed59e1d1-3b41c8d9bedmr13597888a91.23.1795530700477;
+        Tue, 24 Nov 2026 06:31:40 -0800 (PST)
+Received: from cps-manycore-1 ([147.46.174.222])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cde6cfc8829sm7171737a12.8.2026.11.24.06.31.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Nov 2026 06:31:40 -0800 (PST)
+From: Sechang Lim <rhkrqnwk98@gmail.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>
+Cc: "David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Jamal Hadi Salim <jhs@mojatatu.com>,
+	Jiri Pirko <jiri@resnulli.us>,
+	Amery Hung <ameryhung@gmail.com>,
+	Cong Wang <xiyou.wangcong@gmail.com>,
+	=?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+	"D . Wythe" <alibuda@linux.alibaba.com>,
+	Dust Li <dust.li@linux.alibaba.com>,
+	Sidraya Jayagond <sidraya@linux.ibm.com>,
+	Mahanta Jambigi <mjambigi@linux.ibm.com>,
+	Tony Lu <tonylu@linux.alibaba.com>,
+	Wen Gu <guwen@linux.alibaba.com>,
+	David Vernet <void@manifault.com>,
+	bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-rdma@vger.kernel.org,
+	linux-s390@vger.kernel.org
+Subject: [PATCH bpf 0/3] bpf: Reject sleepable struct_ops programs in atomic context
+Date: Tue, 24 Nov 2026 14:31:12 +0000
+Message-ID: <20261124143123.1182108-1-rhkrqnwk98@gmail.com>
+X-Mailer: git-send-email 2.56.1
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -67,107 +117,29 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found more severe
-issue(s) in other patches of this series. This mail is only an FYI, in case
-you want to address the nit picks below when you respin.
+Any struct_ops program can be loaded as sleepable, and it is up to each
+struct_ops to reject that in check_member for members that run in
+atomic context. tcp_congestion_ops, Qdisc_ops and smc_hs_ctrl have no
+check_member, although the kernel calls their members in softirq, under
+a spinlock or under rcu_read_lock(). A sleepable program attached there
+is entered through __bpf_prog_enter_sleepable(), and lockdep reports
+"BUG: Invalid wait context" at its might_fault().
 
-Low priority / nit picks for your consideration:
+This series adds a check_member that rejects sleepable programs to each
+of them, like bpf_tcp_ops does.
 
-- [Low] The comment in the sock_owned_by_user() branch of
-  mptcp_napi_poll() (net/mptcp/protocol.c) is now wrong for the case…
+Sechang Lim (3):
+  bpf: Reject sleepable programs in bpf-tcp-cc
+  bpf: net_sched: Reject sleepable programs in bpf qdisc
+  net/smc: bpf: Reject sleepable programs in smc_hs_ctrl
 
---
-
-mptcp: fix use-after-free of the subflow context on the delegated list
-
-This fixes a use-after-free. subflow_ulp_release() frees the subflow
-context with kfree_rcu() while the context is still linked on the per-CPU
-delegated napi list. A new MPTCP_DELEGATE_DEAD bit hands the free to
-mptcp_napi_poll() when the subflow is scheduled, skips delegated actions
-for dead contexts, and moves delegated_status out of struct_group(reset).
-
-> diff --git a/net/mptcp/protocol.c b/net/mptcp/protocol.c
-> index 50c294d925b0c..23d35f43b566e 100644
-> --- a/net/mptcp/protocol.c
-> +++ b/net/mptcp/protocol.c
-
-[ ... ]
-
-> @@ -4803,10 +4803,13 @@ static int mptcp_napi_poll(struct napi_struct *napi, int budget)
->  	delegated = container_of(napi, struct mptcp_delegated_action, napi);
->  	while ((subflow = mptcp_subflow_delegated_next(delegated)) != NULL) {
->  		struct sock *ssk = mptcp_subflow_tcp_sock(subflow);
-> +		long status;
->  
->  		bh_lock_sock_nested(ssk);
->  		if (!sock_owned_by_user(ssk)) {
-> -			mptcp_subflow_process_delegated(ssk, xchg(&subflow->delegated_status, 0));
-> +			status = xchg(&subflow->delegated_status, 0);
-> +			if (!(status & BIT(MPTCP_DELEGATE_DEAD)))
-> +				mptcp_subflow_process_delegated(ssk, status);
->  		} else {
->  			/* tcp_release_cb_override already processed
->  			 * the action or will do at next release_sock().
-> @@ -4814,11 +4817,15 @@ static int mptcp_napi_poll(struct napi_struct *napi, int budget)
->  			 * CPU that scheduled it.
->  			 */
->  			smp_wmb();
-> -			clear_bit(MPTCP_DELEGATE_SCHEDULED, &subflow->delegated_status);
-> +			status = set_mask_bits(&subflow->delegated_status,
-> +					       BIT(MPTCP_DELEGATE_SCHEDULED), 0);
-
-[Severity: Low]
-This isn't a bug, but is the comment above this branch still accurate
-once MPTCP_DELEGATE_DEAD is set?
-
-The comment says tcp_release_cb_override "already processed the action or
-will do at next release_sock()". However, every path that reaches
-mptcp_subflow_free_ctx() runs after mptcp_subflow_ops_undo_override() has
-restored ssk->sk_prot to plain tcp_prot/tcpv6_prot:
-
-net/mptcp/subflow.c:subflow_ulp_release() {
-    ...
-	mptcp_subflow_ops_undo_override(ssk);
-	if (release)
-		mptcp_subflow_free_ctx(ctx);
-}
-
-mptcp_subflow_drop_ctx() reaches the same undo through
-subflow_ulp_fallback(). __mptcp_close_ssk() only calls
-mptcp_subflow_free_ctx() when icsk_ulp_ops is already NULL.
-
-So for a dead context, the next release_sock() calls tcp_release_cb()
-rather than tcp_release_cb_override(). Any pending action bits are dropped,
-and the commit message says that is intended ("the pending actions must not
-run").
-
-A dead context can reach this branch. __mptcp_close_ssk() holds
-lock_sock_nested(ssk) across this chain:
-
-__tcp_close()->inet_csk_destroy_sock()->tcp_cleanup_ulp()->
-    subflow_ulp_release()->mptcp_subflow_free_ctx()
-
-That means a concurrent mptcp_napi_poll() can see sock_owned_by_user(ssk)
-after DEAD has been set.
-
-Could the comment be updated to say that dead contexts have their pending
-actions discarded here? It could also mention that status is captured so
-the context can be freed with kfree_rcu() after bh_unlock_sock() and
-sock_put().
-
->  		}
->  		bh_unlock_sock(ssk);
->  		sock_put(ssk);
->  
-> +		if (status & BIT(MPTCP_DELEGATE_DEAD))
-> +			kfree_rcu(subflow, rcu);
-> +
->  		if (++work_done == budget)
->  			return budget;
->  	}
-
-[ ... ]
+ net/ipv4/bpf_tcp_ca.c | 11 +++++++++++
+ net/sched/bpf_qdisc.c | 11 +++++++++++
+ net/smc/smc_hs_bpf.c  | 11 +++++++++++
+ 3 files changed, 33 insertions(+)
 
 -- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261123-net-mptcp-misc-fixes-7-4-rc5-v1-0-278042217e8d%40kernel.org
+2.56.1
+
