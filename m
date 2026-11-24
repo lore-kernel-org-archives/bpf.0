@@ -1,62 +1,55 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.84
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795546756;
-	b=yta6u98wXEHPFWh//NQ/D2JDFHuvk9aiTqeZzBcGdZAKsE2vCRX8uYnDcBCfaz2IyNTX
-	 ek2XK3IAD6SbsqBln+SB+ULNQa2rUHsy7FlA7sAgbh7kmFhRrV2NE0fQyVu9+9FpcEsyr
-	 Lx1r10R0WF4ham7v+YyvRiIbK10ztn3WMldSsSGQjf9re7+wMpbCjScnRYuDqKuGYtTlG
-	 701R9vJXHV5vJVmaagtdrzC2IKFkTRgy3hkhoU6q5oppbnPoVRDdYoG0kop/WiDAsRNW/
-	 h4NsDUcBG3XJEPP4vDJo2WvY9Psn5jabL/u5mbvy+a4/+HBxypQpTh8pvtLYOHiD7gw==
+	t=1795547498;
+	b=Nbq0tGxm5PDF52ffRKLQatVih7gT95XPtY9PfGsAhw7SjuwF7U6QeFx9NqIpyuHfFvjY
+	 HTRmqJULu0g6Hyr0o1TNnD+1k4FOrVClNvRVq1jmlRCYxAo/f9XTugr8o6uxJcQVHO9sA
+	 HxUeFOoq1Qqor/42cYF1x3olBqkdZPg7k3e13G9KKukxv+MB7yzoKHKPjaDch1hMJpZXD
+	 RQdZys/pHl4YAPS/k75gGerCOHfYS0ZaBE6EZ1O3EmnQnTCW4WZXvIvL1BL8zGLcs8uQB
+	 6qsV81B9oWmRhOZQ2GJwH0DwUMMwWMxE1BoFVdmJ5QV0XI627JYIoD4IYSu07nq7nPA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795546756;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Date:From:To:CC:Subject:In-Reply-To:
-	 Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=1NRyrHRc5ALrYxpIJVBBawzLs44TfEtpu7WHQ/Gjwwg=;
-	b=34JHGJXOn8EUcypd1IfIa6WC+LLWG4pAkvhQBzyS36xKqkxePxf2tX7Myy+BRpZR6kss
-	 hj86dH7dqT63wQU4jo4l2QKXA//XZPko0tqgErrphrgn1e6XNIWSuHxx4SH1Wp6OuEU0W
-	 Wyl3p4PL55uTCSE0cbXamcr8qj8XWvpCbP3KfuFWsI5gsVxzhAxVuCvKXQrnEedKevK3H
-	 pfPVrtiv8qMKJFMvau6ZKcpnLdU8L5MCLe0Jl/MU3FZ4qrk5EIAnuYV9hRHs0wrGkei+A
-	 YNHMs04mhI1lhYBd8XIxbU1mjk1LcxTuQhJPxNEH/ukhFOqxQIxxnYiXRCUjsTCmv7A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795547498;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=sOH12wkBcbLWROqlS/Jk2VsKeWzTadwiaEoEPTLMHAU=;
+	b=W/57/PM5X4nrVftyaRFioofrtE1cXK3yS/CtHj0+UbRMUu09gh+rzZg13phZaEMDGI7L
+	 FKmXgDdtGp0l8fplyA4U4nt+50oKKxImnQlCmXZaP5F3KUjGfdxLa8IAzgQO9iLY+w8q0
+	 zXLc10wCCJVT5K0reHomLFg+3M49z9e60zCjcn4PDVZY3UckzHI21kbWdh6XUkPRg30ON
+	 YZcPlRAmXvhLZg7N6GZXAFRZXf96Ka/LiRzPOaSR3wakYw4hZk8XtRSUbWYA0R1bhTe8T
+	 m7mGpvLYxdO0kMgu1I/6OgugV1U+8rIk5/9zQRc4RzcVDxQqhDDKcp2VXmZM/gfSZDg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=tYYKc2Zv;
-	arc=none smtp.remote-ip=91.218.175.84
-Received: from mta0.migadu.com (out-84.mta0.migadu.com [91.218.175.84])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=a18LEhsc;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82A55606A680
-	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 18:59:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 82A55606A680
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78FC7606A31E
+	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 19:11:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=tYYKc2Zv
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=oHE0hkASlUBhA102XRimloT7LRv/m9E1Ay8jSrCzsRU=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1795546752; v=1; x=1796151552;
- b=tYYKc2Zv6fWQ4kIgfFbW/rDyp+nJ+Yz6dJdBKVouxawcs1rrsfcjquM0h2I1dxklsvzvP+Jf
- YmqQQDHepvoyUdqcU2PVtHfR8FhXYwjWtrD26Gkj9gY1t/Njicx45h5uttolbDwdcE0MbkkdWeG
- esJtDJY72nfVywweh/zfhxcs=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 93d802ea5e843d77;
-	Tue, 24 Nov 2026 18:59:12 +0000
-X-Mizu-Trace-ID: 93d802ea5e843d77
-X-Migadu-Flow: FLOW_OUT
-Date: Tue, 24 Nov 2026 18:59:12 +0000
-From: Bradley Morgan <bradley.morgan@linux.dev>
-To: rhkrqnwk98@gmail.com
-CC: boqun@kernel.org, bpf@vger.kernel.org, frederic@kernel.org,
- jiangshanlai@gmail.com, joelagnelf@nvidia.com, josh@joshtriplett.org,
- mathieu.desnoyers@efficios.com, neeraj.upadhyay@kernel.org,
- paulmck@kernel.org, qiang.zhang@linux.dev, rcu@vger.kernel.org,
- rostedt@goodmis.org, urezki@gmail.com
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=a18LEhsc
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C16CD1F000C6;
+	Tue, 24 Nov 2026 19:11:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795547497;
+	bh=sOH12wkBcbLWROqlS/Jk2VsKeWzTadwiaEoEPTLMHAU=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=a18LEhscJJ5yeNfAoTPWWPj5r3e0fr1L7RVgLPdfXE69BlN+KN8RRzO5y4jQ5XAJx
+	 75w0mYurTp2G/THLvkPQkrwF5PXwhVjMsopxfgApwY4wX96EPtU+pxUyZ6bhzK3qhF
+	 07Pyd2J092vAF9QPqG6Y9v27+bTlqp+q5uQ0/5uFOKlSgm7GK7Rq5v41ldPx/HKXb/
+	 h7VxjXjnd7tEGweYNn6SsczF/wfFPdHrFlr8GBglwOw8/i2KJi0XQCm0G2I7MaS7K4
+	 J2VqkaJRS88oAJX03igKNbxG5fCbNpgsPgMMsMP433/g7kohCN4OXm7U8Zl5KsuFVG
+	 7o8NS1V7Ckdgg==
+Message-ID: <sashiko-outbox-231883@kernel.org>
+From: sashiko-bot@kernel.org
 Subject: Re: [PATCH] rcu: Mark rcu_read_unlock_special() notrace
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Sechang Lim" <rhkrqnwk98@gmail.com>
+Cc: bpf@vger.kernel.org
 In-Reply-To: <20261124185659.1370644-1-rhkrqnwk98@gmail.com>
-Message-ID: <B9936C09-18A8-4C0A-B502-DBDB0B93FDE4@linux.dev>
+References: <20261124185659.1370644-1-rhkrqnwk98@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 24 Nov 2026 19:11:37 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -65,55 +58,51 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 8bit
 
-On 24 November 2026 18:56:51 GMT, Sechang Lim <rhkrqnwk98@gmail.com> wrote:
->The BPF trampoline calls rcu_read_unlock() on its exit path. If the
->task was preempted in the RCU read-side critical section, this ends up
->in rcu_read_unlock_special(). When a BPF fentry or fexit program is
->attached to rcu_read_unlock_special() itself, the trampoline runs again
->before ->rcu_read_unlock_special is cleared, calls rcu_read_unlock()
->again, and recurses until the stack overflows:
->
->  BUG: TASK stack guard page was hit at ffffc90001657ff8
->  ...
->   bpf_trampoline_6442575622+0x5e/0xac
->   rcu_read_unlock_special+0x5/0x490
->   __rcu_read_unlock+0x9c/0x120
->   rcu_read_unlock_migrate+0x93/0x220
->   bpf_trampoline_6442575622+0x5e/0xac
->   rcu_read_unlock_special+0x5/0x490
->   ...
->
->Mark rcu_read_unlock_special() notrace.
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue to consider:
+- [High] rcu: missing notrace on rcu_unlock_needs_exp_handling() allows
+  recursion
+--
 
-Hmm.. this seems to be edge case, but no big deal.
+commit 0062b967b0900da7cf7c59da2e3a111544dc9aec
+Author: Sechang Lim <rhkrqnwk98@gmail.com>
 
-Reviewed-by: Bradley Morgan <bradley.morgan@linux.dev>
+rcu: Mark rcu_read_unlock_special() notrace
 
+This commit marks rcu_read_unlock_special() notrace to prevent infinite
+recursion when a BPF trampoline attached to it calls rcu_read_unlock().
 
->
->Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
->---
-> kernel/rcu/tree_plugin.h | 2 +-
-> 1 file changed, 1 insertion(+), 1 deletion(-)
->
->diff --git a/kernel/rcu/tree_plugin.h b/kernel/rcu/tree_plugin.h
->index ae5d21bae7bc..a887ab69f486 100644
->--- a/kernel/rcu/tree_plugin.h
->+++ b/kernel/rcu/tree_plugin.h
->@@ -746,7 +746,7 @@ static bool rcu_unlock_needs_exp_handling(struct task_struct *t,
->  * notify RCU core processing or task having blocked during the RCU
->  * read-side critical section.
->  */
->-static void rcu_read_unlock_special(struct task_struct *t)
->+static notrace void rcu_read_unlock_special(struct task_struct *t)
-> {
-> 	unsigned long flags;
-> 	bool irqs_were_disabled;
->
+> diff --git a/kernel/rcu/tree_plugin.h b/kernel/rcu/tree_plugin.h
+> index ae5d21bae7bc0..a887ab69f4860 100644
+> --- a/kernel/rcu/tree_plugin.h
+> +++ b/kernel/rcu/tree_plugin.h
+> @@ -746,7 +746,7 @@ static bool rcu_unlock_needs_exp_handling(struct task=
+_struct *t,
+>   * notify RCU core processing or task having blocked during the RCU
+>   * read-side critical section.
+>   */
+> -static void rcu_read_unlock_special(struct task_struct *t)
+> +static notrace void rcu_read_unlock_special(struct task_struct *t)
+>  {
+>  	unsigned long flags;
+>  	bool irqs_were_disabled;
 
---- Thanks!
+[Severity: High]
+Should rcu_unlock_needs_exp_handling() also be marked notrace (or static
+inline)?
+
+In the preempt_bh_were_disabled || irqs_were_disabled path,
+rcu_read_unlock_special() disables IRQs and calls
+rcu_unlock_needs_exp_handling() while t->rcu_read_unlock_special.s is
+still non-zero.  Because rcu_unlock_needs_exp_handling() is neither
+notrace nor inline, marking rcu_read_unlock_special() notrace prevents the
+compiler from inlining it when notrace expands to
+__no_instrument_function__.  Attaching a BPF fentry or fexit program to
+rcu_unlock_needs_exp_handling() then triggers the same
+rcu_read_unlock() -> rcu_read_unlock_special() recursion and stack
+overflow.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261124185659.1370=
+644-1-rhkrqnwk98@gmail.com?part=3D1
