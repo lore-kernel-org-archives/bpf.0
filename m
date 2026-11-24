@@ -1,100 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.53
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.31
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795530001;
-	b=3IILh/5JVNDetWL747rj7Zi6qB/uit5n1bvZe9xhBHItq40it/ObGqBZdz+6nXKaCQO5
-	 gktRO9U9dDm+TLNVt/II45dIJXSSbavlN0oDPALfHk3R/LujIn5bZQCRNwK3ZB4wtnyb3
-	 tFGS1nH/0CsEESctsPrnomX5F70TkFyvPrHLRVK4/ZH7hnW8+gQE+rVY/z7s9WoBiwtmh
-	 QU2gktigzlCLrPXovUzQgMKOljOyeZ8L8oM+EJPtO3Ce8wGe5vzVUeEj4tddR1u9gz4WE
-	 TmcWIV6dZHYnHV4kSUbOUdDeNJfI3bP/eBvq+gIlMFiCYVhJBTceWxwbrzuDZJryEqA==
+	t=1795530231;
+	b=jM9FZskZt4AQ2SPgrgvCX02Y5cpD/PNqp41fuX10lcRWW2l6WEFMuFEL/xtinW6Cba8G
+	 dYwuHaX4/ftiWjqCUOntHTC+vr3G5RPN/pgK5CPrAKywWvkygTJovMde097NkAUrBI1bZ
+	 28/ICMEgkBKI5KSXHHr57iCedM3ATOwgLVaHmeqCibgN4g5Rj551FaawQEVy0wobk1Hld
+	 xNijh8vSTX8Yz7Fq0ET5sFnGTetsILsuw5Hc9Bk5pk8CnWO35X6WNIoEl8x0TSKYpbLK0
+	 S997YQjv/8MhNaJ+ZrcRYvjz4xB8zo58ZKRnRQBixNhjZj5WP8TZMZ5rCGAfbz+0wkg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795530001;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:X-Google-Original-From:Date:To:Cc:Subject:Message-ID:References:
-	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=7+zJ9wEzRWTT/HcA8h9WG5wBBTJExWPk/UTv1pPJ3a0=;
-	b=nU65cKC/yoGHxAOfY+GZHfNKSwzutEp3No9H+uM7EtOKTUnUDL/awTMCki1B+4P34z3v
-	 V1Q5ra/xXcursy6tFk4qdPH9YwsNQXbrIzmV5ksvCHwztjSQ0j//vnlVNjJIo3a1kFRN8
-	 q+oGxi60ACh/rD6zzJhn+fSExTxi2OtdlKeflgZzSBEI/lVuTcznUIGwUfgvXzs/px4oK
-	 Owvy7i3nKdI1vuGLQN2SU9rOTJ8EwNqLNcrAhdhRjZjPtfLSrXyNdnEvMR4xXUKkYr2g+
-	 tEj6iYLMWiI0SGHZTnQbrE+ih4fnCaVI4T/FYRxTYff8YEbJQVXCN+PpuZxummq4piQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795530231;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=u8ytjzLGT9u73CVzPoGJdSTSstXpX06F4wtfTDoHE9c=;
+	b=N8lx/Tpr+tRWn+XVSTGoi7ZPTk1iYSkq1VhK7aMpOM1Htdo9z8B8I8J0HOLs6ZcGfg1q
+	 m9JHS0XtlJrsmUefs4JaOYniT92YfzIL+g2Rg1iKCOkThnNY2+f9CfdLGcQbiy28eDvcw
+	 RU9ObQZlV6wmDf7osDABNBCAOU8Bpgm6ujQ8YkmZp2VLo70hoYkmwNJ5QQLrg8+PYhrU6
+	 3zwOe3uafM3r8d4gsFXRrMrYSKXWvUd0J2V45Nri+uehQsZovpZyCspgwQzGRNXkdVhit
+	 TlHGgUeir0paIk4UyGm9k8gnuFvVp+1OlTilgaSnOXqFyYlSzcvaCcWVMpKh8Hf6eGw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=IZ7y3J9H;
-	arc=none smtp.remote-ip=209.85.221.53
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=LdiLfpNB;
+	arc=none smtp.remote-ip=91.218.175.31
+Received: from mta0.migadu.com (out-31.mta0.migadu.com [91.218.175.31])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AB30606A31E
-	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 14:20:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8AB30606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAC26606A31E
+	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 14:23:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BAC26606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=IZ7y3J9H
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-48dee593f18so4344095f8f.3
-        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 06:20:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795530000; x=1796134800; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:date:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=7+zJ9wEzRWTT/HcA8h9WG5wBBTJExWPk/UTv1pPJ3a0=;
-        b=IZ7y3J9H93IKqopZTq2ipF3e9s9TFYfJrLsd7BOXZRROtROjngdzYrcxanU8HCuZOA
-         Vkl+OUtO4ikHhIxZiqvGiJuxspFZSu7uIjYM7Uwxn735WIPF7w6DBUcRdP7uv4m+46jH
-         yPCcyA3HM3mtJK9sfDrUQIxu6UiLj1lsOLAXwwzhk+pWXKwu+hCJPD+FHpB9ThwehL7t
-         UBOgA0lc29OCJQId/wjvBVjRDqN/7wq7ipxDR0B+2Ve/5AJG2jiyF1Ykym9MmS2qrGH7
-         ORNuwljXAdyQAqLZLGDq/EVqjwumbG5fIoGYC2nRkT4MgKByvfsH/s6/P+921XwToQbx
-         5mkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795530000; x=1796134800;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=7+zJ9wEzRWTT/HcA8h9WG5wBBTJExWPk/UTv1pPJ3a0=;
-        b=URMXnTrTTdEKBifFCm9uxdoWL6FpP4J+PV3Hl6Aut6zyq4B3YnIL5gtJ/Ryl8aZmF3
-         0MepVQdjmRKlHAUX6neEO/oWcghldvuL27gNfCl51OAU3aOg5orUuG97OPTP7RdaWrgf
-         k7riydLCo96T8AtfKfCPlyA7bwhauBPQfzoC4TRGFinvhd9UbyUVPMdckpu3Cu7D0XtF
-         UOUo6kYuKOGeD9SCaxyZ5CQ1MVLwWOHfvpdun3VhJGEOd3uUHCdfeEkjpTCBAIIDx/3+
-         UFJquSKUpDcY1xBTOeydmkoMr42sNl09iNpRcUqmlyAMgwm9Zd5jV3/FTnNy9SIMgwG8
-         U97g==
-X-Forwarded-Encrypted: i=1; AL+hErH8TPdQZKTiFbaSx/pD7md3Izt1eL9Ac3b1uALXNSuM1Qj6ieSZFFggg7LR6T7ohtN0J6c=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+b8x7hfrdIKsySZJDa3uX+optqP0KIUbcMFxSbfbmiSBmjlLpM
-	yzpwISH4YWmHa6elhbpxUXfV+v2O9MnnmZPLhgY3c46o4t3o7CDczRXU
-X-Gm-Gg: AZFdTZcqvgiTv6jLvHx/FzBijYS5prFV0BV5l7js0eFfn3M3L+lM7CFqr4dyvOXymHj
-	FhAVe8WGcpyQhAHwtrhTwlKtKYSpqDFZr4/ZB4yGpzYdK4i50QVtWvM8mRWyIXtvyJ4zMCfDr4D
-	sfQgKrAR/jX3ZXPrU1YoStv+Skw40wJYtIKs4exXUvzdGylrkP7RPQAtjQxZfhgvU1nuo/oXNrh
-	QKyrmhSkqCnkBJGX43YNyugA3k3y7p+jOtVwlZcbf6VqrLCt/baDnHq9i5UslpTGtjp9P0ej2Ik
-	VdtmgC6eBCWZGek27ihUuM55Aybo9zOs8KrzfByp7DEXGe6jRcJxLx5WoWPu3WpWhXmcBS9rWEu
-	8HNIXAs4gckJE5YF5XP+vT2guhkBS437mJYT5b0xRWYRvgX4X0baCCaTikQffR5cJLRqDSh6c/r
-	ITwy6ySdopg96kprN97PUJ8N7xwZhEA/OkjCuhmy15E3HK4ZQYYelIfeNxdIrwUDRQ5r8qj6Dql
-	68KqoKpltdjDH0gX/8GpzQ6pFz5Cr6PXdGxhQihBa56EnxOhHHvidFPXW4/JAlJfcvg7EdwwTIP
-	84ccm8fyY9JvIJpB
-X-Received: by 2002:a05:6000:299c:10b0:4a7:9630:7b5a with SMTP id ffacd0b85a97d-4abb47b2043mr20944271f8f.47.1795529999684;
-        Tue, 24 Nov 2026 06:19:59 -0800 (PST)
-Received: from krava ([176.74.159.170])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4ab6bb989e3sm28314153f8f.52.2026.11.24.06.19.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Nov 2026 06:19:59 -0800 (PST)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Tue, 24 Nov 2026 15:19:57 +0100
-To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc: Naveen N Rao <naveen@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
-	linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: Re: [PATCHv2 1/2] kprobes: Increase the kprobe hash table size
-Message-ID: <awWdDfj1fknA8fuF@krava>
-References: <20261122200239.1481088-1-jolsa@kernel.org>
- <20261122200239.1481088-2-jolsa@kernel.org>
- <undine-1795477745290490698-99e2fcc5c9b45beb@undined.local>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=LdiLfpNB
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=K5kxjwdrKRCx7YT4plbcssoC62fiIRBME4cA+uWQRsg=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1795530228; v=1; x=1796135028;
+ b=LdiLfpNBVejnfHRV6F9uBV+vuvBX2VNSM74vHBL1IbzHD1AyEAKm1EG4w281zoo56JX+W4C7
+ swoJ1W1knEor//PzJKjpLRBOh0UhwPW6/NwtE6UgaFWb7bavJAhkos4rBxjfg+pgQ6l3zvNTvPB
+ +vOkq5iRkiW2Rmz1YZJK0Y9E=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 30824d65790ac0b1;
+	Tue, 24 Nov 2026 14:23:48 +0000
+X-Mizu-Trace-ID: 30824d65790ac0b1
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <511dade2-01a9-492b-85c2-014880b2379e@linux.dev>
+Date: Tue, 24 Nov 2026 22:23:37 +0800
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -104,158 +58,133 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <undine-1795477745290490698-99e2fcc5c9b45beb@undined.local>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net v2] net: xdp: fix generic XDP on skbs without an
+ Ethernet header
+To: netdev-bot+sashiko@kernel.org
+Cc: netdev@vger.kernel.org, kennethbwlee@snu.ac.kr, davem@davemloft.net,
+ edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
+ ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+ john.fastabend@gmail.com, sdf@fomichev.me, kuniyu@google.com,
+ wang.zhan@smartx.com, mkarsten@uwaterloo.ca, bpf@vger.kernel.org
+References: <20261123121540.275576-1-jiayuan.chen@linux.dev>
+ <179552306350.3135.16282643834784138893@kernel.org>
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <179552306350.3135.16282643834784138893@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Tue, Nov 24, 2026 at 08:49:05AM +0900, Masami Hiramatsu (Google) wrote:
-> On Sun, 22 Nov 2026 21:02:38 +0100, Jiri Olsa <jolsa@kernel.org> wrote:
-> > The kprobe hash table has 64 buckets, so with many probes registered
-> > each get_kprobe() call walks a long chain. With 20000 probes that is
-> > more than 300 entries per bucket on average, and every entry is a
-> > separate struct kprobe, so the walk is mostly cache misses.
-> > 
-> > get_kprobe() is not called just once per registered probe. On x86 the
-> > registration path calls it for each address it has to check around
-> > the new probe: get_optimized_kprobe(), __recover_probed_insn(),
-> > __recover_optprobed_insn() and arch_check_optimized_kprobe() all do
-> > one lookup per byte or per decoded instruction, and most of these
-> > lookups miss, which means walking the whole chain. It is also called
-> > from the breakpoint and ftrace handlers on every probe hit.
-> > 
-> > Increase KPROBE_HASH_BITS from 6 to 12, which gives 4096 buckets and
-> > cuts the chains to about 5 entries for 20000 probes and about 12
-> > entries for 50000 probes.
-> > 
-> > Time to register the probes with the kprobe_many_example sample
-> > module [1] (insmod with nr_functions=20000 and nr_functions=50000)
-> > in a KVM guest, mean of 5 runs, for different KPROBE_HASH_BITS
-> > values. The table memory is the size of the static kprobe_table on
-> > 64-bit:
-> > 
-> >   bits   buckets   table memory   20000 probes   50000 probes
-> >      6        64          512 B         4.71 s        29.99 s
-> >      8       256           2 KB         2.05 s         9.90 s
-> >     10      1024           8 KB         1.39 s         4.63 s
-> >     12      4096          32 KB         1.30 s         3.64 s
-> >     14     16384         128 KB         1.28 s         3.41 s
-> >     16     65536         512 KB         1.28 s         3.38 s
-> > 
+
+
+On 11/24/26 8:24 PM, netdev-bot+sashiko@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential
+> issue(s) to consider.
 > 
-> Thank you for conducting the testing and evaluation. The results show
-> a trend similar to that of a study I previously carried out[1].
+> Critical: 0 · High: 1 · Medium: 0 · Low: 0
 > 
-> [1] https://qiita.com/mhiramat/items/1bbeb309ee5dfbc979ce (Japanese
-> article)
+> If you believe none of the issues are legitimate, please reply to each
+> issue of Medium severity or higher and explain why the AI is wrong.
+> If any of them are legitimate and you plan to respin, please let patchwork
+> know by including "pw-bot: cr" as a separate line at the end of your reply
+> (one such reply per series is enough).
 > 
-> > With 12 bits the registration of 20000 probes is 3.6 times faster
-> > and the registration of 50000 probes is 8.2 times faster than with
-> > the current 6 bits. 12 bits is where the curve flattens: compared
-> > to 10 bits it is still 21% faster for 50000 probes (6% for 20000),
-> > while going further to 16 bits gains only 1.5% for 20000 probes and
-> > 7% for 50000 probes, for a table 16 times bigger (512KB vs 32KB).
-> > 
+> - [High] The new runtime guard in netif_receive_generic_xdp()
+>   (net/core/dev.c:5827, `if (skb->data - skb_mac_header(skb) < ETH_HLEN)…
 > 
-> I personally think 6 bits is too small, maybe up until 9 bits (4KB)
-> will be OK.
+> --
 > 
-> > The cost is the size of the static table, which grows from 64 to
-> > 4096 hlist heads, that is from 512 bytes to 32KB on 64-bit. The
-> > functions that walk the whole table (module notifier, arming or
-> > optimizing all probes, the debugfs list) are slow paths that take
-> > kprobe_mutex and now scan 4096 buckets.
+> net: xdp: fix generic XDP on skbs without an Ethernet header
 > 
-> What I still fail to understand is the use case for employing such a large
-> number of Kprobes simultaneously. If the goal is to trace individual
-> functions, Fprobes are already available and offer better scalability.
-> Personally, while I might occasionally deploy around 100 probes, I cannot
-> conceive of a scenario requiring 1,000 or more. Would you have actual
-> usecase maybe from eBPF?
-
-the use case is the kprobe multi link support for inlined functions,
-which I have in this branch:
-
-  https://github.com/olsajiri/bpf/commits/inlined/
-
-inlined instances are not function entries, so they can't be attached
-through fprobe/ftrace and each instance needs a standard kprobe
-
-number of instances gets big quickly, even for a single function, some
-examples of functions that have both an out-of-line copy and inlined
-instances in my x86_64 build:
-
-  function                inlined instances
-  __list_del_entry                     4144
-  list_add_tail                        1196
-  folio_put                             629
-  put_task_struct                       373
-  percpu_ref_put_many                   273
-  kmemdup_noprof                        207
-  fdput                                 189
-  sock_put                              161
-  migrate_enable                        131
-  migrate_disable                       123
-
-attaching to the list functions is not necessarily a good idea,
-but other functions have a high number of inlined instances too
-
-the goal is not to attach 20k functions, but to make the inline
-attachment fast.. user specifies just a few functions by name and
-has no control over the number of their inlined instances, so even
-a small set of functions can end up with thousands of kprobes,
-and the attach time should stay reasonable for that
-
+> This patch stops generic XDP programs from being attached to devices that
+> are not ARPHRD_ETHER or ARPHRD_LOOPBACK. dev->type can change after attach,
+> so it also skips generic XDP for skbs whose mac header is shorter than
+> ETH_HLEN.
 > 
-> If this change is intended solely to improve performance for an extremely
-> unlikely use case, I would, at the very least, make the size configurable
-> via Kconfig.
+> Closes: https://lore.kernel.org/bpf/20260812043643.808295-1-kennethbwlee@snu.ac.kr/
 > 
-> Since this change affects all architectures, those working with small,
-> embedded-system chips might be reluctant to "pay" 32 KB for a use case
-> that is highly unlikely to ever occur.
-
-I can add CONFIG_KPROBE_HASH_BITS with range 6-16. I'd keep 6 for
-CONFIG_BASE_SMALL, so small systems don't pay anything, and use
-10 (8KB on 64-bit) as the default otherwise, which gets most of the
-speedup from the table in the changelog
-
-thanks,
-jirka
-
-
+>> diff --git a/net/core/dev.c b/net/core/dev.c
+>> index 6140fd9d11cd0..df335f361706d 100644
+>> --- a/net/core/dev.c
+>> +++ b/net/core/dev.c
+>> @@ -5823,6 +5823,10 @@ static u32 netif_receive_generic_xdp(struct sk_buff **pskb,
+>>  	if (skb_is_redirected(skb))
+>>  		return XDP_PASS;
+>>  
+>> +	/* XDP is Ethernet only, skip skbs without an Ethernet header. */
+>> +	if (skb->data - skb_mac_header(skb) < ETH_HLEN)
+>> +		return XDP_PASS;
 > 
-> Thank you,
+> [Severity: High]
 > 
-> > 
-> > The sample module was posted as the last patch of the kprobes
-> > lookup cost series [1] only to demonstrate the testing, it is not
-> > merged and is not going to be.
-> > 
-> > [1] https://lore.kernel.org/bpf/20261109195827.1091410-1-jolsa@kernel.org/
-> > 
-> > Suggested-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> > ---
-> >  kernel/kprobes.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/kernel/kprobes.c b/kernel/kprobes.c
-> > index f14f7ff45961..47ce0bfb7298 100644
-> > --- a/kernel/kprobes.c
-> > +++ b/kernel/kprobes.c
-> > @@ -50,7 +50,7 @@
-> >  #include <asm/errno.h>
-> >  #include <linux/uaccess.h>
-> >  
-> > -#define KPROBE_HASH_BITS 6
-> > +#define KPROBE_HASH_BITS 12
-> >  #define KPROBE_TABLE_SIZE (1 << KPROBE_HASH_BITS)
-> >  
-> >  #if !defined(CONFIG_OPTPROBES) || !defined(CONFIG_SYSCTL)
-> > -- 
-> > 2.56.1
-> > 
-> >
+> According to the commit message, this check covers the case where dev->type
+> changes after attach:
 > 
-> -- 
-> Masami Hiramatsu (Google) <mhiramat@kernel.org>
+>   "An empty bond or team takes the type of its first port ... So also
+>   skip the program for skbs whose mac header is shorter than ETH_HLEN."
+> 
+> What happens with non-Ethernet ports whose L2 or pseudo header is ETH_HLEN
+> bytes or longer? In these two cases data - mac_header is at least 24.
+> 
+> IPoIB, in skb_add_pseudo_hdr():
+> 
+> 	skb_reset_mac_header(skb);
+> 	skb_pull(skb, IPOIB_HARD_LEN);
+> 
+> ipgre with ipgre_header_ops, in __ipgre_rcv():
+> 
+> 	if (tunnel->dev->header_ops == &ipgre_header_ops)
+> 		skb_pop_mac_header(skb);
+> 
+> That second case leaves mac_header on the outer IP header, so mac_len is
+> the outer IP header plus the GRE header.
+> 
+> The sequence looks like this:
+> 
+> 1. Attach an XDP_FLAGS_SKB_MODE program to an empty bond or team while it
+>    is still ARPHRD_ETHER. This passes the new dev_xdp_attach() check.
+> 
+> 2. Enslave an IPoIB device to the bond
+>    (bond_enslave()->bond_setup_by_slave()), or add an ipgre device to the
+>    team (team_dev_type_check_change()->team_setup_by_port()). Nothing
+>    vetoes NETDEV_PRE_TYPE_CHANGE because of a generic XDP program.
+>    bond_enslave() only checks the native-mode bond->xdp_prog.
+> 
+> 3. On RX, __netif_receive_skb_core() calls skb_reset_mac_len() on the
+>    lower device's skb. The rx_handler returns RX_HANDLER_ANOTHER, and at
+>    another_round do_xdp_generic() runs the upper device's generic program.
+> 
+> 4. The new check is false, so the program treats the IPoIB pseudo header,
+>    or the outer IP/GRE bytes, as an Ethernet header.
+> 
+> If the program then changes bytes 0-5 or 12-13, bpf_prog_run_generic_xdp()
+> does:
+> 
+> 	__skb_push(skb, ETH_HLEN);
+> 	skb->pkt_type = PACKET_HOST;
+> 	skb->protocol = eth_type_trans(skb, skb->dev);
+> 
+> This leaves mac_header at data - 14 while skb->mac_len stays at 24 or
+> more. skb->protocol is also taken from non-Ethernet bytes.
+> 
+> Would tc ingress then hit the same "skb_vlan_push got skb with skb->data
+> not at mac header" warning in skb_vlan_push() that this patch is meant to
+> fix?
+> 
+> There is also a second gap. bpf_xdp_link_update() calls dev_xdp_install()
+> directly and does not go through dev_xdp_attach(). After a type change like
+> the one above, could a new generic program be swapped in through an
+> existing link without hitting the new ARPHRD check?
+> 
+> Would any of these close the remaining cases?
+> 
+> - require mac_len == ETH_HLEN at run time
+> - check skb->dev->type for ARPHRD_ETHER or ARPHRD_LOOPBACK at run time
+> - veto NETDEV_PRE_TYPE_CHANGE while a generic XDP program is attached
+> 
+
+
+Ok, same as sashiko.
+I used < ETH_HLEN to keep VLAN devices with reorder_hdr off working, but the fixup after the program is wrong
+for them too, so I'll just skip everything that is not ETH_HLEN.
+
+pw-bot: cr
