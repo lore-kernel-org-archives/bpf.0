@@ -1,82 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.169
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795500244;
-	b=VRIGvdyfpO8Xg96ZLAdjZAdjTc7rZE+AqxavNI3Vb5InjImCyaQEkbnUxUXIsKM98LAT
-	 J/FwHgX9yRBJg9Re4L0mSeph2jfp5ZDUtjYqeUlWqShUHdISs+CcNqkoyV2VUCnecMOJ+
-	 77FYUyvfDYKY0wPVkMLuzXhOZ1jqWBWFwug8kp06N+Cm2SqiE9j/kiWpqctVowXhOaxlI
-	 KsTKsx1vwSV07tUzi3fxUccTKAx2UH2QpciM2hph6gMyaz4aXG6zb76TSCpRWouPv0BeF
-	 TrgEG8o8Hz2n4k0xINgcz/a3sc8E9/nExpQIMcIjJaMhDwrjtgXo/7i8795J/HElSFA==
+	t=1795500246;
+	b=FSPIGs6wmbBekj7EFsuOfZ744oBDvvrH+RoXFOxtGoNIH2cx28bVmVUVb+8SDSieKRvD
+	 XttzoZkhjh05DxIiwqxVkDD2RXLvGMAxuNqB5nBcERuxQMs3Cr8sOEljUNhFGHc5OG4K9
+	 FtJS1aVBXgqvYoEBfC4fK2g6XzT3xA09UkYqnOq5PKKVl9JuEdUW6BiSe3b601WU3Mup2
+	 JMmUW0Gqc2stInpfMZGcvvvgwbLHmlqnn7KmpoWGSVFbs/QrUtwgzsm9LgztdPONn55L4
+	 /DNwRCf3wszYAQqgHlpIAf6ePQk2aDrKHG+YiI7iPkYCRUb/v0xu5oAkSz4NNYlQypg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795500244;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795500246;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=CZLbDNzMabVN7KHk/I04b5Jq/BM2bGCSumT8JlDjLdw=;
-	b=pXJLsvD3q+wG4z0lH2emD6ONWACL3mF92L5wgZW475axk0zitMwNkDgnxLzGWr9Fdz6R
-	 khB1c6aCrEAoSkU9PZp6Sf0btSqCZ9e8ec9vhe6qk8hqG8ZaTix61Nedz7qPa/fjMeCDh
-	 WoYBLdP/GvmKZ552cao9wSXGBC9mas5bdw4Nu7zOb0gbDUyIUdq9eI7B+Ep7mJyh9Lglw
-	 KJncotAQ+GeWwecw5t+qjxkYENiYQQgW0ky+wO/abEobk5xmDPWKkZtiK/LITGue/D6WA
-	 XQGzP/M4RFsPyxDpHbhCciXD0lrY79xvpoloEWxYiSkw7bIsZdAi56KOmIcc38WieYQ==
+	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=mKVi9kkinGrC0GwX38fwgO2rx45odsYgJrguZKyDEsg=;
+	b=jOx9W3yZbjtA2PKeG1/Q9VwlswLq3wagC0xYG8T+0rvoOddAJPJ7Lquukd6pu3YucDw5
+	 rF7SNGp0aOoowLtwWvPGFCEKH1XHIfTXgvv/6u+BlisxvFVF5Wx3Y9BfjQgYZP4ykGMsU
+	 NjsB5vtsqu2NI0fSJYDdRQQnOwLZ3KmaKMJbplo4f9Gzk9XLYOspwoHTAQ7PsB0NARwYu
+	 8cHto1mGlyO+3ojgL2Pufx/JqtRXoCZXNxrVT178pmWo/85GW7gjDQPYUK+mUofs56r7t
+	 6thlf9WBj0mr1NqSB+OQvmBHeEA+i55zx+8dZY8IiB6m/MwEYKtSRo/oqWM2Ekv+5/A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=etsalapatis.com;
 	spf=pass smtp.mailfrom=etsalapatis.com;
-	dkim=pass header.d=etsalapatis.com header.i=@etsalapatis.com header.a=rsa-sha256 header.s=google header.b=JNuIkS6v;
-	arc=none smtp.remote-ip=209.85.214.178
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	dkim=pass header.d=etsalapatis.com header.i=@etsalapatis.com header.a=rsa-sha256 header.s=google header.b="JV8YI/oG";
+	arc=none smtp.remote-ip=209.85.214.169
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DD9B606A31E
-	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 06:04:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3DD9B606A31E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 384B2606A31E
+	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 06:04:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 384B2606A31E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=etsalapatis.com header.i=@etsalapatis.com header.a=rsa-sha256 header.s=google header.b=JNuIkS6v
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2f04244c3d0so34109195ad.3
-        for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 22:04:03 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=etsalapatis.com header.i=@etsalapatis.com header.a=rsa-sha256 header.s=google header.b=JV8YI/oG
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2e9ae391a05so27480245ad.1
+        for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 22:04:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis.com; s=google; t=1795500243; x=1796105043; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=CZLbDNzMabVN7KHk/I04b5Jq/BM2bGCSumT8JlDjLdw=;
-        b=JNuIkS6vosJ+7+ggJ9Q6/px4Yo9nIt0bW9eCmWxTu/IwKa21CYO9X22ZAuOQtqranu
-         qWThE9IWqjKY52jClYVufKCtkkBxtCtzadrrOaXfYNaoApGBn39kXBIxYYhKiKtAdQN/
-         Y4WfFkr63keCa+tUGEHbG6sKwpzibRt3MksoNhUhEUAp6cRambFAeg6gWnpvhT13bP5c
-         GSKfoVpxDXV8OvDNV6bOnYqRyNbCq0BuK0X2lE7AafXNreOgCL6DlM17z/jQtg0Vj0mE
-         TQvyOYcPahrRm7QnLvgNEzjCGGzmMezehPlmd3J3q5AauJ6HDkY59dpXlYSSYorfSjY8
-         io1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795500243; x=1796105043;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=etsalapatis.com; s=google; t=1795500245; x=1796105045; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=CZLbDNzMabVN7KHk/I04b5Jq/BM2bGCSumT8JlDjLdw=;
-        b=QI1ZwsdOXMGXAaLs5GScTfAL0+WFASigVgQm7T4MudarN/NgFk+5YBlrQ+Kn5kldrt
-         sPzpiNNBmJCUCMoMLCzGoLEPRy8JNGED5YVYjg9l5kT1sN3I/M1X/XAL5ZAdIBE+tzcJ
-         M2Lk5mrwa/FI1ew+zKBO0DTgpHWkzxW1xH9X/86Usv7+ss50ndQ4kW9hFdw+6tu/58vn
-         DuXt/qNDtkNO7zlbZcJ/w3TzvvzWC9CL9J2IIymnaZhRK0pb/P4bz0Nnbk9cwiE3I/qt
-         /7MmQNOwEnO8zBdUTQKvyFkKfXwNM2jPi4MG6t2hEq1x0cQ7RN/6lltRtt16sVQZ8067
-         kJOg==
-X-Gm-Message-State: APuU4Z8GpFr22bxSCVo+4+I/PhL9MLRHA79dBQrMwewRc5f2yXtdkdEV
-	V/Yk9+ulrlNpcDnaEVmOZWPhW1k20ApwMrMhEh1yX/vpdYn1SzFOJxsbgb6Ar/3b5owMLq4zw3Z
-	SmjAkM3s=
-X-Gm-Gg: AZFdTZfkdYz6E8gpGD/7/plH5IPaaVaJg4rGBneoiFsznhfEK2QUVMNa6vI51wAto4n
-	SkjjkaEhGQytwLPxAIOiLeI7ivmBXoSZx5hYNzGhdHaRDr1DWgosdadUY6xiC6ENLYKefJNoQhP
-	AZUa8BemOo5cnzlekfY/3ZT7EUmXPiISNqd1X6vyU0K/vrBRjyO58GyOl+o0TaWkfZTNod3ZIhC
-	8J2JLS3W8bWtOE4srdeH/rTV4k43ZR4+uT0wkxgnJY4UPbPYuA2oe17ovKoYmpLG5IXPBEvbjnq
-	4wr1aNWN53Pwy5/Iw+9oWB4gG12kG3zOPx1zbtmzvTmY5XV/VcuZKpxwIrq4XDG/J5r3mGHV7uA
-	mA1pzwWdCbiNmVz0szUxpACuLu6cLPIAAN1RUgkW6FMWKSj2umE02Gwn1ebuhOIT+Fzx6EVyBxd
-	Gujh9hoEzegfT4np3z4IYN1ok+OvqSGgBqWMluBjH/Sb+/U2ZU9Q5y1Qr+gLt7PhorrA71RdFrg
-	PSnIykIhotmDI0pmARk1qShzG6qeuBuqqMI1y6xPR+nlToxcoCApJ6YDEpz6HEDFHIUlb+WifR0
-	ttzWAac2pGoV0Mn5zImGJcGu3KsK49fcWHGmGwXk9Ap57VeJDwjWs6Fi+HpAvS7JWGcUdDR3SQ/
-	3fFZYY2BmKZCqie6xyD91pN+BEcw=
-X-Received: by 2002:a17:902:eccf:b0:2e9:77c0:c7ab with SMTP id d9443c01a7336-2f03f1277f8mr132813155ad.29.1795500243500;
-        Mon, 23 Nov 2026 22:04:03 -0800 (PST)
+        bh=mKVi9kkinGrC0GwX38fwgO2rx45odsYgJrguZKyDEsg=;
+        b=JV8YI/oGhRXO2Y4Rp6KvS0QDMqEZv8p1kLduMqBJ4tl/PrjaxwcrOq+aXebD2L6ppr
+         J2unfnx12XV4+/sIN8qvZgIgJ+XECitZ0ZxEZmectMlZNjF5ERul4mQDX04AxQJPVSWI
+         eUTntruKQITxxADGyqFUbJ3/WioJiyEYaC2/yZ6y0wZggPGdewYX26lpedte/ImRB1ht
+         VsroI3040uQEIAxV7PaIqChL1zQksVAw3v3j/G38BQ+kgSBEI70utIeNWBK76z8spvA7
+         3LcpFyKnLh++E64lH0vKnh9Cp06bjbxpdB3kdW8aSl9R5HNRX1bsm9OlchEgrOukV5HE
+         vtHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795500245; x=1796105045;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=mKVi9kkinGrC0GwX38fwgO2rx45odsYgJrguZKyDEsg=;
+        b=TXqxCfKKNPpCs5GkM/Bdim9q+B4IojrL3fCrSRDVy8N1VwqOoLIkSfkhIVvU8lfOoQ
+         2WgLJlrJjHnXbLVLdEKcly6MUXHGr8xyv59eO58quSJGdv4SFQYCoPFb1tXE9n1yBTld
+         hUPs8yl8VGCGewZbLMJazfqKT/bfq07OFRh+FHQzmA5QyokLbhvupwDz6+Bb/NdbfzoF
+         wYZaeAoMVXH8hUvyGgiP6txbSbCJx0wa90TSuC95+CLqExCP0xIvC0K5FfeODVm/R4op
+         oHXC32PiMenViNjd3Tzh+gbZWobqKpSapplESDx67EL5MyJNxiB262nW6VRqQ7YykL12
+         S7Gg==
+X-Gm-Message-State: APuU4Z8ihFwhL6+lXLnO5E1+hMHJn+hsr4I2gJHZckrMNSKqwSmRFO44
+	7fPqAO3uYFuCCVF3npmL7zvt4Y+7uXzRRJ96Vy/cp+QzU8Z1Sjy3lCsJLRCUj6F+HrvuXwNhGRU
+	JzsUPhr0=
+X-Gm-Gg: AZFdTZcoj/7el9scWBaOkauVBXGFyYjWrtB8rLhmsQ8mMQ2YW9QUxUXkjhpL6ENR/bf
+	+LTiAgOwe6NDdsugMhDOkGpe8W7FV6zwvWOs9DzJy05/yL6N8K1Wid9TjqqIowmJsiwhNEHxn9D
+	znLAJqRdDq4E7YjGW1wlYjO94od0YEm3K3H28VYpUig15IP615JFQ3CAN6EThLBEFfX8bS2oQ9m
+	fJgtz9FUTNfFN1xx2B06vfOTzhhaLX7mdsirx4wdz2gLkDRujjRW2DHtl9Rc8n21h+DCLqCUVAe
+	R9uJakOU3OQbGRW3z9yObPFKoC+48oG0SQdeGoK6b+m4+Cwd2+SydJE1Ouww2v7/sz45VIgktHH
+	NZ5QdYX2Guos1Zd0tGN+yxMjQzC3hKA7AFveKBBO657V4jLPtkZPM92VMwymqElRpEYIBGOKKOe
+	rs8/xR9dSXibIOaDd8dxzy6vGuQrSKsqtQDIAdqsaUGr7OQKTzKH1xiogFqcoBthS+Csm9UWb3F
+	JsAYN577IIP/LcE4dlqs030gJ4c3uL3LCl0aG/5yhe8FVoKdsxbo+gS/1e3V83GQb10pkA/IeLK
+	EgrUQYduZx/Adop7ZcJKAyn90d4YjCBg956E7yRJf4DbC+NPxmw9S/NrnJGl11x3zWCzTK17XEU
+	6P/khenJCT/23NNyE6VNz4WEArYU=
+X-Received: by 2002:a17:903:240d:b0:2f0:446a:dd3 with SMTP id d9443c01a7336-2f0446a123bmr88002535ad.37.1795500245479;
+        Mon, 23 Nov 2026 22:04:05 -0800 (PST)
 Received: from alpine05.ht.home (107-190-31-93.cpe.teksavvy.com. [107.190.31.93])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2f03f0c42a6sm64215985ad.23.2026.11.23.22.04.02
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2f03f0c42a6sm64215985ad.23.2026.11.23.22.04.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Nov 2026 22:04:03 -0800 (PST)
+        Mon, 23 Nov 2026 22:04:05 -0800 (PST)
 From: Emil Tsalapatis <emil@etsalapatis.com>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org,
@@ -85,10 +87,12 @@ Cc: ast@kernel.org,
 	memxor@gmail.com,
 	daniel@iogearbox.net,
 	Emil Tsalapatis <emil@etsalapatis.com>
-Subject: [PATCH bpf-next v1 0/4] bpf: Use kmalloc for local storage if possible
-Date: Tue, 24 Nov 2026 06:03:53 +0000
-Message-ID: <20261124060357.11700-1-emil@etsalapatis.com>
+Subject: [PATCH bpf-next v1 1/4] bpf: Add call for selecting kmalloc or kmalloc_nolock at call time
+Date: Tue, 24 Nov 2026 06:03:54 +0000
+Message-ID: <20261124060357.11700-2-emil@etsalapatis.com>
 X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20261124060357.11700-1-emil@etsalapatis.com>
+References: <20261124060357.11700-1-emil@etsalapatis.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -100,58 +104,117 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Local storage currently only goes through kmalloc_nolock() to allocate
-new memory. This is needlessly restrictive, because the calling context
-may allow for spinning on the zone lock, or even sleeping. Exclusively
-using kmalloc_nolock() has the downside that the call may fail where a
-different variant would succeed, e.g., under heavy contention on the
-ZONE_NORMAL zone lock combined with high hugepage usage in the system
-draining ZONE_DMA32 below the watermark where a ZONE_NORMAL allocation
-can allocate from it. This scenario has been observed in production
-environments.
+Certain parts of the BPF runtime like task-locl storage call
+kmalloc_nolock by default, even when the context within which
+they are called could use regular (nonsleepable) kmalloc. Add
+a helper for determining whether we can try to satisfy the
+allocation with a regular kmalloc, and make a call to kmalloc
+with GFP_NOWAIT when possible before resorting to kmalloc_nolock.
 
-Add more granular context checking during local storage allocation, and
-do either a GFP_KERNEL kmalloc sleepable allocation, a GFP_NOWAIT
-nonsleepable kmalloc allocation, or a kmalloc_nolock() allocation. This
-requires plumbing the aux metadata of the program through the local
-data allocation helpers, and inspecting at runtime the context's
-preemption/nmi state along with the sleepability of the call.
+Spinning on the lock instead of only doing kmalloc_nolock avoids
+unnecessary allocation failures. Using trylock instead of committing
+to spinning during allocation risks failures under contention in the
+critical path. Normally, kmalloc_nolock falls back to ZONE_DMA32 that
+is in practice never contended, but the zone may be below the low
+watermark and fail to allocate. This is the case, e.g., in systems with
+a large amount of hugepages in use (hugepages also allocate form
+ZONE_DMA32 when necessary, lowering it to below the watermark).
 
-The logic is effectively:
-
-  if (aux && bpf_prog_can_sleep(aux->prog)) {
-          ptr = kzalloc(size, GFP_KERNEL | __GFP_RETRY_MAYFAIL);
-  } else if (IS_ENABLED(CONFIG_PREEMPT_COUNT) && can_spin_in_alloc() &&
-             size <= KMALLOC_MAX_CACHE_SIZE) {
-          ptr = kmalloc(size, GFP_NOWAIT | __GFP_NOMEMALLOC | __GFP_ZERO);
-          if (!ptr)
-                  ptr = kmalloc_nolock(size, __GFP_ZERO, NUMA_NO_NODE);
-  } else {
-          ptr = kmalloc_nolock(size, __GFP_ZERO, NUMA_NO_NODE);
-  }
+Make both calls in succession to maximize the possibility of success.
+kmalloc_nolock() tries buckets larger than the requested size's
+when necesary, which kmalloc() does not. The two calls are therefore
+complementary, and we cannot call just kmalloc() when it is available.
 
 Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
+---
+ include/linux/bpf.h            |  3 +++
+ kernel/bpf/bpf_local_storage.c |  6 ++----
+ kernel/bpf/syscall.c           | 27 +++++++++++++++++++++++++--
+ 3 files changed, 30 insertions(+), 6 deletions(-)
 
-Emil Tsalapatis (4):
-  bpf: Add call for selecting kmalloc or kmalloc_nolock at call time
-  bpf: Plumb local storage context
-  bpf: Add sleepable local storage
-  selftests/bpf: Test kmalloc variant selection for task storage
-
- include/linux/bpf.h                           |   8 ++
- include/linux/bpf_local_storage.h             |   3 +-
- kernel/bpf/bpf_cgrp_storage.c                 |   9 +-
- kernel/bpf/bpf_inode_storage.c                |   9 +-
- kernel/bpf/bpf_local_storage.c                |  53 ++++++--
- kernel/bpf/bpf_task_storage.c                 |   9 +-
- kernel/bpf/syscall.c                          |  27 +++-
- net/core/bpf_sk_storage.c                     |  17 ++-
- .../bpf/prog_tests/task_storage_sleepable.c   |  94 +++++++++++++
- .../bpf/progs/task_storage_sleepable.c        | 126 ++++++++++++++++++
- 10 files changed, 319 insertions(+), 36 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/task_storage_sleepable.c
- create mode 100644 tools/testing/selftests/bpf/progs/task_storage_sleepable.c
-
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index a5ad08b7937c7..5565a735ae7ce 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -3037,6 +3037,9 @@ struct page *bpf_alloc_page(int nid, bool sleepable);
+ int bpf_alloc_pages(int nid, unsigned long nr_pages,
+ 		    struct llist_head *pages, bool sleepable);
+ void bpf_free_pages(struct llist_head *pages);
++
++void *bpf_map_kmalloc_maylock(const struct bpf_map *map, size_t size, gfp_t flags);
++
+ #ifdef CONFIG_MEMCG
+ void bpf_map_memcg_enter(const struct bpf_map *map, struct mem_cgroup **old_memcg,
+ 			 struct mem_cgroup **new_memcg);
+diff --git a/kernel/bpf/bpf_local_storage.c b/kernel/bpf/bpf_local_storage.c
+index b12fcec47ffa0..bd79754a1e2fd 100644
+--- a/kernel/bpf/bpf_local_storage.c
++++ b/kernel/bpf/bpf_local_storage.c
+@@ -75,8 +75,7 @@ bpf_selem_alloc(struct bpf_local_storage_map *smap, void *owner,
+ 	if (mem_charge(smap, owner, smap->elem_size))
+ 		return NULL;
+ 
+-	selem = bpf_map_kmalloc_nolock(&smap->map, smap->elem_size,
+-				       __GFP_ZERO, NUMA_NO_NODE);
++	selem = bpf_map_kmalloc_maylock(&smap->map, smap->elem_size, __GFP_ZERO);
+ 
+ 	if (selem) {
+ 		RCU_INIT_POINTER(SDATA(selem)->smap, smap);
+@@ -512,8 +511,7 @@ int bpf_local_storage_alloc(void *owner,
+ 	if (err)
+ 		return err;
+ 
+-	storage = bpf_map_kmalloc_nolock(&smap->map, sizeof(*storage),
+-					 __GFP_ZERO, NUMA_NO_NODE);
++	storage = bpf_map_kmalloc_maylock(&smap->map, sizeof(*storage), __GFP_ZERO);
+ 	if (!storage) {
+ 		err = -ENOMEM;
+ 		goto uncharge;
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index ec8e787929112..4c72b05e11eb0 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -597,15 +597,38 @@ static void bpf_map_release_memcg(struct bpf_map *map)
+ }
+ #endif
+ 
+-static bool can_alloc_pages(void)
++static bool can_spin_in_alloc(void)
+ {
+ 	return preempt_count() == 0 && !irqs_disabled() &&
+ 		!IS_ENABLED(CONFIG_PREEMPT_RT);
+ }
+ 
++void *bpf_map_kmalloc_maylock(const struct bpf_map *map, size_t size, gfp_t flags)
++{
++	const gfp_t nolock_flags = __GFP_ACCOUNT | __GFP_ZERO |
++				   __GFP_NOWARN | __GFP_NOMEMALLOC;
++	struct mem_cgroup *memcg, *old_memcg;
++	void *ptr = NULL;
++
++	bpf_map_memcg_enter(map, &old_memcg, &memcg);
++	if (IS_ENABLED(CONFIG_MEMCG))
++		flags |= __GFP_ACCOUNT;
++
++	/* Only try the spinning allocation when preemption disables are tracked. */
++	if (IS_ENABLED(CONFIG_PREEMPT_COUNT) && can_spin_in_alloc() &&
++	    size <= KMALLOC_MAX_CACHE_SIZE && !(flags & ~nolock_flags))
++		ptr = kmalloc(size, flags | GFP_NOWAIT | __GFP_NOMEMALLOC);
++	/* Allocation failed or kmalloc_nolock()-only context. */
++	if (!ptr)
++		ptr = kmalloc_nolock(size, flags, NUMA_NO_NODE);
++
++	bpf_map_memcg_exit(old_memcg, memcg);
++	return ptr;
++}
++
+ struct page *bpf_alloc_page(int nid, bool sleepable)
+ {
+-	if (!sleepable || !can_alloc_pages())
++	if (!sleepable || !can_spin_in_alloc())
+ 		return alloc_pages_nolock(__GFP_ACCOUNT, nid, 0);
+ 
+ 	return alloc_pages_node(nid,
 -- 
 2.52.1
 
