@@ -1,98 +1,81 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.210.177
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795515470;
-	b=pRsj+qWoBzAL3CGvS64JjyY5jmSm39wyQRXomEB89lpVdp6R+6qQZeMVpcyNcfBIwmoX
-	 rKLvGduoFGBN5shmrtp3Af1JaUa2HBOpXLrb1OnGjy3IDSQsI05wil/iTr5/L+GvAhub0
-	 Y30jgTwQiLVKJ5CePFqtHdDCQk4UowZtInvCBbNZRSb0clTR+Occ4bNGHy+cQa0le+mjB
-	 UfT2ZXo8OjHZPeDUD/o240MLy8uDOf5GMkAr1Rps7Bnd9DGNmgR5V9m5DamY4R1Zuvqzb
-	 FAUYeyxmIdQ0JmWmBzZr1dCk8zwdl4hCi1QUwhiHBcWUEs5mj2GeCe5mUFDmNSdAEHQ==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795515470;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=cDR7cjV4IRioJgp9xWXyZAeSRy7CXHNvvQiffZPND/Q=;
-	b=WWtKNauba2LA+AXmDTS3qzH1lLZiJ1Glk43W7FI6Ba+gFDr8sJOkVffleSO8l/FtPlq2
-	 S07QJTQXPjVCJOpoJCBl7HFsW3tvrrNXuhg7XHSF2kXX0r3BSMdWleqc746PueOVNXFxP
-	 0gMbhkjlferjLA0BI7GY3q0GyGVIPgjYmKZE3g31uP7otmmri42Q80WhXLGq4ykembZkR
-	 O3R20mDobhnxjIZ0L5a4JFifZQR+oJ+tyV1MIL67eTzs7xuGauk5PO3j9ij0mqNefrssM
-	 etYsodbX9NyyUjZpjXESivk9np6O8jzx2D7a0OGQaibtllOU1CDmn48eeuHL2fq2kNQ==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=none header.from=mojatatu.com;
-	spf=none smtp.mailfrom=mojatatu.com;
-	dkim=pass header.d=mojatatu.com header.i=@mojatatu.com header.a=rsa-sha256 header.s=google header.b=boQDOESY;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.210.177
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=148.163.156.1
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795516630;
+	b=GtUmVP54CrMfMIxhZ6Hm6uw3oBF9Bj8W6SnTBR3AEW7eBj5Q89LKaHku6f8gpZIZ+qAC
+	 pSwUU2qB3tUNjKPVlFho7EI4ViAmu2BGdvj6jE2XnCKy0WUNm86OWDlhRhjklB76M4aoy
+	 TtYpKtFhz1dos4aCjhHSSjnwsKsZaWSPSTpie4/RXMtj/KEVbIpNxjHUJlGKY1zzJGLCv
+	 F7lREXqUtqwRJATWjjwXVLdSmCkwNuzQnmynf5cey4XLUQ6/UsqrLJz00VkfCpdyX3V2U
+	 Kqr3po/Q9ca8LRRJnZ9kDvzv+cbE7rEWnAl8GyqQjTN0I+/p06IhfulMWfJ+t1UqHBg==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795516630;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:Received:
+	 Received:Received:Received:Received:Content-Type:Mime-Version:Subject:
+	 From:In-Reply-To:Date:Cc:Content-Transfer-Encoding:Message-Id:
+	 References:To:X-Mailer:X-TM-AS-GCONF:X-Proofpoint-Reinject:
+	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-ORIG-GUID:
+	 X-Authority-Analysis:X-Proofpoint-GUID:X-Proofpoint-Spam-Info:
+	 X-Proofpoint-Virus-Version:X-Proofpoint-Spam-Details;
+	bh=PJzRt0OTpbouwoPXydBA/ffZV91Hp1Y2LkN44LQaldg=;
+	b=hni2KXRdjJfQJxUAvcxYVrC7ReKXH6QlHDXFT4s4ZTZHdeJf/Zl+tsYRcELLiPkRi4QR
+	 1f+8RadgJXYRsmxuiGQaMtffW+6V1lPPuu69rjcGqEo7mn8dgTP1i7ZeuNakkvz3HOkDU
+	 qda4SwoumaKL42hnY7ZsJaa4a8CAMSSIxOp5j9/ZWp9i20FgZyXmrFD7YorVVK+9mzvaV
+	 pSdbqat85hI9ymWk6m0B2B/wrIcig2Amgv+IbfjUkqFqYRFtHnJvPkseSN4jpSs43Msod
+	 4dv62oQQx2XDnqOHrx70NhvmBcvA2+95xxT9fg9yg2II2re/ZYwLCVVnwWnmZl3b3vw==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=linux.ibm.com;
+	spf=pass smtp.mailfrom=linux.ibm.com;
+	dkim=pass header.d=ibm.com header.i=@ibm.com header.a=rsa-sha256 header.s=pp1 header.b=WsEK67X5;
+	arc=none smtp.remote-ip=148.163.156.1
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD824606A33F
-	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 10:17:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BD824606A33F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B559606A31E;
+	Tue, 24 Nov 2026 10:37:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0B559606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.a=rsa-sha256 header.s=google header.b=boQDOESY
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-8b3577deeb0so1879790b3a.3
-        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 02:17:49 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795515469; cv=none;
-        d=google.com; s=arc-20260327;
-        b=KJidU7bLqpTOxyLkYEhP7uV0jnDDMwVUjzUMCz9P/iTFjWP/QuFCRP/1pX6U3swNUl
-         dHygY3fECRVD8xk+KF3fOL9YZqc1BDtoJrz1kBcj2d1vdnbF4aAzIu8H1lK0TJ9vJF+n
-         +QeBw4LHEuLboS5eYv2f3LEBrslOHNa7MtKXZ5f8vTzc+NCPRL89nQN7KCEaJrIB9CW9
-         zEUEFOCyfSuAAp/BOMDIXR6ScJOFQ6Ke7Z/cecPAtx5cdSvOaC1wFknPN2EmQh7O0F7r
-         dP5XZjq84b1UR2R5a5962hYpvWsh5rWt2IncRRNWzJQorgx5+uf0fMLmJ8EsjfGwshXF
-         HU5g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=cDR7cjV4IRioJgp9xWXyZAeSRy7CXHNvvQiffZPND/Q=;
-        fh=3DZZrAEPsr6xEykE9GWUsOIMdVgv7bcRHqn3uBDTrZM=;
-        b=kBXmugJb3sCvzkvhD4EXsMKfjPMWsl1ZrreWARQzE3l/0DdXiOr0q1MvJJDjtDXZ3S
-         c0XUYvS102SpEKCfS/WRUo4SyAuUSKij4eZCM5qMBJjYom2NraNprKNdZvWhgjgqeFtB
-         QkSOVv0d4D+xerkhSDSC1cqdXQugBPh3rVS/OLmSOawc3biWe5qAkDGxE+A+Zov3rcmJ
-         d/4rxkEoN2cEEtjeGnEbktFvm8aV451c2DHg/WDELPywvVOrOghu0EKkbq/zrrYYxVGp
-         dqDioRXQweXIMduuLGsLjYwpCaXOOAnTYGdB3Ex/HmmABYlzA4v3FJWZNot9+lvQaKfw
-         We7w==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu.com; s=google; t=1795515469; x=1796120269; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=cDR7cjV4IRioJgp9xWXyZAeSRy7CXHNvvQiffZPND/Q=;
-        b=boQDOESYfuu+ei6nPbUoODpl/Ek47OYUgvhVk99ETOZyiaz2nZqCLusCouY2MPVsrf
-         Lmi4VNPNuXk5gN0d8V16BfTeGNVTHqfHv8lmY2KZWvPzn/MwZzGSASY+bMZQ5SWPoW91
-         4pw6s5nM+6RqviziclgIXLw7PFOAQx7tuzf3E=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795515469; x=1796120269;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=cDR7cjV4IRioJgp9xWXyZAeSRy7CXHNvvQiffZPND/Q=;
-        b=wOo+pIrtr8Ao+1FgXEx7Dm31hHIU6lnuUW9ORlLd2Ltn5oyEdw0i6KPjXXymgvXaPE
-         bR4e/Kulfz3VLHBc3aqry38ZDKLGRToWgnAXh68y0SMVAaGSB0nddvZY5RkmYkETIvwc
-         TRKkUrHwKYB6Pz/B8cS1SgOri+x6vXvLIqDe+J4rnkJgNwaXFdMOdTA/QJlSaGuD5i9A
-         RGPnUx0I7c+xFHaIDH7Igc7BAlCmGyPCVHiskNp+4jterj1KaJZjgHbIeq+JeUbXmWPv
-         0ZnWq9tUxDlDx9SVLpodFKmDG2tTcm2PjSa2Mn2gUg8r2VifBG/LU6WmJwnU2KHgZCPx
-         49ng==
-X-Forwarded-Encrypted: i=1; AL+hErEyw5NMGnq0zisYiltSlPaOTUBUWqWL+wMzHc9wM2zRpe6Vg1MlOrG1aoS176UgDFma5Lw=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/cTe38EdQqm1mX1dEUD/USe+2cFBihKt3Lpwk8Gew+GK0wg5j4
-	U4OWMnZhcK834m6Knh28++LxYdILwDk4o5U0vIdu9YI0wkauxybg+uKTvDvqoUdhZgEDus/RTJK
-	26bRDS8e8+vm9wqPKYmx55SPGr45Ep95GGCw9Nx7g
-X-Gm-Gg: AZFdTZd9i182cIb+NzKk/lIcn9ZfNILO00mJQ6SSDMZLJU7MurqEvmDM1aLCSJmtgN8
-	a9lk7rTtPGcGE+exT+yMi1HA/zZNe+1aJlquCXxCJg+jWSEsP7Nmys9N8ugUmknyt/cbxg51X6k
-	5Ig++LDdX4Zjp/mfHry2yNgYf6HYQEtt10EO0nJDNakOfMbKluhbiAWKqSqvAlq0WIzsvLUx5tm
-	eguB2Dt3X27g1sZ1B6gueMcarpxXJRvYD2uoeh0NiomiNk8TcMHRC7w+7UmGpN4KIlYgz39bgmI
-	SErwJwE2vXxGbrCxQlP1Al8ahEnzEsIyCMW7mpzmV7GVLWhLw/L5qSfmcqZFrA+SFfHWrNmBV4K
-	EO6jf7lnNdOoPHW+e6NtGK6bGrk5MAq4Nfq1D/mQt1UNQJd1Cjpf8iluDcwYQei+sYBJb8yBDQj
-	p7wr5wgjKe94dfgdW3vepD
-X-Received: by 2002:a05:6a21:4a8c:b0:3f2:acd9:132e with SMTP id
- adf61e73a8af0-4014db57e24mr12442219637.61.1795515469040; Tue, 24 Nov 2026
- 02:17:49 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=ibm.com header.i=@ibm.com header.a=rsa-sha256 header.s=pp1 header.b=WsEK67X5
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6AO350Qo1412736;
+	Tue, 24 Nov 2026 10:36:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=PJzRt0
+	OTpbouwoPXydBA/ffZV91Hp1Y2LkN44LQaldg=; b=WsEK67X5bEBKpneq5obNnV
+	CEuQmJ2JCBSNaIgQxEAoUies85yyVWy2oIfekTXXx+DU4I2RtegJBfWUc2qmZA2Q
+	mDX+vp+ExudowkAlwlpW2cpTGDJNGpV8IyKr6OE2+cQgom5qJCPA9ehprxgopjIJ
+	OGl/dd4unHJrz4gxaPM+qn+eY2mgnbDsf/y/1agYC920wlb54Y51fKeuKtEiGLzQ
+	ElNPWS1TC0szuaHFLXXP7E+d8n+rZb+kfJBa03G0IXYJtnfOJGuALsXSvlVs17vp
+	5sMowNKnxVxY5mTGEANu7J5Fm6bTnMSwbMLPGFYGUkhtNQCsKjmMUVNu8qvYj8Kw
+	==
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4j34fa798y-1
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Tue, 24 Nov 2026 10:36:05 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.11/8.18.1.11) with ESMTP id 6AO8rKxj2086937;
+	Tue, 24 Nov 2026 10:36:04 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4j3p0vjcc9-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 24 Nov 2026 10:36:04 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6AOAa2Hh46006748
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 24 Nov 2026 10:36:02 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 1FF112004B;
+	Tue, 24 Nov 2026 10:36:02 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 447BE20040;
+	Tue, 24 Nov 2026 10:35:57 +0000 (GMT)
+Received: from smtpclient.apple (unknown [9.123.12.120])
+	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Tue, 24 Nov 2026 10:35:57 +0000 (GMT)
+Content-Type: text/plain;
+	charset=utf-8
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -101,140 +84,223 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-References: <6b051681.58b41460.7037.0590.GAE@google.com> <DN37NBGPJJG9.2DSVDCKS3UYTV@gmail.com>
- <CAM0EoMnVa=xGD3uiZKuzMfFL6oZNd=Umb0U7+_QUrTK7Ej-BYg@mail.gmail.com>
-In-Reply-To: <CAM0EoMnVa=xGD3uiZKuzMfFL6oZNd=Umb0U7+_QUrTK7Ej-BYg@mail.gmail.com>
-From: Jamal Hadi Salim <jhs@mojatatu.com>
-Date: Tue, 24 Nov 2026 05:17:38 -0500
-X-Gm-Features: Aa3M54oAhgDu4a3QN-cUvm8ntTPorq0ToGdV6xzEFC1H8I-IekXAnPLMj4fFDqA
-Message-ID: <CAM0EoMn=ZghG5KFu2Nc=W-=KjDv=epspFHZVDY4ww5a9GBUaHQ@mail.gmail.com>
-Subject: Re: net: act_gate bug. was: [syzbot] [tomoyo?] [mm?] INFO: rcu
- detected stall in security_file_ioctl (9)
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: syzbot <syzbot+b6f8640465bdf47ca708@syzkaller.appspotmail.com>, 
-	akpm@linux-foundation.org, andrii@kernel.org, bpf@vger.kernel.org, 
-	brauner@kernel.org, daniel@iogearbox.net, jack@suse.cz, jmorris@namei.org, 
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-mm@kvack.org, linux-security-module@vger.kernel.org, 
-	netdev@vger.kernel.org, paul@paul-moore.com, 
-	penguin-kernel@i-love.sakura.ne.jp, serge@hallyn.com, 
-	syzkaller-bugs@googlegroups.com, takedakn@nttdata.co.jp, 
-	tomoyo-users_en@lists.sourceforge.net, viro@zeniv.linux.org.uk
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3864.300.41.1.7\))
+Subject: Re: [PATCH v3 03/19] perf/uapi: Add BUILD_ID_OFFSET sample types to
+ UAPI
+From: Athira Rajeev <atrajeev@linux.ibm.com>
+In-Reply-To: <20261116074414.3174737-4-irogers@google.com>
+Date: Tue, 24 Nov 2026 16:05:45 +0530
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>, Adrian Hunter <adrian.hunter@intel.com>,
+        James Clark <james.clark@linaro.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+        Yonghong Song <yonghong.song@linux.dev>,
+        Ihor Solodrai <ihor.solodrai@linux.dev>, Leo Yan <leo.yan@linux.dev>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "Steinar H . Gunderson" <sesse@google.com>,
+        Stephen Brennan <stephen.s.brennan@oracle.com>,
+        Thomas Falcon <thomas.falcon@intel.com>,
+        linux-perf-users@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Transfer-Encoding: quoted-printable
+Message-Id: <6F41ABBE-16A3-4B1F-96C0-D6369D5A5A55@linux.ibm.com>
+References: <20261116074414.3174737-1-irogers@google.com>
+ <20261116074414.3174737-4-irogers@google.com>
+To: Ian Rogers <irogers@google.com>
+X-Mailer: Apple Mail (2.3864.300.41.1.7)
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTI0MDA0MSBTYWx0ZWRfX+MWE0Sk2hv/e
+ 2dLLxXRK73zr25oqECzsbC1ep0HS2vby7WAa4mS+YqGc2csB1g3C7iKnDwSoVDs/6ZItosD7NkZ
+ 3OoFFQTw9H9cYWW/cL4oxLzQQqNdNA3xmiDNevFCAiRYkoiham44w2jxXh+9tqLWhuhK0etuyzY
+ uAxn0quLTCOqEv5wpoFAAsCJ5Obd8OcfTZ+MNEe5tQfXTM4pi3M6aQS5CEndjEHbDAAW8ziydXr
+ QdxqYz2j2TBxlLQhjIdhuxF6CWyqHK0t6+E7X6MNKYcsPh4nTRmJytsESURYvl2gp1v/BqR09d/
+ TGQwvwtsXrFIgrxFXGlFfnJJVE6VXhTCwaW2web7sONd4+IZwBZm6JNLi+kRejt7APKJCysBtt4
+ p7EhywEDBTBHPXVbJ63vLXbw8N9s6yGIYQbFqcg5RZOzjKoPY4tyy/WgYKat7bfrdigClLKj3Wd
+ n4v7O9+BktL5X71PkrQ==
+X-Proofpoint-ORIG-GUID: f6ampGcU0crrZM8mAKgcUtk2aBgMQL2N
+X-Authority-Analysis: v=2.4 cv=U6QHnuru c=1 sm=1 tr=0 ts=6b056896 cx=c_pps
+ a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
+ a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=iQ6ETzBq9ecOQQE5vZCe:22 a=1XWaLZrsAAAA:8
+ a=VwQbUJbxAAAA:8 a=-zkOnVWJseZWImJ0AtMA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: lGwW8VbaAWvV7-qsuF1OSoL3-aZOd0fw
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMTI0MDA0MSBTYWx0ZWRfX6AwC5SnyHJNM
+ 6GRrzezvL1gRQUThU8FXhXJ6DpUukPA1h1/jrOQzHh4e1cMglrc901nAR0FCMhXDtyk8hjMd27h
+ CL1JwtL/yu3dXouOi2pYbCB00uDecWg=
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
+ definitions=2026-11-24_01,2026-11-23_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 lowpriorityscore=0 spamscore=0 impostorscore=0
+ clxscore=1011 bulkscore=0 suspectscore=0 adultscore=0 phishscore=0
+ malwarescore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2611040001
+ definitions=main-2611240041
 
-On Tue, Nov 24, 2026 at 5:03=E2=80=AFAM Jamal Hadi Salim <jhs@mojatatu.com>=
- wrote:
->
-> On Tue, Nov 24, 2026 at 1:00=E2=80=AFAM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> >
-> > On Mon, Nov 23, 2026 at 08:45 PM syzbot <syzbot+b6f8640465bdf47ca708@sy=
-zkaller.appspotmail.com> wrote:
-> > > rcu:           hardirqs   softirqs   csw/system
-> > > rcu:   number:     5264          0            0
-> > > rcu:  cputime:      138      52351           25   =3D=3D> 52490(ms)
-> >
-> > It's not tomoyo, mm or bpf. Looks like act_gate.
-> > Zero new softirqs in 52 sec, so one hrtimer_run_softirq() doesn't retur=
-n.
-> >
-> > > RBP: ffff88807ed35538 R08: ffffffff91be1bbf R09: 1ffffffff237c377
-> > > R10: dffffc0000000000 R11: fffffbfff237c378 R12: ffff8880b8228600
-> > > R13: ffffffff89fd0480 R14: ffff8880b8228600 R15: 1ffff1101704514a
-> >
-> > The registers with lockdep struct sizes:
-> >
-> >   reg       value             points to
-> >   --------  ----------------  --------------------------------------
-> >   R14       ffff8880b8228600  cpu_base
-> >   R15 << 3  ffff8880b8228a50  clock_base[HRTIMER_BASE_TAI_SOFT].seq
-> >   RBP       ffff88807ed35538  kmalloc-512 + 0x138, tcf_gate->hitimer
-> >
-> > act_gate has the only soft hrtimer that can be on CLOCK_TAI.
-> > bpf_timer_init() rejects that clock.
-> >
-> > TCA_GATE_CYCLE_TIME is an unchecked u64. In gate_timer_func():
-> >
-> >   n =3D div64_u64(ktime_sub_ns(now, base), cycle);
-> >   close_time =3D ktime_add_ns(base, (n + 1) * cycle);
-> >
-> > With base =3D 0 and cycle =3D U64_MAX, n is 0 and close_time is -1.
-> > The timer restarts in the past and __hrtimer_run_queues() runs it again=
-.
-> > It's there since
-> > commit a51c328df310 ("net: qos: introduce a gate control flow action").
-> >
-> > Jamal,
-> > taprio's INT_MAX limit doesn't fit. tdc uses cycle-time of 600 sec.
-> > The diff saturates the sum instead.
->
-> Looks familiar - i will take a look.
 
-Ok, found an abandoned related thread in my list:
-https://lore.kernel.org/netdev/tencent_FAEDEECDD478AE6DFC2DE96D389440E96A0A=
-@qq.com/
-I will take it from here; it looks like your patch is still needed and
-requires a fixup to the abandoned one as well. I need to reproduce
-this first.
 
-cheers,
-jamal
+> On 16 Nov 2026, at 1:13=E2=80=AFPM, Ian Rogers <irogers@google.com> =
+wrote:
+>=20
+> Introduce PERF_SAMPLE_BUILD_ID_OFFSET and
+> PERF_SAMPLE_CALLCHAIN_BUILD_ID_OFFSET in enum =
+perf_event_sample_format.
+>=20
+> For PERF_SAMPLE_CALLCHAIN_BUILD_ID_OFFSET (and
+> PERF_RECORD_CALLCHAIN_DEFERRED when PERF_RECORD_MISC_MMAP_BUILD_ID is
+> set), encode a deduplicated table of variable-length build IDs
+> (u32 nr_build_ids, u32 nr_offsets, followed by packed { u8 size;
+> u8 data[size]; } entries padded to 8-byte alignment) and an array of
+> 64-bit offsets whose top 8 bits encode the 1-based build ID index (or
+> 0x00 for unresolved user addresses and 0xff for kernel/context =
+entries).
+> In common cases where multiple callchain frames belong to the same
+> binary, each unique build ID is encoded only once.
+>=20
+> Suggested-by: Namhyung Kim <namhyung@kernel.org>
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+> include/uapi/linux/perf_event.h | 59 ++++++++++++++++++++++++++++++---
+> 1 file changed, 54 insertions(+), 5 deletions(-)
+>=20
+> diff --git a/include/uapi/linux/perf_event.h =
+b/include/uapi/linux/perf_event.h
+> index deb7c42d109b..775420ed9aee 100644
+> --- a/include/uapi/linux/perf_event.h
+> +++ b/include/uapi/linux/perf_event.h
+> @@ -165,8 +165,10 @@ enum perf_event_sample_format {
+> PERF_SAMPLE_DATA_PAGE_SIZE =3D 1U << 22,
+> PERF_SAMPLE_CODE_PAGE_SIZE =3D 1U << 23,
+> PERF_SAMPLE_WEIGHT_STRUCT =3D 1U << 24,
+> + PERF_SAMPLE_BUILD_ID_OFFSET =3D 1U << 25,
+> + PERF_SAMPLE_CALLCHAIN_BUILD_ID_OFFSET =3D 1U << 26,
+>=20
+> - PERF_SAMPLE_MAX =3D 1U << 25, /* non-ABI */
+> + PERF_SAMPLE_MAX =3D 1U << 27, /* non-ABI */
+> };
+>=20
+> #define PERF_SAMPLE_WEIGHT_TYPE (PERF_SAMPLE_WEIGHT | =
+PERF_SAMPLE_WEIGHT_STRUCT)
+> @@ -840,7 +842,8 @@ struct perf_event_mmap_page {
+>  *
+>  *   PERF_RECORD_MISC_EXACT_IP           - PERF_RECORD_SAMPLE of =
+precise events
+>  *   PERF_RECORD_MISC_SWITCH_OUT_PREEMPT - PERF_RECORD_SWITCH* events
+> - *   PERF_RECORD_MISC_MMAP_BUILD_ID      - PERF_RECORD_MMAP2 event
+> + *   PERF_RECORD_MISC_MMAP_BUILD_ID      - PERF_RECORD_MMAP2 and
+> + *                                         =
+PERF_RECORD_CALLCHAIN_DEFERRED events
+>  *
+>  *
+>  * PERF_RECORD_MISC_EXACT_IP:
+> @@ -852,7 +855,7 @@ struct perf_event_mmap_page {
+>  *   Indicates that thread was preempted in TASK_RUNNING state.
+>  *
+>  * PERF_RECORD_MISC_MMAP_BUILD_ID:
+> - *   Indicates that mmap2 event carries build ID data.
+> + *   Indicates that mmap2 or deferred callchain event carries build =
+ID data.
+>  */
+> #define PERF_RECORD_MISC_EXACT_IP (1 << 14)
+> #define PERF_RECORD_MISC_SWITCH_OUT_PREEMPT (1 << 14)
+> @@ -1095,6 +1098,38 @@ enum perf_event_type {
+> * { u64 code_page_size;} && PERF_SAMPLE_CODE_PAGE_SIZE
+> * { u64 size;
+> *  char data[size]; } && PERF_SAMPLE_AUX
+> + * { union {
+> + * struct {
+> + * struct perf_build_id bid;
+> + * u64 offset;
+> + * };
+> + * struct {
+> + * u64 zero;
+> + * u64 context;
+> + * u64 cookie;
+> + * u64 ip;
+> + * }; && attr.defer_callchain
+> + *  }; } && PERF_SAMPLE_BUILD_ID_OFFSET
+> + * { u32 nr_build_ids;
+> + *  u32 nr_offsets;
+> + *  struct {
+> + * u8 size;
+> + * u8 data[size];
+> + *  }[nr_build_ids];
+> + *  u8 pad[];
+> + *  u64 offsets[nr_offsets];
+> + *  #
+> + *  # Entries in offsets[] include PERF_CONTEXT_* markers (which
+> + *  # have top 8 bits 0xff). Kernel/hypervisor entries (after
+> + *  # PERF_CONTEXT_KERNEL, PERF_CONTEXT_HV, PERF_CONTEXT_GUEST,
+> + *  # or PERF_CONTEXT_GUEST_KERNEL) and the cookie word following
+> + *  # PERF_CONTEXT_USER_DEFERRED are raw 64-bit values. User
+> + *  # entries (after PERF_CONTEXT_USER or PERF_CONTEXT_GUEST_USER,
+> + *  # or in PERF_RECORD_CALLCHAIN_DEFERRED) use the top 8 bits to
+> + *  # encode a 1-based index (1..254) into the build_ids table and
+> + *  # the lower 56 bits for the DSO file offset, or 0x00 for an
+> + *  # unresolved user virtual address.
 
-> cheers,
-> jamal
-> > Here is a potential fix:
-> >
-> > diff --git a/net/sched/act_gate.c b/net/sched/act_gate.c
-> > index 711cf24..5422d60 100644
-> > --- a/net/sched/act_gate.c
-> > +++ b/net/sched/act_gate.c
-> > @@ -45,8 +45,9 @@ static void gate_get_start_time(struct tcf_gate *gact=
-,
-> >                                 const struct tcf_gate_params *param,
-> >                                 ktime_t *start)
-> >  {
-> > -       ktime_t now, base, cycle;
-> > -       u64 n;
-> > +       u64 cycle =3D param->tcfg_cycletime;
-> > +       ktime_t now, base;
-> > +       u64 rem;
-> >
-> >         base =3D ns_to_ktime(param->tcfg_basetime);
-> >         now =3D gate_get_time(gact);
-> > @@ -56,10 +57,9 @@ static void gate_get_start_time(struct tcf_gate *gac=
-t,
-> >                 return;
-> >         }
-> >
-> > -       cycle =3D param->tcfg_cycletime;
-> > -
-> > -       n =3D div64_u64(ktime_sub_ns(now, base), cycle);
-> > -       *start =3D ktime_add_ns(base, (n + 1) * cycle);
-> > +       /* cycle is an unchecked u64, the sum must not wrap into the pa=
-st */
-> > +       div64_u64_rem(ktime_sub(now, base), cycle, &rem);
-> > +       *start =3D ktime_add_safe(now, cycle - rem);
-> >  }
-> >
-> >  static void gate_start_timer(struct tcf_gate *gact, ktime_t start)
-> > @@ -107,15 +107,8 @@ static enum hrtimer_restart gate_timer_func(struct=
- hrtimer *timer)
-> >
-> >         now =3D gate_get_time(gact);
-> >
-> > -       if (ktime_after(now, close_time)) {
-> > -               ktime_t cycle, base;
-> > -               u64 n;
-> > -
-> > -               cycle =3D p->tcfg_cycletime;
-> > -               base =3D ns_to_ktime(p->tcfg_basetime);
-> > -               n =3D div64_u64(ktime_sub_ns(now, base), cycle);
-> > -               close_time =3D ktime_add_ns(base, (n + 1) * cycle);
-> > -       }
-> > +       if (ktime_after(now, close_time))
-> > +               gate_get_start_time(gact, p, &close_time);
-> >
-> >         gact->next_entry =3D next;
-> >
+Hi Ian,
+
+On PERF_SAMPLE_BUILD_ID_OFFSET, the layout comment doesn't say what is
+written in the non-resolved cases. For =
+PERF_SAMPLE_CALLCHAIN_BUILD_ID_OFFSET
+it is clear: kernel entries are raw 64-bit values, unresolved user =
+entries
+have 0x00 in the top byte, and resolved user entries carry the table =
+index
+and the 56-bit file offset.
+
+For the PERF_SAMPLE_BUILD_ID_OFFSET form, could the comment state:
+
+ - What is written for a kernel IP? (e.g. bid.size =3D=3D 0 and offset =
+=3D=3D raw IP?)
+ - What is written for an unresolved user IP? If bid.size =3D=3D 0, does
+   =E2=80=9Coffset=E2=80=9D hold the raw virtual address?
+
+Thanks,
+Athira
+
+=20
+> + * } && PERF_SAMPLE_CALLCHAIN_BUILD_ID_OFFSET
+> * };
+> */
+> PERF_RECORD_SAMPLE =3D 9,
+> @@ -1306,8 +1341,22 @@ enum perf_event_type {
+> * struct {
+> * struct perf_event_header header;
+> * u64 cookie;
+> - * u64 nr;
+> - * u64 ips[nr];
+> + * union {
+> + * struct {
+> + * u64 nr;
+> + * u64 ips[nr];
+> + * };
+> + * struct {
+> + * u32 nr_build_ids;
+> + * u32 nr_offsets;
+> + * struct {
+> + * u8 size;
+> + * u8 data[size];
+> + * }[nr_build_ids];
+> + * u8 pad[];
+> + * u64 offsets[nr_offsets];
+> + * }; && (header.misc & PERF_RECORD_MISC_MMAP_BUILD_ID)
+> + * };
+> * struct sample_id sample_id;
+> * };
+> */
+> --=20
+> 2.56.1.703.gf848ed807c-goog
+>=20
+>=20
+
