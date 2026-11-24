@@ -1,160 +1,85 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.208.44
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.170
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795543184;
-	b=lKL6umxuRVK+BENCW6PaLmMBFSked//lB4JA2g0y42b4paFVG6x71X/mDN9/JXxx+iE6
-	 uFb0pyw30NV7SBex051/5d3xXOjqnMEWYCdfZK+clqSoCMxBK08+05MyJgwH/08tC5n+F
-	 tWRmNmIAChaatCcBrf4S8oeJR+SVsHQvWwhfMRsM5dWDdrfkem/5pWeZoTg3eet9aPHIh
-	 vVHlAU/IMET3rcTLQOCiYifQLqZ70TqSI6CBvafr0LtYD0uk3kao+OyKXvbx/kIk1eCOb
-	 Gm0xAoIGCX+I7cmJfzRWOIoB8xqA701e7Jdi73T013L/Ld053hkw0TUn/PcV5fIdXrw==
+	t=1795543674;
+	b=qO7gaFV066H2hm0YDoxCoLj5/q6OIQf5AvJpBMNQp3TwLGhtu8Yn9YanuanHTHm5wH/y
+	 dkTzWIAX5tC5MWXgfqn23iJb76xp2HPpSQMObWh7lPv44snqQow5GJEoJjBhGnhfZ5dGC
+	 cWD53SQ/L7czVh7QQJ1WETxwtYc9kJAerG02gp5aVcZGvgIwSqvIOzQLg+jRF5a/S7YDK
+	 BwhDOlnzTjj8+pGNFKSAppWRsHvWiRShWk7XkLJxbt92MJkmXwu240OqCUM1zCRUMAca3
+	 fKG21HFh5TA5VdPD1TnHdePLSYO97Gt1Bs9Rws/mNkEjFT66pRhZr6j6xwDxWWF2PqQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795543184;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795543674;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=Id3aruoTt9p41ov0UzfjZQHi+NKnHu/LyrCozIoZe8o=;
-	b=y/mXh+bqnLAyWkkXZKqpo1OkdoNzxfXDe4yWOAIS+kWa6MEOHvJT++k5FXZ1qez6Ykk4
-	 AAz2jn1PSGsmcwx5KBlqrInBgLM9iwqJNAkJNli4HueR9RAGmqW9FIe0rUIUnoFPyucRN
-	 EA91eSjhoNDtich83gbo96+/JFPx4Gbth8FmYoI57PLQepbr+3HGzpW8v8qKudJdohjMH
-	 QFEcVTkZNkKfd9yw+wy3Br+fws8EXCJSw69Od/F+W7L/Oh9mQp039vEXaBRczStHYmtvr
-	 yqrCzZeJ+8ogkmV99PORr2Z9GoRe8kixdYUNWLWRdrOuNrsTX4N1lcz0sVsu726qmsQ==
+	 Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Message-Id:
+	 Cc:Subject:From:To:X-Mailer:References:In-Reply-To;
+	bh=VsP8MXxfo3SZdbWSOQKBU/IrTFvBThmLY9Ku8DE2rr4=;
+	b=SXbW3x2ohG5wITNgcZ1c+2yaF+qXM6EOr2mdRXaCfDPTn3l8nP7yDhWJMnwqDJTJHRsq
+	 YELlm3QTOPfklaTKwC6yNCQXus7YynwW2HgvTEVgmmjzue3lkAEfkDbSE7I/em66lPZa2
+	 1Ei37oEorpZt8wZeN+GxjSE2hE9sd36k4ENyxNuO0aqcqPao6yfbH4Koa++tnEf1+Wdxl
+	 aYwRFwp58S1TJhMVL1JlRVi+G4JmcNQS9630ClkEv8f/upr2nekKRDsQoBCWoob708VYX
+	 GVkdjcmwfKt/XQ5dSxsU6tARD3ryIgMzDHxaFWPo8FkY6ow2dZLz1bPjYfomIG4PjUQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=cloudflare.com;
-	spf=pass smtp.mailfrom=cloudflare.com;
-	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=QxTcKneD;
-	arc=none smtp.remote-ip=209.85.208.44
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+	dmarc=none header.from=etsalapatis.com;
+	spf=pass smtp.mailfrom=etsalapatis.com;
+	dkim=pass header.d=etsalapatis.com header.i=@etsalapatis.com header.a=rsa-sha256 header.s=google header.b=m9Gg7CuI;
+	arc=none smtp.remote-ip=209.85.210.170
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F2F3606A327
-	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 17:59:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7F2F3606A327
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1FDF606A33E
+	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 18:07:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F1FDF606A33E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=QxTcKneD
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-6b87408c797so6584108a12.1
-        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 09:59:44 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=etsalapatis.com header.i=@etsalapatis.com header.a=rsa-sha256 header.s=google header.b=m9Gg7CuI
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-8a4c72951b8so3114025b3a.3
+        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 10:07:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1795543183; x=1796147983; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=Id3aruoTt9p41ov0UzfjZQHi+NKnHu/LyrCozIoZe8o=;
-        b=QxTcKneDwvtdOC299tZn9xw97835cRZXmaZkQk24rVeZzk4RK3GSF9B7EOMZ3kEhoO
-         671efgyHRPVjZXZ+A54xg7e9c4/anntqhSxPrZLviczRUjperlfAkuTQrXzSfptTxs+7
-         7nnsfJyBHgRATtpRGt7HLHlIAI0ukVdn7RIgqXLaUXAESe/Zi01SMmzxPMd4lAg1/OLj
-         TVinkAgOcMc9w45Z3I2NYyn+pXSMrO65ayYEv7snxF3UkwMl2Nn+VVBNqyNRMDRx6WGP
-         QlIOepd0ewcKo9WNI3SVcLfrQxBhViEtlvY+OP+b7CPCx6Esl7eDPIBDfLb7jiwd4ZOJ
-         ERrA==
+        d=etsalapatis.com; s=google; t=1795543668; x=1796148468; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=VsP8MXxfo3SZdbWSOQKBU/IrTFvBThmLY9Ku8DE2rr4=;
+        b=m9Gg7CuIG+jD0F4py9j/7S33KdOQKnj1BFeWFS7deXWSLRTSpi5axZOyScB7q6h6Jh
+         cmKjd39TdnMesr99sl4PPEOr3evNY1EKBME81qLW7WSlv5c8a9SCm/S6X6hHddaB08yv
+         2MSNmuhbAU2STpzoHFA4wmXjjadDndtxEzyBGzgYkx3G3ufBdWxE1PZcF0WKZvimIqu7
+         sfsDDLZnEf6RXQu5S1mXmLeryVmpwDINaqvOwVKxHrqoD3bpyFgOJZ3A0Cx8CEkUtGFD
+         lfIqZ2QmJJYn83ctLX6MeJ1Q5K9jynH26heEoTBO1/VHsAWjYFLbjL1/xWLlK6yE22Of
+         eL7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795543183; x=1796147983;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Id3aruoTt9p41ov0UzfjZQHi+NKnHu/LyrCozIoZe8o=;
-        b=OCcRmehfJ7n05CtqkTiisF0Y3zYU1XR6QM6sUqQ3WHAJMzmg5valPlVP4K5BMRcWjS
-         225NknPBos3NwM8+lQrTC3nOSgjm21rDt+Q0BjHJYNOUzPNqkbRpy9hxJLnKi0Wpj8qE
-         iS6yvptz5Uu3rezO2rkid47bSV36Y9qlTFeIW/rONO1d/yqo7D90qp2GvYxRB2sQi8Oy
-         iO3ZAlV5nT68RTo4P9gpcgA/+FkgUiOS6xyEWWVUuCzwhL73oBv89dWBmrTlgHseApBb
-         GvOquw6S5EXLfnBNO9FrJ4/Q5qG1tHr1Y+HKquqryR4PNkmH26CMOyYRwoz4lJppKplm
-         HKBA==
-X-Forwarded-Encrypted: i=1; AL+hErG6PIMj0rNBctSL1n1FqxE7Tw5bNb87IMhMuoi8Ef1zTl+WdCb4np7dwoB9dUUBA4fsniI=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8usBAPqfmUQhFUpPePkC1w0BzgcnSGkbfj1+gkbWujanEo6jeK
-	j3SB0yBlLBYt7y30WjFRMZMfvnFI+yKD9pGIKYNgYCbH3Dz3H69Nbl6bTTAiyc8p/Zs=
-X-Gm-Gg: AZFdTZfZL8WUV6OowNEHxfC/2XE/pGvX8Zk37gR1SbiEPKYMNm+RBVXnxWAv6CXgk/5
-	0CELLqFQmoYtUKoGBXj+ivEgYG5GysdIjJZn6rvkKBPHZPNe7uq32o3elnkcsgeItoVqfkrAZGL
-	1rgbJqHhZDJgGL85viI1qDh/ON9sI5DvqS7378R1+wnfMCCb0WYJQ6gllD+qsbQ16Gn9MW4nhjk
-	LglE3iVXv70iGr8LwppZtjFUYV6D2RAJT8mzogJsRfc1RN2t2CwKroupFNOCT8Eze6Uk3LEpBxx
-	CqoTjn4vGIfTK5AKGx2VhirYB/6tp9b9WVj8BFSmtZADjVrvyHBFjZPLxVylIvxthw+4AGUUSRi
-	pHs86e9GPIlkzUciiknBuMcO2P9elspGj3c7VejqbVoPIToa9WibH8moBlRbPf99XL4Qg0cG11B
-	rMrPaQST5YBP6z1O+LBnCPEilYvkSYGJln+5PIdaaZ9F9xR1CYwEBEYAyQZ5Ymu2rhVk31QNQji
-	H9Jr+2yzzIOlnBmmOa6jaxaFwKtrcMmdP54ffDfW3z6XdnZRqAtSkef5cEhn8Wbkyro/McWKxSR
-	xJD6taLYJWzXoT321FCtmQrTyXAkD/N31+WER4HS+QSJRa4=
-X-Received: by 2002:a05:6402:13d2:b0:6b7:e902:5e23 with SMTP id 4fb4d7f45d1cf-6ba37ea6d00mr12237778a12.33.1795543182884;
-        Tue, 24 Nov 2026 09:59:42 -0800 (PST)
-Received: from L9JK9NPFH9 ([2a09:bac6:37ad:1e5a::306:5])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6ba3711ad52sm7205762a12.35.2026.11.24.09.59.37
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 24 Nov 2026 09:59:42 -0800 (PST)
-From: Tianyi Gao <tianyi@cloudflare.com>
-To: netdev@vger.kernel.org,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Eric Dumazet <edumazet@kernel.org>
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Simon Horman <horms@kernel.org>,
-	David Keogh <dkeogh@amazon.com>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	David Woodhouse <dwmw2@infradead.org>,
-	Dragos Tatulea <dtatulea@nvidia.com>,
-	Nimrod Oren <noren@nvidia.com>,
-	Alasdair McWilliam <alasdair@mcwilliam.dev>,
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Magnus Karlsson <magnus.karlsson@intel.com>,
-	David Ahern <dsahern@kernel.org>,
-	Ido Schimmel <idosch@nvidia.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Donald Hunter <donald.hunter@gmail.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Breno Leitao <leitao@debian.org>,
-	=?UTF-8?q?Asbj=C3=B8rn=20Sloth=20T=C3=B8nnesen?= <ast@fiberby.net>,
-	Danielle Ratson <danieller@nvidia.com>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	bpf@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	kernel-team@cloudflare.com,
-	nh-open-source@amazon.com,
-	Stephen Hemminger <stephen@networkplumber.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	"Remy D. Farley" <one-d-wide@protonmail.com>,
-	Amery Hung <ameryhung@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Andy Roulin <aroulin@nvidia.com>,
-	Anil Kaushik <anilkaushikwireless@gmail.com>,
-	Demos Ra <demosthenes.ra@gmail.com>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Hangbin Liu <hangbin.liu@linux.dev>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Joe Damato <joe@dama.to>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Li RongQing <lirongqing@baidu.com>,
-	Louis Scalbert <louis.scalbert@6wind.com>,
-	Marc Kleine-Budde <mkl@pengutronix.de>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Martin Karsten <mkarsten@uwaterloo.ca>,
-	Matt Bobrowski <mattbobrowski@google.com>,
-	Michael Bommarito <michael.bommarito@gmail.com>,
-	Nikolay Aleksandrov <razor@blackwall.org>,
-	Runyu Xiao <runyu.xiao@seu.edu.cn>,
-	Song Liu <song@kernel.org>,
-	Thorsten Leemhuis <linux@leemhuis.info>,
-	Wang Zhan <wang.zhan@smartx.com>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Zhou Qiuyue <n0ps1edzz@gmail.com>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Jeff Layton <jlayton@kernel.org>,
-	Tianyi Gao <tianyi.gao@linux.dev>,
-	Tianyi Gao <tianyi@cloudflare.com>
-Subject: [PATCH net-next v3 11/11] selftests: net: tx_extra_headroom: test the veth attribute
-Date: Tue, 24 Nov 2026 17:58:24 +0000
-Message-ID: <20261124175824.60470-12-tianyi@cloudflare.com>
-X-Mailer: git-send-email 2.56.0
-In-Reply-To: <20261124175824.60470-1-tianyi@cloudflare.com>
-References: <20261124175824.60470-1-tianyi@cloudflare.com>
+        d=1e100.net; s=20260707; t=1795543668; x=1796148468;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=VsP8MXxfo3SZdbWSOQKBU/IrTFvBThmLY9Ku8DE2rr4=;
+        b=Bu0/OhyRrlcGc9iww6NJKguY50LpNcfv9chFVIvuEkM2M/qaABtEzFNMhhBFAOw3eh
+         e4j1WByylKBS58l94MUuSDiDPmcqEtDj68eNsLNXRJtcB0TgBa2r98HMxahey9PPdqkm
+         LmGer9rRISmg0iSFQcAt25b5JD87DSZLzn0iohti6eY+68+97NhsBiSflZkJJyJ8u5U0
+         jNF9cFctql8vxqjgUghT1F00h/ZfH5Glsajs6I4OLrLW7JqZaxOMV6J2piGZfhOZ00EA
+         P6i5TwK2AqepIRw6CF2fZH+fcN99Y0Mvv1sEE77nL9KTQ+qxxcHCkDGx7y2Xvn3S47xK
+         r7bA==
+X-Forwarded-Encrypted: i=1; AL+hErEanrNA9GpY81sKc4yqRK+EHkUIfgLkuCYawy+A7XnLcoDs90+tPzp/exHkev1vt8ni3oc=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8A3maZ4JlvWERpbjTIQqIbpTl7+IJhwv2rb3ZMhFMmLEiVt8Ak
+	mjtod0DKqhzf6PewWC3DgjGbREKI7ltfTIpHpD3HSCSNQtnNiz8o1R3Q+cguBEEcWYI=
+X-Gm-Gg: AZFdTZcWCRTzYvKYEOelxO411KbjPyijOxXbeS2zvMFIkj3FYaWNxSNHijD2da3FGCG
+	yEdw43bb6cHrlfeCB/Ql8A5iSL1EJGxiGf/Gr0IM6mCZMDzdatqBZDeWE/MZ17RSLxvGyBtVxyf
+	hR5aiBkapbBIARQeQ0fezgwtyJhdXtedJSl0SNeMYWiNVf/VUf6xsA3q5zG4E2oc/rfw43RLcKO
+	vL6uosQQt4gPpgNJ28XzCIbeEsWjfY8v72Y3/zY5j3YDQPN8HxaTvPAOy1kEmlToOwDmRXtVwBR
+	YzMFLdR1f9vO5wEL41+s759b4YB6JawofjEmVlS/kdHyoL819dl9EKMCDJ1vKSVb+IkXaaSZKcR
+	3fSZlqan6cGINhsb2F9E97pINhk9IETYiRymzkDYp86DgZkPurfZIVQ5Lv7Kg7spi8g19wx6ZHV
+	ymPnLaA8658G7GKggDBNxzmpuhhE78ytlBe2MZylC3+VqNSp0un8bL79DpWBLALknaq+Yf2OwZL
+	3PEmcCDWEFWyol5Pl+CgPYXKWVreXipqHsgJHSJC/hZByLthwaDL1n/eKAzH2QxWZRP4GDx7UN3
+	v1bvG4FkkXidq6ouPGw0WDWpEXaR4M+mF1+URsXOqmZZxqyw4RbGHlUeV//vFtXYe3MZ3ZtFONK
+	BSb1OVyccVFPyv0210vo91HYRd2HZvJTCek75ugM=
+X-Received: by 2002:a05:6300:492:b0:3eb:a2d9:58f1 with SMTP id adf61e73a8af0-401493a61ecmr13003503637.9.1795543668120;
+        Tue, 24 Nov 2026 10:07:48 -0800 (PST)
+Received: from localhost (107-190-31-93.cpe.teksavvy.com. [107.190.31.93])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cde6cff4c1asm7283156a12.15.2026.11.24.10.07.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 Nov 2026 10:07:47 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -163,146 +88,137 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 24 Nov 2026 18:07:46 +0000
+Message-Id: <DN3N3WXWFO3J.IQPVUAFZKE3B@etsalapatis.com>
+Cc: "Emil Tsalapatis" <emil@etsalapatis.com>, <bpf@vger.kernel.org>,
+ <andrii@kernel.org>, <eddyz87@gmail.com>, <memxor@gmail.com>,
+ <daniel@iogearbox.net>, "Sebastian Andrzej Siewior"
+ <bigeasy@linutronix.de>, "Clark Williams" <clrkwllms@kernel.org>, "Steven
+ Rostedt" <rostedt@goodmis.org>, <linux-rt-devel@lists.linux.dev>,
+ "Vlastimil Babka" <vbabka@kernel.org>, "Hao Li" <hao.li@linux.dev>, "Andrew
+ Morton" <akpm@linux-foundation.org>, "Suren Baghdasaryan"
+ <surenb@google.com>, "Michal Hocko" <mhocko@suse.com>, "Brendan Jackman"
+ <brendan.jackman@linux.dev>, "Johannes Weiner" <hannes@cmpxchg.org>, "Zi
+ Yan" <ziy@nvidia.com>, <linux-mm@kvack.org>, "David Hildenbrand"
+ <david@kernel.org>, "Peter Zijlstra" <peterz@infradead.org>, "Ingo Molnar"
+ <mingo@redhat.com>, "Will Deacon" <will@kernel.org>, "Boqun Feng"
+ <boqun@kernel.org>, "Waiman Long" <longman@redhat.com>,
+ <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH bpf-next v1 1/4] bpf: Add call for selecting kmalloc or
+ kmalloc_nolock at call time
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Harry Yoo" <harry@kernel.org>, "Alexei Starovoitov"
+ <alexei.starovoitov@gmail.com>
+X-Mailer: aerc 0.21.0
+References: <20261124060357.11700-1-emil@etsalapatis.com>
+ <20261124060357.11700-2-emil@etsalapatis.com>
+ <DN38HGVL8JHQ.2ZVZQCKFXVA9T@gmail.com> <awWRZ9xCzWLnj_R6@thinkstation>
+In-Reply-To: <awWRZ9xCzWLnj_R6@thinkstation>
 
-Create a veth pair with VETH_INFO_TX_EXTRA_HEADROOM set to 64 bytes
-through YNL and move the peer to another netns. Check that both ends
-report 64, and that tx_extra_headroom of the peer is 64. The test reads
-it at tcx ingress, because an attach at tcx egress would recalculate
-the value set at creation. Then check that tx_extra_headroom of the
-sending end is 64. With XDP on the peer it is 64 + 256, because the two
-values are added. Also check that a value above 512 is rejected.
+On Tue Nov 24, 2026 at 1:59 PM UTC, Harry Yoo wrote:
+> [+Cc Relevant folks]
+>
+> And a bit of context on the underlying problem.
+>
+> kmalloc_nolock() could fail when there is a contention on locks
+> shared across CPUs (e.g., n->list_lock in slab, zone->lock in buddy),
+> or there is a decent amount of memory pressure. It's more restrictive
+> than GFP_ATOMIC.
+>
+> Unconditionally using kmalloc_nolock() in BPF local storage is
+> unnecessarily restrictive when the program can sleep or spin, and
+> Emil's patchset teaches the local storage whether the BPF program
+> accessing the local storage could sleep or spin on a lock.
+>
+> Answering the question "Does this context allow sleeping, or spinning
+> on a lock" is extremely tricky in the Linux kernel as BPF programs
+> could run and call kfuncs almost at any point in the kernel code and
+> the "context" is usually encoded in the GFP flags or the process flags.
+>
+> Tracking whether certain locks are taken by current context is not
+> ideal either as it adds unnecessary overhead for everybody.
 
-The helpers leave the RtnlFamily socket to garbage collection, as
-link_netns.py does.
+Yes, we considered the page_alloc approach with Harry offlist and I think w=
+hat
+it comes down to is that one approach is the most turnkey for users while
+the other has the clearest semantics. I went with the latter because
+making the selection straight in the BPF code makes the behavior of the
+top-level local storage alloc call ends up easier to understand and
+explicit in the BPF subsystem.
 
-Signed-off-by: Tianyi Gao <tianyi@cloudflare.com>
----
-v3:
-- Check the value set at creation at tcx ingress of the peer (Sashiko).
-
-v2:
-- Test VETH_INFO_TX_EXTRA_HEADROOM with YNL only (Jakub). The IFLA
-  tests of v1 4/8 are gone, so the patch no longer carries
-  David Keogh's sign-off.
-- Drop the VLAN case of v1 4/8. In v2 no code copies
-  tx_extra_headroom to a stacked device.
----
- .../selftests/net/tx_extra_headroom.py        | 70 +++++++++++++++++--
- 1 file changed, 66 insertions(+), 4 deletions(-)
-
-diff --git a/tools/testing/selftests/net/tx_extra_headroom.py b/tools/testing/selftests/net/tx_extra_headroom.py
-index 02ae509ae8c2..cc33c4fa60bb 100755
---- a/tools/testing/selftests/net/tx_extra_headroom.py
-+++ b/tools/testing/selftests/net/tx_extra_headroom.py
-@@ -3,15 +3,17 @@
- 
- """Tests for tx_extra_headroom."""
- 
-+import errno
- import socket
- import struct
- from pathlib import Path
- 
--from lib.py import ksft_run, ksft_exit, ksft_eq, ksft_ge, ksft_gt
-+from lib.py import ksft_run, ksft_exit, ksft_eq, ksft_ge, ksft_gt, ksft_raises
- from lib.py import KsftSkipEx, KsftFailEx
- from lib.py import ksft_busy_wait, ksft_variants, KsftNamedVariant
- from lib.py import cmd, defer, ip, bpftool, bpf_prog_map_ids
- from lib.py import NetNS, NetNSEnter
-+from lib.py import Netlink, NlError, RtnlFamily
- 
- BPF_OBJ = Path(__file__).parent / "tx_extra_headroom.bpf.o"
- XDP_OBJ = Path(__file__).parent / "lib/xdp_dummy.bpf.o"
-@@ -37,9 +39,34 @@ def _setup_addrs(peer_ns, dev, peer):
-         ip(f"neigh replace {addr} lladdr {peer_mac} dev {dev} nud permanent")
- 
- 
--def _setup_veth(peer_ns):
-+def _add_veth(tx_extra_headroom):
-+    """Create veth0 and veth1 with VETH_INFO_TX_EXTRA_HEADROOM through YNL."""
-+    # Without names, the peer is created first and becomes veth0.
-+    rtnl = RtnlFamily()
-+    rtnl.newlink(
-+        {
-+            "linkinfo": {
-+                "kind": "veth",
-+                "data": {"tx-extra-headroom": tx_extra_headroom},
-+            },
-+        },
-+        flags=[Netlink.NLM_F_CREATE, Netlink.NLM_F_EXCL],
-+    )
-+
-+
-+def _veth_tx_extra_headroom(name):
-+    """Return VETH_INFO_TX_EXTRA_HEADROOM of veth device name."""
-+    rtnl = RtnlFamily()
-+    link = rtnl.getlink({"ifname": name})
-+    return link["linkinfo"]["data"]["tx-extra-headroom"]
-+
-+
-+def _setup_veth(peer_ns, tx_extra_headroom=None):
-     """Create veth0 in the current netns and its peer veth1 in peer_ns."""
--    ip("link add veth0 type veth peer name veth1")
-+    if tx_extra_headroom is None:
-+        ip("link add veth0 type veth peer name veth1")
-+    else:
-+        _add_veth(tx_extra_headroom)
-     ip(f"link set veth1 netns {peer_ns}")
-     _setup_addrs(peer_ns, "veth0", "veth1")
- 
-@@ -353,6 +380,39 @@ def test_tag_max() -> None:
-     ksft_eq(bss["tx_extra_headroom"], TX_EXTRA_HEADROOM_MAX)
- 
- 
-+def test_veth_info() -> None:
-+    """Check that VETH_INFO_TX_EXTRA_HEADROOM adds to tx_extra_headroom."""
-+    with NetNS() as send_ns, NetNS() as peer_ns, NetNSEnter(str(send_ns)):
-+        _setup_veth(peer_ns, tx_extra_headroom=64)
-+        ksft_eq(_veth_tx_extra_headroom("veth0"), 64)
-+        map_id = _load_progs()
-+        # An attach at tcx egress recalculates tx_extra_headroom, so read
-+        # the value set at creation at tcx ingress of the peer first.
-+        with NetNSEnter(str(peer_ns)):
-+            ksft_eq(_veth_tx_extra_headroom("veth1"), 64)
-+            _attach_tcx("veth1", "ingress", "record")
-+        _send_udp4()
-+        ksft_busy_wait(lambda: _read_bss(map_id)["count"] == 1)
-+        ksft_eq(_read_bss(map_id)["tx_extra_headroom"], 64)
-+        with NetNSEnter(str(peer_ns)):
-+            bpftool("net detach tcx_ingress dev veth1")
-+        _attach_tcx("veth0", "egress", "record")
-+        _send_udp4()
-+        ksft_busy_wait(lambda: _read_bss(map_id)["count"] == 2)
-+        ksft_eq(_read_bss(map_id)["tx_extra_headroom"], 64)
-+        _attach_xdp(peer_ns)
-+        _send_udp4()
-+        ksft_eq(_read_bss(map_id)["tx_extra_headroom"],
-+                64 + XDP_PACKET_HEADROOM)
-+
-+
-+def test_veth_info_above_max() -> None:
-+    """Check that a value above the maximum is rejected."""
-+    with NetNS() as ns, NetNSEnter(str(ns)), ksft_raises(NlError) as cm:
-+        _add_veth(TX_EXTRA_HEADROOM_MAX + 1)
-+    ksft_eq(cm.exception.error, errno.ERANGE)
-+
-+
- def main() -> None:
-     """Run all test cases."""
-     if "/sys/fs/bpf type bpf" not in cmd("mount").stdout:
-@@ -367,7 +427,9 @@ def main() -> None:
-               test_push_detach,
-               test_push_peer_xdp,
-               test_push_two_progs,
--              test_tag_max])
-+              test_tag_max,
-+              test_veth_info,
-+              test_veth_info_above_max])
-     ksft_exit()
- 
- 
--- 
-2.56.0
+>
+> On Tue, Nov 24, 2026 at 06:40:11AM +0000, Alexei Starovoitov wrote:
+>> On Mon, Nov 23, 2026 at 10:03 PM Emil Tsalapatis <emil@etsalapatis.com> =
+wrote:
+>> > +	/* Only try the spinning allocation when preemption disables are tra=
+cked. */
+>> > +	if (IS_ENABLED(CONFIG_PREEMPT_COUNT) && can_spin_in_alloc() &&
+>> > +	    size <=3D KMALLOC_MAX_CACHE_SIZE && !(flags & ~nolock_flags))
+>> > +		ptr =3D kmalloc(size, flags | GFP_NOWAIT | __GFP_NOMEMALLOC);
+>>=20
+>> It works, but I after a bit of brainstorming the following
+>> might be a better fix, since it will address the root cause:
+>> Pls run it by Vlastimil, Harry, Sebastian.
+>>
+>> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+>> index 2fef409..4368ab5 100644
+>> --- a/mm/page_alloc.c
+>> +++ b/mm/page_alloc.c
+>> @@ -2536,6 +2536,24 @@ __rmqueue(struct zone *zone, unsigned int order, =
+int migratetype,
+>>  	return NULL;
+>>  }
+>> =20
+>> +static DEFINE_WAIT_OVERRIDE_MAP(zone_nolock_map, LD_WAIT_CONFIG);
+>> +
+>> +/*
+>> + * zone->lock is always held with IRQs disabled. A caller that runs wit=
+h IRQs
+>> + * enabled is not nested inside of it, so it can wait for the owner.
+>> + */
+>> +static bool zone_lock_nolock(struct zone *zone, unsigned long *flags)
+>> +{
+>> +	if (IS_ENABLED(CONFIG_PREEMPT_RT) || irqs_disabled() || in_nmi())
+>> +		return spin_trylock_irqsave(&zone->lock, *flags);
+>> +
+>> +	/* The caller may hold a raw_spinlock_t. */
+>> +	lock_map_acquire_try(&zone_nolock_map);
+>> +	spin_lock_irqsave(&zone->lock, *flags);
+>> +	lock_map_release(&zone_nolock_map);
+>> +	return true;
+>> +}
+>
+> I'm not sure this is a better solution unless this could be generalized
+> or abstracted further.
+>
+>>  /*
+>>   * Obtain a specified number of elements from the buddy allocator, all =
+under
+>>   * a single hold of the lock, for efficiency.  Add them to the supplied=
+ list.
+>> @@ -2550,7 +2568,7 @@ static int rmqueue_bulk(struct zone *zone, unsigne=
+d int order,
+>>  	int i;
+>> =20
+>>  	if (unlikely(alloc_flags & ALLOC_NOLOCK)) {
+>> -		if (!spin_trylock_irqsave(&zone->lock, flags))
+>> +		if (!zone_lock_nolock(zone, &flags))
+>>  			return 0;
+>>  	} else {
+>>  		spin_lock_irqsave(&zone->lock, flags);
+>> @@ -3237,7 +3255,7 @@ struct page *rmqueue_buddy(struct zone *preferred_=
+zone, struct zone *zone,
+>>  	do {
+>>  		page =3D NULL;
+>>  		if (unlikely(alloc_flags & ALLOC_NOLOCK)) {
+>> -			if (!spin_trylock_irqsave(&zone->lock, flags))
+>> +			if (!zone_lock_nolock(zone, &flags))
+>>  				return NULL;
+>>  		} else {
+>>  			spin_lock_irqsave(&zone->lock, flags);
+>>=20
+>> pw-bot: cr
 
