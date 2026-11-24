@@ -1,95 +1,49 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795490840;
-	b=ZuHxYG1rlBfJC0jC8vWLvrXdTHmRfANsGCjaL2QZW3HgVRJ26azDumBxV7c+1Uxn74Wj
-	 rUz267f4j9yOFWdLmTRpYvVGlrwNda4NMQYXqNA+pukibEEu4uM6ijLfJQs9hSWOaIqSl
-	 zaMfcsp/vrB6qkTIA9d+8JsjozoHlAgKbph7qZFGfOJdqj6XZV5JSq/fCNAJ8nMbMKRWQ
-	 CNBi7j4w4Es62gKrdJioLQ7rFrHeOz1hzX59SdauiZiNs6bdLc8Xkx3bceAlmmgyNtAen
-	 muPGmIqYFdTOtFi6f6VUFtWAEBHngqjVV8SM4W2neWXcbADFsmVQ/Z4MdDLEmQCzsvw==
+	t=1795491008;
+	b=FXsYzB3fi6wOEZcEjxGHoAOD/EHqAbKFkoVkCA6CbR0hST8HaDajybQynTHOORCzdRsy
+	 gXSE2kv96sjqm9Ff3RMG7RBRfIP25fq5ha8FaB59acBEB16KiDoauxjNISNwrNCw9xdi3
+	 BnsOHSM01pDQcvrn5vEgqj1YtJtsb4OzPcaod42sYxdKpQUFBJV3LxkTt4/L+oF61tcqv
+	 F9SqzLSL0sCjH8JU81AU2SNvWCXV6Z/MipmcUXozFD0R5Yv/FgebtW8usBKtL3Za9xsnd
+	 i/z4KmTQn1Oom/goD+4mKKBbtQguyDxHEIHAEesIL/dpmijR2KBZhlzI2isRkpEYPJA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795490840;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Content-Type:Date:
-	 Message-Id:Subject:From:To:Cc:In-Reply-To:References:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=IFvpmd3WeFOGphC5U52MqXeNCsWhU8pIXy/FEgt8bNo=;
-	b=Usj75XOaeYikBBRb2qyGre4GwVfPhaw2bjY7xoREp6RClG3dW5fo4kzLjg0k4R9PyAgL
-	 SA6DlTPPy6F5pyk2hZVjx+jmomXuzVnMn2D1F/APAjd3I8Qh2Rvvq3z7prnLRQSfk6QHQ
-	 Qo5/16OHrWCYOIZYDBCEuRtnCps9WVYWBxstorr8+o26kaD6gzzFTpJ1s24KmJMFXZ3A0
-	 1FzCeYjC/h6h5+Df3CyT5ngrGVhzlltCJ5BdJWThrMaWnb+qExJWvWD7MIehGdNZZMOII
-	 1fdBXIVSFdZokX4iXOlVAhHEo9Hl/9F44xIy792q2XfZIqHVRlz4EM5sJpsRoEN/BrQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795491008;
+	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
+	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc;
+	bh=woosih2AuG1beuJR/JI+IORd2NX0LXJKFkEno0hX+sE=;
+	b=GrwD7lbbzpL+80YCz9g7OXbuhcHkOfqlE80LvpFdq7/6cpq5yUF0n0VeQ6dHJFSmg2ac
+	 Ul99h2mtjaWdZUu27YUIkn2kC9CcaSgY+8AOqYPqYGg5ZOf+a8FOCUviayHTQpUUMrohw
+	 joyoL5AQVLZypOM8jERzpLPPoFzKggrqKb4VVOaR5nzHmzfzGzo96KCTKaukMxSdc/JPs
+	 dkbOEiTgRu0fWjX3yupmyXnU+EpDG7kLmMFnjsOh1uRqEWdYoYjmsMByf68vAMBF+178v
+	 lR97xTI7tzlbsdmRsjNVUPEMG4/dSNuJowgqNF6vCtNJMTAktOCYFPzwwVNTH/g4L1A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=M7ckrYC8;
-	arc=none smtp.remote-ip=209.85.214.175
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PYt0+Q3E;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6657C606A31E
-	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 03:27:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6657C606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D0B4606A327
+	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 03:30:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=M7ckrYC8
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2f06ff94acfso13383195ad.0
-        for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 19:27:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795490840; x=1796095640; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
-         :from:subject:message-id:date:content-type:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=IFvpmd3WeFOGphC5U52MqXeNCsWhU8pIXy/FEgt8bNo=;
-        b=M7ckrYC8PWxJnAuy2eh+px5zXmgv02RH0JbcWpZ1z1GWwVPMlLRaJQkkSdEL1hZcBe
-         AqCTGjFz3snnX7bU1Ztz6y6VSSSG3JkvvAGsd269BLAOarxNoQe6i7VrBQBuru6yoM0Q
-         1QMKwYGLTwjWmoc1iTxlLAmDXtdUkw+LOKjO9Efl6M+ARl0KeoQAs915avDSIAgPamvj
-         WMYv2InyPeGSJciAV8GYJp9Im4rl4XPNe1ql/eTLaYqIja8ayfkCa1dV1T4l1l9wRJFQ
-         lvd187L0dKkzQs8NH5WS++Jhix48rWo64gJ4eGAL7Or8DMtjB9QoqLgl2QgtH/ifjIeG
-         1VUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795490840; x=1796095640;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
-         :from:subject:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=IFvpmd3WeFOGphC5U52MqXeNCsWhU8pIXy/FEgt8bNo=;
-        b=iU0DtexhwnQtDIWbRdhbKJzDM2YScQ4U2JvAbNWB76kwnH+iOQXKh3/iV5zGRZM8w9
-         32i2Z91v0SKVujHCjBfoMmltabRy2LhdJGNU5pZA46GjI7MO4t5lcbg7txs2Ncz9apCt
-         S01YZYbWI48dAuPefv+dNMdSi4jcuUrkXTxcR9wcjhapMb+yJSi4bbatvVBzu33/fIPv
-         XFFCioMzO7ucPO+4YPzxpqMDIBQQP07n6mrnkQORUAhZVgSV8pA7DD2utfZZxPzHz4BL
-         Iofl/2e2X5vXKguMVNWFfYYHxPHkmAbQbjY1kX8v7GxA0YiqbzMaOzE0EFlOUTQEVGtH
-         0Csw==
-X-Gm-Message-State: APuU4Z9qMFaZ+paCTygdYALz5dAkL4Ugmtf/C8xm/lNNYrUo1diu7kmh
-	nt5INp61VnRrltJi5vUTRTP5xd4ypI6ySiqdCmYaC8c7bQhAErAGWq8x0qKdhw==
-X-Gm-Gg: AZFdTZfaXFARLkXtj0LhP3Xru3dXMWk9b0y6X0eFTTvubq3LwjnfUhLBcl4WXq1utcV
-	oX7Prega5XQgR7Y+SaLgo7dEWcmG/OVLosX0XjiJGAowyXf98YJQrpw6ZaJz0RNt0RXpjJRiZmG
-	Ic/GysOZJWaDwK7tqQZix36C/m1BfXjWaUnXPWS0df1pd2zll+MgidRUaiZnxIxF7mABuFc0R/H
-	rIvXPwoAh3kh+gE08tLvMKO01y8VLSvGZ+S4IHxqjK+DnRFn9c7JEpc4teqgJswwPcPdmzA9B8o
-	SDmK8UF8R7R+OdAMWF+iNEUIIEhnR4sFfp5kE9hIYIq4bLQacKCVlwUZ6O/OOcBfGNZmMrf3toz
-	T33+JFb6S8Jsyn7fK52Y0KoUO68SPMPDjPFIXA19M1HTLRj3vKTtpzXRO6Xkrh41im1/nMJIj1c
-	xypeLG3Vlv958+ndxkR1oPVL674Q7PwPGVKAQ+4izNvxsGSwKEYEat61E8VrMI72e7x6Rmack0F
-	3sqltPVM4bGdbb6Jihy9eWBT9be3VDrVDRvGrnVA/EGndpVRzC+JF7LL70v57jHoJCdgIMBN3mV
-	JztYASeQZcr1hzWDJULRCjNnTGEFNnsDKjazACHJhQqOxl03dj/ebTqwQLk893r8WGwQezDpN/F
-	gtv5jPhr4yw3JiGqPekERUp09c+Pc9TyU6d8AjIwBuQzqVyDx6cXfqQ4=
-X-Received: by 2002:a17:902:ce0b:b0:2e9:5059:4468 with SMTP id d9443c01a7336-2f03ef594efmr126592345ad.7.1795490839459;
-        Mon, 23 Nov 2026 19:27:19 -0800 (PST)
-Received: from localhost ([153.61.198.240])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2f03f105b76sm62243415ad.50.2026.11.23.19.27.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Nov 2026 19:27:19 -0800 (PST)
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 24 Nov 2026 03:27:18 +0000
-Message-Id: <DN34DSBL68MS.2RHLVBAKXACD4@gmail.com>
-Subject: Re: ebpf program can cause verifier crash in check_return_code()
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: <rtm@csail.mit.edu>, "Daniel Borkmann" <daniel@iogearbox.net>, "John
- Fastabend" <john.fastabend@gmail.com>
-Cc: <bpf@vger.kernel.org>
-In-Reply-To: <43917.1795463809@30-11-166.wireless.csail.mit.edu>
-References: <43917.1795463809@30-11-166.wireless.csail.mit.edu>
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PYt0+Q3E
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C05611F000CF;
+	Tue, 24 Nov 2026 03:30:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795491007;
+	bh=woosih2AuG1beuJR/JI+IORd2NX0LXJKFkEno0hX+sE=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=PYt0+Q3EHf0NFWRUuPIiaqYZAS422cCIPu8mrDrmwfIR+9dxMg5mLnQzLXKKx3Du2
+	 gv1lbLSeT5+xwMv5FAHsOd9Jhxvu+HKu7DsFDsL+z65uXuq6h5k/PrziFjXf81ImsP
+	 T+Z2XmlnyBgSv3PEZLe5St36WWe1bgM6fXt1DO04fDmKutLSobSaDg01rdvrTR958L
+	 +yMHhst19M0ya7sEh2g5fZjBFLgV8SIHjndoeAtNQsPISfKCREwtkAFMw5jifiiXwb
+	 HiZMBnmXrCEIA+0x1d+yc0VO7+j6Z+e1gV62mXcwUxSrn/PXz0b3NkRvDEfZFA/GKP
+	 KTlun5B51iJXQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B44CB39302D7;
+	Tue, 24 Nov 2026 03:30:07 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -99,20 +53,43 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v6 0/2] libbpf: Fix CO-RE relocations of unsigned
+ 32-bit enum values
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <179549100653.3259463.11833009507292610295.git-patchwork-notify@kernel.org>
+Date: Tue, 24 Nov 2026 03:30:06 +0000
+References: <20261124000514.2955878-1-yonghong.song@linux.dev>
+In-Reply-To: <20261124000514.2955878-1-yonghong.song@linux.dev>
+To: Yonghong Song <yonghong.song@linux.dev>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+ daniel@iogearbox.net, eddyz87@gmail.com, kernel-team@fb.com
 
-The following should fix it. Pls test it and send an official patch.
+Hello:
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index dea18409f480..5c8e84c80a9e 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -19928,7 +19928,8 @@ static int check_return_code(struct bpf_verifier_env *env, int regno, const char
- 		 * matches the operator's return type and is in its unmodified
- 		 * form. A scalar zero (i.e., a null pointer) is also allowed.
- 		 */
--		reg_type = reg->btf ? btf_type_by_id(reg->btf, reg->btf_id) : NULL;
-+		reg_type = base_type(reg->type) == PTR_TO_BTF_ID ?
-+			   btf_type_by_id(reg->btf, reg->btf_id) : NULL;
- 		ret_type = btf_type_resolve_ptr(prog->aux->attach_btf,
- 						prog->aux->attach_func_proto->type,
- 						NULL);
+This series was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
+
+On Mon, 23 Nov 2026 16:05:14 -0800 you wrote:
+> For a BPF_CORE_ENUMVAL_VALUE relocation, libbpf sign-extends the value
+> of a 32-bit enumerator even if the enum is unsigned. A value in
+> [0x80000000, 0xffffffff], e.g., DCACHE_PRIVATE of enum dentry_flags,
+> then doesn't match the zero-extended value clang emits, and the whole
+> object is refused. And a target value in that range is patched
+> sign-extended.
+> 
+> [...]
+
+Here is the summary with links:
+  - [bpf-next,v6,1/2] libbpf: Fix CO-RE relocations of unsigned 32-bit enum values
+    https://git.kernel.org/bpf/bpf-next/c/4fad237494f1
+  - [bpf-next,v6,2/2] selftests/bpf: Test CO-RE relocations of unsigned 32-bit enum values
+    https://git.kernel.org/bpf/bpf-next/c/885fd5836d3d
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
