@@ -1,59 +1,103 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.170
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795499110;
-	b=SW/hWYBczWZeWDi6nuRTEPkgIkT0u9qlUu7BsplCyeOb7dyOOzJvc+QenGc2DHkgA9Gs
-	 Pb3QjWfgOG5tc1O7qJ5YOxQl/XbJES+vIcvDRWnj98aXTzLsv9W00HoItr9fSOsxZ5O2B
-	 iMONbSLB4OYWChREgMG4ecNmgMonVVZ4ViVwxVavKHRfR35Fqn7jLtWAwF/vPU3i8cot0
-	 ZTDam4HUh/yHti24KJAKv5oGUobVYJWk9l9jmoc9PXMTUMkOjUSseK7iV4q8PsONatF3L
-	 9zMIyZSKvHzVi6zGxGXw/ebNMfU3XDBEJ7DynYeOjJY2OPVOJ91U4Nqm+cGxyE01wlw==
+	t=1795500052;
+	b=csXQ7T+FxSj6MDa5xm+Bb30v5O7YiZ1fCpzlpZvTSwyW0z2iKl3xH2QxYsuclC4C59Jd
+	 mZLUCqDeh7WzB7SUYWmZML0APFM2rksHdrY5D5VKFqIkEnKTHsMtBKf4Bd7Ioi2Kk/vOq
+	 Ycbb9s2ZHRFrgDV8Ag0Mv7T6IjtPFd7lBrNuFvEz6JFEhQFFUcrDWNtL9sQIKdtMrKM0f
+	 IzsQb9LVmThYGVf5FQi/dsLc0OXwkKcaNDm6dHqkK/A0vTo/aF4yRoedJKjS4J7dQdAMt
+	 vaB2B/1WZeDqoqakDGCKVE1r/FRgUy9wfh4OHEBCiHgeso+E8YlfDk2z5whJRpdUAsA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795499110;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
+	a=rsa-sha256; c=relaxed/relaxed; t=1795500052;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Content-Type:Date:Message-Id:From:To:Subject:In-Reply-To:References:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=b7hzx4hdT/aWGEHT3B9cp/wHj65qJWImONpb6FDPul4=;
-	b=u/zsycF9hspY3XuYZ7XsjiBKw7Hy4GmU4CrkfaJwtuPcnHxISkeXKgDWEcraWmuO+cQR
-	 RcUKA/U29xeHz0+48Y2w/X0W+P0p2cOBS1HReKMuMmBlcCsM+ztr+EHS3cRZZRyqSJkxl
-	 6kVbraDEalsQa+Q726Vue3vozthm1r1aMyEbSEqCROrx1vciaRtOzIqqcWxjLdHAx3Dl+
-	 x78NhElnZgH31djSKArnWUCiTU6GfSxlrR5RNqKELkP0GaHA6wLgbknFiqBEItsg0yV7q
-	 wPuYOB/aln6KGVgSPEgCJPSGjQHxp3OnzfuDUsnK6XTRCDbMhwbW9Sg81o5t7ITTZbw==
+	bh=/SLHfkNsrCjSRx5Wz9p+DTV861mq73QFj5nkNZKg5lU=;
+	b=4SG7t9U45IvvPlBmFjmNoKYaS/7hTaKujAAyGkv1wFoihVSubA9vqxBHEza8uIabLYfp
+	 WmE1rJbQ7WOfhNqJNXbL7abVlGxv0pXhoU5fG002/tIfYQiQqlwAk6CojFIczF1QSTHHD
+	 Qs8wIzOpjZFfCBrx4B9Q5KgUYKRJrOHkOfMePjI1M9yHGJC/k5N47Qc/W7Q6Xv+3Gpi2V
+	 RCLEqejE5zlinwZsznL4pmBoJ6xkPOhx4rMZObarzk0rP9q/LifbrpM9JmcqfU3m5vylF
+	 yf6klD5fQpibpEZiFH7uMImZ3eZZ1FiOwAzUcj78qpxY5QbkmKjnmaryRjowVkW9yew==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Vrcodb3p;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=q1+Zpv7v;
+	arc=none smtp.remote-ip=209.85.215.170
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7A7C606A333;
-	Tue, 24 Nov 2026 05:45:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0421606A321
+	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 06:00:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F0421606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Vrcodb3p
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBBA81F000C0;
-	Tue, 24 Nov 2026 05:45:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795499110;
-	bh=b7hzx4hdT/aWGEHT3B9cp/wHj65qJWImONpb6FDPul4=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=Vrcodb3pExD7IvnRJ++M28lf/71cgaIy6O2yMrMX+tiJ+/bLMLI4faFbjLWyK86Ks
-	 46creBgmZY87nJiZm6InSM58VnczzVQRyMZ6FR9fRN8e9yyxkPHRH+5pBUvlIf6pyJ
-	 CdWf5m9tTKjNw3f52dmZ/LXNNqW5esRVeGZFwh5sm7eOG9L/Ds5caUNvGYUncpvPIN
-	 tSAKk/EE48riNy34lxLJwcjgyNYj+BoJC8xztgprVFN7ilYuYbY20BvyXW4nobZcuz
-	 1Cza7+lCS0pN7x4ldEVOBTIFr33kuZ2WGJF7OnLEiq4/X34p8gmiYAvZYQZE+Gez9z
-	 ZdRYQNxKRNRHg==
-Subject:
- Re: [PATCH net v12 2/2] selftests: net: add TAP socket filter attach tests
-From: netdev-bot+sashiko@kernel.org
-To: clementwei90@163.com
-Cc: netdev@vger.kernel.org, bpf@vger.kernel.org,
- willemdebruijn.kernel@gmail.com, jasowangio@gmail.com, andrew+netdev@lunn.ch,
- davem@davemloft.net, kuba@kernel.org, ast@kernel.org,
- alexei.starovoitov@gmail.com, andrii@kernel.org, weirongguang@kylinos.cn
-Date: Tue, 24 Nov 2026 05:45:09 +0000
-Message-ID: <179549910931.3135.4958196655811648969@kernel.org>
-In-Reply-To: <20261123054209.89946-3-clementwei90@163.com>
-References: <20261123054209.89946-3-clementwei90@163.com>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=q1+Zpv7v
+Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-cc751eddf25so2762130a12.3
+        for <bpf@vger.kernel.org>; Mon, 23 Nov 2026 22:00:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795500050; x=1796104850; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to
+         :subject:to:from:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=/SLHfkNsrCjSRx5Wz9p+DTV861mq73QFj5nkNZKg5lU=;
+        b=q1+Zpv7vRdLuNryjubIcK9p1C6hYtJyM8s4Ya+V8PgQONvpdTC7Ua853SGJTsIUcXQ
+         M0pFVL8Do2Ry2wiXUj3cxeKtoqtmO0eJBjUj9twM08oj3aaj/1mWJSU3N4CXDAYxBpCK
+         on+bdLfyiTexuyK1b6zmgwGoqKXFL4GeCN4DTr+jWK4djxI0BL1/DadGxeBp6DK7jASk
+         tRKgLLfGrF8S9KN1UlG+krPmugZz0AWnplxbg1kncJbcJLBXntvKA8UjrUbEBTdBxIUf
+         JruoLYhZMGVzT+PZrzx9sT1rk+fc369T12hC6PaBt2ez90GghipDT83vmsUcG8y9Od5P
+         M7qA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795500050; x=1796104850;
+        h=mime-version:content-transfer-encoding:references:in-reply-to
+         :subject:to:from:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=/SLHfkNsrCjSRx5Wz9p+DTV861mq73QFj5nkNZKg5lU=;
+        b=CLHbL2/cV3WjwxqsZ6RDYnnTnGLZuots6kaTPfFLAOKMVd2+48ch0KdDB+ZJv9OHHg
+         hSAo16sZkURF/ua99AIhz5NLVYPQ8MYmsKPhKIEP1hBz/poKRGxwt5OhqcRip98br3DP
+         39BKg/I1M/S/b0AfHz8WbrQ/UrT/EC9glqFi26T1/DCV/Ep/UMVnsAKVqeotPRynegaN
+         eec9P4M7yXVkWT3ABIRuIvTtchNHk9Vjt/4KGEElLxfV/yPbNST8x/7ESlEnvOZlqdy7
+         Rqb0NfL7cy4lOb2w+5FJbib4CG0dqM1HDTdNBdifLl4OLVYstyRAda1pXfgPox3oer4D
+         WtcQ==
+X-Forwarded-Encrypted: i=1; AL+hErEKH3wxKIvSs5f1fbJJ2KzlAeZMDjcojDqBCsWyu8f0uVl0hHBDcaRLvv7rybQ7tVJ8tgA=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9Tir2DasM8HF6PJGcZvDBq9vpJlL6erw3TcxrhLAjDaD95ne62
+	fYeLiuycH9UqBdsQsCKl4WLFcvkvL7J8LRq1/wZ3B9ezLmnz8EMNgLtb
+X-Gm-Gg: AZFdTZcEZ5v9lA8WJOnuip+ocqUIG6QitweM8fNXiLUJquLqyi6rdaPFid+g4zDoNK6
+	c2h5u77aQvm3rCE9d0hRvFRjdfpVOpUV51omzJ5bGYg5LTQZMfr3iRwZsiobTCH7BZLCkgMVZ0Y
+	AeB6EJ5Xt/98Uae0SfK3eEUOgy+bAAZRMBHoGqS7PFVPrpnzRD6itViLf1FVbMqpPEadKn74QGC
+	qBQDLVfwa9Ddm+U+T0L1JBAqCkv/XavptIfMHzfPLfhPLVYzB7esV27ZONqtolEQ6tuw7sFOpYn
+	yNYJi8v20X7ehIf4AkDdgzFkIgamT9mjEY9O/5PMvNDWZEf/f33zsMzrG/cb2TQ3GXcpMqUERSr
+	p+bBsxcrjcMdZ11fGKv87Jxj9TX8I4m1QR2aCHitWloZVSvmCcqA4TrNJq6je5pfG3uY91WfINn
+	pr6eTGwLW5RK1ujFUILqXOPkorcBG3su17B3pCLlxSFiCUIgckB5oyMleDXslnwJwxrdsQMxAkR
+	YLqsiJeQWpsyOBr4g40G69/XCahmVtFIrMJpJe4Rc0Ika4BWjOFxDSiyqRblCfLtJ0otCuCFM7z
+	XhJIvdgePsv4yr6lr8Jp5XqL9OQIdsuUGxqeDekTpKtEqIybUruRQKxV7Qb39/d/GEFxM1y3bUF
+	NkvShgB7z14M5+AXtd6TO43HwySBtAbkWtrI=
+X-Received: by 2002:a05:6a21:780a:b0:3e2:8b64:2ca0 with SMTP id adf61e73a8af0-4014d35f1bamr11982201637.49.1795500050075;
+        Mon, 23 Nov 2026 22:00:50 -0800 (PST)
+Received: from localhost ([153.61.198.255])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cde6d03adafsm6596544a12.23.2026.11.23.22.00.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Nov 2026 22:00:49 -0800 (PST)
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 24 Nov 2026 06:00:49 +0000
+Message-Id: <DN37NBGPJJG9.2DSVDCKS3UYTV@gmail.com>
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "syzbot" <syzbot+b6f8640465bdf47ca708@syzkaller.appspotmail.com>,
+ <akpm@linux-foundation.org>, <andrii@kernel.org>, <bpf@vger.kernel.org>,
+ <brauner@kernel.org>, <daniel@iogearbox.net>, <jack@suse.cz>,
+ <jmorris@namei.org>, <linux-fsdevel@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
+ <linux-security-module@vger.kernel.org>, <netdev@vger.kernel.org>,
+ <paul@paul-moore.com>, <penguin-kernel@I-love.SAKURA.ne.jp>,
+ <serge@hallyn.com>, <syzkaller-bugs@googlegroups.com>,
+ <takedakn@nttdata.co.jp>, <jhs@mojatatu.com>, <netdev@vger.kernel.org>,
+ <tomoyo-users_en@lists.sourceforge.net>, <viro@zeniv.linux.org.uk>
+Subject: net: act_gate bug. was: [syzbot] [tomoyo?] [mm?] INFO: rcu detected
+ stall in security_file_ioctl (9)
+In-Reply-To: <6b051681.58b41460.7037.0590.GAE@google.com>
+References: <6b051681.58b41460.7037.0590.GAE@google.com>
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -65,181 +109,89 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issue(s) to consider.
+On Mon, Nov 23, 2026 at 08:45 PM syzbot <syzbot+b6f8640465bdf47ca708@syzkaller.appspotmail.com> wrote:
+> rcu: 	         hardirqs   softirqs   csw/system
+> rcu: 	 number:     5264          0            0
+> rcu: 	cputime:      138      52351           25   ==> 52490(ms)
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 1
+It's not tomoyo, mm or bpf. Looks like act_gate.
+Zero new softirqs in 52 sec, so one hrtimer_run_softirq() doesn't return.
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+> RBP: ffff88807ed35538 R08: ffffffff91be1bbf R09: 1ffffffff237c377
+> R10: dffffc0000000000 R11: fffffbfff237c378 R12: ffff8880b8228600
+> R13: ffffffff89fd0480 R14: ffff8880b8228600 R15: 1ffff1101704514a
 
-- [Medium] The selftest misses the half of the bug where the queue is
-  left unpublished.
-- [Low] None of the new tests check whether the cBPF program actually
-  runs on packets.
+The registers with lockdep struct sizes:
 
---
+  reg       value             points to
+  --------  ----------------  --------------------------------------
+  R14       ffff8880b8228600  cpu_base
+  R15 << 3  ffff8880b8228a50  clock_base[HRTIMER_BASE_TAI_SOFT].seq
+  RBP       ffff88807ed35538  kmalloc-512 + 0x138, tcf_gate->hitimer
 
-selftests: net: add TAP socket filter attach tests
+act_gate has the only soft hrtimer that can be on CLOCK_TAI.
+bpf_timer_init() rejects that clock.
 
-This commit adds kselftests in tools/testing/selftests/net/tun.c for
-TUNATTACHFILTER and TUNDETACHFILTER on a multi-queue TAP device. They cover
-re-attaching a queue after the original filter buffer becomes unreadable,
-bad lengths and bad programs with and without attached queues, a filter
-set before any queue is attached, and IFF_NOFILTER handling. Every check
-is made through TUNGETIFF and TUNGETFILTER.
+TCA_GATE_CYCLE_TIME is an unchecked u64. In gate_timer_func():
 
-> diff --git a/tools/testing/selftests/net/tun.c b/tools/testing/selftests/net/tun.c
-> index 34de2580e32ec..ac326193867b0 100644
-> --- a/tools/testing/selftests/net/tun.c
-> +++ b/tools/testing/selftests/net/tun.c
+  n = div64_u64(ktime_sub_ns(now, base), cycle);
+  close_time = ktime_add_ns(base, (n + 1) * cycle);
 
-[ ... ]
+With base = 0 and cycle = U64_MAX, n is 0 and close_time is -1.
+The timer restarts in the past and __hrtimer_run_queues() runs it again.
+It's there since
+commit a51c328df310 ("net: qos: introduce a gate control flow action").
 
-> @@ -548,6 +550,362 @@ TEST_F(tun, reattach_close_delete)
->  	EXPECT_EQ(tun_delete(self->ifname), 0);
->  }
->  
-> +/* accept: return skb->len.  Three instructions on purpose, so that the
-> + * length read back through TUNGETFILTER tells it apart from a rejected
-> + * program that is shorter.
-> + */
-> +static const struct sock_filter filter_accept[] = {
-> +	BPF_STMT(BPF_LD | BPF_W | BPF_LEN, 0),
-> +	BPF_STMT(BPF_ALU | BPF_ADD | BPF_K, 0),
-> +	BPF_STMT(BPF_RET | BPF_A, 0),
-> +};
+Jamal,
+taprio's INT_MAX limit doesn't fit. tdc uses cycle-time of 600 sec.
+The diff saturates the sum instead.
+Here is a potential fix:
 
-[Severity: Low]
-
-Do any of the new tests check that the classic filter actually runs on
-packets?
-
-filter_accept is the only valid program the tests use. It returns
-skb->len, so it can never show a drop or a trim. None of the new tests
-write a frame to the TAP fds or read one back.
-
-Every assertion reads either the IFF_NOFILTER bit from TUNGETIFF or the
-fprog header from TUNGETFILTER. TUNGETIFF builds that bit from its own
-expression in tun_chr_ioctl():
-
-	if (tfile->nofilter || !rcu_access_pointer(tun->cbpf_prog))
-		ifr.ifr_flags |= IFF_NOFILTER;
-
-The companion commit "tun: run the socket filter from tun_net_xmit()" adds
-the execution site as a separate check in tun_net_xmit():
-
-	prog = rcu_dereference(tun->cbpf_prog);
-	if (prog && !READ_ONCE(tfile->nofilter)) {
-		len = bpf_prog_run_clear_cb(prog->prog, skb);
-		if (!len || pskb_trim(skb, len)) {
-
-Would these tests still pass if tun_net_xmit() never ran cbpf_prog, ran it
-on IFF_NOFILTER queues, or ignored its verdict or trim length?
-
-The test comments say a queue "still gets the filter", "must not get the
-filter", or is covered by it. reattach_filter_without_user_buffer already
-says its checks "cannot tell an installed filter from no filter". That
-limit applies to the other new tests as well.
-
-A test could send a frame through a rejecting or truncating program on a
-TAP queue, then read it back or confirm it was dropped. That would cover
-the datapath and the IFF_NOFILTER bypass.
-
-There is also a smaller inaccuracy. The comment above
-attach_filter_clears_nofilter_queue says:
-
-  A later TUNATTACHFILTER covers every queue of the device, including one
-  that was attached with IFF_NOFILTER.
-
-tun_attach_filter() only clears nofilter for the active queues:
-
-	for (i = 0; i < tun->numqueues; i++) {
-		tfile = rtnl_dereference(tun->tfiles[i]);
-		WRITE_ONCE(tfile->nofilter, false);
-	}
-
-A queue opened with IFF_NOFILTER and then detached keeps nofilter set.
-TUNGETIFF keeps reporting IFF_NOFILTER for it until TUNSETQUEUE attaches
-it again. Should the comment refer to the active queues only?
-
-[ ... ]
-
-> +	/* The queue gets that program again, from the device */
-> +	EXPECT_EQ(tun_attach(self->fd, self->ifname), 0);
-> +
-> +	flags = tun_get_iff_flags(self->fd);
-> +	EXPECT_GE(flags, 0);
-> +	EXPECT_EQ(flags & IFF_NOFILTER, 0);
-> +}
-> +
-> +/* A program configured while no queue is attached must cover the queues that
-> + * are attached afterwards.
-> + */
-> +TEST_F(tun, attach_filter_without_queues_then_attach)
-> +{
-> +	short flags = 0;
-> +
-> +	EXPECT_EQ(tun_detach(self->fd, self->ifname), 0);
-> +	EXPECT_EQ(tun_detach(self->fd2, self->ifname), 0);
-> +
-> +	ASSERT_EQ(filter_attach(self->fd, filter_accept,
-> +				ARRAY_SIZE(filter_accept)), 0);
-> +
-> +	EXPECT_EQ(tun_attach(self->fd, self->ifname), 0);
-> +
-> +	flags = tun_get_iff_flags(self->fd);
-> +	EXPECT_GE(flags, 0);
-> +	EXPECT_EQ(flags & IFF_NOFILTER, 0);
-> +}
-
-[Severity: Medium]
-
-Should attach_filter_without_queues_then_attach also check
-IFF_DETACH_QUEUE after the re-attach?
-
-The companion commit "tun: run the socket filter from tun_net_xmit()"
-describes two failure modes of the old check in tun_attach(). In the
-first, a failed read of the user buffer attached the queue without a
-filter. In the second, "a successful read returned early and left the
-queue unpublished".
-
-reattach_filter_without_user_buffer is the only test that checks
-IFF_DETACH_QUEUE. Its buffer is PROT_NONE, so it only exercises the
-failed read case.
-
-In this test filter_accept is in readable .rodata. On the baseline
-kernel, TUNSETQUEUE(IFF_ATTACH_QUEUE) therefore takes the early return in
-tun_attach():
-
-	/* Re-attach the filter to persist device */
-	if (!skip_filter && (tun->filter_attached == true)) {
-		lock_sock(tfile->socket.sk);
-		err = sk_attach_filter(&tun->fprog, tfile->socket.sk);
-		release_sock(tfile->socket.sk);
-		if (!err)
-			goto out;
-	}
-
-That path returns 0 before tun_enable_queue() and before tun->tfiles[] is
-published. TUNGETIFF then reports IFF_DETACH_QUEUE set, because
-tfile->detached is still set. It also reports IFF_NOFILTER clear, because
-sk_filter is set.
-
-Doesn't that let all three assertions here pass on the unfixed kernel
-while the queue stays disabled?
-
-The final re-attach in attach_filter_bad_keeps_program_without_queues has
-the same gap. That test still fails on the baseline kernel, but only
-because of its earlier bad length and bad program checks.
-
-Adding this after the tun_attach() helper call in both tests would cover
-the unpublished queue case:
-
-	EXPECT_EQ(flags & IFF_DETACH_QUEUE, 0);
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261123054209.89946-1-clementwei90%40163.com
+diff --git a/net/sched/act_gate.c b/net/sched/act_gate.c
+index 711cf24..5422d60 100644
+--- a/net/sched/act_gate.c
++++ b/net/sched/act_gate.c
+@@ -45,8 +45,9 @@ static void gate_get_start_time(struct tcf_gate *gact,
+ 				const struct tcf_gate_params *param,
+ 				ktime_t *start)
+ {
+-	ktime_t now, base, cycle;
+-	u64 n;
++	u64 cycle = param->tcfg_cycletime;
++	ktime_t now, base;
++	u64 rem;
+ 
+ 	base = ns_to_ktime(param->tcfg_basetime);
+ 	now = gate_get_time(gact);
+@@ -56,10 +57,9 @@ static void gate_get_start_time(struct tcf_gate *gact,
+ 		return;
+ 	}
+ 
+-	cycle = param->tcfg_cycletime;
+-
+-	n = div64_u64(ktime_sub_ns(now, base), cycle);
+-	*start = ktime_add_ns(base, (n + 1) * cycle);
++	/* cycle is an unchecked u64, the sum must not wrap into the past */
++	div64_u64_rem(ktime_sub(now, base), cycle, &rem);
++	*start = ktime_add_safe(now, cycle - rem);
+ }
+ 
+ static void gate_start_timer(struct tcf_gate *gact, ktime_t start)
+@@ -107,15 +107,8 @@ static enum hrtimer_restart gate_timer_func(struct hrtimer *timer)
+ 
+ 	now = gate_get_time(gact);
+ 
+-	if (ktime_after(now, close_time)) {
+-		ktime_t cycle, base;
+-		u64 n;
+-
+-		cycle = p->tcfg_cycletime;
+-		base = ns_to_ktime(p->tcfg_basetime);
+-		n = div64_u64(ktime_sub_ns(now, base), cycle);
+-		close_time = ktime_add_ns(base, (n + 1) * cycle);
+-	}
++	if (ktime_after(now, close_time))
++		gate_get_start_time(gact, p, &close_time);
+ 
+ 	gact->next_entry = next;
+ 
