@@ -1,101 +1,110 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.221.44
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795556892;
-	b=X8hTmSebhSxgV25ejH8olcv153N+CWO2vXegColSZ18nAgzJVxJMCrGXeRUMemFIwzSx
-	 PCesY3U3G0RUoPgCPrP3Mo5kbtuPGYU3Y3yEd1XZSIoW8jQiYFukwNP3vVJdB2jzs7jDs
-	 xeTViA1R74pia7RFQe0f0ea6OmoW1Al2NlV8h75ab4xUrlnspt4xMCJDeexTG96LGVz1R
-	 Zb7WWfLzcZRKB5b1sk9aXqMsFRQ46jg2SOxvBmVOs46nWx9z4UOX12BejxZvjtTp5yVXL
-	 q4KnngjdjiLXQ22ue9Gesg0iBsWh+2PcUaTX+0AbGxwmf0T28brb6MeGeYOqNcgjshg==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795556892;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=SgapFXyCDKFt+peJ7rxw0qXMyT6IhM0lKM6Lr08CTds=;
-	b=U6kFpP02KPnC8s2zZ0Y28tblho5wsqX9oAgyl8Wfp0NtND7NzvFnebCyu40CeD2sD1vM
-	 W1U3Nsbi+jdUiiLzpjyH8PoG0BJ5nq8SO7we8TrLvkmE0XYfrpc1ml0eeNHz2h+zSlSqi
-	 46Bw1mq0moFlPhZQLCPqu4yO48gBDnbqiF/MZD4cwkEelf0d+Q3F/ejFupnAd9omfd2ae
-	 vguhDNzJnnn/2tG9huo07jrCPNkTE2Sh0r6RRv+XP9R75JHUmOodiJGrWuWu4bV8ptCgh
-	 C0tE2VWB1SpmO4SYDfB+aJHAgREGOVAzwPsbj/PNTZKd6bayL/afkMVAr2FN5QdHubw==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=PJVqJJ+6;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.221.44
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=103.168.172.137
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795557760;
+	b=IXgmyLkzMu098hsHPqko+KX9O3fyQOYM695VvFDw+HBks7fFThx/PUqmwMKPV6GpFWCO
+	 CnXZq5gbqLCFx8CzozcP3u3IDazBZP0oRO9JJIHIn2zbbObX6hakSvB45UkcY3zJ26Ber
+	 DPrmQf4jAy/0shEUcmDVs8t9LHa/hmL21mmRUQlQx69AIM82TtH2eSAGxmPPgDfpqjT/6
+	 jahiHHYjJ4S96Z7u3PQtg1STRDJmnB7SuN030NLGUNXOPkwA+WAZhKl3P3rxySEC4gF/E
+	 8gdAKfpziQftPpxqSWJDUHlHJyqNMreLuPZsZLZ+4F5T6784Jt2gCI5ZwF86aTHuEDA==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795557760;
+	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
+	 X-DKIM2-Info:DKIM2-Signature:X-DKIM2-Info:Message-Instance:
+	 X-ME-Sender:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:X-Mailer:
+	 MIME-Version:X-ThreadId:Date:From:To:Cc:Message-Id:In-Reply-To:
+	 References:Subject:Content-Type:Content-Transfer-Encoding;
+	bh=xqSGxC68OuGq0f3lY+sfYUCqjXoRvtvCw0BSPI+8ZKw=;
+	b=0X3pYQN9agXE9df1bvvOS+MRtM9hwImrRZt65Xf4dbQEaoHM2UlVFcmJ2rFlfhtKyN31
+	 bNjbmPyTT4BxcxuWwjmvWgbg8AmBwUu7g/hcRZN89php6dCfL1FzvJqn9DEmu9wVtslis
+	 fwVwKi2CObzyv25P3NMi3/SFgWk8nzd8Ip1xC99Vl+3GN/VXi4DZUyXHluacnIuC+TM29
+	 HnfQIvnVzVUDsqArVpL8NCtVf4GGuicIVr7oQfM+t5y1oM/G1IR3sWxICmz4v9CUkdUoE
+	 cxHqRvHmphwXMUipJO9clbSc5CxFOdClr8FEvIeCV6pAtP56ps7DxrgxgGlW6fYTdKw==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=arndb.de;
+	spf=pass smtp.mailfrom=arndb.de;
+	dkim=pass header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm2 header.b=mfnJGR8Z;
+	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b=wbnBnHyI;
+	arc=none smtp.remote-ip=103.168.172.137
+Received: from flow-a2-smtp.messagingengine.com (flow-a2-smtp.messagingengine.com [103.168.172.137])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A7B0606A321
-	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 21:48:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3A7B0606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF283606A321
+	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 22:02:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AF283606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=PJVqJJ+6
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-4ac109a8a12so2966748f8f.3
-        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 13:48:11 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795556890; cv=none;
-        d=google.com; s=arc-20260327;
-        b=ATKDk2Xe8ITUDLqhqn+YIutnmR4Tci0kRs8fNi5Azy6WGa/rkvqrMBbIFnnaoBZoHh
-         tWxwT/U3u0fvdFLk2WE6xxd88m5g8R67/vpiNJn3e+kye8FUhhrlo13xlLp8VKIeDJUY
-         ds5hu9PE+1evXuO122qmw6ufprK9VmiUa2Ppc1z/Fj1mG1ieFYTVxF58hqYbbq0LYm1y
-         Ru02VVi2znQ8uPFKa/Hn9Y58W+MMVvsQSLU3nRxtfg09Xkxj4tZ7cfbDhmCRe3k/5YNb
-         rAxcF7tCe1inRlvhWRxKaBvFRWsoIsBvup4Qtm+jCHv7SUWVR6eRxnqL+Ew3NeyiZ/uk
-         KuBw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=SgapFXyCDKFt+peJ7rxw0qXMyT6IhM0lKM6Lr08CTds=;
-        fh=xfnxXem63xQ5mVyCd7l6f0B25q2hcG4h2qMaZi7ng9g=;
-        b=P1LXlmIPbcH5Ef/7dmN8jrv/FSBGtCb5BqWA4CTTc4qGJTSJvSaQlW+XTZHrQVD7Wv
-         0TEb+EdHbS/2lPNpOn48Kxpk/ada0Br75y7M5aZ++HuGAs7bSrw63K0NR1cRJchnW+46
-         L2b3EF3tfGDToKp7ABOmVUIPI+vcw6fKm6oZRqNL4Hlbsk5stcx9ORUp0/SiMd3eUC9O
-         j5Xj3q9EmFEZWNfo296GFj0NyEEVirddU5V5kgNJDuP5h+85cKW/rLcAPgAdefhoAMXN
-         THBEYC1oaMkTaMeIuMf1h9md9JqWhHF7A730fm4rxEIJKya83D3r1gWpHHwl3sHDvzSj
-         tgLg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795556890; x=1796161690; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=SgapFXyCDKFt+peJ7rxw0qXMyT6IhM0lKM6Lr08CTds=;
-        b=PJVqJJ+69ydWTdAOwldeOa/Zj/oB1g/WO/zF7iEkoC4mDRrbViIThuul+JuPovnSy8
-         VZPYecWWf8aLtnEwNQ1utKYSshKRanMRv1jps/aMfaq7R+ooeavz+OMJtKggZDXQrRBV
-         2zZ0eoHWjD0KfpS092rbqq+ea6adZ4qiN904dMbpY6gsgLZgfKqCjThFUnPFowdFu2dn
-         VM/qbz3/7AuMADxjYBaLk/MlY4MJzP8iAKicfOjMwlO7P2ZKWxFsPLg8dhMeISZJq0FD
-         oNe9kLD/juIUFXh6NekvH99kcZz7l5tRMesdS1E/YznaTja0wQ1rsYYfz3w5C3w3Lszd
-         UrZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795556890; x=1796161690;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=SgapFXyCDKFt+peJ7rxw0qXMyT6IhM0lKM6Lr08CTds=;
-        b=RflyHfuG0AYtINgR3Vlm/M0PY3HoDtjDLQhUPTIjuQ/z8xHQckfyYDuaZUMSFPxawR
-         hvRG6L1JnB0N1M6w348kNJ7bs2U1a/FmckqAFV9JRhFfvVC09VE2uiKW9UHYHZganNKk
-         Gs2I2AWwNhEujPpE6xi5WRHn2SlaDGfAyRps7h5SJ6qvoKWHjBjvPxABIaNf8i4uDE72
-         OxBi2Jv1yfbgLFz1zqTsUjiLk8oJwtSec8lMx48c/RGnmPed99nzadwMp5nn9GauwyrX
-         1hhNVY7HaFpMKStSNw/DBJsmAMbYUl0nR5jIKnl9B8u7bFbBjKyAT6A0D2tw/5uLaQYO
-         bl9w==
-X-Forwarded-Encrypted: i=1; AL+hErHjUjbnHQxj485vYNoLMPkmBFEO3llMXIwIdetGbUfyt2TTyDR+BRNcK6z6GpLSNVGCJqU=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/wvxDhD87nQllgSsaL4HuNe9WGXMN7LPwwd68JE3ATW3riUlom
-	Ah1o5Y6MnmsZ1BM67acHA8HXggmvGM6ngvopGDSpbsnmQZAbqqNXhHdeG3J6cpu+MvqnNU5JewD
-	MMvk+e32xYquJdVBt0uaXsIJ7NEbBtT0=
-X-Gm-Gg: AZFdTZd+ukfvgBnqyrAfON4EUvYVpuA7uPBQqFYKeaS0YllLt3opG16qmVuUBqA8TUv
-	ilqEqqbK98SZ+gpfsKMH9Apxr307ChOTF1Xm7bZMgSKWoHDfy4eyLkLYUjmNJbMnEWbtctT65LI
-	ih5EYeXvyhMhaIuQhZPZo/I1WlbRdI1RMzmIbYd6bEk/bfPONjiJouTlUsk7WaftsVcMETBc5e/
-	2v5Ha7jBLiN3uUXxrzCg4E022Qko03EEMmsJCJNvBMj2W/2Y8Y/ZJLycTMuhHaPo6buiqAxz6gw
-	48IWwIrTUN8aEDx1mvc6i6Dg5K9v0cV3QpDdqIaAe52Wws0VtAVaZj8na042ym2Kj90gkaAO2aE
-	n+7Nyf90rDcHlLi5uP1QJPFC2v3mfZIheFIL/mGESx+QCubUfZ+OTnMvkO0hW30iiH9LaQvMqzd
-	G0J6+Sw+77j+LKOagMxMw=
-X-Received: by 2002:a05:6000:27c1:b0:4a5:26ff:13d0 with SMTP id
- ffacd0b85a97d-4abb0f3b5bdmr20496747f8f.14.1795556890344; Tue, 24 Nov 2026
- 13:48:10 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm2 header.b=mfnJGR8Z;
+	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b=wbnBnHyI
+Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
+	by mailflow.phl.internal (Postfix) with ESMTP id 76CEA13803C7
+	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 17:02:38 -0500 (EST)
+Received: from ams-imap-03 ([10.64.2.23])
+  by ams-compute-02.internal (MEProxy); Tue, 24 Nov 2026 17:02:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1795557742;
+	 x=1795564942; bh=xqSGxC68OuGq0f3lY+sfYUCqjXoRvtvCw0BSPI+8ZKw=; b=
+	mfnJGR8ZvkU0LMsvLhbkB2aWWyYvVftk34Igv9f+VSyWFZL75F98YRJInsubsg5N
+	ErWkbpwwYR8PYwwytDXrBO4Zv5tmqL7Kcd99KBzFrH3plirHNa3BF91ghYHg1G2X
+	OmIzUeu9alCUMqYdLPe3t6xGqQDeBJFNzjBkCZdXLIRdfSfdGAENAvBoCa2Hd/va
+	6GViewBlkNAzICD3R2R+FvuW+BnNIr3jT+Fl9ot6DTCUyPwgXgiOAE7gr65RUlWF
+	zTV1eaMMqoKhfcdTawq7FOwHVOJ7hDxNDHC9/0HIOAI9uDObbhkabN2JM4I0uCwd
+	iklYqFK06JlPTifavsWnwQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1795557742; x=
+	1795564942; bh=xqSGxC68OuGq0f3lY+sfYUCqjXoRvtvCw0BSPI+8ZKw=; b=w
+	bnBnHyIX27rhdSGfAc5H4g5+m7drm11Zac2njlCmzN4mbo2YQ6EhH6D3pD/8PeWY
+	8GHoNQCNetXraVudoAhL0qYFTYu9qtXjJhzOx0LKjAdkofjkzwVdOhVC1J2hwfwt
+	VGDOiyN7FwH93as5zO5o+8QJnGBEUiUslUd724GRZXy/EKfZPjLZu/8oWwovMRB0
+	gqyKbJtAxmz5Ye7KI5rrGabmlFjzzdpLjwI7iCre5OXCavuM7GUe/YusH3YuhrsM
+	tEnsRe06oXURbQM9aMsO08wVojk5ODAx8uWqDju1VwkBgXeAY+UL/ydC1j0YZtCu
+	KfHp2BvZEv/a3sOge7mDw==
+X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-09;
+	repo=github.com/dkim2wg/interop; date=2026-11-03; sw=lmtpprox;
+	action=sign d=arndb.de a=rsa-sha256;
+DKIM2-Signature: i=1; m=1; t=1795557742; d=arndb.de;
+	mf=PGFybmRAYXJuZGIuZGU+; rt=PGJwZkB2Z2VyLmtlcm5lbC5vcmc+;
+	s=fm2:rsa-sha256:iiK1fky/ZsVt0sEsbQCauP0Bkn9JXh31EHLL8NT3eQpoi9M
+	0a2mqST4Y3CsfSbdCB4Sb6AfARojwTHMgfUiNFVdzB/vUFI6zdnj4iqtPSJ+oYa+
+	uT8z01IQowjreosSWoWse6sU1sYGydVtMZu8CrR6C39/7kLDfSYv0GFPRFl617Ii
+	E5UB0Xd2i47a6z61saOD+9GxwPSmFE71uKgMspNK0j93GewqLQecbRe0iwV2WutB
+	UbvRlbgklGXYoy19whveyHz/DjmXRPvOnh5D8jJwwb8Yu5JU3O+EYzTGsFzHSJ3r
+	/Tgh7ViMH2SS8LzzrMHHOXtvNJjbqCNs7pazMgA==;
+X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-09;
+	repo=github.com/dkim2wg/interop; date=2026-11-03; sw=lmtpprox;
+	action=mi-m=1; hc=12;
+	hn=cc,content-transfer-encoding,content-type,date,feedback-id,
+	from,in-reply-to,message-id,mime-version,references,subject,to;
+Message-Instance: m=1; h=sha256:Y1L9ZRjDVf0ae1O5OLJmIEMJoJINj3g0qWcfqpumaM8=:uV7HNzlAfzr4LTvQgcdWBWGhD8P70PVpTMD/LBLagBw=;
+X-ME-Sender: <xms:ZAkGa2S1qU5q8Tt4P59rLUZLMDcdcz9MhGSLBcV29aA_t5jwHSVpFQ>
+    <xme:ZAkGa2nn-MLHHH5bsIrtUn53Bm6dbM7HMZKuIRmjk9pvX9DAb9jnrJeBrNTX2ODRl
+    wAAtRHYTqQ6S0lkRVQTlORopD_RQ-qt5BuiOtcQDZFWBrRtGC248laJ>
+X-ME-Proxy-Cause: dmFkZTFRHh3IY7AQpE2sOB2PLJi3AuimKZDL9H1tXPiO9loafbcw/DGlO/Xoejw+8P82CU
+    LZtGPx5Dw2fehVmppW39nh7aiKQqHD4K4dz4hhwMbfJ/rvud1uNRBqKqwpOM3ItmC7aGg2
+    A+GKbJZ0q/HAUhCKq8KTriq2kSTLiR4BY395K6QXzmGZqOgGBQCeI+/qZ5DjTPzrKb+KCk
+    fWxNoXXTvO6/Q9umpMuH+R2tl9qmfexdyWMyjNVwhUtZI0siPxAVzMuaiN62cXkT1LxPsl
+    ivdDM2jUMgnHoUAdJkJTv2Cd0wNryoNWCgNqfkM9sF+PCCJ+n2SVasPPSYcFY35/BtjUi/
+    TlJok52x6K/qFFOH5y2f4B3BhSmPbdoGhxzStq5W26pndjLaCuALLGrZUSxDowPZL8Uxm9
+    tq8OcCqqLGoNK4Gz1S9oU6o18yltNNQA8ylIOP1GM8y9zFzH4ACeaKMpbIKk59CrU6mG5p
+    r7Vqugsc+zPL78L05eqJ+Dv566UPYEBjuKKkv+Kuz7Ek+Vcjrk5P3BBEWeI5xh7lI87c+k
+    EGduRPaTIxc7VwNPWY7uJsLAvKDYRTBcjLlbz5kr2cdl14XqqH/o219lKVdPi2m4ANFlMt
+    HKT2MGXWfnbkl4Zcq1AAqLM5PN7cFVRnArfJggG7bcTT8iycB6wsrFxURFsA
+X-ME-Proxy: <xmx:aQkGa5ADK0kQBKydW-jsYQL2owm6ypApuRcgesYyb9gfGqwkudPKNw>
+    <xmx:aQkGawu6ACeRQkfy1MUQnkSHymWoFOBsVAuxGxAvsiDY-MRkdjhslw>
+    <xmx:aQkGa41LhutcH3hl071xdqmfJ1-SyaJRtJWCEsdFZTLgpNQKlsyu9g>
+    <xmx:aQkGa5jbcusQENaD1VV6mJUEOIOUF73AiAns-Bfib3Jpb0Xg437OxQ>
+    <xmx:bgkGa4awIhQYBbKzBAjp50sAI32cG5KibTRETI3OZH4oHKFRGLB2KqwC>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.ams.internal (Postfix, from userid 501)
+	id EEB3B32A009C; Tue, 24 Nov 2026 17:02:11 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -105,112 +114,109 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261117-bpf-preempt-v2-r2-v3-0-586376ec3672@sentinelone.com> <DN38312WXPDJ.2KLUTCWSDFL3P@gmail.com>
-In-Reply-To: <DN38312WXPDJ.2KLUTCWSDFL3P@gmail.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 24 Nov 2026 13:47:58 -0800
-X-Gm-Features: Aa3M54r4cLpLVpvm5Jm5CUzi10h61k0_Z20IJHqjjVNyNuLE3oFuveUgR2mZQgg
-Message-ID: <CAEf4BzavErcSOZhGobqEo68d+2bCnJ8vFxxT_vqb+oQw1j1d7g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 0/4] bpf: Check recursion per task for
- preemptible programs
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: mikeba@sentinelone.com, bpf@vger.kernel.org, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, Emil Tsalapatis <emil@etsalapatis.com>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	JP Kobryn <jp.kobryn@linux.dev>, linux-trace-kernel@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+X-ThreadId: AUJ1OXWu3nCJ
+Date: Tue, 24 Nov 2026 23:01:51 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "James Houghton" <jthoughton@google.com>
+Cc: "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+ "Arnaldo Carvalho de Melo" <acme@kernel.org>,
+ "Andrew Morton" <akpm@linux-foundation.org>,
+ "Pavel Begunkov" <asml.silence@gmail.com>,
+ "Alexei Starovoitov" <ast@kernel.org>, "Jens Axboe" <axboe@kernel.dk>,
+ bpf@vger.kernel.org, "Daniel Borkmann" <daniel@iogearbox.net>,
+ "David Hildenbrand (Red Hat)" <david@kernel.org>,
+ "David Sterba" <dsterba@suse.com>, io-uring@vger.kernel.org,
+ "Jim Mattson" <jmattson@google.com>,
+ "John Fastabend" <john.fastabend@gmail.com>,
+ "Josh Poimboeuf" <jpoimboe@kernel.org>, "Kees Cook" <kees@kernel.org>,
+ kvm@vger.kernel.org, "Liam R. Howlett" <liam@infradead.org>,
+ linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+ linux-perf-users@vger.kernel.org, linux-scsi@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, "Lorenzo Stoakes" <ljs@kernel.org>,
+ "Chris Mason" <mason@kernel.org>,
+ "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>,
+ "Masami Hiramatsu" <mhiramat@kernel.org>, "Michal Hocko" <mhocko@suse.com>,
+ "Ingo Molnar" <mingo@redhat.com>, "Martin K. Petersen" <mkp@kernel.org>,
+ "Namhyung Kim" <namhyung@kernel.org>, "Paolo Bonzini" <pbonzini@redhat.com>,
+ "Peter Zijlstra" <peterz@infradead.org>,
+ "Steven Rostedt" <rostedt@goodmis.org>, "Mike Rapoport" <rppt@kernel.org>,
+ "Sean Christopherson" <seanjc@google.com>,
+ "Suren Baghdasaryan" <surenb@google.com>,
+ "Thomas Gleixner" <tglx@kernel.org>,
+ "Vlastimil Babka (SUSE)" <vbabka@kernel.org>,
+ "Alexander Viro" <viro@zeniv.linux.org.uk>
+Message-Id: <1a99e5fc-129e-41e3-8420-101bcf04b366@app.fastmail.com>
+In-Reply-To: 
+ <CADrL8HX5vb1PGDpWzp-eR0rNfsMCVUhFa9vp_WZZx2eJZ+dfXQ@mail.gmail.com>
+References: <ac22215d-3e58-4aab-851e-47c30836e058@app.fastmail.com>
+ <20261027231728.1466446-1-jthoughton@google.com>
+ <32fad21b-5bad-4640-97df-ef0f638cd9e9@app.fastmail.com>
+ <CADrL8HX5vb1PGDpWzp-eR0rNfsMCVUhFa9vp_WZZx2eJZ+dfXQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 00/10] uaccess: Refuse and warn on user accesses when
+ current->mm is NULL
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Nov 23, 2026 at 10:21=E2=80=AFPM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Tue, Nov 17, 2026 at 03:29 AM Mike Bazov via B4 Relay <devnull+mikeba.=
-sentinelone.com@kernel.org> wrote:
-> > - Marked programs are not fixed. A program with a per-CPU map or a
-> >   tail call loses runs to preemption as it does today.
->
-> I suspect users will hate the behavior introdcued by patch 2+3,
-> since adding a per-cpu map will suddenly make the prog to miss events.
-> But the idea has legs.
->
-> Earlier I proposed to insert bpf_preempt_disable() by the verifier.
-> No need for that. bpf_prog_exit_run_ctx() can do it when per-cpu access
-> is detected. Like below:
->
-> > One question: the marking is automatic. A flag that the program's
-> > author sets would avoid the second trade-off, but existing programs
-> > would keep losing runs until they are rebuilt. Which do you prefer?
->
-> No new uapi.
->
-> >   series #2    42.34 [42.12-42.78]  39.87 [39.46-41.38]  41.53 [40.79-4=
-1.75]
->
-> Good enough. let's keep the walk. No need for the array.
->
-> +static __always_inline bool bpf_prog_enter_run_ctx(struct bpf_prog *prog=
-,
-> +                                                  struct bpf_run_ctx *ru=
-n_ctx)
-> +{
-> +       struct bpf_run_ctx *ctx, *old_ctx =3D NULL;
-> +
-> +#ifdef CONFIG_BPF_SYSCALL
-> +       old_ctx =3D READ_ONCE(current->bpf_ctx);
->  #endif
-> +       run_ctx->saved_run_ctx =3D old_ctx;
-> +       run_ctx->prog =3D prog;
-> +       if (prog->percpu_state) {
-> +               if (!prog->sleepable)
-> +                       preempt_disable_notrace();
-> +               /* sleepable prog should be using explicit bpf_preempt_di=
-sable() */
-> +       }
-> +       for (ctx =3D old_ctx; ctx; ctx =3D ctx->saved_run_ctx) {
+On Tue, Nov 24, 2026, at 22:10, James Houghton wrote:
+> On Wed, Oct 28, 2026 at 7:14=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> =
+wrote:
+>> On Wed, Oct 28, 2026, at 00:17, James Houghton wrote:
 
-do you mind checking if unlikely() around ctx improves performance?
-
-> +               if (ctx->prog =3D=3D prog)
-> +                       return false;
-> +       }
-> +#ifdef CONFIG_BPF_SYSCALL
-> +       /* Initialize the frame before interrupts and NMIs on this CPU se=
-e it. */
-> +       barrier();
-> +       WRITE_ONCE(current->bpf_ctx, run_ctx);
-> +#endif
-> +       return true;
-> +}
-> +
-> +/* After an enter that returned false the frame is not linked, and the r=
-eset changes nothing */
-> +static __always_inline void bpf_prog_exit_run_ctx(struct bpf_prog *prog,
-> +                                                 struct bpf_run_ctx *run=
-_ctx)
-> +{
-> +       bpf_reset_run_ctx(run_ctx->saved_run_ctx);
-> +       if (!prog->percpu_state)
-> +               return;
-> +       if (!prog->sleepable)
-> +               preempt_enable_notrace();
->  }
+> So now in v2, the _nofault() helpers themselves do not check current->=
+mm.
 >
-> I think this should minimize the breakage and fix the issue.
+> I've uploaded a draft version of v2 here, in case you want to take a l=
+ook:
+>   https://github.com/48ca/linux uaccess-v2-wip
+
+I read through this now and it all looks good to me so far.
+
+>> Since in principle every user access should go through both
+>> access_ok/mask_user_address and current->mm check at some point,
+>> so combining the two as much as possible should help long-term
+>> maintainability.
 >
-
-So basically to opt out from this behavior BPF program would need to
-stop using any per-CPU maps and just implement its own poor man's
-per-CPU storage? And even using SEC(".percpu") would still be detected
-as per-CPU usage, right?
-
-Should we give a way to opt-out of this protection explicitly while
-still using per-CPU maps?
-
-> pw-bot: cr
+> You're right, and v2 has been restructured like this.
 >
+> - The check is in access_ok() itself: the generic version, plus the
+> arm64 and riscv versions. __access_ok() remains a plain range check.
+> - The callers of mask_user_address()/masked_user_*_access_begin()
+> check current->mm explicitly. There are about a dozen such callers.
+> - The unchecked accessors, __copy_{from,to}_user()
+> and__copy_{from,to}_user_inatomic() (and arm64's
+> copy_from_user_flushcache(), which also relies on an earlier
+> access_ok()), keep an explicit check for now. Once their users are
+> converted to the checked versions, those checks can be dropped.
+
+Ok, sounds all good. If we get more than handful of mask_user_address()
+and masked_user_*_access_begin(), we can always revisit that interface
+to make sure the check can't be skipped, but for now this seems
+like a good tradeoff.
+
+> Compared to v1, this also covers get_user()/put_user()/clear_user() on
+> arm64, powerpc, riscv and the asm-generic architectures, and arch code
+> like signal frame setup that uses access_ok() followed by __put_user()
+> or unsafe_*(). user_access_begin() no longer needs its own check.
+>
+> What's still not covered: x86's get_user()/put_user(), which do their
+> own range check in asm, a few architecture-specific paths that call
+> __access_ok() directly (e.g. on alpha and sparc32), and arch code that
+> calls __get_user()/__put_user() without access_ok(), mostly trap
+> handlers for user-mode faults. Probably best tackled later.
+
+ok
+
+>> There are probably few enough of these that we could address them
+>> by either adding current->mm checks or converting them to use
+>> the full versions instead where that is an obvious change like
+>> that usb gadget driver.
+>
+> Sounds good. I'll send a separate series converting the obvious ones,
+> starting with the usb gadget driver. I think that will be useful.
+> Let's see how far I can get; hopefully I can drop
+> __copy_{from,to}_user() completely.
+
+Ok, perfect!
+
+      Arnd
