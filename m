@@ -1,117 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.229
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795560673;
-	b=Ov4Ebwddl4QWGV8Iuc6M0BFToQK3tWWw5TxWyqCAfJDS48ELsgxXDMjPrOo219liSPYN
-	 5BlPqv+bx30v61T2pFct5qneWlqLBIeG6FN/zxixC0C6uyokitkyWdgFCIKn/3iPFMV3M
-	 PLkbpQiW0rZ9x3zVYZaeBqi8kEGoURRaUSueRVKX0fhO09a2l9J7ZVkkW+DGZv3GLc1bL
-	 hEHCFks/XOW5r9yR3JTV/K6WAb4MOIYPGPQNOdQLsH3ySUPdRI9jA22lc0qUdl/zduaO+
-	 ZJ0kaI4SGiVbep5XXOwxtp7+VAxQ2mYkKESXiG85wQaC14/QP41ejF1b+3tMq7Mh9gw==
+	t=1795560769;
+	b=oRTU7+u+zMdWUuD2TyQv5Fb34DzKVtQnNFAPJNFx1+XHsASsqg0hJCzMxFm2D9X3a/bo
+	 pg60qLjzXtYSupOc+XI3x99zvM6dV0dsfBD5BT8efst5EOKeVRgnQxa/uco4+BXi72h5H
+	 /wstEwFYmoBREhHak/SnhjPj5ugessiungITva6qXMbMG+3qeZ9AEJdraoNPuRj6Tx/Ho
+	 vmVngd7Spegjf6nMvkFkiZA2i4DB6Adoe2+oGoRoTJUEn27Mu2a8oKA9B/jGySvpK2dCk
+	 WtwCa3ztxfgDdkv+TofpQyxJm01ZPBbCpT8z98GZwGNpic7IqHl7s+W65UTQfAgSflw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795560673;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=flVppx0kRFMYxE8MCABde0wS9Ry07/Asx+8ob69Cr3Q=;
-	b=DZkHuyKRAzqOYCvvYJ/UmsUID79Gf33HxYXy3Fsd7zbYATyXrfQ9ZaY3QQvAyDl+SsoA
-	 bPrIYClpNEkbwzHddXRqBg4SXmUFjJtab1961UnemKm2BgS4rtyOv3xcFTausgBqFhvyz
-	 BX7G0MUq/SCQBqGFpZdM+GIpUjFMW5BSdEP5pVcAmt0SxFsPTCBF1bbTkN10loL7a9SOO
-	 B96ZmdI5nLUGY5qFmrF1KlMYuAz61X6zxXapni94wgnR6RLNvikoKPUIBiDrMZ9F6mw+N
-	 etxh8R059MjQxbOMHXIzl2FizCnyvbuSmyV4pkuORlRqZE2trpOD3vSDCahBfIxWfDQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795560769;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=yQKyOvawwuO1atA3WB4zRh3RGdgT+yLKezQY+myigjY=;
+	b=VFgNXZCo29XLHHOtM/bsvmTXzwiRJJoIaoyydyAbEUvPpRtOGUdH6Nece3u3EalXePUo
+	 SsO7tQhnmnyuvsyuGBw3NfDzhq7uT9f4xZKNkLC6Y2Vgrt8jP4SN8j4W9wfB6mHX8ntbH
+	 aD+AH/SH6pm2J+ph1z8fn41zMJmMc+EhU5a2FMoJ0ik3eI3gQ+vevf+HPPWeCDxrdDeAv
+	 HVeRCOkeBQmgZChxw6gWR2EmRv7Z6zM92KXn3GNmkliBXqpss4jemnw4RWpZ4tr4vRiMX
+	 /5sGnuznlrowqENET7oqyOP+bNForqtYJgH4DeRAVJTkgvDk1x4PyNoVa4d5kcxZ6Xg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=VeY9yGWs;
-	arc=none smtp.remote-ip=209.85.128.50
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=xBNIXxBk;
+	arc=none smtp.remote-ip=91.218.175.229
+Received: from mta0.migadu.com (out-229.mta0.migadu.com [91.218.175.229])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86D2F606A31E
-	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 22:51:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 86D2F606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35D82606A31E
+	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 22:52:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 35D82606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=VeY9yGWs
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4a35a60499eso40735455e9.0
-        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 14:51:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795560672; x=1796165472; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=flVppx0kRFMYxE8MCABde0wS9Ry07/Asx+8ob69Cr3Q=;
-        b=VeY9yGWsUyLWfVDkEClul5rCYaCp/GGHKnbGE224WHpXJv2yEXHvlKDtdmbLtI8t93
-         eMEpUx8277T1FYjlBztx0zAgO6PqAb/7wOz2qGUAooVRYaUCGm0mXwRoudGd2mdvBhUo
-         8EQ03E8cmbY09e/tzsItyYTBem9/gkr6Ky7y2j5eTix5raUYKLGmQI3Naut5J/Z5GKR/
-         sBQ4JIVkRZn16jpX4k0YUkGJvUel50S+3vkoI6x3fJXlSNIkeNFNyk62321Mn/xUua7J
-         wdxRRHrq8lWLvt7khmLR0VmKJ0YlSnaj686jiXHuEFCBh040zDOoFTtZwhK1ixX2+hGu
-         nllg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795560672; x=1796165472;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=flVppx0kRFMYxE8MCABde0wS9Ry07/Asx+8ob69Cr3Q=;
-        b=BGJg0orYcwtUsmI6FMZTK5A7oWhXE7na3RRcGMiawd+RmwmNzuzVIfb5BrEB2QA6NU
-         P7MPmW2D0VMqSDDsEwHnOoeaQvcyk4DXBArHxUsy2RHxBegH9MtCT0FvP8r/o/0Qz45f
-         qTRN1ZviUHTwVAXrwKgMkzMTJEQ0SMYNgD6bFMD0Qn5oFzmtMGSV2Imv9xzV94GyxY3z
-         odA1Ru6S1ZAAICcYF8bZdlNbOg2xOh/VVGTF58xW0OWo41qrbUSJEBaEipFnllt2ScME
-         RxMYwSe28k+l0T+Y107Az74g/GhNrvTB+xjhevuYmfBaTmuHM4eBY4uqLQMUhmzmwA5L
-         KOtQ==
-X-Gm-Message-State: APuU4Z9YMAHAL2Z7EdOXQuFd5YV+xkQMNsO1XzylhXRf9Zan0ffnWI8m
-	fDv9IT6HU+9tEoGIAqgD7ANKv599+ll6vHMeTNWbP9PewQgHwcZAc7UkbqAtC/s=
-X-Gm-Gg: AZFdTZdh5pMJxN9LZnB4uoNakhL1PiZMCRwycPaEzlrQoaYlYnxo0vq05GUu+oVO6mO
-	yvHp86BrWzOZOzUZuNEx/fuZK8n5Xga4MI1VYYbdziXmI85mY98TYEcHsf9OJIQk6qE7tpdeGSA
-	09VJyFenRgGE01bJ3C5N1u/OHnzxX8l5AkgvIgBjFgVmrGTjoKjZzIlvHT75UIk3/XxR53f4XJ8
-	KFPq4a45tiYtfUd1k/yay/HuGVg8yzQOR9yka1cneh9rEVi2N+qSF1D4EEanAGbZMGFKSw/twK1
-	SS8fUxbRL06lxeqv6qu8v/N8d3z6eHZXbs+yVl9TbMUI0BhxNpr8L8ZQovQbchvviMLvS2n9zj4
-	r1fdH2uWHp0KnBrgftdedIKoC0FGLxKgSBWtohEQ3toOpFjCa0pabd+XI/aEzj8zmVKT6Zs14ut
-	bFJKzbc/Jj6pAjzyXniimFQIidxClj2iXcBvrO5kG0o+SaCdka5mValPTaAyHS9RZQJ/6ngp3A4
-	eSZsk1u3f5STxYEhGD/83NPrRlI2NKsC7QMDOhqIZqYgtHNc79+P4w1xqMUFpKma0GfZ0Ck5LFb
-	eNRs4KOq1MSadk6oVr4CTOKBfbcMt2T7ujFaUZHo2znMeGZSi44ISXPxDWtCYsVYiFOj7nwckUa
-	W30DyOWmICRd9/EH9YrbCac0dQMoXGByAdEmE2AAq8j6j7I9c19OPWrGsp3Yi73fC4OAsTtqWVa
-	xGF446QaPnXCcJNZFOwFcvQXikfZXwmw6P
-X-Received: by 2002:a05:600c:3113:b0:4a2:267:25b3 with SMTP id 5b1f17b1804b1-4bb8882a4b9mr343791695e9.35.1795560671942;
-        Tue, 24 Nov 2026 14:51:11 -0800 (PST)
-Received: from localhost.localdomain (dynamic-2a02-3100-2ec1-8a00-a10d-4335-1e05-e7ae.310.pool.telefonica.de. [2a02:3100:2ec1:8a00:a10d:4335:1e05:e7ae])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb853a1e8bsm393839525e9.9.2026.11.24.14.51.10
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 24 Nov 2026 14:51:11 -0800 (PST)
-From: Tobias Philipp <tphilipp@gmail.com>
-To: bpf@vger.kernel.org
-Cc: Tobias Philipp <tphilipp@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Felix Fietkau <nbd@nbd.name>,
-	=?UTF-8?q?Thibaut=20VAR=C3=88NE?= <hacks@slashdirt.org>,
-	Stijn Tintel <stijn@linux-ipv6.be>,
-	Daniel Mack <daniel@zonque.org>,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v2 4/4] selftests/bpf: Check that map values are 8-byte aligned
-Date: Tue, 24 Nov 2026 23:50:55 +0100
-Message-ID: <20261124225055.87344-5-tphilipp@gmail.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20261124225055.87344-1-tphilipp@gmail.com>
-References: <20261124225055.87344-1-tphilipp@gmail.com>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=xBNIXxBk
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=7c2eK5ZRoYhnY7geiYrgE1DFXHDzKCbM54tHz+l+sEo=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1795560767; v=1; x=1796165567;
+ b=xBNIXxBk2CRHLR+Tp+h7cgJ9NofnLvGZsK2zRJb3ARl2dQR72hbn/La/SJFu0TnvSwZ5/W4n
+ YzCcEYqNb3g8+RXTI6wF1rBrtBl/Q3rh1raWwGpoK4AkqKgdKYm28iuMQFiBzo+/sUMu3pQMmvA
+ gv9F0NioGN3bRnZGcEoI7enw=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 2315a5e7c2c7fbb3;
+	Tue, 24 Nov 2026 22:52:47 +0000
+X-Mizu-Trace-ID: 2315a5e7c2c7fbb3
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <a34def3c-0b04-4f28-823d-9c629285ecdf@linux.dev>
+Date: Tue, 24 Nov 2026 15:52:42 -0700
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -121,141 +58,96 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v2 1/6] libbpf: Separate interfaces shared with
+ in-tree tools
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Quentin Monnet <qmo@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Alan Maguire <alan.maguire@oracle.com>,
+ Emil Tsalapatis <emil@etsalapatis.com>, Jiri Olsa <jolsa@kernel.org>,
+ Song Liu <song@kernel.org>, Tejun Heo <tj@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, sched-ext@lists.linux.dev
+References: <20261121003403.2928928-1-ihor.solodrai@linux.dev>
+ <20261121003403.2928928-2-ihor.solodrai@linux.dev>
+ <adf5a84b-5d80-4c02-91f5-12def2c37304@kernel.org>
+ <faecfef3-ac9f-41be-8bc3-83a66572066a@linux.dev>
+ <CAEf4Bza6oDkY=mfa4PedrQYtjYnkefTs2m-wVatK9BGoNLd-wA@mail.gmail.com>
+Content-Language: en-US
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <CAEf4Bza6oDkY=mfa4PedrQYtjYnkefTs2m-wVatK9BGoNLd-wA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-The verifier assumes that map values are 8-byte aligned. Add a test
-that looks up an IPv4 lpm_trie value, a BPF_F_NO_PREALLOC hash value
-and a devmap value from an XDP program, stores the returned addresses
-in global variables and checks them in user space.
+On 2026-11-24 3:47 p.m., Andrii Nakryiko wrote:
+> On Mon, Nov 23, 2026 at 9:44 AM Ihor Solodrai <ihor.solodrai@linux.dev> wrote:
+>>
+>> On 2026-11-23 7:55 a.m., Quentin Monnet wrote:
+>>> 2026-11-20 17:33 UTC-0700 ~ Ihor Solodrai <ihor.solodrai@linux.dev>
+>>>> resolve_btfids links libbpf statically and uses its BTF header
+>>>> accessor, field iterator and SHA-256 helper. libbpf_internal.h
+>>>> also defines logging macros and poisons kernel integer typedefs,
+>>>> so resolve_btfids wraps the hash helper in a separate source file.
+>>>>
+>>>> Move the shared declarations to libbpf_tools.h and use them
+>>>> directly in resolve_btfids. The header is for in-tree tools and
+>>>> stays uninstalled. No shared-library symbols change.
+>>>
+>>>
+>>> Hi Ihor, the change in bpftool's Makefile looks OK and I understand the
+>>> motivation for libbpf_tools.h for resolve_btfids. But I find it a bit
+>>> confusing to move away from libbpf_internal.h only partially for
+>>> bpftool, and to have a split dependency on both libbpf_internal.h and
+>>> libbpf_tools.h. Have you considered moving the other objects that
+>>> bpftool requires from libbpf_internal.h to libbpf_tools.h as well?
+>>
+>> Hi Quentin, thank you for taking a look.
+>>
+>> I haven't considered that, and it seems like a good idea to me.
+>>
+>> The way I thought about this is that in practice libbpf has at least
+>> three levels of (userspace, non-BPF) API:
+>>     - public API defined in the symbols map
+>>     - internal API, shared helpers and such
+>>     - API for the in-tree users, that doesn't make sense to make
+>>       public
 
-The program does not execute any instruction that requires alignment,
-so on an affected kernel the test fails instead of crashing it.
-Without the previous patches the lpm_trie and devmap checks fail on
-64-bit architectures, and the hash and devmap checks fail on 32-bit
-architectures.
+Hi, Andrii. Just saw your comment after posting.
 
-This patch was written with the help of an AI coding assistant
-(Claude Opus 5.5).
+Please see:
+https://lore.kernel.org/bpf/10ad779b-708b-4b0b-b6af-54f3d7414f82@linux.dev/
 
-Signed-off-by: Tobias Philipp <tphilipp@gmail.com>
----
- .../bpf/prog_tests/map_value_align.c          | 51 +++++++++++++++++++
- .../selftests/bpf/progs/map_value_align.c     | 48 +++++++++++++++++
- 2 files changed, 99 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/map_value_align.c
- create mode 100644 tools/testing/selftests/bpf/progs/map_value_align.c
+> 
+> well, I don't think encouraging this with extra "libbpf_tools.h" is a
+> good thing. I'd prefer to keep stuff like that in libbpf_internal.h
+> (because it is meant to be internal to libbpf, with bpftool and
+> resolve_btfids being a special case)
+> 
+> Do I understand correctly that the problem is mostly in poisoning?
+> should we just guard those pragmas with #ifdef check and let
+> resolve_btfids disable that, if desired?
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/map_value_align.c b/tools/testing/selftests/bpf/prog_tests/map_value_align.c
-new file mode 100644
-index 000000000..91898a052
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/map_value_align.c
-@@ -0,0 +1,51 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <test_progs.h>
-+#include <network_helpers.h>
-+#include "map_value_align.skel.h"
-+
-+#define IFINDEX_LO 1
-+
-+/* The verifier assumes that map values are 8-byte aligned */
-+void test_map_value_align(void)
-+{
-+	LIBBPF_OPTS(bpf_test_run_opts, topts,
-+		.data_in = &pkt_v4,
-+		.data_size_in = sizeof(pkt_v4),
-+	);
-+	struct bpf_devmap_val dval = { .ifindex = IFINDEX_LO };
-+	struct { __u32 prefixlen, data; } lkey = { .prefixlen = 32 };
-+	struct map_value_align *skel;
-+	__u64 val = 0;
-+	__u32 key = 0;
-+	int err;
-+
-+	skel = map_value_align__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-+		return;
-+
-+	err = bpf_map__update_elem(skel->maps.lpm, &lkey, sizeof(lkey),
-+				   &val, sizeof(val), BPF_ANY);
-+	if (!ASSERT_OK(err, "lpm_update"))
-+		goto out;
-+	err = bpf_map__update_elem(skel->maps.hash, &key, sizeof(key),
-+				   &val, sizeof(val), BPF_ANY);
-+	if (!ASSERT_OK(err, "hash_update"))
-+		goto out;
-+	err = bpf_map__update_elem(skel->maps.devmap, &key, sizeof(key),
-+				   &dval, sizeof(dval), BPF_ANY);
-+	if (!ASSERT_OK(err, "devmap_update"))
-+		goto out;
-+
-+	err = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.lookup), &topts);
-+	if (!ASSERT_OK(err, "test_run"))
-+		goto out;
-+
-+	ASSERT_NEQ(skel->bss->lpm_addr, 0, "lpm_lookup");
-+	ASSERT_EQ(skel->bss->lpm_addr & 7, 0, "lpm_value_align");
-+	ASSERT_NEQ(skel->bss->hash_addr, 0, "hash_lookup");
-+	ASSERT_EQ(skel->bss->hash_addr & 7, 0, "hash_value_align");
-+	ASSERT_NEQ(skel->bss->devmap_addr, 0, "devmap_lookup");
-+	ASSERT_EQ(skel->bss->devmap_addr & 7, 0, "devmap_value_align");
-+out:
-+	map_value_align__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/map_value_align.c b/tools/testing/selftests/bpf/progs/map_value_align.c
-new file mode 100644
-index 000000000..bd0663a13
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/map_value_align.c
-@@ -0,0 +1,48 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+
-+struct lpm_key {
-+	__u32 prefixlen;
-+	__u32 data;
-+};
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_LPM_TRIE);
-+	__uint(map_flags, BPF_F_NO_PREALLOC);
-+	__uint(max_entries, 1);
-+	__type(key, struct lpm_key);
-+	__type(value, __u64);
-+} lpm SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__uint(map_flags, BPF_F_NO_PREALLOC);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, __u64);
-+} hash SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_DEVMAP);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, struct bpf_devmap_val);
-+} devmap SEC(".maps");
-+
-+/* Addresses of the map values, checked by user space */
-+__u64 lpm_addr, hash_addr, devmap_addr;
-+
-+SEC("xdp")
-+int lookup(struct xdp_md *ctx)
-+{
-+	struct lpm_key lkey = { .prefixlen = 32 };
-+	__u32 key = 0;
-+
-+	lpm_addr = (unsigned long)bpf_map_lookup_elem(&lpm, &lkey);
-+	hash_addr = (unsigned long)bpf_map_lookup_elem(&hash, &key);
-+	devmap_addr = (unsigned long)bpf_map_lookup_elem(&devmap, &key);
-+	return XDP_PASS;
-+}
-+
-+char _license[] SEC("license") = "GPL";
--- 
-2.54.0 (Apple Git-157)
+Yes, this appears to be the root cause so to speak.
+An #ifdef may help as well, yes.
+
+> 
+>>
+>> I felt like the last one needs a header to reduce the amount of
+>> copy-paste. I don't like "libbpf_tools.h", it gives me "10k loc
+>> utils file" vibes, but I couldn't come up with a better name. Open
+>> to suggestions.
+>>
+>> I need to look into bots' feedback, and I expect there will be a v3,
+>> so I'll see what bpftool parts can be moved to the new header as well.
+>>
+>> Thanks!
+>>
+>>>
+>>> Thanks,
+>>> Quentin
+>>
+>>
 
