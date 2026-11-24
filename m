@@ -1,84 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.170
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.50
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795530708;
-	b=beCSbj6ViSr9PnyI7EFt2/cJNYqR2w/7P6+jfbKACCvUrtxu/fyXErS8WBLL+LG/TGYJ
-	 wShbuM/ru7u6I9LWNe9qusC3z/005//Wepj/9MSWAypUP+rIuzAEksJpXyAahwFOZKcU0
-	 5AKg4C3tqIuiy/9waOOnoz9xUmeyPdoS6WYFERXOUVdBqEqPmvOWN194VW46zCeLu09np
-	 83NCHFhV6jINFYSpFTAYOaiEVL0maf7xECazZaFqkirFa5e3v5QrXSEGrN2szAgWq3pUC
-	 bk7slZ3sZUWYN0oPH5NR0bGCgrAArgKlZKnY/sXVlROd5osVgzLis5iVNqcSpYuLwlw==
+	t=1795530716;
+	b=lEpuhRcXX3cFIAIMPYIMLXWs7gQQE40eLHWEje41/qMpW+Uy+mUxIECFJw/iOevsBmqa
+	 qRhAt+PjcNcuTZDOZxfhIPL7CghNvmwKrTn3yK/T0mzUNslo/mpdCcWFzRUzcnxj63cez
+	 0iYkA2+90XgxqTSqgeAsigviNBR5M5PvR99Y3pULT2awwUQvnEihIdhDGQbnu55To3YkW
+	 FBXZLnxe4fphFpU92ZDIK3Vuf7HZE2avXwYtAgPPiRz952/zzLnrDS1qYyoRtLMfK8ceq
+	 hVvouASG8BOCPeuisZdJf89Qf1h7dq8qMdrf9G8klBokytGCbK2Jt4JqWPcO2GrC93g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795530708;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795530716;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=e5nQK3hY4QWxDiFxG2TVLn0sC87qjDF+NBgRn5G+iKQ=;
-	b=DZERc0CGYub7h/uLLP1762aMeqUvm+PCDq4oxyxk7Ysd7jlyUoLQ8JqAoh3KuBEJ+jN2
-	 iZ4iD6cmOfWgwicqsiVD642MutqGM4skBmX2U0EIZEj+MBKyyhXfG3WyB6kGRKTnGbNfp
-	 3oeRS1esy2CoGXhoTsrIQzUPlTvN7eulD7nG6mlYk1cr52+lUwRMiNCzQ8fTeV1qqHwWE
-	 EUtEGpTEvScczh92QcoKAM8/MNnwzSh6A2rz/+cXFXARe4neVlNaNvV/opEb69wZ1zoLl
-	 CVeSJSvGGoqDuVkO7isdCiHysThNqEmsKasBh1hax+Ygxa6Aj7KONCCojAGg8BoQ+yQ==
+	bh=uZ2nv19VYG29QEUsKhjFZiIjPyzoB2HzMjwa1gkZtBE=;
+	b=3kh/Hi+X/5wTGJH/sZPc2g8uBd9YC8tBYPyK1nR0dyWoiKyKGXxD39ubgdew8cfFVP1n
+	 0y608AXJwsCwJD+1Wlav+IPqglclvytTX7HGrWuKZKKYQLEjnqBxrTsUlWpcSM94n6jqP
+	 drPuo0aBU4mTRZzg8JgfBemFEWek7WB4bgl2BggCJ/crhy8AVoW8HRkKKYhghFGcUZyfp
+	 kWSb7LYMDb7vbkl+Jy8lba5d6AjhMUdIk0tf59pIILFQcnsegX/YfcNgrzG6VJkHss8I4
+	 opqb9y38sNMP0+Bz6by2Y5H4WuDRhO1Ko+p2JZ9YKKuQ8CloyD9Tko/7C/ncdi/SKDA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=AjEHrqNg;
-	arc=none smtp.remote-ip=209.85.215.170
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=eZFPSpwn;
+	arc=none smtp.remote-ip=209.85.216.50
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46678606A31E
-	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 14:31:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 46678606A31E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3471A606A326
+	for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 14:31:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3471A606A326
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=AjEHrqNg
-Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-cdb628232d2so2513937a12.0
-        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 06:31:48 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=eZFPSpwn
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-3b40d23e1adso3181996a91.0
+        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 06:31:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795530707; x=1796135507; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1795530714; x=1796135514; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=e5nQK3hY4QWxDiFxG2TVLn0sC87qjDF+NBgRn5G+iKQ=;
-        b=AjEHrqNgifqF8aPJ7EKJgLp2n35585eq5Lo7NlPgH7Ksj/AuHveZRs0v1+Jj/5Nk9K
-         j+m9et26cCVsmUDROlNzguXU7+UAqRX9pNQL7hFerUbgazOwkPflbu4D2dCjEP9v318U
-         qcBx5MXmk2SpLe7MhVmj7Gg5OXUqpZfTEYnUYDHGv+r2p9Hz6irlHYxkFGj8qj5h0SFY
-         ovU0WeZu93+hL/FsH3taW3Bhd0qh6DJ7hxj19t4Nklc1hcnuguD/v+Bn9VvF03I+OyBm
-         TOnOR0wxs8IQjc4nt34T2dTC9NQjZ8PdbM9CZoI00jbSq0z1/poyerK/kqKvJhrtWaIx
-         ZxRA==
+        bh=uZ2nv19VYG29QEUsKhjFZiIjPyzoB2HzMjwa1gkZtBE=;
+        b=eZFPSpwn+EWv3WI7oq8FlcFGbwsio7In32Q9BXJj5JT7LzvUi+kuUNm1OptvAjCIym
+         aF8gEZ7GN0JzTzjRlSQ3RzWTQdd1+ELxeIAcrsblcQ1cDQsbrRnXpt+qp6NBBwMlAAlI
+         8dmX7Soe+UgAiA/D0pjjKxJ71j8a3BiSOsVHvYDirhOXjv2CCz65FPRAx2J+gZxPH3X/
+         Wfji9sW+KxmqfmoK0xns6FC+klWB+WlypOLzUqUiwa+utnziBtEUEndtzhsyOeCrhJMH
+         CUAU99cpqBKX1trCjELPtos3AEXJ5UWjnA8HDPZIaR5qYjzl/vWzUSFJR2woUvkguqGi
+         L9hQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795530707; x=1796135507;
+        d=1e100.net; s=20260707; t=1795530714; x=1796135514;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=e5nQK3hY4QWxDiFxG2TVLn0sC87qjDF+NBgRn5G+iKQ=;
-        b=f+HuOo28T/phYLLNTiMYf1XIMqXF1ar9CpMKoOJt61sTNdSXEsd8npyhKOCWlmkXHZ
-         56jfRFSIBmn7OE7BDrj6u1REbzvjb0desH1jIGcHDEAQ1RJMe5qRaRP9XEvARLsXIt0z
-         n+zCU1cY15EhCBnYPHNYh8MwSVBK5PiReTJe7/cXmd7h7O4mwehAFSKdsouxu2wDwhK4
-         Z/iuwKiYINyqZXjB5CfHVTZq2iqj+w96WREcU1D0tX9LkQZUkrd9cuAUer6DV7nCuZYK
-         1oCgZ+ZIVeFDVtsuBGthUGxD1uz/fehmBoxOmIfyQdQam1l50vWwcKA2jXe0eL4RT4Wq
-         uSUg==
-X-Forwarded-Encrypted: i=1; AL+hErHGR9WuuiD3Y08t8bULhCdZHS12YIY07tM53nSV9tzOJvPO+c8DqIxFV2s+hDwHZIkEhJg=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9w4a1HL1XFSq2WitB1I7cY5UgCrN62btBNbWiUXskZDz5fP18Z
-	6mo796HzeeUtpALxOAf3yI446kvO99oULkspII0H7HJ/EvmU1SIJOqby
-X-Gm-Gg: AZFdTZckA0dvfOKXOVIg4BXYn0/4TLGXeYqYLYaQdaFQvwCzn9xqU1WTpXhMHTiNIvG
-	F5kSwbye9okWOTo46K0arIEjW8xzRNJug8M9aeSSMXp9nCDaWQr+6C1YXgmhP1lKcklmO9dp+uF
-	K7FwJNMVEYSkoXpmxAvOz9y2+UoDlQG4yXZoWVSZEYSqIIji2HkVygq0j5bKfPzgJRpe9jQ0Kqc
-	9K9ndiMnWo0hyoQsrx/POGS97Dd2I8x9z8zThgHFUqyMZ1FGFbZfiMmoGhhZBNW8ZK87QDWwOE6
-	XmRjFln6Y89ZTy9A5aBJ/gg/QNT7BSeCaUhKgl15PtjzumHAJX/BntgmtWBi26cLGfEDDgWm6yZ
-	5vTjmcoxtP7Wgf9ubKL1zzjJpjzwJgEbKgGzT6bRkdCZbmZCd0/UacCoJgj0OLVsfSu5nr8bz7q
-	QJ16JC3tWK8tE+dHWMTb355galiQsY/FyygdUDlzOKeYJf+GGduWkQcIciqbYCxZYr0NY6Uih9I
-	HygzML7kvyumxEyyOL5kKciMKoaJch0tHN553Ukx9dBee5H5dcP2kwi9mKL86+QF4ODcq4ey1ub
-	YObjD8zqNObTW8cKtVeWExj/BFsGGY706FL+pXQ2GQv2xibS3wwg8aLFjxkpjRJGLpeuPS+6Tsr
-	gDe3d/daDWw==
-X-Received: by 2002:a17:90b:1d03:b0:3b1:96fe:f5d2 with SMTP id 98e67ed59e1d1-3b41c9bacc7mr14862324a91.65.1795530707373;
-        Tue, 24 Nov 2026 06:31:47 -0800 (PST)
+        bh=uZ2nv19VYG29QEUsKhjFZiIjPyzoB2HzMjwa1gkZtBE=;
+        b=z61Tk8s34Yp94A67WnLouAC+zzvnrqxnP1UzLJPHbNaRVNR9sQUEltKkK+0S3Ds1q4
+         XzX0RKtnpEMOElIMc3tz4n8+CnEwIir7E0EkPw6zcke2uriPyYKtjJiz+tN65wUl7UId
+         BgoBMVVUczZU8sWZVlzVe3dgiPXEf8LMXf1DEqBKIpSUQJK76GVwknLd8wPIE0H/t5Zb
+         pRBZpLgt05wbyYo0/6l2pGZXZ/LNvUZfLMik8XoLvDNJsl/xSb+QSPdFWD2Kbvs7sX4j
+         UNhGqSgMfNAFZm93aaAM2BY/KBtHlRPQ/7AagOwXojwEDVcjYix31Ou3EdXSpozPCEf6
+         9v8w==
+X-Forwarded-Encrypted: i=1; AL+hErFnHX8JZZgTKYeC9VnAYs0ZuminfRs7bHG7OzsDsOrl4BpIR8nrGW7cYmMSY2mQCfzRC7I=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8t4kkDYyPxFYP+/KsFDr5mukodrgCt4JlI8vhjHutSYXtF1XUG
+	C9h0jwAWDDIUsMuDrM5kxN1fatbxT/zavFIf+5QzEvEwSPFB5q1cd4ld
+X-Gm-Gg: AZFdTZf5l5fPIAyCa/jUtGB4s5J4JXPSWi6UfRTCfofymWRmyKCgOJ/fg/e24UCwCH9
+	xA2rXKAeJgXbWA6gQe65PJIu1Owqs+t7QLzuRMY7p2pxBKtLKFqSGYL/i5VKSp2B90pTI7WyaG0
+	6N+T8/fUEgOEOOndT8eUIflGK1jfyeNxuWw+XScRpXKKhjMz+HSUkeXItHeSL5K77lEsaGEVegr
+	IY/KbFgNQOxZcK9wlGL7vKQO0rbnqfy20Io1JoSKryWosdz2yq/8v38C6oZGKs9W9BjnarY1MWj
+	dNqRFEQN6+fpOqQINnB2hogOXHtsVB1bkQClY2akLXqmAWEvgMgU0Hk/U/WX8B3q+AFc1UxBTeg
+	L7adGeUJMYUmb011Tn02YSCttmgdL8VpVA9ADRYm+dPOuzR38VeiIizgWP/nKYRWesqAO3zj0Pe
+	hpA/bfkstCC4VDHKynHHiAaMlCiyiPdBrRsJrjFu8PR4iX5ibxbNQ2Gf1aJHZCZS6bS2F5OpTYE
+	29lIH6fs6IMF0FUB5/9vwYIkoe9BzZhK1fRHwTmTc91YxIcA1iv0mn7qVQ069rbq0/BOwLa/n40
+	g43rcFIX4bPeUakijyrqTvoWnBd4PtvNgqk9HA2D9Zo+PXXZI7EM9wRd60LyJdMC
+X-Received: by 2002:a17:90b:4ad2:b0:3a4:7730:33dd with SMTP id 98e67ed59e1d1-3b41c99525fmr14250279a91.58.1795530714346;
+        Tue, 24 Nov 2026 06:31:54 -0800 (PST)
 Received: from cps-manycore-1 ([147.46.174.222])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cde6cfc8829sm7171737a12.8.2026.11.24.06.31.40
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cde6cfc8829sm7171737a12.8.2026.11.24.06.31.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Nov 2026 06:31:47 -0800 (PST)
+        Tue, 24 Nov 2026 06:31:53 -0800 (PST)
 From: Sechang Lim <rhkrqnwk98@gmail.com>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -105,9 +104,9 @@ Cc: "David S . Miller" <davem@davemloft.net>,
 	netdev@vger.kernel.org,
 	linux-rdma@vger.kernel.org,
 	linux-s390@vger.kernel.org
-Subject: [PATCH bpf 1/3] bpf: Reject sleepable programs in bpf-tcp-cc
-Date: Tue, 24 Nov 2026 14:31:13 +0000
-Message-ID: <20261124143123.1182108-2-rhkrqnwk98@gmail.com>
+Subject: [PATCH bpf 2/3] bpf: net_sched: Reject sleepable programs in bpf qdisc
+Date: Tue, 24 Nov 2026 14:31:14 +0000
+Message-ID: <20261124143123.1182108-3-rhkrqnwk98@gmail.com>
 X-Mailer: git-send-email 2.56.1
 In-Reply-To: <20261124143123.1182108-1-rhkrqnwk98@gmail.com>
 References: <20261124143123.1182108-1-rhkrqnwk98@gmail.com>
@@ -122,31 +121,29 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-A bpf-tcp-cc program can be loaded with BPF_F_SLEEPABLE, but the TCP
-stack calls the congestion control ops in atomic context. For example,
-tcp_set_ca_state() is called from tcp_v4_syn_recv_sock() in softirq with
-the socket spinlock held.
+A bpf qdisc program can be loaded with BPF_F_SLEEPABLE, but enqueue and
+dequeue run with the qdisc root lock held and BH disabled.
 
-bpf_tcp_congestion_ops has no check_member, so nothing rejects such a
-program. Add one that rejects sleepable programs.
+bpf_Qdisc_ops has no check_member, so nothing rejects such a program.
+Add one that rejects sleepable programs.
 
-Fixes: 1e12d3ef47d2 ("bpf: Allow BPF_PROG_TYPE_STRUCT_OPS programs to be sleepable")
+Fixes: c8240344956e ("bpf: net_sched: Support implementation of Qdisc_ops in bpf")
 Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
 ---
- net/ipv4/bpf_tcp_ca.c | 11 +++++++++++
+ net/sched/bpf_qdisc.c | 11 +++++++++++
  1 file changed, 11 insertions(+)
 
-diff --git a/net/ipv4/bpf_tcp_ca.c b/net/ipv4/bpf_tcp_ca.c
-index 2a71dc81562f..acd5e84a3dd9 100644
---- a/net/ipv4/bpf_tcp_ca.c
-+++ b/net/ipv4/bpf_tcp_ca.c
-@@ -208,6 +208,16 @@ static const struct bpf_verifier_ops bpf_tcp_ca_verifier_ops = {
- 	.btf_struct_access	= bpf_tcp_ca_btf_struct_access,
+diff --git a/net/sched/bpf_qdisc.c b/net/sched/bpf_qdisc.c
+index 5691c13781a8..3dbe52a04fa2 100644
+--- a/net/sched/bpf_qdisc.c
++++ b/net/sched/bpf_qdisc.c
+@@ -356,6 +356,16 @@ static const struct bpf_verifier_ops bpf_qdisc_verifier_ops = {
+ 	.gen_epilogue		= bpf_qdisc_gen_epilogue,
  };
  
-+static int bpf_tcp_ca_check_member(const struct btf_type *t,
-+				   const struct btf_member *member,
-+				   const struct bpf_prog *prog)
++static int bpf_qdisc_check_member(const struct btf_type *t,
++				  const struct btf_member *member,
++				  const struct bpf_prog *prog)
 +{
 +	if (prog->sleepable)
 +		return -EINVAL;
@@ -154,17 +151,17 @@ index 2a71dc81562f..acd5e84a3dd9 100644
 +	return 0;
 +}
 +
- static int bpf_tcp_ca_init_member(const struct btf_type *t,
- 				  const struct btf_member *member,
- 				  void *kdata, const void *udata)
-@@ -335,6 +345,7 @@ static struct bpf_struct_ops bpf_tcp_congestion_ops = {
- 	.reg = bpf_tcp_ca_reg,
- 	.unreg = bpf_tcp_ca_unreg,
- 	.update = bpf_tcp_ca_update,
-+	.check_member = bpf_tcp_ca_check_member,
- 	.init_member = bpf_tcp_ca_init_member,
- 	.init = bpf_tcp_ca_init,
- 	.validate = bpf_tcp_ca_validate,
+ static int bpf_qdisc_init_member(const struct btf_type *t,
+ 				 const struct btf_member *member,
+ 				 void *kdata, const void *udata)
+@@ -446,6 +456,7 @@ static struct bpf_struct_ops bpf_Qdisc_ops = {
+ 	.reg = bpf_qdisc_reg,
+ 	.unreg = bpf_qdisc_unreg,
+ 	.validate = bpf_qdisc_validate,
++	.check_member = bpf_qdisc_check_member,
+ 	.init_member = bpf_qdisc_init_member,
+ 	.init = bpf_qdisc_init,
+ 	.name = "Qdisc_ops",
 -- 
 2.56.1
 
