@@ -1,45 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.176
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795579700;
-	b=SyA3OczZuLQjI9+9zNK6+G/YJjyT/TW71aOCRWz2k7qfQ7AMWoEXqVjDwl1A2KGbkM6I
-	 5OL96ARnb1tf5CKEur4x7hu4Kr2wC/z/t0Z6w10rc4oQbOaNacO907vpygTk3A3xMvhHR
-	 8cHYI2hRgABxSb39B4TS+abjDcGs1jjCQ3r5srIpwPpswwaqcftZg/UteAtqYQBSyQt3I
-	 IwORcgxSBtKBc/831GifnN3WcZwXYTRb92Tb53C1oNxDl+Aaw25O5kkdQ7+gv9EKuhUIw
-	 YIrQHBP8uB7WdnKaIC6PfRFj9GJSmNw+UsUYHG+7Rn2V9RFT4tUdcU4XtBniuqrwwew==
+	t=1795579705;
+	b=nHObKU6K1BIT+CADdzwl7hYEDzbfdVqe45Og8cK8WQPdoTEZPWZQEsDvXqruO7BRa9xf
+	 Wz8tCI8pDsoJxTJ1zi9w1QLPQ+Tu6OHZ1jXdktwzvoWwaJIN4QiGzv0D99AHPNJSPm7E+
+	 FvKTo8Lj2IKAsccQloHsZwKcoEN4bm099m9PviD/tin4wBn1rh8KDWBHVkWucN2+4Zqyl
+	 sXLZ64ck55tQ2eKUxkU1/6FhL1tPYRXdYndV+AIcKerP4A8zoFYgZGZFJ4wNJ/bZbRUQ7
+	 T9iW7OzLY0JJzuPUav1/9s97FoLLi/2TxrYl3J5/XaF11PIX90R3dvlgqNgm2+kQi5w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795579700;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=hAz+pNtOgLBglRHgB4EybuS/9YaaObwGBodr5tygHXY=;
-	b=OOQMMQZEdaHGauDP/QuVvQzEBrwxZYq9botgUwHfDGz15C5dRCRZ8L8kcM6//AyIpPzW
-	 mmrTuN2PEQd22K4BBj0jVKJpNZeIkCVzIY99nLe9zhz/QmEuL9+VRVEXhdfPW/RZ132qs
-	 NuB8cUSFq6bVL21KtJPxrsGHqzCNO+Ri6wbdB0qTFoK3x28GKdgNZIcbpkDomQqY2Ke8m
-	 UnB3CAuI5chf9fZZ6pTaBCI3bVe5hFfRCI6P/nigknP3r6XLKkvtfoTnqbh4K2fBo6jEg
-	 Rgd4Pgx4b5jBuR5V4Yi9Z97zOjyNkaGiepUaTo26PHms9BtEjpQfUwLmkwjirLHK3Kw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795579705;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=90sSLq3PtHo4RwsoDWC5eUvenirGrx+VFVGpu53GEaM=;
+	b=Gn5QhU8+l8l6WmBrWnE30wkrr0bIKTEbCbEiNgWtuNOaUyDUZaN3fWDR+O7N24dxnbiN
+	 PNDLL4my017KLCzG6Mj2zDcBhC93lDqItE1SdnwSCX/gET3ScgUTs8ptgVY6kfC3yREkw
+	 i58/YDryMytmlWIlqyO4Nx1LFKsqEmvkrREUHR5IrgCnbZVywJx1kr3OvRLrj5q8Wc/Zo
+	 kmMwQZn/HneOQtf2CmVGRYkQWnaMB7CfiEVfn3//UKob7G7GiMDESzTyjCFjVCfq6wMOy
+	 Upx8Jl9SR2qxx0IZx0HAX3kFIcCN7JqeA2M1+mR46oYWnH+OLtxNbVHaRv/znk0brjw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eftVM32I;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Hsr3ZJKB;
+	arc=none smtp.remote-ip=209.85.214.176
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40EFE606A31E
-	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 04:08:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE065606A321
+	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 04:08:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DE065606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eftVM32I
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C22E51F000C0;
-	Wed, 25 Nov 2026 04:08:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795579699;
-	bh=hAz+pNtOgLBglRHgB4EybuS/9YaaObwGBodr5tygHXY=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=eftVM32IvJhJA+uTYuTBKzFz+OID9BaWe1G1ke7fMzhoKJm5RpRjlmnmdUDiYjCzH
-	 Fy96MITqLK85BLctY0NC0O/tbljKLnR7cVeCPKSzms49EHOLeuwBwB7AFMOh4SWiMG
-	 5Bj9GV8p9UH8UntggyKVisPTjXMPtofqVJQDoCt90mDJGWKTZUXpC163L1D4GY1E3p
-	 kdVuPp9cOwX341408Vs0XQzwIxICsX5G+JwJWRrbWbF2FWG5nnPDQagCiRwUuqqRV1
-	 e9GumsxuRzvNGGID+LnQ8AAplAdwGngCkYPkyN4J77T6LrjtXgauzlEcYqeSdurTNr
-	 Eno9Cga/RTUhw==
-Content-Type: multipart/mixed; boundary="===============4357921173702940775=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Hsr3ZJKB
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2f04ad2c46dso31615945ad.2
+        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 20:08:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795579704; x=1796184504; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=90sSLq3PtHo4RwsoDWC5eUvenirGrx+VFVGpu53GEaM=;
+        b=Hsr3ZJKBg7EDqGdG3FN+7/dX34lcXhNoDazAhI5njAg8t+Mez1LKxeoR7xWn3rLOkn
+         AN5T5Xo6XB848ADyZMd3cE4ov01ckFlVnfempAGxWmfAN6mRRrrkfBgXTl8/dPGUjIFo
+         JPMKXYGe44N6pUVJ8yWy6IzL/diX0C0MplpuGGC4klKS44EcAQHhkSnTUwREfBCP49Zo
+         XTQPOsJ7KDZWc49o+wrbOXgdeH3UZ/CC6pqv6j4FMrzlrXE/cPHFeL53yptKnnCkfZb/
+         KGSk2Cl9WkweD9wMnKRfGSUXJwlzwvXlwzNFUlJKsFai9aqcolv07o2oKAnANNGaKCsQ
+         zYVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795579704; x=1796184504;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=90sSLq3PtHo4RwsoDWC5eUvenirGrx+VFVGpu53GEaM=;
+        b=AIpWP2HJ2RT4x4bBhe2C3UjvbhdpvJqJQ3tYlQnl+2jB5cQKHRrEJBDZ6fiuv6kaHL
+         kvjkALjeD83CE2dI8votSi+KW93aHrUF8gyBVMirbJNk0vIbd/UKB5anUdpb9aVSo+gQ
+         528CIyyIQdFsZQkrOYg7A+nM0TlrnaHklqy7c8guy6qfIozbMRyGqufwKrOpseamZ2wS
+         UFdXFvPPKCfghvPxmsuNGbqM/CbT35JrPrzVqToCfpj450SjmFI2he24ziKK1Jrl1hlm
+         RzyFOa5SDbBMcvfsyUKXSaDgVkiI6m2UCqWlCTsiu1IYnNpZCug6GuazyhlhtpjyrfKR
+         dosQ==
+X-Gm-Message-State: APuU4Z9u9GJBsJb3lkMfcle96okRvt8TC0vXc3vpJhJWNGqjjSR+8uUv
+	gr11eOCuy9MOeBqalIKHfqhgZtY4sVTm1sKQuHgVXX/aJtcr7Lmmwlp8poMUYDt8
+X-Gm-Gg: AZFdTZc97AHnXt0cwYKtghVn9+q9L2DKMIeJmdpQv06EzQ8YLDkBsRfBQvFTRyu//0+
+	FwSzZxca8DbFPAbFhga5jEHqwjKJ+3SQbFmm2P3ImjKUQQEKBjW8EGG9nx+x7/bM5c+CDroDhAC
+	n2fJ4dLtLAhOkWbmaIXDf1TRfIfu19H4U9PGRFUMm1Xuelt60gSKPu9wFf0l4Js/gWQ/ZV4v5eU
+	/7Nqe/thANQu5jKnkXowOFBWP78jswL4knq1XzAlHXkK5N6N/QFxh+n/rUcbJENwTYfstyGD5+x
+	VA3PgT+IZBk0eVymJkOYP8l5mWNIDCbPvCXlCNlL/NM7+wVeSXDv+Knhc7jOwtMGpX+orZ3NCyz
+	UgbyYPAu1QW/TmYh86dN3UPZQ8ysrMCtKCALuhURK+rkn0a5ZAlxS6LEbpsgTa1gQiYj6L2FsxR
+	RAQWFScazvyp5EKK6HGMmNFZ1NQo12EnFA2Qj/xN5Ofez16qNirs++HiOtJMOrwEQc0inOs6WlR
+	BH7/RjWRTvjdcI//eHPWQKb91es8wofLhaNh/Q6o0mOBCnKb+ziR4b/9cFh+wDQfbyWveiWL77K
+	GhKL5m3yF7q5zHcPsSM2P3ShbVBfjK5rGfnkuv9eJCNA973H+x6m9LcxCbbQ8bbtfPWG5sGqN+b
+	1lvzoBAHc3R8apBfHpB9dzVovYUNex5AzMazaIgZxSGxzjYXFhTyLq8uFvof0InupWduCaUMRaA
+	==
+X-Received: by 2002:a17:902:e542:b0:2e9:6b5b:3db6 with SMTP id d9443c01a7336-2f03f1a4967mr172959075ad.30.1795579704257;
+        Tue, 24 Nov 2026 20:08:24 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.243])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2f03f120769sm78420735ad.57.2026.11.24.20.08.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Nov 2026 20:08:23 -0800 (PST)
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To: bpf@vger.kernel.org
+Cc: daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	luis.gerhorst@fau.de
+Subject: [PATCH bpf 0/5] bpf: Fixes for speculation barriers and constant reads
+Date: Wed, 25 Nov 2026 04:08:15 +0000
+Message-ID: <20261125040820.947816-1-alexei.starovoitov@gmail.com>
+X-Mailer: git-send-email 2.55.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,54 +97,34 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <b366e22d7135557535ba15efd2e8166eafef33e4d97d14b9cd79845b66b38f2e@mail.kernel.org>
-In-Reply-To: <20261125032938.670542-27-alexei.starovoitov@gmail.com>
-References: <20261125032938.670542-27-alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH bpf 26/47] bpf: Require CAP_PERFMON for kfuncs that leak pointers or touch tasks
-From: bot+bpf-ci@kernel.org
-To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
-Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Wed, 25 Nov 2026 04:08:18 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
 
---===============4357921173702940775==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+From: Alexei Starovoitov <ast@kernel.org>
 
-> bpf: Require CAP_PERFMON for kfuncs that leak pointers or touch tasks
+These patches fix bugs in the verifier:
 
-TL;DR: Documentation nit: the KF_PERFMON section in kfuncs.rst doesn't cover
-the task-acting kfuncs (bpf_send_signal_task, task work) that now get the
-flag, so new such kfuncs may miss it.
+  patch  area
+  -----  ------------------------------------------------------------------
+  1      insn aux data after a failed check on a speculative path
+  2      spills of invalid registers
+  3      unaligned reads of read-only maps
+  4-5    the barrier after a store to the stack: atomics, calls
 
-> diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
-> index 901c37504217..31389dd5c9f6 100644
-> --- a/Documentation/bpf/kfuncs.rst
-> +++ b/Documentation/bpf/kfuncs.rst
-> @@ -537,7 +537,8 @@ addresses to the BPF program, for example by reading through a pointer that the
->  verifier does not check. Calling such a kfunc requires CAP_PERFMON, or
->  CAP_SYS_ADMIN, in the same way that the equivalent BPF helpers are gated in
->  bpf_base_func_proto(). A program loaded with CAP_BPF alone is rejected at load
-> -time.
-> +time. The flag is implied when the program gets a returned ``void *`` as a
-> +number.
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 
-This isn't a bug, but the KF_PERFMON section still describes the flag as being
-for kfuncs that "can expose kernel memory or kernel addresses".
+Alexei Starovoitov (5):
+  bpf: Undo insn aux changes of a failed speculative path
+  bpf: Treat NOT_INIT as a pointer in __is_pointer_value()
+  bpf: Use get_unaligned() in bpf_map_direct_read()
+  bpf: Emit nospec after BPF_ATOMIC stores to the stack
+  bpf: Do not end a speculative path at a call
 
-The same patch adds KF_PERFMON to bpf_send_signal_task(),
-bpf_task_work_schedule_signal() and bpf_task_work_schedule_resume(), which
-return only 0 or -errno and expose neither.  The commit message gives a
-different reason for those: they "act on any task".
-
-Could the first sentence of the section be widened to cover kfuncs that act
-on any task as well?  Otherwise a new kfunc that signals or schedules work on
-an arbitrary task may not get KF_PERFMON, based on this reference.
+ kernel/bpf/fixups.c   |  4 ++++
+ kernel/bpf/verifier.c | 28 +++++++++++++++++-----------
+ 2 files changed, 21 insertions(+), 11 deletions(-)
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+base-commit: 81c6c8c608b6075846d3bd5b6f57958300a56eda
+-- 
+2.55.0
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/45542192835
---===============4357921173702940775==--
