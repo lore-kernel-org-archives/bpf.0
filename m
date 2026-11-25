@@ -1,100 +1,79 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.167.43
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795601006;
-	b=uzrZj4siFXrOhXTXq9V0+xkTr4YpNcc+4moz8a+fmp4JKHtzbueh/nc/+qBub/jgmA9w
-	 sd/U1Nk+u95C43z0Kez1v8DWBkuZkoPDMSMqGvReUrOII9JnMIECOKEdqYFmEilgDEgXd
-	 jpqsIkZTbbxdpDIASx98WybV5NFTCC9AZ/wLnMTmklbji/FDdG89cdd0znYq/uhMoTyx7
-	 hVPSTWBHr5D5upisILmEvlRovGi+OJClp3/2nIfsrarccek1nSWAMHC+XPEBpP5o6kwGe
-	 D5H8vTQ9anOdVv/UkmkLUnvQ1a6tGj00Unn+pYy4xj/l/hRi9OoTulnOppcCyU4xFBQ==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795601006;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=4yqmOnJX29DOBy6vmcdiSt8m4vhrVknvos21mrTZvSw=;
-	b=YEDHtELBFsbvNcGgTIEqXb0ZvZwWMFh9PBdCBp/V41aUCgauUxq1nkSOepRem25wm6mj
-	 uspQ0EMkPpr4Da2wyBWPy5YkMOEiNntsXbQhfV1UKfpyQpgYWNvNlGQr24zf5OYOpoBhB
-	 0ZKEMJnmtM1e8d6aRcRlg+HTglqwYjKgHntgPjRcSlg9dwFUpvGCVNtVf+aMkuQ4FJpdH
-	 IJ7l/Tju+AiP2G0mLBrcNMC65pQCLpRrELyQxFz36q8fPPbiL8mN4e2/yjPsAgb02Q+IT
-	 CkD1Pag/quiqNNlFutODh841/s9BS8vVwcXiFiOyEfc4JM2pLU10WADPCMZiY0psd8A==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ay9+Ssce;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.167.43
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.74.67.63
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795601549;
+	b=KeP7l7Enl3ttz3xsjPg8jV4LWetfA8p4G+yddUn9prna5K8uIiKUJhJe4Hqinfe2+sbH
+	 z+63gNcFIFFrELZ8Pti71QF0pZC4RXQL4vUgMHrOMicBF3dDiRIxrlVlDa3WdDw1Lq7/J
+	 A18KGf9o7n6es6PUZ1TpVMglg2QKtxyiqgyOY6RDTm5vX93SqPJKQv0WTemiVYR9Qk+R0
+	 w73WcQvPqXUNRTFS71MFndC98Y0QOQGn6BIM/1CLwVa5OZqjiZIQDO7huErwapcXipwe6
+	 p2DlJy+YaFKLWPtVAv2ayQvMhKmulSH3Fu5ruJk0XS8Yo5+7TY/ShuU7Fg084bgl8Og==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795601549;
+	h=DMARC-Filter:Received:Date:From:To:Cc:Subject:Message-ID:References:
+	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To:
+	 DKIM-Signature;
+	bh=gNLzY4BwVKCseo7jPGBp/FH18c7BfmwO0rueLWEHRog=;
+	b=xFym/cPIL810elLmvjXqmTBQbt9cq0cdZzvFYNoZ4iLnp58r7GBWX1mHHgY4qRf8MMjp
+	 02lbZFJf+jzz8PFeE98SIOZYIFaVf9jv4hafFJYk5SWGr2IUUj85+Faj3aQKFNKyR4viX
+	 50F0NkkKjOCuWW8hwkIjnpt4Uy7S+h14Z3VS9ojAh+imjDVTCAncWk5GkF0+hkG6cjh/t
+	 jmTwhmLJLw5M++9omVI6nZk+1dUOJrGaAnNUVIATEv9ftsuIo0bfXPtBh7YJ5IswqY2aV
+	 s55mocHP64NhHaLGQJNS5gqERKn3CdFQy1MoxNUnjysy+T4EKOu5wC3MrLpv8QZcUlQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=poczta.fm;
+	spf=pass smtp.mailfrom=poczta.fm;
+	dkim=pass header.d=poczta.fm header.i=@poczta.fm header.a=rsa-sha256 header.s=dk header.b="CkSW/lbI";
+	arc=none smtp.remote-ip=217.74.67.63
+Received: from smtpo63.interia.pl (smtpo63.interia.pl [217.74.67.63])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F138606A31E
-	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 10:03:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1F138606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2141606A31E
+	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 10:12:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A2141606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=poczta.fm
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=poczta.fm
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ay9+Ssce
-Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-5c0a520df2eso5559076e87.0
-        for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 02:03:25 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795601004; cv=none;
-        d=google.com; s=arc-20260327;
-        b=ow0oCuLZa2EOHYpajN1bO9A3AXqmH0kM7nvtdDvhTTpLwh3dbF8oMDSI+9FOnV41GU
-         B9IcR9nI6sEAu3CcHlX73m6K5TsYJ8KVtpKZKCr0hatrnl/y4/zXPHTT2RaWp56P+NNF
-         x+hfBB3xlR+hq9Odd7lieaD3yDWGNu13yADcmTIQcXuqKNVE1F7A1PvXDNhMMCV7SEYr
-         eRjnfPyYyCttpS+BpsB63ImlXGAOL8cSHUi2UabuD0LhLYtndb3Ar6BFgFmlhgSR00LO
-         eg4eTHwuJPt9sy9XV9GJLRDfxKmocKkIWPDu04GFm2283+QHmFp0yH7+Ksbne2Jl8lu/
-         LwOA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=4yqmOnJX29DOBy6vmcdiSt8m4vhrVknvos21mrTZvSw=;
-        fh=d19on6tNyYQfk7vmf/KSFupylEwKSkM1TVU2eX/HHSU=;
-        b=I3VBGN0P9cAlJt4mOkSlvP2tp8eoTuhbmnlzCB9x5d6IrUndhrYg5DvpZZkuwhtVeG
-         vBypry0TUU3diR7TTC7RyUjD4IXOEEpso4a83/TMaGJdhhs5HgBoCT0VdldMhzmrFRd5
-         K5w6g79eS5k1sNyigI39+bzWwcclgVftc0885x77Lige9bkrVfFbqfmStOajZZcAlWcI
-         8/iNEpZlzE4FoY1OjRlegLxWvYDzTAqMVzY+WtkUrd7Z4zwvy6Foqp5pzpHGc2wpQUMh
-         C3cH5azGOImCd6iylJG7ZB9E/gMlX693QrH6borxroJ/Sx2Nz4h5cRUhqAjU4sUoA4si
-         aSEA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795601004; x=1796205804; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=4yqmOnJX29DOBy6vmcdiSt8m4vhrVknvos21mrTZvSw=;
-        b=ay9+SsceQ9jHRcRMslrgmqdSOnvnudmMflbs1Avejl0zkOGZBGKpQA0dM6CYQutGwW
-         9u/N0BGvFt06XERIVFzmv4f8jyisegG59kaO0/P/YagT9iWpfEJl3Wf045T5K5BD0Wqj
-         cN+C1EROJW8WQY6Cp0ymeeN5pYoJaLNeCZX51EE0u5xJn7ueHxNNF+nAIR0PU/I5JwVU
-         NOfZiH71ylqVnQzKUTYh137Au31crg7ZjGvYhf3PprVQE1EgZuXk2WwnUJdmY1e5WSYH
-         EfQWhIwdnuBi26YrBLsUTA0hislhvKWy11bUZD1WXBQXYCxf5Nww4/Mu0LX3sbnOistz
-         FpAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795601004; x=1796205804;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=4yqmOnJX29DOBy6vmcdiSt8m4vhrVknvos21mrTZvSw=;
-        b=qgNhQNWexGLkonUNUAGv4NcLMLTrcCs6jWJ9B6hrtHBbKuzxeemKxQQsTdCZigSBkl
-         5Z9mmf0jb/bP/ReiahOs3ZJGDHO+f2pbKzanyDICN1XWDSs5Oa6D4sFjEp7PD23L318Z
-         g6mxOCj+BdjtQTHDLIey/6+axJy3yHPLs3sm0I7ahaM8uHdmMityjJEjFTKpI31mbMvc
-         VcP+FkBdp4MOWcC8dYjGU5BW6o5MVeYpd0WmZbx0LmW32gz5Oc9JQ/k4M4PVHbKEO/5p
-         4SJ30nJe/FXT/QtB4TDSQUYVikDwC7iX6WOtIUji3kAczx0J4qf1Jr1VsmN5P4F1BIG8
-         wEbg==
-X-Forwarded-Encrypted: i=1; AL+hErFKuVHicd5MvSjQZypiS6KlFGxV8jKATmzizgHypjGfQx5ECFS5OsZ4FPI9DWfYqxfeA6g=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+g1rK7O7crrhWBddpOSI69t6a+4z4g21Cfygh4o+R0r/eT5CT2
-	r6XQVY0xIzbOXNkLRisUsPQtb0vf3SpIyumDmz01C9EBPmR9or8D6nMONO88c75toqGV0Wy7KXu
-	2ApyyrCeeA30n8cStER58BiA+0/x0muw=
-X-Gm-Gg: AZFdTZcE4UefwGirRC2SMlY7+q6I8qdpk6hTWCn/NHjAmhU7OFl0DivOiPsHaRUbh3K
-	ePDxd+rF6a+4SdQ8hFkSPRUteeMQT0UZ6QAKkHJ9y0x2ihHBaMfY2TBP50lOMA3eHFtdbhCbTFh
-	FAuqnzoxEVOM1A8hFaOZd5MOgYPM735pQtzNHyg7Y2cMbopdxOnY6+ZD154eR8ovRCMA16+EjUf
-	jm3C8TNTke4TWyE8ZYc9TKrmjnZuEpJHcRC1MpKUzECjUH9ZvRh1bGdzTUC3h0xE6vnN9ZEMsyl
-	M58iocQA2IjZmQYzyGp7301ubtLA6lM12PEFWPeOkiHnOT5bfeZ7OfxkuC/mykUWIYijESq3CtS
-	PP7UgzNF8cVKHMTnYKOTt7JgPHtzQ9wKfXw89Jw==
-X-Received: by 2002:a05:6512:3e26:b0:5bf:dfb9:33db with SMTP id
- 2adb3069b0e04-5c1bc894b28mr5679079e87.38.1795601004108; Wed, 25 Nov 2026
- 02:03:24 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=poczta.fm header.i=@poczta.fm header.a=rsa-sha256 header.s=dk header.b=CkSW/lbI
+Received: from nr200 (unknown [80.68.231.31])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by poczta.interia.pl (INTERIA.PL) with ESMTPSA;
+	Wed, 25 Nov 2026 11:12:16 +0100 (CET)
+Date: Wed, 25 Nov 2026 11:12:14 +0100
+From: Slawomir Stepien <sst@poczta.fm>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	jiayuan.chen@linux.dev
+Cc: Daniel Borkmann <daniel@iogearbox.net>,
+	"David S . Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>, bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	Tianyi Gao <tianyi@cloudflare.com>,
+	Octavian Purdila <tavip@google.com>,
+	Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+	Lorenzo Bianconi <lorenzo@kernel.org>,
+	Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>,
+	Magnus Karlsson <magnus.karlsson@intel.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Eric Dumazet <edumazet@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Simon Horman <horms@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v8 bpf 0/7] xdp: fix page_pool leaks
+Message-ID: <awa0fvxzngTtIYVd@nr200>
+References: <20261124104016.532341-1-sst@poczta.fm>
+ <DN3QVHST3PUQ.3NINFUW0FL9IW@gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -104,49 +83,270 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261124230228.3868519-1-graypanda.inzag@gmail.com> <DN3TX43KWXO5.JWLJ9HO1C9K7@gmail.com>
-In-Reply-To: <DN3TX43KWXO5.JWLJ9HO1C9K7@gmail.com>
-From: Junyoung Jang <graypanda.inzag@gmail.com>
-Date: Wed, 25 Nov 2026 19:03:12 +0900
-X-Gm-Features: Aa3M54r5upvGV8Qfv_TsLuVCjrNe6583K5J-EQlsL_l6e_r1ayLjtruktTOLARY
-Message-ID: <CAO7ntTSjpH337UucxpxSCTXud3yYi0MqfRELHFcER_enhu9fAg@mail.gmail.com>
-Subject: Re: [PATCH net] tcp: avoid NULL skb dereference in zerocopy receive
- with sockmap
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Eric Dumazet <edumazet@kernel.org>, Neal Cardwell <ncardwell@google.com>, 
-	Gwanhyun Lee <gwanhyunlee@gmail.com>, Kuniyuki Iwashima <kuniyu@google.com>, 
-	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Simon Horman <horms@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
-	Jakub Sitnicki <jakub@cloudflare.com>, Jiayuan Chen <jiayuan.chen@linux.dev>, netdev@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DN3QVHST3PUQ.3NINFUW0FL9IW@gmail.com>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=poczta.fm; s=dk;
+	t=1795601540; bh=gNLzY4BwVKCseo7jPGBp/FH18c7BfmwO0rueLWEHRog=;
+	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+	b=CkSW/lbIqxnu8SM9tcMd1jFWP+JUPVIDM2ul10ZUK7lVhSvMMJzkHv7Xp+aJxyrbJ
+	 wDgTnnHiqKXewKZWk7C019oOIGT1rQGLx5j3f0qVM9Bp6wP6hixWKM7PL/zSLaM4fh
+	 bB8oAhTY6n2EL6PjyrxTj/ycnOiSLEIgMXvIMZ/Y=
 
-Thank you for the review and for pointing out the other paths affected
-by a stale copied_seq.
+On lis 24, 2026 21:04, Alexei Starovoitov wrote:
+> On Tue, Nov 24, 2026 at 02:40 AM Slawomir Stepien <sst@poczta.fm> wrote:
+> > Patch 1 prepares bpf_prog_test_run_xdp() for patch 3. Generic XDP runs
+> > on the rxq info of the device queue, which is shared with test_run; with
+> > patch 3 alone, any packet through generic XDP on lo makes later
+> > multi-buffer test runs free their frags as page_pool pages. Restoring
+> 
+> The store into the shared rxq is the problem.
+> Patch 3 does it for every packet on every CPU, for linear skbs too.
+> The comment in include/net/xdp.h says that rxq must not be updated
+> during NAPI poll.
+> On Dudu's patch I proposed to put rxq on stack:
+> https://lore.kernel.org/bpf/DMAP8LNBJRPN.2THUHLKURP25G@gmail.com/
+> It works for veth too.
+> An skb leaves veth as a MEM_TYPE_PAGE_SHARED frame, like today.
+> No need for xdp_convert_skb_to_buff(), veth_xdp_get_pp(), pp_cow,
+> rq->xdp_mem and patch 6.
 
-I agree that this should be fixed on the sockmap side. I will look into
-e5c6de5fa025 later today and prepare a v2. In the meantime, if the
-sockmap maintainers have a preferred approach in mind, please let me
-know.
+Thanks for these points. This approach is less complex. Let me play with it and I will respin it in
+v9.
 
-On Wed, Nov 25, 2026 at 8:28=E2=80=AFAM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Tue, Nov 24, 2026 at 03:02 PM Junyoung Jang <graypanda.inzag@gmail.com=
-> wrote:
-> > Check tcp_recv_skb() before using its result in both paths. Also stop
-> > before advancing beyond the last skb in sk_receive_queue. Neither
-> > check consumes data in the sockmap ingress queue.
->
-> This should be fixed on bpf side. Other readers trust copied_seq too:
->
->   reader                             with stale copied_seq
->   ---------------------------------  ----------------------------
->   tcp_recvmsg_locked()               WARN "TCP recvmsg seq # bug"
->   tcp_read_sock()                    frees new skbs
->   tcp_collapse()                     BUG_ON(offset < 0)
->   tls_strp_load_anchor_with_queue()  WARN_ON_ONCE(!first)
->
->
+> Patches 6 and 7 never free a page_pool frag. Jiayuan's test does:
+> https://lore.kernel.org/bpf/20260911135711.109338-3-jiayuan.chen@linux.dev/
+
+Jiayuan Chen, can I use your selftest then in v9? :)
+
+> Below replaces patches 1-5.
+> 
+> diff --git a/drivers/net/veth.c b/drivers/net/veth.c
+> index faa837a..8bb015c 100644
+> --- a/drivers/net/veth.c
+> +++ b/drivers/net/veth.c
+> @@ -63,7 +63,6 @@ struct veth_rq {
+>  	struct napi_struct __rcu *napi; /* points to xdp_napi when the latter is initialized */
+>  	struct net_device	*dev;
+>  	struct bpf_prog __rcu	*xdp_prog;
+> -	struct xdp_mem_info	xdp_mem;
+>  	struct veth_rq_stats	stats;
+>  	bool			rx_notify_masked;
+>  	struct ptr_ring		xdp_ring;
+> @@ -642,6 +641,7 @@ static int veth_xdp_tx(struct veth_rq *rq, struct xdp_buff *xdp,
+>  }
+>  
+>  static struct xdp_frame *veth_xdp_rcv_one(struct veth_rq *rq,
+> +					  struct xdp_rxq_info *rxq,
+>  					  struct xdp_frame *frame,
+>  					  struct veth_xdp_tx_bq *bq,
+>  					  struct veth_stats *stats)
+> @@ -657,7 +657,8 @@ static struct xdp_frame *veth_xdp_rcv_one(struct veth_rq *rq,
+>  		u32 act;
+>  
+>  		xdp_convert_frame_to_buff(frame, xdp);
+> -		xdp->rxq = &rq->xdp_rxq;
+> +		rxq->mem.type = frame->mem_type;
+> +		xdp->rxq = rxq;
+>  		vxbuf.skb = NULL;
+>  
+>  		act = bpf_prog_run_xdp(xdp_prog, xdp);
+> @@ -669,7 +670,6 @@ static struct xdp_frame *veth_xdp_rcv_one(struct veth_rq *rq,
+>  			break;
+>  		case XDP_TX:
+>  			orig_frame = *frame;
+> -			xdp->rxq->mem.type = frame->mem_type;
+>  			if (unlikely(veth_xdp_tx(rq, xdp, bq) < 0)) {
+>  				trace_xdp_exception(rq->dev, xdp_prog, act);
+>  				frame = &orig_frame;
+> @@ -681,7 +681,6 @@ static struct xdp_frame *veth_xdp_rcv_one(struct veth_rq *rq,
+>  			goto xdp_xmit;
+>  		case XDP_REDIRECT:
+>  			orig_frame = *frame;
+> -			xdp->rxq->mem.type = frame->mem_type;
+>  			if (xdp_do_redirect(rq->dev, xdp, xdp_prog)) {
+>  				frame = &orig_frame;
+>  				stats->rx_drops++;
+> @@ -746,6 +745,9 @@ static void veth_xdp_get(struct xdp_buff *xdp)
+>  	struct skb_shared_info *sinfo = xdp_get_shared_info_from_buff(xdp);
+>  	int i;
+>  
+> +	/* the buff holds plain page references from here on */
+> +	xdp->rxq->mem.type = MEM_TYPE_PAGE_SHARED;
+> +
+>  	get_page(virt_to_page(xdp->data));
+>  	if (likely(!xdp_buff_has_frags(xdp)))
+>  		return;
+> @@ -755,6 +757,7 @@ static void veth_xdp_get(struct xdp_buff *xdp)
+>  }
+>  
+>  static int veth_convert_skb_to_xdp_buff(struct veth_rq *rq,
+> +					struct xdp_rxq_info *rxq,
+>  					struct xdp_buff *xdp,
+>  					struct sk_buff **pskb)
+>  {
+> @@ -773,7 +776,9 @@ static int veth_convert_skb_to_xdp_buff(struct veth_rq *rq,
+>  	/* SKB "head" area always have tailroom for skb_shared_info */
+>  	frame_sz = skb_end_pointer(skb) - skb->head;
+>  	frame_sz += SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
+> -	xdp_init_buff(xdp, frame_sz, &rq->xdp_rxq);
+> +	/* the prog can free only frags and they came from skb_pp_cow_data() */
+> +	rxq->mem.type = MEM_TYPE_PAGE_POOL;
+> +	xdp_init_buff(xdp, frame_sz, rxq);
+>  	xdp_prepare_buff(xdp, skb->head, skb_headroom(skb),
+>  			 skb_headlen(skb), true);
+>  
+> @@ -794,6 +799,7 @@ drop:
+>  }
+>  
+>  static struct sk_buff *veth_xdp_rcv_skb(struct veth_rq *rq,
+> +					struct xdp_rxq_info *rxq,
+>  					struct sk_buff *skb,
+>  					struct veth_xdp_tx_bq *bq,
+>  					struct veth_stats *stats)
+> @@ -815,7 +821,7 @@ static struct sk_buff *veth_xdp_rcv_skb(struct veth_rq *rq,
+>  	}
+>  
+>  	__skb_push(skb, skb->data - skb_mac_header(skb));
+> -	if (veth_convert_skb_to_xdp_buff(rq, xdp, &skb))
+> +	if (veth_convert_skb_to_xdp_buff(rq, rxq, xdp, &skb))
+>  		goto drop;
+>  	vxbuf.skb = skb;
+>  
+> @@ -830,7 +836,6 @@ static struct sk_buff *veth_xdp_rcv_skb(struct veth_rq *rq,
+>  	case XDP_TX:
+>  		veth_xdp_get(xdp);
+>  		consume_skb(skb);
+> -		xdp->rxq->mem = rq->xdp_mem;
+>  		if (unlikely(veth_xdp_tx(rq, xdp, bq) < 0)) {
+>  			trace_xdp_exception(rq->dev, xdp_prog, act);
+>  			stats->rx_drops++;
+> @@ -842,7 +847,6 @@ static struct sk_buff *veth_xdp_rcv_skb(struct veth_rq *rq,
+>  	case XDP_REDIRECT:
+>  		veth_xdp_get(xdp);
+>  		consume_skb(skb);
+> -		xdp->rxq->mem = rq->xdp_mem;
+>  		if (xdp_do_redirect(rq->dev, xdp, xdp_prog)) {
+>  			stats->rx_drops++;
+>  			goto err_xdp;
+> @@ -914,6 +918,11 @@ static int veth_xdp_rcv(struct veth_rq *rq, int budget,
+>  			struct veth_xdp_tx_bq *bq,
+>  			struct veth_stats *stats)
+>  {
+> +	struct veth_priv *priv = netdev_priv(rq->dev);
+> +	struct xdp_rxq_info rxq = {
+> +		.dev = rq->dev,
+> +		.queue_index = rq - priv->rq,
+> +	};
+>  	int i, done = 0, n_xdpf = 0;
+>  	void *xdpf[VETH_XDP_BATCH];
+>  
+> @@ -928,7 +937,7 @@ static int veth_xdp_rcv(struct veth_rq *rq, int budget,
+>  			struct xdp_frame *frame = veth_ptr_to_xdp(ptr);
+>  
+>  			stats->xdp_bytes += xdp_get_frame_len(frame);
+> -			frame = veth_xdp_rcv_one(rq, frame, bq, stats);
+> +			frame = veth_xdp_rcv_one(rq, &rxq, frame, bq, stats);
+>  			if (frame) {
+>  				/* XDP_PASS */
+>  				xdpf[n_xdpf++] = frame;
+> @@ -943,7 +952,7 @@ static int veth_xdp_rcv(struct veth_rq *rq, int budget,
+>  			struct sk_buff *skb = ptr;
+>  
+>  			stats->xdp_bytes += skb->len;
+> -			skb = veth_xdp_rcv_skb(rq, skb, bq, stats);
+> +			skb = veth_xdp_rcv_skb(rq, &rxq, skb, bq, stats);
+>  			if (skb) {
+>  				if (skb_shared(skb) || skb_unclone(skb, GFP_ATOMIC))
+>  					netif_receive_skb(skb);
+> @@ -1149,9 +1158,6 @@ static int veth_enable_xdp_range(struct net_device *dev, int start, int end,
+>  						 NULL);
+>  		if (err < 0)
+>  			goto err_reg_mem;
+> -
+> -		/* Save original mem info as it can be overwritten */
+> -		rq->xdp_mem = rq->xdp_rxq.mem;
+>  	}
+>  	return 0;
+>  
+> @@ -1180,7 +1186,6 @@ static void veth_disable_xdp_range(struct net_device *dev, int start, int end,
+>  	for (i = start; i < end; i++) {
+>  		struct veth_rq *rq = &priv->rq[i];
+>  
+> -		rq->xdp_rxq.mem = rq->xdp_mem;
+>  		xdp_rxq_info_unreg(&rq->xdp_rxq);
+>  
+>  		if (delete_napi)
+> diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+> index d6c9dc6..1d89b6f 100644
+> --- a/net/bpf/test_run.c
+> +++ b/net/bpf/test_run.c
+> @@ -1349,6 +1349,7 @@ int bpf_prog_test_run_xdp(struct bpf_prog *prog, const union bpf_attr *kattr,
+>  	struct netdev_rx_queue *rxqueue;
+>  	struct skb_shared_info *sinfo;
+>  	struct xdp_buff xdp = {};
+> +	struct xdp_rxq_info rxq;
+>  	int i, ret = -EINVAL;
+>  	struct xdp_md *ctx;
+>  	void *data;
+> @@ -1417,8 +1418,7 @@ int bpf_prog_test_run_xdp(struct bpf_prog *prog, const union bpf_attr *kattr,
+>  	}
+>  
+>  	rxqueue = __netif_get_rx_queue(current->nsproxy->net_ns->loopback_dev, 0);
+> -	rxqueue->xdp_rxq.frag_size = PAGE_SIZE;
+> -	xdp_init_buff(&xdp, rxqueue->xdp_rxq.frag_size, &rxqueue->xdp_rxq);
+> +	xdp_init_buff(&xdp, PAGE_SIZE, &rxqueue->xdp_rxq);
+>  	xdp_prepare_buff(&xdp, data, headroom, linear_sz, true);
+>  	sinfo = xdp_get_shared_info_from_buff(&xdp);
+>  
+> @@ -1426,6 +1426,11 @@ int bpf_prog_test_run_xdp(struct bpf_prog *prog, const union bpf_attr *kattr,
+>  	if (ret)
+>  		goto free_data;
+>  
+> +	/* generic XDP uses the same rxq and its frags can be smaller */
+> +	rxq = *xdp.rxq;
+> +	rxq.frag_size = PAGE_SIZE;
+> +	xdp.rxq = &rxq;
+> +
+>  	size = linear_sz;
+>  	if (unlikely(kattr->test.data_size_in > size)) {
+>  		void __user *data_in = u64_to_user_ptr(kattr->test.data_in);
+> diff --git a/net/core/dev.c b/net/core/dev.c
+> index 6140fd9..fe9f222 100644
+> --- a/net/core/dev.c
+> +++ b/net/core/dev.c
+> @@ -5684,6 +5684,7 @@ u32 bpf_prog_run_generic_xdp(struct sk_buff *skb, struct xdp_buff *xdp,
+>  	void *orig_data, *orig_data_end, *hard_start;
+>  	struct netdev_rx_queue *rxqueue;
+>  	bool orig_bcast, orig_host;
+> +	struct xdp_rxq_info rxq;
+>  	u32 mac_len, frame_sz;
+>  	__be16 orig_eth_type;
+>  	struct ethhdr *eth;
+> @@ -5707,6 +5708,13 @@ u32 bpf_prog_run_generic_xdp(struct sk_buff *skb, struct xdp_buff *xdp,
+>  	if (skb_is_nonlinear(skb)) {
+>  		skb_shinfo(skb)->xdp_frags_size = skb->data_len;
+>  		xdp_buff_set_frags_flag(xdp);
+> +		/*
+> +		 * The frags came from skb_pp_cow_data(). xdp_rxq is shared
+> +		 * with other CPUs and with BPF_PROG_TEST_RUN, so use a copy.
+> +		 */
+> +		rxq = rxqueue->xdp_rxq;
+> +		rxq.mem.type = MEM_TYPE_PAGE_POOL;
+> +		xdp->rxq = &rxq;
+>  	} else {
+>  		xdp_buff_clear_frags_flag(xdp);
+>  	}
+> @@ -5719,6 +5727,7 @@ u32 bpf_prog_run_generic_xdp(struct sk_buff *skb, struct xdp_buff *xdp,
+>  	orig_eth_type = eth->h_proto;
+>  
+>  	act = bpf_prog_run_xdp(xdp_prog, xdp);
+> +	xdp->rxq = &rxqueue->xdp_rxq;
+>  
+>  	/* check if bpf_xdp_adjust_head was used */
+>  	off = xdp->data - orig_data;
+> 
 > pw-bot: cr
+
+-- 
+Slawomir Stepien
