@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.177
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795577431;
-	b=bgeHdA1HZR2Y2P/DadS4J7j4dbrtKX/5pX+AtR+nC7Ojsl7RWBCDWn1CP0+nV4OdOk8h
-	 DxxLzLtuzR/xRQ2bDCF6EUlh2PV3V6x5pj+diCf/1jZ5kMsL4HIfJqRdVBVLK/iL/g/k0
-	 SaEFutrIXzqP+3IAA790Q42yQu84UvJ+q0m5TJ8KcoybiM8JLky+a7EfZk2dxoYrYGyyx
-	 C/HPXy5yZadOLFyxtcPZVBV0e9z4cOHn+vDX31mDaeosk/oC4Sjg0AF06IM/nrwFjNRF7
-	 2lKU822FJaTw0f/qsaJRd/kKNcdpgXacioO1w/LpsTMoX7Gpk3Gm92ZfPy0bQt6iYrg==
+	t=1795577437;
+	b=O5oIaj2fn++HZppgNku0QpZKRzfcctxShloq21vvU2h0wc8kyuCpSmMlwULzIgsm1GVZ
+	 LE8/ZcBiDufgoOATo0BnNOep15/cdG8o699PkBDVht5EXr+ovYCZnNH6Cl4olE2yQihIw
+	 6Hnskd4Cubxa3n5m+XhlnO6vJFlMP3VcvKpeN74FKvu8sZdjs/9FoJ8EgauXUtn4T6FhT
+	 6aPd5nQTLNvDqR0jA89GOm2RjpSPpErjZveaw8oXIGVM/8KssnTU8U4ZC7d5/Zo2rD/az
+	 AKy9/Fq4zAzShIBQetQuPJZCwjCDAdyclw2AgzE5NmbYgHifnaOHI7aTzyUWd/wS4Tw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795577431;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795577437;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=s6wJ+4GRbUc5cdVyS+/gZn2PiKHi7MowB0E60D2MYEs=;
-	b=PRqUFnCmJdI7omn5wA4UhIfPcpePlBhV2LxSrlQftCA1qR83HgEPaFE5cIfcwyB/G0QZ
-	 hwyLHqlFXe1XlICh8tnfx2IwaI2oOXFgmMNwe3SAtHM91RvP/Vfn2UnYU4vUdynM4IdPw
-	 GqBM05RiXBGzUTtLk1q4JkDC7MnYwLre35VGloZEDUGATs/daxpRUp9YXafIwH3zdQ3g+
-	 fULaNlF+oW9zrxqsD4EIweTHCL4DniobFk2nDb124CZyg6X5R4Nf8Z5mPzJ79KhU0Pc/E
-	 7xvIvT8+AnTXu0dqJ6vB1G5u6IDaA/6qOPcU6xeV62eH201e0tLbZ0yjyp2VoHpyHUg==
+	bh=A7ptYyXeS64rDuh6zf7FsqnnO3bjT69b3YP1ylCDZ1M=;
+	b=kgFTqVJaxM5Fex7uKwTHqvvaCIH5v9dpI99bfO5IH/zAm5Kn0jtLzNinPovxdu54vVTf
+	 F388ZI+z+80e/lyUheHv+dK8X/3Mygr0+1G3Zv9QL37snXoSWA4ToB0gEeQ/G6LxpXVbZ
+	 gUvZhqgLEoMsfWO0KZevsoIUSy3WdFan8seD2vdq/9wmffTMkSleWn/MHwbj18ZEX+beq
+	 OzcT93v+69kuhmS1YYaDxorVmD9g4PkEJFDC3j5M2r1ZxOJ1M5l2g0dPxCFDoJQZSvwh5
+	 Zmsd4iCqOTzVUl0vs6986zvGwPDYDShRY5ZLNWVR3b5fI6ZUSGs3nu8CR8o8tU6433A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=nvwrlL4y;
-	arc=none smtp.remote-ip=209.85.214.173
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="dWy/00po";
+	arc=none smtp.remote-ip=209.85.215.177
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E24EB606A31E
-	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 03:30:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E24EB606A31E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5DEB606A326
+	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 03:30:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A5DEB606A326
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=nvwrlL4y
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2f01f296937so40591485ad.3
-        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 19:30:30 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=dWy/00po
+Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-cde0daf3a2aso2225315a12.3
+        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 19:30:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795577430; x=1796182230; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1795577436; x=1796182236; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=s6wJ+4GRbUc5cdVyS+/gZn2PiKHi7MowB0E60D2MYEs=;
-        b=nvwrlL4yFBwRRW1x7yNI21cKbHmTp58CWSYGelhQfVryTN83HzaRUE28ltPo4HMWsc
-         yUT1GskYt1VxEDWNSqQN/CYthT9WM4szLsg+9oJkb9p8+0g/MESqOeD7CaOWkWuT3/Ti
-         kqI7zX3eN6OWbDJcDutHq4Y6bXdWxiHHd6+cAwncqUfUVD4xiGe5h3fq4qGgrg7vl0Y8
-         R3LB6vcrKbU3d8Q3EOCSGYSoMN2vSiD4MHQKVWzuBLFhD3ASc8/b4gqym/qhXM4/sseR
-         QpijPd/nsgtRkZQEL9FKpu/T1PJwvhsy/3sytelJ6KD0VtpcwCXcjheZSYkCmXjST05U
-         Ln9Q==
+        bh=A7ptYyXeS64rDuh6zf7FsqnnO3bjT69b3YP1ylCDZ1M=;
+        b=dWy/00poIt9OvDaZwXNkPjgkxRYk/FnjmxDdxKADmBA1VT5Y2+C8ijdP5T1WnpOryn
+         8+961PgoaJvTnZKj5alL2ubQ+V9nqQDef+p8UuYwC3jBQ1GSQrG5GpGEu21783ha9N1S
+         /QU/2r84jx2HOCInI0C1bh/VIqiSm40hvuwgIlMqVJIJxYIBMdjTZ6pa8+G6wUCQ8eum
+         YhDbKs67NMYRW2gY5/57mdDHQumq4u6rVnWt9gQO9BaornGj8EieyWIglap/xVL3yLq2
+         2az/W3gr29XOogaliAs0aKgM0LoPJjzwJfmiHaFWrLMVYVk5EQ1LlSJilApNtAimk2kq
+         lVrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795577430; x=1796182230;
+        d=1e100.net; s=20260707; t=1795577436; x=1796182236;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=s6wJ+4GRbUc5cdVyS+/gZn2PiKHi7MowB0E60D2MYEs=;
-        b=G5ewFgVVDpieRvcc8uno7qaPNFZqnCmAyIZjDTRblEz1yKC5ujIdqMRv/SQ8dcdKYc
-         A3uy9iQI7KAww3nS7IdTr2v+xrM6C4zNMIEqdHTdBMB5G59ovAyYbt3J3AS5kyK5syWN
-         DtgrwNLQyc/jrH6KeBmaAs7cHO7rki5ATs6Jg4HO1xw1HGhnfXGT9PVX5xX3CD1NsMLN
-         ZWeR3tQa2bbgBfEwpV4ANGvIyShErD5Fj7BOee0H8EYjWNQqnD2lYnRyEBJrhN5SOCBC
-         R/L4WI9GQsLF+2iM2vSRHwHD8O36Kx7cTSn65XbHmge+GBf2IwqsoMSYIfHl6CLAvK7b
-         KAZw==
-X-Gm-Message-State: APuU4Z8Ta7mdePAlemlSDckBV9hjElwZlYOEHTGpIVanAAx7Y2LgSzPS
-	jn9YJ3nLcTjr3d3l0AvMk/ihgnYpX8r53NeSLnb8hgDnsxyv+8FHsmRPbzGdIYWa
-X-Gm-Gg: AZFdTZegnyUOqpOFe06NY8moAa9Xg0vRDvEfy96pOyV/TzLBqM/TzJcbWcoC4wfZARj
-	W4+XzeysDQIwdJas+JoIiOfOgzsInBr+2KPwa1PCyyQzzls4eeBtT/5QI2EQTT11oMffJtl0Eub
-	lf7tnHJs3W1u+epo27ZouLzk9CTIIFKrQt8n2bkQy2q4N5nKpVUnay7gTBPZTJ2s2XHPK4yttnb
-	U6ir6byAPmr3csYD6UDJP4PK/anr/eQenhEaJp972vk5IUdzD6bzmHPr0JcvCfOmlsWmAGrP9UG
-	bTpq7pNLXtWYUiOsalPkyK2oitEQluyKqyCQThJWSShyy2XZA848w8Z4RantUBCI/wTdDODN4/L
-	uuaBDNHUm8XVMXoLP/2HdqgTtB9VHGVGGb+FaKB5eExZmHjT4tvtjFiY3Ykj3rhzT9uL9yoJmCa
-	bPiEE18EwLh3AGwboABzzrCdYqYSpQVIbAZmoCTCIeke36xePuUvHn4TjZo97wRzc79wojCv0Nk
-	SL673rSt716seYu9X6eHhKerj9mXDaCJJIz5utTHVmUWo15gPLScPe4+WBFlU/MXIb+RXZtroWc
-	+AkgicwfYAmHh1cAzjfMpknMWIyqT/SiJnUNUSFXSfDZOgNw9glZl6tSHmxCK0wk97R52sQgKZW
-	iazWwRlT+X4m6LtJ8QigcgoNTdJfcgyLw94gzq2fYVfTxY8iVdXeLy52qwtxmuwhfkRadvWUmk0
-	4=
-X-Received: by 2002:a17:903:98b:b0:2df:aed3:2ac0 with SMTP id d9443c01a7336-2f03f1cf5ccmr181381515ad.10.1795577430053;
-        Tue, 24 Nov 2026 19:30:30 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.247])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2f03ee84285sm75931195ad.3.2026.11.24.19.30.29
+        bh=A7ptYyXeS64rDuh6zf7FsqnnO3bjT69b3YP1ylCDZ1M=;
+        b=U+BTdls2cd//dm/rJfBaZm9S/ChRc1TVMnKQRslI7F4viPQy0Dz1t/yu5K4fLBH4UR
+         gChqBMhyflbyDZnc9RATn+t/+7Rub7dChzxNoN9AXV06CQQTnlP8mmf/IoaB+oN1h/pp
+         +4xKt3CAHDEzNmwVtpfoz2qYWzybUt97YVACA9Vpn0ZLMd4peYdf637NOSCZ+ohBXP8i
+         H0ieYTYBer2tqClwLnB9HuAe95VlRDU2HaV5WVjQeVEsYc6O48kY3trossOhY7anCeGb
+         IYReE3f8/M0tZKi+1zHQm1kr4teFZWZZQYDef0FS1+j2LAJ6UWYFicCe/SoGz+jmcdb7
+         kmCw==
+X-Gm-Message-State: APuU4Z8Odlh8q5lMBK6p9FGk1EqEYscnZdXHMJkpqkXnTA6iH3nuvm+S
+	sht0os/ZplYACvdNRgbxl3HxWFwCyHXVulUIFoTamunx6IL6cAN1cQXbNFUz9BXN
+X-Gm-Gg: AZFdTZf3vVE/lzDKP3zOqt92dygomsV/iRXDJcUMP1ExWpVblzTopWsS9ivWutq+R7T
+	7gxZmbLPMO0VaQrWb8UWL9e2TZcJSRHrLdHhe86HYJH5f1eRoWBCfSOCofNtTtMicq72S/M31I8
+	WJ0zzD878BOJ1qPOuVkuspP3ppNJ7HCd+lcwpMTZTX5W5RxH02+nrUqMWRoPYnAIW1VEOQa+wvJ
+	uLo7WfKlTFP5heI9Om/hGquHMvOmG7FchjfSNRyT51TStx9zWUMB4NoOUaYD0qwA9tzhxqOB56X
+	hTjwrXcyiKzTZxxukrLCkOTzJMNqHhXaHUEtUeQVi4mHtvZt+hta6XHN4T2OWN7T7A9ykL0xCP4
+	87yxeidWgV4sngwmMJUM/Q78z4w9X0rfLIPRcl72spblifGxAXdZmTphFUxtbpKmdZ05sWnZeFU
+	+7W30ETX6sgy4Sf8dwccfumCNKevcqmQ5Zjnt4WN+Tfioz2a3GBWEgsQoRbPlynNPhBnOS1CKKE
+	MFAYWGzCO53HDjyVq+xVnMoYF7cgN57VBZTCW0i6vzrYh56iNM9oLOBE42UtqW9ZA4ES/KCHoMJ
+	zSyk72Czm+8iiXzBTqQNaDOYXkd3a8NhqB1kI2Tu8TRovqNsjMDwOeOWCLzpn5t7lVdFZ96rtoo
+	+2TSENMUc0Oi93ZTUBRSexMKY6eyJc25AzmhNBYQT8GkbtosjOE7Jaz+CLGKrplX1FfR44ki2pA
+	o=
+X-Received: by 2002:a17:90b:268f:b0:3b3:afdc:2e5 with SMTP id 98e67ed59e1d1-3b41c9cf56bmr11842247a91.30.1795577435899;
+        Tue, 24 Nov 2026 19:30:35 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.253])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b405ecbd0bsm28441051a91.15.2026.11.24.19.30.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Nov 2026 19:30:29 -0800 (PST)
+        Tue, 24 Nov 2026 19:30:35 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf 08/47] bpf: Reserve cookie and ip in the trampoline for tail calls
-Date: Wed, 25 Nov 2026 03:28:59 +0000
-Message-ID: <20261125032938.670542-9-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf 09/47] bpf: Check that a program and a struct_ops map are for the same struct
+Date: Wed, 25 Nov 2026 03:29:00 +0000
+Message-ID: <20261125032938.670542-10-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261125032938.670542-1-alexei.starovoitov@gmail.com>
 References: <20261125032938.670542-1-alexei.starovoitov@gmail.com>
@@ -104,39 +104,141 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-The trampoline has a session cookie and the address of the function
-only when the program that is attached asks for them. After a tail call
-bpf_get_func_ip() returns what is on the stack, and
-bpf_session_cookie() points to the first argument, which the trampoline
-passes to the function:
+A map takes a program when the id of the struct and the index of the
+member are the same. Ids of types are not unique among modules. Compare
+BTF too.
 
-  KASAN: maybe wild-memory-access in range [0x4141414141414148-0x414141414141414f]
-  RIP: 0010:vfs_truncate+0x32/0x450
+BPF_PROG_ASSOC_STRUCT_OPS takes any struct_ops map, and the callers of
+bpf_prog_get_assoc_struct_ops() take the result for their own struct.
+Pass the struct_ops that the caller wants, return NULL for another one.
+The callers are scx_prog_sched() of sched_ext and bpf_testmod, they
+change with the prototype.
 
-Ask for both when the program has a tail call.
-
-Fixes: 9b99edcae5c8 ("bpf: Add bpf_get_func_ip helper for tracing programs")
-Fixes: eeee4239dbb1 ("bpf: support fsession for bpf_session_cookie")
+Fixes: f6be98d19985 ("bpf, net: switch to dynamic registration")
+Fixes: b5709f6d26d6 ("bpf: Support associating BPF program with struct_ops")
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/fixups.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ include/linux/bpf.h                                  | 6 ++++--
+ kernel/bpf/bpf_struct_ops.c                          | 8 ++++++--
+ kernel/sched/ext/internal.h                          | 5 ++++-
+ tools/testing/selftests/bpf/test_kmods/bpf_testmod.c | 6 ++++--
+ 4 files changed, 18 insertions(+), 7 deletions(-)
 
-diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-index a656634fa9e4..59dcd91ed551 100644
---- a/kernel/bpf/fixups.c
-+++ b/kernel/bpf/fixups.c
-@@ -2254,6 +2254,10 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
- 			 * the program array.
- 			 */
- 			prog->cb_access = 1;
-+			prog->call_get_func_ip = 1;
-+			if (prog_type == BPF_PROG_TYPE_TRACING &&
-+			    (eatype == BPF_TRACE_FSESSION || eatype == BPF_TRACE_FSESSION_MULTI))
-+				prog->call_session_cookie = 1;
- 			if (!bpf_allow_tail_call_in_subprogs(env))
- 				prog->aux->stack_depth = MAX_BPF_STACK;
- 			prog->aux->max_pkt_offset = MAX_PACKET_OFF;
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 5f2e386dc118..e98d26cf6ced 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -2411,7 +2411,8 @@ static inline void bpf_module_put(const void *data, struct module *owner)
+ int bpf_struct_ops_link_create(union bpf_attr *attr);
+ int bpf_prog_assoc_struct_ops(struct bpf_prog *prog, struct bpf_map *map);
+ void bpf_prog_disassoc_struct_ops(struct bpf_prog *prog);
+-void *bpf_prog_get_assoc_struct_ops(const struct bpf_prog_aux *aux);
++void *bpf_prog_get_assoc_struct_ops(const struct bpf_prog_aux *aux,
++				    const struct bpf_struct_ops *st_ops);
+ u32 bpf_struct_ops_id(const void *kdata);
+ int bpf_struct_ops_for_each_prog(const void *kdata,
+ 				 int (*cb)(struct bpf_prog *prog, void *data),
+@@ -2475,7 +2476,8 @@ static inline int bpf_prog_assoc_struct_ops(struct bpf_prog *prog, struct bpf_ma
+ static inline void bpf_prog_disassoc_struct_ops(struct bpf_prog *prog)
+ {
+ }
+-static inline void *bpf_prog_get_assoc_struct_ops(const struct bpf_prog_aux *aux)
++static inline void *bpf_prog_get_assoc_struct_ops(const struct bpf_prog_aux *aux,
++						  const struct bpf_struct_ops *st_ops)
+ {
+ 	return NULL;
+ }
+diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
+index 7c5cd6086e27..71235df99cc9 100644
+--- a/kernel/bpf/bpf_struct_ops.c
++++ b/kernel/bpf/bpf_struct_ops.c
+@@ -845,6 +845,7 @@ static long bpf_struct_ops_map_update_elem(struct bpf_map *map, void *key,
+ 		}
+ 
+ 		if (prog->type != BPF_PROG_TYPE_STRUCT_OPS ||
++		    prog->aux->attach_btf != st_map->btf ||
+ 		    prog->aux->attach_btf_id != st_ops_desc->type_id ||
+ 		    prog->expected_attach_type != i) {
+ 			bpf_prog_put(prog);
+@@ -1591,13 +1592,14 @@ void bpf_prog_disassoc_struct_ops(struct bpf_prog *prog)
+  * Get a reference to the struct_ops struct (i.e., kdata) associated with a
+  * program. Should only be called in BPF program context (e.g., in a kfunc).
+  *
+- * If the returned pointer is not NULL, it must points to a valid struct_ops.
++ * If the returned pointer is not NULL, it must points to a valid @st_ops.
+  * The struct_ops map is not guaranteed to be initialized nor attached.
+  * Kernel struct_ops implementers are responsible for tracking and checking
+  * the state of the struct_ops if the use case requires an initialized or
+  * attached struct_ops.
+  */
+-void *bpf_prog_get_assoc_struct_ops(const struct bpf_prog_aux *aux)
++void *bpf_prog_get_assoc_struct_ops(const struct bpf_prog_aux *aux,
++				    const struct bpf_struct_ops *st_ops)
+ {
+ 	struct bpf_struct_ops_map *st_map;
+ 	struct bpf_map *st_ops_assoc;
+@@ -1607,6 +1609,8 @@ void *bpf_prog_get_assoc_struct_ops(const struct bpf_prog_aux *aux)
+ 		return NULL;
+ 
+ 	st_map = (struct bpf_struct_ops_map *)st_ops_assoc;
++	if (st_map->st_ops_desc->st_ops != st_ops)
++		return NULL;
+ 
+ 	return &st_map->kvalue.data;
+ }
+diff --git a/kernel/sched/ext/internal.h b/kernel/sched/ext/internal.h
+index 58652370da5a..c0109ac98347 100644
+--- a/kernel/sched/ext/internal.h
++++ b/kernel/sched/ext/internal.h
+@@ -2674,6 +2674,8 @@ static inline bool scx_task_on_sched(struct scx_sched *sch,
+ 	return rcu_access_pointer(p->scx.sched) == sch;
+ }
+ 
++static struct bpf_struct_ops bpf_sched_ext_ops, bpf_sched_ext_ops_cid;
++
+ /**
+  * scx_prog_sched - Find scx_sched associated with a BPF prog
+  * @aux: aux passed in from BPF to a kfunc
+@@ -2687,7 +2689,8 @@ static inline struct scx_sched *scx_prog_sched(const struct bpf_prog_aux *aux)
+ 	struct sched_ext_ops *ops;
+ 	struct scx_sched *sch, *root;
+ 
+-	ops = bpf_prog_get_assoc_struct_ops(aux);
++	ops = bpf_prog_get_assoc_struct_ops(aux, &bpf_sched_ext_ops) ?:
++	      bpf_prog_get_assoc_struct_ops(aux, &bpf_sched_ext_ops_cid);
+ 	if (likely(ops)) {
+ 		sch = rcu_dereference_all(ops->priv);
+ 		if (sch && unlikely(READ_ONCE(sch->dead)))
+diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+index 76fbe64755ef..7c5255ac49a3 100644
+--- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
++++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+@@ -2500,13 +2500,15 @@ int bpf_kfunc_multi_st_ops_test_1(struct st_ops_args *args, u32 id)
+ 	return ret;
+ }
+ 
++static struct bpf_struct_ops testmod_multi_st_ops;
++
+ /* Call test_1() of the associated struct_ops map */
+ int bpf_kfunc_multi_st_ops_test_1_assoc(struct st_ops_args *args, struct bpf_prog_aux *aux)
+ {
+ 	struct bpf_testmod_multi_st_ops *st_ops;
+ 	int ret = -1;
+ 
+-	st_ops = (struct bpf_testmod_multi_st_ops *)bpf_prog_get_assoc_struct_ops(aux);
++	st_ops = bpf_prog_get_assoc_struct_ops(aux, &testmod_multi_st_ops);
+ 	if (st_ops)
+ 		ret = st_ops->test_1(args);
+ 
+@@ -2584,7 +2586,7 @@ static struct bpf_testmod_multi_st_ops multi_st_ops_cfi_stubs = {
+ 	.test_1 = bpf_testmod_multi_st_ops__test_1,
+ };
+ 
+-struct bpf_struct_ops testmod_multi_st_ops = {
++static struct bpf_struct_ops testmod_multi_st_ops = {
+ 	.verifier_ops = &bpf_testmod_verifier_ops,
+ 	.init = multi_st_ops_init,
+ 	.init_member = multi_st_ops_init_member,
 -- 
 2.55.0
 
