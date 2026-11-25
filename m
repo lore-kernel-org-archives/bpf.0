@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.178
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795577617;
-	b=Niq10fFCRlvihgJIUxY1pTmYv1wrp5rb7BW/+uw7MXc0GqYyZg5srJsfqa9hLxupefR+
-	 4PrM1jCA8U+paC4/lNxNGvVH5mNrhZS7imHr5xjeVwj7iCaM9Mbq9brJ3cejEX/m5VgjF
-	 u7r4q0tTTC7HWlTxa+w+kXbZlTAciD19qqRSUs84F2xCMCwXlZ7bpAqgDuJwZiMn3UDOH
-	 thFg43UuKeRopNxhgUTehQ/Y+1sjSYnncyzaBQB4v0r5SnhL1AEe3iSuDjIHVsV3hYvul
-	 EZAb/a+4QaJGOiJt96JopHRijMUk6twdz4vb2XpBV9KDO5RbtMU9PZHbGYNIZ/2IaiA==
+	t=1795577623;
+	b=Q3Hvdlh4QOzftywZk3IdpKOqOJwAGg7xl++VdhIlGUFyvlJPiqQVa9+8A8U8E5FFvrL7
+	 f7eRe0ZZ9wxZNO3VcoMcvCK/eisHQ+Pok3GB7pdDKKLkgypryfiJyPqtjVkABOrP0F7ud
+	 2mwzITG15IFiPGclqvvE+ViS2SaRpzJe6u+UI424Kswj3J9MR3kNU5iX2Zz8snOSWWIYh
+	 Q43KfIZPB3qNoX1WmqTm2RYOKehr5q7ooGp4XrHBhgDNWs8Z7k1ilrLAT41j4/PdWuAn8
+	 IHujDbesJmD2XhCdNmXa0GiWXDp2dKMxIuUlsJZMkw/4ez2EtaKos/vmqJKhO+CmB6w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795577617;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795577623;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=DBjF90kJNnpORhJq8HbCjiQja6mtLYPpVYNkM8kR4Nc=;
-	b=KQAji8LKcUUBIa5q9fxT0TX84H9nvtvbjkU7pZfFuTYocKQtnWH0Iam0HYCMeO408eJb
-	 k31U6oE7dqFhn74vbyusTXv/nFO16Ksg6HAZPS21Dw+AVgOpshQ1B6qHMGWlb1ZX4cotk
-	 7grgaDk/ib4G7Rc0/QSLlvoJ02yhrbZHUQYfQGxGQtwjhdd1f93AKOGS6AwrkLtmA5LSO
-	 GAodvyQnHhHar8achKvGzTNLkxPY0xyqB+wdRJfSocBlzmW6iTCHiPa74MAfSDZP3H+j2
-	 qm910zbhpqzyIl5lBgdHj2+jQlvff4ciAp4GQOpRrFxS3ZkdT+tUJHcJ7xIJCqdma2w==
+	bh=I7VVNQb+CMXSEh7yNtfPHJ7+1vEtiXOGdD+I/0XonW0=;
+	b=ZZ9jb2FXQPkInk9lrdshXZe/MV/qDaxOAGeBoL9Fbd7uuKyddVjRBfES2Uyox8yEyU5F
+	 TKyveZop2Wi2m2zCjkg5C13kKk9ozrl7kBUqj9ObVQjQE54iSXQs6wX0WNBdQP5eh9X3j
+	 HQghArn5+GVDIVMqaFy1psrAYTvQdBmNiOysybVbVXixvm5m2BA3ai87Nq+iCoNxNuohI
+	 Vq9rr74uh0uUjXVhiXH1P1nJmxIJbyUBaooRsoyTcLx8DyAtNuKyXUNV3tza1GECPob0s
+	 n2q6d1Jl6azyyeEjC3Ymy2gSOysGzNzWaIeMNT5FSIdZdVx8SVAUoY6awIzudo4omLQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=w4jMLknP;
-	arc=none smtp.remote-ip=209.85.214.172
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="yE/ts8qZ";
+	arc=none smtp.remote-ip=209.85.215.178
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F1D5606A31E
-	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 03:33:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3F1D5606A31E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E029A606A326
+	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 03:33:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E029A606A326
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=w4jMLknP
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2f020d0169eso25471885ad.0
-        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 19:33:37 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=yE/ts8qZ
+Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-cd60c5da24cso3252318a12.0
+        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 19:33:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795577617; x=1796182417; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1795577622; x=1796182422; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=DBjF90kJNnpORhJq8HbCjiQja6mtLYPpVYNkM8kR4Nc=;
-        b=w4jMLknPiFr3AH/l+E6Tvc5HrmN4D7EvQyXR3OikZrxjSyaTMykUFlO9G3txdcVpvT
-         7hP3jDplAmf9IpMgg6aI8EuqcXy24G9NSwSBLxvozB1xiRP/JZn2LelJfkAkciXTVmTN
-         saipfgBHhVweJ8bHkQTJkAgTdi6xxf186sth72fQNVKyc42b534xhzI6BSQA4cplH4iK
-         fXQOv+wFszODtOZGLYvtD65hZ0RDUH0sj7hChYpJiEps5cffLwj3fUvY1SIRyKjZgbXj
-         6V2edyUSY43m51Y0n4ZIWmJDhCVuoSBti+keuW6c8lqksmDHifJGMvNWACNevcUtai5X
-         3rog==
+        bh=I7VVNQb+CMXSEh7yNtfPHJ7+1vEtiXOGdD+I/0XonW0=;
+        b=yE/ts8qZn5PPBDT+G5ZbmeFzg1HApJsKynSgn9Ou7Lf46rCUB5TmcfjKs9GrZMSCkY
+         gOxjKdoZ/yT3QvZYu1ugkM9b6QT85SYEr7gQNy/yYIXtNFyPgxGlMyMqJHbwRtnUSSGa
+         60h/1UVhSnha3JzlwQBXZ+TKwl4Eqp/QIayyffTp8OPnCkOsWayvrTc7QH3qTPwlEeus
+         OBldseZOFnW3eqJsAOHsxpYXTL029JO1/r0PaURSRANV1bg9G1jQj4HAEGKnLaFQ/D7O
+         q2PHrm8NTj5CQjeLgPrPkqpsHVKp6++wnb22uyG5NBctJyzQ0coKDwEu2cT9fOEu6hVF
+         D3wQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795577617; x=1796182417;
+        d=1e100.net; s=20260707; t=1795577622; x=1796182422;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=DBjF90kJNnpORhJq8HbCjiQja6mtLYPpVYNkM8kR4Nc=;
-        b=tHKdDZz+cXjMeKYz3brggN/1LRJOcMTk1grL/+0k/7u/mcpoM27S4rlfSNJA2T9dIw
-         KDfOLbRcyxJ4ngFYCLN7bHD7Y65+IZ1aYhwJ+uRGqOB06ixFON60dNeptL+UBwM7rOwn
-         6Qi05ehR1ezcpyJ1i/8qFtTJSiJsbfnDmvCH6vjckWxkV0CKGPWrEER9MVopoAnzEj+r
-         x0Sr8RQFOQM/HwRKAghqkLLilmeEK5qkG7Rsg64XuvoOB3JP3ouj7OejR3IstFyYeClN
-         zazZtMvHAVAxMkU/6kmjddTaBeJloHl+EUagZ8RSmqnJrSURL3dPexG4y/dW/X3IVjqS
-         m14g==
-X-Gm-Message-State: APuU4Z9um3/tH0e8aMYZmfH3gm3xgeT339swJyjvWvzLX1//Q39T9/uK
-	vcxBUJEtuMla42idm4oKFemrR3n1AmvOuzCJ/Ph0s5bVktsi1afNbUnmwhgh10hc
-X-Gm-Gg: AZFdTZcnOFMXTaOTxy7mNIsjQ51NKvLTIO0tzUUIYCar8leWQlMsVMYRxmlrUwei9ny
-	Ov81clfZPKutK5T0LLn+eWDZkGx4LFjHPnxG9MXeuLQYcQ0LP+gA5XJObjwucOVCuvJZyZkYl2C
-	d0DZuA0HBVULYEE1fniR78fsTY4LhQeTAv8LlfcfojK/1RW5YnBz40ZVJQ9/4ZzOslJN/IriLYa
-	/rsoWRiPOuL+4bdHYtsP0Hqz7oSqA6tqdSWZnnX0KI1mtwE1sNfhvO1tVQCKUuAem15+d5st00T
-	waDU9eJjscU/lAF5hsfRhVWv6EWKj5V73i/m0SjQwFgE4kwcdYswGUEusq5SN88DEl0S+IQIyMX
-	NB+xxyC2pNrywCXp+jyofXjDeGSzKIO8td1KHEmRqey635IdSYiBQ8w/K3+hceQVyY0EPKiIACP
-	gIYoJZkEE3U/Kij2OISXBbMWOeYdDZyLBMAd9HIHNSequJovgPveuk7HFoyEB6kY0suPoaDatwc
-	8hGQxlBs3dwBlG9HEyx3Lzbgb9XvjMicm9fYEd2ZY8vX4Uw5HgiR0nerOfgsz7E2xQrTy+kpOEt
-	hxFbfEC5dif8rI+fjChNkmNO5eloOmtsthyzMYl9TJOkXDApxmZ/veZJHsXEXlszIvToO1ocxvi
-	ZvxB9HbwxlgkC0oRKvBx6w/Lfnu1IDHGh94q/rwXhLPG+RtcQP9cTnjHQo+EBRB+Z2u2lbv8eAA
+        bh=I7VVNQb+CMXSEh7yNtfPHJ7+1vEtiXOGdD+I/0XonW0=;
+        b=EHRZ8zGIS1l5cfko9xn73G0w9WiMhzAUPm5k9IsG+/A5YA6WtkMo6Ix8FIgr2XYOjK
+         sc3AEjAp+XMsYZvx6bXxBmNjAzTSkL0fikQ1aTurI3th84PYuqMoxwDeC1qRdKAfGW6R
+         Z3Rfhixp3ecBR4U1i3p/HgEFISJEX2TgL4DVLjOJ5UFpm/afvGyPTuLOZK2yqKejC+bg
+         qH9GRF11Z+NUy80IDDcfuuGxZI6qkCvgbQqXJ4QMZdvzkjL0Ua6nZpAAMrWquhjmTeqf
+         cyt5k6r2UfYY8rDBzavjY9U+ipSDVABb6neAaPkOiQKerrRMMRYrO0BU93D4GudaIzD+
+         srzw==
+X-Gm-Message-State: APuU4Z++z0zaa6T4iraketSB94/0UYwkFxPNA3wr/5LVDQAm+h6qno2v
+	6+HWKrC7BCLFkaE8tgvzoRoAXQ17DiWCl1cFvw9B2XkX7aNIOUO/sGmb3eR+NvMn
+X-Gm-Gg: AZFdTZcMGbFIJJNi52l7RMmm6rDybyGeKMaZ80FhtI83d9fTloraQUgZNMkU2IsGLwe
+	19KU1Qt0vmCd/FckhNFxTSk7xsS960o2FGiizQZYDiLMg0eJljB66jk7lM2KXPZcVCoZFOEEOc0
+	Z8H3hIFe0h9+y2CYafKVocFPmSjn5105iT4wNyozH2We6JpdPqG+7lW31n5lnKnI9yl5Qv0crJR
+	j7KlosmQwhvnrLLSEoAYCUaeZ5JxCzSxwLDwb7XeCdiGm2dBrIKhn4ckP5cyi0p1tKZ0JKbDmng
+	7TR/Hm8SH5X/e9dZ3lmXfrNsNgwGgHsJfVMUZSuZyqhuOFPkaydJaoMOr7piQcf3tnp3MZS6kr6
+	qMrN7FA60uiSGNs/OpEq3XL/F8qLtE8iKOCjCU2ymOSilb1elPo8AHUjRcd4Luk5sUp0RBadF01
+	2LlIWvMjXBgmFnDpy2ts/keBn4I8WTuSQ4KxMhqjZZN/J7T7WPlWXqd65iZjCSnCVXp6wNBkM53
+	inr4y8TnbK/DbZixOQOp2h22fcpUYhXjQU6P8EqdDD+GkjTzzTLa5wAEMWTSFoJ9oVtJmd/MijV
+	b+HP0TcxRdILnGU0TcJjFe5gTDTOtVnUcmY8owbQSofKNphqvwa4JJnVzHJxtjOz9xcWZ0UVNMJ
+	PEXHlrAMLAJLebkc3yUQlymjG2GdOfE1zg7l32R6mfk/dY8T6FtnDIz99bJCf0t/ZyzKWAs40IQ
 	==
-X-Received: by 2002:a17:903:1ac8:b0:2f0:a586:81d9 with SMTP id d9443c01a7336-2f0a58682a8mr75426795ad.50.1795577616460;
-        Tue, 24 Nov 2026 19:33:36 -0800 (PST)
+X-Received: by 2002:a17:90b:5543:b0:3b0:a1af:e4fa with SMTP id 98e67ed59e1d1-3b41c9e4290mr16455186a91.24.1795577622247;
+        Tue, 24 Nov 2026 19:33:42 -0800 (PST)
 Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.243])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2f07d6d4bddsm49032745ad.62.2026.11.24.19.33.35
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b405d1361fsm27952137a91.6.2026.11.24.19.33.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Nov 2026 19:33:36 -0800 (PST)
+        Tue, 24 Nov 2026 19:33:41 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf 40/47] bpf: Fix slices behind the end of an XDP packet
-Date: Wed, 25 Nov 2026 03:29:31 +0000
-Message-ID: <20261125032938.670542-41-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf 41/47] bpf: Clear family and port of a short address for cgroup sockaddr hooks
+Date: Wed, 25 Nov 2026 03:29:32 +0000
+Message-ID: <20261125032938.670542-42-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261125032938.670542-1-alexei.starovoitov@gmail.com>
 References: <20261125032938.670542-1-alexei.starovoitov@gmail.com>
@@ -104,56 +104,48 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-A dynptr keeps the size that the packet had at bpf_dynptr_from_xdp().
-When the packet has shrunk since, bpf_dynptr_slice() takes the error of
-bpf_xdp_pointer() for "not linear" and copies from the frags. A linear
-packet has none, its skb_shared_info is what the buffer held before.
+recvmsg() from a unix socket that has no name leaves the buffer of the
+address as it is, and that is on the stack of the kernel. The program
+reads user_family and user_port whatever the length is.
+bpf_sock_addr_set_sun_path() sends the family to user space.
 
-Return NULL. Don't look at the frags of a linear packet for a length of
-0 at its end either.
+Clear the bytes from the length up to 4. Write AF_UNIX next to the path
+in the kfunc.
 
-Fixes: 66e3a13e7c2c ("bpf: Add bpf_dynptr_slice and bpf_dynptr_slice_rdwr")
+Fixes: 859051dd165e ("bpf: Implement cgroup sockaddr hooks for unix sockets")
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/helpers.c | 4 +++-
- net/core/filter.c    | 2 +-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ kernel/bpf/cgroup.c | 4 ++++
+ net/core/filter.c   | 1 +
+ 2 files changed, 5 insertions(+)
 
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index a0fd6bdb3278..1b95fe795b4d 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -13,6 +13,7 @@
- #include <linux/sched.h>
- #include <linux/uidgid.h>
- #include <linux/filter.h>
-+#include <net/xdp.h>
- #include <linux/ctype.h>
- #include <linux/jiffies.h>
- #include <linux/pid_namespace.h>
-@@ -3144,7 +3145,8 @@ __bpf_kfunc void *bpf_dynptr_slice(const struct bpf_dynptr *p, u64 offset,
- 		if (!IS_ERR_OR_NULL(xdp_ptr))
- 			return xdp_ptr;
+diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+index 4e388d994d80..1ff030f4314f 100644
+--- a/kernel/bpf/cgroup.c
++++ b/kernel/bpf/cgroup.c
+@@ -2010,6 +2010,10 @@ int __cgroup_bpf_run_filter_sock_addr(struct sock *sk,
+ 		ctx.uaddrlen = 0;
+ 	} else {
+ 		ctx.uaddrlen = *uaddrlen;
++		/* Programs read the family and the port also of a short address. */
++		if (ctx.uaddrlen < offsetofend(struct sockaddr_in, sin_port))
++			memset((void *)uaddr + ctx.uaddrlen, 0,
++			       offsetofend(struct sockaddr_in, sin_port) - ctx.uaddrlen);
+ 	}
  
--		if (!buffer__nullable)
-+		/* the packet may be shorter than it was for bpf_dynptr_from_xdp() */
-+		if (!buffer__nullable || ptr->offset + offset + len > xdp_get_buff_len(ptr->data))
- 			return NULL;
- 		bpf_xdp_copy_buf(ptr->data, ptr->offset + offset, buffer__nullable, len, false);
- 		return buffer__nullable;
+ 	cgrp = sock_cgroup_ptr(&sk->sk_cgrp_data);
 diff --git a/net/core/filter.c b/net/core/filter.c
-index 2415cd90ab5d..97f5d60ec817 100644
+index 97f5d60ec817..eb6aeabb410e 100644
 --- a/net/core/filter.c
 +++ b/net/core/filter.c
-@@ -4326,7 +4326,7 @@ void *bpf_xdp_pointer(struct xdp_buff *xdp, u32 offset, u32 len)
- 	if (unlikely(offset + len > xdp_get_buff_len(xdp)))
- 		return ERR_PTR(-EINVAL);
+@@ -12633,6 +12633,7 @@ __bpf_kfunc int bpf_sock_addr_set_sun_path(struct bpf_sock_addr_kern *sa_kern,
+ 		return -EINVAL;
  
--	if (likely(offset < size)) /* linear area */
-+	if (likely(offset < size || !xdp_buff_has_frags(xdp))) /* linear area */
- 		goto out;
+ 	un = (struct sockaddr_un *)sa_kern->uaddr;
++	un->sun_family = AF_UNIX;
+ 	memcpy(un->sun_path, sun_path, sun_path__sz);
+ 	sa_kern->uaddrlen = offsetof(struct sockaddr_un, sun_path) + sun_path__sz;
  
- 	sinfo = xdp_get_shared_info_from_buff(xdp);
 -- 
 2.55.0
 
