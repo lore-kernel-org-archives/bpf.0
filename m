@@ -1,47 +1,47 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=115.124.30.99
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=115.124.30.118
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795609321;
-	b=RjadLOiboYu46+LwOqhKWI25zCTNWs1SnwWSijg5r4gp9wMTO73FJDcNoC2C7O40GiOS
-	 YXYVwBEAECH01M4e2Aq1sqU/CBqAUuBJ2OuHsoh516LQEtXVWoypuE1KtAq9GjzCC4i8b
-	 t2V2cRQdIEWQfc2VEiHnKPafu1VYxx9DuFKBTM8Zgo/iGQWQcuEK9PErWHeMV5UqjocQm
-	 qdofkWtshn2DuRCdi9ekeIUk9Fi40/iFNRE9e0UktFg9nq3+JlWtnxeKCpjuqXsGMrC+3
-	 hLOzovdiXYgMNZeaeZOsJ0+xTmoukTfeo381I+J4lM8EoqxtwTy1I2ybCJlzGQ+zGBQ==
+	t=1795609317;
+	b=c46mbFg0AnGdJaCIXrlf2TqteeqzPDnE5S5fPkvBmkTJliI1YJ1cZcDeXRfN5nlUdaIm
+	 gmH4uuQmy8pQAC+N4Cu1S3cDkrwSCqtOuOyiOVAQ+iSA0NTgbmi2ZUqsey2aR41M6P5mL
+	 KH1YOpAb6i2o7K/3OjFkRy0AbQ4cZ47JHQyDDb02Ty+2JT1N5LEATUzh6JYqxVqVSJOCN
+	 96DrYGDBnf4abkxEgQ6F7SPZAIOo+JUVLRskFjpjoZDUY9oqEJ/ZuclY7hQFkWAzykonW
+	 v7/9mbdm1Xoeo22LUkqz+QgCF3G1P0N7J+jcnU2IZTBM0cROWG0aqsiI1ERnEL+4UKQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795609321;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795609317;
 	h=DMARC-Filter:DKIM-Signature:X-Alimail-AntiSpam:Received:From:To:Cc:
 	 Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=uMOn8ufJW4MJjdZ42uB/Y2v47MqOMwzfyNn9XpkpkZk=;
-	b=0ZIxNyigUvNRndam6Co8NW9ZIMeMexczE8j/RBeT2RPrnqtt7B4ZeXpl2xRlo03H7ZN5
-	 nc2p1zFgknCrqzxP6ZI5yiMjyeM8v82zZ5t4umVUX96nZyixWSbW78GV3zjoGJhHsduOx
-	 QPRkei5fK2Ry82elpmefj9ZuAilGsoQ2oeKkpcxY7pkOgOELUACHz9OyxdZILyP2KQ7S2
-	 9Y5JA74AmvCZmipFDEOzvKhBxYEodkrngFv0lFq7iuwT/Cd0HvGPOUvhCc3GZs5G//31J
-	 9mdOKHDqs5eLEchdRxwS2lsv4WzrQzOHjpX93YNW1LG0LJ9Qrgk5kKohSa5s+jK0xTg==
+	bh=YO+gVdYbAsguYJfAA7/L0gHdhb6kJyRHPaqV/Yh+2u4=;
+	b=CX23ono/Ne+qzyZiEW8f9j53weadBO99cfvfmPSH7VKOT2zlrgXQYZEwzWc+40uq4/BZ
+	 LW+Do9tZRRjOr1STH1wtIdSSD6L+0gX8oIs5bxMogR35CHJytE+Ce4P3MfUptDKeUuCFA
+	 YuqSd77Deev+LgWZitHsEL3zzXxR0O4BZH5nzhgOcOUSistODxV6w5XRoLdhgdlyqvGRz
+	 FS/5KJidx1y1qjtGwPgvZCgtCB+b9ZW0txrpbmyfgaW6I18Ojgh23T+3ZAlv2SLJJ/MaE
+	 FZETIZDS3/L+4xiLn1vWTmsEtx2bt/kcE+gLetdsBtufowhCVfAmOoN91VVtHHYAkOg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.alibaba.com;
 	spf=pass smtp.mailfrom=linux.alibaba.com;
-	dkim=pass header.d=linux.alibaba.com header.i=@linux.alibaba.com header.a=rsa-sha256 header.s=default header.b=WFuKupqf;
-	arc=none smtp.remote-ip=115.124.30.99
-Received: from out30-99.freemail.mail.aliyun.com (out30-99.freemail.mail.aliyun.com [115.124.30.99])
+	dkim=pass header.d=linux.alibaba.com header.i=@linux.alibaba.com header.a=rsa-sha256 header.s=default header.b=q9ipg8Ng;
+	arc=none smtp.remote-ip=115.124.30.118
+Received: from out30-118.freemail.mail.aliyun.com (out30-118.freemail.mail.aliyun.com [115.124.30.118])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1842E606A321;
-	Wed, 25 Nov 2026 12:21:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1842E606A321
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1430606A334;
+	Wed, 25 Nov 2026 12:21:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D1430606A334
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.a=rsa-sha256 header.s=default header.b=WFuKupqf
+	dkim=pass (1024-bit key, unprotected) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.a=rsa-sha256 header.s=default header.b=q9ipg8Ng
 DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=linux.alibaba.com; s=default;
-	t=1795609309; h=From:To:Subject:Date:Message-ID:MIME-Version;
-	bh=uMOn8ufJW4MJjdZ42uB/Y2v47MqOMwzfyNn9XpkpkZk=;
-	b=WFuKupqf710D0zGP/M0jAWEaPM9lLtRg+ci3Wd4/lKrtiB05E/TIRsLZO2iQwSLVMOqrN65y2LN+fGkhhxIyXRdUj06pCnncNPoOcfEqDEQaXBOeBbPVHmWmuDP3FxI8ksbWsfxVYyjLW5LICyULK3ookvu/1b6+UdZAGjg9JjU=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037033178;MF=cp0613@linux.alibaba.com;NM=1;PH=DS;RN=28;SR=0;TI=SMTPD_---0XFRij1o_1795609306;
-Received: from DESKTOP-S9E58SO.localdomain(mailfrom:cp0613@linux.alibaba.com fp:SMTPD_---0XFRij1o_1795609306 cluster:ay36)
+	t=1795609310; h=From:To:Subject:Date:Message-ID:MIME-Version;
+	bh=YO+gVdYbAsguYJfAA7/L0gHdhb6kJyRHPaqV/Yh+2u4=;
+	b=q9ipg8Ng06GISbuGWVZOmuVBpgByjGOIEdHFQmTyCqA+2rCeWB4SYdiNsH4oQoEPAOo9aDMY9yUdEV/38aT7Z8JEKEoBvaJINcxk7KOCi4Maolmsmv41pNEWwxPeqUr5wdzIugeI52J0vcr2R7b0l5tyTClWM6zI3Ga7IrUlX4c=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033045133197;MF=cp0613@linux.alibaba.com;NM=1;PH=DS;RN=28;SR=0;TI=SMTPD_---0XFRij20_1795609307;
+Received: from DESKTOP-S9E58SO.localdomain(mailfrom:cp0613@linux.alibaba.com fp:SMTPD_---0XFRij20_1795609307 cluster:ay36)
           by smtp.aliyun-inc.com;
-          Wed, 25 Nov 2026 20:21:47 +0800
+          Wed, 25 Nov 2026 20:21:48 +0800
 From: Chen Pei <cp0613@linux.alibaba.com>
 To: ast@kernel.org,
 	daniel@iogearbox.net,
@@ -71,9 +71,9 @@ Cc: eddyz87@gmail.com,
 	linux-riscv@lists.infradead.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v4 bpf-next 2/3] selftests/bpf: Enable private stack tests for riscv64
-Date: Wed, 25 Nov 2026 20:21:25 +0800
-Message-ID: <20261125122126.939-3-cp0613@linux.alibaba.com>
+Subject: [PATCH v4 bpf-next 3/3] selftests/bpf: Test a private stack together with stack arguments
+Date: Wed, 25 Nov 2026 20:21:26 +0800
+Message-ID: <20261125122126.939-4-cp0613@linux.alibaba.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20261125122126.939-1-cp0613@linux.alibaba.com>
 References: <20261125122126.939-1-cp0613@linux.alibaba.com>
@@ -88,125 +88,82 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The RV64 JIT now supports the private stack. Allow the existing
-verifier and struct_ops private-stack tests to run on riscv64 and add
-the expected RV64 JITed instruction patterns.
+Add two asm programs to verifier_stack_arg.c, inside the block that is
+already gated on x86, arm64 and riscv64. A raw_tp program with a 64 byte
+frame calls a ten-argument subprog with a 64 byte frame of its own, and
+BPF_PROG_TEST_RUN runs the pair without attaching it. Args 9 and 10 stay
+in the kernel frame and arg 10 points into the caller's frame, so the two
+have to agree on where the outgoing area is. The callee returns what the
+caller stored plus arg 9, so a wrong area shows up as a wrong retval
+rather than as a crash.
 
+Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 Signed-off-by: Chen Pei <cp0613@linux.alibaba.com>
 Reviewed-by: Pu Lehui <pulehui@huawei.com>
 ---
- .../bpf/prog_tests/struct_ops_private_stack.c |  3 +-
- .../bpf/progs/verifier_private_stack.c        | 41 ++++++++++++++++++-
- 2 files changed, 42 insertions(+), 2 deletions(-)
+ .../selftests/bpf/progs/verifier_stack_arg.c  | 49 +++++++++++++++++++
+ 1 file changed, 49 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/struct_ops_private_stack.c b/tools/testing/selftests/bpf/prog_tests/struct_ops_private_stack.c
-index 2b3ec2b79091..103179ff8733 100644
---- a/tools/testing/selftests/bpf/prog_tests/struct_ops_private_stack.c
-+++ b/tools/testing/selftests/bpf/prog_tests/struct_ops_private_stack.c
-@@ -6,7 +6,8 @@
- #include "struct_ops_private_stack_recur.skel.h"
- #include "struct_ops_private_stack_large.skel.h"
+diff --git a/tools/testing/selftests/bpf/progs/verifier_stack_arg.c b/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
+index c642675dd92b..16afc69af947 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
++++ b/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
+@@ -1156,6 +1156,55 @@ __naked void stack_arg_precision_fallback(void)
+ 	);
+ }
  
--#if defined(__x86_64__) || defined(__aarch64__) || defined(__powerpc64__)
-+#if defined(__x86_64__) || defined(__aarch64__) || defined(__powerpc64__) || \
-+	(defined(__riscv) && __riscv_xlen == 64)
- static void test_private_stack(void)
- {
- 	struct struct_ops_private_stack *skel;
-diff --git a/tools/testing/selftests/bpf/progs/verifier_private_stack.c b/tools/testing/selftests/bpf/progs/verifier_private_stack.c
-index e7f410a74a21..41bd0ec54edf 100644
---- a/tools/testing/selftests/bpf/progs/verifier_private_stack.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_private_stack.c
-@@ -8,7 +8,8 @@
- /* From include/linux/filter.h */
- #define MAX_BPF_STACK    512
++/* Writes both ends of its frame, then reads args 9, 10 and the frame of the caller. */
++static __naked __noinline __used
++long priv_stack_10args(long a, long b, long c, long d, long e, long f, long g, long h,
++		       long i, long *j)
++{
++	asm volatile (
++		"r1 = 0;"
++		"*(u64 *)(r10 - 8) = r1;"
++		"*(u64 *)(r10 - 64) = r1;"
++		"r0 = *(u64 *)(r11 + 32);"
++		"r1 = *(u64 *)(r11 + 40);"
++		"r1 = *(u64 *)(r1 + 0);"
++		"r0 += r1;"
++		"exit;"
++		::: __clobber_all
++	);
++}
++
++/*
++ * A frame of 64 bytes in a raw_tp prog goes to the private stack.
++ * arm64 and riscv64 pass args 9 and 10 on the kernel stack. On x86-64
++ * both frames stay there as well.
++ */
++SEC("raw_tp")
++__description("stack_arg: private stack in the caller and in the callee")
++__success __retval(890)
++__naked void stack_arg_priv_stack(void)
++{
++	asm volatile (
++		"r1 = 800;"
++		"*(u64 *)(r10 - 64) = r1;"
++		"r1 = r10;"
++		"r1 += -64;"
++		"*(u64 *)(r11 - 40) = r1;"
++		"*(u64 *)(r11 - 32) = 90;"
++		"*(u64 *)(r11 - 24) = 8;"
++		"*(u64 *)(r11 - 16) = 7;"
++		"*(u64 *)(r11 - 8) = 6;"
++		"r1 = 1;"
++		"r2 = 2;"
++		"r3 = 3;"
++		"r4 = 4;"
++		"r5 = 5;"
++		"call priv_stack_10args;"
++		"exit;"
++		::: __clobber_all
++	);
++}
++
+ #else
  
--#if defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)
-+#if defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) || \
-+	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)
- 
- struct elem {
- 	struct bpf_timer t;
-@@ -42,6 +43,14 @@ __jited("	mov	x0, #0x2a")
- __jited("	str	x0, [x27]")
- __jited("...")
- __jited("	ldp	x25, x27, [sp], {{.*}}")
-+__arch_riscv64
-+__jited("	addi	sp, sp, -0x20")
-+__jited("...")
-+__jited("	sd	s5, 0x10(sp)")
-+__jited("...")
-+__jited("	sd	a0, -0x100(s5)")
-+__jited("...")
-+__jited("	ld	s5, 0x10(sp)")
- __naked void private_stack_single_prog(void)
- {
- 	asm volatile ("			\
-@@ -60,6 +69,10 @@ __jited("	subq	$0x8, %rsp")
- __arch_arm64
- __jited("	mov	x25, sp")
- __jited("	sub	sp, sp, #0x10")
-+__arch_riscv64
-+__jited("	addi	sp, sp, -0x30")
-+__jited("...")
-+__jited("	addi	s5, sp, 0x10")
- __naked void no_private_stack_nested(void)
- {
- 	asm volatile ("			\
-@@ -187,6 +200,14 @@ __jited("	str	x0, [x27]")
- __jited("	bl	{{.*}}")
- __jited("...")
- __jited("	ldp	x25, x27, [sp], {{.*}}")
-+__arch_riscv64
-+__jited("	addi	sp, sp, -0x20")
-+__jited("...")
-+__jited("	sd	s5, 0x8(sp)")
-+__jited("...")
-+__jited("	sd	a0, -0x200(s5)")
-+__jited("...")
-+__jited("	ld	s5, 0x8(sp)")
- __naked void private_stack_nested_1(void)
- {
- 	asm volatile ("				\
-@@ -257,6 +278,16 @@ __jited("	bl	0x{{.*}}")
- __jited("	mov	x8, x0")
- __jited("	mov	x8, #0x0")
- __jited("	ldp	x25, x27, [sp], {{.*}}")
-+__arch_riscv64
-+__jited("func #1")
-+__jited("...")
-+__jited("	addi	sp, sp, -0x20")
-+__jited("...")
-+__jited("	sd	s5, 0x8(sp)")
-+__jited("...")
-+__jited("	sd	a0, -0x200(s5)")
-+__jited("...")
-+__jited("	ld	s5, 0x8(sp)")
- __naked void private_stack_callback(void)
- {
- 	asm volatile ("			\
-@@ -487,6 +518,10 @@ __arch_arm64
- __jited("	mrs	x10, TPIDR_EL{{[0-1]}}")
- __jited("	add	x27, x27, x10")
- __jited("	add	x25, x27, {{.*}}")
-+__arch_riscv64
-+__jited("	addi	sp, sp, -0x20")
-+__jited("...")
-+__jited("	sd	s5, 0x8(sp)")
- int private_stack_async_callback_1(void)
- {
- 	struct bpf_timer *arr_timer;
-@@ -516,6 +551,10 @@ __arch_x86_64
- __jited("	subq	$0x100, %rsp")
- __arch_arm64
- __jited("	sub	sp, sp, #0x100")
-+__arch_riscv64
-+__jited("	addi	sp, sp, -0x120")
-+__jited("...")
-+__jited("	addi	s5, sp, 0x100")
- int private_stack_async_callback_2(void)
- {
- 	struct bpf_timer *arr_timer;
+ /* No BTF tells about this store. The insn is what JIT has to deal with. */
 -- 
 2.50.1
 
