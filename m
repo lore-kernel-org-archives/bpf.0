@@ -1,96 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.52
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795577658;
-	b=JYG5wh8uUxwqiltQkyJBVRsg2gNbUg9+RuXlMNPUikaslDJWXv9l0rfC2Sym21EQl5fs
-	 QN5j7cbR3z2CrpxBF//d9JoXmZfT6gysWkyYWHgUVU4kn5WDQJSp/P5rSm/oAdTFFBazp
-	 2aUdYt4mPvO9C9HHlgS8x768FuTDZZ5H7zyIn0JQ63crsWabP/PWsfU/EyBMbK2FGQsyO
-	 ByCc+54syeiMk4zU0ogwgIXZMngzA5l4bLgE07FOctpWv+kcadDv/lvIHhhIwW3Ggrqts
-	 4i+Y0mom8xAsc6hgOIiPHj7ulpVqHE6MP7WLrqbpf3FT05LFePqNZq18gdioEgQJ2Jg==
+	t=1795578516;
+	b=BR2WBrx/+7YHCpJ8HaUTxjiCTD4HyZoYuSX3enGJgXvem1BUL00lCN3dC2ToKgDQiz9S
+	 gMV1QrOjg1eU8u564g1MhZFAykesLC/WLPZ2ruCcaPferwcYNpQQS4TLYnYRjV0OAQ58e
+	 +LHQfJ0dPeS//YdUgZF4Kx7Y73OAcML89bCAbHywAPYsQaPgeHosJlcANhsFNmUxzzSCk
+	 8qC37OqzRigsBcXEtZCT3+ZWaPFcaf9UWVgkyYRaH08ihRIBgKmjyJhrg61H4103v5Snu
+	 2iXLtQZ1WrCb/e4ZR+FpVMyx1mUPy/e9LHWNfHZhH40737cidj1QPsZZfU9NE5eaeYQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795577658;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=tl3ysfSawWkwlpJKiGVKXEwozKN06r4sJBLhVNMlULw=;
-	b=ovPjETvXDAMs3qADDFHgb2GdDOBXLNBux1lIv0SgX+oV6xMG4cD+saM7Xw19UzK45MGp
-	 jMozRLSNP77aQMQqwSqE3mGB5MKm7K3UpHwEkZbW8+Ee4DRy8W8dthBswHsbKE/I6+NuM
-	 sC0OsK4qWDqOFNV9Ff4iSC2LzESuW2xATnQu3/8DyZFlpSfV6PcQtbB5AQA+q6jlrnp8C
-	 XMddldwpFJEwnmoQTQK9ateEc0dP+K39WvlcRxG6QO+xa8RuBKG3VjqIgvu6mXsI/a9D1
-	 HAKhUAYezPSB6JxO2tkW5wJkkKMII2PzbQ/OdsHokRInM+oTfFQVY29hMBBbzBXqOQA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795578516;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=8Ttx7XCVkthCgqojx3GiZ18Ov1zXrMBznLrdGDtmANk=;
+	b=AAiAEyV89lbdi57qS+p/pRofB9Coprj2JdD0ZKU5tRM+VOOlGt8jQbscyjaUgTyG1tyf
+	 GKRgvzCwAYgvQmRD2cGwCS7di25XZb4dBh4lP2oRz19kzYHG2whSl6ihgBDQmaIY++nxA
+	 XgJH9fsys+i/E3jFXM+HHsJvamfQKUB3GpvBElZ+yFIFTQLXCxVXUjMfsc8Gdol2GtQ0F
+	 2kMIvyDDNDQEICy9iFQlxtWZI+/PDtFrNHZcCzgPjiG8nEFXqZHtsk8WQHILkMIpWZ3r3
+	 Q2r+MBxITgqxZ5vGbCYvHg+zyW1iFbM8Uzt4REI9/m8DSjjSaj9DZARY/lkHP2B1lHA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=IvFUn8t5;
-	arc=none smtp.remote-ip=209.85.216.52
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PK+QtqSv;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DDA3606A31E
-	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 03:34:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9DDA3606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 304AF606A31E
+	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 03:48:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=IvFUn8t5
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-3b413d04c93so3066887a91.1
-        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 19:34:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795577657; x=1796182457; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=tl3ysfSawWkwlpJKiGVKXEwozKN06r4sJBLhVNMlULw=;
-        b=IvFUn8t5m/DP65tkOK3fZYw26WwJcykexsZVqmOGtQTNZWTAaML5noMQppaNfUvfTr
-         pcQNwcl9GCK6SR3MClh35TQUEi2+Y1HCYB727/hsuYLPfq+tNPnx/cRHB5ugnmU88Wdf
-         4bPexv+VUZpuVeL+q0SjmuunYNGPqE0/tLXom4fwRxo5giEmcHdISKRuXGuKBzogJrvQ
-         qkIsv5xkzKVR9xrkZ49j/5I9VFR/j6sIhupGn5ZggplbpcDWhy9IZrkLqFQLeemVi6bG
-         rTZPtGwp9CQ6nldA/WlXOrDUVaCgTojQWX+532g2RReYtZ1RDJecDItSBFrSJ4zRK+HZ
-         5/Bw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795577657; x=1796182457;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=tl3ysfSawWkwlpJKiGVKXEwozKN06r4sJBLhVNMlULw=;
-        b=vpIOZ5JH4FYfWR65Z761mMKIJLYMn8j4N6/8eSJ53osiuEVRoVj0ypa75nQug2j9gH
-         LbPfpDOrxAEeY8ChEVbOAVReHJ3jeNXmhgqh5hIzJDxeE1M9DHaurW0XwGz759OlamxH
-         u5OezJkAr5YFoPiaRDLHj02xIYOyvruASz9iQHpYzxg28voBfEWYUDFCPXIChIfA5JKZ
-         FXBQmfeSmD7O9v7m5Jlw574kMjjAV82M8FTh37lvvyl685pgWyv+zo/Ub0LT1KvPBgUH
-         LASr3kmU/w5orPvV4ls5c3Hr81ZVewy+PqlhffeXYiBiz+wWoGdS2rBfnuDRihsHgaaZ
-         mUgA==
-X-Gm-Message-State: APuU4Z9t6cUsoMT67cq6ePybDBhB68E+dL660GaRlHrWCjAtpVCz+V05
-	46QHY7eyUEg7Y4B4QsFdRG0neaExrAX7/kJeVPeR8ZVWvTiOUS/jAlkX4GKFuFNz
-X-Gm-Gg: AZFdTZcVPBoHXE6D0fsxKbQ8q/PlKLpUN32hUInJVrFewN5evHJBly6YA5/tWYCDmyD
-	kusxak50Leh7zHCSPQ23sHzhyI/WMfWtSnVtjgQ9tx1sWbLk1QsFUXXuOXK4DWi2v96YQ/L7wab
-	rMlRebdN3hqKV46a4WsB8zW2hPdi2eD3DMrqFoJG2bw3gwzvs1JxT9q+6hL73jQnMsdN3BC7osE
-	EFEA1+74rxO5ffum9aGGxvpRAz8oM1Mrb1jG+w5StEPShhptG1XJ8OB2mmJJbogoaT/9kueE3uu
-	+ktaDgRnpk12syDNFDOjmTeNSCwUXUI/m8iEqYOq0rofGopcgtvgqGVf5VuvH8bOTf9dl99qAhj
-	LAmQLcYCKTrCqcaihSTt/b9e45m0SdrcMP1WGWYBeJMucDB1xTu2XL0kQJ9/1IKtEVQYG551+La
-	SeIP5z0gtXlCqv7le6V133iIMJ+EsAEjQfCkalY5HUMEla3r+lJbS2uQMv5COWv4lK9mP/Ckhjc
-	kmh4neNOmQPRxu7/lxqwC81Ob/1VGSap+WBW1I+j73dx1aOURewMKrCIugxi9732aXWJN6gzkFr
-	NsvNZVU9t532J2YLCnFG9qCsivyBYe+RlVOMqQ3LSvCU2a2XOgAEmos0u7qEiOR1P5rwqamJgbm
-	mZ8vJ8qwKRCBwgDWgjFWNQrvry1nifYTyUxoeo9N8Wj2w4CGuPFG0iyd3lFZzVYV9qWOcElx/mg
-	==
-X-Received: by 2002:a17:90b:5543:b0:3a4:f75d:d194 with SMTP id 98e67ed59e1d1-3b41caeca54mr15460506a91.36.1795577656740;
-        Tue, 24 Nov 2026 19:34:16 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.245])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b44b792474sm11613390a91.3.2026.11.24.19.34.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Nov 2026 19:34:16 -0800 (PST)
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To: bpf@vger.kernel.org
-Cc: daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com
-Subject: [PATCH bpf 47/47] bpf: Check the type of R0 at the exit of a struct_ops program
-Date: Wed, 25 Nov 2026 03:29:38 +0000
-Message-ID: <20261125032938.670542-48-alexei.starovoitov@gmail.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20261125032938.670542-1-alexei.starovoitov@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PK+QtqSv
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED3391F000C0;
+	Wed, 25 Nov 2026 03:48:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795578516;
+	bh=8Ttx7XCVkthCgqojx3GiZ18Ov1zXrMBznLrdGDtmANk=;
+	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
+	b=PK+QtqSvRXJO0ud6wlkeeQmOv1r6QtbAFsCpM3mZyQr6jyU5K3sk69sN+VrcTLLVb
+	 j3uBNCc9L8dLyS4eR0yRg0PXzfLlOnsUFyWMMw9S7u+K7gr4gb4wQVk5h6KDxAGxhD
+	 sqB2Lv7ffjKl73wglDk4XJS2bVjMesyjK4f9CWJ76bMJgV9GnXrTncEry/7GuAfgB3
+	 FD/KiQc/51ehcGngiSv2fe6BuUZd9KsoCI3hKLVyP3kqcVD5Q/LNPjOflB4Y4of3g5
+	 ZRNy8udbd2EXWeMUXjEtr5KihO0oDEBYyFo/L3gpbvvhbCFS4kuXMyxHYLuXQmsWRE
+	 m7cdnOxYG1pCA==
+Message-ID: <sashiko-outbox-232511@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf 22/47] bpf: Flush TLB when a page of arena replaces
+ the scratch page
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
+In-Reply-To: <20261125032938.670542-23-alexei.starovoitov@gmail.com>
 References: <20261125032938.670542-1-alexei.starovoitov@gmail.com>
+ <20261125032938.670542-23-alexei.starovoitov@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 25 Nov 2026 03:48:35 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -99,37 +59,70 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-From: Alexei Starovoitov <ast@kernel.org>
+Thank you for your contribution! Sashiko AI review found no new issues
+in this patch, but noticed 1 related pre-existing issue it does not
+introduce:
+- [High] arm64/mm: ptep_try_set() undefined when CONFIG_ARM64_CONTPTE is
+  disabled [1]
+--
 
-check_return_code() takes reg->btf for valid when it is not NULL. The
-field is in a union, so for other types of registers it holds something
-else, and the verifier follows that as a struct btf.
+commit 4eb6b85f2fe787d069b3bed0effa2468a69cda9e
+Author: Alexei Starovoitov <ast@kernel.org>
 
-Look at it only when the register is PTR_TO_BTF_ID.
+bpf: Flush TLB when a page of arena replaces the scratch page
 
-Fixes: 8d9f547f74c7 ("bpf: Allow struct_ops prog to return referenced kptr")
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
----
- kernel/bpf/verifier.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+This commit flushes the TLB across all CPUs after dropping arena->spinlock
+when a newly allocated arena page replaces the scratch page on architectures
+without flush_tlb_before_set(), or fails and defers freeing the range when
+the caller cannot sleep.
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 554d99c1c943..d4b31990fcb9 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -19608,7 +19608,8 @@ static int check_return_code(struct bpf_verifier_env *env, int regno, const char
- 		 * matches the operator's return type and is in its unmodified
- 		 * form. A scalar zero (i.e., a null pointer) is also allowed.
- 		 */
--		reg_type = reg->btf ? btf_type_by_id(reg->btf, reg->btf_id) : NULL;
-+		reg_type = base_type(reg->type) == PTR_TO_BTF_ID ?
-+			   btf_type_by_id(reg->btf, reg->btf_id) : NULL;
- 		ret_type = btf_type_resolve_ptr(prog->aux->attach_btf,
- 						prog->aux->attach_func_proto->type,
- 						NULL);
--- 
-2.55.0
+> diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
+> index 2c6ddec747def..56bd02b783f98 100644
+> --- a/kernel/bpf/arena.c
+> +++ b/kernel/bpf/arena.c
+> @@ -149,6 +149,8 @@ struct apply_range_data {
+>  	struct bpf_arena *arena;
+>  	struct llist_head *pages;
+>  	int i;
+> +	bool can_flush;	/* the caller can flush TLB of all cpus after it drops =
+the lock */
+> +	bool flush;
+>  };
+> =20
+>  struct clear_range_data {
+> @@ -189,6 +191,12 @@ static int apply_range_set_cb(pte_t *pte, unsigned l=
+ong addr, void *data)
+>  			continue;
+>  		if (WARN_ON_ONCE(pte_page(old) !=3D d->arena->scratch_page))
+>  			return -EBUSY;
+> +#ifndef flush_tlb_before_set
+> +		/* The scratch page is in TLB, and it takes an IPI to flush it */
+> +		if (!d->can_flush)
+> +			return -EBUSY;
+> +		d->flush =3D true;
+> +#endif
+>  		ptep_get_and_clear(&init_mm, addr, pte);
+>  		flush_tlb_before_set(addr);
+>  	}
 
+[Severity: High]
+This problem wasn't introduced by this patch, but on arm64 with
+CONFIG_ARM64_CONTPTE=3Dn, aren't ptep_try_set() and flush_tlb_before_set()
+left undefined [1]?
+
+arch/arm64/include/asm/pgtable.h defines both helpers inside the
+#ifdef CONFIG_ARM64_CONTPTE block even though they operate on init_mm and
+do not depend on contiguous PTEs.  When CONFIG_ARM64_CONTPTE is disabled,
+apply_range_set_cb() skips its #ifdef ptep_try_set path, while a kernel
+fault on an unmapped arena address still reaches __do_kernel_fault() ->
+bpf_arena_handle_page_fault() -> apply_range_set_scratch_cb(), which calls
+the no-op ptep_try_set() stub in include/linux/pgtable.h, reports the
+fault as handled without mapping the scratch page, and hangs the CPU in an
+infinite page-fault loop.
+
+[1] https://sashiko.dev/#/bug/linux-b7d0ea8c-0c63-439f-9b21-bfd45fea82bb
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261125032938.6705=
+42-1-alexei.starovoitov@gmail.com?part=3D22
