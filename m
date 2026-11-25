@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.178
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.171
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795577623;
-	b=Q3Hvdlh4QOzftywZk3IdpKOqOJwAGg7xl++VdhIlGUFyvlJPiqQVa9+8A8U8E5FFvrL7
-	 f7eRe0ZZ9wxZNO3VcoMcvCK/eisHQ+Pok3GB7pdDKKLkgypryfiJyPqtjVkABOrP0F7ud
-	 2mwzITG15IFiPGclqvvE+ViS2SaRpzJe6u+UI424Kswj3J9MR3kNU5iX2Zz8snOSWWIYh
-	 Q43KfIZPB3qNoX1WmqTm2RYOKehr5q7ooGp4XrHBhgDNWs8Z7k1ilrLAT41j4/PdWuAn8
-	 IHujDbesJmD2XhCdNmXa0GiWXDp2dKMxIuUlsJZMkw/4ez2EtaKos/vmqJKhO+CmB6w==
+	t=1795577629;
+	b=v8sGx78LFYJ/SKdETJvkoEmTG6SV9AlXrAyvOImnGjDr5BYc5n+qrXWDpbcP6CZGCwwm
+	 dCenTXgeAQ3AqP/p8Vbbg+mUUoPMMBgBfWRjppIozdde7vCKGDn2Fm0XQlm0q4h+GK2hI
+	 1TkhWwvcFhft19QYyROTFoOlc+et+rH57Y48YwE3Csi8KPrlC8bBiYRIC8PNfWii5ZnuX
+	 WYVqk/rR8XssIwRwi8J9PzY/xXdwbk2rIr3hM8MWzqL7Qn0dJWd25hsj2XckIR3M0Yv5D
+	 gEIFm8q07iEwCUq+nWZQhDpurJu2pGpQRT3d26X6hqV8PqXmuc+o6oDdccL2T6XGXdA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795577623;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795577629;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=I7VVNQb+CMXSEh7yNtfPHJ7+1vEtiXOGdD+I/0XonW0=;
-	b=ZZ9jb2FXQPkInk9lrdshXZe/MV/qDaxOAGeBoL9Fbd7uuKyddVjRBfES2Uyox8yEyU5F
-	 TKyveZop2Wi2m2zCjkg5C13kKk9ozrl7kBUqj9ObVQjQE54iSXQs6wX0WNBdQP5eh9X3j
-	 HQghArn5+GVDIVMqaFy1psrAYTvQdBmNiOysybVbVXixvm5m2BA3ai87Nq+iCoNxNuohI
-	 Vq9rr74uh0uUjXVhiXH1P1nJmxIJbyUBaooRsoyTcLx8DyAtNuKyXUNV3tza1GECPob0s
-	 n2q6d1Jl6azyyeEjC3Ymy2gSOysGzNzWaIeMNT5FSIdZdVx8SVAUoY6awIzudo4omLQ==
+	bh=aJmBh1sMPPK5/LSn+ZacQ/Z6Krzf1/w8C9N4rRJM5WA=;
+	b=2rLhcD2/zIVYh00TAckgcvtl27659vb0/wS71uzm6Zpstuvu7QrhbqEYbFgHPM0Z8vrH
+	 XvkXI64r0eVxEzAgVvZcRFeouVkTYfFKFUjzLRe/6E62M7FLZP4QJNMyOQASfQIPZ4AvH
+	 BnD18ZPMeRh9DNB6aYCNL2X4x5bSC1NmK1hJfpamPY04lXkemNxU9kAiKyyf0lk5XxbDn
+	 C0AQYdz7MXRW1lzLyUrgjlF1u5m0nmiOk7CQ83HTKuscGmTN7bqSPaP0Xe54vjdrObHHY
+	 T+j5AXVao94cEu/zS9KpN87DViyAgnIo3qoaCsl56iNTRY5yXon5Cv8wBiqpKy4mVbQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="yE/ts8qZ";
-	arc=none smtp.remote-ip=209.85.215.178
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="D/xVcqXw";
+	arc=none smtp.remote-ip=209.85.214.171
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E029A606A326
-	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 03:33:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E029A606A326
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4253606A31E
+	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 03:33:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D4253606A31E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=yE/ts8qZ
-Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-cd60c5da24cso3252318a12.0
-        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 19:33:42 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=D/xVcqXw
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2f04bea9a93so45970015ad.3
+        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 19:33:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795577622; x=1796182422; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1795577628; x=1796182428; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=I7VVNQb+CMXSEh7yNtfPHJ7+1vEtiXOGdD+I/0XonW0=;
-        b=yE/ts8qZn5PPBDT+G5ZbmeFzg1HApJsKynSgn9Ou7Lf46rCUB5TmcfjKs9GrZMSCkY
-         gOxjKdoZ/yT3QvZYu1ugkM9b6QT85SYEr7gQNy/yYIXtNFyPgxGlMyMqJHbwRtnUSSGa
-         60h/1UVhSnha3JzlwQBXZ+TKwl4Eqp/QIayyffTp8OPnCkOsWayvrTc7QH3qTPwlEeus
-         OBldseZOFnW3eqJsAOHsxpYXTL029JO1/r0PaURSRANV1bg9G1jQj4HAEGKnLaFQ/D7O
-         q2PHrm8NTj5CQjeLgPrPkqpsHVKp6++wnb22uyG5NBctJyzQ0coKDwEu2cT9fOEu6hVF
-         D3wQ==
+        bh=aJmBh1sMPPK5/LSn+ZacQ/Z6Krzf1/w8C9N4rRJM5WA=;
+        b=D/xVcqXwYpqQhuOL3mtsTPdGmiB5cMrGD/dJyfHO9r7zWSkw+xbG4RKN44zdgn+Ol5
+         1XWMmBRyx2rVU7/cRMYzA91pvqnZWeISzTXF/cjLnsqL2cXqgZR86HNAuwxkZDL1fmvH
+         vIAKD7haNe/r30gHdCaAq17HpsbRmDr3aHLQuJMdg+joA56UY/R2o/nYclWkL4u/K04+
+         vVWRWb88McvBi/6ZSNapDQtr+aOnIzP0I4eGOKWAdJ9AQpDUXT4vd5cz1wOg4g5Kzci+
+         IGzVWm42oAU8s/YAjY+JpWiT/H9gtPeqdkQl2TCVJ4ONJVVURKt+fqK+WexLtlfvnVrh
+         7jfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795577622; x=1796182422;
+        d=1e100.net; s=20260707; t=1795577628; x=1796182428;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=I7VVNQb+CMXSEh7yNtfPHJ7+1vEtiXOGdD+I/0XonW0=;
-        b=EHRZ8zGIS1l5cfko9xn73G0w9WiMhzAUPm5k9IsG+/A5YA6WtkMo6Ix8FIgr2XYOjK
-         sc3AEjAp+XMsYZvx6bXxBmNjAzTSkL0fikQ1aTurI3th84PYuqMoxwDeC1qRdKAfGW6R
-         Z3Rfhixp3ecBR4U1i3p/HgEFISJEX2TgL4DVLjOJ5UFpm/afvGyPTuLOZK2yqKejC+bg
-         qH9GRF11Z+NUy80IDDcfuuGxZI6qkCvgbQqXJ4QMZdvzkjL0Ua6nZpAAMrWquhjmTeqf
-         cyt5k6r2UfYY8rDBzavjY9U+ipSDVABb6neAaPkOiQKerrRMMRYrO0BU93D4GudaIzD+
-         srzw==
-X-Gm-Message-State: APuU4Z++z0zaa6T4iraketSB94/0UYwkFxPNA3wr/5LVDQAm+h6qno2v
-	6+HWKrC7BCLFkaE8tgvzoRoAXQ17DiWCl1cFvw9B2XkX7aNIOUO/sGmb3eR+NvMn
-X-Gm-Gg: AZFdTZcMGbFIJJNi52l7RMmm6rDybyGeKMaZ80FhtI83d9fTloraQUgZNMkU2IsGLwe
-	19KU1Qt0vmCd/FckhNFxTSk7xsS960o2FGiizQZYDiLMg0eJljB66jk7lM2KXPZcVCoZFOEEOc0
-	Z8H3hIFe0h9+y2CYafKVocFPmSjn5105iT4wNyozH2We6JpdPqG+7lW31n5lnKnI9yl5Qv0crJR
-	j7KlosmQwhvnrLLSEoAYCUaeZ5JxCzSxwLDwb7XeCdiGm2dBrIKhn4ckP5cyi0p1tKZ0JKbDmng
-	7TR/Hm8SH5X/e9dZ3lmXfrNsNgwGgHsJfVMUZSuZyqhuOFPkaydJaoMOr7piQcf3tnp3MZS6kr6
-	qMrN7FA60uiSGNs/OpEq3XL/F8qLtE8iKOCjCU2ymOSilb1elPo8AHUjRcd4Luk5sUp0RBadF01
-	2LlIWvMjXBgmFnDpy2ts/keBn4I8WTuSQ4KxMhqjZZN/J7T7WPlWXqd65iZjCSnCVXp6wNBkM53
-	inr4y8TnbK/DbZixOQOp2h22fcpUYhXjQU6P8EqdDD+GkjTzzTLa5wAEMWTSFoJ9oVtJmd/MijV
-	b+HP0TcxRdILnGU0TcJjFe5gTDTOtVnUcmY8owbQSofKNphqvwa4JJnVzHJxtjOz9xcWZ0UVNMJ
-	PEXHlrAMLAJLebkc3yUQlymjG2GdOfE1zg7l32R6mfk/dY8T6FtnDIz99bJCf0t/ZyzKWAs40IQ
+        bh=aJmBh1sMPPK5/LSn+ZacQ/Z6Krzf1/w8C9N4rRJM5WA=;
+        b=dx48kT/9PPkcvBooU43ra+XTYDVVIrxmImRkTAmezVGBYuKTv+7jfAW+/F61l/Jtk7
+         4cjViQeO9Y9Cpw3UBFsZzzpzrxFIhAjJP/LmONi5FrkwmKhatb+wxWrE75NGQQleyf5N
+         EiZYROrkNY+kO+Y/cv6T672xfRX+oOG0gJFKhQcifUtaYd63Kt9lsbLz00N78aVg7tcg
+         EWb2+pHVwgAXG5iZcdpKP6FjwaSOiVO52Qkp7Q8UM3NPPnQPoh4TfYaXn8YYddWyJA6y
+         E4PWNTPhimE6hoydqCyeS//wsYUvA6pCoSbGFrP2rBdU55GPgZQOMsWSUgfPM+HelURk
+         f1+Q==
+X-Gm-Message-State: APuU4Z+1UPo3wsiYzLiKDIcEhz0B4tdjKWwHVjQOhMaE+o4p9SQSOn9s
+	wvh1c3B2M7LQKQHxLB6HqKQXRZtsX9ot9DolrSDJYRVfPQIOzggpAx8lIt37miQ8
+X-Gm-Gg: AZFdTZclfmRm3/JcMbn1D4C8KZbT3RmbaTEdS3nVi7zqtECEdqYJwWJcLeKt9Mb4xLN
+	o3YdcOBRHWFJQYQLqaJLVhAr1bxhcRYOwpnU707ungrHt3R+rr7/QlWU40tIHnRFO4+WFH+ncSx
+	xs2bX64TQRrw8grVGdvMHvoFMreSvo5aR06P9pdq+FyFjFsBwiq8Wzklp3+AofeO3m78Q1B4zKg
+	olVblt8tWeWqMqkM3LvqZFRz1ikTOXfO5+7uz+ts4TPrl1c04+LQXj0+PT9e150jpxgoqUOJc+n
+	tjsrNzwBIjT8AHFoX2o+ELwVlgYJoT1YeoCNmowyvAvCIGWxJDTLzGDIbYsNrH23x+oS046hYkx
+	Wl3MjlXqbME+0XOgZCmS2oKK9PscBFEdFH4rIBLWt4R2kqK493zY2oqHWSuCeLQgQ4y2jCgSANL
+	T24gXsyIgk7dIKOB/O83AnXdjOW7TqGBwcZqd4wcidiAHI7Z+BCmlq0Jn7wdJyQUPLKZOimwzk5
+	BFtaHq9XL04+9kSfle8MCHzocTCHGYKeSXK/OUm+hiX1jY9rt8wgwIK46kBjoJthkPNI7OxRKNL
+	BQ2Ey2USnrM3aSWh/PDEcKOydcKD7FexZNhzCAgpz0h3rgKRcZvLlO2AiKSDCUAncexSkpJzbJp
+	IrxE3riatRMQvBro2EUN9paAg0UhuDNTFq6wuQxFw9BxY82pPrA+Iv0t9/3dV25ktfxOLyh35Iw
 	==
-X-Received: by 2002:a17:90b:5543:b0:3b0:a1af:e4fa with SMTP id 98e67ed59e1d1-3b41c9e4290mr16455186a91.24.1795577622247;
-        Tue, 24 Nov 2026 19:33:42 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.243])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b405d1361fsm27952137a91.6.2026.11.24.19.33.41
+X-Received: by 2002:a17:903:2f87:b0:2ef:df75:337b with SMTP id d9443c01a7336-2f03f246f17mr169370905ad.48.1795577628048;
+        Tue, 24 Nov 2026 19:33:48 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.244])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2f0667679d8sm59082945ad.48.2026.11.24.19.33.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Nov 2026 19:33:41 -0800 (PST)
+        Tue, 24 Nov 2026 19:33:47 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf 41/47] bpf: Clear family and port of a short address for cgroup sockaddr hooks
-Date: Wed, 25 Nov 2026 03:29:32 +0000
-Message-ID: <20261125032938.670542-42-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf 42/47] bpf: Take a neighbour of the L3 master in bpf_redirect_neigh()
+Date: Wed, 25 Nov 2026 03:29:33 +0000
+Message-ID: <20261125032938.670542-43-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261125032938.670542-1-alexei.starovoitov@gmail.com>
 References: <20261125032938.670542-1-alexei.starovoitov@gmail.com>
@@ -104,48 +104,37 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-recvmsg() from a unix socket that has no name leaves the buffer of the
-address as it is, and that is on the stack of the kernel. The program
-reads user_family and user_port whatever the length is.
-bpf_sock_addr_set_sun_path() sends the family to user space.
+bpf_redirect_neigh() takes the neighbour from the route, the skb gets
+the device that the program has named. They are not always the same for
+IPv4, and the queue of a neighbour is purged with its own device only.
 
-Clear the bytes from the length up to 4. Write AF_UNIX next to the path
-in the kfunc.
+When a L3 master was named take a neighbour of that device, as IPv6
+does. Its driver drops the header and routes the packet, one entry does
+for all.
 
-Fixes: 859051dd165e ("bpf: Implement cgroup sockaddr hooks for unix sockets")
+Fixes: ba452c9e996d ("bpf: Fix bpf_redirect_neigh helper api to support supplying nexthop")
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/cgroup.c | 4 ++++
- net/core/filter.c   | 1 +
- 2 files changed, 5 insertions(+)
+ net/core/filter.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-index 4e388d994d80..1ff030f4314f 100644
---- a/kernel/bpf/cgroup.c
-+++ b/kernel/bpf/cgroup.c
-@@ -2010,6 +2010,10 @@ int __cgroup_bpf_run_filter_sock_addr(struct sock *sk,
- 		ctx.uaddrlen = 0;
- 	} else {
- 		ctx.uaddrlen = *uaddrlen;
-+		/* Programs read the family and the port also of a short address. */
-+		if (ctx.uaddrlen < offsetofend(struct sockaddr_in, sin_port))
-+			memset((void *)uaddr + ctx.uaddrlen, 0,
-+			       offsetofend(struct sockaddr_in, sin_port) - ctx.uaddrlen);
- 	}
- 
- 	cgrp = sock_cgroup_ptr(&sk->sk_cgrp_data);
 diff --git a/net/core/filter.c b/net/core/filter.c
-index 97f5d60ec817..eb6aeabb410e 100644
+index eb6aeabb410e..8d331802a7db 100644
 --- a/net/core/filter.c
 +++ b/net/core/filter.c
-@@ -12633,6 +12633,7 @@ __bpf_kfunc int bpf_sock_addr_set_sun_path(struct bpf_sock_addr_kern *sa_kern,
- 		return -EINVAL;
+@@ -2367,7 +2367,11 @@ static int bpf_out_neigh_v4(struct net *net, struct sk_buff *skb,
+ 	}
  
- 	un = (struct sockaddr_un *)sa_kern->uaddr;
-+	un->sun_family = AF_UNIX;
- 	memcpy(un->sun_path, sun_path, sun_path__sz);
- 	sa_kern->uaddrlen = offsetof(struct sockaddr_un, sun_path) + sun_path__sz;
+ 	rcu_read_lock();
+-	if (!nh) {
++	if (!nh && netif_is_l3_master(dev)) {
++		/* The route leads to another device, this one looks it up again */
++		skb_dst_drop(skb);
++		neigh = ip_neigh_gw4(dev, htonl(INADDR_ANY));
++	} else if (!nh) {
+ 		struct rtable *rt = skb_rtable(skb);
  
+ 		neigh = ip_neigh_for_gw(rt, skb, &is_v6gw);
 -- 
 2.55.0
 
