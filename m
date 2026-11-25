@@ -1,113 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795641932;
-	b=Cdn3mJ5kIPUC3toNhbiAM8owi4GuLUmMExtNyTmlbTUj4d8Vlz0V/Wn8UXYi9g7oomg8
-	 RNLQKC/MFjcChhyqjgZ92aNEEQmBBwt12SrOiVpOv+9WdIWSW4X5NIZbulMp1MQTE1mqL
-	 zdcDgPysmjkUijSNfUSSPuxRVDcjMTHiUkDOiZF8TEFuLXTQp0NL45cj8DQih9IF6mVR7
-	 MsT6K7hn2gQmp+uAzGfLjp0iJ6FpjE9YOC/WIUwUwmhY2Ef/UdT5i29Jc1tHn6zWWvCHV
-	 96Mglkzg1ZL4CMI3k1Gi3z1pwXiUoKj1iK/zuEXbKZREd437SJYEPbRoE2ztzewZM3A==
+	t=1795643135;
+	b=co9tgQ2qIyHEFUO+C//lnuWbUbpWi5gYgmAUjKQcz5NIfOFwJsphbR9lSYffLv9cUj58
+	 UI9lX4iWpctEwe3yCFkz+ctgn7KeEPVXvgIHpe3kHVhgloPi95SaSmlK/57hSmxI86QJi
+	 szVydrCnWyD1bxdyiNnBNv8xnthBRTGGh5mBmBCooUui81bEGY9IckUDRxhnVL1wEldzN
+	 oZCX1VCnhAUqo33g5ocJ+6DtNO68Ww5h9F8EJ0U2PH75tzwU1wfWY8XhffYOg10nzUA9W
+	 Vb0T11fXokG63yaF5JpugY6aDYoqaEAorxUcmFoXmkG3Tj2A+9ZPR2JJXSGKHOa/i4A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795641932;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:X-Mailer:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=24/tAy177JKP0owGUloJsJ9O1cxGKyGsp+3cRmkz8Hw=;
-	b=Sui0e2o8++Rqa0/5r/v+KjAGvMg+jkOZX903NOAHxpWBesXvNBt80ye2VwvQNZ7klQax
-	 QEXTPrbjhjC7dgQQ+afjC0BRjaPxarfo33nWg/tprFzQ6thf4Vq65qUDiOn0Q/XeBO8bG
-	 0FWD0jI1pqUrFauTOKOkKWhHnRUEco2BKRrNwwFl87KM/2HBGvk7KWxkihKnYcl4QVCS/
-	 mF1H1zklQuqcS1LLQlbfpzvU3L1NXYdcySn6UiLYojZ4I7gJk8FN1aKz0tr85jqjXbNig
-	 9tU+0Tqsmabw5kQ9OUCJzMNqpkjVqc/cF7s8UUwe3NKB7a6UIUXww2ReNMf2EFDM1hg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795643135;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=Jo4SEKF41tVgFr7rYNyyPCaU7SHDrcS+GKvJm3KJFcQ=;
+	b=NtNXwrWsENpZLf+WkoIEvDC2Pxb+zaOqWEYVCOrFWldpKyuY8Vqd+VqDOJjFz693bH4K
+	 3wqEwUGKC8WZUI4YeyL/jXIry6JZFC5AacEar/ysSy8NHnEdXAGQSWEc4jvmheev/RHoS
+	 DVrPf6Y/VQzkv4fqsNGrvAPwbjrKzy6hMuHT6RMVrUOOxyatA+Pk70eD0RgJKlt+l4ijJ
+	 ZmSJ/tm/lwUiNpgDDrrMyJm34g6TlY84HbJEFiiTU6eF2YGLqBcEqmae2/xntzDbRDc4E
+	 WN5S1mFUbnDDiU3sqp6Vw7B4zXBscxU77vPRPle1bqJKAwJtQ3m1bBIg1rJp9YkA/qg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=RI0PEVo8;
-	arc=none smtp.remote-ip=209.85.128.44
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=oxpD+fAm;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E9DF606A326
-	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 21:25:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8E9DF606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18ED9606A321;
+	Wed, 25 Nov 2026 21:45:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=RI0PEVo8
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4bb85e07aadso78050145e9.1
-        for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 13:25:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795641930; x=1796246730; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=24/tAy177JKP0owGUloJsJ9O1cxGKyGsp+3cRmkz8Hw=;
-        b=RI0PEVo8e/bM5LpLPZ+ED0hsyThViRRY4VFXcvOC3yq8ssab9D3GWTn/NExxaMUXZ/
-         SCEfAUzxIznLHW4X8Ux3FmsnGjVl8+Tu2I50vFro4UF290hC+aOGoCx3seQbB/Kkai92
-         i2zbpMXrHM1e+hdoZw3s9g8KJwVNLFn1XzFiXMwhZLLCZapmock/E0+9J3LFHctwNKM2
-         1wJUObs/t1OyGzg2ZnBNFqAphLTJMLH8yCwqrFBvoaxKN25zrCKYmaShH0vjh09I3jpG
-         Uz4nqzrg6/yfBT6SdKciD9tyk2az1dmjbdzWK08Rn0x/RK7kdBz6as33XNA2CJWx8x3B
-         BHwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795641930; x=1796246730;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=24/tAy177JKP0owGUloJsJ9O1cxGKyGsp+3cRmkz8Hw=;
-        b=CVkXX5c9MPiGj7T8kjNWPun0dx2wSA5nz0r4RGYX8ya4gz3+OjqltTuRZ3jTuuZHGV
-         D1L9UuQpRmWVUKOTNVJt7ckOcv3hD6B0nwU31PXmH+lpvFT6eMkpEvUXb/T/BW6EPkCO
-         iLTvRjIH1jYOak014thrdZkFajM1nfGyPtikYf404SCAw7H+CIkSHgZZXDWakZOGdhrc
-         1rmpiGkKxU3XQf0MUTBE3QKyqzsgkrk9qDb1IPYbwxrQOaPqTBnsETgNlK+/CTkT8X4N
-         KGAYmhDeelmUvmyUe0Vi37GlVYKNi6aDIpr/4TbAKa4fsyhHTeNPvdRW4ypIusxJt5mO
-         Aqsg==
-X-Forwarded-Encrypted: i=1; AL+hErGqBQXJ6KtDlXwP8SFFdjFm4U7hJOQJYlmhRScdxSopm0G0fGPEMtWAQNVyhY53jcI3eAk=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9ZzeV12pyqdslrzTiltmbWNuRDSea2/IQVVbUz2dDUqXfR5tKx
-	PVvFx7yvY9nFZuksLN1fgJ4mmn2Kag3rDeYjMpLlEFg3OhJwnVtmzqT6iGCGJLQc
-X-Gm-Gg: AZFdTZcbxNdL6+WxTo456aWz3CjrrWwIQThxzobEIvchdL4NJB8ZSFPzfKB7SqUKiy7
-	mvpbYvTHm1eq/f9zqrS3Q7PTqC9k9Za+d2Ah+ntmDHjCd8epG27gsffcYVbg7bGg0HmpkXxRxoJ
-	Zh1gzZAkoH3wXNyR1us6X3swAXYVrUsR/lwnQMVFQOXZmqPZMUq+0xto9QPB98xfT9nnIz90mQi
-	MIBR5qNO7yIJ/RjHRPHqAhE8rtPgeOcUo7VLhltgv5UEHDFWqLKbHVf5XVnJ15l+Or/rDbuvVoQ
-	879AWSltwhXbVoraZb7XxmVFi2P517QqMAvCkOr/F+bS6ywcgoDocw9/1AlZyTi4rr4q8wLged5
-	/ldMMrK30SlUD7hwBr1y+cl/W557op9F5L2Xobwf3X6Kl3p9IOiG2mrx+DYQVM3E3JYGDydPSZE
-	w++lT4ihtxlEnwEUEt5lzTwOm7DbubSUjnNkFS6Gq0JupTdYGKKcC3w9oGkzgqhMoAY/alLTFMG
-	KuWjjDMZd4oeuTnTynQbYzvl/0NPlLFr5tyG3//vFDyke3u71sI1MaogipakaANhEsuZxt+N0Ld
-	LNcNfaHeTFi8Qs0NtcjdSHIz1grp8+TrmO5/1cniiKgxHbXmh/aiRtIhzleulFwWvA==
-X-Received: by 2002:a05:600c:4584:b0:4bb:5de1:e90f with SMTP id 5b1f17b1804b1-4bb88819bcdmr380720815e9.31.1795641929874;
-        Wed, 25 Nov 2026 13:25:29 -0800 (PST)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb853c9170sm615777065e9.14.2026.11.25.13.25.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Nov 2026 13:25:29 -0800 (PST)
-Date: Wed, 25 Nov 2026 21:25:28 +0000
-From: David Laight <david.laight.linux@gmail.com>
-To: Petr Pavlu <petr.pavlu@suse.com>
-Cc: Samuel Wu <wusamuel@google.com>, Jonathan Corbet <corbet@lwn.net>, Shuah
- Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>,
- Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,
- Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin
- <atomlin@atomlin.com>, Alexander Viro <viro@zeniv.linux.org.uk>, Christian
- Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Alexei Starovoitov
- <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
- <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya
- Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song
- Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa
- <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai
- <ihor.solodrai@linux.dev>, Nathan Chancellor <nathan@kernel.org>, Nick
- Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>,
- Justin Stitt <justinstitt@google.com>, Andrew Morton
- <akpm@linux-foundation.org>, Petr Mladek <pmladek@suse.com>,
- kernel-team@android.com, linux-kernel@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-modules@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH bpf-next v3 2/9] module: Add module_kallsyms_find_name()
-Message-ID: <20261125212528.239ab6bf@pumpkin>
-In-Reply-To: <0c2e606e-e0b8-4466-b9dd-4db14cc35d1d@suse.com>
-References: <20261113221248.3535369-11-wusamuel@google.com>
-	<20261113221248.3535369-13-wusamuel@google.com>
-	<0c2e606e-e0b8-4466-b9dd-4db14cc35d1d@suse.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=oxpD+fAm
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 142CB1F000F2;
+	Wed, 25 Nov 2026 21:45:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795643134;
+	bh=Jo4SEKF41tVgFr7rYNyyPCaU7SHDrcS+GKvJm3KJFcQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=oxpD+fAmaAmRA/r+MbxpVivJH1l4Aes+TjzfBYuCVvNxsL072nZd6psX9L1xfDgeQ
+	 8ePtke9iN0M9k/B1RFyKujsTuLMmw9nnFwJKMz3NoCq1rIgcKIvRUPcaUUdu1pInP0
+	 HSn3gq9sUB7edeNucfnBU63vRTN1meBqEOJCOnKTGL0bnOwoOFtvXdhDrj3zgcC2Vv
+	 5RvbvvOZc5niEXEme7K6CeIguth4B2W3dCq2m569znxaTv04Z1ewf4yBcvdGVQZ7di
+	 ObohOJcob2tqZItQVFAbM4rKBY3zFNwcQ5ExpkSHv+32dgnzqDSwm4825h9Z2rOVzf
+	 k3Tx7JdLll+SQ==
+Date: Wed, 25 Nov 2026 13:45:32 -0800
+From: Namhyung Kim <namhyung@kernel.org>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Ian Rogers <irogers@google.com>, Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	James Clark <james.clark@linaro.org>,
+	Athira Rajeev <atrajeev@linux.ibm.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Leo Yan <leo.yan@linux.dev>, Dmitry Vyukov <dvyukov@google.com>,
+	"Steinar H . Gunderson" <sesse@google.com>,
+	Stephen Brennan <stephen.s.brennan@oracle.com>,
+	Thomas Falcon <thomas.falcon@intel.com>,
+	linux-perf-users@vger.kernel.org, bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 03/19] perf/uapi: Add BUILD_ID_OFFSET sample types to
+ UAPI
+Message-ID: <awdW_Al_OhIVCimV@google.com>
+References: <20261125005108.1020003-1-irogers@google.com>
+ <20261125005108.1020003-4-irogers@google.com>
+ <20261125132512.GB2668804@noisy.programming.kicks-ass.net>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -117,72 +78,36 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20261125132512.GB2668804@noisy.programming.kicks-ass.net>
 
-On Wed, 25 Nov 2026 17:45:36 +0100
-Petr Pavlu <petr.pavlu@suse.com> wrote:
+Hi Peter,
 
-> On 11/13/26 11:12 PM, Samuel Wu wrote:
-> > KALLSYMS_QUERY_BY_NAME, added later in this series, needs to find a
-> > symbol name or prefix across module symbols in one pass.
-> > module_get_kallsym() walks the module list from the head and runs an
-> > export bsearch() for every symbol index.
+On Wed, Nov 25, 2026 at 02:25:12PM +0100, Peter Zijlstra wrote:
+> On Tue, Nov 24, 2026 at 04:50:52PM -0800, Ian Rogers wrote:
+> > Introduce PERF_SAMPLE_BUILD_ID_OFFSET and
+> > PERF_SAMPLE_CALLCHAIN_BUILD_ID_OFFSET in enum perf_event_sample_format.
 > > 
-> > Add module_kallsyms_find_name(), and put the shared query struct in
-> > linux/kallsyms.h, so we have a more efficient linear walk.
-> > 
-> > Signed-off-by: Samuel Wu <wusamuel@google.com>
-> > ---
-> > [...]
-> > diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
-> > index 1ff8ce857d92..72006c9bad42 100644
-> > --- a/kernel/module/kallsyms.c
-> > +++ b/kernel/module/kallsyms.c
-> > @@ -406,6 +406,63 @@ int module_get_kallsym(unsigned int symnum, unsigned long *value, char *type,
-> >  	return -ERANGE;
-> >  }
-> >  
-> > +/**
-> > + * module_kallsyms_find_name - Find a module symbol by name or prefix
-> > + * @symnum: in: index to start at; out: index of the match. The index
-> > + *          counts the symbols of the searched modules in list order.
-> > + * @q: name query; if @q->modname is set, only that module is searched
-> > + * @value: set to the symbol address
-> > + * @name: set to the symbol name (KSYM_NAME_LEN bytes)
-> > + * @module_name: set to the module name (MODULE_NAME_LEN bytes)
-> > + *
-> > + * Undefined (SHN_UNDEF) symbols are skipped.
-> > + *
-> > + * Return: 0 on a match, or -ENOENT.
-> > + */
-> > +int module_kallsyms_find_name(unsigned int *symnum,
-> > +			      const struct kallsyms_name_query *q,
-> > +			      unsigned long *value, char *name,
-> > +			      char *module_name)  
+> > For PERF_SAMPLE_CALLCHAIN_BUILD_ID_OFFSET (and
+> > PERF_RECORD_CALLCHAIN_DEFERRED when PERF_RECORD_MISC_MMAP_BUILD_ID is
+> > set), encode a deduplicated table of variable-length build IDs
+> > (u32 nr_build_ids, u32 nr_offsets, followed by packed { u8 size;
+> > u8 data[size]; } entries padded to 8-byte alignment) and an array of
+> > 64-bit offsets whose top 8 bits encode the 1-based build ID index (or
+> > 0x00 for unresolved user addresses and 0xff for kernel/context entries).
+> > In common cases where multiple callchain frames belong to the same
+> > binary, each unique build ID is encoded only once.
 > 
-> Nit: kernel/module/kallsyms.c already contains a zoo of lookup functions
-> with similar names. Adding module_kallsyms_find_name() adds more to the
-> confusion, being similar to module_kallsyms_lookup_name() and
-> find_kallsyms_symbol_value().
+> Why ?!? This is insane
 
-I've thought of splitting the file in two.
-Separating the core symbol table functions from the /proc/kallsyms code.
-Might help here as well.
-The cut goes just above the extra structure the /proc code uses.
-Three functions have to be made non-static, none are that internal.
+This is basically to save space for callchains.  When multiple entries
+fall into the same binary, it can have a table of binaries/build-ids
+and use indices instead of repeating full build-id for each entry.
 
-David
+It'd be great if it could have a global (or per-session) table.  This is
+a per-sample table.  Please let us know if you have a better idea.
 
-> 
-> I suggest calling it module_kallsyms_query_name() to match the
-> kallsyms_name_query parameter and to express that this is a structured
-> query, as opposed to a simple by-name lookup. It might be a good idea to
-> similarly stick to "query" instead of "find" in kernel/kallsyms.c.
-> 
-> Otherwise, this looks ok to me from the modules perspective. Feel free
-> to add:
-> 
-> Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
-> 
+Thanks,
+Namhyung
 
