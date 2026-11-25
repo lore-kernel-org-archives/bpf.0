@@ -1,47 +1,48 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=117.135.210.4
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=117.135.210.3
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795584771;
-	b=l58KGwNWdFFdU3LrLdHIa7zG9qG0h0sJkjAn9CFPEF3KUv/Yz02dbUDtkcG9QAfuAcr7
-	 cHwsNDh2Rw82g+vaujb3mrjSiWv8pJXWK7zHsm4aL2mHqOj1jvb+jEZDUeJrdxdc2PPSr
-	 BWuoMEk8bHTqAi8usSDJVta4+WodO21fzpt4KHhhGVDsTOJBXYjq5Y3uudJMM8k3jAWfA
-	 TGONK3dt1m8qkUP4k7IPSnUt777Bp+0DWgrBLHkBQX5Tb0Zu9pL/B6jwmTIT93b+l9gPC
-	 WwL2ZwW8PTvQZOmIPybVqWkgT7fpwqnTzcqDGw6lSuDRRvdbRYlCbH+kVQw6actloLA==
+	t=1795584773;
+	b=lvJk9IPq8Hsl7q/9n+HI9qlsbythZVw9eMRt9yfxPiE4+EaB1IHtKny5tE4XpYlkSWo+
+	 P6HixnV/UpWMiyUQTM93I/QfdOYUCuhT/Qn/ZwzEigbHGRc/PFUnaf14uPvpyfpe15zTt
+	 naP3PmjL0PLi8Jdep22HuuqnQXp0Ygs7/5j4ZWv9becBpNrKUeD0oAinOtyt8dlPfXpAS
+	 viiYgLa4jlVBrKrGMcdy3UjQaOENhwrRQ054UAs4jRPIKR8RhBLVuPI5LW6kWdfxEVv4m
+	 mWtCBZrhlKvzNXcvavHQs2XPyWLkA3BD+VpgKnkUks1KatQ/KkSXgGUC+/CRmFSsI8A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795584771;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795584773;
 	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
-	 Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding:
-	 X-CM-TRANSID:X-Coremail-Antispam:X-CM-SenderInfo;
-	bh=8TDkzHIQTb0cmXMx7xs5icndgOXcEeTLbwyeJ7c7VFM=;
-	b=Tbput1JbMrXuoU/gUA/a6UYb3c8ycAM5X3Uum/5Q8LizNMuQdB9SVW9Ys1e5oASG/RX1
-	 43YzkYIYyfO3SPd7sPDCxhNVIt19glrmmmuK+nANClmEC3E6bBj2v0CzbqdtiT1GxPH+e
-	 1VsG8tSgNGse8xL21VOzxHWDdPGUNGwOcYpADDzT+uoxiFbFxsYvBgakh9cKGwMy2/naI
-	 pZB1836YPBUXsfQCHwvGeESifaMP36cE3Emj8UcNVkB0xWv5ta9V2vyy9emgWXTw81twL
-	 yEqJfye7KwS5bNA7QnXijvSzUVg/Q94w4kjK+dkJHRym/aeELhiHhlH0H9GKiF4F94g==
+	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding:X-CM-TRANSID:X-Coremail-Antispam:
+	 X-CM-SenderInfo;
+	bh=soxq+5MXIST1SgaMLSBl1OUg/dP9HEWCgOkYllx5Baw=;
+	b=yA4kahq5PIc3J1dcxc6bxidI8klmedozBNvPuBKfvrLGOZow9Ou9l7K6rPvLpjpuboKc
+	 oDMGMhd7Rn+AfIhOPSIgWnWhT7DgBsCpEZI78R6lfJgVBOCB/+VWTor1z+w+R18g5497/
+	 8G1nWfQWgx7Okh7OWgZPfc6Ha12Rm1Hja6GEWjLM2KwF6BsRHz8nrxOAdcb/QGQLrFB+R
+	 5LQKRMUwVRSu4ypP/3fxhu5yBtTj/uOa9OSrEpEDmQLOwN3hPfhC7hJvccUL5qx10xugD
+	 lWdynrYZXX+HT8yrbfDlGgu9CU7wu+7EtEvXH5wY57L+gWHapKSyimQY2C9B8pJD5FQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=163.com;
 	spf=pass smtp.mailfrom=163.com;
-	dkim=pass header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=h+E4YswI;
-	arc=none smtp.remote-ip=117.135.210.4
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
+	dkim=pass header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=G6kit3pl;
+	arc=none smtp.remote-ip=117.135.210.3
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.3])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6E3D606A327
-	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 05:32:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A6E3D606A327
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D9F3606A329
+	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 05:32:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2D9F3606A329
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=h+E4YswI
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=G6kit3pl
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=8T
-	DkzHIQTb0cmXMx7xs5icndgOXcEeTLbwyeJ7c7VFM=; b=h+E4YswI9uA7ADhvZq
-	E3Y/6YBxPslBIABqID0H4D25URGPYG8qV+hEe4VHF5CR2zkUa1hGD0El+ElZBnpN
-	xCMvfIePaJQVHyqtGMBdSVmUI6PXKfUNyv5n8A3U4O5RFv/llVT4e0L0YvQhuQLp
-	lnKWk9aoA/3NrqcCLA59tBlR0=
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=so
+	xq+5MXIST1SgaMLSBl1OUg/dP9HEWCgOkYllx5Baw=; b=G6kit3plWndRFitdoM
+	eLiLnae9mgok4+1QnYHV0jCmnu0xsscgDvTJTVxPcUXLfGdz5xSQdjaikqwszVRp
+	bqZoNzggZIpenhCjva6fA88M8E6PA8RW4q1HXRXOoO5amBC9T/6IVD4YcGpomxTH
+	DClPh72SguifflzOkn+eNNqUk=
 Received: from kylin-ERAZER-H610M.. (unknown [])
-	by gzga-smtp-mtada-g1-0 (Coremail) with SMTP id _____wDnL6jCcgZrriN8JQ--.11907S2;
-	Wed, 25 Nov 2026 13:31:49 +0800 (CST)
+	by gzga-smtp-mtada-g1-0 (Coremail) with SMTP id _____wDnL6jCcgZrriN8JQ--.11907S5;
+	Wed, 25 Nov 2026 13:31:52 +0800 (CST)
 From: Yun Lu <luyun_611@163.com>
 To: ast@kernel.org,
 	daniel@iogearbox.net,
@@ -56,10 +57,12 @@ To: ast@kernel.org,
 	ihor.solodrai@linux.dev
 Cc: yatsenko@meta.com,
 	bpf@vger.kernel.org
-Subject: [PATCH bpf-next v5 0/6] bpf: Fix async callback use-after-free on map deletion
-Date: Wed, 25 Nov 2026 13:31:26 +0800
-Message-ID: <20261125053132.444234-1-luyun_611@163.com>
+Subject: [PATCH bpf-next v5 3/6] selftests/bpf: Test task work scheduling on a deleted value
+Date: Wed, 25 Nov 2026 13:31:29 +0800
+Message-ID: <20261125053132.444234-4-luyun_611@163.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20261125053132.444234-1-luyun_611@163.com>
+References: <20261125053132.444234-1-luyun_611@163.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -70,107 +73,67 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wDnL6jCcgZrriN8JQ--.11907S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxuF18CFykCF13uF43Xw4UCFg_yoWrZrWfpa
-	yFqwnxtr4DGas7t393Cw48ZFyFgwn5Ja1akasaqryYvrn8Xr18AryI9r1jgF9xCrZYgw1a
-	vrn2qana9a4jva7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07URSoAUUUUU=
-X-CM-SenderInfo: pox130jbwriqqrwthudrp/xtbC6wUq+GsGcsWTlwAA3i
+X-CM-TRANSID:_____wDnL6jCcgZrriN8JQ--.11907S5
+X-Coremail-Antispam: 1Uf129KBjvJXoW7urWkKw13AFW3Zr4fuF1Utrb_yoW8AF48pa
+	yrArW2kw4Sgw17tr4fAws3KryrWw4ktw4rGrZxK34Yyr9xXrn7Xr4IkF12qFsxCrZYgr43
+	Zw42q3yxuF4UWrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jDSdgUUUUU=
+X-CM-SenderInfo: pox130jbwriqqrwthudrp/xtbC6wgr+WsGcsiUKgAA3Y
 
 From: Yun Lu <luyun@kylinos.cn>
 
-This series fixes a use-after-free when a BPF program schedules task
-work, workqueue work or a timer through a value pointer retained across
-map deletion. Review of the earlier task-work series [1] pointed out
-that cancellation can leave the deleted value open to reinitialization.
+Add a return-value regression to the task_work_fail object, which
+test_task_work already runs through RUN_TESTS(). Assert -ENOENT when
+scheduling task work through a deleted map value. Positive step codes
+distinguish fixture failures and the callback does not access the
+map element.
 
-The original reader keeps the element alive while it queues new work,
-but the new callback can start outside the grace period that protects
-the element and access the freed key or value. Patch 2 describes the
-race and includes a KASAN report from an unmodified kernel.
+Signed-off-by: Yun Lu <luyun@kylinos.cn>
+---
+ .../selftests/bpf/progs/task_work_fail.c      | 26 +++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
-Mark task work FREED or clear cb->map before detaching the context.
-Following Alexei's suggestions [2, 3], check task-work membership after
-claiming PENDING and check wq/timer membership in the shared setter.
-The setter also rejects zero usercnt. An idle callback can survive in
-an unlinked cached element past the last user reference and be reused
-when the element is inserted again.
-
-Patches 1-3 fix task work and add its regression test. Patches 4-6 fix
-the shared wq/timer paths and cover both in the wq and rhash_timer
-selftests.
-
-Testing on x86-64 QEMU/KVM with KASAN, PROVE_LOCKING, PROVE_RCU and
-DEBUG_ATOMIC_SLEEP enabled.
-
-- task_work, task_work_stress, wq, rhash_timer, timer and timer_mim pass.
-  The deleted-value tests and wq/usercnt_reuse pass.
-- With the same test binary on v3, wq/usercnt_reuse fails as expected
-  when the setter returns 0 instead of -EPERM.
-
-Changes since v4:
-- Patch 1: every canceller compare-exchanges the task-work slot; the
-  first FREED transition owns the map reference (Alexei).
-- Patch 2: non-marking LRU hash lookup (bpf-ci) and a full barrier
-  ordering the membership lookup before the usercnt read (Alexei).
-- Patch 3: move the deleted-value task-work test to RUN_TESTS (Mykyta).
-- Patch 4: every canceller clears cb->map and compare-exchanges the
-  async slot with a READ_ONCE slot load (Alexei).
-- Patch 5: carries forward the shared wq/timer setter checks and the
-  rhash_timer regression.
-- Patch 6: single skeleton load with map-in-map for the reuse test
-  (Mykyta); setup/cleanup errors and retry exhaustion fail the test
-  (bpf-ci).
-
-v4: https://lore.kernel.org/all/20261119033051.196177-1-luyun_611@163.com/
-
-Changes since v3:
-- Reject zero usercnt in the shared setter (Sashiko), order the check
-  after lookup with a full barrier, and add a wq regression for reuse.
-- Consolidate the task-work return value documentation (bpf-ci).
-
-v3: https://lore.kernel.org/all/20261111024333.228633-1-luyun_611@163.com/
-
-Changes since v2:
-- Use the existing map lookup and move the wq/timer check to the shared
-  setter (Alexei).
-- Give slot detachment to the first invalidator and reuse the existing
-  task-work, wq and timer selftests.
-
-v2: https://lore.kernel.org/all/20261106095747.471718-1-luyun_611@163.com/
-
-Changes since v1:
-- Replace slot poisoning and allocator hooks with lookup checks
-  and split out cancellation ordering (Alexei).
-- Extend the fix and regression coverage to wq and timers (Alexei,
-  Mykyta).
-
-v1: https://lore.kernel.org/all/20261028073525.1035605-1-luyun_611@163.com/
-
-[1] https://lore.kernel.org/all/20261012061915.231254-1-luyun_611@163.com/
-[2] https://lore.kernel.org/all/DMGN8VM2BAOR.28NRNN51MCI8I@gmail.com/
-[3] https://lore.kernel.org/all/DMOAQI1S0JBS.3N3WETHD2L6KQ@gmail.com/
-
-Yun Lu (6):
-  bpf: Mark task work FREED before detaching it
-  bpf: Check task work value membership before scheduling
-  selftests/bpf: Test task work scheduling on a deleted value
-  bpf: Invalidate async callbacks before detaching them
-  bpf: Check async callback membership and user references
-  selftests/bpf: Test wq callback setup after deletion and user release
-
- include/uapi/linux/bpf.h                      |   2 +
- kernel/bpf/helpers.c                          | 100 ++++++++++++++++--
- tools/include/uapi/linux/bpf.h                |   2 +
- .../selftests/bpf/prog_tests/rhash_timer.c    |  24 ++--
- tools/testing/selftests/bpf/prog_tests/wq.c   | 115 +++++++++++++++++-
- .../testing/selftests/bpf/progs/rhash_timer.c |  26 ++--
- .../selftests/bpf/progs/task_work_fail.c      |  26 +++++
- tools/testing/selftests/bpf/progs/wq.c        | 109 ++++++++++++++++-
- 8 files changed, 358 insertions(+), 46 deletions(-)
-
-
-base-commit: bd75869299f1d4ff6e9f45117cce28f8badee1cd
+diff --git a/tools/testing/selftests/bpf/progs/task_work_fail.c b/tools/testing/selftests/bpf/progs/task_work_fail.c
+index bc56bda..7c118c4 100644
+--- a/tools/testing/selftests/bpf/progs/task_work_fail.c
++++ b/tools/testing/selftests/bpf/progs/task_work_fail.c
+@@ -2,6 +2,7 @@
+ /* Copyright (c) 2025 Meta Platforms, Inc. and affiliates. */
+ 
+ #include <vmlinux.h>
++#include <errno.h>
+ #include <string.h>
+ #include <stdbool.h>
+ #include <bpf/bpf_helpers.h>
+@@ -94,3 +95,28 @@ int map_null(struct pt_regs *args)
+ 	bpf_task_work_schedule_resume(task, &work->tw, NULL, process_work);
+ 	return 0;
+ }
++
++static int deleted_task_work_cb(struct bpf_map *map, void *key, void *value)
++{
++	return 0;
++}
++
++SEC("syscall")
++__retval(-ENOENT)
++int schedule_deleted_task_work(void *ctx)
++{
++	struct elem empty = {}, *value;
++	int key = 0;
++
++	if (bpf_map_update_elem(&hmap, &key, &empty, BPF_NOEXIST))
++		return 1;
++	value = bpf_map_lookup_elem(&hmap, &key);
++	if (!value) {
++		bpf_map_delete_elem(&hmap, &key);
++		return 2;
++	}
++	if (bpf_map_delete_elem(&hmap, &key))
++		return 3;
++	return bpf_task_work_schedule_signal(bpf_get_current_task_btf(),
++					     &value->tw, &hmap, deleted_task_work_cb);
++}
 -- 
 2.43.0
 
