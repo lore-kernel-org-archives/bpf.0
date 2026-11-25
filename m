@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795615696;
-	b=YqmIj1Uy8VI1PvQHf/BUarBL7IvnRpvVICOT6w4GUXdkRJPhCYVGoR9hvdwSBkrIQR06
-	 eSAXHqNjJYnhJWnAsfIiwYBnTM/Ll1RzEQczM/n1i/TGMSKzgD4NGF/+A/HVxkFyebcJT
-	 ts0O6iWz55WfL206eZFluE+gPtOwGRoJcjhzhdXJ6MBlgA5NIONMXAoAnY7HDJTaZyCcn
-	 5c62oX4Ie+BwQIaNSLUZ1ZjX4GOOYmmbZ126R/vayZ56auJ8bfuYBE3IQphhJIzWc6bEB
-	 3kvj1y0OG611vdL95pDXryKQb9Jffi2MpswIXxU2OmCOpRuA2ijKwREHFjIEWosRpMg==
+	t=1795615713;
+	b=hwHJiqx80oBBTdZhC553fv4yZxMbTZK74RcXsxEjMds6DoMXATxvo6nDV2bxtc54/C+w
+	 r5K5dpFt6mHRE6YPXkyDLEOZ5m1+jmyusaGrzuYKdsCCuPdxHXtnmYkWVrm6SOM7QdVIW
+	 B8fV772/S6fQHYNCYuS8yqoHJ2aHLzrRmDZIKO1QFe8GC8il0+HY1AF7s669Q/iXxzzto
+	 CqMOnpCWpfNXaya6+AGees7m3U1F3iFqp9zIifTqiKdhbQ/6myadSFj+RWTG6cE5SIIGO
+	 Feof2oKhp/GWuCNS+3sQ13AvBi9wR04+QiRxFAatcI235DN4VsulYE3wq8W2HHVDGMQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795615696;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795615713;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=uUVLwnKayt6g2P+NkpEhvsPO9KV0gc6su6pn44rfNmw=;
-	b=Hqe8nli7hEVUd1N+XGESO9JA3Fb93u9CtyXYCNWMnGaeonXiEDIF8V9/8XRgHOj0FYFW
-	 IbbF/G2zOhYkcplrA8/pDkLMqNHyvBLW2LH/HXttMJU2vl1FbIWgD2F94Hvw45g+MLZRO
-	 x/VZI0ONJCSZg9esDusBjbElB6X8jOAaf4Or4wNtOXC/ds9Q2JBSRCMFS6kNHgCKMTxlY
-	 5Uy8KZ7ZFc6VlLDQYnkP0oxoU0EwEDeLkk7SnRaE3LqoIGr/Qf1RvxBWexFNrNsQ8UkjK
-	 89yxfrSlJtJxTf0NolYspJ7BE9SBwdBTR+VLhT7tq5yvBVgRQXyLJ4LmVITETwK2TVA==
+	bh=b09hhgWjhTUr1ufEegNZrG6hsijrw5UpXsQzYbBJZIk=;
+	b=QAfK3jOqTuPg9ShEoHYgnthxPbuaBRZpH7qzplgg/KiWWEUGb79jVUCuJlsgVQ2Ff9Ow
+	 M0V7LKsr1Wa+FB1JjtHG4kUgESNxtfyk9iyOtk6XK4x+7PsiCLsBRi6bo/RXujHHtoD4c
+	 eh/9x/cEhKF1nTUUnvu99JCqSU3FG0/Nvz2C5+F3C+Lhz2iiKadguqoxmfmIwSMV3S0S4
+	 mBvz+2/Ve197jaAGMb4j5zO+tjhw1jh72I2jJWYrjpB57fOvkAmoRKWS645rLPtOnhtZC
+	 GPCDGKm7zKxiV3+vdDozehDlFm5Gd2e7kNlp8yWYUFJZHX99xkc2FAEwtroEuHMXC0g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="alt/h17j";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=aAXFma8M;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67323606A681;
-	Wed, 25 Nov 2026 14:08:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18DFA606A689;
+	Wed, 25 Nov 2026 14:08:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=alt/h17j
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C0A41F0157D;
-	Wed, 25 Nov 2026 14:08:13 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=aAXFma8M
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D06C1F000C6;
+	Wed, 25 Nov 2026 14:08:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795615696;
-	bh=uUVLwnKayt6g2P+NkpEhvsPO9KV0gc6su6pn44rfNmw=;
+	s=k20260515; t=1795615712;
+	bh=b09hhgWjhTUr1ufEegNZrG6hsijrw5UpXsQzYbBJZIk=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=alt/h17jzfl+c+EI4Fx//NL8vNX9t0T38Q9Oh2PqfCsaHyDbjZgxeyvlIGlBVdKMc
-	 cr+ldWTEA/yXws0IgxZxeQjkF0riLQYKPEhPkB0tohK0RWOR2Qhm34jTsbx9CaC+c9
-	 eJU9zOYnRiR9+vQngCqnkyGoq9I87AGTg4GDmIzZqGRhqfi1tX5yc5pBKEFJi5qGoz
-	 Fb8H2ejBfvh6Dklc08Q/r13cQOsKr7DpbRlMpFaTOZ4p6UecXQkB0cyTyLv3T47itN
-	 vHIy4lp5K4Z+jtDuY6/saTGCdEddhd22C9wmWywAHccSll45ubcKwZbtvaJO8YXJxE
-	 csYHqzSloxwIw==
-Subject: Re: [PATCH net-next 05/15] xdp: Run programs on buffers that must not
- hold kernel structures
+	b=aAXFma8Mu84w7CroG/zNy+2h2yIwb3Rxj3uTXEvqsUjTZ3V847fnYsi94ZhF7LFzE
+	 B+EA+vkYMuoPCceSmsVHBviuSnK7pu9fPfwWioLfGa380gMa5ABKGF/4ZeSAqTuxsZ
+	 6nZ0MsLGHEmv60x/O9U/ISc7+QWLUdHNG7Z/N5VXqa2rm4dHQF9hhkmlWfkJMURQ0+
+	 /X2wMTgycnditRoM/2BBG8TcPNQu3GysCvyCOBVl0xudmfRmjdQEuApoxNdWRIm217
+	 sYFVBRlaPGezXpWtQF5hAiYxKOBI7ASfWeTiwLw2M+PltCQv+u/cd0kkt0zv4Il1eX
+	 qxbuU5MpRYCdA==
+Subject:
+ Re: [PATCH net-next 12/15] eth: mlx5e: Receive into XDP-only memory providers
 From: netdev-bot+sashiko@kernel.org
 To: bjorn@kernel.org
 Cc: magnus.karlsson@intel.com, maciej.fijalkowski@intel.com,
@@ -63,10 +63,10 @@ Cc: magnus.karlsson@intel.com, maciej.fijalkowski@intel.com,
  dw@davidwei.uk, asml.silence@gmail.com, linux-rdma@vger.kernel.org,
  linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
  linux-kernel@vger.kernel.org
-Date: Wed, 25 Nov 2026 14:08:12 +0000
-Message-ID: <179561569289.3135.1423395269344157578@kernel.org>
-In-Reply-To: <20261124125654.183091-5-bjorn@kernel.org>
-References: <20261124125654.183091-5-bjorn@kernel.org>
+Date: Wed, 25 Nov 2026 14:08:28 +0000
+Message-ID: <179561570896.3135.8953893024403211017@kernel.org>
+In-Reply-To: <20261124125654.183091-12-bjorn@kernel.org>
+References: <20261124125654.183091-12-bjorn@kernel.org>
 X-sashiko-severity: High
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -80,10 +80,10 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 2 potential
+Thank you for your contribution! Sashiko AI review found 3 potential
 issue(s) to consider.
 
-Critical: 0 · High: 1 · Medium: 0 · Low: 1
+Critical: 0 · High: 2 · Medium: 1 · Low: 0
 
 If you believe none of the issues are legitimate, please reply to each
 issue of Medium severity or higher and explain why the AI is wrong.
@@ -91,108 +91,174 @@ If any of them are legitimate and you plan to respin, please let patchwork
 know by including "pw-bot: cr" as a separate line at the end of your reply
 (one such reply per series is enough).
 
-- [High] The new XDP_FLAGS_SINK contract in include/net/xdp.h says a
-  helper that checks bytes and reads them again later must check a copy,…
-- [Low] The commit message opens with "Currently, the core refuses native
-  XDP programs next to a memory provider." That was no longer true when…
+- [High] net/mlx5e: deferred close in mlx5e_switch_priv_channels()
+  starves XDP-only MP
+- [High] net/mlx5e: NAPI busy loop and refill rollback in
+  mlx5e_post_rx_wqes()
+- [Medium] The mlx5 patch lets the nonlinear striding RQ take an XDP-only
+  (AF_XDP sink) provider, but the commit message only describes the…
 
 --
 
-xdp: Run programs on buffers that must not hold kernel structures
+eth: mlx5e: Receive into XDP-only memory providers
 
-This lets native XDP programs run on AF_XDP sink buffers (UMEM chunks
-that userspace may write at any time). Such buffers are marked with
-XDP_FLAGS_SINK and XDP_FLAGS_SINFO_EXT, and their shared info moves into
-the rxq. XDP_TX and XDP_PASS become XDP_DROP, and frame and skb
-construction refuse sink buffers.
+This patch lets the page pools of mlx5 RQs that run an XDP program take
+XDP-only memory providers such as the AF_XDP sink. It also allows queue
+restarts while a program is attached, and it skips the minimum posted
+WQE wait for provider-backed RQs. Buffer addresses are now taken with
+xdp_netmem_address() so XDP-only net_iovs are covered.
 
-> Currently, the core refuses native XDP programs next to a memory
-> provider. An AF_XDP sink needs XDP to steer its packets and to use the
+> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+> index 06a8a4be4be7c..a8d46508b6fc3 100644
+> --- a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+> @@ -1012,6 +1012,9 @@ static int mlx5e_alloc_rq(struct mlx5e_params *params,
+>  
+>  		pp_params.order     = pool_order;
+>  		pp_params.flags     = PP_FLAG_DMA_MAP | PP_FLAG_DMA_SYNC_DEV;
+> +		/* Trap and PTP RQs use queue 0 too, without a program */
+> +		if (params->xdp_prog)
+> +			pp_params.flags |= PP_FLAG_ALLOW_XDP_ONLY_NETMEM;
 
-[Severity: Low]
-Is this opening sentence still accurate at this point in the series?
+[Severity: Medium]
+How does this behave for the nonlinear striding RQ? The flag is also set
+there, but the commit message only talks about the linear striding RQ:
 
-The previous commit, "net: Add memory providers that only feed XDP",
-already exempts MP_XDP_ONLY providers in dev_mp_blocks_xdp():
+    The RQ keeps its layout. A stride of the linear striding RQ still
+    holds the shared info of the skb that XDP_PASS builds, ...
 
-net/core/dev.c:dev_mp_blocks_xdp() {
+The nonlinear striding RQ is used with XDP when the program is frags
+aware and the MTU is above the linear XDP limit. With a program attached,
+mlx5e_skb_from_cqe_mpwrq_nonlinear() builds an empty head in the linear
+page:
+
+drivers/net/ethernet/mellanox/mlx5/core/en_rx.c:mlx5e_skb_from_cqe_mpwrq_nonlinear() {
     ...
-		if (ops && !(ops->flags & MP_XDP_ONLY))
-			return true;
+	if (prog) {
+		...
+		va = mlx5e_mpwqe_get_linear_page_frag(rq);
+		...
+		linear_hr = XDP_PACKET_HEADROOM;
+		linear_data_len = 0;
     ...
 }
 
-That commit also relaxed the dev_xdp_prog_count() check in
-__netif_mp_open_rxq() for XDP-only providers.
+mlx5e_mpwqe_linear_page_refill() allocates that linear page from
+rq->page_pool. With this flag set, the page is a UMEM chunk taken from
+the socket's FILL ring, and it is only ever used for empty heads.
 
-This patch touches neither net/core/dev.c nor netdev_rx_queue.c. Could
-the message be reworded so it doesn't suggest that this patch lifts the
-refusal?
+mlx5e_fill_mxbuf() calls xdp_prepare_buff(..., true), so the program can
+call bpf_xdp_adjust_meta() into that headroom. When an empty head
+reaches the sink, xsk_sink_rcv() does this:
 
-> diff --git a/include/net/xdp.h b/include/net/xdp.h
-> index 944418111a86e..c7cb0ba4e16f4 100644
-> --- a/include/net/xdp.h
-> +++ b/include/net/xdp.h
+net/xdp/xsk_sink.c:xsk_sink_rcv() {
+    ...
+	if (!hlen) {
+		/* An empty linear part, as mlx5 builds for nonlinear RQs */
+		empty = niov;
+		headroom = 0;
+	} else {
+    ...
+	if (metalen > headroom)
+		goto drop;
+    ...
+}
+
+Won't every packet on this RQ type whose program wrote metadata (RX hash,
+timestamp and so on) be dropped and counted in rx_dropped? The same
+program works on the linear striding RQ and on the cyclic RQ.
+
+That also seems to contradict the documentation added in this series,
+which says bpf_xdp_adjust_meta() and the RX metadata kfuncs work as with
+pages.
+
+Should the commit message and docs describe the nonlinear striding RQ
+case, both the dropped metadata and the UMEM chunks spent on empty heads?
+Or should this mode be handled differently?
+
+>  		pp_params.pool_size = pool_size;
+>  		pp_params.nid       = node;
+>  		pp_params.dev       = rq->pdev;
 
 [ ... ]
 
-> @@ -95,6 +99,15 @@ enum xdp_buff_flags {
->  	 * frame, see xdp_data_hard_end(): the frame must hold nothing else.
->  	 */
->  	XDP_FLAGS_SINFO_EXT		= BIT(3),
-> +	/* AF_XDP sink memory, see %MP_XDP_ONLY: the buffer may only go to the
-> +	 * AF_XDP socket of its queue. Userspace may write it at any time,
-> +	 * also while the kernel reads it. So the kernel takes bounds only
-> +	 * from its own fields, and only the XDP program and its helpers read
-> +	 * the bytes. A helper that checks bytes and reads them again later
-> +	 * must check a copy, see bpf_syncookie_th(). Nothing builds a frame
-> +	 * or an skb in the buffer.
-> +	 */
-> +	XDP_FLAGS_SINK			= BIT(4),
+> @@ -3050,6 +3053,14 @@ static int mlx5e_wait_channels_min_rx_wqes(struct mlx5e_channels *chs)
+>  		if (test_bit(MLX5E_CHANNEL_STATE_XSK, c->state))
+>  			continue;
+>  
+> +		/* An RQ that an XDP-only provider backs fills from the FILL
+> +		 * ring of its socket, which stays empty until the socket
+> +		 * gets its chunks back, so a queue that restarts under a
+> +		 * slow reader would never meet the bound.
+> +		 */
+> +		if (netif_rxq_has_xdp_only_mp(c->netdev, c->ix))
+> +			continue;
+> +
+>  		err |= mlx5e_wait_for_min_rx_wqes(&c->rq, timeout);
+>  
+>  		/* Don't wait on the XSK RQ, because the newer xdpsock sample
 
 [Severity: High]
-Where is bpf_syncookie_th() defined? I can't find it in this commit or
-later in the series. This comment is the only place the name appears.
+How does this behave on a cyclic RQ? The flag is set for both RQ
+types, and mlx5e_skb_from_cqe_linear() and
+mlx5e_skb_from_cqe_nonlinear() now take XDP-only net_iovs. A provider
+can therefore back an RQ that runs with striding RQ disabled through
+the priv flag, or on a device that lacks it.
 
-The syncookie helpers that XDP programs can call still read th->doff
-twice from packet memory:
+There, rq->post_wqes is mlx5e_post_rx_wqes(), which asks
+mlx5e_refill_rx_wqes() for the whole missing part of the ring as one
+wqe_bulk. The FILL ring of the socket may hold fewer chunks than
+that, which is the normal case at bind time and under a slow reader.
+mlx5e_alloc_rx_wqes() then stops short, and mlx5e_refill_rx_wqes()
+jumps to err_free. It frees everything it allocated with
+mlx5e_free_rx_wqes() and returns 0.
 
-net/core/filter.c:bpf_tcp_raw_gen_syncookie_ipv4() {
-    ...
-	if (unlikely(th_len < sizeof(*th) || th_len != th->doff * 4))
-		return -EINVAL;
+mlx5e_post_rx_wqes() then sees count != wqe_bulk and sets busy
+regardless of rq->xsk_pool. mlx5e_napi_poll() returns the full budget
+without calling napi_complete_done(). NAPI keeps rescheduling itself
+in softirq, posts nothing to the hardware, and never parks to wait
+for the socket to wake it. If the UMEM has fewer chunks than the
+ring, the bulk can never be satisfied and the CPU spins
+indefinitely.
 
-	mss = tcp_parse_mss_option(th, 0) ?: TCP_MSS_DEFAULT;
-    ...
-}
+The striding path posts what it got and only reports busy when
+rq->xsk_pool is set, so it idles until xsk_sink_wakeup(). Should the
+cyclic path do the same for a provider-backed RQ, posting partial
+bulks and not reporting busy? Or should
+PP_FLAG_ALLOW_XDP_ONLY_NETMEM be limited to the striding RQ until it
+does?
 
-tcp_parse_mss_option() then reads doff again to decide how many option
-bytes to walk:
+[Severity: High]
+Can the new RQ end up with no posted WQEs at all when the channels
+are switched while a provider is bound? Before this change, the wait
+here would at least time out and queue rx_timeout_work. Now the RQ is
+skipped silently.
 
-	int length = (th->doff * 4) - sizeof(struct tcphdr);
+On devices with tis_tir_td_order, mlx5e_switch_priv_channels() only
+deactivates the old channels. mlx5e_close_channels_xsk() then closes
+just the RQs that have MLX5E_CHANNEL_STATE_XSK set. The regular RQ of
+old_chs and its page_pool stay open while
+mlx5e_activate_priv_channels() activates the new channels and
+mlx5e_trigger_napi_icosq() runs their first refill.
+mlx5e_safe_switch_params() closes old_chs only after that.
 
-bpf_tcp_raw_gen_syncookie_ipv6() does the same thing. So does
-bpf_tcp_gen_syncookie(), which checks doff and then re-parses the
-options through tcp_v4/v6_get_syncookie().
+The chunks that the old page_pool has taken from the provider keep it
+as their owner. When the new RQ refills, sink->released is still
+empty. A chunk from the FILL ring that the old pool owned is put back
+into the old pool's ring rather than handed to the new one. The
+allocation fails. mlx5e_post_rx_mpwqes() posts nothing and returns
+false, since rq->xsk_pool is NULL, and NAPI completes.
 
-The verifier only checks th_len bytes, because arg2 is ARG_PTR_TO_MEM and
-arg3 is ARG_MEM_SIZE_OR_ZERO. With a sink buffer, a userspace thread can
-change doff from 5 to 15 between the check and tcp_parse_mss_option().
-Could the parse then read up to 40 bytes beyond the region the verifier
-checked?
+When mlx5e_close_channels(old_chs) later destroys the old pool, its
+chunks move to sink->released, but nothing schedules NAPI on the new
+channel. No RX WQEs are posted and no UMR is in flight on the ICOSQ,
+so no completion will arrive to wake it. The queue stops receiving.
 
-xdp_sink_mark() also sets XDP_FLAGS_SINFO_EXT on sink buffers, so
-xdp_data_hard_end() reserves no shared-info tailroom. A program can grow
-the tail to the end of the frame. If the TCP header sits at the end of
-the last UMEM chunk, can the extra read go past xdp_vaddr + xdp_vsize
-and fault in NAPI context?
-
-Classic AF_XDP zero copy has the same double fetch, but there the
-shared-info tailroom keeps the extra read inside the chunk.
-
-Should this patch add the copy-and-check that the comment describes for
-these helpers? Or, if it is meant to come later, should the comment
-point to something that already exists?
+This is reachable from MTU changes, ethtool ring and channel changes,
+priv flag changes, and mlx5e_safe_reopen_channels() during recovery.
+Should the RQ that a provider backs be closed before the new channels
+are activated, as is already done for the XSK RQ? Or should NAPI on
+the new channel be kicked once old_chs is closed?
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261124112707.118678-1-bjorn%40kernel.org
