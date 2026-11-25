@@ -1,66 +1,80 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.152
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795617055;
-	b=indO2UPcIZ7YJmmbPmvR1BKgd6Dx1rs9ZiMzmV9V0cSfZTSN4erd9adq4HkryUkIjXCc
-	 Q+voLcnXlmV9EaOs3oFc1q8jmodWFisUQO/nopuKag9Ii+CgPx76NZ11Awmj5Q1Ds6unW
-	 18XUFArfCrCZdEKL/2vkQGHj7omRUKWtRlIN7lWwanPAxLTqPqHDqMEPckJxEalx0fXgd
-	 XyPzPtFE2iJWl69PYvu2Fl5bDGmlGs/s01agdFbWdloGcqC6ztWIx6MWLhKke15CazNT7
-	 /41nL4JWpBUUpyPsTNUcarkWh/iLruMiZ8ywm9XLS1gXUdZllxScoYeoTGP7svrDhJg==
+	t=1795617121;
+	b=Zm6Y798X6SfUDSK6oFiGr846oXW4XLcfVmUfVE5t4uTk1pv2R4JW2JXh+5ic647qOklR
+	 KhNuQtrx2jQScGZICcnY5f39IYqsBEmzDfkkUwcdfE/hnPf/JsqnDgcQiWpWKZuYyp+/t
+	 wr+YLBlS16rYrMl2qtXoISMulE0ig0wrMokBxmGYSsskEC5oQEgwfh3I0OY+FxUN+jh8N
+	 bh7QXR4bylRvWKPszjT945cHZRXE+jL5FezePKGLX0kWHoYUEVfZiYk+9CT+N8SsDHXGR
+	 +egwo/PSTdrF/jhqvEXYq5GzngENE17mFCCd5HliXxER+WfnXFXNWPWhYmw/mGIXXgw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795617055;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=o7NfTeHgie8kk98wdxr3cUN3JAiQZkYebkrK1SD6t6w=;
-	b=zO5TG3hwD+eE174BATZIfKjAbHE55kbUtWYUx5RtnHcGTeaTzOqglRj4iFW7qejMMCYb
-	 UCWp+8gJtN2XeMNwC9dCTRONcFSm51YF5RmgFPec++9znM/FYS3OFmVbcmmJCsaKCGoJ9
-	 HdpGSHqAOevFf5b4LBnR2xSLY+QfuZqJ/Hxs8ALj0TIQUngYvyKyCfecnAInwj1ccA0zV
-	 s5TqQhK5osWLEzUUgp74kt8ZwYL1CsCsvjdCyLOsvkpZtY08cRLa7iiRB8+ntiwRSk7Am
-	 P8Tb5PfiZ4cNE4GYUZES6QtJYgVD8djaCd0zViTU8f8D46g5WaInyny/bbCaLVgvxjA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795617121;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=W9vKBkuf9EfCK/eG7T7fyygPvv7SG3tP86gxBxZ2fjY=;
+	b=V9K5rjJq77dxXIc3tJgccJGV/UG+0xhpqeU07o8eax61ElJ/4Lbj/S9YpB7v/VIsAp2d
+	 R+cApEWcnYwxCqWYbSmf505+PxqydjPoz0FqTpx1c3OGD2s/cFoU34hKtk+/0i1QX53eJ
+	 0Lr7/WeBzREY41eGZeMN8TYebDRaL+0yY33hRINQt7wWfZd5ar6QvYveraYI4mX4Dy+P2
+	 cu6aW9BAxRzLq/mgQZxjG4NSie1ut5NzahFe+qHrmhimJvAQnOvOcgWynv+EMk+U0NTBJ
+	 WBYrudPVuvzPxEtXKugIr+rbXMvgL9K+7xnIM4UqXqkk/fy99zdiM11zx8N5KR8A7sA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BetaRQnY;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=BYoKa5HF;
+	arc=none smtp.remote-ip=95.215.58.152
+Received: from mta1.migadu.com (out-152.mta1.migadu.com [95.215.58.152])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 052F6606A321;
-	Wed, 25 Nov 2026 14:30:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEF02606A332
+	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 14:31:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BEF02606A332
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BetaRQnY
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99ACE1F000D0;
-	Wed, 25 Nov 2026 14:30:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795617054;
-	bh=o7NfTeHgie8kk98wdxr3cUN3JAiQZkYebkrK1SD6t6w=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=BetaRQnYjnzenM/h40NWfe8nEyvUTBR0OueMt/3UKx9DphWz5Jz+xIVdKbjZGzqjr
-	 xvkFy4THWdsptklDzOyBa65zOoqT96e81bl+eq2pCE1lHLWudPYCDr9GBzAqQB2pfZ
-	 CXhHzUwrtVlcN6cn/5dgEEjfx0eEdeZPYZHoW5BnxzOl8Q1U/Rlp+mGjwKnzyGhX/r
-	 o+Uvo+FOCvjFwO6iSz7GU8/Fd8GVgkk8v30gw2LMKQT0x5N4vzBoQUiQtpKloaYUGB
-	 uuv/vxu6/v+icbuGJBKEBNpvxlM1T0XNbvqMBtiVZzZIWk2BrDrPpVa5mxuDF5vYan
-	 C5p8uR7gn1fZg==
-Date: Wed, 25 Nov 2026 14:30:52 +0000
-From: Harry Yoo <harry@kernel.org>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org, andrii@kernel.org, eddyz87@gmail.com, 
-	memxor@gmail.com, daniel@iogearbox.net, 
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>, Clark Williams <clrkwllms@kernel.org>, 
-	Steven Rostedt <rostedt@goodmis.org>, linux-rt-devel@lists.linux.dev, 
-	Vlastimil Babka <vbabka@kernel.org>, Hao Li <hao.li@linux.dev>, 
-	Andrew Morton <akpm@linux-foundation.org>, Suren Baghdasaryan <surenb@google.com>, 
-	Michal Hocko <mhocko@suse.com>, Brendan Jackman <brendan.jackman@linux.dev>, 
-	Johannes Weiner <hannes@cmpxchg.org>, Zi Yan <ziy@nvidia.com>, linux-mm@kvack.org, 
-	David Hildenbrand <david@kernel.org>, Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, 
-	Boqun Feng <boqun@kernel.org>, Waiman Long <longman@redhat.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next v1 1/4] bpf: Add call for selecting kmalloc or
- kmalloc_nolock at call time
-Message-ID: <awbvek-HS3OJYJGF@thinkstation>
-References: <20261124060357.11700-1-emil@etsalapatis.com>
- <20261124060357.11700-2-emil@etsalapatis.com>
- <DN38HGVL8JHQ.2ZVZQCKFXVA9T@gmail.com>
- <awWRZ9xCzWLnj_R6@thinkstation>
- <20261125140902.GE2668804@noisy.programming.kicks-ass.net>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=BYoKa5HF
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=XKKXO3M5xHnltq0mNRZ0f54bFSZ0rb5xvZeNSjm/bpw=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1795617117; v=1; x=1796221917;
+ b=BYoKa5HF3cO2wpf3Q55gkeZHM9JZR495dSzvCQD3W2PQK+Kmp9QuYPfJJIA/zwBoVC4vH15y
+ Ppbh0+HEKnX+bZwJEVSSXi1bw5HVzqtwZ/8q2t1V8CmpRN802Jm5Fpxj9DmhLRuEp38vKuSXk8U
+ MAOUDC+fNubNVpT9+kE6mSCY=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id aab6a3ba64b69de4;
+	Wed, 25 Nov 2026 14:31:57 +0000
+X-Mizu-Trace-ID: aab6a3ba64b69de4
+X-Migadu-Flow: FLOW_OUT
+From: Leon Hwang <leon.hwang@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Matt Bobrowski <matt@bobrowski.net>,
+	Shuah Khan <shuah@kernel.org>,
+	Leon Hwang <leon.hwang@linux.dev>,
+	linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	netdev@vger.kernel.org
+Subject: [PATCH bpf-next v4 0/6] bpf: Add log support for tracing link_create
+Date: Wed, 25 Nov 2026 22:31:32 +0800
+Message-ID: <20261125143138.47174-1-leon.hwang@linux.dev>
+X-Mailer: git-send-email 2.55.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -70,68 +84,89 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261125140902.GE2668804@noisy.programming.kicks-ass.net>
+Content-Transfer-Encoding: 8bit
 
-On Wed, Nov 25, 2026 at 03:09:02PM +0100, Peter Zijlstra wrote:
-> On Tue, Nov 24, 2026 at 01:59:31PM +0000, Harry Yoo wrote:
-> > [+Cc Relevant folks]
-> > On Tue, Nov 24, 2026 at 06:40:11AM +0000, Alexei Starovoitov wrote:
-> > > On Mon, Nov 23, 2026 at 10:03 PM Emil Tsalapatis <emil@etsalapatis.com> wrote:
-> > > > +	/* Only try the spinning allocation when preemption disables are tracked. */
-> > > > +	if (IS_ENABLED(CONFIG_PREEMPT_COUNT) && can_spin_in_alloc() &&
-> > > > +	    size <= KMALLOC_MAX_CACHE_SIZE && !(flags & ~nolock_flags))
-> > > > +		ptr = kmalloc(size, flags | GFP_NOWAIT | __GFP_NOMEMALLOC);
-> > > 
-> > > It works, but I after a bit of brainstorming the following
-> > > might be a better fix, since it will address the root cause:
-> > > Pls run it by Vlastimil, Harry, Sebastian.
-> > >
-> > > diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> > > index 2fef409..4368ab5 100644
-> > > --- a/mm/page_alloc.c
-> > > +++ b/mm/page_alloc.c
-> > > @@ -2536,6 +2536,24 @@ __rmqueue(struct zone *zone, unsigned int order, int migratetype,
-> > >  	return NULL;
-> > >  }
-> > >  
-> > > +static DEFINE_WAIT_OVERRIDE_MAP(zone_nolock_map, LD_WAIT_CONFIG);
-> > > +
-> > > +/*
-> > > + * zone->lock is always held with IRQs disabled. A caller that runs with IRQs
-> > > + * enabled is not nested inside of it, so it can wait for the owner.
-> > > + */
-> > > +static bool zone_lock_nolock(struct zone *zone, unsigned long *flags)
-> > > +{
-> > > +	if (IS_ENABLED(CONFIG_PREEMPT_RT) || irqs_disabled() || in_nmi())
-> > > +		return spin_trylock_irqsave(&zone->lock, *flags);
-> > > +
-> > > +	/* The caller may hold a raw_spinlock_t. */
-> > > +	lock_map_acquire_try(&zone_nolock_map);
-> > > +	spin_lock_irqsave(&zone->lock, *flags);
-> > > +	lock_map_release(&zone_nolock_map);
-> > > +	return true;
-> > > +}
-> > 
-> > I'm not sure this is a better solution unless this could be generalized
-> > or abstracted further.
-> 
-> This is absolute atrocious shite. You cannot attempt a spin_trylock from
-> NMI context. That thing might be a mutex.
+I'm planning to add syscall common attrs support for LINK_CREATE cmd.
 
-Uh, right. We went through this when kmalloc_nolock() was introduced.
+This is the second series for the plan, that adds syscall common attrs
+support for LINK_CREATE of tracing prog and cgroup prog.
 
-> This should not work; if it does, that is an accident we need to fix.
+BTW, address Andrii's review [1] in patch 5:
+1. Change if (!OPTS_ZEROED(opts, iter_info_len)) to if
+   (!OPTS_ZEROED(opts, log_opts)).
+2. Add comment to iter_info and iter_info_len that they are
+   deprecated, and use iter.info and iter.len instead.
 
-Current implementation handles this by can_spin_trylock() in
-mm/internal.h.
+Links:
+[1] https://lore.kernel.org/bpf/CAEf4BzbW4zwL-9j8e2B6KNXVNwsfWyMSAo_RsGCqv-nu_yGhTg@mail.gmail.com/
 
-One remaining accident we're aware is that we cannot attempt a
-spin_trylock or local_trylock under pi_lock (even on !RT).
+Changes:
+v3 -> v4:
+* Collect Acked-by tag from Jiri, thanks.
+* Change 'tgt_fd' to 'target_fd' in patch 1. (Sashiko)
+* Trim tests to 4 tests for tracing, tracing_multi, iter and cgroup links.
+  (Alexei)
+* v3: https://lore.kernel.org/bpf/20261123152743.19629-1-leon.hwang@linux.dev/
 
-Currently I don't have a good idea to fix this :/
+v2 -> v3:
+* Add log support for bpf_check_attach_btf_id_multi().
+* Add more selftests to cover more logs for link creation failures.
+* Update some log messages in patch 1. (Alexei)
+* Add log for dst attach type check in bpf_check_attach_target(). (Alexei)
+* Update some log messages in patch 2. (Alexei)
+* Pass 'log' to btf_attach_func_proto() and btf_distill_func_proto() in
+  bpf_check_attach_btf_id_multi(). (Alexei)
+* Add a log msg in check_dup_ids() when dup ids. (Alexei)
+* Add a log msg in bpf_tracing_multi_attach() when it returns
+  -EOPNOTSUPP. (Alexei)
+* Swap function names between iter_info and iter_info_len selftests.
+  (Sashiko)
+* v2: https://lore.kernel.org/bpf/20261114150610.84507-1-leon.hwang@linux.dev/
+
+v1 -> v2:
+* Add log_opts support for bpf_program__attach_iter() API in libbpf.
+* Add test to verify the log for freplace max_ctx_offset case.
+* Update a subtest to verify the log_opts in bpf_program__attach_iter()
+  API.
+* Add log for freplace max_ctx_offset case. (bot+bpf-ci)
+* Drop unnecessary bpf_verifier.h include. (bot+bpf-ci)
+* Change log to "Invalid tracing attach_type.\n" when the link
+  attach_type is not prog->expected_attach_type. (bot+bpf-ci)
+* Change BPF_XDP to BPF_TRACE_FEXIT in tracing link_create test.
+  (bot+bpf-ci)
+* Drop dead iter.len check in libbpf. (bot+bpf-ci, Sashiko)
+* Add OPTS_ZEROED(opts, iter) check. (bot+bpf-ci, Sashiko)
+* Swap log positions of iter_info and iter_info_len. (Sashiko)
+* Update bpf_program__attach_iter() to use iter.info and iter.len.
+  (Sashiko)
+* v1: https://lore.kernel.org/bpf/20261109140816.5196-1-leon.hwang@linux.dev/
+
+Leon Hwang (6):
+  bpf: Add log support for tracing link_create
+  bpf: Add log support for tracing_multi link_create
+  bpf: Add log support for iter link_create
+  bpf: Add log support for cgroup prog link_create
+  libbpf: Add log_opts support for BPF_TRACE_ITER
+  selftests/bpf: Test tracing and cgroup link creation logs
+
+ include/linux/bpf-cgroup.h                    |  6 +-
+ include/linux/bpf.h                           |  9 +-
+ include/linux/bpf_verifier.h                  |  3 +-
+ include/linux/trace_events.h                  |  7 +-
+ kernel/bpf/bpf_iter.c                         | 27 ++++--
+ kernel/bpf/cgroup.c                           | 76 ++++++++++++-----
+ kernel/bpf/syscall.c                          | 30 +++++--
+ kernel/bpf/trampoline.c                       |  5 +-
+ kernel/bpf/verifier.c                         | 51 ++++++++---
+ kernel/trace/bpf_trace.c                      | 27 ++++--
+ tools/lib/bpf/bpf.c                           | 23 +++--
+ tools/lib/bpf/bpf.h                           |  8 ++
+ tools/lib/bpf/libbpf.c                        |  5 +-
+ tools/lib/bpf/libbpf.h                        |  3 +-
+ .../selftests/bpf/prog_tests/link_log.c       | 85 +++++++++++++++++++
+ 15 files changed, 290 insertions(+), 75 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/link_log.c
 
 -- 
-Cheers,
-Harry / Hyeonggon
+2.55.0
+
