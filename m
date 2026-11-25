@@ -1,56 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795578516;
-	b=BR2WBrx/+7YHCpJ8HaUTxjiCTD4HyZoYuSX3enGJgXvem1BUL00lCN3dC2ToKgDQiz9S
-	 gMV1QrOjg1eU8u564g1MhZFAykesLC/WLPZ2ruCcaPferwcYNpQQS4TLYnYRjV0OAQ58e
-	 +LHQfJ0dPeS//YdUgZF4Kx7Y73OAcML89bCAbHywAPYsQaPgeHosJlcANhsFNmUxzzSCk
-	 8qC37OqzRigsBcXEtZCT3+ZWaPFcaf9UWVgkyYRaH08ihRIBgKmjyJhrg61H4103v5Snu
-	 2iXLtQZ1WrCb/e4ZR+FpVMyx1mUPy/e9LHWNfHZhH40737cidj1QPsZZfU9NE5eaeYQ==
+	t=1795578537;
+	b=aqk5IUHFyiQeV7jL8esiP61JRsP/JdZo1KcKmTMyN9mnLXUziTrN8POtTe8iGq/2fLMo
+	 61+nlx0TwYcsG4UDpL9QB0wp+k5EBPP/HFID1SLesRu3F4qNn/CVcv+MUFUCK+0qKfRTb
+	 DciR2o1+LzePIbACkgI0SNs80PQNLsxwMPQXxPYf4In45raTY5KDYqsCpWZ/jU1pQYlXS
+	 5vaOjEZL722oKVAnNd3dM7H4Iitje8KX88LM0Mj024xfW7BuIySI4Dn0pV8TJ1eGiHEr0
+	 4Eu7jjxbQu0sjv7dugb3e6kLhf43aeV/GGVX40JnJ1T+r+hCXU7EQ5UWEUMSwDwUkmg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795578516;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795578537;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=8Ttx7XCVkthCgqojx3GiZ18Ov1zXrMBznLrdGDtmANk=;
-	b=AAiAEyV89lbdi57qS+p/pRofB9Coprj2JdD0ZKU5tRM+VOOlGt8jQbscyjaUgTyG1tyf
-	 GKRgvzCwAYgvQmRD2cGwCS7di25XZb4dBh4lP2oRz19kzYHG2whSl6ihgBDQmaIY++nxA
-	 XgJH9fsys+i/E3jFXM+HHsJvamfQKUB3GpvBElZ+yFIFTQLXCxVXUjMfsc8Gdol2GtQ0F
-	 2kMIvyDDNDQEICy9iFQlxtWZI+/PDtFrNHZcCzgPjiG8nEFXqZHtsk8WQHILkMIpWZ3r3
-	 Q2r+MBxITgqxZ5vGbCYvHg+zyW1iFbM8Uzt4REI9/m8DSjjSaj9DZARY/lkHP2B1lHA==
+	bh=qNZAY6UfltGZFyhV5agfg0LJhkYXtfgZdrwzmXs1Lw4=;
+	b=Q8tqDFLjiNcIGJluTmiV5YVQ/WgxBY0u1e13Cm7/Y4HlI/lHAdq7V9mrHqpn6cYpC6wT
+	 2B82VXoNvzC5JB9IPjTA42QnoS84ZUb12hKxuBwGJrTI56x0DO1ItIDaoRufbG4GnpXrr
+	 GGGwm5gSeaLighO2N8Je+hoxMX1Dj8zEVvGD3CEHBNjf5CWv390XGmnviNBVBnNnasvsT
+	 0Zu3CEjoHZGobWrxnnzo1gL9+2+zwYGIjU867K23V4OF8p36YoRkDeHd7zXMqpXNjyDSX
+	 H69FGIybNKEAnuQtUuahCt7oycCD1enMJrWm+JIlmvd8f61Fba4w65J7nlcW7SrrH+A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PK+QtqSv;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Xr0oW9a1;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 304AF606A31E
-	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 03:48:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76CB4606A31E
+	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 03:48:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PK+QtqSv
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED3391F000C0;
-	Wed, 25 Nov 2026 03:48:35 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Xr0oW9a1
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 924731F000CA;
+	Wed, 25 Nov 2026 03:48:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795578516;
-	bh=8Ttx7XCVkthCgqojx3GiZ18Ov1zXrMBznLrdGDtmANk=;
+	s=k20260515; t=1795578536;
+	bh=qNZAY6UfltGZFyhV5agfg0LJhkYXtfgZdrwzmXs1Lw4=;
 	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=PK+QtqSvRXJO0ud6wlkeeQmOv1r6QtbAFsCpM3mZyQr6jyU5K3sk69sN+VrcTLLVb
-	 j3uBNCc9L8dLyS4eR0yRg0PXzfLlOnsUFyWMMw9S7u+K7gr4gb4wQVk5h6KDxAGxhD
-	 sqB2Lv7ffjKl73wglDk4XJS2bVjMesyjK4f9CWJ76bMJgV9GnXrTncEry/7GuAfgB3
-	 FD/KiQc/51ehcGngiSv2fe6BuUZd9KsoCI3hKLVyP3kqcVD5Q/LNPjOflB4Y4of3g5
-	 ZRNy8udbd2EXWeMUXjEtr5KihO0oDEBYyFo/L3gpbvvhbCFS4kuXMyxHYLuXQmsWRE
-	 m7cdnOxYG1pCA==
-Message-ID: <sashiko-outbox-232511@kernel.org>
+	b=Xr0oW9a1CPKSzqDUQ7fFREwjowo64ZQnSp8Iyewzjm9X2LtOrVh2Mckm7eRVryQsA
+	 la34XYupBGVtKCYpyy3a1P5yonua/Ujdd/YRaYEh2ASDaEz9Rili83E1MLrU7buER+
+	 K1URr4a9t4GR9A5G5SQJW4wegbCo+uW+Q8l4EE8Ybk4QqO4bztIxDad/5Jnah+4+Os
+	 ih/wcY+5clSVEPdNboj7zLvB8Evt4ztCJY7OP6UeKcIt45qCsekoovk56O0jlWsGcr
+	 7FhbOhaSStvMS4rZXxGq7zjOOMpAmB+p3n0WqL2WZhPOduDqdxbasjrslABfC54htM
+	 WU+TObMXufUfg==
+Message-ID: <sashiko-outbox-232513@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf 22/47] bpf: Flush TLB when a page of arena replaces
- the scratch page
+Subject: Re: [PATCH bpf 12/47] bpf: Check for NULL in helpers that take a
+ kernel pointer
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-In-Reply-To: <20261125032938.670542-23-alexei.starovoitov@gmail.com>
+In-Reply-To: <20261125032938.670542-13-alexei.starovoitov@gmail.com>
 References: <20261125032938.670542-1-alexei.starovoitov@gmail.com>
- <20261125032938.670542-23-alexei.starovoitov@gmail.com>
+ <20261125032938.670542-13-alexei.starovoitov@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 25 Nov 2026 03:48:35 +0000
+Date: Wed, 25 Nov 2026 03:48:56 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -63,66 +63,50 @@ Precedence: list
 Thank you for your contribution! Sashiko AI review found no new issues
 in this patch, but noticed 1 related pre-existing issue it does not
 introduce:
-- [High] arm64/mm: ptep_try_set() undefined when CONFIG_ARM64_CONTPTE is
-  disabled [1]
+- [Critical] bpf: uninitialized memory leak in bpf_copy_from_user_task()
+  [1]
 --
 
-commit 4eb6b85f2fe787d069b3bed0effa2468a69cda9e
+commit 021b75463c0bf9eb8fa8c4cfc85b4a67aea33848
 Author: Alexei Starovoitov <ast@kernel.org>
 
-bpf: Flush TLB when a page of arena replaces the scratch page
+bpf: Check for NULL in helpers that take a kernel pointer
 
-This commit flushes the TLB across all CPUs after dropping arena->spinlock
-when a newly allocated arena page replaces the scratch page on architectures
-without flush_tlb_before_set(), or fails and defers freeing the range when
-the caller cannot sleep.
+This commit adds NULL checks for BTF pointer arguments in several BPF
+helpers to prevent NULL pointer dereferences.
 
-> diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
-> index 2c6ddec747def..56bd02b783f98 100644
-> --- a/kernel/bpf/arena.c
-> +++ b/kernel/bpf/arena.c
-> @@ -149,6 +149,8 @@ struct apply_range_data {
->  	struct bpf_arena *arena;
->  	struct llist_head *pages;
->  	int i;
-> +	bool can_flush;	/* the caller can flush TLB of all cpus after it drops =
-the lock */
-> +	bool flush;
->  };
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index bc0dd36a2799a..749169a0b157b 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -726,7 +726,7 @@ BPF_CALL_5(bpf_copy_from_user_task, void *, dst, u32,=
+ size,
+>  	if (unlikely(!size))
+>  		return 0;
 > =20
->  struct clear_range_data {
-> @@ -189,6 +191,12 @@ static int apply_range_set_cb(pte_t *pte, unsigned l=
-ong addr, void *data)
->  			continue;
->  		if (WARN_ON_ONCE(pte_page(old) !=3D d->arena->scratch_page))
->  			return -EBUSY;
-> +#ifndef flush_tlb_before_set
-> +		/* The scratch page is in TLB, and it takes an IPI to flush it */
-> +		if (!d->can_flush)
-> +			return -EBUSY;
-> +		d->flush =3D true;
-> +#endif
->  		ptep_get_and_clear(&init_mm, addr, pte);
->  		flush_tlb_before_set(addr);
->  	}
+> -	mm =3D get_task_mm(tsk);
+> +	mm =3D tsk ? get_task_mm(tsk) : NULL;
+>  	if (!mm) {
+>  		memset(dst, 0, size);
+>  		return -EFAULT;
 
-[Severity: High]
-This problem wasn't introduced by this patch, but on arm64 with
-CONFIG_ARM64_CONTPTE=3Dn, aren't ptep_try_set() and flush_tlb_before_set()
-left undefined [1]?
+[Severity: Critical]
+This problem wasn't introduced by this patch, but does the early -EINVAL
+return for non-zero flags just above in bpf_copy_from_user_task() leave
+dst uninitialized [1]?
 
-arch/arm64/include/asm/pgtable.h defines both helpers inside the
-#ifdef CONFIG_ARM64_CONTPTE block even though they operate on init_mm and
-do not depend on contiguous PTEs.  When CONFIG_ARM64_CONTPTE is disabled,
-apply_range_set_cb() skips its #ifdef ptep_try_set path, while a kernel
-fault on an unmapped arena address still reaches __do_kernel_fault() ->
-bpf_arena_handle_page_fault() -> apply_range_set_scratch_cb(), which calls
-the no-op ptep_try_set() stub in include/linux/pgtable.h, reports the
-fault as handled without mapping the scratch page, and hangs the CPU in an
-infinite page-fault loop.
+kernel/bpf/helpers.c:bpf_copy_from_user_task() {
+	/* flags is not used yet */
+	if (unlikely(flags))
+		return -EINVAL;
 
-[1] https://sashiko.dev/#/bug/linux-b7d0ea8c-0c63-439f-9b21-bfd45fea82bb
+bpf_copy_from_user_task_proto marks dst as ARG_PTR_TO_UNINIT_MEM, so the
+verifier treats dst as initialized after the helper returns even on
+error, allowing the BPF program to read uninitialized stack or map memory
+when non-zero flags are passed.
+
+[1] https://sashiko.dev/#/bug/linux-63188542-7120-4444-b9a3-9977c77b0e2d
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261125032938.6705=
-42-1-alexei.starovoitov@gmail.com?part=3D22
+42-1-alexei.starovoitov@gmail.com?part=3D12
