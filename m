@@ -1,72 +1,75 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.200
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.199
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795567882;
-	b=G4dG6uiXiVSPoYu7GG8OovK4sScYjH+MkHSWrzPYmmtLNxNH0Tg+N4vbWPTmfgFAEwws
-	 Q5QBKefcUaA411CfovgmShpqSgC/zyPEATTOzYShm40CHR2KRxU0PtMJt0ImDfHRvGE5/
-	 XWll6aMwbnhjw351Hv6DKs/MQ13bGttp0NzJkNTAUpJi72d2EHYiqFvT1StrNsKAP7jnr
-	 2pT0UqtdHceGPs8EwzP72ch3WCa43WKS1Fa8OLPIQSZnOl7wy6uXsW2GOTgBC0aJcsZRf
-	 sNyhFLvC9I7I3E5Oom5/ICQ0NnaTSuPsfyB+t2WAoCZVI8r8Q2Wno7Oq2ciMdl+P0Yw==
+	t=1795567883;
+	b=VmCjxdt+HHSamWhU77Hl5cE7iMXiNzHKpdkEOphCA7ifVIUcU207fQpLh21KIZYg+L/F
+	 AvtGl483XHb6KW/D3Qf3euV1376UJgVyEu/j846jIQjvguE9eLHJROrYy2lcsnDyw6v8O
+	 AdWQPUX8uZRLhu9UQlVDEk806SNX4h+j/o6k1Q/1iaTSavPD5Xb1qMK5u0a7wMQvJpqbO
+	 8UIqP1dT3XjLM0GClzk6tg4dAr2pfXGYz7CKwkfUKeD8K+x4MfYxBoV9DmkuzJQqAEGDE
+	 YP/3Vo6ue5bT93/3igpsct5Qo5XOjf5dPOnvKu32zp1V4U/0Zi0SUESOyi/YXX8YoiQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795567882;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795567883;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:Mime-Version:
-	 X-Mailer:Message-ID:Subject:From:To:Cc:Content-Type;
-	bh=xn05DNXJx3ZrmbBdEnb3GxLRVxQ7tTbOGpqpdS+/kMM=;
-	b=4sRk114b+RxjkU0axoNQm0P3OksdhaNrgIVtBbIAJgANDCbGqs4zpkg8LpQAQZNzThIW
-	 8KG9aTn6XMW3H6m0hYIfuvcO4mrEXt+chEcccSnnwunxMmFrIWmmaBiE25KQjRMItUeQr
-	 pOIw7mAJU7kjL9qLH/TeuB3NpQ3y5OZmWEdAKg6vKxE0RDjlxcKnJIN8KySwCRlV7fEeE
-	 Bkajg7X7qyeYwIF+PTiGpntf1tdcxVO+TkkZJ+BFiJgOgnALw1OIyELOx1o5Shx02LiGv
-	 EqXYDAzrSCYf8AoQAsfnwrb3OynjvC469MKgHE7Si4bBfLFalIzIo1xzALnobE1NARQ==
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
+	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
+	 Content-Type;
+	bh=p2fy+DpqSZGCjXCmXOGO/oc1L9NBEimm7FRwFXyUqLA=;
+	b=qA1Y/dHVKfFasfzEPQSBVEW6dWmmUGcYjlIdKq9Ch8tvjq9BsXp35UfGZ5ogNDMLiGWz
+	 T+fFSNb5C/HFySKD2Pnjjv+3U6UaqJbdsTmwfTy48XOfne9+YqpfX9Zqdc3rKe9bKktsV
+	 bqwg4G3/QgU7p9/TjqwnTUl62WsXyA2CmvBTXh/8eLRR1qMWnDyRgJdB5y4I0I/5vny6Z
+	 8KS6E62aTfLMfmMTk+UbSw0LPgbFr6VaVnMd+fmyXrkdfLFq6i+7Jg/oJeOMNsbzH15cp
+	 8Xwb8QEUb5YLeiosUQ2TMcvT5rBDPaTwKiBAIWdDcXs0EAZv/AMAnSC3Cf6D29vBSKw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--irogers.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=IeVgVvsE;
-	arc=none smtp.remote-ip=74.125.82.200
-Received: from mail-dy1-f200.google.com (mail-dy1-f200.google.com [74.125.82.200])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=M3VRzKsP;
+	arc=none smtp.remote-ip=74.125.82.199
+Received: from mail-dy1-f199.google.com (mail-dy1-f199.google.com [74.125.82.199])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3D1E606A31E
-	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 00:51:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B3D1E606A31E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49CB7606A334
+	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 00:51:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 49CB7606A334
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=IeVgVvsE
-Received: by mail-dy1-f200.google.com with SMTP id 5a478bee46e88-386b8624cf7so5839047eec.1
-        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 16:51:21 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=M3VRzKsP
+Received: by mail-dy1-f199.google.com with SMTP id 5a478bee46e88-33c35f5ca6cso6898674eec.1
+        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 16:51:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795567881; x=1796172681; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=xn05DNXJx3ZrmbBdEnb3GxLRVxQ7tTbOGpqpdS+/kMM=;
-        b=IeVgVvsE8XPiJVP51wPpsrsuuT+h3agsYQgtQlAcUQvwYFBfWzKe53xNQjsIL+wfLC
-         GYe/5hhlz8jax9H5tKG3B4jBo8Ng7vpvGISlwgwLFDh03AKC6/0Pp3ueLCjtQg+GoX0m
-         IYBB9mDnkDhei9MkzhcBdUdAHPQxJUXe/rBDvUGBzdEL5QULW1EA4Xuvxicl2hnsG7QM
-         xh9A8iJIJD54+2ELaH/M7h7RY11uYFqeXYdeKZzA8/OKISGFAIdD0AN52etsZ+jF5Xc1
-         pQ7R36/quP9/HYmvmy4fMuBcTmif44p+o40GBmnOIoZd1iIgWUV7pfeLmOycmxYIo210
-         NmzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795567881; x=1796172681;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=google.com; s=20260707; t=1795567883; x=1796172683; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=xn05DNXJx3ZrmbBdEnb3GxLRVxQ7tTbOGpqpdS+/kMM=;
-        b=XQKF5Rh8nEJYQ//YfaSgevGw17MMA+iX9zIF+AEGTJISxq4rw5aqidHqFcoYbI5PWC
-         DsuW70m9Ng5/rSVNq4p3IMReCu9S4wNkMtvTwTKoiqqPqbaaY8Snbncx6OF717kWcxqO
-         OvaC4T0ss61ri4AAFH9zyfbF6zuE7gSkSouARKjaIQgR8gjEaCtvyt+DZMWaCRWMZPAr
-         zC/SPgAJGVPtnHqGL6rcie1koJCtiJqLzyzjQHE27l1N+6QWs79aSb6OlJJ+QuDW1iGc
-         P/eBIYZ/YQXDJfpVjHRbvyGWNiCTV2GSplmHML7VlspzihG3sJatgP0S2cEKZfS5xmOp
-         fKgw==
-X-Forwarded-Encrypted: i=1; AL+hErHOBAlzD9+qel+dTMmQNJLfVslBGg5xgXis/ggzFW4cmYRYJ5zS1Sqry2wjvlSxhIhA95k=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/cjBFjBnmzitZQpP91Ba3eMtBrnV9I4E0VxUALfdHJB9D8Z9tz
-	cABudOsaOKb8OYZmhfXhQ+lCfqC6vkpa/CAgt22hbvenm1zsy6ZwH9hnbZHC0EJoKSvKt6iDi5X
-	FjRJ6vNbrNg==
-X-Received: from dyaw26-n1.prod.google.com ([2002:a05:693c:415a:10b0:359:a8c8:38e2])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:693c:8859:b0:386:b826:3f9
- with SMTP id 5a478bee46e88-386b82605b9mr5947474eec.7.1795567880388; Tue, 24
- Nov 2026 16:51:20 -0800 (PST)
-Date: Tue, 24 Nov 2026 16:50:49 -0800
+        bh=p2fy+DpqSZGCjXCmXOGO/oc1L9NBEimm7FRwFXyUqLA=;
+        b=M3VRzKsP3UU+jOmahxJ9oJPAs3N0YNRgLeynysUqTwnKN3O2FrO+UiWcovRQjLYdUa
+         PtOKXAvO/ZDaKwWxZtSt0sHyILm1do5CxcIgYdafcJigWctm4SKnk2egJEuZ1t1m/fz+
+         c0+KgN/MA+HzF0EG8xpjKmNbgYocQNTK5o6CpooKWu3xsYvKdqghR7031/P9dZCfa1Qq
+         VwUD1dN5h91xvEhmRQQ5uv1AHWOWFCpLMTcr5uGgZaAzdvnKRoK2iY+s8JfGgjZPf22n
+         bPKDNfWTfpYtv9dYLV1WCJeNxA7y2rihYRc8Xhh6AMam5U1WrHYwcF/AyeIJWcVKZtTe
+         +99w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795567883; x=1796172683;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=p2fy+DpqSZGCjXCmXOGO/oc1L9NBEimm7FRwFXyUqLA=;
+        b=a7hKtqzBLrUzz6bMpIL/190H1j/qbgcG2qw7GcUvprZOtE/obi6EHJw/OgFED1xerN
+         9iTqNJi2QB7zjDb2NXq34yxIyyCzc8dIFCY+1yNwXinCo53/b7latT0hFCzqtEbJFeYs
+         LTGjAhcVq+7eeIb145ZxYpPLC4e+/EFb0rONa0SjEOmreBkFqYu2XVtp3Hnpzo/taQRO
+         9oZ0x1allJ5fyKQujuw3SmP0YwRWjErlH7ETMppQNFf6VIvDIM/wwqpk2mcFPtxbjdxm
+         qdDl7S5Gk5tz7CexlppDmGL/+5+V1z42XI+3uTq3QhqEpHvch68NLZqpVzjdjy721nXF
+         X8Ew==
+X-Forwarded-Encrypted: i=1; AL+hErFtO+tkukHMQobsbk+g+qOQiXc3pwKLIzmQXS8Ujvi3AwOw2ujTCclJYJmGS9yU9e6dclA=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+GECYqjA0mk+GXq6zIz2528td0IuM3fCYofM8+DBvq4k+fb8Sz
+	pNq1RsO8o6frUetA7+SoOgddP0vX9L55wTw84BtthspglH82HGouPEwktIWd9wCcoHe0TlnJhz9
+	xSwv6T5YM2Q==
+X-Received: from dyad21.prod.google.com ([2002:a05:693c:8355:b0:35d:1771:4816])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:693c:42cb:b0:386:b621:d8ec
+ with SMTP id 5a478bee46e88-386b621dc16mr6503137eec.19.1795567882190; Tue, 24
+ Nov 2026 16:51:22 -0800 (PST)
+Date: Tue, 24 Nov 2026 16:50:50 -0800
+In-Reply-To: <20261125005108.1020003-1-irogers@google.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -76,10 +79,10 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 Mime-Version: 1.0
+References: <20261125005108.1020003-1-irogers@google.com>
 X-Mailer: git-send-email 2.56.1.831.g720f3f5937-goog
-Message-ID: <20261125005108.1020003-1-irogers@google.com>
-Subject: [PATCH v4 00/19] perf/core, perf/tools: Add PERF_SAMPLE_BUILD_ID_OFFSET
- support
+Message-ID: <20261125005108.1020003-2-irogers@google.com>
+Subject: [PATCH v4 01/19] perf/core: Protect per-CPU callchain buffer across bpf_overflow_handler()
 From: Ian Rogers <irogers@google.com>
 To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
@@ -97,254 +100,56 @@ Cc: Athira Rajeev <atrajeev@linux.ibm.com>, Alexei Starovoitov <ast@kernel.org>,
 	bpf@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-This patch series introduces PERF_SAMPLE_BUILD_ID_OFFSET and
-PERF_SAMPLE_CALLCHAIN_BUILD_ID_OFFSET to the perf_event UAPI and
-implements full support across both the kernel and perf tools. It
-builds on earlier work making build IDs the default and improving build
-ID handling in perf [1].
+In bpf_overflow_handler(), perf_prepare_sample() runs before bpf_prog_run()
+and saves data->callchain pointing into the current CPU's callchain buffer
+for the active interrupt_context_level(), after get_perf_callchain() has
+already released its callchain_recursion slot.
 
-Based on linux-next (next-20261123) merged with perf-tools-next
-(964e8b1c9c79), which combines the tip, bpf-next, and perf-tools-next
-trees including the prerequisite deferred-output perf/core fixes [4]
-and standalone perf tool fixes.
+If the attached BPF_PROG_TYPE_PERF_EVENT program invokes a helper at the
+same interrupt_context_level() that calls get_callchain_entry() (such as
+bpf_perf_event_output() on a PERF_COUNT_SW_BPF_OUTPUT event configured with
+PERF_SAMPLE_CALLCHAIN and a larger stack, or bpf_get_task_stack()), it
+re-acquires the same per-CPU callchain buffer and overwrites
+data->callchain->nr in place. When bpf_prog_run() returns non-zero and
+__perf_event_output() emits the outer event's sample, perf_output_begin()
+reserves only the smaller dyn_size computed earlier while
+perf_output_sample() copies the overwritten larger data->callchain->nr
+entries, overflowing the ring-buffer reservation.
 
-Background & Motivation:
+Hold the callchain recursion slot via get_callchain_entry() across
+bpf_prog_run() when PERF_SAMPLE_CALLCHAIN has been prepared so nested
+callers at the same context level cannot overwrite the active per-CPU
+callchain buffer.
 
-In order for perf to translate virtual addresses of samples into
-symbols a file and offset within the file are needed. During event
-synthesis perf will create mmap events to facilitate the translation
-of a virtual address to a file and offset by modelling the address
-space of a process. By directly recording in a sample the Build ID of
-a file and the offset within it, no synthesis is necessary. The Build
-ID and offset as a pair are larger than a virtual address, so there is
-a trade-off between synthesis cost and extra size for samples. These
-changes facilitate Build ID and offset as a choice for perf samples so
-the user can choose to use it when they believe it is advantageous.
+Fixes: 0eed28220598 ("perf/core: Call perf_prepare_sample() before running BPF")
+Signed-off-by: Ian Rogers <irogers@google.com>
+---
+ kernel/events/core.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-In practice perf still needs to map a build ID to a file, so by
-default this change keeps synthesis to allow this. It is expected a
-user that knows their build IDs, say through debuginfod, will disable
-this option with --synth=no.
-
-For callchains (PERF_SAMPLE_CALLCHAIN_BUILD_ID_OFFSET and
-PERF_RECORD_CALLCHAIN_DEFERRED with PERF_RECORD_MISC_MMAP_BUILD_ID),
-unique build IDs are deduplicated into a compact variable-length table
-(up to 254 unique build IDs per record) and referenced by a 1-based
-index in the top byte alongside a 56-bit file offset for user frames,
-while non-user callchain addresses and context markers are preserved
-unmodified across architectures.
-
-The kernel support uses the existing build ID and offset support used
-by BPF stack traces (stack_map_get_build_id_offset()). When
-attr.defer_callchain is enabled (the default for `perf record
---buildid-offset`), user-space build ID and offset resolution is
-deferred to a task_work callback where page faults are permitted, with
-resolved entries emitted via PERF_RECORD_CALLCHAIN_DEFERRED.
-
-The Build ID and offset samples inherently don't leak ASLR
-information. As with the ASLR remapping work in perf inject, support
-is added to migrate virtual addresses to Build ID and offset (`perf
-inject --sample-buildids`) for testing and conversion without kernel
-support.
-
-Series Organization:
-- Patch 1: Pre-existing kernel perf/core fix for per-CPU callchain
-  buffer protection across bpf_overflow_handler().
-- Patches 2-6: Kernel UAPI, BPF helper export, and perf/core synchronous
-  and deferred BUILD_ID_OFFSET / CALLCHAIN_BUILD_ID_OFFSET support.
-- Patches 7-9: Pre-existing perf tool fixes uncovered during
-  development and review.
-- Patches 10-19: Tool UAPI header sync, perf parsing/synthesis/symbol
-  resolution, `perf inject --sample-buildids`, `perf record
-  --buildid-offset`, man page updates, and C/shell test coverage.
-
-v4:
-- Rebased onto linux-next (next-20261123) + perf-tools-next
-  (964e8b1c9c79), adapting to the new `perf maps` Clang thread-safety /
-  context-analysis annotations, and addressed review feedback from
-  Namhyung Kim and Athira Rajeev on v3 [5] (with AI coding assistant
-  help refactoring and verifying fixes against kernel/perf builds,
-  checkpatch.pl, and `perf test`):
-  - Moved PERF_SAMPLE_BUILD_ID_OFFSET and
-    PERF_SAMPLE_CALLCHAIN_BUILD_ID_OFFSET before PERF_SAMPLE_AUX in the
-    PERF_RECORD_SAMPLE UAPI layout, kernel perf_prepare_sample() /
-    perf_output_sample(), and perf tools parsing, synthesis, and `perf
-    inject --sample-buildids` so PERF_SAMPLE_AUX remains the last entry
-    consuming the remaining sample space (Namhyung).
-  - Clarified the PERF_SAMPLE_BUILD_ID_OFFSET UAPI layout comment for
-    resolved user IPs, non-user/unresolved user IPs (bid.size == 0 and
-    offset holding the raw IP/virtual address), and attr.defer_callchain
-    deferred user IPs, as well as valid build_ids[] table entry sizes
-    (1 <= size <= 20; zero-padded to 20 bytes by the kernel via
-    bpf_stack_build_id while user-space tools such as `perf inject` may
-    emit the exact unpadded length) (Athira).
-  - Added PERF_SAMPLE_CALLCHAIN_TYPE alongside PERF_SAMPLE_WEIGHT_TYPE
-    in UAPI and used it across kernel and perf tool callchain checks
-    (Athira).
-  - Allocated the per-CPU build-ID callchain scratch buffers
-    on demand only while at least one
-    PERF_SAMPLE_CALLCHAIN_BUILD_ID_OFFSET event is active, avoiding any
-    extra memory overhead for plain PERF_SAMPLE_CALLCHAIN events, and
-    documented the per-CPU memory cost in Patch 5's commit message
-    (Athira).
-
-v3:
-- Rebased onto linux-next (next-20261113) + perf-tools-next, dropping
-  the prerequisite perf/core [4] and perf tool fixes that were merged
-  upstream, and addressed review feedback on v2 [3] as well as findings
-  from Sashiko AI review (with AI coding assistant help refactoring and
-  verifying fixes against kernel/perf builds, checkpatch.pl, and
-  `perf test`):
-  - Split larger kernel and tool patches into smaller logical commits
-    and separated pre-existing kernel and perf tool bug fixes into
-    standalone commits with Fixes: tags at the start of the kernel and
-    tool sections.
-  - Changed PERF_SAMPLE_CALLCHAIN_BUILD_ID_OFFSET and build-ID
-    PERF_RECORD_CALLCHAIN_DEFERRED to deduplicate build IDs into a
-    compact packed table + 8-bit index / 56-bit file offset array,
-    keeping non-user addresses lossless across all architectures.
-  - Preserved source-level API compatibility in libperf's
-    `struct perf_record_mmap2` union by retaining `build_id_size` and
-    `build_id[]` alongside `struct perf_build_id bid`.
-  - Fixed per-CPU callchain buffer protection across
-    bpf_overflow_handler(), deferred output build-ID accounting and
-    single-IP clamping, and deferred callchain u16 header.size clamping.
-  - Isolated user vs kernel DSO/map build-ID lookups, handled vDSO and
-    kcore names when synthesizing build IDs in `perf inject
-    --sample-buildids`, aligned sample payload walking with
-    __evsel__parse_sample(), and fixed cross-endian deferred sample
-    re-parsing and Python event copying.
-  - Documented `--sample-buildids` in perf-inject.txt and
-    `--buildid-offset` in perf-record.txt.
-
-v2:
-- Addressed review feedback from Namhyung Kim and Sashiko AI on v1 [2]:
-  - Extended the deferred callchain unwind infrastructure
-    (attr.defer_callchain / PERF_RECORD_CALLCHAIN_DEFERRED) to support
-    deferred user-space build ID and offset resolution in task_work
-    context where page faults are allowed, avoiding NMI-time page fault
-    limitations and per-CPU irq_work contention.
-  - Batched in-place user callchain resolution into a single
-    stack_map_get_build_id_offset() call and skipped kernel frames.
-  - Defined struct perf_build_id and struct perf_sample_build_id_offset
-    consistently across UAPI and libperf headers, with a fallback for
-    __DECLARE_FLEX_ARRAY.
-  - Added reference-counted tracking (nr_build_id_offset_events and
-    nr_callchain_build_id_offset_events) and clamped callchain frame
-    counts in perf_prepare_sample() and perf_callchain_deferred_output()
-    to prevent u16 header.size overflows.
-  - Added cross-endian byte-swapping support for
-    PERF_SAMPLE_BUILD_ID_OFFSET, PERF_SAMPLE_CALLCHAIN_BUILD_ID_OFFSET,
-    and PERF_RECORD_CALLCHAIN_DEFERRED.
-  - Fixed perf_record_mmap2 union field preservation when build ID
-    synthesis fails, callchain context marker tracking in perf inject,
-    and per-event callgraph configuration in `perf record
-    --buildid-offset`.
-
-[1] https://lore.kernel.org/lkml/20250424061943.1321025-1-irogers@google.com/
-[2] https://lore.kernel.org/lkml/20260807071818.718751-1-irogers@google.com/
-[3] https://lore.kernel.org/linux-perf-users/20261002173848.3228217-1-irogers@google.com/
-[4] https://lore.kernel.org/lkml/20261025215508.1237480-1-irogers@google.com/
-[5] https://lore.kernel.org/all/20261116074414.3174737-1-irogers@google.com/
-
-Ian Rogers (19):
-  perf/core: Protect per-CPU callchain buffer across
-    bpf_overflow_handler()
-  perf/uapi: Factor perf_build_id out into its own top-level struct
-  perf/uapi: Add BUILD_ID_OFFSET sample types to UAPI
-  bpf: Export stack_map_get_build_id_offset() for perf events
-  perf/core: Implement BUILD_ID_OFFSET and CALLCHAIN_BUILD_ID_OFFSET
-    sample types
-  perf/core: Support deferred unwinding for BUILD_ID_OFFSET sample types
-  perf inject: Set ordered_events and ordering_requires_timestamps for
-    --aslr
-  perf session: Avoid double byte-swapping re-parsed deferred samples
-  perf inject: Fix PERF_SAMPLE_READ layout and bounds checks in
-    aslr_tool__process_sample()
-  tools headers UAPI: Sync linux/perf_event.h for struct perf_build_id
-  tools headers UAPI: Sync linux/perf_event.h for BUILD_ID_OFFSET
-  perf: Refactor thread map and symbol APIs to take perf_sample
-  perf maps: Add dsos__find_by_build_id() and maps__find_by_build_id()
-  perf evsel: Parse, synthesize, and dump BUILD_ID_OFFSET sample types
-  perf symbol: Resolve symbols and callchains using build ID and offset
-  perf inject: Add --sample-buildids to convert samples to build ID +
-    offset
-  perf record: Add --buildid-offset option
-  perf test: Add BUILD_ID_OFFSET C unit tests
-  perf test: Add inject --sample-buildids and record --buildid-offset
-    shell tests
-
- arch/powerpc/perf/core-book3s.c               |  10 +-
- arch/s390/kernel/perf_cpum_sf.c               |   6 +-
- include/linux/bpf.h                           |  14 +
- include/linux/perf_event.h                    |  45 +-
- include/uapi/linux/perf_event.h               |  90 +-
- kernel/bpf/stackmap.c                         |   8 +-
- kernel/events/callchain.c                     | 308 +++++-
- kernel/events/core.c                          | 315 ++++++-
- tools/include/uapi/linux/perf_event.h         |  90 +-
- tools/lib/perf/include/perf/event.h           |  43 +-
- tools/perf/Documentation/perf-inject.txt      |   8 +
- tools/perf/Documentation/perf-record.txt      |   6 +
- .../arch/powerpc/util/skip-callchain-idx.c    |   4 +-
- tools/perf/builtin-inject.c                   |  80 +-
- tools/perf/builtin-record.c                   |  22 +-
- tools/perf/builtin-report.c                   |   4 +-
- tools/perf/builtin-script.c                   |  76 +-
- tools/perf/builtin-timechart.c                |   5 +-
- tools/perf/builtin-trace.c                    |  10 +-
- tools/perf/tests/Build                        |   1 +
- tools/perf/tests/bid-offset.c                 |  61 ++
- tools/perf/tests/builtin-test.c               |   1 +
- tools/perf/tests/code-reading.c               |   6 +-
- tools/perf/tests/mmap-thread-lookup.c         |  58 +-
- tools/perf/tests/sample-parsing.c             |  60 +-
- tools/perf/tests/shell/inject_bid_offset.sh   | 179 ++++
- tools/perf/tests/shell/record.sh              |  74 ++
- tools/perf/tests/tests.h                      |   1 +
- tools/perf/util/Build                         |   1 +
- tools/perf/util/annotate-data.c               |   5 +-
- tools/perf/util/aslr.c                        | 142 ++-
- tools/perf/util/build-id.c                    |   2 +-
- tools/perf/util/callchain.c                   | 153 ++-
- tools/perf/util/capstone.c                    |   4 +-
- tools/perf/util/cs-etm.c                      |  10 +-
- tools/perf/util/data-convert-json.c           |   4 +-
- tools/perf/util/debug.c                       |   6 +-
- tools/perf/util/dlfilter.c                    |   8 +-
- tools/perf/util/dsos.c                        |  68 ++
- tools/perf/util/dsos.h                        |   6 +
- tools/perf/util/event.c                       |  89 +-
- tools/perf/util/evlist.c                      |  38 +-
- tools/perf/util/evlist.h                      |   2 +
- tools/perf/util/evsel.c                       | 180 +++-
- tools/perf/util/evsel.h                       |   2 +-
- tools/perf/util/evsel_fprintf.c               |   9 +-
- tools/perf/util/inject_bid_offset.c           | 882 ++++++++++++++++++
- tools/perf/util/inject_bid_offset.h           |  15 +
- tools/perf/util/intel-pt.c                    |  24 +-
- tools/perf/util/machine.c                     | 194 +++-
- tools/perf/util/maps.c                        |  73 ++
- tools/perf/util/maps.h                        |   2 +
- tools/perf/util/perf_event_attr_fprintf.c     |   3 +-
- tools/perf/util/python.c                      |  43 +-
- tools/perf/util/record.c                      |  22 +
- tools/perf/util/record.h                      |   1 +
- tools/perf/util/sample.c                      |  84 ++
- tools/perf/util/sample.h                      |  39 +
- tools/perf/util/session.c                     | 140 ++-
- tools/perf/util/synthetic-events.c            |  77 +-
- tools/perf/util/thread.c                      |  11 +-
- tools/perf/util/thread.h                      |  14 +-
- tools/perf/util/unwind-libdw.c                |   7 +-
- tools/perf/util/unwind-libunwind.c            |   8 +-
- 64 files changed, 3564 insertions(+), 389 deletions(-)
- create mode 100644 tools/perf/tests/bid-offset.c
- create mode 100755 tools/perf/tests/shell/inject_bid_offset.sh
- create mode 100644 tools/perf/util/inject_bid_offset.c
- create mode 100644 tools/perf/util/inject_bid_offset.h
-
-base-commit: 3191063649dbf7c0d0b768e1f3655e4c5fc6edb5
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index 947f23973ed4..d67bb825c504 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -10816,11 +10816,18 @@ static int bpf_overflow_handler(struct perf_event *event,
+ 	rcu_read_lock();
+ 	prog = READ_ONCE(event->prog);
+ 	if (prog) {
++		struct perf_callchain_entry *callchain = NULL;
++		int callchain_rctx;
++
+ 		perf_prepare_sample(data, event, regs);
+ 		/* bpf_perf_event_data::addr is readable without PERF_SAMPLE_ADDR */
+ 		if (!(data->sample_flags & PERF_SAMPLE_ADDR))
+ 			data->addr = 0;
++		if (data->sample_flags & PERF_SAMPLE_CALLCHAIN)
++			callchain = get_callchain_entry(&callchain_rctx);
+ 		ret = bpf_prog_run(prog, &ctx);
++		if (callchain)
++			put_callchain_entry(callchain_rctx);
+ 	}
+ 	rcu_read_unlock();
+ out:
 -- 
 2.56.1.831.g720f3f5937-goog
 
