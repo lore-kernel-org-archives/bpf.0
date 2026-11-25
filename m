@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.46
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.174
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795577542;
-	b=zkxgOLhplTzHACk/cBcYilaO8dzI1EYvWTY6HcezcLF5P1Dh6QjAGjcNbn9pJk/b0Bmg
-	 rpdBGjTSoKdMxElkk9qCyL3027ks/ZfQ6sXJAvk8VPR7WypKX9vVdVOp1q1kyXTjGup5g
-	 uwj+fCq6hv8f55ds32zbssAtYjzoRh3PaOqdJr72IISemx9vHkxnISrkqXyFzyrJmY3EU
-	 crDWqolBzt8VJ89YgBgij7p1WuBgYnV0IiUrS2MaUQHPN+UFregmtLafFn3vvbs0hEkce
-	 Plzf4cgZICe0Yl7meed/gRXsmME8sxzamItxQvCH4rJfxRLf1Au/32ij7AJws/5VHxA==
+	t=1795577548;
+	b=hFeKwBOkvNHDsao75E8L7iiwd7eNlwK0rv4TdXKtzHmcKx7oIsmYk6gdqKGvySGGffqZ
+	 rDgt4umi1GIUvohpWyOPvh2QpSRlfYZS7S4Bj8BnNKYVfHywJkd9G1NGqKMM4COFBlk60
+	 X0hdadlV1+/Mp9Wqi+feSPhbASlNmBqSgQjCzwW2YOtKs7TlQioh0QDWNWMmZDqIDWcEB
+	 Wf0f3lMy6ere/PyF8TbW3bIzAyCd7MPQnsfMw3X84GfkwtSn2OUqcjNrTMNmhdFuIDpIw
+	 BCqXX5lFFvuehDxPKTNsYK7kaD/dguh8c+7v6xsDYb3hlLQBil8nFenFef0hJw47y7Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795577542;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795577548;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=xYsRKNoP8UvWd5Vx02OL8oCTtfZVWSb6iHzy3vKxxGI=;
-	b=CIDE+cO7bFAxzOpqD9AAul6w7YnB0W5yJGaW2RDGcLgP+muSOyDu4k0fw6HVtbCn3W46
-	 gpobYtIdWEvkn2f7DoXoO7+MHLDoXWuJOJfWg9hQ4qioF9wgSvfQwS3BhtnmjocZCOKn0
-	 B75Rh0hUPDY0OFLN5HJks+kjp30aGEiLIRuY5cY19iW7ZMXWmMGPsxWq8Rtyo7k+pW3vC
-	 9PRrR7FGXa9YIqaUQBESOhNoOQEEqnIlAOfidO+jN9Ku9hWGZoTA0wsFzimK1EhuQrHhY
-	 RjCLd00pb9B8MBgCmnPVxVawPiFxrMxp9lfiDH+aJ3Z/ihd8HmrL2rLFnUWYuvnGzTw==
+	bh=tRHki3w2Kqh2hcFR0F/e1uXDOFUXH5wXN+txi6+NaHc=;
+	b=UY5h+30OuXUfrh+HxLSfzfCGWkkczg7Zs5kw7XShcoChC8rSLTwh9GXTu8A6ZxjaTTFV
+	 67OgY9AWBiQ3LJkOe2OSvogZv0gymgfRIl09Llrznf5XaHvbdihdG+L/ELTdC4gwRNMiP
+	 syNJnzajwzI6SB1HG6X9839vdoEf2kx57yYiXQ0D79c1yAohp6HngkIo84A0UHkxUeAAP
+	 gfrLannxSWqhyVXl2/zBk21TmH5k6S2NpDnmmwSbVGWxphZXfGT01EG2HpTi8Bsmg6Xng
+	 OnjdurJtF7WuYnZMz6tNUlO9KWWIPI66zKY/8yvKGaHoxjVlmlNwzJONTwtdscJ39pQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=p5+ltDcp;
-	arc=none smtp.remote-ip=209.85.216.46
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=dMdycwA5;
+	arc=none smtp.remote-ip=209.85.215.174
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32F6E606A31E
-	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 03:32:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 32F6E606A31E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF902606A31E
+	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 03:32:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BF902606A31E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=p5+ltDcp
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-3b3a914e4c8so2818280a91.0
-        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 19:32:22 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=dMdycwA5
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-cde84cb8803so1259040a12.1
+        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 19:32:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795577541; x=1796182341; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1795577547; x=1796182347; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=xYsRKNoP8UvWd5Vx02OL8oCTtfZVWSb6iHzy3vKxxGI=;
-        b=p5+ltDcpFBqJOT8kzeLoqN4iIJ5PzTvg74RL/Kfuge/J+KsyZKOFcrDNNpgyPXIGIy
-         5r6aH3kFibO/ebQI7sdK8OJh/yX3gvTFyeGNoP/VyFfAmrJNVcFbWyrkSGEqZ5q/Ffao
-         c32G0EsvJCrPcpUHNi2kGYd3fvwBACprgNL4oHO8El5o+D3QL3xiF57KtxOmzxZAB7nQ
-         BHfA4KgsdweiOy8huw7gEKwBhbY/yjGQsjJNOFHtKMvecRq1K8/MU1otuLvsQnwhUR8f
-         pvjBiYM5VxtvzpSj6R05kZjbUEesrJINZsqfLwnI0RwXsDrflS5Rqbpfz6bfuQxdU+Ph
-         fQ5A==
+        bh=tRHki3w2Kqh2hcFR0F/e1uXDOFUXH5wXN+txi6+NaHc=;
+        b=dMdycwA5jhuAX87bJ8owcJ3azjqyHnpatpOlRL49ZlMmTbH6XtiyxuYeub+tY7F9RY
+         OsiDSg4LmjgqjiDApwRHP9X+zVaukkLqTugBzCJN6lulICXD7loYFCWEslGaiR070pVW
+         N1GvLXwUeXKXqCQyNen69WGiK1kaCgPeDP+LCfsXQ1iCNwg8Lsua2YbiVRll4FYRbr7q
+         pt43kg3+EEbD7WciI+JB/YwM8k6JigjM5B+6CRn8lfsTI2oyC6ADhC32uvri0PUl7zuz
+         ebkPnjT6nqL4EeT5zBfJZEYxqE2zsDKAlwbaMDFeboPpSx2/eFweOUx1m3bTqJOEUDNf
+         2QwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795577541; x=1796182341;
+        d=1e100.net; s=20260707; t=1795577547; x=1796182347;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=xYsRKNoP8UvWd5Vx02OL8oCTtfZVWSb6iHzy3vKxxGI=;
-        b=z+3zuVaomfd+uPsB2i+Q6vzjIHUKP2qW9zMV6kxDE7s8sc2BtYxykc2QTgqm0eTTbg
-         RSCXzzq559c1UBhrtmqf1AFfPwSWw15C8lzHCVnb/Z4FIGKbtPOrDXNazyQTPuGji6iS
-         pCViy5hp7jm12JJjb1vebvTyJOwg3JJyoGSkGSlCcAIH8Ln844iVyzDE060WBNeRVrQQ
-         M/l00Lh0jUyGIT0Q/veCLfm8yVHIJkac50WjM7WGMQCIXh6MA4V/oz4OEP9hlBK7B3JR
-         oQQZxYDnETAyj8NdZByPAFHfq5/bueqR0cc8ZLwAxCkKYrUUQl4cCOyGx0RdevY9Ka3t
-         T5yw==
-X-Gm-Message-State: APuU4Z9Zcp6XPwdINZppRP4t9NAcSVTp63ZzFfH5eeo4iezscD1h2E1i
-	VPSLra+e46ztMLKoewPz80ILRqLwPG+rwNpcXO8rwnLQCaXxZMZbcGSRjSokY2eQ
-X-Gm-Gg: AZFdTZdUGBguk+GIvxwxSWmHukXPNqhNaAIQ7qneq9PBYnKn311DqAwSeYWhjUUeeiZ
-	BJtU1zmP2JOG7hX8w91yzv3aJ97xz5jnmvP4VVa+7xWY5llzE5j9CBdbeoE5Qyx4+1TsLPV9uLt
-	wKH0Z/p+tNSCR0grIzZ6Z3IW92xD9JEvCVGkq6PYkILoO5i4H1AqpwOE5ALOmGoGPZg6dNX2VDk
-	1P1ZiRuHhsZyxAnPrDrI/12wHe5RGJyMK4RZ54K8pEc+dQN7UT5RFVGyjGK1iOJCIKrj3MIa3fs
-	S8oE1QIX/wz4BnHHdH9uB2gV1cQ3dHD9AsViV/0jUuwxHZ4mpc13Hjc/MywakQiVmcy4zce9MhE
-	y9R1aYo6dRIjX4UeEM9/RjS8uCoRy9sO+eCt6bVR/6DwpLhZYnghxGvQbloS3dblZV+No0oRqlj
-	z4cJ/Xw1hDrh6g3d40Ez5zO6cp0cv2Uu8S9KSa9Y8s9yq0SqMtP2SKOf4fEhnr9TXnEFgitzw5T
-	z1tA4DzoitBy7z4W1bwFe8+J/3D0EMomHcEjEjftvD+o6+ehTuAVLGJATVyolK2FCcXOWh7SnVL
-	DcyQs+9LtlxBl4zgH+GUS1aLFmbhmgWOsL57E6V2ViXy7TKUHRGwc6pZ53O2qaRtBQl/8uoASB2
-	jPaRtYMwytU9EIGoTfGKmGd8/xUb6iQrHOzpf7hhSb3F9F0wTi6KHzPdfWUWDE7gexRZFIaxXAg
+        bh=tRHki3w2Kqh2hcFR0F/e1uXDOFUXH5wXN+txi6+NaHc=;
+        b=zRuPxlowdExWI14ygQ7OZaaroYZ1PXXIgUWvPO2DOWUvAj4ZijAA9NPTwgChJsmgdi
+         v+ezqj+495AE0NNZZujDfrmxY62UkpuwYRYGCLY80AZE9totgqasOphYseQ7vRPGX7oo
+         JXmRIzFEBprgeS8u+0ewBxZ5XyFC4zj0zAxbv6Ze/8PtFnzLIqDlSAL1qOPmnBuv2J+A
+         qsJDTVZdQm/sMEW1UzZQiSzuxrkY73/PKfZN8mp0lu9s5G4GaRQqE6o7O7t+HGNjW9jm
+         Gz7T2gKB8YRVPIjnqPMa63YEUpINbXrn2/Bxv3ULpUXc9WC76A+Z9c1vw008xjvdPmAT
+         qasw==
+X-Gm-Message-State: APuU4Z95VPqhoUjYE5cCP+iKCndIKmusU9/R5ZYbS3IoYyD1XhEv4riL
+	OzygPet8V7ROpLAJe9iY8IDBVZTGckKZ9BNQHQlgW7lNt+452PvtR+Y5rZizsBwN
+X-Gm-Gg: AZFdTZeCBLtIALD5h8WFfmek7Hxc9uzw1W4P0KzRY3TqJpg6B695I0mG6qp52X/ouGG
+	rldvEpdUEdZRYKEHE2jdgJN1al4fwY5aFIQLZj8hIkoSsZa5EWM3gvnFPe7C8SSacvHdUA24hAy
+	JRi/vldbg3qIRe+zqH4X9u4pNOnKmL8X+VcQDLjnjxmI58+3MQcLMFK++/X1KyXfSzkGqWOqpUt
+	PkpfkCFzDV9wt29Kz8reBq7hwaDAjmznYlrWCRlDoOEHUA7V0Xwv6sKYjkUfyBoqz88almwRH8B
+	MQWVRlI0kjzleG1x++wCeA4XF8k/eiv70ZPocNd3UOQiWRRhV5C6Rh6u+xzuU2mFIMlnERduXMQ
+	gZ4H0qG3msnLiWqNIs6YmKq+gyRX2RiuzdnY0xAhqE1TS8dhGU/K3AMnvFNiCwQSF1yeYpYvb+Q
+	LpS9cwFnjmD05ojXEx9kkFBQPoYAhHjqpZ5CSGarXVzW0G7JjA2gy6fZUtzOFXZMq/ulnlgXyG/
+	6K2Z9kPJmwwSk0ftemg10dJWgOQdXJ0pNO+r3sFQbG0FmQN8YE0jElcssKdqbze6XRMwC+4EfaN
+	+vId+wNPY67IxRmz0UbhbjZ3TVO93mzJMklqBMfv6o18gGPcwf2mNKjM3nJjUMBgT2Ghi1NaU/W
+	NY4qRJMyHwAsPMcO8vNWzy+V8zpTn+gGPvaxu5QYp+EB/7X90C9ZVO/8X6xEhAysnyc7oZILfBw
 	==
-X-Received: by 2002:a17:90b:4a48:b0:3b3:b5b4:e4a9 with SMTP id 98e67ed59e1d1-3b41c7ac07amr15550147a91.3.1795577541169;
-        Tue, 24 Nov 2026 19:32:21 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.254])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b41ad8ef99sm26163009a91.12.2026.11.24.19.32.20
+X-Received: by 2002:a17:90b:5109:b0:3ac:9c37:942e with SMTP id 98e67ed59e1d1-3b41c953f98mr16768021a91.49.1795577546934;
+        Tue, 24 Nov 2026 19:32:26 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.243])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b4afeaaa84sm9735585a91.10.2026.11.24.19.32.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Nov 2026 19:32:20 -0800 (PST)
+        Tue, 24 Nov 2026 19:32:26 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf 27/47] bpf: Require CAP_PERFMON to read streams
-Date: Wed, 25 Nov 2026 03:29:18 +0000
-Message-ID: <20261125032938.670542-28-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf 28/47] bpf: Limit reads of variables of the kernel
+Date: Wed, 25 Nov 2026 03:29:19 +0000
+Message-ID: <20261125032938.670542-29-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261125032938.670542-1-alexei.starovoitov@gmail.com>
 References: <20261125032938.670542-1-alexei.starovoitov@gmail.com>
@@ -104,86 +104,78 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-A loader that has CAP_BPF only can read the streams of its program.
-Reports of the kernel have addresses in them: those of locks after a
-deadlock, and of code that has no symbol in call traces.
+ld_imm64 of a variable that is not a struct gives readable memory, so do
+bpf_per_cpu_ptr() and bpf_this_cpu_ptr(). Many variables hold addresses,
+and CAP_BPF is enough to read them. The size comes from BTF, and that
+can be BTF of the program. Loads from such memory are not probed.
 
-Require CAP_PERFMON for BPF_PROG_STREAM_READ_BY_FD and
-BPF_PROG_STREAM_OPEN, through the token of the program if it has one.
+Ask for CAP_PERFMON, as for the access to a struct. Addresses of
+functions and of per-cpu variables can be loaded as before. Take BTF of
+the kernel and of modules only, libbpf passes no other.
 
-Fixes: ecec5b5743bf ("bpf: Report rqspinlock deadlocks/timeout to BPF stderr")
-Fixes: d7c431cafcb4 ("bpf: Add dump_stack() analogue to print to BPF stderr")
+Fixes: eaa6bcb71ef6 ("bpf: Introduce bpf_per_cpu_ptr()")
+Fixes: 541c3bad8dc5 ("bpf: Support BPF ksym variables in kernel modules")
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- include/uapi/linux/bpf.h       | 3 ++-
- kernel/bpf/stream.c            | 4 ++++
- tools/include/uapi/linux/bpf.h | 3 ++-
- 3 files changed, 8 insertions(+), 2 deletions(-)
+ kernel/bpf/helpers.c  |  8 ++++----
+ kernel/bpf/verifier.c | 11 +++++++++++
+ 2 files changed, 15 insertions(+), 4 deletions(-)
 
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 8d7228834305..6840ca5b923b 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -934,6 +934,7 @@ union bpf_iter_link_info {
-  *		by *prog_fd*, and the stream is identified by the *stream_id*.
-  *		The data is copied to a buffer pointed to by *stream_buf*, and
-  *		filled less than or equal to *stream_buf_len* bytes.
-+ *		The caller needs **CAP_PERFMON**.
-  *
-  *	Return
-  *		Number of bytes read from the stream on success, or -1 if an
-@@ -953,7 +954,7 @@ union bpf_iter_link_info {
-  *	Description
-  *		Open a file descriptor for one of the BPF streams associated
-  *		with the program identified by *prog_fd*. The stream is selected
-- *		by *stream_id*.
-+ *		by *stream_id*. The caller needs **CAP_PERFMON**.
-  *
-  *		The returned file descriptor supports **read**\ (2) and
-  *		**poll**\ (2). Reads block while the stream is empty unless
-diff --git a/kernel/bpf/stream.c b/kernel/bpf/stream.c
-index 65f65876afdb..53519a17bf26 100644
---- a/kernel/bpf/stream.c
-+++ b/kernel/bpf/stream.c
-@@ -268,6 +268,8 @@ int bpf_prog_stream_read(struct bpf_prog *prog, enum bpf_stream_id stream_id, vo
- {
- 	struct bpf_stream *stream;
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index 61ddc45b0330..b570b7314ab4 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -2185,10 +2185,6 @@ bpf_base_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ 		return &bpf_spin_unlock_proto;
+ 	case BPF_FUNC_jiffies64:
+ 		return &bpf_jiffies64_proto;
+-	case BPF_FUNC_per_cpu_ptr:
+-		return &bpf_per_cpu_ptr_proto;
+-	case BPF_FUNC_this_cpu_ptr:
+-		return &bpf_this_cpu_ptr_proto;
+ 	case BPF_FUNC_timer_init:
+ 		return &bpf_timer_init_proto;
+ 	case BPF_FUNC_timer_set_callback:
+@@ -2292,6 +2288,10 @@ bpf_base_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ 		return &bpf_get_branch_snapshot_proto;
+ 	case BPF_FUNC_find_vma:
+ 		return &bpf_find_vma_proto;
++	case BPF_FUNC_per_cpu_ptr:
++		return &bpf_per_cpu_ptr_proto;
++	case BPF_FUNC_this_cpu_ptr:
++		return &bpf_this_cpu_ptr_proto;
+ 	default:
+ 		return NULL;
+ 	}
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 410804e80392..3cfc64e2f9e1 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -20989,6 +20989,12 @@ static int __check_pseudo_btf_id(struct bpf_verifier_env *env,
+ 		}
+ 	}
  
-+	if (!bpf_token_capable(prog->aux->token, CAP_PERFMON))
++	if (!percpu && !env->allow_ptr_leaks) {
++		verbose(env, "access to '%s' is allowed only to CAP_PERFMON and CAP_SYS_ADMIN\n",
++			sym_name);
 +		return -EPERM;
- 	stream = bpf_stream_get(stream_id, prog->aux);
- 	if (!stream)
- 		return -ENOENT;
-@@ -368,6 +370,8 @@ int bpf_prog_stream_new_fd(struct bpf_prog *prog, enum bpf_stream_id stream_id,
- 	int fd_flags = O_RDONLY | O_CLOEXEC;
- 	int fd;
- 
-+	if (!bpf_token_capable(prog->aux->token, CAP_PERFMON))
-+		return -EPERM;
- 	stream = bpf_stream_get(stream_id, prog->aux);
- 	if (!stream)
- 		return -ENOENT;
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 8d7228834305..6840ca5b923b 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -934,6 +934,7 @@ union bpf_iter_link_info {
-  *		by *prog_fd*, and the stream is identified by the *stream_id*.
-  *		The data is copied to a buffer pointed to by *stream_buf*, and
-  *		filled less than or equal to *stream_buf_len* bytes.
-+ *		The caller needs **CAP_PERFMON**.
-  *
-  *	Return
-  *		Number of bytes read from the stream on success, or -1 if an
-@@ -953,7 +954,7 @@ union bpf_iter_link_info {
-  *	Description
-  *		Open a file descriptor for one of the BPF streams associated
-  *		with the program identified by *prog_fd*. The stream is selected
-- *		by *stream_id*.
-+ *		by *stream_id*. The caller needs **CAP_PERFMON**.
-  *
-  *		The returned file descriptor supports **read**\ (2) and
-  *		**poll**\ (2). Reads block while the stream is empty unless
++	}
++
+ 	type = t->type;
+ 	t = btf_type_skip_modifiers(btf, type, NULL);
+ 	if (percpu) {
+@@ -21034,6 +21040,11 @@ static int check_pseudo_btf_id(struct bpf_verifier_env *env,
+ 			verbose(env, "invalid module BTF object FD specified.\n");
+ 			return -EINVAL;
+ 		}
++		if (!btf_is_kernel(btf)) {
++			verbose(env, "BTF fd for ksym is not a kernel BTF\n");
++			btf_put(btf);
++			return -EINVAL;
++		}
+ 	} else {
+ 		if (!btf_vmlinux) {
+ 			verbose(env, "kernel is missing BTF, make sure CONFIG_DEBUG_INFO_BTF=y is specified in Kconfig.\n");
 -- 
 2.55.0
 
