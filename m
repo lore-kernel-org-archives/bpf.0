@@ -1,75 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.200
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.167.198
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795567921;
-	b=b+IVLtqkSq6sjixICiuph1LRI5iIvn94dbB+YLhx0RrRbc9SqR/8roHa/qx1CT5u7W8E
-	 WwkfKVAl8H/CrD3ZiC4Uc3eqSpOV5zivphR/kZeQvI7Ekmw4VLGOOiFE0tT4Jj3m2lYRJ
-	 w/z8bNYAfg9rYu8VGmSoDu8PDDxU+ecKCmgAALyd5/C5p1eDVdWl49wIKYEH3+fH8q0kN
-	 u9WN0B6AJJhIt7l1UQvrNgzeqPRnaJlN+aNi2uQ0mh3fzb5fHQhVXCeC/YSJanL4UffsT
-	 DBBKVPHVf5zr7Ra6Ep+z9ac4gUA61F7Nkb1r4iQAVyMr35JPGpC1pizrZZV7FUA+TWA==
+	t=1795568039;
+	b=QiOL4Slk6svYu1+C5+QksepBv1tRUSBhwydTJYZ1yPqKiaclubHFvVklZ5JRseEGrhEI
+	 2PHXOFZLNzgobYVLY5YRpsraVR7myNeHEFemxIG6qIFXCPtrH0pyAEVEwZhfIi12m9LNf
+	 NgNlXQSa+698WO6nPTIca7PM+IPwUNc2VDuY03ynLrca9I73mWQa4BbhCKK1H84QB3I5G
+	 DnI+VYRCPF4AnkTGh+Gx9BOklmrwZfp9PVJ1VjPb0ZTAHTrPp4y1I6Wq99mPgrkAZJAto
+	 wkt4upbad3ABvYTIvca7OaRG9gwKv+LqqwObRFw5vlTDGn64YURhRjBYQbBnZmek2Lw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795567921;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
-	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
-	 Content-Type;
-	bh=reO/0evIiDzpyVPcrOkTNkcSvkNXLH6JHyvO2OKvF+E=;
-	b=1zbENZdrOUNoZzZQV4s8Sx2WYd7a0tB/6JdDGQoWDPY4XztHasjRWxb2Bo6XkBmL/PKV
-	 K895lleN35sutPz43zo3/uwIeC242Ycm1euOnGrjfb2nhKDJsrvrZIRj4TpNcggQz0dkp
-	 ZKIWW1/HFYbodb4YRQHL5P2242DgBqQ2h88poUspwcjJ/PeqzbNaPu5Te0gdaunspMIG8
-	 tNaTMaQej2PPbyegiu/jeFrfkkt8FkINS5anNH5QumyDLLfErPuQOIIfHRvaVYF8Vn4H3
-	 60leU02eOCpGsBimhEYg6dP+ry8HoPOulypO8aT2nbMEmzDlAiJmBJA7LYcEgQVV19Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795568039;
+	h=DMARC-Filter:Received:X-Google-DKIM-Signature:X-Forwarded-Encrypted:
+	 X-Gm-Message-State:MIME-Version:X-Received:Date:
+	 X-Google-Appengine-App-Id:X-Google-Appengine-App-Id-Alias:Message-ID:
+	 Subject:From:To:Content-Type;
+	bh=LKUhl2vfu8qY8Xs2R02bqfFtv08jhN3q+ez3lxFZo7U=;
+	b=BrS1ICVn5HWeOc7oGNj+VomQoZaUdFvhsuPNQMlb5KnhrNg4mpvhMr6xYBYbtvXMjcwy
+	 sMvqfVJ8IvBIqpRv3j6zQPZsUQJ9SRl9j0Fglf4QWzIZZBbg4mrpmCTf25yCF43MVwyif
+	 qU8pPUhp133crPiroGpY5PdJuxDXLMbXltFlQY68KoklCtZ+PleHhJlN9pTXJSgYoAdmH
+	 coamhDE/vHp1WsSTicuKga9in2Sd1CzyLk9PBaYmj/b5lQrtMe7Q1k6lZO4BQu1i2K63B
+	 RKfeXw+1rZPGHmP4og2FbF5QoRfgRQPy7dW3ib44cA590PSw7DCJxlxKA66FNoQZBkQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=flex--irogers.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=aQx7jrkG;
-	arc=none smtp.remote-ip=74.125.82.200
-Received: from mail-dy1-f200.google.com (mail-dy1-f200.google.com [74.125.82.200])
+	dmarc=fail header.from=syzkaller.appspotmail.com;
+	spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com;
+	arc=none smtp.remote-ip=209.85.167.198
+Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com [209.85.167.198])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D401560A5BE1
-	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 00:52:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D401560A5BE1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=aQx7jrkG
-Received: by mail-dy1-f200.google.com with SMTP id 5a478bee46e88-38355b03cb8so5056007eec.0
-        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 16:52:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795567920; x=1796172720; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=reO/0evIiDzpyVPcrOkTNkcSvkNXLH6JHyvO2OKvF+E=;
-        b=aQx7jrkGVcH19bCY5rgJwvjq+KiJAhEf52+OiAcrQMBE4qbRpoylCJVZjNbGF4On9h
-         73a5XuKQB+1Gpedqcept51JcxhgCx+mF0LZeqcE3qjVdrORfSEy3Wrv0gRbbTm4QNqoD
-         9yaygDQRn5TEnBZmRxBCynGeWbLj22d0REsMg0ZzkxO7ClYsJJ5XXLq6790Dzwlr3MoQ
-         ApWG537I0pcXGzeDSyQyomZJ57SaqsysxDHnit36NauM8FgoJJ85jNMKEqrM/nL9rqvf
-         1yFGBSjWJ3a4JAxsP+dnGMrIJrnU79JbjKFYam8F2y2v7mqI6/aqEUpycjB0VDWP3D3Y
-         f3hA==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CECEB606A323
+	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 00:53:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CECEB606A323
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-oi1-f198.google.com with SMTP id 5614622812f47-4f8281066c4so6262289b6e.2
+        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 16:53:58 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795567920; x=1796172720;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=reO/0evIiDzpyVPcrOkTNkcSvkNXLH6JHyvO2OKvF+E=;
-        b=zdHqAqS1kZS4Eo71ErS9uqoKfsDUwTik0ZsU5LcqRqOD9R0TKwIM6LdYRlpEzUca8J
-         z4ke+UNooWonM57NlSRYdmqom+Vsl7TfX6DpQI1syN80es2YFTXBsoSLM9ewdvsH+992
-         FmgsSBQcOc3Yxc6toWsrdgYk7fMkgNZ3b7cyaBWfIhnx3v6yYuZNAdYQAPp0NHoeuxU+
-         ZCt+/v6L6NqXl195H4CiYtPMaYMvwtX/qwjwdKt1yHVY/GlA3NsLLET9ALSWKZIYvk32
-         DULL/NRoTSMDJ6qJiDFzl/d4YuDb/s7mBUSrH0jb5c2geFzaK/SS3ot1hjQIEp8k7lDA
-         QrVg==
-X-Forwarded-Encrypted: i=1; AL+hErE6rNxF8cHe3JPTwAinunmCgyOjQSkonSzrOSCKYxs9l2n3+PMrlJGTS3Rx893rJDpPG2I=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/T7EsXsD9NAeuXWUIVvFZ0Q6jK6cQQmvbrZGRgy1snioDy0nyf
-	UmMKixrWP24xWIw9EFJtwlXt+/Hf63XISQvqh9ObT8UMIsPhal56XAFU94uABIkT5EbHdvs2J+Y
-	I7Ggn/Pri/A==
-X-Received: from dycnr5-n1.prod.google.com ([2002:a05:7300:e9c5:10b0:369:fbca:f649])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7301:6191:20b0:375:e4de:96d3
- with SMTP id 5a478bee46e88-3869e61da0fmr12560688eec.31.1795567919715; Tue, 24
- Nov 2026 16:51:59 -0800 (PST)
-Date: Tue, 24 Nov 2026 16:51:08 -0800
-In-Reply-To: <20261125005108.1020003-1-irogers@google.com>
+        d=1e100.net; s=20260707; t=1795568038; x=1796172838;
+        h=content-type:to:from:subject:message-id:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=LKUhl2vfu8qY8Xs2R02bqfFtv08jhN3q+ez3lxFZo7U=;
+        b=Cuxi4VW5SBtmnXlGjm1gtmgEdXwM/HqRLV86azhgX7lJs2gTCv1hxmnIqQ1svDTDQE
+         EFnS/EmFwbeYqj6hKSGYkcgEwwQP4a6fU9ILGvRmBJPHJW8xwddOqN8t1pG39vBiqGCW
+         2AUNktxD/muBMYytI0gVwDXg8j98bb+OqYCDnVyrNIw4qDc5bMYDdURtHFsrKKhtIu2f
+         fNu3RXxBgx7eWUKywHm1PGGdBD4h4QAeXCBzZMf0mxVEcEq9qznV8pzzokAsu7+xwVZE
+         ZHMU2Rhjenug+sGRhRMKAGdcMg52aG9ZEnYe+5MZVvHZYUnAPoq1k0N7Ux0PAHpYwJPn
+         /lsg==
+X-Forwarded-Encrypted: i=1; AL+hErFMSrOMeB0PIgZQLrCyN5/gAwcEQvq4+Zb4Xq4GhKfcklRgfsYKN04KuPAcOerh6S9uNWU=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9MoZCpd9MYAigGJ/J+ZgssOsdPg47LHwghkjqZfcvIyEaZ5vmW
+	NscVyKhClAO667pAAqWQhEzVfsFC2HkCmd3EFIfI3sDM8yvizzBoxkUfp01O2P0I1aZqsWd2OiH
+	qxtbz+Z4lDCiR01iL/DtcF2kzduWd8h30JuM+9f0eF4QJcf47lijh40QiyfU=
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -78,318 +57,119 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-References: <20261125005108.1020003-1-irogers@google.com>
-X-Mailer: git-send-email 2.56.1.831.g720f3f5937-goog
-Message-ID: <20261125005108.1020003-20-irogers@google.com>
-Subject: [PATCH v4 19/19] perf test: Add inject --sample-buildids and record
- --buildid-offset shell tests
-From: Ian Rogers <irogers@google.com>
-To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
-	James Clark <james.clark@linaro.org>
-Cc: Athira Rajeev <atrajeev@linux.ibm.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	Leo Yan <leo.yan@linux.dev>, Dmitry Vyukov <dvyukov@google.com>, 
-	"Steinar H . Gunderson" <sesse@google.com>, Stephen Brennan <stephen.s.brennan@oracle.com>, 
-	Thomas Falcon <thomas.falcon@intel.com>, linux-perf-users@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+MIME-Version: 1.0
+X-Received: by 2002:a05:6808:308d:b0:573:b907:d55c with SMTP id
+ 5614622812f47-57a077150cbmr19544453b6e.7.1795568037944; Tue, 24 Nov 2026
+ 16:53:57 -0800 (PST)
+Date: Tue, 24 Nov 2026 16:53:57 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <6b0631a5.eee51036.26eb72.03da.GAE@google.com>
+Subject: [syzbot] [bpf?] KCSAN: data-race in bcmp / htab_lru_map_update_elem
+From: syzbot <syzbot+542d2bc50fc9545a27d6@syzkaller.appspotmail.com>
+To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
+	daniel@iogearbox.net, eddyz87@gmail.com, emil@etsalapatis.com, 
+	ihor.solodrai@linux.dev, jolsa@kernel.org, linux-kernel@vger.kernel.org, 
+	martin.lau@linux.dev, memxor@gmail.com, song@kernel.org, 
+	syzkaller-bugs@googlegroups.com, yonghong.song@linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-Add shell tests verifying perf inject --sample-buildids (with basic
-samples, callchains, pipe mode, and kernel samples) and perf record
---buildid-offset across per-thread, system-wide, workload, and callgraph
-modes.
+Hello,
 
-Signed-off-by: Ian Rogers <irogers@google.com>
+syzbot found the following issue on:
+
+HEAD commit:    b6a9fa34ce41 Linux 7.4-rc4
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=17783865580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=886d2ddd2d6b664e
+dashboard link: https://syzkaller.appspot.com/bug?extid=542d2bc50fc9545a27d6
+compiler:       Debian clang version 22.1.8 (1~deb13u4), Debian LLD 22.1.8
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/1cd533522ae8/disk-b6a9fa34.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/19d6c1c369e3/vmlinux-b6a9fa34.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/dfb541770724/bzImage-b6a9fa34.xz
+
+AI-generated root cause summary:
+Lockless RCU lookups in `BPF_MAP_TYPE_LRU_HASH` maps (`__lookup_elem_raw()`)
+traverse `hlist_nulls` buckets and compare `l->key` via `memcmp()` without
+waiting for an RCU grace period when elements are recycled. Concurrently,
+`htab_lru_map_update_elem()` -> `prealloc_lru_pop()` evicts/pops an element `l`
+via `bpf_lru_pop_free()` (which unlinks it with `hlist_nulls_del_rcu()` and
+immediately writes the new `hash`) and overwrites `l->elem.key` with `memcpy()`.
+An RCU reader that already loaded `l` and observes `htab_elem_hash(l) == hash`
+concurrently executes `memcmp(&l->key, key, key_size)` against the in-progress
+`memcpy()`, triggering a KCSAN data race and allowing torn key comparisons.
+
+full analysis:  https://syzkaller.appspot.com/x/ai_root_cause?x=542d2bc50fc9545a27d6
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+542d2bc50fc9545a27d6@syzkaller.appspotmail.com
+
+==================================================================
+BUG: KCSAN: data-race in bcmp / htab_lru_map_update_elem
+
+write to 0xffff88811ee5cda0 of 280 bytes by task 12413 on cpu 0:
+ prealloc_lru_pop kernel/bpf/hashtab.c:407 [inline]
+ htab_lru_map_update_elem+0x223/0x7d0 kernel/bpf/hashtab.c:1516
+ bpf_map_update_value+0x4f7/0x570 kernel/bpf/syscall.c:297
+ generic_map_update_batch+0x4e6/0x700 kernel/bpf/syscall.c:2125
+ bpf_map_do_batch+0x26a/0x3b0 kernel/bpf/syscall.c:5849
+ __sys_bpf+0x784/0xc50 kernel/bpf/syscall.c:-1
+ __do_sys_bpf kernel/bpf/syscall.c:6582 [inline]
+ __se_sys_bpf kernel/bpf/syscall.c:6579 [inline]
+ __x64_sys_bpf+0x69/0x80 kernel/bpf/syscall.c:6579
+ x64_sys_call+0xf26/0x2550 arch/x86/include/generated/asm/syscalls_64.h:322
+ do_syscall_x64 arch/x86/entry/syscall_64.c:61 [inline]
+ do_syscall_64+0x11e/0x3a0 arch/x86/entry/syscall_64.c:89
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+
+read to 0xffff88811ee5ce88 of 8 bytes by task 12419 on cpu 1:
+ memcmp lib/string.c:665 [inline]
+ bcmp+0x23/0x90 lib/string.c:697
+ memcmp include/linux/fortify-string.h:675 [inline]
+ __lookup_elem_raw kernel/bpf/hashtab.c:827 [inline]
+ lookup_nulls_elem_raw kernel/bpf/hashtab.c:865 [inline]
+ __htab_lookup kernel/bpf/hashtab.c:889 [inline]
+ __htab_map_lookup_elem+0x246/0x390 kernel/bpf/hashtab.c:906
+ __htab_lru_map_lookup_elem kernel/bpf/hashtab.c:973 [inline]
+ htab_lru_map_lookup_elem_sys+0x1d/0x60 kernel/bpf/hashtab.c:991
+ bpf_map_copy_value+0x442/0x500 kernel/bpf/syscall.c:-1
+ map_lookup_elem+0x511/0x700 kernel/bpf/syscall.c:1847
+ __sys_bpf+0x683/0xc50 kernel/bpf/syscall.c:6440
+ __do_sys_bpf kernel/bpf/syscall.c:6582 [inline]
+ __se_sys_bpf kernel/bpf/syscall.c:6579 [inline]
+ __x64_sys_bpf+0x69/0x80 kernel/bpf/syscall.c:6579
+ x64_sys_call+0xf26/0x2550 arch/x86/include/generated/asm/syscalls_64.h:322
+ do_syscall_x64 arch/x86/entry/syscall_64.c:61 [inline]
+ do_syscall_64+0x11e/0x3a0 arch/x86/entry/syscall_64.c:89
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+
+Reported by Kernel Concurrency Sanitizer on:
+CPU: 1 UID: 0 PID: 12419 Comm: syz.0.3950 Not tainted syzkaller #0 PREEMPT(lazy) 
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 11/06/2026
+==================================================================
+
+
 ---
- tools/perf/tests/shell/inject_bid_offset.sh | 179 ++++++++++++++++++++
- tools/perf/tests/shell/record.sh            |  74 ++++++++
- 2 files changed, 253 insertions(+)
- create mode 100755 tools/perf/tests/shell/inject_bid_offset.sh
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/tools/perf/tests/shell/inject_bid_offset.sh b/tools/perf/tests/shell/inject_bid_offset.sh
-new file mode 100755
-index 000000000000..9be2e3323558
---- /dev/null
-+++ b/tools/perf/tests/shell/inject_bid_offset.sh
-@@ -0,0 +1,179 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+# perf inject --sample-buildids test
-+
-+set -e
-+set -o pipefail
-+
-+shelldir=$(dirname "$0")
-+# shellcheck source=lib/perf_has_symbol.sh
-+. "${shelldir}"/lib/perf_has_symbol.sh
-+
-+sym="noploop"
-+
-+skip_test_missing_symbol ${sym}
-+
-+temp_dir=$(mktemp -d /tmp/perf-test-bid-offset.XXXXXXXXXX)
-+
-+prog="perf test -w noploop"
-+[ "$(uname -m)" = "s390x" ] && prog="$prog 3"
-+err=0
-+
-+cleanup() {
-+	local exit_code=${1:-$?}
-+	trap - EXIT TERM INT
-+	if [ "${exit_code}" -ne 0 ] || [ "${err}" -ne 0 ]; then
-+		echo "Test failed! Preserving temp directory: ${temp_dir}"
-+		exit 1
-+	fi
-+	if [[ "${temp_dir}" =~ ^/tmp/perf-test-bid-offset\. ]]; then
-+		rm -rf "${temp_dir}"
-+	fi
-+	exit 0
-+}
-+
-+trap_cleanup() {
-+	local exit_code=$?
-+	echo "Unexpected signal in ${FUNCNAME[1]}"
-+	cleanup ${exit_code}
-+}
-+trap trap_cleanup EXIT TERM INT
-+
-+compare_script() {
-+	local orig=$1
-+	local bid=$2
-+	local msg=$3
-+
-+	perf script -F -ip -i "${orig}" > "${temp_dir}/script_orig.txt"
-+	perf script -F -ip -i "${bid}" > "${temp_dir}/script_bid.txt"
-+
-+	if [ ! -s "${temp_dir}/script_orig.txt" ]; then
-+		echo "${msg} [Failed - empty perf script output]"
-+		err=1
-+	elif ! diff -q "${temp_dir}/script_orig.txt" "${temp_dir}/script_bid.txt"; then
-+		echo "${msg} [Failed - perf script output differs]"
-+		err=1
-+	else
-+		echo "${msg} [Success]"
-+	fi
-+}
-+
-+compare_report() {
-+	local orig=$1
-+	local bid=$2
-+	local msg=$3
-+
-+	perf report -i "${orig}" --stdio | grep -v '^#' > "${temp_dir}/report_orig.txt"
-+	perf report -i "${bid}" --stdio | grep -v '^#' > "${temp_dir}/report_bid.txt"
-+
-+	if ! diff -q "${temp_dir}/report_orig.txt" "${temp_dir}/report_bid.txt"; then
-+		echo "${msg} [Failed - perf report output differs]"
-+		err=1
-+	else
-+		echo "${msg} [Success]"
-+	fi
-+}
-+
-+test_basic() {
-+	echo "Test basic build id offset injection"
-+	local data="${temp_dir}/perf.data.basic"
-+	local data2="${temp_dir}/perf.data2.basic"
-+
-+	perf record -e task-clock:u -o "${data}" ${prog} >/dev/null 2>&1
-+	perf inject --sample-buildids -i "${data}" -o "${data2}" >/dev/null 2>&1
-+
-+	compare_script "${data}" "${data2}" "Basic injection"
-+}
-+
-+test_callchain() {
-+	echo "Test Callchain build id offset injection"
-+	local data="${temp_dir}/perf.data.callchain"
-+	local data2="${temp_dir}/perf.data2.callchain"
-+
-+	perf record --call-graph fp -e task-clock:u -o "${data}" ${prog} >/dev/null 2>&1
-+	perf inject --sample-buildids -i "${data}" -o "${data2}" >/dev/null 2>&1
-+
-+	compare_script "${data}" "${data2}" "Callchain injection"
-+}
-+
-+test_pipe() {
-+	echo "Test pipe mode build id offset injection"
-+	local data="${temp_dir}/perf.data.pipe"
-+	local data2="${temp_dir}/perf.data2.pipe"
-+
-+	perf record -e task-clock:u -o - ${prog} 2>/dev/null | tee "${data}" | \
-+		perf inject --sample-buildids -o "${data2}" >/dev/null 2>&1
-+
-+	compare_script "${data}" "${data2}" "Pipe mode injection"
-+}
-+
-+test_report() {
-+	echo "Test perf report consistency"
-+	local data="${temp_dir}/perf.data.report"
-+	local data2="${temp_dir}/perf.data2.report"
-+
-+	perf record -e task-clock:u -o "${data}" ${prog} >/dev/null 2>&1
-+	perf inject --sample-buildids -i "${data}" -o "${data2}" >/dev/null 2>&1
-+
-+	compare_report "${data}" "${data2}" "Report consistency"
-+}
-+
-+test_pipe_report() {
-+	echo "Test pipe mode perf report consistency"
-+	local data="${temp_dir}/perf.data.pipe_report"
-+	local data2="${temp_dir}/perf.data2.pipe_report"
-+
-+	perf record -e task-clock:u -o - ${prog} 2>/dev/null | tee "${data}" | \
-+		perf inject --sample-buildids -o "${data2}" >/dev/null 2>&1
-+
-+	compare_report "${data}" "${data2}" "Pipe Report consistency"
-+}
-+
-+test_kernel() {
-+	echo "Test kernel build id offset injection"
-+	local data="${temp_dir}/perf.data.kernel"
-+	local data2="${temp_dir}/perf.data2.kernel"
-+	local kprog="dd if=/dev/urandom of=/dev/null bs=1M count=50"
-+
-+	# Not all systems allow kernel profiling, so we check if it succeeds first
-+	if ! perf record -e task-clock:k -o "${data}" ${kprog} >/dev/null 2>&1; then
-+		echo "Kernel injection [Skipped - permissions or support missing]"
-+		return
-+	fi
-+	perf inject --sample-buildids -i "${data}" -o "${data2}" >/dev/null 2>&1
-+
-+	compare_script "${data}" "${data2}" "Kernel injection"
-+}
-+
-+test_record_buildid_offset() {
-+	echo "Test perf record --buildid-offset consistency"
-+	local data="${temp_dir}/perf.data.record_orig"
-+	local data2="${temp_dir}/perf.data2.record_bid"
-+
-+	perf record -e task-clock:u -o "${data}" ${prog} >/dev/null 2>&1
-+	# We must have the binaries in .build-id cache, which the first record does natively.
-+	# Now record with --buildid-offset.
-+	if ! perf record --buildid-offset -e task-clock:u -o "${data2}" \
-+	    ${prog} >/dev/null 2>&1; then
-+		echo "Record --buildid-offset consistency [Skipped - not supported by kernel]"
-+		return
-+	fi
-+
-+	# Verify symbolization resolves the workload symbol
-+	if ! perf report -i "${data2}" --stdio | grep -q "${sym}"; then
-+		echo "Record --buildid-offset consistency [Failed - missing ${sym} in perf report]"
-+		err=1
-+	else
-+		echo "Record --buildid-offset consistency [Success]"
-+	fi
-+}
-+
-+test_basic
-+test_callchain
-+test_pipe
-+test_report
-+test_pipe_report
-+test_kernel
-+test_record_buildid_offset
-+
-+cleanup ${err}
-diff --git a/tools/perf/tests/shell/record.sh b/tools/perf/tests/shell/record.sh
-index e4789e2bcf43..80cee3eedcc3 100755
---- a/tools/perf/tests/shell/record.sh
-+++ b/tools/perf/tests/shell/record.sh
-@@ -740,6 +740,79 @@ test_ratio_to_prev() {
-   echo "Basic ratio-to-prev record test [Success]"
- }
- 
-+check_buildid_offset() {
-+  perf report --header -D -i "${perfdata}" 2>/dev/null | grep -q "BUILD_ID_OFFSET"
-+}
-+
-+test_buildid_offset() {
-+  echo "buildid-offset test"
-+  local ret=0
-+  perf_record_with_retry "${perfdata}" "check_buildid_offset" "perf test -w thloop" \
-+    --buildid-offset || ret=$?
-+  if [ $ret -eq 2 ]; then
-+    echo "buildid-offset test [Skipped not supported]"
-+    return
-+  elif [ $ret -eq 1 ]; then
-+    echo "buildid-offset test [Failed missing output]"
-+    err=1
-+    return
-+  fi
-+
-+  # Expand test coverage
-+  ret=0
-+  perf_record_with_retry "${perfdata}" "check_per_thread" "perf test -w thloop" \
-+    --buildid-offset --per-thread || ret=$?
-+  if [ $ret -ne 0 ]; then
-+    echo "buildid-offset test [Failed per-thread]"
-+    err=1
-+    return
-+  fi
-+
-+  ret=0
-+  perf_record_with_retry "${perfdata}" "check_system_wide" "perf test -w thloop" \
-+    --buildid-offset -aB --synth=no || ret=$?
-+  if [ $ret -eq 2 ]; then
-+    echo "buildid-offset system-wide [Skipped not supported]"
-+  elif [ $ret -ne 0 ]; then
-+    echo "buildid-offset test [Failed system-wide]"
-+    err=1
-+    return
-+  fi
-+
-+  ret=0
-+  perf_record_with_retry "${perfdata}" "check_workload" "perf test -w thloop" \
-+    --buildid-offset || ret=$?
-+  if [ $ret -ne 0 ]; then
-+    echo "buildid-offset test [Failed workload]"
-+    err=1
-+    return
-+  fi
-+
-+  case $(uname -m)
-+  in s390x)
-+       cmd_flags="--call-graph dwarf -e cpu-clock";;
-+     *)
-+       cmd_flags="-g";;
-+  esac
-+
-+  if ! perf record --buildid-offset -o "${perfdata}" $cmd_flags \
-+    perf test -w brstack > /dev/null 2>&1
-+  then
-+    echo "buildid-offset test [Failed callgraph record]"
-+    err=1
-+    return
-+  fi
-+
-+  if ! perf report -i "${perfdata}" 2>&1 | grep -q "${testsym2}"
-+  then
-+    echo "buildid-offset test [Failed callgraph missing symbol]"
-+    err=1
-+    return
-+  fi
-+
-+  echo "buildid-offset test [Success]"
-+}
-+
- # raise the limit of file descriptors to minimum
- if [[ $default_fd_limit -lt $min_fd_limit ]]; then
-        ulimit -Sn $min_fd_limit
-@@ -760,6 +833,7 @@ test_precise_max
- test_callgraph
- test_acr_sampling
- test_ratio_to_prev
-+test_buildid_offset
- 
- # restore the default value
- ulimit -Sn $default_fd_limit
--- 
-2.56.1.831.g720f3f5937-goog
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
