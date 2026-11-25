@@ -1,101 +1,102 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.53
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795644159;
-	b=eNHpunnxex/uMSlgJgAW3iFrKqoDPlm7pk4fbyxmYJEjr2Y8nIFb5JJr7c4/htfkkiQA
-	 bzmT5ql04vQRw4bSx2IZpRb3km0uUE2bC10Tz4NwOZzRdqfwbijc24m/DxqKZqEzecJrw
-	 c+n0nCquaNcyvR4LdQqzHD8af8WBofzPTazha993cQSQrioHB8L7fiba5mUI4QRrbrPip
-	 Mc+YP8J1fk4npjQF/PuZxRzmKauGyqwkC790nTmmnAwbEtiOXb5CvtZmsTs82bPfCswtZ
-	 03DBeMhsYsH5BZw//cqn1GhLPEt/7naqJpr7G3/wU0Kf/Zf3BLfr5DtUzjORFSwbcCQ==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795644159;
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.49
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795644332;
+	b=NLz/Zxw6M37Q3VzDqwy80NWbIOamXe0g7qZuZgC9Ut6IKGtSyLRr+ghDtav2QDJ0AhP7
+	 ENgQykNKcv0uQJFlUAFpQ17ugT+dKQJOs0QIZnDQj47zPeUUdDIXd4nrf3hfqA4DmGkaK
+	 dbwtS7eMNNCRrf8llX3xoNHM1pXQdgSZ7O5WUMaq4Qb8Az1T4WEgcFBh7ESDjTOQDJ6h5
+	 bn7teksdcWwEQ3NN/QNi+6FXmeZACpaFRB5PLWQku2W9IA8yhq8rlRB8b0B8SilSRVBZl
+	 8xZ+Tj0ZwKZKje+LLwGQ+r2qXT4lW58frw3h9AmLFdjeiEikUY9l0S4SJs3R0N4PZVA==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795644332;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=oHR1tBRCrTp4GdTSuulB2NpPvXunoIK0pVzcT18XLsE=;
-	b=bMIRHRrwRG/tOPqMmSVN5vi9YFTegyVa4py+eBHL/IzqX4bqlQomqdoAulj11R9NLEEQ
-	 tcn4gZ3KCDbi1FfgGGPN/lTM5MXRuFvvcd3cdq8TKH9wPk/6QjfbDN+0GCnQSv56Uydzr
-	 wOGwLmtBzUNOx5B+LEb5r0JY5+xu0r+rOkhXj7i2BY1tdTUncn40/RdFqKNqq+d6NqH/L
-	 BbQKw+spuLfby2YhteUQjzI/+F1w5N5NdHlmWXxpN8+tJb9W9XzTymYjqilqeGCWmC0RR
-	 uW4I9mnC1Z9gs6xJ5J955AoTKeUD9W3FrhSCfAlDWtSr6pJg7R0KOiTWgXFV7BTDgKA==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:X-Google-Original-From:Date:To:Cc:Subject:Message-ID:References:
+	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=PFMx5gcHoGq+aybX24krgUmTqr/EIcl1w7rEetCl/eM=;
+	b=q9sP4JXScUO3h/DHYQ8rR6KHG5bsrHdDtmMPMxuQANUb2PWpEBP/CP83sF4nSJaMLHir
+	 Hk0YRYVlhZdTXNxbdN8KccKAEkv9X2jO7EiTZ03lTSdH9tP690zqOV5hIRMiED7DhbUJE
+	 pU5XHn9IBPPjPT7IcjNC5xIgYZhZDSUq5QYtWOLXRxkJEXj/xJSUReNC/i1+3dyHTszUv
+	 wRSgumo6kjsMUO8OuYtxokTtcRqefVBIDc057QIF0YEiIsU/8eqVMVO+twEwsFqdVpp6g
+	 9Ii11Sji/eGWwMUFwUDWzinDoPIZHPUTGoeWWwiMUE1QerAh/9ekORppeWyWu93FMKw==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=DUdMaKJu;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.53
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=hRsY6FcO;
+	arc=none smtp.remote-ip=209.85.128.49
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9166606A321
-	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 22:02:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D9166606A321
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDA49606A323
+	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 22:05:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CDA49606A323
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=DUdMaKJu
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4bb70074ab2so67938435e9.0
-        for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 14:02:38 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795644157; cv=none;
-        d=google.com; s=arc-20260327;
-        b=oeCVfwz3B3P3Mg7fY5Ntn/hCfMqMq4vfE6lAazCAPeUBxd3AXHZzHhwv7pNsfZ/mRr
-         MgrpqxNLG/nzyB5z1sjv9k4NIlqgG7NPW77vHisFVc9Mwh4qtlUYzigrnQlR8+VVn8mY
-         ZFFbUBfyVeLpSKCC/k/4H3ZIL/MXYNfN1V6X8umlJOfqfQzuxWeiXbCbnSt/6a3TqP0s
-         RdzFo3PrAj99BsqbiXrQGuOVghajx0YXwP60+KwVgKYWx1TebljtJRrVc1bsmDc/ibb7
-         7Y/9rBnxsH59AGjLBNZHyJTz0rPbgdVPKc8O44b8lVebp39TfhU13Gh+1zHsJc6BXX9+
-         1bOg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=oHR1tBRCrTp4GdTSuulB2NpPvXunoIK0pVzcT18XLsE=;
-        fh=/pEexQIve92NxpYL9gy7+r5SgziaRhiu2qYcwB3WxqY=;
-        b=MGz+00SorNFWJojkumemPcxsV89MqVsXzYPczyDcvBmChM5kmp4F7TwI8fTMAHFWN6
-         TS55wdwkxS0EYOotHqeMCj+CalKa+bWKb1ktOL+P/rn017mKSzsWpRIupSq61m5d+9Gk
-         SGtMtRrPg3e03/kbWr0W39+2uXVt4/ixcR/ZEIJS1VFRIFt0UehsMnMIDzNvDN6pGKTE
-         nDhnUhfRXmFmVi+zVwTgO77JR1IlKFWVSU7rw3LH4sTQSJt8dTKmHnm++SUBG06T574c
-         Z1EsuEh90ZfxZgPmhY6q14+f5JYfxoFuYR+fLT3Rpcl4agnLCYarap/HawLil375scg+
-         E/Ig==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=hRsY6FcO
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4a5b2be99a8so53585745e9.2
+        for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 14:05:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795644157; x=1796248957; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+        d=gmail.com; s=20260707; t=1795644330; x=1796249130; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:date:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=oHR1tBRCrTp4GdTSuulB2NpPvXunoIK0pVzcT18XLsE=;
-        b=DUdMaKJuwUDdxlYTSZPt5gtur2Cj9hzVh8bPg61VMEQMGvBXDTBSV2l1KSbZUUd+3c
-         pNloy/PZqJPvY0K+zoeDZdmMBMexEcq2qjE1sav+r/rQi3yKJzmSw4eLM3x73s7Po+7X
-         MMuIyP0+MAD8ZWCE3NnngRYnJBd56qkXAhSgPhYogAX5E2swZ9yLF0/NRbY6Fmz8VsRQ
-         EiZog8ujkcs7ujBC++CLtQYmXJTqeiVIBmnEzQNmJ0P16SnuENvK0HcckjXInSIFpeRf
-         B6vKBy/0rgpzNVyfp3IDFFlZwFz4/z9k3E8nA8YGJWRZQ6n7DyGnN0Kv0UkU8HcRO4MG
-         6oyg==
+        bh=PFMx5gcHoGq+aybX24krgUmTqr/EIcl1w7rEetCl/eM=;
+        b=hRsY6FcO9VKK/UOP2vT1k2XjTWekQ5+uV5pYD/ykGM2TvFCyGMhb3aYmmesN/XrDM7
+         /xa+R5z8TfXWB8q3iC3SJujbwY+KX79yguFoL2/rHEyUduY3s6a2Pv3F0n15bbHIg4V5
+         WR2l8gEtzHyz0zdHGDTbTcthKXhlzTX2niHKXed5ySIIvuMR6lYDsV9apaFFC1GKGY0B
+         yK6xEfP/kLAM90sSgP4FCwuj10gbhEo45nAoZhvn9+4Uwebuq3G/4Bvae1/F/7yEu/vh
+         2FVnxNb/1g8JkQLKE1FsLRvC8Y8DAaiw0iilY6hXNScPUtyZmYfE/0UxFKB10RD4OMv4
+         CLog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795644157; x=1796248957;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20260707; t=1795644330; x=1796249130;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=oHR1tBRCrTp4GdTSuulB2NpPvXunoIK0pVzcT18XLsE=;
-        b=MZgHPvhjmU2mRr2xG/YuMT2Sr83UvWgvOaTKGFjAaYMfQSoHNr+KwOs/PUmdJL6qVD
-         885cXxdYJC0UVCcdopcxfa58DIBn4fd+eboyhhM+yatAWivsdGq6DNriLcbJKnimQiME
-         /M2h6qmC4C1KMBu3i08WYs7bB9+n5ALx1mtvHIO78znht7fi2KFPDyombE4WLPo1N08Y
-         k7JxS8KrTL8NPq9tFiWI4fLvvL4bqM2oXR5e3JESof8GpsqGGrSPPoYXaUltPZJB/JyS
-         ci0/OMsCx8srBx3yhAj7maYMSzE45WFZMCxti9wwHlkrygKMwKg1iQK/vjNPcduTXaWp
-         RAYg==
-X-Forwarded-Encrypted: i=1; AL+hErHit900/dOCc3NCfvOA8xl6EhqOIvWAXQ64R16+HD6gwhNnICPYeBiVAGiAsTFIRRc25kA=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+NoTDbntwbSbdpQuxnSzNuIaNpRwDjX+739YRYZ9RTVZt3584G
-	Cf892kFLT3D5z2nH7O5aylDA3MWlEEsGnlAukygyiRK8U63hQEXBhvPDEXcLshbZ6dSyecPx1pJ
-	P43DH/ynZCfqvxjQRA6c/TM9bfEy2mlc=
-X-Gm-Gg: AZFdTZeCGeGNNfsZxKKs7z9YSL7hMa5UgjdSvD50vLFJhWykh7ybJ5AdGYvrc/ZC73a
-	jlRfeSKN3YuGX1yGCAd/BtVSNFK3vGornm4+f6w4LXF15qW/PbwYI/3iSbqVlGGhEZ2vOcGjIuJ
-	FrmbA1grP7at8fVPrhgyAVtcVhDr9Dl0fY1dX5fvV9zvmzq3U8NTCpMyvLENZ621ROwLmUg7/b7
-	p2ca6hTDjzwTMrdUUCnzAnqujeTq9ABLcYn0BHHy6ugPzxuvdmSeTVx0Eta0NVxyI1V/Lv15G/j
-	kV84s2zpeRjufWAVYQLpoGPbfbeHSNHSt90BHM7F2Kv39fhEoUrdnAKv7IfBaeUsWTj5fkg6tvW
-	Gr9aB8//mHkOLJsOrGs1p/80m4rfSGYhiXOq8rUj00Q5fx5SQ2vm3kO00HulsGp5MYTSkPgllSW
-	11KzpgrAnGJRHHBkuz5+Cf7FF6oOhg6U9El+LY9CRj+yTvBsAe1BGUZg==
-X-Received: by 2002:a05:600c:4e0d:b0:4a5:e6fd:65e5 with SMTP id
- 5b1f17b1804b1-4bb88922a67mr378017515e9.31.1795644156940; Wed, 25 Nov 2026
- 14:02:36 -0800 (PST)
+        bh=PFMx5gcHoGq+aybX24krgUmTqr/EIcl1w7rEetCl/eM=;
+        b=iupM03yKHUxJimumaYnS8bGZ4l3QhuPTVlxy8k7WDKIeXcLpneckVbzXW8g66wo6s3
+         q4k96bg4NE593JHOR8CEuMCWwz6dPPPc2TaUXXB5RqItnMHSVzJai+W1D8RPYsh7Uca7
+         BGXpn3K1FKOazzMw/wqmCURdgoy1fM1m/RABLiWZDTNZFqkNxxCCzPFLWEbVABelXEWm
+         lOxY6Y8IxBQGr44KlQUiHbLndThlZ85m4ci+MVJISy3dAsYm+X4uUeVmO/+jwyHbVRGN
+         3bhPqPG4y5/0gRtSxbhZESy2fWRMyH15njKS2ScLJrWeTf84Hs53dvNX+q/d9+wiKatr
+         rUSw==
+X-Forwarded-Encrypted: i=1; AL+hErE/GsfhQ4mz4ZeDcJp5QbVTeplKT2uXr8KAZKFXNHZntTlWjuCZ2KNUiqJwzxiTz0Jojhk=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8jmIWMh7VU9JVI50f1az8a0ZfnA+1gkoP05JWKmphyZlsVby64
+	IUhfW4ky5ATZt+HrpLeUg9RZnRc1ou/bXApizL3WNyQxky7TbORHJd1R05sg+g==
+X-Gm-Gg: AZFdTZcl7WlqVyPF031dxT0LC8/bnpCFE2fhLB2CHCWYv4ZHFBTwhBuR/yYau6xxFEe
+	w3V9WFqdRcavtt6bNJJR3cLGX+fRAca9mzL0ThpNYWp9T+db5WatUQzBbzwC6wsfhYGmBdwc43B
+	A9fe3sL2+7qy8uNr4S0bleAX4Ez/FH/b3RppgK9hNd2DphHtawCjWPMI8Q6PvUxm45RzMR0mXHF
+	NWypt4OINdt3g7sZOKeH1CrP6uA8FI2AQbIyee8KKcG9Re5MF1P1YjGDz1M1mKtVRbmJsBsdiVI
+	7le4yfUgfEhtEA6TNwpTXJfZyhiFH+8u5POGyFvMiICB3KtDzLMKOZFML9ed5+l1hx0AA11Ew3H
+	HeXbQuoQAd1cpkUNaIyWtHh6rm1q3nYgeSo87TLGn1vx7of0puh0J8U4l/6n+gypqjdtaoIGUjg
+	Sxe54in5+XpTS5tGFIjYd16ExOZvBmvp+Te3/CpN33mmMIZ8j6Q76NB232eeZYxgryU/T/FXqGl
+	ReWoC76KVVteQeOlZ+kvlnX07uAotGDPDisu5y3pkvefKigJzlXW1oLXV3dcr4TjPUS4PooB3Xa
+	dHQ6w6lLnjGQwdc9
+X-Received: by 2002:a05:600c:e549:10b0:4bb:a60a:fc8 with SMTP id 5b1f17b1804b1-4bba60a11d2mr42321925e9.35.1795644330050;
+        Wed, 25 Nov 2026 14:05:30 -0800 (PST)
+Received: from krava ([176.74.159.170])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb8538b09bsm1016582145e9.4.2026.11.25.14.05.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Nov 2026 14:05:29 -0800 (PST)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Wed, 25 Nov 2026 23:05:27 +0100
+To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc: Jiri Olsa <olsajiri@gmail.com>, Naveen N Rao <naveen@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
+	linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: Re: [PATCHv2 1/2] kprobes: Increase the kprobe hash table size
+Message-ID: <awdbpwBAyzIdG9tL@krava>
+References: <20261122200239.1481088-1-jolsa@kernel.org>
+ <20261122200239.1481088-2-jolsa@kernel.org>
+ <undine-1795477745290490698-99e2fcc5c9b45beb@undined.local>
+ <awWdDfj1fknA8fuF@krava>
+ <undine-1795616480318619368-1be7e961905611b5@undined.local>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -105,95 +106,77 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261121012402.84848-1-tianyi@cloudflare.com> <3adef4b4d528780bae31f2fb02d0a08bf9c8ebd5.camel@gmail.com>
- <CAG4wq-f18SHytDb39SdJYzRPk-dzECjH_HCSiMGAQ721Zmfomg@mail.gmail.com>
- <CAKgT0UeWWherBt1MDcPF7R7jxt6E_3peo8VuxrgY3JdseM-0rg@mail.gmail.com>
- <CAG4wq-dizUz-6GB8Aj1wRTQBOzbHbT7pX9gom+AhR=5OWSyjzw@mail.gmail.com>
- <CAKgT0UffmbELMsGi8HRfu62MfC9VRYZ+TMNKFjZMWJyrV4t3jw@mail.gmail.com>
- <CAG4wq-cG1bseTFczZTjashN75J1Jsrv=u1ccuRsY-N1kZ=SXXg@mail.gmail.com>
- <CAKgT0UeNyyXKARjKR4nVVxNe3UB16WuXqxSz0cf4ZvCdb9A4_Q@mail.gmail.com>
- <20261125090732.69233-1-tianyi@cloudflare.com> <CAKgT0UcFnSvTO6ATw76qVHYxRusTYXpRVi0_GR5QnMhhoXwXsA@mail.gmail.com>
- <20261125183125.25801-1-tianyi@cloudflare.com>
-In-Reply-To: <20261125183125.25801-1-tianyi@cloudflare.com>
-From: Alexander Duyck <alexander.duyck@gmail.com>
-Date: Wed, 25 Nov 2026 14:02:00 -0800
-X-Gm-Features: Aa3M54o80FY0kbVxOnhE-mBTpxSO-3Img4pRNLDvWi5ZvexKf5BGtRjI4tXLTnA
-Message-ID: <CAKgT0Ueso=OQ7=GJp7m8nr90kBUp-+N6ko+Qy4e29MZv6tLQfQ@mail.gmail.com>
-Subject: Re: [PATCH net] ice: do not report CHECKSUM_COMPLETE when an XDP
- program is attached
-To: Tianyi Gao <tianyi@cloudflare.com>
-Cc: netdev@vger.kernel.org, intel-wired-lan@lists.osuosl.org, 
-	Tony Nguyen <anthony.l.nguyen@intel.com>, Przemek Kitszel <przemyslaw.kitszel@intel.com>, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Simon Horman <horms@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
-	Paul Greenwalt <paul.greenwalt@intel.com>, Alice Michael <alice.michael@intel.com>, 
-	Eric Joyner <eric.joyner@intel.com>, Jesse Brandeburg <jbrandeb@kernel.org>, 
-	Lorenzo Bianconi <lorenzo@kernel.org>, bpf@vger.kernel.org, kernel-team@cloudflare.com, 
-	tianyi.gao@linux.dev, Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <undine-1795616480318619368-1be7e961905611b5@undined.local>
 
-On Wed, Nov 25, 2026 at 10:31=E2=80=AFAM Tianyi Gao <tianyi@cloudflare.com>=
- wrote:
->
-> On Wed, 2026-11-25 at 08:32 -0800, Alexander Duyck wrote:
-> > Realistically speaking there is an easy solution to this in the
-> > program itself. It would be to look at using something like the
-> > REDIRECT action instead of just stripping the tunnels and passing it
-> > back to the original interface. It would then take the frame and stop
-> > processing the remaining descriptor data. As it stands that would be
-> > the more correct solution as you could then just redirect it to the
-> > tunnel interface I assume you have stacked on top of it and have it
-> > receive the frame instead of having received it at the interface that
-> > just head the header stripped.
-> >
-> > It would also match up better with how the stack would actually expect
-> > this to work if you didn't have the XDP program in place.
->
-> That is exactly what we are trying to do. Our traffic will be
-> redirected anyway, to a cpumap for load balancing. We tried to keep the
-> RX metadata across the redirect autonomously in [2], but this has been
-> strongly opposed so far [5][6].
->
-> [2] https://lore.kernel.org/all/cover.1794281983.git.tianyi@cloudflare.co=
-m/
-> [5] https://lore.kernel.org/all/20261117161856.6f6c2ce9@kernel.org/
-> [6] https://lore.kernel.org/all/20250716142015.0b309c71@kernel.org/
+On Wed, Nov 25, 2026 at 11:21:20PM +0900, Masami Hiramatsu (Google) wrote:
 
-The thing is once you start making modifications to the frame all that
-metadata should probably be thrown out anyway since none of it is
-really valid. I would probably treat it like we would a namespace
-leak. I get that you want things like the RSS hash to provide some
-entropy but it is basically just snooping into fields that you
-wouldn't want getting passed on anyway like details about the outer
-headers. Same thing for CHECKSUM_UNNECESSARY. It was making
-assumptions about the frame that you likely changed, as a result you
-can't really trust the flag when it is provided.
+SNIP
 
-If anything, the path you are taking now with disabling
-CHECKSUM_COMPLETE is the opposite direction of how I would probably go
-about this. If you are wanting something that is more universal
-focusing more on CHECKSUM_COMPLETE would more than likely be the way
-to go as it doesn't care about what the outer or inner protocols are
-and the math is pretty lightweight as you only have to fold in the
-header checksums as you modify them and don't have to mess with the
-entire frame. Your modified frame could return whatever the value is
-that you want to pass out to indicate that it is modified, and you
-would then be able to just pass the checksum modification out as part
-of the metadata in some expected format that the drivers could then
-process.
+> > > If this change is intended solely to improve performance for an extremely
+> > > unlikely use case, I would, at the very least, make the size configurable
+> > > via Kconfig.
+> > > 
+> > > Since this change affects all architectures, those working with small,
+> > > embedded-system chips might be reluctant to "pay" 32 KB for a use case
+> > > that is highly unlikely to ever occur.
+> > 
+> > I can add CONFIG_KPROBE_HASH_BITS with range 6-16. I'd keep 6 for
+> > CONFIG_BASE_SMALL, so small systems don't pay anything, and use
+> > 10 (8KB on 64-bit) as the default otherwise, which gets most of the
+> > speedup from the table in the changelog
+> 
+> That is good. If you introduce the inline function support which is
+> enabled by some kconfig, that kconfig can increase the hash bits. That
+> should be more reasonable.
 
-By disabling it you are basically forcing yourself into a
-vendor/protocol lock in as you can only get checksum info on the
-packet types the hardware supports. The issue is that
-CHECKSUM_UNNECESSARY doesn't convert well to anything once you strip
-the header. That is why back in the day we had strongly encouraged
-people to use non-zero UDP checksum on their tunnels and had added the
-ability to convert the CHECKSUM_UNNECESSARY to CHECKSUM_COMPLETE when
-decapsulating generic UDP tunnels. With that we could support most
-NICs instead of the 2 or 3 that supported all the new tunnel types
-that were coming out that then had to parse all the way to the inner
-headers.
+yes, good idea, something like below, I'll send that as part of the
+inline tracing changes
+
+thanks,
+jirka
+
+
+---
+diff --git a/arch/Kconfig b/arch/Kconfig
+index 1163736de1f9..350144df6863 100644
+--- a/arch/Kconfig
++++ b/arch/Kconfig
+@@ -141,6 +141,23 @@ config KPROBES
+ 	  for kernel debugging, non-intrusive instrumentation and testing.
+ 	  If in doubt, say "N".
+ 
++config KPROBE_HASH_BITS
++	int "Kprobe hash table size in bits" if EXPERT
++	depends on KPROBES
++	range 6 16
++	default 10 if DEBUG_INFO_BTF_INLINE
++	default 6
++	help
++	  Size of the kprobe hash table as a power of two. The default
++	  of 6 (64 buckets) is enough for a small number of probes.
++
++	  Attaching to inlined functions can register thousands of
++	  kprobes at once, so the default is raised to 10 (1024 buckets,
++	  8KB on 64-bit) when the inline site information is available
++	  (DEBUG_INFO_BTF_INLINE).
++
++	  If in doubt, keep the default.
++
+ config JUMP_LABEL
+ 	bool "Optimize very unlikely/likely branches"
+ 	depends on HAVE_ARCH_JUMP_LABEL
+diff --git a/kernel/kprobes.c b/kernel/kprobes.c
+index f14f7ff45961..eba446e8ae37 100644
+--- a/kernel/kprobes.c
++++ b/kernel/kprobes.c
+@@ -50,7 +50,7 @@
+ #include <asm/errno.h>
+ #include <linux/uaccess.h>
+ 
+-#define KPROBE_HASH_BITS 6
++#define KPROBE_HASH_BITS CONFIG_KPROBE_HASH_BITS
+ #define KPROBE_TABLE_SIZE (1 << KPROBE_HASH_BITS)
+ 
+ #if !defined(CONFIG_OPTPROBES) || !defined(CONFIG_SYSCTL)
