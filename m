@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.170
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.46
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795577536;
-	b=P3oBPuSmN5XdXzfmnvuHMHfEpZAE1zQ8fOWOsH+x8elL86R5cDjpm7KOaXEaYZTkhgFm
-	 jwDOsq0weqlX1ukBr6rf+cpEIXirTgKXMlOhciDswM/AoSg8kMl7HD2m9xb0QhXDYFghC
-	 5sjBnjmy2k00RgjpP/PVC7F0PAOkU9NfoIrTz0eE4kEluKApozHPVDm4zOqm3h8cQIYhS
-	 5ko4lqTbJYWdPqcCy49tywYthtM+c+KqucRSKceUSuLkcZD9TkL7fb9K985x6hrYT1yH9
-	 3WQWHwLwOmkCa0cveyEkc7OyEERVJBpLuI4t2it8BSyNKFp7wyyr3juwlAUZSJDt+ew==
+	t=1795577542;
+	b=zkxgOLhplTzHACk/cBcYilaO8dzI1EYvWTY6HcezcLF5P1Dh6QjAGjcNbn9pJk/b0Bmg
+	 rpdBGjTSoKdMxElkk9qCyL3027ks/ZfQ6sXJAvk8VPR7WypKX9vVdVOp1q1kyXTjGup5g
+	 uwj+fCq6hv8f55ds32zbssAtYjzoRh3PaOqdJr72IISemx9vHkxnISrkqXyFzyrJmY3EU
+	 crDWqolBzt8VJ89YgBgij7p1WuBgYnV0IiUrS2MaUQHPN+UFregmtLafFn3vvbs0hEkce
+	 Plzf4cgZICe0Yl7meed/gRXsmME8sxzamItxQvCH4rJfxRLf1Au/32ij7AJws/5VHxA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795577536;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795577542;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=mNDhX+PjlFJOF0i60mR1jUbNgonHFASLNfEl+lG2Gac=;
-	b=MAXMS5FCelXcprCL60GQT/B4/Gxw5a3ABr7zcR3MG3HKa7tR682ev9XjQ/Y2P+9fVcmH
-	 1UTt0GEY62OzSBPwgN/VDmUQoAcfOyHt6MQLjAXoQ6zKBsq+8zQM3rpQwpBye9Tnaohxw
-	 JMgmmOSl81ifDgK5/jn0anfqhXtjdEmBnmcFq/bVuWVsmxmsEgKYuZrYfclI9xwfnk88f
-	 tHo5LBE2/Qsb1SIOy3q1eA4KcfV8uYS+h91+nk0VJvz3ev3I6xurCykh5c2opMfF/vdZK
-	 R91VcFl6FKsqKMGZX7NWW1QIauPUD9hSX3qKWqgqRoIY25+Y2qlKcFSWpbM3JPAWcAQ==
+	bh=xYsRKNoP8UvWd5Vx02OL8oCTtfZVWSb6iHzy3vKxxGI=;
+	b=CIDE+cO7bFAxzOpqD9AAul6w7YnB0W5yJGaW2RDGcLgP+muSOyDu4k0fw6HVtbCn3W46
+	 gpobYtIdWEvkn2f7DoXoO7+MHLDoXWuJOJfWg9hQ4qioF9wgSvfQwS3BhtnmjocZCOKn0
+	 B75Rh0hUPDY0OFLN5HJks+kjp30aGEiLIRuY5cY19iW7ZMXWmMGPsxWq8Rtyo7k+pW3vC
+	 9PRrR7FGXa9YIqaUQBESOhNoOQEEqnIlAOfidO+jN9Ku9hWGZoTA0wsFzimK1EhuQrHhY
+	 RjCLd00pb9B8MBgCmnPVxVawPiFxrMxp9lfiDH+aJ3Z/ihd8HmrL2rLFnUWYuvnGzTw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=R6eRAkYH;
-	arc=none smtp.remote-ip=209.85.210.170
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=p5+ltDcp;
+	arc=none smtp.remote-ip=209.85.216.46
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59FED606A321
-	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 03:32:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 59FED606A321
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32F6E606A31E
+	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 03:32:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 32F6E606A31E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=R6eRAkYH
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-8b3577deeb0so2384208b3a.3
-        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 19:32:16 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=p5+ltDcp
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-3b3a914e4c8so2818280a91.0
+        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 19:32:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795577536; x=1796182336; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1795577541; x=1796182341; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=mNDhX+PjlFJOF0i60mR1jUbNgonHFASLNfEl+lG2Gac=;
-        b=R6eRAkYHsDWbcXY0w4QcLFtj3c8ww14CKHU8Nf5bkrfrxTjZyN0/1veNhSeqg4bwGu
-         s5APui5/kHh6wroKmo1sT+qt9yvc0ya/hMzA6Ykvz5au1ZbArvfEulascUeJQtDSnUVi
-         K4pAnFWbfGfOoXDCXTIRA3mMI5rHVGPXZYAHFFSkwsw7Ncc+FZ6XKO2Sxv2L3dT0Q57I
-         NSjr7+t3mAiF4LFvBT1EhsakYHaQzHPA/NXuRBLRB4mF7HglfBdpzG+9FWvA178qb5yn
-         RgWeE/RVzsmO7UlHpTNf9IxzpOfGUD6Q3lssbT8Eyejbd8FUZwh0bSdn5r077BRttXOq
-         6h+Q==
+        bh=xYsRKNoP8UvWd5Vx02OL8oCTtfZVWSb6iHzy3vKxxGI=;
+        b=p5+ltDcpFBqJOT8kzeLoqN4iIJ5PzTvg74RL/Kfuge/J+KsyZKOFcrDNNpgyPXIGIy
+         5r6aH3kFibO/ebQI7sdK8OJh/yX3gvTFyeGNoP/VyFfAmrJNVcFbWyrkSGEqZ5q/Ffao
+         c32G0EsvJCrPcpUHNi2kGYd3fvwBACprgNL4oHO8El5o+D3QL3xiF57KtxOmzxZAB7nQ
+         BHfA4KgsdweiOy8huw7gEKwBhbY/yjGQsjJNOFHtKMvecRq1K8/MU1otuLvsQnwhUR8f
+         pvjBiYM5VxtvzpSj6R05kZjbUEesrJINZsqfLwnI0RwXsDrflS5Rqbpfz6bfuQxdU+Ph
+         fQ5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795577536; x=1796182336;
+        d=1e100.net; s=20260707; t=1795577541; x=1796182341;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=mNDhX+PjlFJOF0i60mR1jUbNgonHFASLNfEl+lG2Gac=;
-        b=kdH1Z7kbavYBegW2ghwjFRgvw85KssEkvlW7KBSq2mqDvfYRJj2EmBIWuWlmUkzAY/
-         dW/eCfuVUYZxbnh3eY2oNhuEdXQ2s/tJGhUo/ZYIM+t8cMewqvvICMVv8Uzu9oGu/h+b
-         RE4nl6kEDpS3tQ7asR2FT47NhCYhDkcFm6gWVX4bnMBBD7rig/oIqOjZjNs36P2/MvZ5
-         YEwGEdkSzvmPsUiJIaQ+f483fIVInZuvz11TXf1lzB6FlTfJixszykECPGzvp7f4Ro7C
-         4geap3d8VDJh9RpE0izbSyy01RWivdFvEy+FApV6ysTyqimaWxaYxIV/3aCBd3t9PyBl
-         ijBQ==
-X-Gm-Message-State: APuU4Z83i94Pu1r/QyXygEkyxHzbZXwl+DeR2uOXLGASGVdmErwZIl7m
-	X1uYi3rN3uoUutoewIOghzu3NUaXrx5mrymRLCAYWnmK/qc3RhFAeridJXE1finI
-X-Gm-Gg: AZFdTZe9u9erCO246iZ3YpICFosYNQnW1O1pF8UFLwH8Ea0sWh9R7x7TpDTZvP/WItn
-	KX6DRs2KjsgF4ImOldznl6qPp9MW70/Tz4okC/I/n5xziQDRQ0t9K6M2EkWXJyqvTCjI8WtMKMi
-	cy8pHwavr53ZSI71r7vXIq8f9s4TVr4mlelIWMmZFNIl1rOO8U4c7zOrIiUJlnRa8d0kF6WEyCN
-	ZCIfaoTZ8VD9aYIiQckNUdJHY++sSXWVB2OMgiaMeWQxgdn8ZeavyW3djBTB9ubZYk1+BHMgx5K
-	n9WAqaSLZbQaGDRjpgZ0stVp9phkc9b9FjVjk5piJSwKmSwWuavPJ63DOTqMOLxfGcF7I8SW/cR
-	gvlTncKPjh8cCVAEG4gTtcynw7RA5dmOFd+RbO402q8mU63GNsn6/qjj7sDjS1MhSwx3Xt8Rcjg
-	hGaCKfXoDFzoC4rHGCs8/IiT1k5qlrPbOpfF864UoayA/51JHohSeLLC+VBdVvUnbC+jRk3XhkK
-	Udu1QQq21mdtqtRP6JYXkuY6CDGrolCPqSGW8NhbVqxcTmqLMcbHr+GXQJdcuw09gmRplMBa89d
-	jG4+A9CBWH0eLi/MSS09nNavUCYEI4liZ9d7p329uWjpMG+yfPbaGN1NLzP0r8gP8tpdDPWS1bk
-	QIohLGFkPJsMtWFMU8z69Eo3QpblQkrPrJAqqet3EiDAB4pn0RF1l+88YM9GBsamb1SRA05UQtw
+        bh=xYsRKNoP8UvWd5Vx02OL8oCTtfZVWSb6iHzy3vKxxGI=;
+        b=z+3zuVaomfd+uPsB2i+Q6vzjIHUKP2qW9zMV6kxDE7s8sc2BtYxykc2QTgqm0eTTbg
+         RSCXzzq559c1UBhrtmqf1AFfPwSWw15C8lzHCVnb/Z4FIGKbtPOrDXNazyQTPuGji6iS
+         pCViy5hp7jm12JJjb1vebvTyJOwg3JJyoGSkGSlCcAIH8Ln844iVyzDE060WBNeRVrQQ
+         M/l00Lh0jUyGIT0Q/veCLfm8yVHIJkac50WjM7WGMQCIXh6MA4V/oz4OEP9hlBK7B3JR
+         oQQZxYDnETAyj8NdZByPAFHfq5/bueqR0cc8ZLwAxCkKYrUUQl4cCOyGx0RdevY9Ka3t
+         T5yw==
+X-Gm-Message-State: APuU4Z9Zcp6XPwdINZppRP4t9NAcSVTp63ZzFfH5eeo4iezscD1h2E1i
+	VPSLra+e46ztMLKoewPz80ILRqLwPG+rwNpcXO8rwnLQCaXxZMZbcGSRjSokY2eQ
+X-Gm-Gg: AZFdTZdUGBguk+GIvxwxSWmHukXPNqhNaAIQ7qneq9PBYnKn311DqAwSeYWhjUUeeiZ
+	BJtU1zmP2JOG7hX8w91yzv3aJ97xz5jnmvP4VVa+7xWY5llzE5j9CBdbeoE5Qyx4+1TsLPV9uLt
+	wKH0Z/p+tNSCR0grIzZ6Z3IW92xD9JEvCVGkq6PYkILoO5i4H1AqpwOE5ALOmGoGPZg6dNX2VDk
+	1P1ZiRuHhsZyxAnPrDrI/12wHe5RGJyMK4RZ54K8pEc+dQN7UT5RFVGyjGK1iOJCIKrj3MIa3fs
+	S8oE1QIX/wz4BnHHdH9uB2gV1cQ3dHD9AsViV/0jUuwxHZ4mpc13Hjc/MywakQiVmcy4zce9MhE
+	y9R1aYo6dRIjX4UeEM9/RjS8uCoRy9sO+eCt6bVR/6DwpLhZYnghxGvQbloS3dblZV+No0oRqlj
+	z4cJ/Xw1hDrh6g3d40Ez5zO6cp0cv2Uu8S9KSa9Y8s9yq0SqMtP2SKOf4fEhnr9TXnEFgitzw5T
+	z1tA4DzoitBy7z4W1bwFe8+J/3D0EMomHcEjEjftvD+o6+ehTuAVLGJATVyolK2FCcXOWh7SnVL
+	DcyQs+9LtlxBl4zgH+GUS1aLFmbhmgWOsL57E6V2ViXy7TKUHRGwc6pZ53O2qaRtBQl/8uoASB2
+	jPaRtYMwytU9EIGoTfGKmGd8/xUb6iQrHOzpf7hhSb3F9F0wTi6KHzPdfWUWDE7gexRZFIaxXAg
 	==
-X-Received: by 2002:a05:6a00:2888:b0:89f:db59:193c with SMTP id d2e1a72fcca58-8c87bac50abmr13138625b3a.9.1795577535429;
-        Tue, 24 Nov 2026 19:32:15 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.244])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8c872e45eccsm8128332b3a.31.2026.11.24.19.32.14
+X-Received: by 2002:a17:90b:4a48:b0:3b3:b5b4:e4a9 with SMTP id 98e67ed59e1d1-3b41c7ac07amr15550147a91.3.1795577541169;
+        Tue, 24 Nov 2026 19:32:21 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.254])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b41ad8ef99sm26163009a91.12.2026.11.24.19.32.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Nov 2026 19:32:15 -0800 (PST)
+        Tue, 24 Nov 2026 19:32:20 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf 26/47] bpf: Require CAP_PERFMON for kfuncs that leak pointers or touch tasks
-Date: Wed, 25 Nov 2026 03:29:17 +0000
-Message-ID: <20261125032938.670542-27-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf 27/47] bpf: Require CAP_PERFMON to read streams
+Date: Wed, 25 Nov 2026 03:29:18 +0000
+Message-ID: <20261125032938.670542-28-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261125032938.670542-1-alexei.starovoitov@gmail.com>
 References: <20261125032938.670542-1-alexei.starovoitov@gmail.com>
@@ -104,102 +104,86 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-Syscall, tc, XDP and cgroup programs load without CAP_PERFMON and can
-call kfuncs that give more than CAP_BPF stands for:
+A loader that has CAP_BPF only can read the streams of its program.
+Reports of the kernel have addresses in them: those of locks after a
+deadlock, and of code that has no symbol in call traces.
 
-- kfuncs of arena take any pointer for the address and can leak it.
-  The check for an arena misses one from a map of maps.
-- void * of a kfunc is a number for the verifier.
-- bpf_send_signal_task() and the kfuncs of task work act on any task.
+Require CAP_PERFMON for BPF_PROG_STREAM_READ_BY_FD and
+BPF_PROG_STREAM_OPEN, through the token of the program if it has one.
 
-Ask for CAP_PERFMON, as the helpers of the same kind do. struct_ops and
-tracing programs have it.
-
-Fixes: 317460317a02 ("bpf: Introduce bpf_arena.")
-Fixes: 88d1d4a7eebe ("bpf: Allow kfuncs return 'void *'")
-Fixes: 6280cf718db0 ("bpf: Implement bpf_send_signal_task() kfunc")
-Fixes: 38aa7003e369 ("bpf: task work scheduling kfuncs")
+Fixes: ecec5b5743bf ("bpf: Report rqspinlock deadlocks/timeout to BPF stderr")
+Fixes: d7c431cafcb4 ("bpf: Add dump_stack() analogue to print to BPF stderr")
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- Documentation/bpf/kfuncs.rst | 3 ++-
- kernel/bpf/arena.c           | 7 ++++---
- kernel/bpf/helpers.c         | 6 +++---
- kernel/bpf/verifier.c        | 6 ++++++
- 4 files changed, 15 insertions(+), 7 deletions(-)
+ include/uapi/linux/bpf.h       | 3 ++-
+ kernel/bpf/stream.c            | 4 ++++
+ tools/include/uapi/linux/bpf.h | 3 ++-
+ 3 files changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
-index 901c37504217..31389dd5c9f6 100644
---- a/Documentation/bpf/kfuncs.rst
-+++ b/Documentation/bpf/kfuncs.rst
-@@ -537,7 +537,8 @@ addresses to the BPF program, for example by reading through a pointer that the
- verifier does not check. Calling such a kfunc requires CAP_PERFMON, or
- CAP_SYS_ADMIN, in the same way that the equivalent BPF helpers are gated in
- bpf_base_func_proto(). A program loaded with CAP_BPF alone is rejected at load
--time.
-+time. The flag is implied when the program gets a returned ``void *`` as a
-+number.
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 8d7228834305..6840ca5b923b 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -934,6 +934,7 @@ union bpf_iter_link_info {
+  *		by *prog_fd*, and the stream is identified by the *stream_id*.
+  *		The data is copied to a buffer pointed to by *stream_buf*, and
+  *		filled less than or equal to *stream_buf_len* bytes.
++ *		The caller needs **CAP_PERFMON**.
+  *
+  *	Return
+  *		Number of bytes read from the stream on success, or -1 if an
+@@ -953,7 +954,7 @@ union bpf_iter_link_info {
+  *	Description
+  *		Open a file descriptor for one of the BPF streams associated
+  *		with the program identified by *prog_fd*. The stream is selected
+- *		by *stream_id*.
++ *		by *stream_id*. The caller needs **CAP_PERFMON**.
+  *
+  *		The returned file descriptor supports **read**\ (2) and
+  *		**poll**\ (2). Reads block while the stream is empty unless
+diff --git a/kernel/bpf/stream.c b/kernel/bpf/stream.c
+index 65f65876afdb..53519a17bf26 100644
+--- a/kernel/bpf/stream.c
++++ b/kernel/bpf/stream.c
+@@ -268,6 +268,8 @@ int bpf_prog_stream_read(struct bpf_prog *prog, enum bpf_stream_id stream_id, vo
+ {
+ 	struct bpf_stream *stream;
  
- 2.6 Registering the kfuncs
- --------------------------
-diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
-index 56bd02b783f9..70a49b1200a9 100644
---- a/kernel/bpf/arena.c
-+++ b/kernel/bpf/arena.c
-@@ -1187,9 +1187,10 @@ __bpf_kfunc int bpf_arena_reserve_pages(void *p__map, void *ptr__ign, u32 page_c
- __bpf_kfunc_end_defs();
++	if (!bpf_token_capable(prog->aux->token, CAP_PERFMON))
++		return -EPERM;
+ 	stream = bpf_stream_get(stream_id, prog->aux);
+ 	if (!stream)
+ 		return -ENOENT;
+@@ -368,6 +370,8 @@ int bpf_prog_stream_new_fd(struct bpf_prog *prog, enum bpf_stream_id stream_id,
+ 	int fd_flags = O_RDONLY | O_CLOEXEC;
+ 	int fd;
  
- BTF_KFUNCS_START(arena_kfuncs)
--BTF_ID_FLAGS(func, bpf_arena_alloc_pages, KF_ARENA_RET | KF_ARENA_ARG2 | KF_SPINLOCK_SAFE)
--BTF_ID_FLAGS(func, bpf_arena_free_pages, KF_ARENA_ARG2 | KF_SPINLOCK_SAFE)
--BTF_ID_FLAGS(func, bpf_arena_reserve_pages, KF_ARENA_ARG2 | KF_SPINLOCK_SAFE)
-+BTF_ID_FLAGS(func, bpf_arena_alloc_pages,
-+	     KF_ARENA_RET | KF_ARENA_ARG2 | KF_SPINLOCK_SAFE | KF_PERFMON)
-+BTF_ID_FLAGS(func, bpf_arena_free_pages, KF_ARENA_ARG2 | KF_SPINLOCK_SAFE | KF_PERFMON)
-+BTF_ID_FLAGS(func, bpf_arena_reserve_pages, KF_ARENA_ARG2 | KF_SPINLOCK_SAFE | KF_PERFMON)
- BTF_KFUNCS_END(arena_kfuncs)
- 
- static const struct btf_kfunc_id_set common_kfunc_set = {
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 70330a7088db..61ddc45b0330 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -5156,7 +5156,7 @@ BTF_ID_FLAGS(func, bpf_task_from_pid, KF_ACQUIRE | KF_RET_NULL)
- BTF_ID_FLAGS(func, bpf_task_from_vpid, KF_ACQUIRE | KF_RET_NULL)
- BTF_ID_FLAGS(func, bpf_throw)
- #ifdef CONFIG_BPF_EVENTS
--BTF_ID_FLAGS(func, bpf_send_signal_task)
-+BTF_ID_FLAGS(func, bpf_send_signal_task, KF_PERFMON)
- #endif
- #ifdef CONFIG_KEYS
- BTF_ID_FLAGS(func, bpf_lookup_user_key, KF_ACQUIRE | KF_RET_NULL | KF_SLEEPABLE)
-@@ -5272,8 +5272,8 @@ BTF_ID_FLAGS(func, bpf_cgroup_read_xattr, KF_RCU)
- #endif
- BTF_ID_FLAGS(func, bpf_stream_vprintk, KF_IMPLICIT_ARGS | KF_SPINLOCK_SAFE | KF_PERFMON)
- BTF_ID_FLAGS(func, bpf_stream_print_stack, KF_IMPLICIT_ARGS | KF_SPINLOCK_SAFE | KF_PERFMON)
--BTF_ID_FLAGS(func, bpf_task_work_schedule_signal, KF_IMPLICIT_ARGS)
--BTF_ID_FLAGS(func, bpf_task_work_schedule_resume, KF_IMPLICIT_ARGS)
-+BTF_ID_FLAGS(func, bpf_task_work_schedule_signal, KF_IMPLICIT_ARGS | KF_PERFMON)
-+BTF_ID_FLAGS(func, bpf_task_work_schedule_resume, KF_IMPLICIT_ARGS | KF_PERFMON)
- BTF_ID_FLAGS(func, bpf_call_rcu, KF_IMPLICIT_ARGS)
- BTF_ID_FLAGS(func, bpf_call_rcu_tasks_trace, KF_IMPLICIT_ARGS)
- BTF_ID_FLAGS(func, bpf_dynptr_from_file)
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index d29d0725ec01..410804e80392 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -15851,6 +15851,12 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 				return err;
- 		} else if (btf_type_is_void(ptr_type)) {
- 			/* kfunc returning 'void *' is equivalent to returning scalar */
-+			if (!env->allow_ptr_leaks) {
-+				verbose(env,
-+					"%s is allowed only to CAP_PERFMON and CAP_SYS_ADMIN\n",
-+					func_name);
-+				return -EPERM;
-+			}
- 			mark_reg_unknown(env, regs, BPF_REG_0);
- 		} else if (!__btf_type_is_struct(ptr_type)) {
- 			if (!meta.ret_mem.found) {
++	if (!bpf_token_capable(prog->aux->token, CAP_PERFMON))
++		return -EPERM;
+ 	stream = bpf_stream_get(stream_id, prog->aux);
+ 	if (!stream)
+ 		return -ENOENT;
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 8d7228834305..6840ca5b923b 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -934,6 +934,7 @@ union bpf_iter_link_info {
+  *		by *prog_fd*, and the stream is identified by the *stream_id*.
+  *		The data is copied to a buffer pointed to by *stream_buf*, and
+  *		filled less than or equal to *stream_buf_len* bytes.
++ *		The caller needs **CAP_PERFMON**.
+  *
+  *	Return
+  *		Number of bytes read from the stream on success, or -1 if an
+@@ -953,7 +954,7 @@ union bpf_iter_link_info {
+  *	Description
+  *		Open a file descriptor for one of the BPF streams associated
+  *		with the program identified by *prog_fd*. The stream is selected
+- *		by *stream_id*.
++ *		by *stream_id*. The caller needs **CAP_PERFMON**.
+  *
+  *		The returned file descriptor supports **read**\ (2) and
+  *		**poll**\ (2). Reads block while the stream is empty unless
 -- 
 2.55.0
 
