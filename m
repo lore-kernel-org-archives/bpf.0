@@ -1,84 +1,76 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795622658;
-	b=Wcb/78agj7s1TdrpiGCFNxwUyK5bYgsxlYw/vvKbbcUlq4RoDt5XsXCgiez3KJ6tvzBS
-	 QcgxcTQGOvzZguQ+mAU+Hov28iqmOtf3mmglFUzFjB9dWlWgpW18lIaPX7WumeBPsp2IV
-	 JExQaluRzF4DTy++AHpcRffRotQ7jDia62/gymdMPt1FqchtXcHmK/dLPN8SLqhjSwfDE
-	 UJivSQxsqjuA/yGwdrLmBUkAwhe31O8SqQY9b5TNsAKqIZ5u0p83aiZIXhgd8i6HREu9Q
-	 EJK+OMDpGVMsyOGg8ppVsI2U+5Snq6LvEEwCMxEYh7wnnz+Db7PlLpEEewsVbnN4SuA==
+	t=1795623860;
+	b=KVxZ50CvBSDEdeFgqO1NZUbcGMhHqlagx4/YqhqM0XVSTP40QNmWiq5f6Qq4X14hWv9Z
+	 FZBVmr/JYKLIMrWh9INc6AViqFOBW+Ab5hVVohdSYqk4zuHQGiMpNW8nDR52USc5ekUpk
+	 cfREcPFdSuaMD3uFRbGNi/rF2kbi/J45EfwgY/nTc9s5ET6bozFFurLGw5NmCzmSF0yPI
+	 ZBqfUAe7pL8eZEr9Py7l3UL8GDC8s5Q5eGyZWAZFNzZbVCUEmFBp45zW9FAR6B+UNY+TJ
+	 vfhfdHVqazeippqgbSepTH8letnLEekAX0j2/Xit1bEzmchiKgy1Gq9BjwoTvAf2vrA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795622658;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=LozVc94GvRrMpc05Z6BHALOclMWxHaFig1ixRTKkdyU=;
-	b=O2d/JIyws3xwmXSPpujJZta3kW0xW5lsueKEiSsPOxJm/dFXbMKt+b0JocqXSlnzhRCA
-	 SGy6qMmQDr2sW5nrlga0zNU3d3kDRXfQ2QZhqWVucaz9eZTHrSbgYrkGtUVNopmjWkV8H
-	 KEMQMnQr1hhbAXzi5V6ju/yYC6h2QA60C+xdAaiVNRHYQGVyTgOk64uyUell0YqyJkURc
-	 q4vbY6n/DfnpDXHmXeMO2Sirtj+0tqksta1AZlDUL9QFfCbiLv7xbPnA5bMfrldof01kU
-	 1YGdaR3xYJAU5Z7e9/zsCpXIXJ1IguDJZxYzhJ+BWQFXQKEv8+jphdt25zVbyZ1Nt0g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795623860;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=93PlHQzdBd5hDciyifgipa2sETM6WYe2vvJEu0EdaIE=;
+	b=bJZOpm1IZ0A82i3YDiShiViJwET2+8aO2LMc6QN72srhNwAxWdeOozGJZe4YZDeyzy4m
+	 XJ+/yNfqLiPyYCmosAqPm+q5ZtiPyxzwFJ5N5MBfjaOmxhtUJpI2tR6sE95WZgS7hocvT
+	 T6t3pgtFvu8HNhsJC/MlRA09ICtfCPTH2RH8MR/wPDfylFaFrnUpW4wOvI+fBOY1UQ2cv
+	 ZrvIPGwVIV1jx1MZ+TkfbGqXDA+dr6mguBultnUMnxZ5iYe/2XeJt6YuSCwjtPB4ST+je
+	 CS3VFeTOgN/Tb19YkLTiDlkcpXxxjF/u4KstiGqWPVjVrUQZXBS8uE9ZxHKDuFywx9g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=infradead.org;
-	spf=pass smtp.mailfrom=infradead.org;
-	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=Th9WkmJA;
-	arc=none smtp.remote-ip=90.155.92.199
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UqK2qb3F;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0070D606A32D;
-	Wed, 25 Nov 2026 16:04:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0070D606A32D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
+	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id A6CEF606A31E;
+	Wed, 25 Nov 2026 16:24:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=desiato.20200630 header.b=Th9WkmJA
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=LozVc94GvRrMpc05Z6BHALOclMWxHaFig1ixRTKkdyU=; b=Th9WkmJAm20Jktbi/zYzyZaOgX
-	BjVyyFdGD3TGMyljTvD+yJTzFUq9AEoZyUNauy2qrAauT95N4P/TL9iNr3hSkSm/kF7ArBq5415/S
-	CoaywChZFxQy/1UnTQCVJkeW9nohTRLMNH37hcZeUvMZyFEm5aZ3S/JuPoFl69s+9dDqfNYW9nFW4
-	Pb70nVw3U2LuiNZbmCrWu4ivq60e9kkzN52b1HfBUSU4QFwvUfLZLff/Zugc+yvZZfDCBd0P+vEFS
-	2DWgv/zrsUEkgGngu8xYoRY6INTtaI8oa1ikYVUfb5vQ6TLpMJsaQWv2qBfVXalT9hUc2/GwzdwAb
-	3l6H4OxQ==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
-	id 1xWFTf-00000005Vfy-0GiP;
-	Wed, 25 Nov 2026 16:04:11 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 18D053008BF; Wed, 25 Nov 2026 17:04:09 +0100 (CET)
-Date: Wed, 25 Nov 2026 17:04:09 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Harry Yoo <harry@kernel.org>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org,
-	andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
-	daniel@iogearbox.net,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Clark Williams <clrkwllms@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	linux-rt-devel@lists.linux.dev, Vlastimil Babka <vbabka@kernel.org>,
-	Hao Li <hao.li@linux.dev>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>,
-	Brendan Jackman <brendan.jackman@linux.dev>,
-	Johannes Weiner <hannes@cmpxchg.org>, Zi Yan <ziy@nvidia.com>,
-	linux-mm@kvack.org, David Hildenbrand <david@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-	Boqun Feng <boqun@kernel.org>, Waiman Long <longman@redhat.com>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next v1 1/4] bpf: Add call for selecting kmalloc or
- kmalloc_nolock at call time
-Message-ID: <20261125160409.GF2668804@noisy.programming.kicks-ass.net>
-References: <20261124060357.11700-1-emil@etsalapatis.com>
- <20261124060357.11700-2-emil@etsalapatis.com>
- <DN38HGVL8JHQ.2ZVZQCKFXVA9T@gmail.com>
- <awWRZ9xCzWLnj_R6@thinkstation>
- <20261125140902.GE2668804@noisy.programming.kicks-ass.net>
- <awbvek-HS3OJYJGF@thinkstation>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UqK2qb3F
+Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 7624A1F000C4;
+	Wed, 25 Nov 2026 16:24:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795623860;
+	bh=93PlHQzdBd5hDciyifgipa2sETM6WYe2vvJEu0EdaIE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=UqK2qb3FQVwmTqV8oUUCeEtkJg9SD6RlxBIdsewlju3Y6yf64LEDRua/CP8PuokUM
+	 o1vJ05+rehtnQ3lsUqLX4G48iP71LMVhvqDAURRrlVkTETRCB1t1zf1GLgSh8PC6ov
+	 hrTGvDOKmlnQrx8Cvm6tsUTJp5p4ASihgzfEEEV9BP/JDjAgo9v0Ev7deWEw5eoLci
+	 fb4P7fSbUfxBYC/3IBYMbAUeM92yF05ODOER00oMYavQQn/fmId7+9baSwIFZ01rf+
+	 WElptmHmI3QPFYytegFUZC4SluG5bFEfaeSzufIKLwi0d+u4kuLU63S4GkWl1Ozxst
+	 DzmuADMR9Ln/A==
+Date: Wed, 25 Nov 2026 18:24:16 +0200
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: linux-fsdevel@vger.kernel.org
+Cc: bpf@vger.kernel.org, containers@lists.linux.dev,
+	linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+	linux-security-module@vger.kernel.org,
+	Aleksa Sarai <aleksa@amutable.com>,
+	Alexander Mikhalitsyn <alex@amutable.com>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Andy Lutomirski <luto@amacapital.net>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Christian Brauner <brauner@kernel.org>,
+	David Howells <dhowells@redhat.com>,
+	Eric Biggers <ebiggers@kernel.org>,
+	Giuseppe Scrivano <giuseppe@scrivano.org>,
+	Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
+	Jeff Layton <jlayton@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Josef Bacik <josef@toxicpanda.com>, Kees Cook <kees@kernel.org>,
+	KP Singh <kpsingh@kernel.org>,
+	Lennart Poettering <lennart@poettering.net>,
+	Neal Gompa <neal@gompa.dev>, Oleg Nesterov <oleg@redhat.com>,
+	Paul Moore <paul@paul-moore.com>,
+	Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
+	Serge Hallyn <sergeh@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Zygmunt Krynicki <zygmunt.krynicki@canonical.com>
+Subject: Re: [RFC PATCH v7 00/26] userland: Userland containers
+Message-ID: <awcLsCALUwJ1Qlcc@kernel.org>
+References: <20261122193539.3334213-1-jarkko@kernel.org>
+ <awYJnFNt9kkBqj59@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -90,26 +82,166 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <awbvek-HS3OJYJGF@thinkstation>
+In-Reply-To: <awYJnFNt9kkBqj59@kernel.org>
 
-On Wed, Nov 25, 2026 at 02:30:52PM +0000, Harry Yoo wrote:
+On Wed, Nov 25, 2026 at 12:03:12AM +0200, Jarkko Sakkinen wrote:
+> On Sun, Nov 22, 2026 at 09:35:13PM +0200, Jarkko Sakkinen wrote:
+> > OVERVIEW
+> > ========
+> > 
+> > A userland is an anonymous-inode control object with separate build and
+> > live phases that binds together:
+> > 
+> > 1. A full set of detached namespaces owned by a fresh user namespace,
+> >    with optional build-phase opt-in sharing (USERLAND_SHARE_NSFD).
+> > 2. A dedicated PID namespace for spawning processes into, signaling
+> >    members, and polling or waiting on PID 1 exit.
+> > 3. An initially empty mount namespace (CLONE_EMPTY_MNTNS) populated
+> >    directly in its target user namespace before going live, without
+> >    inheriting host mounts or cloning staged trees, while still allowing
+> >    new mounts to be attached at runtime.
+> > 
+> > Work on this feature started in 2025 after reviewing David Howells'
+> > container object patch set [1], whose underlying mechanics made sense to
+> > me as a continuation of earlier container object efforts [2]. The
+> > lifecycle follows a staircase initialization model similar to the Intel
+> > SGX driver, without an embryonic task state or a parallel namespace
+> > syscall API, pairing a compact policy-agnostic implementation with an
+> > allow-list security model (with LSM hooks) and runtime mount hotplug.
+> > 
+> > While the patch set is manually written, the original motivation came
+> > from isolating LLM agents. Running untrusted agent workloads made it
+> > clear that OCI runtimes need to minimize their live configuration
+> > surface.
+> > 
+> > Assembling mounts, credentials, and namespaces inside helper processes
+> > with a half-configured container is what I see as the main challenge,
+> > and the existential debate around namespaces and container objects is an
+> > unfocused discussion topic.
+> > 
+> > [1] https://lore.kernel.org/all/155059610368.17079.2220554006494174417.stgit@warthog.procyon.org.uk/
+> > [2] https://lwn.net/Articles/1102593/
+> > 
+> > IMPLEMENTATION
+> > ==============
+> > 
+> > Standalone fd-based namespace configuration (patches 01-07) decouples
+> > user and mount namespace setup from live helper tasks. userns_set_idmap()
+> > atomically configures USERNS_SETGROUPS_ALLOWED policy and UID, GID, and
+> > project ID mappings on a CLONE_NEWUSER nsfs fd, checking current_cred()
+> > so an unprivileged creator can delegate the fd via SCM_RIGHTS to a
+> > privileged mapping daemon. move_mount(..., MOVE_MOUNT_T_MNTNS) operates
+> > on any non-anonymous mount namespace fd: on an empty mount namespace it
+> > installs "/" onto the nullfs root once, attaches relative submounts both
+> > before entry and into live mount namespaces, and supports
+> > MOVE_MOUNT_CLONE for recursive bind mounts without OPEN_TREE_CLONE.
+> > 
+> > userland_open() allocates a userland instance backed by a pollable
+> > anonymous-inode fd, creating a fresh owning user namespace and a full
+> > set of detached namespaces: empty mount (CLONE_EMPTY_MNTNS), PID, UTS,
+> > IPC, network, cgroup, and time. ioctl(ufd, USERLAND_GET_NSFD, nstype)
+> > returns nsfs file descriptors for member namespaces, and
+> > ioctl(ufd, USERLAND_SHARE_NSFD, ns_fd) replaces a member cgroup, IPC,
+> > UTS, network, or time namespace while the userland is in USERLAND_INIT.
+> > 
+> > Superblocks are configured directly in the target user namespace via
+> > fsopen(), FSCONFIG_SET_USERLAND, and fsmount() for filesystems opting
+> > into FS_USERLAND_MOUNT (tmpfs, ramfs, devpts, proc, mqueue) or
+> > FS_USERNS_DELEGATABLE, allowing unprivileged callers to assemble mounts
+> > without holding CAP_SYS_ADMIN in their own user namespace or entering
+> > the target user namespace first.
+> > 
+> > Once "/" is installed, processes are spawned into the userland via
+> > clone3() with CLONE_INTO_USERLAND and struct clone_args.userland,
+> > without modifying the calling process's own live state first. Pairing
+> > CLONE_INTO_USERLAND with CLONE_VFORK and opening the target binary via
+> > openat2(..., RESOLVE_IN_ROOT) on the retained "/" mount fd allows
+> > spawning with execveat() directly into the target root.
+> > 
+> > The first entrant becomes PID 1; once it exits and
+> > zap_pid_ns_processes() reaps all members, poll() reports EPOLLHUP and
+> > waitid(P_USERLAND, ufd, infop, options, NULL) returns init's exit
+> > status without consuming it. pidfd_send_signal(ufd, sig, NULL, 0) walks
+> > pid_ns->idr under tasklist_lock to signal member thread groups, and
+> > dedicated LSM hooks mediate userland allocation, teardown, namespace
+> > sharing, process entry, and signal delivery.
+> > 
+> > SYSCALLS
+> > ========
+> > 
+> > Two new system calls are proposed:
+> > 
+> > 1. userland_open(): open an opaque staircase-initialized container
+> >    object (modeled on Intel SGX enclave initialization with separate
+> >    build and live states) with no embryonic state, opting selected
+> >    shared namespaces in via an allow-list instead of unshare semantics.
+> > 2. userns_set_idmap(): configure all UID, GID, and project ID map
+> >    extents for a container user namespace in a single atomic system
+> >    call.
+> > 
+> > Extensions to existing system calls:
+> > 
+> > 1. move_mount() (MOVE_MOUNT_T_MNTNS, MOVE_MOUNT_CLONE): install "/" and
+> >    relative submounts into a mount namespace fd before entry or at
+> >    runtime, and recursively bind-clone mount trees without
+> >    OPEN_TREE_CLONE.
+> > 2. clone3() (CLONE_INTO_USERLAND, struct clone_args.userland): spawn
+> >    PID 1 and subsequent processes directly into a userland without
+> >    modifying the calling process's own live state first.
+> > 3. fsopen() / fsconfig() / fsmount() (FSCONFIG_SET_USERLAND): bind a
+> >    filesystem context to a userland's namespaces and create mounts
+> >    without entering its user namespace.
+> > 4. waitid() (P_USERLAND): wait on a userland fd for PID 1 exit and read
+> >    its exit status without consuming it.
+> > 5. pidfd_send_signal(): broadcast signals to member thread groups via a
+> >    userland fd.
+> > 6. ioctl() (USERLAND_GET_NSFD, USERLAND_SHARE_NSFD): open member nsfs
+> >    file descriptors and opt selected namespaces into existing nsfs fds
+> >    during USERLAND_INIT.
+> > 
+> > HOTPLUG
+> > =======
+> > 
+> > 1. Host calls userland_open().
+> > 2. Host sets uid/gid maps with userns_set_idmap().
+> > 3. Host populates "/" with MOVE_MOUNT_T_MNTNS, optionally combined with
+> >    MOVE_MOUNT_CLONE for bind mounts.
+> > 4. Host spawns PID 1 with clone3(CLONE_INTO_USERLAND) (optionally
+> >    passing an AF_UNIX socketpair fd for communication).
+> > 5. PID 1 watches /proc/self/ns/mnt via fanotify(FAN_REPORT_MNT |
+> >    FAN_MARK_MNTNS, FAN_MNT_ATTACH) or polls /proc/self/mountinfo.
+> > 6. On hotplug, host mounts the filesystem via fsopen() /
+> >    fsconfig(FSCONFIG_SET_USERLAND) / fsmount() (plus optional
+> >    MOUNT_ATTR_IDMAP).
+> > 7. Host creates the mountpoint with openat2(RESOLVE_IN_ROOT) + mkdirat()
+> >    and attaches the mount with MOVE_MOUNT_T_MNTNS.
+> > 8. PID 1 receives FAN_MNT_ATTACH and queries the new mount via
+> >    statmount().
+> 
+> The initial ad-hoc testing of hotplug using a bare metal x86-64 machine
+> and systemd-nspawn has been successful. The kselftest seems provide
+> pretty good guarantees for the basic stability; using the syscalls has
+> caused no issues so far.
+> 
+> I took some time to go through my experimental SystemD patch files and
+> sliced them so that they ought to be easy to bisect and refactor. They
+> should be also quite easy to read, understand and evaluate. Finally, I
+> removed the shitty patch files from my test harness repository.
+> 
+> Resulting outcomes of all of this are:
+> 
+> 1. Rebased RFC v7 patches with refined LSM support and fixes to the
+>    known issues as of today:
+>    https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/log/?h=userland
+> 2. SystemD patches:
+>    https://github.com/jarkkojs/systemd/commits/userland/
+> 
+> No new issues were found during testing, other than fixing the issues
+> reported to this thread. This is all feels fairly nice, clean and
+> stable.
 
-> > This is absolute atrocious shite. You cannot attempt a spin_trylock from
-> > NMI context. That thing might be a mutex.
-> 
-> Uh, right. We went through this when kmalloc_nolock() was introduced.
-> 
-> > This should not work; if it does, that is an accident we need to fix.
-> 
-> Current implementation handles this by can_spin_trylock() in
-> mm/internal.h.
-> 
-> One remaining accident we're aware is that we cannot attempt a
-> spin_trylock or local_trylock under pi_lock (even on !RT).
-> 
-> Currently I don't have a good idea to fix this :/
+Possibly userns_set_idmap() should be cut into a patch set of its own,
+as it stands as a feature on its own, and is likely agreeable part for
+any possible solution. I'm open to that.
 
-Yeah, me neither, other than creating specific classes of
-tracepoints/whatnot where things are explicitly allowed.
-
-
+Br, Jarkko
