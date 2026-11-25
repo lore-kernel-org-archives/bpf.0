@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.179
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.179
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795577448;
-	b=pv5UUSUUoxNbhdZbPfaktwX7lgsH0adA+dNG5k296h+nh7DPGOsPfFxZSxNPT4iniGIO
-	 AbMapFe4WhVCVybHe5GKB0nIoe78RIDnwMK0vBb+sii5R58DxHYLA6O1l1cNlL8ueDirj
-	 QNKyukTHC8EH1gplnEdeDQwsxEtbiAtZmNfYbdVExZ+G5elb1GsxCej+vbESyE8wQ6qM4
-	 0xLngGdZgmRue5NiD1ptF8yCV66UCYbuSGypciFtiNClndexzPWMF05NRucnBgVoAirE4
-	 QHGhaXPT7ekEQQoslSzzlXQI799x3VPfG5OimeATUr0fB2yl/uXpMvfrJn+0gt60EXw==
+	t=1795577454;
+	b=Clm8KzCFLv1pCkB5c/Z6ufVUKbdWHgRemq8hdRb3wYgezoz1lFHm+WaHOhq0JV6gcNEv
+	 k5A6OFNTPDHZaWCuSihZUGuluZk7fqFnxCUfJOBMbxGVHPa9Q7dWhOXlUmWwEt1IugwIM
+	 0Mu6Y4tjxkb/SXfX6isXL3XwfJY1aclZMAQkX8s6Rxh44hE7JhXGilKDYiLf94Z5SOmXx
+	 LI+ASPpeI6K/JgXiriS2644fzdXusHPsl359sctTcG2MBE9t7qO3RkDBMcgQrxFClA83R
+	 ILuwL8lSng0B68nd/WmzkH+U23As8sKQaKhIAo+B0qVrUkjW008KKhkqngCTvTNhGvA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795577448;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795577454;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=CNAZV4hsaOYpoc7G6eE/V01yFUey7tcWZS29nmcD83U=;
-	b=HZNhrpy9suL+HIWcVypEClNZTsBEyiK+xecboSFO65REeTop2xzFlgmbBDV+A723yk0T
-	 KTrIPmBvdCG4Oq7s5CaZgy1/A/eM7Zl+RvgPSQYG6GPc5e5tPib91O6x7gbnwrLh6rayY
-	 ACxUsp53HlgSx9fWeA4nKx03DEEUG4EegJIxtv3aczXbDN0LaLpxUCe30z3id4gOmXszQ
-	 OAMt9J6t+oG5LS9m2Ic6/ca0/DUNZpJmifTjEGzEQpyXXitwbn+8yqsVvJpiAytfW/VqU
-	 84+TSqvZBgg1mHfbc4z6xrYjnljZo0vAvq+8SchLaMuxdMdYBPb5jl7yXsmtzI5XMOg==
+	bh=Gi3nAP5S9cUUD4uvUufAsZ4GCs7hvUo9XzPnxaWoezI=;
+	b=CUhJfbsdO81USLzxNVFiHPaR4L3m4gSj25nXsUUBOcFEyjf0ympmcsEoYPn9a/q2bBAH
+	 jy1QL4aqsCBWi3hukCFqZWwNHcG6Q3CM/eHCetpJqMNzdRZRBeWQjbFYQCNtIvNVv5j/d
+	 jWMygwXUir7ZlGFTC93OEqRhO+0M8/SIvsHIpsgCAq/wyU3dphDRgmC4i6w083ebQ0f7I
+	 MUfJmXPm1E9a/EplSYLbtSjkBR/IMrnb+I4h88Y5pUG7Pb63kdaSRbRRyLRi0zPamGuoy
+	 qZLw8DnKbs3tS5BtTrvNhI6PEHx25XjEMw10GhdEEvedhTpOH+Tjus3oerQN7CmwuRg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=cSqBYZ6+;
-	arc=none smtp.remote-ip=209.85.215.179
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=YlTnc7Xe;
+	arc=none smtp.remote-ip=209.85.214.179
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3198C606A31E
-	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 03:30:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3198C606A31E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DC24606A31E
+	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 03:30:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2DC24606A31E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=cSqBYZ6+
-Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-cd62c570b5dso3527873a12.2
-        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 19:30:48 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=YlTnc7Xe
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2f020d0169eso25462505ad.0
+        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 19:30:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795577448; x=1796182248; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1795577453; x=1796182253; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=CNAZV4hsaOYpoc7G6eE/V01yFUey7tcWZS29nmcD83U=;
-        b=cSqBYZ6+uCb97F5wJKvbTHRqa/ZjEb2YN/BwDtOYORajxBMMra5fsj1CQwSmSL5/uA
-         Xp1WjSztERSyyzAhqI5H0xGcuJmdTIcJ0Xvrb2y4oLqJW6JjPZsXjVeFPULddK1vWgOA
-         23QFU6BC1DQG+1ZSqUVn72ci8O96TFhLTfZYLrwmaxVfwMsCVTxYBQL0GNqkhjK2TW4y
-         Ak9LylPCclWaOeDAGmw3fgYPb4CqoAFghPbrmBXtBa5Pxw66Zue0I7/7YH7dHSFD3Ezy
-         Vq1k5orcTWKpY8kHQua4lHyfBPfrvGkBJADZSRxB1Zu3hA/PZ+c+ASM0JA1gZ7b6Jkso
-         u/Pg==
+        bh=Gi3nAP5S9cUUD4uvUufAsZ4GCs7hvUo9XzPnxaWoezI=;
+        b=YlTnc7Xer87VEKR6HL0KvUJzrHCeZlZ0Tc8qR5vQ5Yuz0uj9Lx91hfEofbZag0p+MS
+         Bbbx2NjlzwSIlhpujRwSxT9bapnWUMLOBKX1O/T5xj461rS9XTI9A0uVGu0FTGYLiQYj
+         7KZVa39O0DoQXx52G182AhSCfSlAMyrFm8fA+kD5mIibI3+PS1BznXZVOSxalpjWIYk9
+         c4zsVILlplqUR6sGpe5sHS8mSobm6YlCuGxzXpLkojq2hQojZ3xz4RCiRWAwkS29S7pc
+         2VcBzL2aQuDg8dy67sSIWsVpeLQmq/mhiKyTIHSSDs0JwezKNFU0PWStdRFBR4Z25N8x
+         Y9Ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795577448; x=1796182248;
+        d=1e100.net; s=20260707; t=1795577453; x=1796182253;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=CNAZV4hsaOYpoc7G6eE/V01yFUey7tcWZS29nmcD83U=;
-        b=LgOtmC0yGvoALZH0rKRq0ro3CFrVNhej/GxTc/S1l/AeBeSf9qGR9XjWm2g+TJJgrs
-         AL+Ca3nMmAHrLqX7VYH1YPiCEGVKOrg61fDE7nKVX4jZ8+SEmsrWEkOhoeY3uYpMedBu
-         3WZYVCU0wm8bOGt7liK/UGFLN/7yWx/lacXS72lJ7oY6g+Gp8YiIltFhP9pfpL/yuWh8
-         Xi8Ow89IsR4cICT++uUTdjFhTfok4rW+Z58GHLgyzvxFf9Pye2VT3ytkCGzC+kISBkm6
-         rNuHfJGMaijtJUXIULQQN7eNHeAPRIJoMTGMzi0888ZVwCt2ScO0CHviLWpgjFCQwqJS
-         /ROw==
-X-Gm-Message-State: APuU4Z8fa+9U6WNCO5ODVy57h1NafE8YWdi6azSU6lXItF2JVLrlmZhP
-	+3jC1EaJxWpfEY2WiZ/eqoAs1NcPpyusMRNBcDPVtV7/qgxGv9IM13hYzB1UTJ8b
-X-Gm-Gg: AZFdTZcB8vSXBEAZOYuJOzzup5qyQK0PWVkYpZBgsFp4RnoAuCMEAODkeh2z4Szq1kG
-	1+Wq0gIYA6TQLj2G7g6eRa1J1h9TYxpMHbboYlXx+TC2mn38iFksXznJbzl4mneMVgEP7F1FV86
-	4HrpMqjaz63jVwNAiCPuwDHeeHzZsY5KnCFFK1MlSdAw//C9qk7yTfnPNZ3c89UgNrZQ4uFtmfF
-	8GzCUe8pB17gfeTzpMaeFGu57OI1Qe8A22Jeqo3KdtFz1dfeRGKPUJ0Xppkr/ljdFDTaH6UqYlZ
-	1lsCIA5AAxqLSk0DpF3pdsvUdzsP0n84s3M9ZN7AK2HIhC1XwHwbU++Y5hDT4PfnCx2RcICAFQu
-	e/sUmZ9sAULH+jD7vKEWc129dhQIASAKYjR4JHlBniDBYgU6d82NYyAp8j+io4RLhMrP3yK+04B
-	Z0lsrcylb8GvtS82PH9CQjxq+9yzfv2pR268HmZUJF1RdUobx8XnfQ2E97/pzq7jE64sAzwk7O5
-	vhukZH92kHu4VmWhOnVKjRsADLM6HLanVV/nkEfPj4cTGX50jHqUFxwPAo9K2HYasEtufcnvjmZ
-	Tr3HXh3W1i0TwPdxhOh1DFBWJgUr4l4z406dLPnmr32N2VgRrVNK4KWWCfeIS7T1Dp8GG/+kjL9
-	sd/yCKjF9rEyA6AVoamrq3mW1wULSKlMJaJsWMU+FOgH+92sBAL3Rd0y0wUmLmgpjHeIc1LQCpC
-	A=
-X-Received: by 2002:a17:90a:d444:b0:3b4:15e3:3a53 with SMTP id 98e67ed59e1d1-3b41cb53acbmr15569714a91.66.1795577447517;
-        Tue, 24 Nov 2026 19:30:47 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.243])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b495035339sm12517623a91.0.2026.11.24.19.30.47
+        bh=Gi3nAP5S9cUUD4uvUufAsZ4GCs7hvUo9XzPnxaWoezI=;
+        b=1rrM9oWnWSJa727TyP7hUjUxlOLnOibNc3uxkiROd3zcqVeVEisCwfjw3HmSFcwRI3
+         5bA4/Hs1DXb+IgRqRMQWrQzt0kURoGQ+UQIHcEz87bQrTimSEej9msoI/bYr2ymNfXvB
+         3mn55Ju2z7G8FWooGX4RHBS9oIEwNVUSRRZdEcPTQc1y/EOLKmzNF5+I1iEVQALuphpv
+         lEYzqW6Cr/iTF3BoxXu+7HAOaPEqZtRA6i+lyqQIy2k7C0ntQ06Xtxvbef29RdhQMVi7
+         MYfcxL2mwMWBKEU+gAT7tMwL8wD5ZQuScxDJjTNI7olPCV4Ho/kfBfXvaQhn8LNaPDAl
+         W9Xw==
+X-Gm-Message-State: APuU4Z/dUFU9BERlHSpyT73mvIrM4FMXbzo+JNipM42jl1rvY+ipI1YC
+	8Unkkcp16wcFtOmGhT5YiGMd7eMAsxpWLduQ7RRhQYijS1KTV2gF76LnSFOgy+jn
+X-Gm-Gg: AZFdTZfpUo0LFJjaD5hCOBAgIJqwf83+T55/+fD5gIyiddYUc3EIsHZqPy3t/HLvd6X
+	3gmbM8OepTAw0cypBZMyyvFOb/j318TqzL6pCTVtLcj/+bzL/aB0KsIDlizr+67BpXfdqJF/dft
+	aiUGSjbxtLKDJOgubg4Fz8fdDHbzChuX0BqypTFCx+Zi3Q5DtchAFW5Xz2nlyRoHGX+2X+rHkIs
+	x+TMqdRiuaGr+fQpI9ZJBIUJjNcKL5tJA7bTlOcq3FWRu1AcRaN0Rv8+rC85mydO/TIRmxo/aEL
+	2XYKJu6ytj8NYGSxWok7d6i8ooJD8s617ksRHVu+ILIAGnQR5sq0hRRSGYUaFBfG6mQsNDxRxqe
+	CZFvSltA5sF0G6zwrwf5nzn5+LikQ6oGFnJ2/Jnb49HdcXfPiX2KovNNhkI3laMVUpwlJ8u4wbV
+	bMau+ISngixyL8Y/+KqQFKFdbaemSkmrv+1+h5x00x9f3hoDf1Pl7jhOp9o4uJgDTlf2Am2gqqH
+	NaCVUEiZ2jJh/0Ic3rvN7vEx31vOgCje2V72gjNWTNCcts8wGDQE6gYW8H1i7vAKQ4UO0n3fXTj
+	/foYCNC1QY4dXa7YmBpGpYte24Pp72aWWCPfMB5xDB8dFEXga4zBFuU3lELD+iRXEE8OD44T9yT
+	MQaRhKi3d1+SBHhrElIkpCeQlnpq3y22QyEOK2LJIlnjNWUYLVvQrraSc9A5h+IXRcp+4fSmPqw
+	==
+X-Received: by 2002:a17:903:b0e:b0:2eb:1bba:abbd with SMTP id d9443c01a7336-2f03f2069c2mr151346465ad.60.1795577453335;
+        Tue, 24 Nov 2026 19:30:53 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.245])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2f0bc695f31sm20269115ad.49.2026.11.24.19.30.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Nov 2026 19:30:47 -0800 (PST)
+        Tue, 24 Nov 2026 19:30:53 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf 11/47] bpf: Do not trust the neighbour of tp_btf/neigh_create
-Date: Wed, 25 Nov 2026 03:29:02 +0000
-Message-ID: <20261125032938.670542-12-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf 12/47] bpf: Check for NULL in helpers that take a kernel pointer
+Date: Wed, 25 Nov 2026 03:29:03 +0000
+Message-ID: <20261125032938.670542-13-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261125032938.670542-1-alexei.starovoitov@gmail.com>
 References: <20261125032938.670542-1-alexei.starovoitov@gmail.com>
@@ -104,46 +104,149 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-___neigh_create() calls the tracepoint before it tests the result of
-neigh_alloc(). It is NULL when the table is full. The verifier takes it
-for a trusted pointer, and a load through it oopses:
+Helpers take a plain PTR_TO_BTF_ID, which can be NULL: an argument of
+a traced function, or a member of a struct. Some do not check it:
 
-  BUG: kernel NULL pointer dereference, address: 000000000000013c
-  RIP: 0010:bpf_prog_56e3384dcafb1b5b_on_create+0x61/0xc4
+  KASAN: null-ptr-deref in range [0x0000000000000048-0x000000000000004f]
+  RIP: 0010:sock_from_file+0x22/0x70
 
-Mark it untrusted, loads through it are probed then. PTR_MAYBE_NULL
-would refuse programs like bpftune, which pass &n->parms to
-bpf_probe_read_kernel() without a check. The pointer cannot be passed
-as memory or as a trusted argument any more.
+bpf_task_pt_regs(), bpf_get_task_stack(), bpf_copy_from_user_task(),
+bpf_xdp_get_buff_len(), bpf_getsockopt() and bpf_setsockopt() oops the
+same way. So does bpf_d_path() on the path of a unix socket that is not
+bound, it has no dentry.
 
-Fixes: 838a10bd2ebf ("bpf: Augment raw_tp arguments with PTR_MAYBE_NULL")
+Check for NULL, as bpf_find_vma() and bpf_skc_to_*() do.
+
+Fixes: fa28dcb82a38 ("bpf: Introduce helper bpf_get_task_stack()")
+Fixes: 6e22ab9da793 ("bpf: Add d_path helper")
+Fixes: 4f19cab76136 ("bpf: Add a bpf_sock_from_file helper")
+Fixes: 3cee6fb8e69e ("bpf: tcp: Support bpf_(get|set)sockopt in bpf tcp iter")
+Fixes: dd6e10fbd9fb ("bpf: Add bpf_task_pt_regs() helper")
+Fixes: d99173027d68 ("bpf: add frags support to xdp copy helpers")
+Fixes: 376040e47334 ("bpf: Add bpf_copy_from_user_task() helper")
+Fixes: 9113d7e48e91 ("bpf: expose bpf_{g,s}etsockopt to lsm cgroup")
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/btf.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ kernel/bpf/helpers.c     |  2 +-
+ kernel/bpf/stackmap.c    |  2 +-
+ kernel/trace/bpf_trace.c |  4 +++-
+ net/core/filter.c        | 17 +++++++++++------
+ 4 files changed, 16 insertions(+), 9 deletions(-)
 
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index d5e126dc5d3e..8c934aa8ad60 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -7444,6 +7444,7 @@ static const struct bpf_raw_tp_null_args raw_tp_null_args[] = {
- 	/* iptfs */
- 	{ "iptfs_ingress_postq_event", 0x1000 },
- 	/* neigh */
-+	{ "neigh_create", 0x4000 },
- 	{ "neigh_update", 0x10 },
- 	/* snd_firewire_lib */
- 	{ "amdtp_packet", 0x100 },
-@@ -7656,6 +7657,9 @@ bool btf_ctx_access(int off, int size, enum bpf_access_type type,
- 			/* Is the current arg IS_ERR? */
- 			if (raw_tp_null_args[i].mask & (0x2ULL << (arg * 4)))
- 				ptr_err_raw_tp = true;
-+			/* It can be NULL, and programs that do not check it have to load */
-+			if (raw_tp_null_args[i].mask & (0x4ULL << (arg * 4)))
-+				info->reg_type = PTR_TO_BTF_ID | PTR_UNTRUSTED;
- 			break;
- 		}
- 		/* If we don't know NULL-ness specification and the tracepoint
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index bc0dd36a2799..749169a0b157 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -726,7 +726,7 @@ BPF_CALL_5(bpf_copy_from_user_task, void *, dst, u32, size,
+ 	if (unlikely(!size))
+ 		return 0;
+ 
+-	mm = get_task_mm(tsk);
++	mm = tsk ? get_task_mm(tsk) : NULL;
+ 	if (!mm) {
+ 		memset(dst, 0, size);
+ 		return -EFAULT;
+diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
+index a19126f5db02..f25f5585e578 100644
+--- a/kernel/bpf/stackmap.c
++++ b/kernel/bpf/stackmap.c
+@@ -897,7 +897,7 @@ static long __bpf_get_task_stack(struct task_struct *task, void *buf, u32 size,
+ 	struct pt_regs *regs;
+ 	long res = -EINVAL;
+ 
+-	if (!try_get_task_stack(task)) {
++	if (!task || !try_get_task_stack(task)) {
+ 		memset(buf, 0, size);
+ 		return -EFAULT;
+ 	}
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index bb79669d1cf4..19e6b51bb2f0 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -807,7 +807,7 @@ const struct bpf_func_proto bpf_get_current_task_btf_proto = {
+ 
+ BPF_CALL_1(bpf_task_pt_regs, struct task_struct *, task)
+ {
+-	return (unsigned long) task_pt_regs(task);
++	return task ? (unsigned long)task_pt_regs(task) : 0;
+ }
+ 
+ BTF_ID_LIST_SINGLE(bpf_task_pt_regs_ids, struct, pt_regs)
+@@ -946,6 +946,8 @@ BPF_CALL_3(bpf_d_path, const struct path *, path, char *, buf, u32, sz)
+ 	len = copy_from_kernel_nofault(&copy, path, sizeof(*path));
+ 	if (len < 0)
+ 		return len;
++	if (!copy.mnt || !copy.dentry)
++		return -EFAULT;
+ 
+ 	p = d_path(&copy, buf, sz);
+ 	if (IS_ERR(p)) {
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 53c042b267ab..49eb26d016a1 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -4215,10 +4215,15 @@ static const struct bpf_func_proto bpf_xdp_get_buff_len_proto = {
+ 	.arg1_type	= ARG_PTR_TO_CTX,
+ };
+ 
++BPF_CALL_1(bpf_xdp_get_buff_len_trace, struct xdp_buff *, xdp)
++{
++	return xdp ? xdp_get_buff_len(xdp) : 0;
++}
++
+ BTF_ID_LIST_SINGLE(bpf_xdp_get_buff_len_bpf_ids, struct, xdp_buff)
+ 
+ const struct bpf_func_proto bpf_xdp_get_buff_len_trace_proto = {
+-	.func		= bpf_xdp_get_buff_len,
++	.func		= bpf_xdp_get_buff_len_trace,
+ 	.gpl_only	= false,
+ 	.arg1_type	= ARG_PTR_TO_BTF_ID,
+ 	.arg1_btf_id	= &bpf_xdp_get_buff_len_bpf_ids[0],
+@@ -5856,7 +5861,7 @@ static int sol_ipv6_sockopt(struct sock *sk, int optname,
+ static int __bpf_setsockopt(struct sock *sk, int level, int optname,
+ 			    char *optval, int optlen)
+ {
+-	if (!sk_fullsock(sk))
++	if (!sk || !sk_fullsock(sk))
+ 		return -EINVAL;
+ 
+ 	if (level == SOL_SOCKET)
+@@ -5879,7 +5884,7 @@ static bool is_locked_tcp_sock_ops(struct bpf_sock_ops_kern *bpf_sock)
+ static int _bpf_setsockopt(struct sock *sk, int level, int optname,
+ 			   char *optval, int optlen)
+ {
+-	if (sk_fullsock(sk))
++	if (sk && sk_fullsock(sk))
+ 		sock_owned_by_me(sk);
+ 	return __bpf_setsockopt(sk, level, optname, optval, optlen);
+ }
+@@ -5889,7 +5894,7 @@ static int __bpf_getsockopt(struct sock *sk, int level, int optname,
+ {
+ 	int err, saved_optlen = optlen;
+ 
+-	if (!sk_fullsock(sk)) {
++	if (!sk || !sk_fullsock(sk)) {
+ 		err = -EINVAL;
+ 		goto done;
+ 	}
+@@ -5916,7 +5921,7 @@ static int __bpf_getsockopt(struct sock *sk, int level, int optname,
+ static int _bpf_getsockopt(struct sock *sk, int level, int optname,
+ 			   char *optval, int optlen)
+ {
+-	if (sk_fullsock(sk))
++	if (sk && sk_fullsock(sk))
+ 		sock_owned_by_me(sk);
+ 	return __bpf_getsockopt(sk, level, optname, optval, optlen);
+ }
+@@ -12469,7 +12474,7 @@ const struct bpf_func_proto bpf_skc_to_mptcp_sock_proto = {
+ 
+ BPF_CALL_1(bpf_sock_from_file, struct file *, file)
+ {
+-	return (unsigned long)sock_from_file(file);
++	return file ? (unsigned long)sock_from_file(file) : 0;
+ }
+ 
+ BTF_ID_LIST(bpf_sock_from_file_btf_ids)
 -- 
 2.55.0
 
