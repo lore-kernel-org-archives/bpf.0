@@ -1,83 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.47
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.208.51
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795601813;
-	b=uy3IrtQ/jz2qFXrajo31Qme8vFJ92tLKeGVVRrihLIzrAl0OWEUgKVZt6khhyjd7Wpy0
-	 Iqu8Kfz3FdDBkksAFWWioxBGX+4ryX8qZ4pRDIk1oslv0ibUw+DY5E9qo8Md5KQoT4P+y
-	 BYXL7VhLEiU+EfAf7NAPmTMCJLl6cCEZ59SK9dnjHG/B+VzfJ39YF0oRNNfzd4FZTWqp1
-	 QxlHVZv2cwLXeM9q8MsDOw5znhiLn1MzX0fTKy7WAV4DVZ3M/tdo/SD9O4ZdgjrHumf4q
-	 SBIe6HWhptN/H1wvmn/7GPRlciBSQx6mKPyfqZ5f/rPaaACFCdq6jaPEW90sYxhTd2Q==
+	t=1795601816;
+	b=ABJ3yOzeLzRMzUiJR6rfEYPRiTwAr3RLw7NsjlRGJ0mMU8YjjzN6os3zA31x9bAYsS/8
+	 6RYzEPsd6j+qe+P0r36v9NxfkFt2A+6qu1DYV3Jvp43xu2FmHigEznDv7yhEPn8Fvl5eF
+	 2Q7XCW9YdFOJk1214BPpA8/fMDA5WCE5F0dtKV5RDvuuHbuJgaIc2ukMtqC5m9PqYImc+
+	 qSArEtZIWRlTZF1XzVKS/375guvm/TxP3af++Qc/SPTPJ7PrM4JsJiEVGfxX05QPKHyOt
+	 vv2Gi3grVtZQW7eTcxuLKdgUUUSlh/cBQuWY72zYCAkobEPcd0oAqIcwIKpN+dMNe8w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795601813;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795601816;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=gwuYbcf0S9r2sXGONvPKKNcYrCofnj72DonTSrXPeY0=;
-	b=uEP7lYM8GAZoKmFCy+tJKg4NVLc6ZScgO33iHno0f/yaT6pvJbGgdmP00HloubKNMC8G
-	 RO8EvFZBiNNd2hqz1t5+klWkLQ26Pfyr35+vsWNpzYvtD3kWwMW06KXUIaV4tzTLgWlpP
-	 I/drFG4Ca6JeFNwzFYDfRc74hjcDU0Kc/ZcY+/gcQLT9lVcCWBAZ/sHUE+Y95GgZUNTkA
-	 68cFVMXs18DRxg38R4na4Uwpu4n4KO7mteh+apFHVwOm7Vbm8j3OScVpCkbvj7LJ255gI
-	 TOqFO56ercbjw9dXqHAw30+oXWnev1SjI5iqV58rh67bLVMDAakjAGVq3Bf4uGRYVUQ==
+	bh=JhBNX3uOzO5PNgRDDTMCPnoI/htIxNKkhVjejqAXAjY=;
+	b=ZXCHCIFnxK3xBYeUGLRrcoP6v40+dMYrkASCM3QFus9Y1WIwhaugOuoqumnXrcFHz9PF
+	 LD6uA7olgXS/yBi1lrC/WAoO18e7TWacgqQL8FuQ/CcrWK1wLBYWuR9K6ZMUH+CpO/NS5
+	 Z+D8AX/uy5o18nTq1CfFkz5HSq9qVYoXWxwrro+tJd+IXSwAm0br9IoZ5ZbqVvzdsOeMU
+	 6VscRAZHrL5Oojjav6SH3xpqD9LcF5lqkhPQ65rkOY85MCIDDUPp3AWVHKxIEjQUvJLOS
+	 FCuGA3tjmg8FuNDUmd9todDY3+gs+EuA4ps/AXV++a4UCJ2B4LIc5zg3PUAmdeVzzrA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=VvF89Wzh;
-	arc=none smtp.remote-ip=209.85.221.47
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=YLwU7In+;
+	arc=none smtp.remote-ip=209.85.208.51
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EF54606A31E
-	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 10:16:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8EF54606A31E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F489606A32C
+	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 10:16:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9F489606A32C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=VvF89Wzh
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-48e47347279so3338241f8f.1
-        for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 02:16:53 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=YLwU7In+
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-6b587538a37so8364363a12.2
+        for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 02:16:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795601812; x=1796206612; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1795601814; x=1796206614; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=gwuYbcf0S9r2sXGONvPKKNcYrCofnj72DonTSrXPeY0=;
-        b=VvF89WzhJK+Cdrzr6DfL/nNWQlZL6qi1lUXkLz7vzx9qnLZ3zuLPwhNqEM/YFfWKyV
-         wFAX3eMUYaW9ExNKAhUk9mnx/dOZnGGz7SMw8vTn288XjsFINxvRFV+PVLSsUlEXHFY6
-         ZBWQPfhfzGX+LTg6dSb7PymaFo5XvnDgdzO4oX79XC/yxRlI+h6SXZL3nk1D6ETiwPyD
-         rXMJRBa/eEsuBIvhoU7GA2j5P7aoiU15RFtTTbwxrtBmJ/ZXlXg+lKGJGyF+vFu/nQTY
-         l9VBdGwK+FdRUyxg59/xKUVLGyL/6LNTarGvu/dVvbEfSgJYYukCIxjQzOrIk70jELRL
-         aOsw==
+        bh=JhBNX3uOzO5PNgRDDTMCPnoI/htIxNKkhVjejqAXAjY=;
+        b=YLwU7In+ybSlCqtMy+R5e5EXFmn+yePs3hO+rHXz3cmB3dMaar9EkOd2nNeXpCTDfe
+         Ztb3tAUOLUjhmyMmOubqNUJ9S8Q0n70tJNKJ/Q95LS7dMe6HK57vMuHe0FWhvlfzfv1H
+         +4CvpVh/5Fvi76qzBhG55Xxi9dEhasCDal7yunkEYoODNIEW75xhyGZ2COp+KGCGB6o7
+         Qz0U16ivrrTmUqBrimGoWgOMQYdkePn0koRU2E1pZupAWDF0KsZvwtWy8fTt2GR7TJWh
+         DO9mom1EKTB99LmNrimqHkEgE1uRlSuOjLsi5t+Ig0h+K8Nwb8h1nD2c8grRs6l4cQEk
+         k1Og==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795601812; x=1796206612;
+        d=1e100.net; s=20260707; t=1795601814; x=1796206614;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=gwuYbcf0S9r2sXGONvPKKNcYrCofnj72DonTSrXPeY0=;
-        b=1i53qaTGL+3fymgNa49yqlB+gLppG5t4m0N2aO/0iW48JiA/H78T7GTgH+palezm8n
-         /LRvy44GbFiMciNf8tx14tYAhAPTCeDdsPkH38aIbsh2ILTTpryhLBYOYx5ZN2K/gGQq
-         RedYOGbWxJJrtWTKbfOlg7XKgSrFYxLko9ROgtazCjV2r//CnnbzBZps2eAcfrQN+QBZ
-         d6am/9Gf5nVzFqhRaKAY4NsmN7mUtRAVUtgU39OFw13PleYtyz//hBUUPhlzccgoIYX8
-         AJ+YXHCwTTx6pbYx7NnqUdQScL9XgiAh+H8a/z1TPXtHFO2SV3SW36pvTW4DwKYQZ/7f
-         FXUA==
-X-Forwarded-Encrypted: i=1; AL+hErGqhnlERMqCBbUuykj5Z8cOmeubAXTY1nVLyRz7wuuu+mi354VcgL90sscy3fWI4dTiV0g=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+bNztSRV1AFzsmjnwwUlPowl/iomu6/NoLLmgoVecG4tmd0N6Y
-	lGbrohGvhN/Nnk8slrvZFa2ngD1NM1jHr1t6Bj+qh7UMfLsMsk0ih4Hb
-X-Gm-Gg: AZFdTZckOS+IlHg61F0cBKrFxkcv+BN4trh67DvOk71MLWHBHH/zvGfgTplrH67TGDH
-	s66dFYEAVu0Xg2RE9n3DsaKm2rPFmuGdWcbGYvCQYISOBMnuipd+Z7wI4S4NVHX/JhtuaRVd+IU
-	j3tEeLLuZmE2SWCXtmirBSVoJEGiO7zatKXoKVYYUywSn1DdwwcBFsNpItALS4xsu2KBpdmGuZs
-	u6DaGU5Vut7B191KuEzQCR52O5h80g/11ttkT/ugpPVUdGKptspdZVWcn6cUoYut6w2o5hm8TZr
-	GYz/PBDUIX8NhzoEAW+vaBSbFzHnftYQwlpz7wKBYkn0UxkyfhHN6wWookNvUpQOSUV/zNVCa3p
-	6ceideC2eZ3ik4+7cSpSxV54mAeq8c65+gOHOR9ywypgFMD6WF1Sdohz+MIfpXdNF6zSjBNFP3p
-	tfPEg05h8ZOsrGToE0Lvsswh5VrCCNMSB3wA3gcYBPWkyGoE+kl+6WzI6Am1XgO6NBw4Ps3NIVX
-	Rj2ipAyvZrJ928LqtSAd0Kph5AMJAJFjLd3RUptAw039nkkBZEd1Y5h2oNrQLRolvnUs0NQO2PE
-	V5XrhY0Q2Rz3WAntyZPPkYKRZ7OS4I6LQXvtkrqBH6mSvOs=
-X-Received: by 2002:a05:6000:2b87:b0:487:13f:f612 with SMTP id ffacd0b85a97d-4abb6095d9bmr19979718f8f.37.1795601811921;
-        Wed, 25 Nov 2026 02:16:51 -0800 (PST)
+        bh=JhBNX3uOzO5PNgRDDTMCPnoI/htIxNKkhVjejqAXAjY=;
+        b=Z37xEQWMn2POzHMWpZ0g3xykREIqY6ujc76TvICGew5sUidIlH9AeOejYs21Feu0x1
+         aFcvijEWGktymSSES3AgE8H0QM87LX+kUlJckENb0zaALg04ywlhv24fIB60ulBEPdU/
+         c5GXt0KPC3UkPsmmjgxyhIATI5wv/WWMI4beQUcia415vwgum+G7HUsbxppgpiFh/hEc
+         +jlIyGeiLsPSBHlxH8+K70VVHl986sCbejmENQrv77sgCnLJ/yCM4Yl6QnUQRpWf+27j
+         ys1tAwodvlZIVAWhb9xGaWRbbpCe+Y76dZWtBJ2a9xuo/nZ2L3YCYUMr4qq66+NAnJSB
+         5GnQ==
+X-Forwarded-Encrypted: i=1; AL+hErFHGdEWkf2YY26DPklL4RBTFggVYpld6/XBGhPYXmMb4QMrFODcpJy9mfV8Lnj7nl4F+Lo=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+X7o52Qpfa7IlUCyiuhZtmjfC+941BD7XfWfhYggFofXjMIvCm
+	SAsUNJM5yLQGVdSKbYYZuDYJ8BfwtAqt9Q8CWiqujvu2xzd+EDP2EYGX
+X-Gm-Gg: AZFdTZfo6BI3NdY8aGtzj2ObqQADYI9Xy09C73BEWnAd3z2LP06JICVwnCrdcMTJiH/
+	ixsX66gnnaf9Lzv3UgcujwABPOTpb/vcegz7bE5d3QKxPFzXVi+8Ts2zlhcuPdcT3H6geI4YFRJ
+	t2Gv0xkdYBq2shLUAjuySm4EEPT+wg7OY1Tf6HpORVOazrHG6BfCfsxlcOdZhrHYRgm190c8FYw
+	VtFJpRoOWM2K3vDI4Z8F88s32mjz6CemfZy0Wn2q+ug75v+vryz62nY81dTA8AxsDu8nbgfdVrS
+	n1TU4g035uQWhmjrhk04xh18UZvKQktqBjMbnYZwCYieJC8e5ToyqEHOVvbmNa22aAn2YiKPjv8
+	qDGTebbgj9oVXzFB0aimyIYRrSwy5DTJ4zmsSayr3g9jd4iNh1K3sxTASHWBC/cR4OI+pT3rlZx
+	Tu8tV/y3K1obNdSv6azKt39oV06b92mcsaqLjztGJfsJMR5+ex6jEadmzOVpmpJfp2swy8LMOuZ
+	bwc7/lngYHmQBujobhNydd+7QKWWKNUtwoTxl8+9cqHlb2TnTtgLTj7cJEhiKqclf3BODRvMMYq
+	5cAkvE80vnDJXo5h3RSWWOMh8dkRpOGtpqA5FHDMomO8dpHzzyioi3xZAyDjm27oXeXH
+X-Received: by 2002:a05:6402:5486:b0:6bb:33c1:ccee with SMTP id 4fb4d7f45d1cf-6bb33c1cfbemr567680a12.14.1795601813753;
+        Wed, 25 Nov 2026 02:16:53 -0800 (PST)
 Received: from localhost.localdomain ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4ab6a68048esm34765938f8f.29.2026.11.25.02.16.51
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4ab6a68048esm34765938f8f.29.2026.11.25.02.16.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Nov 2026 02:16:51 -0800 (PST)
+        Wed, 25 Nov 2026 02:16:53 -0800 (PST)
 From: Anton Protopopov <a.s.protopopov@gmail.com>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -88,9 +88,9 @@ To: Alexei Starovoitov <ast@kernel.org>,
 	John Fastabend <john.fastabend@gmail.com>,
 	bpf@vger.kernel.org
 Cc: Anton Protopopov <a.s.protopopov@gmail.com>
-Subject: [PATCH v1 bpf-next 6/7] resolve_btfids: Tag the functions that return ERR_PTR()
-Date: Wed, 25 Nov 2026 10:28:03 +0000
-Message-ID: <20261125102810.699464-7-a.s.protopopov@gmail.com>
+Subject: [PATCH v1 bpf-next 7/7] selftests/bpf: Test fmod_ret on functions that return a pointer
+Date: Wed, 25 Nov 2026 10:28:04 +0000
+Message-ID: <20261125102810.699464-8-a.s.protopopov@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20261125102810.699464-1-a.s.protopopov@gmail.com>
 References: <20261125102810.699464-1-a.s.protopopov@gmail.com>
@@ -105,68 +105,71 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-A function that returns ERR_PTR(-EINVAL) fails in the same way as one
-that returns -EINVAL. Its callers check the pointer with IS_ERR() and
-get the error with PTR_ERR(). But resolve_btfids looks only at the
-functions that return an integer.
-
-Look at the functions that return a pointer too. A pointer has 8
-bytes and its errors are sign extended as for a function that returns
-long. NULL is not listed: a program that returns 0 lets the
-trampoline call the function.
-
-The verifier checks all 64 bits of the return value of a program on
-such a function and requires the JIT for it, as for a function that
-returns long.
+bpf_testmod_retval_pointer() returns ERR_PTR(-EINVAL) or NULL. Expect
+the tag "bpf_fmodret_retval:-22" for it and check that a program on
+it may return ERR_PTR(-EINVAL).
 
 Signed-off-by: Anton Protopopov <a.s.protopopov@gmail.com>
 ---
- tools/bpf/resolve_btfids/fmodret.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ .../testing/selftests/bpf/prog_tests/fmodret_retval.c  |  2 +-
+ tools/testing/selftests/bpf/progs/fmodret_retval.c     | 10 ++++++++++
+ .../selftests/bpf/test_kmods/bpf_testmod_retval.c      |  2 +-
+ 3 files changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/tools/bpf/resolve_btfids/fmodret.c b/tools/bpf/resolve_btfids/fmodret.c
-index e1afdb6dedd5..db9794a88aef 100644
---- a/tools/bpf/resolve_btfids/fmodret.c
-+++ b/tools/bpf/resolve_btfids/fmodret.c
-@@ -29,8 +29,8 @@
- /* More than any arch has argument registers */
- #define MAX_PARAMS	16
+diff --git a/tools/testing/selftests/bpf/prog_tests/fmodret_retval.c b/tools/testing/selftests/bpf/prog_tests/fmodret_retval.c
+index 281c6192e570..ef2a57f52dac 100644
+--- a/tools/testing/selftests/bpf/prog_tests/fmodret_retval.c
++++ b/tools/testing/selftests/bpf/prog_tests/fmodret_retval.c
+@@ -24,7 +24,7 @@ static const struct {
+ 	{ "bpf_testmod_retval_no_effect",	"-28,-22,-16" },
+ 	{ "bpf_testmod_retval_err_ptr",		"-34,-14" },
+ 	{ "bpf_testmod_retval_no_branch",	"-14" },
+-	{ "bpf_testmod_retval_pointer",		"" },
++	{ "bpf_testmod_retval_pointer",		"-22" },
+ 	{ "bpf_testmod_retval_argument",	"" },
+ 	{ "bpf_testmod_retval_notrace",		"" },
+ 	{ "bpf_testmod_retval_variadic",	"" },
+diff --git a/tools/testing/selftests/bpf/progs/fmodret_retval.c b/tools/testing/selftests/bpf/progs/fmodret_retval.c
+index 112f1575ce1f..699f3603dfa0 100644
+--- a/tools/testing/selftests/bpf/progs/fmodret_retval.c
++++ b/tools/testing/selftests/bpf/progs/fmodret_retval.c
+@@ -10,6 +10,7 @@
+ #include <bpf/bpf_tracing.h>
+ #include "bpf_misc.h"
+ #include "bpf_experimental.h"
++#include "err.h"
  
--/* Return the size of the integer which FUNC returns, or 0 */
--static __u32 int_return_size(const struct btf *btf, const struct btf_type *func)
-+/* Return the size of the integer or of the pointer which FUNC returns, or 0 */
-+static __u32 return_size(const struct btf *btf, const struct btf_type *func)
- {
- 	const struct btf_type *t = btf__type_by_id(btf, func->type);
- 	int ret = t->type ? btf__resolve_type(btf, t->type) : -1;
-@@ -38,6 +38,8 @@ static __u32 int_return_size(const struct btf *btf, const struct btf_type *func)
- 	if (ret < 0)
- 		return 0;
- 	t = btf__type_by_id(btf, ret);
-+	if (btf_is_ptr(t))
-+		return 8;
- 	return btf_is_int(t) || btf_is_any_enum(t) ? t->size : 0;
+ char _license[] SEC("license") = "GPL";
+ 
+@@ -108,6 +109,15 @@ __naked void zero_extended(void)
+ 	::: __clobber_all);
  }
  
-@@ -80,7 +82,8 @@ static int cmp_error(const void *va, const void *vb)
++/* NULL calls the function */
++SEC("fmod_ret/bpf_testmod_retval_pointer")
++__load_if_JITed()
++__success
++void *BPF_PROG(err_ptr, int value)
++{
++	return value ? ERR_PTR(-EINVAL) : NULL;
++}
++
+ /* A privileged program may return a pointer, but not here */
+ SEC("fmod_ret/bpf_testmod_retval_called")
+ __failure __msg("R0 is not a known value (ctx)")
+diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_retval.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_retval.c
+index 85722e48d34c..ec093098108b 100644
+--- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_retval.c
++++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_retval.c
+@@ -131,7 +131,7 @@ static __used noinline int bpf_testmod_retval_no_branch(unsigned long left)
+ 	return left ? -EFAULT : 0;
+ }
  
- /*
-  * Write the tag for a function which returns SIZE bytes, and in them one of the
-- * NR VALUES of the return value register. In 8 bytes an error is sign extended.
-+ * NR VALUES of the return value register. In 8 bytes an error is sign extended,
-+ * as in ERR_PTR(). NULL is 0: no program can return it instead of the function.
-  * Return false if there is nothing to tag.
-  *
-  * The machine code cannot tell the -EPERM of a permission check from the -1 of a
-@@ -217,7 +220,7 @@ int fmodret_tag(Elf *elf, struct btf *btf, int verbose)
- 		if (!btf_is_func(t))
- 			continue;
- 		nr_funcs++;
--		size = int_return_size(btf, t);
-+		size = return_size(btf, t);
- 		if ((size != 4 && size != 8) || !fits_trampoline(btf, t))
- 			continue;
- 		/* Init code is gone before a program can attach */
+-/* Not an integer, and an error which is not returned */
++/* ERR_PTR() is an error, NULL is not */
+ static __used noinline void *bpf_testmod_retval_pointer(int value)
+ {
+ 	return value ? ERR_PTR(-EINVAL) : NULL;
 -- 
 2.43.0
 
