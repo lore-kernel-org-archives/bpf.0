@@ -1,56 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795579781;
-	b=op2iWuQqDb0XzkeeJUq/A4XXpTHmju1v+HD+nQ4p590Bl/OIlQMh9Q90iMpW74/BU+lQ
-	 vxEKyUK17+whxQe7I4I87F4W4Hgb7kYcM318+gztNJZxec1hTkB9a4neHUaY+UIWjYBIm
-	 bQ59MrvfUp4rwrfIl+K3mkYnmd2sbg/rAikUBavi79VsiUrJUjATk2yeHoi18g843Cddh
-	 HudYIInasLGekCqI5BeaBgOw1Z3w3YQFWoCLTG2iYgtAh1u6UVWZdZxRn4//bpxEw1+0w
-	 mBk7rlWPx81gOV5/tnhKQARQCpMw3l5WO6x6SCYBQR+BAna7ZoytVROGHnI74hEMVgQ==
+	t=1795580581;
+	b=mXtngp+f+1ZlPlp/t9lQ+FziHVlELWSmsTNbuf19HtRFyDkpz3RvPUS+dBd5ZZXb1Q+z
+	 WLOImuXHplq9ZxSCvC/Y3xOgZ3GoeZ3jZhb6ERSkLtKyVB5ZpuyAFx2T3cKZSXP/C7ie1
+	 +9OtvZHdKnZVrB3WNSHrX+kIA2xIJ/IGRLsiqP1QzFMgIcS188S3wJ+6iIgZ84ljk1E6u
+	 iDLj0gVb4c2XcM1CHcJo/tQ6UcwR02RbfKFnfxxAcozzVU72WJzhvvPVm14l821dRnIsv
+	 0JmjznEB7wpTUcxx0ZDMePKnJYz/Kvsn6at0/L8SGGy3VCc/YN4XfP1C5uRO9AZFaxw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795579781;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
+	a=rsa-sha256; c=relaxed/relaxed; t=1795580581;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=i6vGCEPmTfNujBrV5pLY6XewY/QJKIYc1T4YRrAIko4=;
-	b=Pf2eZLTVpxbS9GOnpUcvmu4xz3OBreUhpX6Ld3kK5I22onxOrdaUHWSZ+TUiV/iLJUaQ
-	 r4Xs1sLJ7KjWiNl+TUGIMIcAs/AYZ6mKBqmMTjlW2lGPctZvw2pJA7CQih6YOqMkQV6Ft
-	 CF+w2D48zWD8XLNXc/6imyXUEWpZ/RZebHUKwkumH6SNMlROBNCzdcW9ovXaCpGJWofzS
-	 U7u3R9AZdLY0xkH/uJTcyn5EjgAFaqkXeaCTCL+kf//vtnIiKtwdIQp4uITsvwiEinDqH
-	 GUBM43X2ZF59434Ui6OffteUmdztDDVJ0/GlVTKv/k1lzxTI64CO3tA/zphF9IA2j3Q==
+	bh=5IqHR7B3aedVm5SCA6788o/yEH0agx+sbs2oCgqHtYI=;
+	b=e257fUzptRTR+SPZVeQcIPWeGefknRSTLp1Gu7Gd+jDyZIonEXve5WqW9EoB75Xo9g6o
+	 NSIKMrkrW2FEsepfB/FT91/c6msQyJPOtR7VAvPQiiaaAv6BKqvqhcnBqzdFEZVMppVMm
+	 IlueVCVLC/0kzwZuBeKXs4sbvBzGik3+Qe9vFJVHfkU38vKuQhSsmW2x6oWOAcXRwVw0F
+	 u5Y8e1uv7WcOvLpTDmIYvRJkNx71Px6qjkoNUGMSKszOFl36w2Tqli39CIA2whBu9HNP7
+	 3YcgJ5LEoH5bZXVKKlgchN2PbIz3qpZpv2P+YF0lX+Rerv0FGC4+SDa+zGGfnYnv/5g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AgyMy6WL;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fnG9CKXh;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE10C606A31E
-	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 04:09:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B25AB606A31E
+	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 04:23:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AgyMy6WL
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FA541F000C0;
-	Wed, 25 Nov 2026 04:09:41 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fnG9CKXh
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43F6E1F000CA;
+	Wed, 25 Nov 2026 04:23:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795579781;
-	bh=i6vGCEPmTfNujBrV5pLY6XewY/QJKIYc1T4YRrAIko4=;
-	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=AgyMy6WLC//Y0NlljrnVozDgyoSy43vPFfgVm50thrBgJ1GZCx6KfiKnPXt+r8P1f
-	 6kL2c5yoBgFwS5ucTHQIxqwB1TZihJlzSA3vdngryd1/uYHfaPcoC7Uf74r08tqlhR
-	 3CxrY3Pq+nPaMKaBUGgrzfn86IbdC2sTnvwoB5e2tyn7lVwKTXcsl3xUrU3dH3icAR
-	 bKyrSMUY9e8MyAG8alNogp+q2tCqG9707VTB0uZbQQIFb1N+47UcYmrhEVfOTKDiig
-	 O/Lo5Sg/fvmSATWrA1pzZ7u7Cjcuo1Vx102X/wlT+p8XMjRNmsvU2kXJvZGv3vlJLd
-	 IxOBeqUWEuZ4Q==
-Message-ID: <sashiko-outbox-232556@kernel.org>
+	s=k20260515; t=1795580581;
+	bh=5IqHR7B3aedVm5SCA6788o/yEH0agx+sbs2oCgqHtYI=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=fnG9CKXh4VewQtU+ndIpMddICXN1ttNXeQyuB7Psznjjj8OBptTYzegQcfKT7ec4Q
+	 uhkgUfa7foAlN8bmX7ROdEMpL0bniJp1AS7n2IgKM56LKa3VA2jbONwlvZv21Ua86n
+	 /PAP4Wu/GwYYSlPJ3oar6w40TdyRdGqDvK8csM4bVMBGgLotNKbKSp0Te5kx8zwuAW
+	 r0M042Cay6osf2sOUCaeXbOg8DmvC+oRG40vAgaZSNH+6a05VQEVG0gfjgU2YyXAjr
+	 RtZru0/0leFv5AvNVr/95QrXxabftzzrNIMAyCW9sxsDwiSRqaThsZonMX7+5Ieqyp
+	 3g9eE3ezkk9wA==
+Message-ID: <sashiko-outbox-232571@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf 42/47] bpf: Take a neighbour of the L3 master in
- bpf_redirect_neigh()
+Subject: Re: [PATCH bpf-next v2] bpf: Add rcu_read_unlock_special() into btf
+ id deny list
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-In-Reply-To: <20261125032938.670542-43-alexei.starovoitov@gmail.com>
-References: <20261125032938.670542-1-alexei.starovoitov@gmail.com>
- <20261125032938.670542-43-alexei.starovoitov@gmail.com>
+To: "Sechang Lim" <rhkrqnwk98@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20261125040106.2200628-1-rhkrqnwk98@gmail.com>
+References: <20261125040106.2200628-1-rhkrqnwk98@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 25 Nov 2026 04:09:40 +0000
+Date: Wed, 25 Nov 2026 04:23:00 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -62,60 +62,43 @@ Precedence: list
 
 Thank you for your contribution! Sashiko AI review found 1 potential
 issue to consider:
-- [High] bpf: neigh->dev and skb->dev mismatch in bpf_out_neigh_v4() on
-  non-L3-master
+- [Medium] bpf: unresolved BTF_ID for static inlinable
+  rcu_read_unlock_special()
 --
 
-commit 14e765ab115457bb4915055efa26bf5101b3a1a3
-Author: Alexei Starovoitov <ast@kernel.org>
+commit d423a98c605ab7698cdc1fbadbd9de2303d91def
+Author: Sechang Lim <rhkrqnwk98@gmail.com>
 
-bpf: Take a neighbour of the L3 master in bpf_redirect_neigh()
+bpf: Add rcu_read_unlock_special() into btf id deny list
 
-This commit updates bpf_out_neigh_v4() to drop the skb dst and look up a
-neighbour on the target device itself when no nexthop is supplied and the
-target device is an L3 master.
+This commit adds rcu_read_unlock_special() to the btf_id_deny set under
+CONFIG_PREEMPT_RCU to prevent infinite recursion when attaching fentry or
+fexit BPF programs to it.
 
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index eb6aeabb410e4..8d331802a7db6 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -2367,7 +2367,11 @@ static int bpf_out_neigh_v4(struct net *net, struc=
-t sk_buff *skb,
->  	}
-> =20
->  	rcu_read_lock();
-> -	if (!nh) {
-> +	if (!nh && netif_is_l3_master(dev)) {
-> +		/* The route leads to another device, this one looks it up again */
-> +		skb_dst_drop(skb);
-> +		neigh =3D ip_neigh_gw4(dev, htonl(INADDR_ANY));
-> +	} else if (!nh) {
->  		struct rtable *rt =3D skb_rtable(skb);
-> =20
->  		neigh =3D ip_neigh_for_gw(rt, skb, &is_v6gw);
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index e7013ed8cadd7..0e8afc0250b54 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -24735,6 +24735,7 @@ BTF_ID(func, preempt_count_sub)
+>  #ifdef CONFIG_PREEMPT_RCU
+>  BTF_ID(func, __rcu_read_lock)
+>  BTF_ID(func, __rcu_read_unlock)
+> +BTF_ID(func, rcu_read_unlock_special)
+>  #endif
+>  BTF_SET_END(btf_id_deny)
 
-[Severity: High]
-Can rt->dst.dev still differ from dev in the "else if (!nh)" branch when
-dev is not an L3 master?
+[Severity: Medium]
+Can resolve_btfids fail to resolve rcu_read_unlock_special when the
+compiler inlines it?
 
-__bpf_redirect_neigh_v4() calls ip_route_output_flow() and accepts both
-RTN_UNICAST and RTN_LOCAL routes without checking that rt->dst.dev =3D=3D d=
-ev.
-When ip4h->daddr is a local address (or 0.0.0.0),
-ip_route_output_key_hash_rcu() produces an RTN_LOCAL route whose
-rt->dst.dev is net->loopback_dev (or the VRF master device) rather than
-dev; outbound tunnel-mode XFRM policies matched via xfrm_lookup_route()
-can likewise switch rt->dst.dev to a different outer egress device.
-
-In that case skb->dev is set to dev while ip_neigh_for_gw() looks up or
-creates a neighbour on rt->dst.dev.  If that neighbour is unresolved, the
-skb is queued on rt->dst.dev's arp_queue with skb->dev pointing to dev, so
-unregistering dev will not purge it via neigh_ifdown() and leaves a
-dangling skb->dev pointer (use-after-free).  In addition, headroom was
-only validated against dev, so if dev has no header_ops while rt->dst.dev
-uses a cached hardware header (such as loopback_dev or a VRF master),
-neigh_hh_output() can hit WARN_ON_ONCE(skb_headroom(skb) < hh_alen).
+rcu_read_unlock_special() is defined in kernel/rcu/tree_plugin.h as a
+static function without noinline, and __rcu_read_unlock() is its only
+caller.  When the compiler inlines it and elides the out-of-line
+definition, no BTF_KIND_FUNC entry is emitted in vmlinux, causing
+resolve_btfids to emit an unresolved symbol warning (or fail the build
+when CONFIG_WERROR=3Dy passes --fatal_warnings).  Should
+rcu_read_unlock_special() be marked noinline as well?
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261125032938.6705=
-42-1-alexei.starovoitov@gmail.com?part=3D42
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261125040106.2200=
+628-1-rhkrqnwk98@gmail.com?part=3D1
