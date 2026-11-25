@@ -1,101 +1,55 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.229.8
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795626300;
-	b=wkNQR4XYxLh8LbeeklLX3DK4Cx/rJ2UzQ0ZA49ET2VMNSa4rgaj4y+Kc15t76X1E0RYV
-	 AuHmm4YLhJi11tVbelGmKJJK+IZyqJc9WjEMaGgiJ27IqbIr2JzJ8UUoFtXQXyfO3CBV5
-	 tgtQ510End0zkXxkHKMtRla3AmULoxscP5g4U6X7rOWIQb+GOB3UB/iJW3oA6hPe1b0z4
-	 DonZ3/ESPjFf+ag8X26b08FSfZXPogVhQyfnzjVX72XZ0HX+o2VBpTFjIht2DlAsjb0jr
-	 9po4ULQBrP4A3LZkS+AG6WexkCQ1RKSpbiW3CDBqX3lbTWS04OCwe8mGgOsMx5CYQAA==
+	t=1795626480;
+	b=hqJnKZvjHK24HJClgjADBwcqNWPeAmkzA+jX6300OpLVm5j5oqKDXYYhwkd832xWqRaZ
+	 Yl2lLluJlHifypsWWqtCwAFHERXFBCjntQCjJwgsvn4MbVcKpmxW2OrLd+c2AFDuOssnE
+	 60l+zWak0OlbDCaiYHOTtg47gj2zfE2wSD9ypOT4zeith6kAAPTP3hRb2f+5tjDqQTN/g
+	 CQbSyBTuGQJVUKRV7q98xK/FP5pCOr/MFJ1ilC9BqEWYArxhSjv17wHRNmDGti0/6/PMJ
+	 a2AzG+8pH6+o+/M+t7MvXqBM1mnBWeELcGgMsksQ+6j7hqICDpGXdeTlDXar9J0464Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795626300;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=XDu0RE2qLqkN4F9FMA5I580EwKMJWPCFaxCVS6yhsfo=;
-	b=ntW4AI42lyKQX+GPnPUuWKmidruHJ9eLZX01ViFZg2suzwIoJKt9BqvPeMbROijtmv1Y
-	 iv8e6Ge05TQlsL61LfcW6c1VGWD6YHuijRppYekIsBIklDMLcDabQzpIxlqM61mSgUEG+
-	 ZSxVpnveYVCa2MUWxxOTdwhXMKMKuYG+xRuXCDGZOW78Bak3jx+PUShYByXryl9f0C18z
-	 0O6u//043FDE9lyD46dc748yVUTixOfuqZHXeEatv/8MJh7ePGM5QvWV2e78+D4a5T/gv
-	 5iHE/B0Ki78ZrZUKkhp5m1smR50yM+hqRsv1pwtJMQST2GfUbserfPCZPSTnsU0lpug==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795626480;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=urHFx3b6gWNWRXANUCfTDqj3yvhkqieRlYBhS4ZuTZM=;
+	b=eZKk8vGErkrfTrg3JHdQO/WFZR3w0gsDSVyzpooTaA/JXLG0KSRoBLx2nOMtMX3p/IIL
+	 CrrPoLGqcLapW06c5aAzNqjOXyHFXejwBQ2p1NXWsTnjNAPvG6YEemlabsBu466fSTBVC
+	 D5yRlcYTSGwBLnpelXYcM8Qz9nZhXEp4Bg+W3jm6V7Has8STgpazlzqZX6iaoZ6MwjOh9
+	 l07od/SD2jt0Qykr46Dka0mUba1y83ugiwWXzedJNWIIO45t/2eqcj5gmKr/0G01jwMEh
+	 uMvtimzQsc5UPvhe5XFMWfVco47IkRM8vBWOOczwbd0QGewBEqpsRRNwxVHS7VFwAqg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=dlI7NdZ6;
-	arc=none smtp.remote-ip=74.125.229.8
-Received: from mail-dy2-f8.google.com (mail-dy2-f8.google.com [74.125.229.8])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MU0gnyYy;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B50C5606A32C
-	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 17:04:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B50C5606A32C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9541606A31E;
+	Wed, 25 Nov 2026 17:08:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=dlI7NdZ6
-Received: by mail-dy2-f8.google.com with SMTP id 5a478bee46e88-382afece6d8so1210725eec.1
-        for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 09:04:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795626299; x=1796231099; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=XDu0RE2qLqkN4F9FMA5I580EwKMJWPCFaxCVS6yhsfo=;
-        b=dlI7NdZ6HZjf1sqzJlDb5DOKhlVyFKple/gNDaS6e5XwpFA6jde3ic/2XTVBd5JpH7
-         G9fLQ4zVM0COeUqOPDuUl1sop/G5hkHOCt/77+E8W1EeXCaNBRUZbPyBdMsIVtZrduao
-         rdQj7Ik9foTfSEFMy2h5jmwJYxgAAQzB3gkHFRY3sD0v7vqgG6bB/Q+YvVR1yamfzzY6
-         Hm1fku2bGC0M4ziUerbRDW3puxBZT3la5acEp54YUBPKHjv4xkw7iVxaYpqcG6Jc9QKS
-         CrWbmHtCQB6DV6W+lu23KQ8nO66s9fAebnkMPYOPxxpWG0NK0QsGzRVFTAbx2HbCT35L
-         JIAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795626299; x=1796231099;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=XDu0RE2qLqkN4F9FMA5I580EwKMJWPCFaxCVS6yhsfo=;
-        b=TU9I+HCkbH61ESkNlDkbEhsSNmIZbBEp5JRV3xyuhbLMS4pEfpFtzWCjHRJopSixJQ
-         MFHWLSWb3Cnh7jazl1jLQLwaYV4BhJaILY+d2XGiUZt8pWN5d40ZDcP4EzVw8rFx+ktg
-         n8fZadSULup8ZE5F2MF9VWr92+lNezrxJTLwXpH3kIscH5Lp5huQ/QtFaVZA25r7b4h2
-         AiRYQ/LOqHVP7YIW9ROErghYtGTmGJ3RpR1VZLUlV33AgqndFEHwQWKUL5tq5GPLd8Yj
-         NQ2mYdXaFIszCJ44vcsX1Kua/u27nUkAsSxrmNL0fcy7CRMQCpnzPV7bd7y8/bYgv9za
-         k06A==
-X-Gm-Message-State: APuU4Z8BOaA0zpO+6Z7RVoyYj58l9Q3l4amk3UCFnuC2A/RNeEyIlk0Y
-	NogiwrSYze1yYzhWScVVDw5/ZFcdTtc9ngeG1v/60ZEG/Pscceurf+B7xsMp2OTN0Fw=
-X-Gm-Gg: AZFdTZfzZuaK7NrHsy75JzvY16ha20On3qskO9LIGSTdw+z5LAo0ViKwdlvB9JjdgRC
-	NQJaLoaY7uuQjRQuFqPfBrmpw8HOAy7QFX2cJdmjK+A88hsiTOhkWgPjAIze25OIR7sRqL2b7IO
-	jEjQRqRKMgewvRijS6Uo6Ql16AV2iacU4xkcT26Xm78um15XpiMvuNkIoCD45mDGbXehNTyuIcK
-	ZJ0V7OGg+sC4MufDJZLlPyXJ8/VhIgcp068kYT72T6hpibYX3L+Ilcatsxsg0tu/yxzcAAAw0Q9
-	QtYdkzdGSemYvttxfc3GW1UJXujHZgnax3IxcTlTOBwxW8Fq8mHc1/QaFkRPD1rwxKw1IK99PcX
-	U3Ick4RwHHjNhITAuKjiIT5utB7AAWstFcJzjrrfDVg0co/C4iaPQ6ERl6Zdw/UgHCjGGmS/VRU
-	b9pmsG/pasnxk420Z8YZhnkGc25ONPtbvF5g28rle2L7QClo84ey60Y31gmzZt2u5qjzLA0cXd7
-	n9+higWsgwZ7JR69Q+S/QwIEmZOV1LXIM0ScArkHGj0giB8ks6eo7FSN89nbaLdhWpuxoqiRpPX
-	6Aw2m1Wuj4LyqVxHlsPqEOc=
-X-Received: by 2002:a05:7301:182d:b0:386:b801:cd06 with SMTP id 5a478bee46e88-386b801cd3bmr7888146eec.40.1795626298644;
-        Wed, 25 Nov 2026 09:04:58 -0800 (PST)
-Received: from localhost ([2a03:2880:9ff:43::])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-385672c6f31sm53837321eec.15.2026.11.25.09.04.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Nov 2026 09:04:58 -0800 (PST)
-Date: Wed, 25 Nov 2026 09:04:13 -0800
-From: Stanislav Fomichev <sdf.kernel@gmail.com>
-To: Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: bpf@vger.kernel.org, kpsingh@kernel.org, matt@bobrowski.net, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	Stanislav Fomichev <sdf@fomichev.me>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	Xu Kuohai <xukuohai@huawei.com>, netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf v2 1/2] bpf, lsm: fix bpf_setsockopt() on a half set
- up child in inet_csk_clone
-Message-ID: <awcUm4PvuYb3nGxM@devvm16445.scu0.facebook.com>
-References: <20261125070330.16625-1-jiayuan.chen@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MU0gnyYy
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F04C1F000C4;
+	Wed, 25 Nov 2026 17:08:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795626480;
+	bh=urHFx3b6gWNWRXANUCfTDqj3yvhkqieRlYBhS4ZuTZM=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=MU0gnyYyJ+IvbtkavoqG7K/VGO2N7wwWta4r2mJPkJuSzVj12EJ4UjpqOGCzKbWpP
+	 X2DWXHIEYOsxY+oqSTgUTsCNSMQ+9vI9SAcUM2biMQ6/RF54a2esbbwRa8U2A0MDjd
+	 Y5W9ca1X3Sy/mIm598DeEF1U07y+g+P9BhgVtdgW8jfR/e9Zy8oT+zl+rm1r1HnAVQ
+	 RshfIfNPWeimqJxGklNsgwElPYJs1O4JBnU5S7NT6Mn650N+hEwTZl4o7MjSH9PNtI
+	 wuaoXUlXrh5/HfL1TNZ+6iBuYUoiRLqb79WuJIUahU8sb6AdcMz2Ksdt3+urIf+W9g
+	 bywjKw6ziOqlw==
+Message-ID: <sashiko-outbox-233806@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] HID: bpf: fix use-after-free in hid_bpf_reg()
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Sechang Lim" <rhkrqnwk98@gmail.com>
+Cc: linux-input@vger.kernel.org, bpf@vger.kernel.org, dmitry.torokhov@gmail.com
+In-Reply-To: <20261125164728.24914-1-rhkrqnwk98@gmail.com>
+References: <20261125164728.24914-1-rhkrqnwk98@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 25 Nov 2026 17:07:59 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -104,36 +58,91 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20261125070330.16625-1-jiayuan.chen@linux.dev>
 
-On 11/25, Jiayuan Chen wrote:
-> security_inet_csk_clone() is called at the end of inet_csk_clone_lock().
-> The child is locked, which is why the hook is in
-> bpf_lsm_locked_sockopt_hooks, but it is not set up yet:
-> icsk->icsk_ca_ops and the ipv6_pinfo still point to the ones of the
-> listener, and the timers are not initialized.
-> 
-> So bpf_setsockopt() from a lsm_cgroup prog is wrong there for:
-> 
->  - TCP_CONGESTION: puts icsk->icsk_ca_ops, which the child holds no
->    reference on.
->  - IPV6_TCLASS: writes to the ipv6_pinfo of the listener.
->  - SO_KEEPALIVE, TCP_KEEPIDLE: arm the keepalive timer before
->    tcp_init_xmit_timers() sets it up.
-> 
-> Options considered:
->  1. Remove the hook from bpf_lsm_locked_sockopt_hooks, as commit
->     5416c9aea832 ("bpf: Fix the kernel crash caused by bpf_setsockopt().")
->     did for socket_sock_rcv_skb. Not done, setting options like
->     SO_PRIORITY on the child is what the hook is used for and it works.
+Thank you for your contribution! Sashiko AI review found no new issues
+in this patch, but noticed 1 related pre-existing issue it does not
+introduce:
+- [Critical] HID: bpf: use-after-free on struct hid_device in
+  hid_bpf_unreg() [1]
+--
 
-[..]
+commit 8a1a1e9fd3f55ee6ffdf0b624cf6f20fd17120ed
+Author: Sechang Lim <rhkrqnwk98@gmail.com>
 
->  2. Make these options work. This needs the child set up before the
->     hook, too much for a fix.
+HID: bpf: fix use-after-free in hid_bpf_reg()
 
-What is too much? Moving security_inet_csk_clone to happen at the end of
-tcp_create_openreq_child? Or is it more involved?
+This commit holds an extra device reference across hid_bpf_reg() so that
+concurrent device destruction cannot free struct hid_device before
+hid_bpf_reconnect() runs.
+
+> diff --git a/drivers/hid/bpf/hid_bpf_struct_ops.c b/drivers/hid/bpf/hid_b=
+pf_struct_ops.c
+> index c90b68956cb3b..e2512bd6e6b29 100644
+> --- a/drivers/hid/bpf/hid_bpf_struct_ops.c
+> +++ b/drivers/hid/bpf/hid_bpf_struct_ops.c
+> @@ -198,6 +198,7 @@ static int hid_bpf_reg(void *kdata, struct bpf_link *=
+link)
+>  		return PTR_ERR(hdev);
+> =20
+>  	ops->hdev =3D hdev;
+> +	get_device(&hdev->dev);
+> =20
+>  	mutex_lock(&hdev->bpf.prog_list_lock);
+> =20
+> @@ -239,6 +240,7 @@ static int hid_bpf_reg(void *kdata, struct bpf_link *=
+link)
+>  		hid_bpf_reconnect(hdev);
+>  	}
+> =20
+> +	put_device(&hdev->dev);
+>  	return err;
+>  }
+
+[Severity: Critical]
+This problem wasn't introduced by this patch, but can the paired
+hid_bpf_unreg() hit a similar use-after-free on struct hid_device
+[1]?
+
+drivers/hid/bpf/hid_bpf_struct_ops.c:hid_bpf_unreg() {
+	...
+	hdev =3D ops->hdev;
+
+	/* check if __hid_bpf_ops_destroy_device() has been called */
+	if (!hdev)
+		return;
+
+	mutex_lock(&hdev->bpf.prog_list_lock);
+	...
+}
+
+hid_bpf_unreg() reads ops->hdev without a lock or reference before locking
+hdev->bpf.prog_list_lock:
+
+CPU0                                    CPU1
+hid_bpf_unreg()
+  hdev =3D ops->hdev;
+                                        hid_destroy_device()
+                                          hid_bpf_destroy_device()
+                                            __hid_bpf_ops_destroy_device()
+                                              mutex_lock(&hdev->bpf.prog_li=
+st_lock)
+                                              e->hdev =3D NULL
+                                              mutex_unlock(&hdev->bpf.prog_=
+list_lock)
+                                              hid_put_device(hdev)
+                                          put_device(&hdev->dev)
+                                            kfree(hdev)
+  mutex_lock(&hdev->bpf.prog_list_lock)
+    <-- use-after-free
+
+In addition, if hid_bpf_unreg() takes prog_list_lock after
+hid_bpf_destroy_device() sets hdev->bpf.destroyed to true but before
+__hid_bpf_ops_destroy_device() clears e->hdev, hid_bpf_unreg() still sees
+a non-NULL ops->hdev and calls hid_bpf_reconnect() on a device being
+destroyed.
+
+[1] https://sashiko.dev/#/bug/linux-6599bf1d-e091-4b20-bab0-cb93dd34be79
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261125164728.2491=
+4-1-rhkrqnwk98@gmail.com?part=3D1
