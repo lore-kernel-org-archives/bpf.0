@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.171
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795577584;
-	b=xWekMLXKlem+SoLe8BM9ut11/5Ro+4tbKgbO5pe5s/CS3CvM/O4K8sX0Y96LJ6r4/mFq
-	 CC03EjxuKOF+2x7G5hN/chAm8V+dWJDt8PzjgZx3FcWPGam1hNTe1rGUEA28+TSqM8bZY
-	 N06LXVfGBqBtH/UfOsMnlSKbWW91aPtt/uyv6xtdw+rkO+HmkInQjerkBD2O/CzuyJbjk
-	 i9WbXDnaBxMJ2ztoWWJCsc80d05+K9mivSanU4TBRVXrGmLs4ivzLxFUahjMyQyBt/j/N
-	 ljMiuCPAAEaAOq6C4RUDKQlMljkOzqOoLNwonEUQEmjPaeKW8BHM0soSCWfEEbtKRIA==
+	t=1795577586;
+	b=yYyXQ1OSQxtVHc2RIubGTZkj65Op2AhQqAk3C7LlCprwybewH1YUygLNKp/ROP3B+VAq
+	 Bdj5o8J0kozjMILWfkShx6xvG8Fl6bDJmxJiQMX2/qGvFMM8os4qWIF0farfvsF+X0qdB
+	 jIZz5HF2SmWEB4fkNMIetgn/ls4AyjoTLLXgc/s8BLlFg6WMP6RD97iIBb8U02t1rLexF
+	 EfD3UtYm2TPbpqp9q2BWV/k3bOL4eAK/4i50Y1723mWzs0I+EMMPBMmTXzncNC5qTj9/a
+	 g73XilXrv07DDsQdCZkgIUbqT50t/t1ECuusAAkjVCR0h3D3O32Rleev4SSlDLPebvg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795577584;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795577586;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=8Hw1Re73JxyniUZgjNRzvpEomKIMU1jEfJYB11AqM3I=;
-	b=qd7GrQy6MXlI+A5V8Ay0hTknwrhLnkqNMnAfViKXRROJ7L9CFs3z39bbV5kY2Jztp5D2
-	 ZvkOvwwx5irgWAC6WHq8nNehZ/tWYtvHaxoiiPfsigjM3SlNg6hz1O/NhsLVxEp12qxAD
-	 oYGdI0Vad8854RZY1Hj0uhbSWmzqKndL88CFJ0LAFEoBaknRk0jdoRzUxvlsE4vOk74bD
-	 dzBKq9Pjn01elmQWJhdf/rSvSr0lKmV9OzNcr5F4UZE3vTAnBTn4a2XsUOkxJbt3UAOKN
-	 wvrSkIxoMZT68unVXtTjKljn4iqqFJHsYPShdVbBuUFZ45MftRA1yEkqyjTZ9gxOi+A==
+	bh=3atTFqNicxw9/2abno5bwtyXJnSjkg6iBLecR9045e8=;
+	b=etsBlmOfectvQJMAivsp1huLcKpZkd4s8B5UsPs0I2XV5PAg9xkxiHBJtKForN/Z+0C7
+	 52X9o651LmU4gebm+xQgMvZ2XziDOz3zy7v6vo2gE9cB/RXMydqi1CPZUiVD8l++0eWZ8
+	 E0w7Ro0p1rt2D6ZmbklYyoknWY//lypKATBGvBwdtyUuL7AVoxzs1zxlRHxVKweopWUQ+
+	 AQdUyBOqk2UAfFAGg+pRqcDDmWOUTJ8Qsy6UBzXQHT8vAQCSWvgnc6v451+Uu0/zK8+yC
+	 lAQRpB9q0QIaroRmfiHx0WrKCP+S+WXB9FJLujmsdyrtNYkc9+u3aXaat3KTaWnNwiQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=pRpScTAW;
-	arc=none smtp.remote-ip=209.85.214.170
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=oXj1gvu6;
+	arc=none smtp.remote-ip=209.85.214.171
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDA3D606A32E
-	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 03:32:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EDA3D606A32E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6849606A335
+	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 03:33:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C6849606A335
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=pRpScTAW
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2efe591a1f6so17775715ad.2
-        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 19:32:56 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=oXj1gvu6
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2f0458cc9easo41424275ad.3
+        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 19:33:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795577576; x=1796182376; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1795577582; x=1796182382; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=8Hw1Re73JxyniUZgjNRzvpEomKIMU1jEfJYB11AqM3I=;
-        b=pRpScTAW7g7oUfuSb7O+2S7eR6Bl4yA4Z4mY1JUGqmo94wu6OtKCx/v9X9VJ8DrBEE
-         ZxoIRL3/5iPVFM3cWn6cakKndwzRgyF9eJvpe5hpf+evaFf4br+mPVjEm2ku7DhSgH49
-         Qxx+wb1/kqOF+aqaM+P6c9z27xMVDpo+7PC/ZULWM4PtFPa35ZBeDmk3VwKQjPUnGBqY
-         0EVE1Pnw4QiK6say7IIi5qgdcXYyn6XzP1XjIuutiEwO2XGkmKFO5YE6tmzUOcJuxCrn
-         Usu1o3yPze84ZiJ1/VB+FEcsPsIOkyy3jzZDVTefWtyprbCfB/lPdYZeG9QUxzU81dMc
-         EqAg==
+        bh=3atTFqNicxw9/2abno5bwtyXJnSjkg6iBLecR9045e8=;
+        b=oXj1gvu6iAoTPk2PDFl81HWIlHab4rWD45CHTwQpdQhk66dxozilJzK2m/fCPr5omT
+         lc/3EggTeCVKbpVGfj0XtAyoB649OPSCiwDhAxU1MwF+risq8KDEXFeNywmihpjvge+3
+         52g8JFemjI0gy+OEcs1M5VndnJ/HcnxYIbsS2ULkaBHDUwJiJxE0d89z/N9tSzt5sBqq
+         +J2Fkqu7wVxm5eyrGSzBqs+V2jsSacLYHPzNfEl/F8ZxyXnKTmKrtnzxyM6Rj53nEfqg
+         lzjAmwthVlF1sm8osf7Y/dNg20CIJUNVFJ1FXSfILMr4fJR2B6iXQy5u2K7Yb0Zan6co
+         Kh/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795577576; x=1796182376;
+        d=1e100.net; s=20260707; t=1795577582; x=1796182382;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=8Hw1Re73JxyniUZgjNRzvpEomKIMU1jEfJYB11AqM3I=;
-        b=ww8lE+hsx2kd9BcfrIzOYaQJPktVUczI8oC2xrWyoxKS5UwDiUMTp/agAXVQL2QaH0
-         epKKXOQnGRR8neqS053KS2gv3OgSsmdtq09IxldeaxYqwsxTnk76nHuHegEMnP7sCgvY
-         9tcepbTnZP4nndCOhpOIBPcJ+WpbzewIoduNdasVNU6pAdF2G/QRBnTLEY+WrDu0at4j
-         WITfQGiJN2JfGJXbhaJOsWsC6Q27O2m5FYcWiXgRAX3iblG93Sf8hm+puTsc6ygypwUl
-         Fr8wMu98qrSq28F2GtJM1xZmczwZvyVVmkqTk7ePH3X957jgixWOgdvnsR+BfOz6/0Z8
-         ln2Q==
-X-Gm-Message-State: APuU4Z8fC8T65jDCBiJVwCbJzDkgBAwhebpEoIU5N5XvHF4DylA2/HO9
-	3EfXQ2lq6QGZOy8kxd0bUf95+syhfG3WIdIei8J1jrAuCc8cEBROy06196mmIOEe
-X-Gm-Gg: AZFdTZejT+yN8nridyKxJAYuJ0lI3sNziVbDvvs9OOA2u0QYKOHn0KOkMz5id6FABxs
-	Tt0Kl4U65J2UpdQ9jYnC0daUGWi1LR4R1hmdI+bTI22QiIag4RziiDRlhAEDfcoBrN0Fv10RepC
-	6sDThunYljJh65WDd52Dp5/Gjjo04cVuwwK3C7+ink3donSZCSflkG7D8nWNpv0j4xkIX21Pee1
-	M+dBUHnr8D84B3oZ38mRMAocSYFXzHNcMxQ/WvzSznGI3UU5mbRcW++I/QrsyCUqMIw9VM4r4jv
-	6muA7IW1UgnLI/7C30RU0pakONJgAbeJ/278xwTNwhhqXROKY96JUHQpPEkMDQrAqowoPlzI72n
-	M7txFJL0ympHurnZGYyiYYIXBNA45+27VE6eHuQewZOyt5c040EMUtgBpnGvT6AAe9KT3A9ujOk
-	JSl9VVKIp5/xkxPK5JyrjhkKa17hLmQ8SjPNPyj9i8vV432kk/42nZ6a/3DIwkRHn4Qe0udfv4y
-	zRgJwT9UsHuqNb0hu4Ypc1pCjGYIn2I40mqRT9SttC0qB67PBv916ft9Ty69keFFPqGSbSqgfTb
-	/kxtwOzUsRMZmhHP+2Ac74f82lD0KlQ6NLMDoXMM0M8jPR8JB6OT0jHURXWEFpQyh5+tRI9Nv6Q
-	8rBOVRwR/LGOuy7XkkfXBQ+EcUyirpTodmrguXDCA44Oto8uUWZAbPPsoPrmEtxp0rDYjM4kT0s
-	Y=
-X-Received: by 2002:a17:903:b4f:b0:2f0:22fe:65e5 with SMTP id d9443c01a7336-2f03f1d0f8amr147269295ad.60.1795577575970;
-        Tue, 24 Nov 2026 19:32:55 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.245])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2f03f120016sm77866285ad.58.2026.11.24.19.32.55
+        bh=3atTFqNicxw9/2abno5bwtyXJnSjkg6iBLecR9045e8=;
+        b=eNNyjTpcm6LjO63de1pExqNWw6M2iCETgI0xla/9Ghxf48K0ovBAlDoDDtyWM1P5r2
+         UqCHuKN4XU9+IgomgihYSDHs/Jl4/TrsgtXu56KxUh6yRKRyZoXGbBjLNbXwYqcjQSSC
+         bHxCHcasTWXNqNDn79iOyH9bQ6vjB1qfYpTpa8XAqkebDPm7EZGv3VOi+lh8bqKzSc0g
+         U3xEfbMxZN3Rsm9bJUWIULy/BUv3g6Y//vKEUr6+0TCHVp9yeVjp7uW9SN+TyDGdSsgX
+         m01ui9NNR/dMLTDSAAzx5esiKjf+UsCOe/AB1oZ57OzqH1Rvw2Jqpk+uKgtFNSFXYWQq
+         jstw==
+X-Gm-Message-State: APuU4Z/QZm7VWcOhIJ79a52zP2P1kncmPHoS4nLb6bp+chW8ppSCv08y
+	2p8nkES5UszQSpcRtlzN3E6KAuEvcqJafIOiJHeNvV9HidgQhlyKKrbS9WP2RLrC
+X-Gm-Gg: AZFdTZdvuEZeo9XfVRaBJ6lbgqx7jDaTjV37w5g6NUvHxbF1yNG5KZjVZUPhG5PwL1N
+	UA7aHSzu/w4CsE5IB78ckMXI4zHJzwzo6ZKg+oeu2aEkx1+97BJL+Kg115St6B4Q9FXzeY2Y5Pl
+	OnvtOLLRHe/glEaiDYKwasps3rGuUC0PBB6lSaKEUiALa4ufxVKDgefaIdbvKJOf7jvE5wdcoP2
+	8kSsxAe6PLsNA+RPf1CkWGBKnjHWxc2DJUx2+otsSiNhBCVVzuOxNb9e5vWZXyqRXNpPhF4ceOL
+	KYQt3H1poF4YNhw3zNVgQMXN+VTuyw/rAdBun8HUlayvPlrkHkRnRICJApqvjbAwyNM4HmkToXu
+	/BVeXkpLpyT3UvmKxSO4bI8ADt2gGeTFzZZpgfdsUmrt9ixS8CEBb2u0KDeCcJg5/+FLC0DSXIA
+	10K+8w1yFwqbQNXsep31K+Tm7CmmEFzETcdb4CKTV0jwBR4WXsj0ryvHPaa/YHujwIc6AiUzK1G
+	WlEL5YdGonwOIMyv3/7YxOuFet297ax1baOeN6qdqaS4PGNA6lFTIw+QWZg4F/OLr0hin9YRDby
+	87MMS8ENzRahRNel7c0Dzrs+2Amr20Fm8Nb6l8Xqk702kCw3bYY10/ZHw1ToZoPgn/k6jMm+3gr
+	u2lGAZ0o8Qs2jfuFsyztO/Bin/iKiIueSSgOJQFKHZUdyFTkAeUw7cUYhxXEKtHebSViogurwSg
+	==
+X-Received: by 2002:a17:903:198e:b0:2f0:3b8b:9160 with SMTP id d9443c01a7336-2f03f1d3714mr162515925ad.44.1795577581725;
+        Tue, 24 Nov 2026 19:33:01 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.244])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2f03f118c88sm77688285ad.56.2026.11.24.19.33.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Nov 2026 19:32:55 -0800 (PST)
+        Tue, 24 Nov 2026 19:33:01 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf 33/47] bpf: Require CAP_PERFMON for the dump of all storages of sockets
-Date: Wed, 25 Nov 2026 03:29:24 +0000
-Message-ID: <20261125032938.670542-34-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf 34/47] bpf, x86: Do not use the paranoid ITS thunk
+Date: Wed, 25 Nov 2026 03:29:25 +0000
+Message-ID: <20261125032938.670542-35-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261125032938.670542-1-alexei.starovoitov@gmail.com>
 References: <20261125032938.670542-1-alexei.starovoitov@gmail.com>
@@ -104,34 +104,83 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-inet_diag dumps values of all sk_storage maps when the request names no
-map. It takes CAP_BPF and no fd. These are data of other programs, and
-tracing programs keep addresses and memory of the kernel there.
+The paranoid thunk completes the check of a hash, it traps when ZF is
+clear. The JIT emits no such check. With paranoid FineIBT, the default
+with IBT and no FRED, on a cpu that has ITS the kernel oopses at an
+indirect tail call, at gotox, and when an XDP program is not in the
+dispatcher:
 
-Ask for CAP_PERFMON. "ss --bpf-maps" needs it then. A request with fds of
-maps works as before.
+  CFI failure at __x86_indirect_its_thunk_array+0x3d/0x3e
 
-Fixes: 2c78ee898d8f ("bpf: Implement CAP_BPF")
+Take the plain thunk. its_static_thunk() has no user after this.
+
+The miss of the dispatcher is an indirect jump to bpf_func. FineIBT has
+no ENDBR there, with or without ITS. Jump to bpf_dispatcher_nop_func(),
+it goes through the preamble.
+
+Fixes: 4f9087f16651 ("x86/cfi,bpf: Fix BPF JIT call")
+Fixes: e52c1dc7455d ("x86/its: FineIBT-paranoid vs ITS")
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- net/core/bpf_sk_storage.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ arch/x86/net/bpf_jit_comp.c | 17 ++++++++++++++---
+ 1 file changed, 14 insertions(+), 3 deletions(-)
 
-diff --git a/net/core/bpf_sk_storage.c b/net/core/bpf_sk_storage.c
-index 1c59300af05c..67288177492a 100644
---- a/net/core/bpf_sk_storage.c
-+++ b/net/core/bpf_sk_storage.c
-@@ -502,6 +502,10 @@ bpf_sk_storage_diag_alloc(const struct nlattr *nla_stgs)
- 		nr_maps++;
- 	}
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index 4c3e09d98131..4411fa667027 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -683,6 +683,12 @@ static void __emit_indirect_jump(u8 **pprog, int reg, bool ereg)
+ 	*pprog = prog;
+ }
  
-+	/* It's a dump of all maps, see bpf_sk_storage_diag_put() */
-+	if (!nr_maps && !perfmon_capable())
-+		return ERR_PTR(-EPERM);
++/* its_static_thunk() can give the one that completes the check of a hash */
++static u8 *its_thunk(int reg)
++{
++	return IS_ENABLED(CONFIG_MITIGATION_ITS) ? __x86_indirect_its_thunk_array[reg] : NULL;
++}
 +
- 	diag = kzalloc_flex(*diag, maps, nr_maps);
- 	if (!diag)
- 		return ERR_PTR(-ENOMEM);
+ static void emit_indirect_jump(u8 **pprog, int bpf_reg, u8 *ip)
+ {
+ 	u8 *prog = *pprog;
+@@ -691,7 +697,7 @@ static void emit_indirect_jump(u8 **pprog, int bpf_reg, u8 *ip)
+ 
+ 	if (cpu_feature_enabled(X86_FEATURE_INDIRECT_THUNK_ITS)) {
+ 		OPTIMIZER_HIDE_VAR(reg);
+-		emit_jump(&prog, its_static_thunk(reg + 8*ereg), ip);
++		emit_jump(&prog, its_thunk(reg + 8*ereg), ip);
+ 	} else if (cpu_feature_enabled(X86_FEATURE_RETPOLINE_LFENCE)) {
+ 		EMIT_LFENCE();
+ 		__emit_indirect_jump(&prog, reg, ereg);
+@@ -732,7 +738,7 @@ static int emit_indirect_call(u8 **pprog, int bpf_reg, u8 *ip)
+ 
+ 	if (cpu_feature_enabled(X86_FEATURE_INDIRECT_THUNK_ITS)) {
+ 		OPTIMIZER_HIDE_VAR(reg);
+-		err = emit_call(&prog, its_static_thunk(reg + 8*ereg), ip);
++		err = emit_call(&prog, its_thunk(reg + 8*ereg), ip);
+ 	} else if (cpu_feature_enabled(X86_FEATURE_RETPOLINE_LFENCE)) {
+ 		EMIT_LFENCE();
+ 		__emit_indirect_call(&prog, reg, ereg);
+@@ -4675,6 +4681,7 @@ int arch_bpf_trampoline_size(const struct btf_func_model *m, u32 flags,
+ 
+ static int emit_bpf_dispatcher(u8 **pprog, int a, int b, s64 *progs, u8 *image, u8 *buf)
+ {
++	void *nop_func = bpf_dispatcher_nop_func;
+ 	u8 *jg_reloc, *prog = *pprog;
+ 	int pivot, err, jg_bytes = 1;
+ 	s64 jg_offset;
+@@ -4694,7 +4701,11 @@ static int emit_bpf_dispatcher(u8 **pprog, int a, int b, s64 *progs, u8 *image,
+ 		if (err)
+ 			return err;
+ 
+-		emit_indirect_jump(&prog, BPF_REG_3 /* R3 -> rdx */, image + (prog - buf));
++		/* With FineIBT there is no ENDBR at bpf_func, go through the preamble */
++		OPTIMIZER_HIDE_VAR(nop_func);
++		err = emit_jump(&prog, nop_func, image + (prog - buf));
++		if (err)
++			return err;
+ 
+ 		*pprog = prog;
+ 		return 0;
 -- 
 2.55.0
 
