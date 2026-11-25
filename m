@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.53
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795577454;
-	b=Clm8KzCFLv1pCkB5c/Z6ufVUKbdWHgRemq8hdRb3wYgezoz1lFHm+WaHOhq0JV6gcNEv
-	 k5A6OFNTPDHZaWCuSihZUGuluZk7fqFnxCUfJOBMbxGVHPa9Q7dWhOXlUmWwEt1IugwIM
-	 0Mu6Y4tjxkb/SXfX6isXL3XwfJY1aclZMAQkX8s6Rxh44hE7JhXGilKDYiLf94Z5SOmXx
-	 LI+ASPpeI6K/JgXiriS2644fzdXusHPsl359sctTcG2MBE9t7qO3RkDBMcgQrxFClA83R
-	 ILuwL8lSng0B68nd/WmzkH+U23As8sKQaKhIAo+B0qVrUkjW008KKhkqngCTvTNhGvA==
+	t=1795577460;
+	b=r7NYJcpadrvLEpw4Hf/Bw7yq/CcTAKguvuo5IeOIgQRy38Nebmn6psxewzy1fNLnl1Ct
+	 wnzYy0XVCX1KFrnpNuDX3cQh840nPZBhjxG9gxqYmE+zoeTq9AHbdJJ2u9tE5t7xmtqKX
+	 mlx5o+EXFVdAg3gNWdfzwUl+Bd9FGZ4sr4LiRNLA1wO4VVplo2UU/3ybXqrnjmOu6s0Fl
+	 xovjBrykF1DJm+acJnxoHDqyfhOICEY/4gwhRQp6vK0+/eavWIQDhLq2NYmktIDMypCVV
+	 qsXbsLNx84n6vMHbSWHto0okxJhI5MIyx/sB+kY+jJmRYaBAhStKTbhRX6iLsWLJ50A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795577454;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795577460;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=Gi3nAP5S9cUUD4uvUufAsZ4GCs7hvUo9XzPnxaWoezI=;
-	b=CUhJfbsdO81USLzxNVFiHPaR4L3m4gSj25nXsUUBOcFEyjf0ympmcsEoYPn9a/q2bBAH
-	 jy1QL4aqsCBWi3hukCFqZWwNHcG6Q3CM/eHCetpJqMNzdRZRBeWQjbFYQCNtIvNVv5j/d
-	 jWMygwXUir7ZlGFTC93OEqRhO+0M8/SIvsHIpsgCAq/wyU3dphDRgmC4i6w083ebQ0f7I
-	 MUfJmXPm1E9a/EplSYLbtSjkBR/IMrnb+I4h88Y5pUG7Pb63kdaSRbRRyLRi0zPamGuoy
-	 qZLw8DnKbs3tS5BtTrvNhI6PEHx25XjEMw10GhdEEvedhTpOH+Tjus3oerQN7CmwuRg==
+	bh=oTME3xtjD1fA+Iidk7GGeMaMxMBMOSwmPQ4dozKmWo4=;
+	b=KlJuM5EVM9dVmhVgfhpBLJmozMfHeBf0gRGPyynlvpio7xWTck85J+Dz2WYBXpLPtuum
+	 DmEupV1pgLVyRaXgDpIMwqQOzpUNgvyLi6mdFJg8frX2VZsOhtbVlZOvpbFrdET9GT6U2
+	 qvfnqNn/qXO0HV5uYbhjYZ2f5OkXlQtrYRI/Klj/codDt77/JV1R2Jm0OKiDmCV3kruEd
+	 xsqvQMQskskDyUoiPRzMaFWlOsk9sjbdWMmIkmJaCS6bmc49/mftrBzSj9crYIChthx13
+	 E6ykklG+2kxpGGeJiU1iIbB86CRI47kk7Eydz6pqhw9Ec1rIiP/PL/zjXewATXVOxlw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=YlTnc7Xe;
-	arc=none smtp.remote-ip=209.85.214.179
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=oxPTDHAZ;
+	arc=none smtp.remote-ip=209.85.216.53
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DC24606A31E
-	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 03:30:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2DC24606A31E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BC8D606A32D
+	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 03:30:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4BC8D606A32D
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=YlTnc7Xe
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2f020d0169eso25462505ad.0
-        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 19:30:54 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=oxPTDHAZ
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-3b3a914e4c8so2817604a91.0
+        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 19:30:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795577453; x=1796182253; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1795577459; x=1796182259; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=Gi3nAP5S9cUUD4uvUufAsZ4GCs7hvUo9XzPnxaWoezI=;
-        b=YlTnc7Xer87VEKR6HL0KvUJzrHCeZlZ0Tc8qR5vQ5Yuz0uj9Lx91hfEofbZag0p+MS
-         Bbbx2NjlzwSIlhpujRwSxT9bapnWUMLOBKX1O/T5xj461rS9XTI9A0uVGu0FTGYLiQYj
-         7KZVa39O0DoQXx52G182AhSCfSlAMyrFm8fA+kD5mIibI3+PS1BznXZVOSxalpjWIYk9
-         c4zsVILlplqUR6sGpe5sHS8mSobm6YlCuGxzXpLkojq2hQojZ3xz4RCiRWAwkS29S7pc
-         2VcBzL2aQuDg8dy67sSIWsVpeLQmq/mhiKyTIHSSDs0JwezKNFU0PWStdRFBR4Z25N8x
-         Y9Ag==
+        bh=oTME3xtjD1fA+Iidk7GGeMaMxMBMOSwmPQ4dozKmWo4=;
+        b=oxPTDHAZGRIUmRmSMRF5AQB7qUeab++jspRZq96Vd+HRF+hkQHb3rh2DjZ+Ai3WTIY
+         FZgKvBVv5UxD19Iry5nHfZr+Bq5h7nxH8wrT04SDdR1ml4MTBMxo8svoKDXpClklJA6S
+         q8GWBk2yR2Y3zYdyb50gl1NtbMk1FDS7xU16XY9HDNcHmzYffbLJs8xUc8F6Cu5GmjwE
+         8FumrPk01MDzyVQOGntjYGjttEtOsqObkttNOm01vf56VB0SJ7qM7pCaKZhZ9ARaW868
+         5yBzuoCt0FLDfwcZIAPuZvtmbeSPk9JtNtDogrMJ1BCPhNZJDmHVSo/7J5Tlx/HrZCwu
+         jx/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795577453; x=1796182253;
+        d=1e100.net; s=20260707; t=1795577459; x=1796182259;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Gi3nAP5S9cUUD4uvUufAsZ4GCs7hvUo9XzPnxaWoezI=;
-        b=1rrM9oWnWSJa727TyP7hUjUxlOLnOibNc3uxkiROd3zcqVeVEisCwfjw3HmSFcwRI3
-         5bA4/Hs1DXb+IgRqRMQWrQzt0kURoGQ+UQIHcEz87bQrTimSEej9msoI/bYr2ymNfXvB
-         3mn55Ju2z7G8FWooGX4RHBS9oIEwNVUSRRZdEcPTQc1y/EOLKmzNF5+I1iEVQALuphpv
-         lEYzqW6Cr/iTF3BoxXu+7HAOaPEqZtRA6i+lyqQIy2k7C0ntQ06Xtxvbef29RdhQMVi7
-         MYfcxL2mwMWBKEU+gAT7tMwL8wD5ZQuScxDJjTNI7olPCV4Ho/kfBfXvaQhn8LNaPDAl
-         W9Xw==
-X-Gm-Message-State: APuU4Z/dUFU9BERlHSpyT73mvIrM4FMXbzo+JNipM42jl1rvY+ipI1YC
-	8Unkkcp16wcFtOmGhT5YiGMd7eMAsxpWLduQ7RRhQYijS1KTV2gF76LnSFOgy+jn
-X-Gm-Gg: AZFdTZfpUo0LFJjaD5hCOBAgIJqwf83+T55/+fD5gIyiddYUc3EIsHZqPy3t/HLvd6X
-	3gmbM8OepTAw0cypBZMyyvFOb/j318TqzL6pCTVtLcj/+bzL/aB0KsIDlizr+67BpXfdqJF/dft
-	aiUGSjbxtLKDJOgubg4Fz8fdDHbzChuX0BqypTFCx+Zi3Q5DtchAFW5Xz2nlyRoHGX+2X+rHkIs
-	x+TMqdRiuaGr+fQpI9ZJBIUJjNcKL5tJA7bTlOcq3FWRu1AcRaN0Rv8+rC85mydO/TIRmxo/aEL
-	2XYKJu6ytj8NYGSxWok7d6i8ooJD8s617ksRHVu+ILIAGnQR5sq0hRRSGYUaFBfG6mQsNDxRxqe
-	CZFvSltA5sF0G6zwrwf5nzn5+LikQ6oGFnJ2/Jnb49HdcXfPiX2KovNNhkI3laMVUpwlJ8u4wbV
-	bMau+ISngixyL8Y/+KqQFKFdbaemSkmrv+1+h5x00x9f3hoDf1Pl7jhOp9o4uJgDTlf2Am2gqqH
-	NaCVUEiZ2jJh/0Ic3rvN7vEx31vOgCje2V72gjNWTNCcts8wGDQE6gYW8H1i7vAKQ4UO0n3fXTj
-	/foYCNC1QY4dXa7YmBpGpYte24Pp72aWWCPfMB5xDB8dFEXga4zBFuU3lELD+iRXEE8OD44T9yT
-	MQaRhKi3d1+SBHhrElIkpCeQlnpq3y22QyEOK2LJIlnjNWUYLVvQrraSc9A5h+IXRcp+4fSmPqw
+        bh=oTME3xtjD1fA+Iidk7GGeMaMxMBMOSwmPQ4dozKmWo4=;
+        b=sLK+qMsM77VtbnA7fdQwbG4/GW2bD/MbW9XmOcrYAIXcB0US4jvqFaNrbr4/gnPRKA
+         mZXnqEbyFumwr3NSJY1MyjFmEelkWAjl/vIekyYN9Ec7Hk6gjgFxE2+JS4oE7YEGBZ1g
+         Z1cpZ5ZXt++usws1KwQejpo2VEklQ542n7KMPPJ3T4aJCkB7TchlZfuQYv8KmOLfQ8KV
+         eWhpLS3YUU4wBA6TiAg16H5zWk/bWGYWDOYLrjgFivNUpgZ9jpumT3SP/IIsVuLQXmWO
+         ywjgE0kxWE0LImBHv9N3Xg5t5BwG4ULEqpqfhOG+umT4VlVl7EBEnYca0dURAXYSq6q1
+         UC4A==
+X-Gm-Message-State: APuU4Z8lzg7Krdg0CS3sKBZx9gQXNrw8O0BVkRQkbWhxkSVnulTkC6Gn
+	/dQwnUdbXb4kiiR7bQbZGXEHRn3UdIGqTAmTgkbtAiStrAeJqUs/0PavZHySDDSV
+X-Gm-Gg: AZFdTZfrzcCp6c2c+sVWaDrenMOevrSI8/lAlAYi1lETsEB/g9Gv2zcRee85YKhmdUW
+	DDqiwnEOpMAXrUtkIavCQZSsD6wR/4nKOAartGxj4c5fQoLdWhsxkm5rs9s1YXUcNpbjr2HIQ82
+	bNltMAwwVs44Bhvy2Uc7dIK8O5xcPQuHEr6o/FtflohVcTrBZbOG9pcgxyXoYR/o++lEkKsVhRd
+	VdV0igkS6ENnrZCueS4TaP0T4HyxVGr6BOg5PddR1Cah7pVHANWRKb7Kyv29mN/V0IQ8BWWHADg
+	ce0PPL6R25G3kAGstMog6IqXGefHA2hv+RShAb8xiQjaKybH5CpEY1ZXtJLKBVCGUhcLOpiv7J2
+	y4OWpcNS+VCXMLqYGjlZwY6Y8X6pvuFAJv0sjNzZRA3TyhPs2AAg0pg9Kb3YO31ycj/JoaV2djt
+	aJ2DEhkOPUPZ/H7HkeCEYdEpnv9eLb/E1Yfg4OZLU9yCiav7BaZwe0Rp+QOsnBEfl6OcnyxIVeA
+	pl0RShzlf+/Nc0HKYImtXZZCnkLAR6t/igU/xjDQ7rfw7asCdJFNmpfAntdueC7OPekjZkRiW4Z
+	UfT30LQIPiOizuJtczstCXLpgcmZ2aUN925TpebHeV4h1KajXzEBOicOBksNsH/idkJMePZQrEc
+	2yvkAZkIMDG+TVz4rOqzPTtW+cwnhvHI8QlohNa54Eq9B4uiQ5IZMGPDmQfIfpgZ8p5x337EN/w
 	==
-X-Received: by 2002:a17:903:b0e:b0:2eb:1bba:abbd with SMTP id d9443c01a7336-2f03f2069c2mr151346465ad.60.1795577453335;
-        Tue, 24 Nov 2026 19:30:53 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.245])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2f0bc695f31sm20269115ad.49.2026.11.24.19.30.52
+X-Received: by 2002:a17:90a:e705:b0:3b4:fa3:36de with SMTP id 98e67ed59e1d1-3b41c9750e2mr14199898a91.51.1795577459101;
+        Tue, 24 Nov 2026 19:30:59 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.253])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b4afeaaa84sm9729644a91.10.2026.11.24.19.30.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Nov 2026 19:30:53 -0800 (PST)
+        Tue, 24 Nov 2026 19:30:58 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf 12/47] bpf: Check for NULL in helpers that take a kernel pointer
-Date: Wed, 25 Nov 2026 03:29:03 +0000
-Message-ID: <20261125032938.670542-13-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf 13/47] bpf: Leave nothing behind in the frame of bpf_throw()
+Date: Wed, 25 Nov 2026 03:29:04 +0000
+Message-ID: <20261125032938.670542-14-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261125032938.670542-1-alexei.starovoitov@gmail.com>
 References: <20261125032938.670542-1-alexei.starovoitov@gmail.com>
@@ -104,149 +104,71 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-Helpers take a plain PTR_TO_BTF_ID, which can be NULL: an argument of
-a traced function, or a member of a struct. Some do not check it:
+bpf_throw() does not return. What is kept for the return stays behind.
 
-  KASAN: null-ptr-deref in range [0x0000000000000048-0x000000000000004f]
-  RIP: 0010:sock_from_file+0x22/0x70
+With fexit on bpf_throw() the trampoline is never freed. With kretprobes
+and function_graph the next traced function up the stack takes the
+return address of bpf_throw() for its own. Mark it notrace and
+NOKPROBE_SYMBOL.
 
-bpf_task_pt_regs(), bpf_get_task_stack(), bpf_copy_from_user_task(),
-bpf_xdp_get_buff_len(), bpf_getsockopt() and bpf_setsockopt() oops the
-same way. So does bpf_d_path() on the path of a unix socket that is not
-bound, it has no dentry.
+kasan_unpoison_task_stack_below() takes the stack for aligned to
+THREAD_SIZE. The stack for interrupts of x86-64 is aligned to a page.
+A program that throws in softirq can leave the redzones of bpf_throw()
+there:
 
-Check for NULL, as bpf_find_vma() and bpf_skc_to_*() do.
+  BUG: KASAN: stack-out-of-bounds in stack_trace_consume_entry+0x14e/0x170
 
-Fixes: fa28dcb82a38 ("bpf: Introduce helper bpf_get_task_stack()")
-Fixes: 6e22ab9da793 ("bpf: Add d_path helper")
-Fixes: 4f19cab76136 ("bpf: Add a bpf_sock_from_file helper")
-Fixes: 3cee6fb8e69e ("bpf: tcp: Support bpf_(get|set)sockopt in bpf tcp iter")
-Fixes: dd6e10fbd9fb ("bpf: Add bpf_task_pt_regs() helper")
-Fixes: d99173027d68 ("bpf: add frags support to xdp copy helpers")
-Fixes: 376040e47334 ("bpf: Add bpf_copy_from_user_task() helper")
-Fixes: 9113d7e48e91 ("bpf: expose bpf_{g,s}etsockopt to lsm cgroup")
+It is the only frame with redzones that is skipped. Do not instrument
+it.
+
+Fixes: f18b03fabaa9 ("bpf: Implement BPF exceptions")
+Fixes: ec5290a178b7 ("bpf: Prevent KASAN false positive with bpf_throw")
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/helpers.c     |  2 +-
- kernel/bpf/stackmap.c    |  2 +-
- kernel/trace/bpf_trace.c |  4 +++-
- net/core/filter.c        | 17 +++++++++++------
- 4 files changed, 16 insertions(+), 9 deletions(-)
+ kernel/bpf/helpers.c | 13 ++++---------
+ 1 file changed, 4 insertions(+), 9 deletions(-)
 
 diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index bc0dd36a2799..749169a0b157 100644
+index 749169a0b157..70330a7088db 100644
 --- a/kernel/bpf/helpers.c
 +++ b/kernel/bpf/helpers.c
-@@ -726,7 +726,7 @@ BPF_CALL_5(bpf_copy_from_user_task, void *, dst, u32, size,
- 	if (unlikely(!size))
- 		return 0;
- 
--	mm = get_task_mm(tsk);
-+	mm = tsk ? get_task_mm(tsk) : NULL;
- 	if (!mm) {
- 		memset(dst, 0, size);
- 		return -EFAULT;
-diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
-index a19126f5db02..f25f5585e578 100644
---- a/kernel/bpf/stackmap.c
-+++ b/kernel/bpf/stackmap.c
-@@ -897,7 +897,7 @@ static long __bpf_get_task_stack(struct task_struct *task, void *buf, u32 size,
- 	struct pt_regs *regs;
- 	long res = -EINVAL;
- 
--	if (!try_get_task_stack(task)) {
-+	if (!task || !try_get_task_stack(task)) {
- 		memset(buf, 0, size);
- 		return -EFAULT;
- 	}
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index bb79669d1cf4..19e6b51bb2f0 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -807,7 +807,7 @@ const struct bpf_func_proto bpf_get_current_task_btf_proto = {
- 
- BPF_CALL_1(bpf_task_pt_regs, struct task_struct *, task)
- {
--	return (unsigned long) task_pt_regs(task);
-+	return task ? (unsigned long)task_pt_regs(task) : 0;
+@@ -22,7 +22,7 @@
+ #include <linux/security.h>
+ #include <linux/btf_ids.h>
+ #include <linux/bpf_mem_alloc.h>
+-#include <linux/kasan.h>
++#include <linux/kprobes.h>
+ #include <linux/bpf_verifier.h>
+ #include <linux/uaccess.h>
+ #include <linux/verification.h>
+@@ -3463,7 +3463,8 @@ static bool bpf_stack_walker(void *cookie, u64 ip, u64 sp, u64 bp)
+ 	return false;
  }
  
- BTF_ID_LIST_SINGLE(bpf_task_pt_regs_ids, struct, pt_regs)
-@@ -946,6 +946,8 @@ BPF_CALL_3(bpf_d_path, const struct path *, path, char *, buf, u32, sz)
- 	len = copy_from_kernel_nofault(&copy, path, sizeof(*path));
- 	if (len < 0)
- 		return len;
-+	if (!copy.mnt || !copy.dentry)
-+		return -EFAULT;
- 
- 	p = d_path(&copy, buf, sz);
- 	if (IS_ERR(p)) {
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 53c042b267ab..49eb26d016a1 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -4215,10 +4215,15 @@ static const struct bpf_func_proto bpf_xdp_get_buff_len_proto = {
- 	.arg1_type	= ARG_PTR_TO_CTX,
- };
- 
-+BPF_CALL_1(bpf_xdp_get_buff_len_trace, struct xdp_buff *, xdp)
-+{
-+	return xdp ? xdp_get_buff_len(xdp) : 0;
-+}
-+
- BTF_ID_LIST_SINGLE(bpf_xdp_get_buff_len_bpf_ids, struct, xdp_buff)
- 
- const struct bpf_func_proto bpf_xdp_get_buff_len_trace_proto = {
--	.func		= bpf_xdp_get_buff_len,
-+	.func		= bpf_xdp_get_buff_len_trace,
- 	.gpl_only	= false,
- 	.arg1_type	= ARG_PTR_TO_BTF_ID,
- 	.arg1_btf_id	= &bpf_xdp_get_buff_len_bpf_ids[0],
-@@ -5856,7 +5861,7 @@ static int sol_ipv6_sockopt(struct sock *sk, int optname,
- static int __bpf_setsockopt(struct sock *sk, int level, int optname,
- 			    char *optval, int optlen)
+-__bpf_kfunc void bpf_throw(u64 cookie)
++/* It does not return. What a tracer keeps for the return would stay behind, redzones too. */
++__bpf_kfunc notrace __no_sanitize_address void bpf_throw(u64 cookie)
  {
--	if (!sk_fullsock(sk))
-+	if (!sk || !sk_fullsock(sk))
- 		return -EINVAL;
+ 	struct bpf_throw_ctx ctx = {};
  
- 	if (level == SOL_SOCKET)
-@@ -5879,7 +5884,7 @@ static bool is_locked_tcp_sock_ops(struct bpf_sock_ops_kern *bpf_sock)
- static int _bpf_setsockopt(struct sock *sk, int level, int optname,
- 			   char *optval, int optlen)
- {
--	if (sk_fullsock(sk))
-+	if (sk && sk_fullsock(sk))
- 		sock_owned_by_me(sk);
- 	return __bpf_setsockopt(sk, level, optname, optval, optlen);
+@@ -3473,16 +3474,10 @@ __bpf_kfunc void bpf_throw(u64 cookie)
+ 		WARN_ON_ONCE(!ctx.aux->exception_boundary);
+ 	WARN_ON_ONCE(!ctx.bp);
+ 	WARN_ON_ONCE(!ctx.cnt);
+-	/*
+-	 * Prevent KASAN false positives for CONFIG_KASAN_STACK by unpoisoning
+-	 * deeper stack depths than ctx.sp as we do not return from bpf_throw,
+-	 * which skips compiler generated instrumentation to do the same. Some
+-	 * architectures cannot recover sp while unwinding, so fall back to bp.
+-	 */
+-	kasan_unpoison_task_stack_below((void *)(long)(ctx.sp ?: ctx.bp));
+ 	ctx.aux->bpf_exception_cb(cookie, ctx.sp + ctx.aux->stack_arg_sp_adjust, ctx.bp, 0, 0);
+ 	WARN(1, "A call to BPF exception callback should never return\n");
  }
-@@ -5889,7 +5894,7 @@ static int __bpf_getsockopt(struct sock *sk, int level, int optname,
- {
- 	int err, saved_optlen = optlen;
++NOKPROBE_SYMBOL(bpf_throw);
  
--	if (!sk_fullsock(sk)) {
-+	if (!sk || !sk_fullsock(sk)) {
- 		err = -EINVAL;
- 		goto done;
- 	}
-@@ -5916,7 +5921,7 @@ static int __bpf_getsockopt(struct sock *sk, int level, int optname,
- static int _bpf_getsockopt(struct sock *sk, int level, int optname,
- 			   char *optval, int optlen)
+ __bpf_kfunc int bpf_wq_init(struct bpf_wq *wq, void *p__const_map, unsigned int flags)
  {
--	if (sk_fullsock(sk))
-+	if (sk && sk_fullsock(sk))
- 		sock_owned_by_me(sk);
- 	return __bpf_getsockopt(sk, level, optname, optval, optlen);
- }
-@@ -12469,7 +12474,7 @@ const struct bpf_func_proto bpf_skc_to_mptcp_sock_proto = {
- 
- BPF_CALL_1(bpf_sock_from_file, struct file *, file)
- {
--	return (unsigned long)sock_from_file(file);
-+	return file ? (unsigned long)sock_from_file(file) : 0;
- }
- 
- BTF_ID_LIST(bpf_sock_from_file_btf_ids)
 -- 
 2.55.0
 
