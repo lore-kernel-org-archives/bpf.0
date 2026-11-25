@@ -1,66 +1,104 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.52
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795609873;
-	b=QGTh49TyAdfZ3S/oa3r17OKESuPM0VG1K+0qCH0vDVxtIZo4inEA0e8bIKJVz7jnpryw
-	 cfrfVtWEi1C9bFdSerMN2LgoFQyXZrSVdvtLHXvCZJyiasBI+EXVfseV7vFKy7TUGBg1Y
-	 oMpV9q815W/3D+WQ13G5kgd/KT3JfidiEbWoZcJ6ATf8FIet+eOgnTNIC7DZhyHvwaT5c
-	 QxaJhay2hFQzil8JY5it+qh03zIkUoSWo6+Qf05zINCD93VFM816Ftry7a/AQkZoHY1V7
-	 1laT81SomrSdwnM837dJ7ytA6x2Sew00SAgu0PkkPA1cgBtezGN1fCCpkI9nwDHrN1w==
+	t=1795610652;
+	b=jc8KkXnDXFq04cSJfavhVq3jmfeLUuIKkKynkJ83FlX96CDswprTwsR0Iq/8dACm8YvY
+	 OzmB8HIp5hutk6ZUwxx+XxqCt5WFvGVSmDVnMj+CrKFIp5cIP1xvjziCTVI8sefXhsDNd
+	 CrF/Qglvrn1pHeoVfHQIuA0McjFcBT70nBQpbuNOeogxN6j4gUqgVHqensykatshyLAdu
+	 WHDZBYbmKVha5u0JiU121sdzfYDGhB1nSUnRg9zEQBB2qOWG8F0tLGMAW7/uR1pIV7ujt
+	 1vNgvMF7LU6srLSMEKhw1ZKxJzzvpin8T0ITRcWF6XIrN8UfIiLoPb/hiyPp1choutA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795609873;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=YW/wH69a6msdALwLu/bQnPmudlA0vz81wQd6TeQpf3U=;
-	b=bvzIYx9s8yfQ2l6BtbMInjWDBOyM/hydX1ySVqvxXYgt/zM89NAmkayS8S3wX8OgpjZ+
-	 Ssdr4YhY2d0KzSLMFZwhEzMc6Cp5lXoULeINnkSXm7b+YG/dMx5tP5AW7vk5QKjfQu0IT
-	 cMqfkfUATICsAUtxXVab9OPZvF0txiVpYVHWkJUC3OWOcyxdB6xKQfbx6KlTSZSaeJRkn
-	 qmAMkBauJwp6r8B8SJaY5kul5HRpX29PzoxzRQ8Fi+uO4/S6dKWkj0X2rr8tYucroMRBT
-	 OIbnrfL0HcqTC8Pnqs/OeQXazVWewNgnazY8kaX+atXTYVxLVp6VaY+l4MbsCKJr6Kw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795610652;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:Content-Transfer-Encoding:User-Agent:MIME-Version;
+	bh=n3kRI1t8FC4sBJ1KlH6nbApPr67WWAzYu4YOF8wU9ro=;
+	b=2tPJ8Y0kcinGmFFzu9bQ/UVOalknHRu/6pFbAmU3texvnVdnFOiaBjs8r4Xf1eObVplc
+	 0fSPwm4QxapsJAySEGrdiOJwJ68PSN/jBG0dibK+wtYPLNcV5V+o2ZwmdOeUPJEcckeNM
+	 UUVCzIzkrVZ/8NgmijYEjeSqYsD3pYa2RZDfR7OwRT2Z0z+LkfAhyqINBawo+6mdN+E8B
+	 6aBzzp6fRlHmvD5CdRadV8dDJ6jao3vsrOyk0fQ/03nNvzN4y1tKF6JDJWJiSK28oBNkc
+	 S5txKcpZ1wrBzs6xMYY8z4+mW4Y7Y4mRpSMtlOu3rYdezdQQJprpbMKU7AaNoA0fFnw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MCPTuUqF;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=none header.from=amutable.com;
+	spf=pass smtp.mailfrom=amutable.com;
+	dkim=pass header.d=amutable-com.20260707.gappssmtp.com header.i=@amutable-com.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=JcoUc7GM;
+	arc=none smtp.remote-ip=209.85.221.52
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F8A4606A31E;
-	Wed, 25 Nov 2026 12:31:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73A24606A31E
+	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 12:44:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 73A24606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amutable.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amutable.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MCPTuUqF
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43CD31F000C4;
-	Wed, 25 Nov 2026 12:31:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795609872;
-	bh=YW/wH69a6msdALwLu/bQnPmudlA0vz81wQd6TeQpf3U=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=MCPTuUqFt3zw+UNyh4BYvuzxLB6B+IDc/VhwWdBapfXfjl2RlXZhCqHwlsMK0RHVi
-	 si3afs8RfkmgO8Wrcu6gnRJTLfcrFt2v9zGhfw7uygp65S+ZSO6YgCyKRdpOV1TbSv
-	 iEEy4HEnbzBeOXZ5iOrD9qcik3oRyHFQL80dfEnMLvJMbkZbwIG8ryrpjjT9IW4/Cu
-	 lT/o65ghUXTn7K0VRXmjNEX4cI1ORjj13/OYxLLgk3oIap4HvAQoFovW7OgZitwTUj
-	 XiuPR9ExMyYnsSvl3lAE85FE9dU9JXPIPuriV72A7ojjLnjnlRJ0uhI5bwDgSbtFB/
-	 w+qKdZTHIU0JQ==
-Subject: Re: [PATCH net-next v12 4/4] net: stmmac: rework stmmac_rx to support
- XDP rx multi-buff
-From: netdev-bot+sashiko@kernel.org
-To: lorenzo.bianconi@oss.qualcomm.com
-Cc: maxime.chevallier@bootlin.com, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
- mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com, ast@kernel.org,
- daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
- sdf@fomichev.me, Jose.Abreu@synopsys.com, boon.leong.ong@intel.com,
- horms@kernel.org, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
- martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
- jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
- netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- bpf@vger.kernel.org, nb@tipi-net.de
-Date: Wed, 25 Nov 2026 12:31:10 +0000
-Message-ID: <179560987080.3135.9418981958235641169@kernel.org>
-In-Reply-To: <20261121-stmmac-rx-mb-v12-4-3ae2f3bce174@oss.qualcomm.com>
-References: <20261121-stmmac-rx-mb-v12-4-3ae2f3bce174@oss.qualcomm.com>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=amutable-com.20260707.gappssmtp.com header.i=@amutable-com.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=JcoUc7GM
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-492f0a1b685so3966476f8f.0
+        for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 04:44:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amutable-com.20260707.gappssmtp.com; s=20260707; t=1795610650; x=1796215450; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=n3kRI1t8FC4sBJ1KlH6nbApPr67WWAzYu4YOF8wU9ro=;
+        b=JcoUc7GMiAh0LkpV1E480w7GXCIAW/e8cF7hpO69S4aq0dcYx4tjFtoWiYr/DAm4+r
+         yQ/2E0q/ZEtANpcmhRiWttvENm2b4bj22INjO2Cx/R+/hBXaXVuDkjlb15+GWRRpJToA
+         gOt2R0IR6kS/Ao9M36XuCAmR5ct6HS3dYddtARbxeWS1JjHEBmwNCLXhc2QkvjRgk2lT
+         AJJAOIWWGoD+UkNdRCPXyT74UpyGH73ouJzCAPdkF/Lr70PZiakzkApmnO3aBQ+SwCeG
+         0TuQ+Y4k0z+qEetWXaTlu1C1y6AjZth3CoXXov75D3SM0G7QrDYTrkbxN01Y+ILgo/HG
+         90Nw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795610650; x=1796215450;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=n3kRI1t8FC4sBJ1KlH6nbApPr67WWAzYu4YOF8wU9ro=;
+        b=ZBMdgW6gVpAY26HbHu4hSYSakvnC3ccgkOP3EXqVhlj74GHQrH9M1lxsj+F+H4gnXO
+         rVUj2osVDJlz7IFkL3b6QWgTBSnT7qGfl1einny2FjY7o8lvK1+xZmai3NfR0HnzH9dZ
+         Foqo5tivVppPcKhk1XECe2+87ZWS/C/hNyhy20FWdd23GrmKdpnIn9KaBRHsDx8fP+gQ
+         w4FiHGZNTJ1+Fy3rxzmKRa5F1pIRbof4QU32TCJcSaQ/7j55Xxcqy5R2D9eE8GkDx6/W
+         LJlnNmw4xNsFViDsKzj+an7Am+QqDhU0bT2JQjDj7SZ3Tbqk2HDNQ/wdJrLTlJJfcX7o
+         073g==
+X-Forwarded-Encrypted: i=1; AL+hErEIFGjbRnbxf/2XjuyD6GfEDtF+BO674xVWuNTwaAqqP7MJpu8+faLOPBYO4hsih5j1mbI=@vger.kernel.org
+X-Gm-Message-State: APuU4Z83vzccjaXXkkdgf+nYVqBWJ+8DeCnHEPtXIplQ82DvSO2YnW28
+	s8bJjOJ5m52W/lpnlf6M0w4QM18eZQzU4JeR0tHi7G2OQU1mlE8cn+qB0WesGGyMNgi4
+X-Gm-Gg: AZFdTZcmT/2d3TWi6eTNMmgMbQy2+/im77jH8dtaQeCCDhA8BSLlPBXwfwSv+nt6RrK
+	xLqDILCJ4WjSFItsjBjng488XW+I5yBn/w0qNi2gXrW0snAQme20WrfFnsRSVxSdumeUC6238Ey
+	ZThGVdJIEXl5L5j2zNZq4HG38XwCeqfIIEWEiCFga3kKRMzXVC1+n4YAUcnMCqKtrhM81rBmOT0
+	Oaq4DVeisL+T/9oZwxrUfVsHWln59g+ovrSpiSPBpjrV9b4QppAvK+hbNRomcT+2iYYWyUGLH8k
+	XohmkEuomZTiLSm1ZhgUjI+TsSrJ27e44DTlDZ6u54JeirMVSn4i21joOZDD6McWMVlsbuvtLfS
+	2+2t1cBcV/BI8aPpIa0k5c80alJJJPx5oJxQwDQNCDQH9tbfbAXyXz69zBm6rE61J7jkRbcHZho
+	sFUve4beXPa2rtB3qotTdaGUbGMBW+ImYCUtYg1To6EeZaOcRDw1poktYU+F5dBggQEUzk2h3QW
+	UHlDB6V+ZJBhZNCnK7rw9AL+uEg25o5l+9VjzHYLrwxexJQ9LoXG47vbbRnS8DtquLMZPt9Q1lS
+	NsBV9AT47jCF6dS2SQ+RaHTL67hbSzshhY1E/8sYaIQ39XUVoL5jlI+R1JUwue6/V3N5Y26zt6d
+	ydZnQS1xJw9wHNn9kkIx/fdJgTL0HMBE6/GZjsGDRmB7feCtJxERJoVs=
+X-Received: by 2002:a5d:584f:0:b0:4b9:8ac3:f5fa with SMTP id ffacd0b85a97d-4b98ac3f6d5mr4714062f8f.48.1795610649431;
+        Wed, 25 Nov 2026 04:44:09 -0800 (PST)
+Received: from ?IPv6:2003:cf:572c:2800:c235:97b:8b16:8928? (p200300cf572c2800c235097b8b168928.dip0.t-ipconnect.de. [2003:cf:572c:2800:c235:97b:8b16:8928])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4ab6a67fe75sm38964871f8f.24.2026.11.25.04.44.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Nov 2026 04:44:08 -0800 (PST)
+Message-ID: <e6c23984f7b47f9dcfffd6de2f6fdf75d07a14fe.camel@amutable.com>
+Subject: Re: [PATCH v2 01/13] ovl: don't warn when the lazy lowerdata lookup
+ fails in ovl_d_real()
+From: Alexander Mikhalitsyn <alex@amutable.com>
+To: Christian Brauner <brauner@kernel.org>, Amir Goldstein
+ <amir73il@gmail.com>, 	linux-fsdevel@vger.kernel.org
+Cc: Chris Down <chris@chrisdown.name>, Miklos Szeredi <mszeredi@redhat.com>,
+ 	linux-unionfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, 	linux-trace-kernel@vger.kernel.org,
+ linux-integrity@vger.kernel.org, 	linux-security-module@vger.kernel.org,
+ linux-mm@kvack.org, 	stable@vger.kernel.org, Sashiko
+ <sashiko-bot@kernel.org>
+Date: Wed, 25 Nov 2026 13:44:07 +0100
+In-Reply-To: <20261116-work-ovl-d_real-v2-1-90564c4ae347@kernel.org>
+References: <20261116-work-ovl-d_real-v2-0-90564c4ae347@kernel.org>
+	 <20261116-work-ovl-d_real-v2-1-90564c4ae347@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2-0+deb13u1 
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -71,148 +109,100 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue(s) to consider.
+On Mon, 2026-11-16 at 10:43 +0100, Christian Brauner wrote:
+> ovl_d_real() looks up the data of a metacopy file in a data-only
+> layer
+> itself if nothing has done that yet. If that lookup fails it WARN()s
+> and
+> returns the overlayfs dentry.
+>=20
+> Commit 42dd69ae1af4 ("ovl: implement lazy lookup of lowerdata in
+> data-only layers") assumed that the file would be read before
+> trace_uprobe places a uprobe on it so the data would be there
+> already.
+>=20
+> But nothing actually guarantees that. trace_uprobe takes the path
+> from
+> kern_path() and calls d_real_inode() on it when the event is created
+> and
+> again when it is enabled. So a uprobe on a metacopy file whose
+> redirect
+> points at nothing warns twice:
+>=20
+> =C2=A0 ovl_d_real(/f, 0): real dentry not found
+> =C2=A0 WARNING: fs/overlayfs/super.c:79 at ovl_d_real+0xc9/0x210, CPU#2:
+> sh/279
+> =C2=A0 Call Trace:
+> =C2=A0=C2=A0 <TASK>
+> =C2=A0=C2=A0 __trace_uprobe_create+0x1869/0x25b0
+> =C2=A0=C2=A0 trace_probe_create+0xcc/0xe0
+> =C2=A0=C2=A0 dyn_event_create+0x46/0x70
+> =C2=A0=C2=A0 create_or_delete_trace_uprobe+0x3c/0x70
+> =C2=A0=C2=A0 trace_parse_run_command+0x1a6/0x320
+> =C2=A0=C2=A0 vfs_write+0x1cd/0xfa0
+> =C2=A0=C2=A0 ksys_write+0x116/0x250
+> =C2=A0=C2=A0 do_syscall_64+0x10e/0x5e0
+> =C2=A0=C2=A0 entry_SYSCALL_64_after_hwframe+0x77/0x7f
+> =C2=A0=C2=A0 </TASK>
+>=20
+> bpf's uprobe_multi does the same.
+>=20
+> A failed lookup isn't a bug though. The data can be missing, its
+> verity
+> digest can be wrong or a signal can interrupt the wait for the inode
+> lock. ovl_open() simply fails in that case and
+> ovl_maybe_lookup_lowerdata() already warns ratelimited about failed
+> lookups. So return the overlayfs dentry without warning. That's what
+> the
+> WARN() path returned anyway.
+>=20
+> Fixes: 42dd69ae1af4 ("ovl: implement lazy lookup of lowerdata in
+> data-only layers")
+> Cc: stable@vger.kernel.org=C2=A0# v6.5+
+> Reported-by: Sashiko <sashiko-bot@kernel.org>
+> Closes: https://lore.kernel.org/all/sashiko-outbox-214581@kernel.org
+> Reported-by: Chris Down <chris@chrisdown.name>
+> Closes:
+> https://lore.kernel.org/all/20261114120557.4bc1eb6e57218cdc@chrisdown.nam=
+e
+> Reviewed-by: Amir Goldstein <amir73il@gmail.com>
 
-Critical: 0 · High: 0 (1) · Medium: 1 · Low: 0
+Reviewed-by: Alexander Mikhalitsyn <alex@amutable.com>
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
-
-- [Medium] The patch makes __stmmac_dvr_probe() always add
-  NETDEV_XDP_ACT_RX_SG to ndev->xdp_features.
-
-Pre-existing issues:
-- [High] This problem wasn't introduced by this patch, but the patch
-  extends it.
-
---
-
-net: stmmac: rework stmmac_rx to support XDP rx multi-buff
-
-This reworks stmmac_rx() to collect every descriptor of a frame into an
-xdp_buff. The XDP program now runs on the whole frame, which may be
-fragmented, and the skb is built with __xdp_build_skb_from_buff(). It also
-saves the in-progress xdp_buff across NAPI polls and advertises
-NETDEV_XDP_ACT_RX_SG.
-
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> index ca4c7fb11b73f..b657701f51f90 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-
-[ ... ]
-
-> @@ -6023,120 +6038,79 @@ static int stmmac_rx(struct stmmac_priv *priv, int limit, u32 queue)
-
-[ ... ]
-
-> +		ctx.desc = p;
-> +		ctx.ndesc = np;
-> +
-> +		skb = stmmac_xdp_run_prog(priv, &ctx.xdp);
-> +		/* For Not XDP_PASS verdict */
-> +		if (IS_ERR(skb)) {
-> +			unsigned int xdp_res = -PTR_ERR(skb);
-> +
-> +			if (xdp_res & STMMAC_XDP_CONSUMED) {
-> +				__xdp_return_buff(&ctx.xdp, true);
-> +				rx_dropped++;
-> +			} else if (xdp_res & (STMMAC_XDP_TX |
-> +					      STMMAC_XDP_REDIRECT)) {
-> +				xdp_status |= xdp_res;
-> +			}
-> +			goto next;
-> +		}
-
-[Severity: High]
-This is a pre-existing issue, but now that multi-buffer frames can reach
-XDP_TX, does it widen a race on the RX page_pool's lockless alloc cache?
-
-XDP_TX frames go to a TX queue picked by CPU number, not by the RX queue
-that owns the page_pool:
-
-stmmac_xdp_xmit_back()
-  stmmac_xdp_get_tx_queue(priv, smp_processor_id())
-      while (index >= priv->plat->tx_queues_to_use)
-          index -= priv->plat->tx_queues_to_use;
-
-Completion then runs in that TX queue's tx_napi:
-
-stmmac_tx_clean()
-  xdp_return_frame_rx_napi(xdpf)
-    __xdp_return(..., napi_direct=true)
-      page_pool_put_unrefed_netmem(allow_direct=true)
-        page_pool_recycle_in_cache()
-
-allow_direct is already true, so page_pool_napi_local() is skipped. That
-means pool->alloc.cache and pool->alloc.count are written without a lock.
-
-Meanwhile the owning rx_napi on another CPU uses the same cache through
-stmmac_rx_refill(), __xdp_return_buff(&ctx.xdp, true), and
-page_pool_put_full_page(..., true) in stmmac_build_xdp_frags().
-
-Here is one example. With multi-MSI and ethtool -L rx 4 tx 2, rx_napi 2
-(hinted to CPU2) sends XDP_TX on TX queue 0. The tx_napi for TX queue 0
-runs on CPU0 and recycles pool 2 pages while rx_napi 2 refills from pool 2
-on CPU2. IRQ affinity changes can cause the same overlap.
-
-Can these unsynchronized updates give the same page to two RX descriptors,
-or lose pages? Before this patch only the linear head page went through
-this path. Now every buf1/buf2 frag page of a multi-buffer XDP_TX frame
-goes through it as well.
-
-[ ... ]
-
-> @@ -8218,6 +8199,7 @@ static int __stmmac_dvr_probe(struct device *device,
->  	ndev->hw_features = NETIF_F_SG | NETIF_F_IP_CSUM | NETIF_F_IPV6_CSUM |
->  			    NETIF_F_RXCSUM;
->  	ndev->xdp_features = NETDEV_XDP_ACT_BASIC | NETDEV_XDP_ACT_REDIRECT |
-> +			     NETDEV_XDP_ACT_RX_SG |
->  			     NETDEV_XDP_ACT_XSK_ZEROCOPY;
-
-[Severity: Medium]
-Should NETDEV_XDP_ACT_RX_SG be advertised while the driver still refuses
-the setups where multi-buffer XDP is needed?
-
-stmmac_xdp_set_prog() in stmmac_xdp.c still rejects every program once the
-MTU is above ETH_DATA_LEN, including programs loaded with
-BPF_F_XDP_HAS_FRAGS. It also still turns SPH off:
-
-	if (prog && dev->mtu > ETH_DATA_LEN) {
-		...
-		NL_SET_ERR_MSG_MOD(extack, "Jumbo frames not supported");
-		return -EOPNOTSUPP;
-	}
-
-stmmac_change_mtu() also refuses a jumbo MTU while XDP is attached:
-
-	if (stmmac_xdp_is_enabled(priv) && new_mtu > ETH_DATA_LEN) {
-		netdev_dbg(priv->dev, "Jumbo frames not supported for XDP\n");
-		return -EINVAL;
-	}
-
-The commit message says as much:
-
-  "it does not enable XDP jumbo support by itself."
-
-The in-tree AF_XDP selftest in tools/testing/selftests/net/lib/xsk/test_xsk.c
-turns on its multi-buffer tests based on this flag:
-
-	if (query_opts.feature_flags & NETDEV_XDP_ACT_RX_SG)
-		ifobj->multi_buff_supp = true;
-
-Those tests include testapp_send_receive_mb(), testapp_xdp_metadata_mb(),
-testapp_adjust_tail_grow_mb() and similar ones. They set the MTU to
-MAX_ETH_JUMBO_SIZE (9000) and attach a program in DRV mode. On stmmac one
-of those two steps is refused, depending on which comes first. So these
-tests would go from SKIP to FAIL with this patch.
-
-Could NETDEV_XDP_ACT_RX_SG be left out until the MTU and program checks
-accept frags-capable programs at jumbo MTU?
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261121-stmmac-rx-mb-v12-0-3ae2f3bce174%40oss.qualcomm.com
+> Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
+> ---
+> =C2=A0fs/overlayfs/super.c | 10 ++++------
+> =C2=A01 file changed, 4 insertions(+), 6 deletions(-)
+>=20
+> diff --git a/fs/overlayfs/super.c b/fs/overlayfs/super.c
+> index 08695a99f4f93..1985b553a47b7 100644
+> --- a/fs/overlayfs/super.c
+> +++ b/fs/overlayfs/super.c
+> @@ -58,15 +58,13 @@ static struct dentry *ovl_d_real(struct dentry
+> *dentry, enum d_real_type type)
+> =C2=A0
+> =C2=A0	/*
+> =C2=A0	 * Best effort lazy lookup of lowerdata for D_REAL_DATA case
+> to return
+> -	 * the real lowerdata dentry.=C2=A0 The only current caller of
+> d_real() with
+> -	 * D_REAL_DATA is d_real_inode() from trace_uprobe and this
+> caller is
+> -	 * likely going to be followed reading from the file, before
+> placing
+> -	 * uprobes on offset within the file, so lowerdata should be
+> available
+> -	 * when setting the uprobe.
+> +	 * the real lowerdata dentry. Callers may ask for files that
+> were never
+> +	 * opened, e.g. for uprobes or O_PATH files, so the lookup
+> can fail
+> +	 * here. Return the overlayfs dentry then.
+> =C2=A0	 */
+> =C2=A0	err =3D ovl_verify_lowerdata(dentry);
+> =C2=A0	if (err)
+> -		goto bug;
+> +		return dentry;
+> =C2=A0	lower =3D ovl_dentry_lowerdata(dentry);
+> =C2=A0	if (!lower)
+> =C2=A0		goto bug;
