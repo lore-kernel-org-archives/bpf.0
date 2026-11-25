@@ -1,88 +1,94 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.54
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.171
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795625141;
-	b=0png7wEbBV06OB4ZiJzuYKq6E4DCTturezW2IRW9HN+3Ontf4JQsWEyK9ELgpt/g0cbe
-	 pDQ/qOOeAikk4c53p7EcXplz9+7u7CBmxaZeR4JFDRzuELw/eR0GS48Kvumal3xoOgaGO
-	 njkp4fE3A6PgXjIiBFDcJuFS/dUYkrevvSK+3m4H8L+O/iUJ7SuZF4oHp3qO/IAUBzFyz
-	 WVC/mHDVGerfiBZHWtvjx1zm7C4D79m1i6bfoXDwrh2XEmnvSPBv5g1xsBnOur45OyZc8
-	 y50q46tMUINVUrPtco9hgv9l0rY2IH4iVhC2HCJsRJ1JQQXILi/Id84nRxP7yxX0bYg==
+	t=1795625261;
+	b=j5O823F3rUGsh6HPgXypDM5b0tBUDVIMSTX4VTJ10cPMmBilnSNu/HL+MBSwPw5zWd28
+	 sRJdR53qJZ4EbfULfU3lz7JBcnHzJooABo50jVmuXy/zUSnSMO6sGqkDNKNEo9xSCcQLc
+	 dO6W3eHGH+RLNF5SKl6O6OSrp/PT79oglULE6TRYv0QXILS5VMg8quj2M8LqWGKCZn5JD
+	 Ez2SQDGJTR9Vk0NwLOTxKVN/mbeZpVxmy+/8OVllj4eJVILn0u5TjNe73FRnPQr+uvZQ0
+	 ++P77p7FcOy8+dicscceROowRLPz1QrwR9U18vSBB/AlmcL/NnEZ/34tVvd+ujR2tfg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795625141;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795625261;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
-	 Content-Language:From:In-Reply-To:Content-Type:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=qzSNzkmnLjAnm2o7UEPNC82u2CvWGqHDymHqRLR8nws=;
-	b=UYefFA0GV1Cx0mnF41lSnFDwOtzb522ea2+OYItY2k0Y13mQZDTTXUpmwcB/yzxSbkje
-	 kb2YOnmxyyykmoe2N4BdRZ08N8GQQmMFptVAOo3rknRsqNwv3kBw2/SH0rrU88TRKgFZ+
-	 v1dLGQvO2PUvwBrCcK3/efsDBcbRD6gp2wtFai0OfwSokGtZvpYQhWpXUA7fDzxC4tQmu
-	 5tiA9+RgS/kPFB+SoJYKsmVwnpeS6prcO1jjBgUi/In9OAuhH/ab6JLA5s5ZHmQaWAmzA
-	 Vehrb9DtxcyVTY2lFE8Q6zR/ECD+ZPreYornVPW8Jm2rq6IZYzsWs51aA7Ev3Ls72KQ==
+	bh=k1C78Uc1W59p66k/nD/Zj6PrIT29VxqTwRjxHQ+aiV4=;
+	b=MfR4On8KLUhHp6++2x+MeiliKpEoRtWmzhpQzCaHABZqPEmuAy7C80aJZjyQTuMcUlh4
+	 isG4I4Pr4GqVRPS6nVNKDsQqLb1CvqWtGqtOLhipKsHU/HYz3Xk4V2IuKrqTN/lka1iiz
+	 ziNmiBdeSEvz3KPwdOq1UcvPCUP8bN87F3+87Xf/dXIGBuyVUGdd0PSqVufAX26Dv00La
+	 2WcPMZ/Tb5uNdcqh3b4ptI2q9m5gOrWTGIaOQ0JIE9XwQrArSR3tjQQFz8+ZqhdJb/Qyj
+	 43qmTr1VtwcU7hfpCtWPXMmk6B9vU/StPnkEXsdl3YeU4n8lR1Cj73s56OK8tcun5Lg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=suse.com;
-	spf=pass smtp.mailfrom=suse.com;
-	dkim=pass header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=VeMZMFlK;
-	arc=none smtp.remote-ip=209.85.221.54
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=rB4+0FqZ;
+	arc=none smtp.remote-ip=209.85.214.171
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A943606A680
-	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 16:45:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2A943606A680
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E53F6606A321
+	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 16:47:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E53F6606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=VeMZMFlK
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-491971ac844so5413996f8f.2
-        for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 08:45:39 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=rB4+0FqZ
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2f04bea9a93so53039155ad.3
+        for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 08:47:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1795625138; x=1796229938; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=qzSNzkmnLjAnm2o7UEPNC82u2CvWGqHDymHqRLR8nws=;
-        b=VeMZMFlK4XeBzwrDD6z4Doe5ujZ5PmFlBvgdtXgvDNgqyB2+a2sCMN2wk+r327T/uW
-         /r2BhYppBsmLCfA6wEf9rqAgdyevRRA01ag2IXLdtngT05rT8V5qUBbFQDnjjQgYE2gf
-         VRO105Wv3wS0sYOzpdh62UmMxKFuJZsiAfPK9beaxT/i9ZUHpkfJOUrelw8QBpX9lGS4
-         m35Q/nRZpkrOo84dL5yj6BJK1saMLREXy289b+W8lcU1Li54eo2LPH2XZ2BzxTKFv4V2
-         TU/7Cyf6kqOyQ8kgJ2U5PgB/NbN2a8Bu0WSQShF93YOhfgaUMd2kQPQDvfuKKEMIIK8r
-         gfQg==
+        d=gmail.com; s=20260707; t=1795625260; x=1796230060; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=k1C78Uc1W59p66k/nD/Zj6PrIT29VxqTwRjxHQ+aiV4=;
+        b=rB4+0FqZ1CZz21tsa67voyk2x6NXgq81CuBWayyF4UYmvBgatYBVaNcj/3ozmZ/iiM
+         Da08/9XHKbYf1SubiB0vnwwEfpk0cUM6dbMszpNggH1KM4iTht9Y2Qycao7aHdIFLIKO
+         weAIxXq1I4sRGtOJxXW6XFU1Pw5oqUyb1tCMu+Ks6RdklZBC+nzotf/WNkFKsIIP6tuW
+         OPAGrBEDHx/2Gu/lquPrKXhMrcQ7fanP0jl1JoF0T7kOJ1o6zExCytCUu+WanrH6GsCi
+         z2AxidbqRuqhFKtm8Q1IWm3dnCt8cAQGcfSJx5r2wEdC1HmXbDPeSnpuFWgG1WWF2lCb
+         e18Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795625138; x=1796229938;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20260707; t=1795625260; x=1796230060;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=qzSNzkmnLjAnm2o7UEPNC82u2CvWGqHDymHqRLR8nws=;
-        b=M+YIxP2QAkHoUuu3qFxf3kInMratnGfJGPWMrlholMBSYt2SmGkYU+J1IPKTlw1Wub
-         I2lyeqmyLb8388/45YKq79ZK5LsaGAS/40QSnWJZyY+2mwOfV5sR2wOmdzACLhYFUs0G
-         7MvjKe+RVeKPLIHP2kisNihimjefBfjDejFPgltrHz725eF8oyJKPD6vvBh+9Ok6XEgK
-         D8BNx5un7X8Cwez8+8TEq/bpPz19u3QtGFalMWn+0tFoWsqN+hv4YL+xHSXm7EaWpMPc
-         iuc4CkfGz1Ot4voXyaReYl6t0qnqovN/ajs3t11vYzkzrD4nQV8iPvltgpK/NffA/tht
-         Kp5w==
-X-Forwarded-Encrypted: i=1; AL+hErET64m40IQg8qXCUhgXAwZYUkCPLJWthwgYYtEcuehC2Jbh+07FZLkNp2RiAipB4qFnzBM=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/h6TFQN7mIqLxOnnG4pVDZ40+vYFCafGVDGX+sMdUynQspd+qw
-	anQKOMBGTU7rC1QLD8t7Vw8Euccmpc6nzAVA20meBTmiRsvcimDHlyrxXGYnVk7U6BY=
-X-Gm-Gg: AZFdTZdTE3K/1sbTWqiJ9pnYKoMRtAWExOc9BzPFeyXL4/rKAPQSyW6qCJ7ap0nHYGA
-	NSQAc7FBLFRlHV88x5PaUZuCfdBB4LPgdU92E75s8D+kckzcdYSD4CJP9jt/+Xlq76i3aLY1R7B
-	/IVrTbSUptFXDLo7ve3bc4qmI4VVps7HBYS+N/5FyPPOlF7DTBuUXZxqr6nBye8Qd1iIguPI86i
-	p49jR7+jcKHPvQu5q7Emv9KcdSonAl4mqyDMH9PW9FJCDCOyLQRdCCwM355/KVxtUYMGT7kCufw
-	LmB+dBIGLq4HtcF9een2EYMzm+RD+IUNpKBM+IL7jXJ09Ql//8GneUez1R+qiT97ELg6G/h7KwD
-	yigpxNax/H0e749kCUeoizc2BmhIQbbeyJgz42p9HoeVJoVWTW5bnzWGD1l8qy1uZZ9YSFOpy1P
-	yDXYjSX4ZZs75dUfvDOHoMyeNoJBofLcJL1FFblKXPtf/9vAyt4v6UWTe4AYKf+jF/81IPn7uz3
-	sGSQTm2gNbGT8tcwRkSF55u+y9dBsGcdy5/OA9tWsMSk1EP5MBH9GQz6Va+Z9k6KMw0s7/8dl61
-	q57DtE8HsG+cZTkwUtPRTJ+BfU/UAn53a+4GC/dETPyzPrg0gS853NlvyDr4lA7+8Q==
-X-Received: by 2002:a05:6000:4617:b0:48d:f464:6989 with SMTP id ffacd0b85a97d-4abb18cbe2cmr35982135f8f.27.1795625138335;
-        Wed, 25 Nov 2026 08:45:38 -0800 (PST)
-Received: from ?IPV6:2a07:de40:8100:0:89a9:fd0e:583d:4a53? ([2001:af0:8000:1409:193:86:92:181])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4ab6b110c50sm34852448f8f.37.2026.11.25.08.45.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 Nov 2026 08:45:37 -0800 (PST)
-Message-ID: <0c2e606e-e0b8-4466-b9dd-4db14cc35d1d@suse.com>
-Date: Wed, 25 Nov 2026 17:45:36 +0100
+        bh=k1C78Uc1W59p66k/nD/Zj6PrIT29VxqTwRjxHQ+aiV4=;
+        b=ARMnzBgKx04pxy72CQn1g7JoopJbMiysjDb5iSl0cwGNOelY+1yB5PQh9YJxf3JmED
+         W/yE+RkypunjUH6T241U7DBzrXhXOTd+fwOH+J0yXQ2sFXuQ0zszEtPN3MgDGPSvaod1
+         WuGHq8BlvhommxTBg1pS9dG0i8ebechmZ+d7dJqaopcT+14z1fZ1kISwuK+qPGu7N+8m
+         HhbTbT5RhhNkrvTUevzeSR3dauMNZbBV8FiCr3rKlzUaTELS9u62iCTVXvkDqC+bZ8g/
+         PfO8nWH/WshHX/S5DW3FAYRSREkV0oCPKcg41fvfXQbWtqtqPRyrpZNuSmOm9RyJsedE
+         5G5w==
+X-Forwarded-Encrypted: i=1; AL+hErGmI0vr58YlGufei7ymbOLq8Fv66izJMyeU87+BBuaQvSzkz6cRVN1Xbx/05bwBz8Rgros=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/KUWUdzIABptFHbsQqZLrfUBbLCZ3FO+4se1aYNIa98rgLopyp
+	tki2vDCv+eZxGU8RrLheM3rPaCIM0qeemoWlG91+X4xBcuY794ETbHU6
+X-Gm-Gg: AZFdTZdNDbknBPtceBBM3IuiD9gelfD3A3TK6/U91HdKMkxWh4yOsdjyuyQjVJsWvqN
+	uQcpCB/hAGYza39H0lt+rU3ST1RWhsDh3FALwYHn4HBqrIEwketE8IRdygP/sDjvBpuLkpxeyKY
+	m4pKCvY0LbxPyBGKGoL6I7FYHVtF61x5bQ9CXh3coU/PUzkYb+FU9g+SFSysvuu3djgXmYrQUiX
+	3FDbQZHL3GwJOMAP8phnrgxCyGT0NfNFw2NBX489jFt4VnPdvFCXqXuI4R0AqnDqfQV4LTKR22t
+	TGA6Lvx3KhigabpSgXG6s/uw+qodHgZHVXesEvYAjHrTukjRFJx2ZuQp73ctRsrleLzsAW3sgVt
+	x8XzZxATNc9FrHhRyKucVfsY+bAKymuZK75Z3D/1MiwqPhqchRTp6CaEFevsXYkqFFwuZK7awKU
+	meVszcnqKi4CANzwxlgNGWvQ5YLZn29b9QEuoNbfLQRV6GDBuTxHX8Y1ZcLMisRJ6m+B2Y5MSYs
+	X6mbaRc+81//bjexrimmgOFrqE5qUqsB/JWg2C9iy1oXNAcio7SHpJ0JWTIFPhJG//AoKyvnNwo
+	Tq2I1ZxAVQDwkhLmInrbLL24IlBTTSmUaBpK0LhnnXcOYsUkNgTwJGjs1RzizK2C
+X-Received: by 2002:a17:902:ce85:b0:2f0:3e44:4761 with SMTP id d9443c01a7336-2f03f25e801mr192769945ad.54.1795625260030;
+        Wed, 25 Nov 2026 08:47:40 -0800 (PST)
+Received: from cps-manycore-1 ([147.46.174.222])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2f03f0dcbe3sm89876535ad.28.2026.11.25.08.47.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Nov 2026 08:47:39 -0800 (PST)
+From: Sechang Lim <rhkrqnwk98@gmail.com>
+To: Jiri Kosina <jikos@kernel.org>,
+	Benjamin Tissoires <bentiss@kernel.org>
+Cc: linux-input@vger.kernel.org,
+	bpf@vger.kernel.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Shen Yongchao <grayhat@foxmail.com>,
+	stable@vger.kernel.org
+Subject: [PATCH] HID: bpf: fix use-after-free in hid_bpf_reg()
+Date: Wed, 25 Nov 2026 16:47:18 +0000
+Message-ID: <20261125164728.24914-1-rhkrqnwk98@gmail.com>
+X-Mailer: git-send-email 2.56.1
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -92,91 +98,49 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v3 2/9] module: Add module_kallsyms_find_name()
-To: Samuel Wu <wusamuel@google.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- Randy Dunlap <rdunlap@infradead.org>, Luis Chamberlain <mcgrof@kernel.org>,
- Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>,
- Aaron Tomlin <atomlin@atomlin.com>, Alexander Viro
- <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>,
- Jan Kara <jack@suse.cz>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>,
- Ihor Solodrai <ihor.solodrai@linux.dev>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Andrew Morton <akpm@linux-foundation.org>, Petr Mladek <pmladek@suse.com>,
- David Laight <david.laight.linux@gmail.com>, kernel-team@android.com,
- linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-modules@vger.kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
-References: <20261113221248.3535369-11-wusamuel@google.com>
- <20261113221248.3535369-13-wusamuel@google.com>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20261113221248.3535369-13-wusamuel@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 11/13/26 11:12 PM, Samuel Wu wrote:
-> KALLSYMS_QUERY_BY_NAME, added later in this series, needs to find a
-> symbol name or prefix across module symbols in one pass.
-> module_get_kallsym() walks the module list from the head and runs an
-> export bsearch() for every symbol index.
-> 
-> Add module_kallsyms_find_name(), and put the shared query struct in
-> linux/kallsyms.h, so we have a more efficient linear walk.
-> 
-> Signed-off-by: Samuel Wu <wusamuel@google.com>
-> ---
-> [...]
-> diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
-> index 1ff8ce857d92..72006c9bad42 100644
-> --- a/kernel/module/kallsyms.c
-> +++ b/kernel/module/kallsyms.c
-> @@ -406,6 +406,63 @@ int module_get_kallsym(unsigned int symnum, unsigned long *value, char *type,
->  	return -ERANGE;
->  }
->  
-> +/**
-> + * module_kallsyms_find_name - Find a module symbol by name or prefix
-> + * @symnum: in: index to start at; out: index of the match. The index
-> + *          counts the symbols of the searched modules in list order.
-> + * @q: name query; if @q->modname is set, only that module is searched
-> + * @value: set to the symbol address
-> + * @name: set to the symbol name (KSYM_NAME_LEN bytes)
-> + * @module_name: set to the module name (MODULE_NAME_LEN bytes)
-> + *
-> + * Undefined (SHN_UNDEF) symbols are skipped.
-> + *
-> + * Return: 0 on a match, or -ENOENT.
-> + */
-> +int module_kallsyms_find_name(unsigned int *symnum,
-> +			      const struct kallsyms_name_query *q,
-> +			      unsigned long *value, char *name,
-> +			      char *module_name)
+hid_bpf_reg() keeps the reference from hid_get_device() in ops->hdev
+and adds ops to prog_list. After prog_list_lock is dropped, a concurrent
+hid_destroy_device() can put that reference and free the device. With
+hid_rdesc_fixup set, hid_bpf_reconnect() then runs on a freed device:
 
-Nit: kernel/module/kallsyms.c already contains a zoo of lookup functions
-with similar names. Adding module_kallsyms_find_name() adds more to the
-confusion, being similar to module_kallsyms_lookup_name() and
-find_kallsyms_symbol_value().
+  BUG: KASAN: use-after-free in device_reprobe+0x111/0x1c0
+  Call Trace:
+   device_reprobe+0x111/0x1c0
+   hid_bpf_reg+0x3ce/0x420
+   bpf_struct_ops_link_create+0x39b/0x4e0
+   __sys_bpf+0xaca/0xc30
 
-I suggest calling it module_kallsyms_query_name() to match the
-kallsyms_name_query parameter and to express that this is a structured
-query, as opposed to a simple by-name lookup. It might be a good idea to
-similarly stick to "query" instead of "find" in kernel/kallsyms.c.
+Hold an extra device reference until hid_bpf_reg() returns.
 
-Otherwise, this looks ok to me from the modules perspective. Feel free
-to add:
+Fixes: ebc0d8093e8c ("HID: bpf: implement HID-BPF through bpf_struct_ops")
+Cc: stable@vger.kernel.org
+Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
+---
+ drivers/hid/bpf/hid_bpf_struct_ops.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
-
+diff --git a/drivers/hid/bpf/hid_bpf_struct_ops.c b/drivers/hid/bpf/hid_bpf_struct_ops.c
+index c90b68956cb3..e2512bd6e6b2 100644
+--- a/drivers/hid/bpf/hid_bpf_struct_ops.c
++++ b/drivers/hid/bpf/hid_bpf_struct_ops.c
+@@ -198,6 +198,7 @@ static int hid_bpf_reg(void *kdata, struct bpf_link *link)
+ 		return PTR_ERR(hdev);
+ 
+ 	ops->hdev = hdev;
++	get_device(&hdev->dev);
+ 
+ 	mutex_lock(&hdev->bpf.prog_list_lock);
+ 
+@@ -239,6 +240,7 @@ static int hid_bpf_reg(void *kdata, struct bpf_link *link)
+ 		hid_bpf_reconnect(hdev);
+ 	}
+ 
++	put_device(&hdev->dev);
+ 	return err;
+ }
+ 
 -- 
-Thanks,
-Petr
+2.56.1
+
