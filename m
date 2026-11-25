@@ -1,64 +1,64 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=131.188.11.21
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795627563;
-	b=x4C/kpiWsNkPvCBf2jt1s7geXXUEtpKXrPKKJW3z5wP2yhmIyWsBFFAMaAHDevrNbV+B
-	 B6OKxI9d9la8GYRuzISy103f7G03WUSc4z9NSHIaGIGOyw/pAy+ih8f4RzgVMD2kvG2dA
-	 ZDXB2lGcYC2641UdZOAa6EfRexPaTV9vEhLxv8Yw7MFyAIRLgD44jEPH1p4FB55skxOqQ
-	 PiOlrXYf5W3vFlUfFHdWN/3KgnnFXmdJZnwfLDWcvb0Tfqg/Nrk/mBlBLlSyNcYw1L8sr
-	 Fbu1JvKz1vpIePIyuyAMsrfZC973KkBZqyaESpsUoEcKKwppjBA3kh/+fxqR5Ep/JrA==
+	t=1795627751;
+	b=LB/srVO64/6+3XTxg+snIO8twmaHxxB6VKhnkQauf8MDV6/pTobjww7At66FqjXn39dE
+	 adYI9john0UU+PYwN6wNS6tkewMdwud0UJzJVA+hSpa3CyHpCVrncYcU3IxC/84nTuIwB
+	 t2wM87m7gd+BwmDDLarFpTn15XeHRH7rWEmeAhZbds03sBZ4QEi4a97XZmoqERZwe0/l2
+	 yCBEBgPlsuLULSUxH/GjfvYTmIMr2oFCRESmuVSrThAO2RHZ53cEZVspxrgoxTbUpp4Qu
+	 +1sqMi3vHVcAAkX2Gp0msLpcFghFOlJTHC3ks6LVOmjgL57hPOUnhGput9zsS1HCZcw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795627563;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795627751;
 	h=DMARC-Filter:DKIM-Signature:Received:X-Virus-Scanned:X-RRZE-Flag:
 	 X-RRZE-Submit-IP:Received:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
 	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=7bqVY2Ko99LHinsxz7OiER/U69CTPh5CCd08W4Uyqjg=;
-	b=hUl1aPaKadINf6afnuqdXpQt8AJ8IxBdcVum3VOUItBw/5pboGERMOERsBimp5p+MZh4
-	 Y/zZOMITHJwA2DoxTdXfSLejqyQ4khrUgo4a+xzWsT7WXNM9QXO7EI+MIFTIkkKh2Mvap
-	 8AwtFS59IBcQkOZa14U/2NdG5/2eXCI9YvyTdU2hZS369wSMlZkYtRvbjEIFBCLNu15MX
-	 1ghGqA2nX3zY1GrY4sl6i/fXJxYVoudurbvor8gEwFhPWU6L9qmSZs4ZLTdngMIXyeAcr
-	 6kLvYsmrFPFWMbCiulgh3nS4Ci0A095o/3Bcb3w/FezTAjYOpgw3MKPQvwjuTaOvKVw==
+	bh=kk4HSfep6lD7JbkZrDPTxgrBwIlCPCupQVQtAuMl/dQ=;
+	b=5UBfzWC6BUxNifl2OytnaIrFySmkcsnBRSYVVlVXS0ZtlufSbwLJLerPu2NSr9xBpYsA
+	 H/71HxDD4yGHtI2DMrk0HhgIgbvWXZ1TYXmy/Z2/kcp8tTwdiDL/UZywwKLQ+Ox1o7o22
+	 ypvuDmWzNp2o+BpTivRVhZ1RiCVLMzY8DrwtRnaA3z4xeOHZdb1AtGYZDkPmxx5iWegrn
+	 APt07PINjdNzmX2MCh+SuRDclkELi7vWjoz4rGwMa0WXIPB6LqfRf3X/Ls2r3tYP1YnVm
+	 r5aQzinyuwfJrw5Q+p75l5jDY5gqVdgvOrWwVVuYm6pOlbmGsO2MMIDtr8eLy2aY3Yw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=fau.de;
 	spf=pass smtp.mailfrom=fau.de;
-	dkim=pass header.d=fau.de header.i=@fau.de header.a=rsa-sha256 header.s=fau-2021 header.b=MaZR55iw;
+	dkim=pass header.d=fau.de header.i=@fau.de header.a=rsa-sha256 header.s=fau-2021 header.b=lLpuowNO;
 	arc=none smtp.remote-ip=131.188.11.21
 Received: from mx-rz-2.rrze.uni-erlangen.de (mx-rz-2.rrze.uni-erlangen.de [131.188.11.21])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0161B606A327;
-	Wed, 25 Nov 2026 17:26:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0161B606A327
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 970D8606A31E;
+	Wed, 25 Nov 2026 17:29:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 970D8606A31E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fau.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fau.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.a=rsa-sha256 header.s=fau-2021 header.b=MaZR55iw
+	dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.a=rsa-sha256 header.s=fau-2021 header.b=lLpuowNO
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fau.de; s=fau-2021;
-	t=1795627561; bh=7bqVY2Ko99LHinsxz7OiER/U69CTPh5CCd08W4Uyqjg=;
+	t=1795627749; bh=kk4HSfep6lD7JbkZrDPTxgrBwIlCPCupQVQtAuMl/dQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From:To:CC:
 	 Subject;
-	b=MaZR55iwBtQgQKT403zHfF0N9PQmzL7MyETmIPNfQE+rdXEwPp8Z03f85LiFdrH6d
-	 j/ZILVvXcgPx47CiNZOqUtma1pCLnyzySJPhyoYx7B0bTlQyoRdmU/JIzv/9+fLDph
-	 WGoGXLSysy8NO3IE/f6fvhzdO9J4kZW6Uova6BR2nRM/y13ZcmtKTlFhliSRaLkvHJ
-	 boqQnMD1hGNgmLQLjx5N+K4NVb0WqKDkEO3IDIyhy3XhE4WUQSjfad5oHtCSiUPNxG
-	 iqocqcuGapVbAjO09VaX3iX4Q3eHt1kuhHxIXKB1ceDeffFkEO9Esqm3Vncdzex8Uq
-	 1+a13Fwyl/Xcg==
+	b=lLpuowNO8sqSxDnLqUsbXyPemn9qNAM5d1WoenUiwYbXHRuL/8sRJGdk5IDYitiTz
+	 XvcUZPrbZvbPR+46r4EpvqPyIcuU0KcAz1cQsQYuuSB3HDOtk31CdOt7prI3vb1EyC
+	 Wu2v4US5jzCG03/S8e+eT55HZ079Bnykd9O6CmHnXEaz6ghAbKRlBsPyy6J6uD4VwJ
+	 Csg8jivuSI5UQK6MwWEsunhyMbROaL0sk+2+vHBEIFNrloBWM3IDEGuOptKPOVU9qA
+	 yNXPgifwTWsQdDkTssCD3z5PBd3DZZuB44SPr8D44JKzvfD8dMwJvNW7p7nPmHZo/C
+	 pkLzvDhVoAo/Q==
 Received: from mx-rz-smart.rrze.uni-erlangen.de (mx-rz-smart.rrze.uni-erlangen.de [IPv6:2001:638:a000:1025::1e])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-rz-2.rrze.uni-erlangen.de (Postfix) with ESMTPS id 4jZRRF0h5KzPkpF;
-	Wed, 25 Nov 2026 18:26:01 +0100 (CET)
-X-Virus-Scanned: amavisd-new at boeck4.rrze.uni-erlangen.de (RRZE)
+	by mx-rz-2.rrze.uni-erlangen.de (Postfix) with ESMTPS id 4jZRVr6lH5zPkpl;
+	Wed, 25 Nov 2026 18:29:08 +0100 (CET)
+X-Virus-Scanned: amavisd-new at boeck2.rrze.uni-erlangen.de (RRZE)
 X-RRZE-Flag: Not-Spam
 X-RRZE-Submit-IP: 2001:620:618:5b8:2:80b3:0:59e
 Received: from luis-tp.epfl.ch (unknown [IPv6:2001:620:618:5b8:2:80b3:0:59e])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	(Authenticated sender: U2FsdGVkX19dXUJDzYUT2O5yCwvtj0Bvthn1xg3zTf0=)
-	by smtp-auth.uni-erlangen.de (Postfix) with ESMTPSA id 4jZRR51S75zPkxb;
-	Wed, 25 Nov 2026 18:25:53 +0100 (CET)
+	(Authenticated sender: U2FsdGVkX1+mXuB51AtwrTnI/EBm3xGZ6zuWk22nc0w=)
+	by smtp-auth.uni-erlangen.de (Postfix) with ESMTPSA id 4jZRVn4tKZzPkS4;
+	Wed, 25 Nov 2026 18:29:05 +0100 (CET)
 From: Luis Gerhorst <luis.gerhorst@fau.de>
 To: Alexei Starovoitov <ast@kernel.org>,
 	bpf@vger.kernel.org
@@ -77,9 +77,9 @@ Cc: Luis Gerhorst <luis.gerhorst@fau.de>,
 	Shuah Khan <shuah@kernel.org>,
 	Henriette Herzog <henriette.herzog@rub.de>,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf 3/4] bpf: Emit nospec after every insn with nospec_result
-Date: Wed, 25 Nov 2026 18:12:51 +0100
-Message-ID: <793677d276c8e0315ab4a9fb70178cd040d9bc97.1795625597.git.luis.gerhorst@fau.de>
+Subject: [PATCH bpf 4/4] selftests/bpf: Test nospec after stack writes of calls and atomics
+Date: Wed, 25 Nov 2026 18:12:52 +0100
+Message-ID: <254382ea54ff319c0dcf8c93642f5850b276b549.1795625597.git.luis.gerhorst@fau.de>
 X-Mailer: git-send-email 2.56.1
 In-Reply-To: <cover.1795625597.git.luis.gerhorst@fau.de>
 References: <20261125-nospec-result-reply-d60fdc6da8ef@fau.de> <cover.1795625597.git.luis.gerhorst@fau.de>
@@ -94,202 +94,257 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-check_stack_write_fixed_off() sets nospec_result of the insn that writes
-to the stack if the store must not be bypassed speculatively. Besides a
-BPF_MEM store, the insn can be a BPF_ATOMIC insn or a call: a helper or
-kfunc that initializes a dynptr, an iterator or the flags of
-bpf_local_irq_save() on the stack. But bpf_convert_ctx_accesses() emits
-the nospec only after BPF_MEM stores.
+Check that a nospec follows an insn that writes to the stack if the insn
+is not a BPF_MEM store:
 
-This has two consequences for the other insns:
+- a call of bpf_ringbuf_reserve_dynptr(), which initializes a dynptr on
+  the stack
+- a BPF_ATOMIC insn
 
-- Spectre v4: If the store is bypassed, what reads the slot behind the
-  insn gets the old content of the slot: a load in the program, or a
-  helper that is passed the slot as a dynptr.
+Also check that a program is rejected if it requires a nospec that does
+not fit: in front of a jump with the smallest offset, or behind a store
+that is between such a jump and its target. The programs are valid. They
+are rejected because of a limit of insn patching that exists for every
+insn the verifier inserts there: the jump can not be widened. The tests
+document that the programs are not loaded without the nospec in this
+case, not that they should be rejected. No test covered these error
+paths so far.
 
-- Spectre v1: do_check() ends a speculative path at an insn with
-  nospec_result, because a nospec follows that insn. Without the
-  nospec, the insns behind it are not verified for that path.
+Two more cases reach code that no test runs so far:
 
-Emit the nospec after every insn with nospec_result, whatever the insn
-is. Do this in a pass of its own, bpf_emit_nospec(), which runs before
-bpf_convert_ctx_accesses(), and move the nospec in front of an insn
-there too. The conversion of an insn no longer depends on nospec_result:
-bpf_convert_ctx_accesses() used to skip an insn after it emitted the
-nospec for it.
+- a store that is only reached speculatively: do_check() ends the
+  speculative path at it because a nospec follows, and the store is
+  replaced as dead code
+- a backward jump with a nospec in front of it, whose 16-bit offset
+  bpf_adj_moved_insn() adjusts
 
-Both are inserted with bpf_insert_insns(), so that the insn keeps its
-aux data for bpf_convert_ctx_accesses() and bpf_do_misc_fixups().
+The programs that need more than an unprivileged program may do are
+loaded with CAP_BPF but without CAP_PERFMON, so that Spectre v1 and v4
+are mitigated for them.
 
-The pass is skipped if both Spectre v1 and v4 mitigations are bypassed,
-because neither nospec nor nospec_result is set then. It only runs for
-programs that are loaded without CAP_PERFMON: there it took at most
-8.4 ms in our measurements, for a program of the maximum size of 1M
-insns without any nospec, which is 0.4% of the 2.1 s that the program
-takes to verify.
-
-An insn that is only reached speculatively is rewritten to 'goto -1' by
-sanitize_dead_code() and keeps nospec_result. It gets a nospec behind
-it now, like it already gets one in front of it for nospec.
-
-Fixes: d6f1c85f2253 ("bpf: Fall back to nospec for Spectre v1")
 Assisted-by: Claude:claude-mythos-5-2
 Signed-off-by: Luis Gerhorst <luis.gerhorst@fau.de>
 ---
- include/linux/bpf_verifier.h |  1 +
- kernel/bpf/fixups.c          | 91 ++++++++++++++++++++++--------------
- kernel/bpf/verifier.c        |  3 ++
- 3 files changed, 59 insertions(+), 36 deletions(-)
+ .../selftests/bpf/progs/verifier_unpriv.c     | 201 ++++++++++++++++++
+ 1 file changed, 201 insertions(+)
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 2f9fa9d889a4..7dd71cef3f3a 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -2029,6 +2029,7 @@ void bpf_opt_hard_wire_dead_code_branches(struct bpf_verifier_env *env);
- int bpf_opt_remove_dead_code(struct bpf_verifier_env *env);
- int bpf_opt_remove_nops(struct bpf_verifier_env *env);
- int bpf_opt_subreg_zext_lo32_rnd_hi32(struct bpf_verifier_env *env, const union bpf_attr *attr);
-+int bpf_emit_nospec(struct bpf_verifier_env *env);
- int bpf_convert_ctx_accesses(struct bpf_verifier_env *env);
- int bpf_jit_subprogs(struct bpf_verifier_env *env);
- int bpf_fixup_call_args(struct bpf_verifier_env *env);
-diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-index 485feffe0536..d5faaf3233c8 100644
---- a/kernel/bpf/fixups.c
-+++ b/kernel/bpf/fixups.c
-@@ -940,7 +940,6 @@ int bpf_convert_ctx_accesses(struct bpf_verifier_env *env)
- 	const struct bpf_verifier_ops *ops = env->ops;
- 	int i, cnt, size, ctx_field_size, ret, delta = 0, epilogue_cnt = 0;
- 	const int insn_cnt = env->prog->len;
--	const struct bpf_insn nospec = BPF_ST_NOSPEC();
- 	struct bpf_insn *epilogue_buf = env->epilogue_buf;
- 	struct bpf_insn *insn_buf = env->insn_buf;
- 	struct bpf_insn *insn;
-@@ -1022,25 +1021,6 @@ int bpf_convert_ctx_accesses(struct bpf_verifier_env *env)
- 		enum bpf_reg_type ptr_type;
- 		u8 mode;
+diff --git a/tools/testing/selftests/bpf/progs/verifier_unpriv.c b/tools/testing/selftests/bpf/progs/verifier_unpriv.c
+index a54b5a58b945..12d5e9e66890 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_unpriv.c
++++ b/tools/testing/selftests/bpf/progs/verifier_unpriv.c
+@@ -1035,6 +1035,71 @@ __naked void stack_write_nospec_slot_index(void)
+ "	::: __clobber_all);
+ }
  
--		if (env->insn_aux_data[i + delta].nospec) {
--			WARN_ON_ONCE(env->insn_aux_data[i + delta].alu_state);
--
--			new_prog = bpf_insert_insns(env, i + delta, &nospec, 1,
--						    BPF_INSERT_BEFORE);
--			if (IS_ERR(new_prog))
--				return PTR_ERR(new_prog);
--
--			delta    += 1;
--			env->prog = new_prog;
--			insn      = new_prog->insnsi + i + delta;
--			/* This can not be easily merged with the
--			 * nospec_result-case, because an insn may require a
--			 * nospec before and after itself. Therefore also do not
--			 * 'continue' here but potentially apply further
--			 * patching to insn.
--			 */
--		}
--
- 		if (insn->code == (BPF_LDX | BPF_MEM | BPF_B) ||
- 		    insn->code == (BPF_LDX | BPF_MEM | BPF_H) ||
- 		    insn->code == (BPF_LDX | BPF_MEM | BPF_W) ||
-@@ -1104,22 +1084,6 @@ int bpf_convert_ctx_accesses(struct bpf_verifier_env *env)
- 			continue;
- 		}
- 
--		if (type == BPF_WRITE &&
--		    env->insn_aux_data[i + delta].nospec_result) {
--			/* nospec_result is only used to mitigate Spectre v4 and
--			 * to limit verification-time for Spectre v1.
--			 */
--			new_prog = bpf_insert_insns(env, i + delta, &nospec, 1,
--						    BPF_INSERT_AFTER);
--			if (IS_ERR(new_prog))
--				return PTR_ERR(new_prog);
--
--			delta    += 1;
--			env->prog = new_prog;
--			insn      = new_prog->insnsi + i + delta;
--			continue;
--		}
--
- 		ptr_type = env->insn_aux_data[i + delta].ptr_type;
- 		switch ((int)ptr_type) {
- 		case PTR_TO_CTX:
-@@ -1862,6 +1826,61 @@ static int may_goto_expand_timed(struct bpf_insn *insn_buf, int off,
- 	return cnt;
++struct {
++	__uint(type, BPF_MAP_TYPE_RINGBUF);
++	__uint(max_entries, 4096);
++} map_ringbuf SEC(".maps");
++
++/* The helper initializes the dynptr on the stack. */
++SEC("socket")
++__description("unpriv: Spectre v4 nospec after stack write in helper")
++__success __success_unpriv
++__caps_unpriv(CAP_BPF)
++__retval(0)
++#ifdef SPEC_V4
++__xlated_unpriv("r4 = r10")
++__xlated_unpriv("r4 += -16")
++__xlated_unpriv("call")
++__xlated_unpriv("nospec")
++__xlated_unpriv("r1 = r10")
++#endif
++__naked void helper_stack_write_nospec_result(void)
++{
++	asm volatile ("					\
++	r1 = %[map_ringbuf] ll;				\
++	r2 = 8;						\
++	r3 = 0;						\
++	r4 = r10;					\
++	r4 += -16;					\
++	call %[bpf_ringbuf_reserve_dynptr];		\
++	r1 = r10;					\
++	r1 += -16;					\
++	r2 = 0;						\
++	call %[bpf_ringbuf_discard_dynptr];		\
++	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm(bpf_ringbuf_reserve_dynptr),
++	  __imm(bpf_ringbuf_discard_dynptr),
++	  __imm_addr(map_ringbuf)
++	: __clobber_all);
++}
++
++SEC("socket")
++__description("unpriv: Spectre v4 nospec after atomic stack write")
++__success __success_unpriv
++__caps_unpriv(CAP_BPF)
++__retval(2)
++#ifdef SPEC_V4
++__xlated_unpriv("r1 = 1")
++__xlated_unpriv("*(u64 *)(r10 -8) = r1")
++__xlated_unpriv("nospec")
++__xlated_unpriv("lock *(u64 *)(r10 -8) += r1")
++__xlated_unpriv("nospec")
++__xlated_unpriv("r0 = *(u64 *)(r10 -8)")
++__xlated_unpriv("exit")
++#endif
++__naked void atomic_stack_write_nospec_result(void)
++{
++	asm volatile ("					\
++	r1 = 1;						\
++	*(u64 *)(r10 - 8) = r1;				\
++	lock *(u64 *)(r10 - 8) += r1;			\
++	r0 = *(u64 *)(r10 - 8);				\
++	exit;						\
++"	::: __clobber_all);
++}
++
+ __noinline int nospec_global_func(int x)
+ {
+ 	return x + 1;
+@@ -1072,4 +1137,140 @@ __naked void nospec_backward_call(void)
+ "	::: __clobber_all);
  }
  
 +/*
-+ * Emit the speculation barriers that do_check() asked for:
++ * The jump is reached with a pointer in r6 on a speculative path only, so a
++ * nospec is required in front of it. Its offset is the smallest one that a
++ * jump can have, and the nospec is between the jump and its target: the offset
++ * can not be adjusted for the nospec.
 + *
-+ * - nospec: a nospec in front of the insn. It is set if the insn failed a
-+ *   check on a speculative path.
++ * The program is valid, it is only rejected because the verifier can not widen
++ * a jump when it patches a program. Any insn that is inserted between such a
++ * jump and its target has the same effect. Without the nospec the program
++ * would not be safe, so it must not be loaded. If jumps can be widened one day,
++ * this program has to be accepted.
 + *
-+ * - nospec_result: a nospec behind the insn. It is only used to mitigate
-+ *   Spectre v4 and to limit verification-time for Spectre v1. It is set for a
-+ *   store to the stack, whatever the insn that stores is: BPF_ST, BPF_STX
-+ *   including BPF_ATOMIC, or a call of a helper or kfunc.
-+ *
-+ * An insn may require both. The insn keeps its aux data, so this has to run
-+ * before the passes that rewrite the insn itself: what they emit for the insn
-+ * stays between the two nospec.
++ * The insns that are only executed speculatively are removed as dead code, so
++ * they must not be between the jump and its target.
 + */
-+int bpf_emit_nospec(struct bpf_verifier_env *env)
++SEC("socket")
++__description("unpriv: nospec does not fit in front of a jump")
++__success __failure_unpriv
++__msg_unpriv("cannot be patched due to 16-bit range")
++__caps_unpriv(CAP_BPF)
++__retval(0)
++__naked void nospec_jump_out_of_range(void)
 +{
-+	const struct bpf_insn nospec = BPF_ST_NOSPEC();
-+	struct bpf_prog *new_prog;
-+	int i;
-+
-+	/* Neither of the two is set without the mitigations. */
-+	if (env->bypass_spec_v1 && env->bypass_spec_v4)
-+		return 0;
-+
-+	if (bpf_prog_is_offloaded(env->prog->aux))
-+		return 0;
-+
-+	for (i = 0; i < env->prog->len; i++) {
-+		if (env->insn_aux_data[i].nospec) {
-+			WARN_ON_ONCE(env->insn_aux_data[i].alu_state);
-+
-+			new_prog = bpf_insert_insns(env, i, &nospec, 1, BPF_INSERT_BEFORE);
-+			if (IS_ERR(new_prog))
-+				return PTR_ERR(new_prog);
-+
-+			env->prog = new_prog;
-+			/* the insn and its aux data are behind the nospec now */
-+			i++;
-+		}
-+
-+		if (env->insn_aux_data[i].nospec_result) {
-+			new_prog = bpf_insert_insns(env, i, &nospec, 1, BPF_INSERT_AFTER);
-+			if (IS_ERR(new_prog))
-+				return PTR_ERR(new_prog);
-+
-+			env->prog = new_prog;
-+			/* skip the nospec */
-+			i++;
-+		}
-+	}
-+
-+	return 0;
++	asm volatile ("					\
++	call %[bpf_get_prandom_u32];			\
++	r0 &= 0xff;					\
++	r6 = r0;					\
++	r7 = 0;						\
++	if r0 < 0x100 goto l1_%=;			\
++	/* executed only speculatively */		\
++	r6 = r10;					\
++	goto l1_%=;					\
++l0_%=:	r0 = 0;						\
++	exit;						\
++l1_%=:	.rept 32765;					\
++	r1 = 0;						\
++	.endr;						\
++	if r7 != r6 goto l0_%=;				\
++	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
 +}
 +
- /* Do various post-verification rewrites in a single program pass.
-  * These rewrites simplify JIT and interpreter implementations.
-  */
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 13c53df386bc..aa73c3326d39 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -24220,6 +24220,9 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
- 			sanitize_dead_code(env);
- 	}
- 
-+	if (ret == 0)
-+		ret = bpf_emit_nospec(env);
++/*
++ * Like above, but for the nospec behind a store to the stack that is between
++ * the jump and its target.
++ */
++SEC("socket")
++__description("unpriv: nospec does not fit behind a store")
++__success __failure_unpriv
++__msg_unpriv("cannot be patched due to 16-bit range")
++__caps_unpriv(CAP_BPF)
++__retval(0)
++__naked void nospec_result_jump_out_of_range(void)
++{
++	asm volatile ("					\
++	call %[bpf_get_prandom_u32];			\
++	r6 = r0;					\
++	r7 = 0;						\
++	goto l1_%=;					\
++l0_%=:	r0 = 0;						\
++	exit;						\
++l1_%=:	*(u64 *)(r10 - 8) = r7;				\
++	.rept 32764;					\
++	r1 = 0;						\
++	.endr;						\
++	if r7 != r6 goto l0_%=;				\
++	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
 +
- 	if (ret == 0)
- 		/* program is valid, convert *(u32*)(ctx + off) accesses */
- 		ret = bpf_convert_ctx_accesses(env);
++/* The store is only reached speculatively and is replaced as dead code. */
++SEC("socket")
++__description("unpriv: Spectre v4 nospec after dead stack write")
++__success __success_unpriv
++__retval(0)
++#ifdef SPEC_V4
++__xlated_unpriv("if r0 == 0x0 goto pc+2")
++__xlated_unpriv("goto pc-1")
++__xlated_unpriv("nospec")
++__xlated_unpriv("exit")
++#endif
++__naked void dead_stack_write_nospec_result(void)
++{
++	asm volatile ("					\
++	w7 = 0;						\
++	w7 ^= w7;					\
++	w0 = w7;					\
++	if r0 == 0 goto l0_%=;				\
++	*(u64 *)(r10 - 8) = r0;				\
++l0_%=:	exit;						\
++"	::: __clobber_all);
++}
++
++/*
++ * The jump is reached with a pointer in r6 on a speculative path only. Its
++ * offset is adjusted for the nospec in front of it.
++ */
++SEC("socket")
++__description("unpriv: nospec in front of a backward jump")
++__success __success_unpriv
++__retval(0)
++#ifdef SPEC_V1
++__xlated_unpriv("nospec")
++__xlated_unpriv("if r7 != r6 goto pc-6")
++__xlated_unpriv("r0 = 0")
++__xlated_unpriv("exit")
++#endif
++__naked void nospec_backward_jump(void)
++{
++	asm volatile ("					\
++	call %[bpf_get_prandom_u32];			\
++	r0 &= 0xff;					\
++	r6 = r0;					\
++	r7 = 0;						\
++	if r0 < 0x100 goto l1_%=;			\
++	/* executed only speculatively */		\
++	r6 = r10;					\
++	goto l1_%=;					\
++l0_%=:	r0 = 0;						\
++	exit;						\
++l1_%=:	r1 = 0;						\
++	r1 = 0;						\
++	if r7 != r6 goto l0_%=;				\
++	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
+ char _license[] SEC("license") = "GPL";
 -- 
 2.56.1
 
