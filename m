@@ -1,102 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.43
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795624415;
-	b=iIEze61yhRLAeNugG1AHBOXZzaU2Knz7fD/LBM35njBivyKgyRhlaRbrCY/maw0qJW0t
-	 qmJaEcRUtpwCgJDOFrrpS9rzkb5wArmMXG1kf34+L+mkEQzgXftZz1rKOi2g29fgwYyXV
-	 6+Ck5eKQpPBHk7WX2bnXpyPijbnbgDX7LUiUgBuQo4zyb0a2ek6upto1lZosivNzaF0Ok
-	 Eutp3kdFWPDh97f/O9SsjFWr0zxiGTv60wVG2P8WGupEchAlIHzZHogxNq86g9N8Mp4TD
-	 VkH0nck5PZfG6MChI8FBVCt7aXBCPB1k13ecu4LxA7iwcJluYUHfm92KvSOiDT8uvww==
+	t=1795625055;
+	b=yu7t6Riwh+wPOMWaiZRuj+Y1LytQSpFDWf2O3X+f6iv1nHRNRmP3PdDuazZ5tYzU2dp0
+	 9PezfFJ1DTSE8+7S7CweEVXK/wM8QCoNIv/jfRRxuL6Mti1/A6Uk4+Bo9Fgv2RFMlepcy
+	 lVipeihr+TP49Yir99qf9NbMMivOKj4Mfl76+7ChGQFXgzKLmvMBnMyiUjMVP4io6HgnO
+	 FWfYFI8uA70M/YD5LxXyQ11Lbs38yepY1QfDM68quiwS7aZ3xxTttVQObiELyWwhMxL4D
+	 AZ2w5lrr8SwGBYkldfP56rjuvfkzGtw5ED8tdoTdEH9kW0Se5xKn/e8jKUtGQN7FYfA==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795624415;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795625055;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
 	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
 	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=G8pGBF4gig+42xucKEgB4reT/S4vYsrjWIoua9qgDow=;
-	b=XjVcUoswhJ4SHmjdS3p/J8hNAl4T0o2YGdbk1RaDexV29Z3icPTBgibSXVdpRya3cDRP
-	 p2pzjzQNs1Aa+OWFpPBgsANSi7FZc+IafGYKACShmv3Eb++Cs1dgrcf7RWcqYdXlgv/xb
-	 fv2EETUSV/EagpoJIwCR7b9MWEWZNM6TylvRr/ytQfSOaoPLJ91yRobNKb5V/LEXxIlnq
-	 pglfD2nq7Bc27wTSI23iQrcBE1QIWyd+WDIdaMJl3Sra68fVP6XHvlg9N4IghTk3Fdvkn
-	 mRyeOiCkdfMGVpAy5vs7p7kDhUreAwbLo0UGhf6u0Fh/B/JnkGF5XkoaXddwRrYtU/Q==
+	bh=II/aro/lwWCAag041h9klo86GZWrpoxtriGNBQNlDMw=;
+	b=KZIhzftOL+Df09xDaH9RQzx598k1mlwW+S7HInbjKeo5Ulpv5VrV0FDk7etNr5e+tcKo
+	 V0Rc85Sazrr0UeCeq7SWj8CE/Nt/2h9zvm2RPnBDiFPrC0qrxz+hWjXF52kHnqYmf+wWY
+	 Dez0hC2W1OMNSLbO6sDd1Qfg6gepEbQzXAT+iDAqyrcF+Wb5U1FenmibIZuyX69s+vFOK
+	 +GYbAtCPxnZ507XuR9RS7o+lxYUBbewgDBKzqf0r6YTuVi0r3nLUXP8C87G8HuC1tnCy4
+	 PRZtVI9AuEEZUP1ES9emccDpoYjTN3JpjulZRKFrkYWUw6oIYhEsCfQlVoFF8KrkWzg==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Rbqg8zfj;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.52
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=PKZ23RQe;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.43
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DADB4606A685
-	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 16:33:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DADB4606A685
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71388606A329
+	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 16:44:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 71388606A329
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Rbqg8zfj
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4bb69f5b161so39072695e9.0
-        for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 08:33:34 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795624413; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=PKZ23RQe
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-c4cb6834eaaso127066166b.2
+        for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 08:44:15 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795625054; cv=none;
         d=google.com; s=arc-20260327;
-        b=TokxSYBCsZmJRs5ldx/wKJko+TM7CC/TbJdkamYpmMAm8N/0bNk0QqXw4XtBehXhPN
-         rGJwXeNOqz+TkWOyrXNHd7a2zeknBiNL8DYnsa4TVTVu7Hsi7fOm23pUQmBKbRKSC3k9
-         O2Re0HESdp44/ATe8N/TbjV0YZDjR+HSE5f9+wv4l1HKvEg1noZp3AIfXDKjLEhty1Ll
-         Il72t4FtBkHFmlhegekd487HP7W6AiYPr0CHRLkRDp0fxDb051YkngLiCdX5u2Is51Ow
-         S4elkqud2C80lJDuRMfm63+k7HZLas/IZ6Qe71fnNKl76xF40tb1C2TjJezGMfMbCLCK
-         HxsA==
+        b=IwoTTqnF4OVj2r8J4JVpS0MC9rWI9PwX5jrA8hx0OrqxoASnhZJOcN8HT5ScOnPod1
+         Em9yGWC0q63kbzrHAsaWnyRz63XAVTIK1aKx5A5HBP45euDRp+O9LoxZVJyYHyjMPvLC
+         jj0+8AbAU9/nHEhZWz5CdJfonQWOj63Kyng4XgTolCgKQk6JnBbQzqeDLxO8uAVZoKTN
+         KZ2Wv9EkH0Sc5yB7ywbyGZqMW7el7cMuYw5WL9AaLGS9RL9yY32pgU41N8SlKQtL8AN1
+         pLMjmP/wKVT0B7wW/FNvNNFk3GFyocj3LxJ0t6bdGALHqNTwazDYpswjt//Oz5mah8SN
+         R2YA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=G8pGBF4gig+42xucKEgB4reT/S4vYsrjWIoua9qgDow=;
-        fh=xt2Zh4rt2I0I1gZgAPMIKbJjVNzQmnPVHWVh9nD7tM8=;
-        b=jIaU7tpKUxkHBHuEuqIlYPWq5id9oCzAXJzOD4i+/hPgVy3Vrqjx5yUD8/ywkbZi1U
-         6dy59ixVvfHusKMiTKFNWxUOpdKiljjfybDHT8W9GaVqxy773FIC6iemOd6oYG3uVESr
-         t+gJMgud31k5pvzrzvTno3spBv3w3GR+JcNtE5Dr0jX7zfkxu02EaFvLTVXRVhO1vY4X
-         +MxGWVJrN5toaVGN/ReNgoTIFsussU6PKB7zlkAO4NSrqdF8i1EtiUVXC8+KS5LN6qOx
-         XHd8JUmMY6lEIR8bfnO558FbA8+kgWbjMesYCI+79GCPdZQIADGVyHDDkPunMKmt1aOO
-         MnUw==;
+        bh=II/aro/lwWCAag041h9klo86GZWrpoxtriGNBQNlDMw=;
+        fh=MIy7r8XiXHcGuZ9Lu47LUua1/9cgBrTmrSL1hKMbNBg=;
+        b=X3h0oyLwglRTTJhmWr7Qx1xqHmCAfqpzr5v4QkcCFuflDQf5dEvUpNTJ4SXrxislAa
+         ws7yyLjajC3X+hUFXZXJc2UQbLGCOLWiwc2yT/FV6WP6SUoSb2DGGw4b8eTvv8lvk3On
+         YXLfB0lqU4cOunSWo0o+yzNsuf1xWreisTC8ZEO9hEcPO2BKo+00z5wtJ534mmnhdAQ7
+         S+0CJLXxA+ToS71n7Vq9fZipSQRCvwQaCvqk5HK6CvWuLBV+9m42l1SXzVFkKSwCACeJ
+         fhrxeTfv1X6Y9DvnYa3Oglng1UWo71rBpuTqJR7RiqFqL/OwQ4I1fmf9IYc6xKuyjHai
+         X+qQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795624413; x=1796229213; darn=vger.kernel.org;
+        d=google.com; s=20260707; t=1795625054; x=1796229854; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=G8pGBF4gig+42xucKEgB4reT/S4vYsrjWIoua9qgDow=;
-        b=Rbqg8zfjfvFC59XPp+SButv8F2T9dDxx2RyvwtNx1mAGakIwMBPuepMlgxF4f+vX+W
-         sbwmxXnjHYQsObZystSYwo38AQrBj1Kh3s0bGUFEi9zlxfpKlZkDxoYWSEcDr6/UKU0o
-         AHlljwa5KJwq4V3vjl50S3JakI8gNqAjHb4LqNXDXR8++IX7C2z3bAdu90NIMcYqN7O7
-         pgxS52kiGgsCoOdHxPofoEgtXl4NLBGYvHS//vqZoeoH4EfUlZMSUTN4OqapTIY2EHfb
-         aQfxj/U/8rOAtYu24vxfehm4PHBs736cLOlSQCS60eSnJuisfol8zLOMvsKl0upqhy/N
-         0fPw==
+        bh=II/aro/lwWCAag041h9klo86GZWrpoxtriGNBQNlDMw=;
+        b=PKZ23RQeMEttotX4OBPRP2DbbrMEB51nwAQlsHi3Clsl60+KLwydytyVzIwS3CPrsp
+         gMCa0qLojqUmZPTj1WgDWb2vfDDzy8I3ouZC6AtzVQzGhYkAtsdS7I194LfKbKzPHVBH
+         9FjnQKv/TdlaTy27yqxtS+FRu+TCtlSdjsR4QOyB9tkMnDrs00BEwfTTEGdJNrrE0d1S
+         i0G3BgU+8ocwt4ScMKi+JN47+02WlDqK9aHu8g0fQCVcWCnmaTG9N306L0mPKog4H/f4
+         BgsXgGhnHP8RFqRdmh8kRVgxVbHO2JS8qa43xqFnpf9P4Z4Esbd1QfxvoHuOMiibIYtV
+         4BnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795624413; x=1796229213;
+        d=1e100.net; s=20260707; t=1795625054; x=1796229854;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=G8pGBF4gig+42xucKEgB4reT/S4vYsrjWIoua9qgDow=;
-        b=UFTcis5EVh9jNF5mCvA5KoSlVcj3l6bUdEThM0dtYKpLibQkiw2MFxM8x0NWJe7Q/7
-         PeOtPMtDtezc+uuDQq0eoVBID2yK1pRZrKPtSWdIesDZvBiFaCdKXU5PmSBzN/Deg6HZ
-         TfhKgekElDxxYLE94mJJ8JGSGdZyp4hQl8N+QdPTVm5x3/NEL/qTUK9aBJv7Mpqvc87H
-         HnIL09It2tAL2Zb/YoSv5ll4rre36VvVc/ACvUtsM/lBhSiY3JDd/pqc0ira0CKYUuS+
-         EQ5tntLV3qmdK+f92BOPmReMVYkFJX74EQt+kDw0ZtnDotQmZB+57ieUmUc4bAwR4qqX
-         v9LA==
-X-Forwarded-Encrypted: i=1; AL+hErHKIxY52PC00EycQ+d3r4dRpUvedPIV+vOTzaiJLR4A+ayhzkx1EAyunP7DJanjA+lGnkw=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9Wjsdr5WcVbVbVhYY5SdUTvrL/wJDYWLOrZXaGxm2Er8Hz/ILf
-	t414tF+Lb4jar6WT0UWHQh0G4Mm8lh4vJqjOWhb/kuIFfe90Ly20C/XTXbxEXrgRBUZAUo2bE4O
-	EK46m1p/2DXZ+HFpfCjl9R3fA5eYHjNE=
-X-Gm-Gg: AZFdTZdHCGeqcmjlR+wioshh5yFB96/Zy4zM2avAIsuDx+poEdNQoRvsFkC3S1WQLor
-	j9GGmfVkduJBpQqhCv0Kdt1fbJH5c2ivwcZ3jDyHH6NLAjbywSsAdw2AOb95PuYQyEMKUlhW3/h
-	EQDn0+uDC+r0w7oSXY1GBHWkmNRscRiB5c+wB5mEc8H7YQK44NfgyItGjTGRjiUIAnVpMlbJDaL
-	ruWCc+Bti5CmnLbFCPRgjK0lFF/+pqZyGx4wvFqxC7hni20Pc7ZM113a4vAGXx8mx12Va72BFH4
-	J4GN2wSnxE8L+R1iTr0APBMAxtesHXevMc287KbF5kIXTGwRG79WIQcGgULG/fHMLAuAHJ3ujGJ
-	LgidUJDR4OCJ+C2ws/Yctz31oqfzaO3h8bBpqcZWQPWdrf7ymoZwyS4fqKFkLIj2De/FatTaj7b
-	PTdZGhSjlRv/XmOLJNZLiwQpQikaUdjdTuvdkR09gi/MRzXpnAQ7/J54GdPbMjLkXczS5xgRDjQ
-	QE=
-X-Received: by 2002:a05:600c:3113:b0:4bb:5f45:c97f with SMTP id
- 5b1f17b1804b1-4bb88816b2bmr398390865e9.27.1795624413003; Wed, 25 Nov 2026
- 08:33:33 -0800 (PST)
+        bh=II/aro/lwWCAag041h9klo86GZWrpoxtriGNBQNlDMw=;
+        b=Ix9E9/tDnB0qjbhv3NLrqnhQQM8pho1yZVEhFFe6mg9+UGMY1NRH/9EplSGIzxO6A6
+         jGjKAQ+PSwhaTK7Qu44Emt/yQrYRuxsPj3DQ2C4ev/tY/1A3daHwoZZ4WEV6+gt+qR6+
+         e4yUu3Qj2ClpsmGQSe1rPXv4OCdUz9fx8uy8ujmXgS5CnuNOl8SvgckFK4kk8M+SpmX+
+         LS68mjqr1g5HFkwMJQ3kQ43NKxVIJUu/fFwrpa3Cu+61c73pmkUeMnRd79QpF8YncWS0
+         i1kfM0xeDtiiyNVxSeL7bT6fwNISTNL6sqSpD+aKNMi3mFsP5g99a3gAHAOV6b+v9CA3
+         RPaw==
+X-Forwarded-Encrypted: i=1; AL+hErGjdxUmTHRIAKosajgTFQES7TzMLEuV9KKjoGEVuzkyHKesJJY/XyyFnzNGLT0VUD0cIgY=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+z4BVYLGV7bOT18CbsyemLiOK6MT7Xuo4EQFr2TSyXbtIZAHJ5
+	c6ZmcCyMhjQRiDl75x2GjVpa7U6mYCWxe1U2Z8WTZNO+bVkY7O8f3R8W9JYgm38D+CEEey6uUfp
+	0RJMUWfhJkmZqsjjM5REKw2qwux2t2ZmDNYeY7YC+
+X-Gm-Gg: AZFdTZcdmXVLHwP3Ufi+TtqaXOEnatdg1A98nigG/hbsH6hhLMX+fs2WwLrZ0QvbZx9
+	AFd4KYjus73g3EBQj706nw8uEfInO3utLmiJBFlT3a64e7l4A0rn2jvsZBGPR6Qv2n3ZIHjAaSU
+	ykq6CxY88FAOKSnrW6rkrjVfR9Bbmjo1eOXc29QmQzaHPTmUopYC0tYAWeZNxeHYa288g+QfkHy
+	3fRzbRwD50ikNkENKFHguXDq/6NbV7euYCGNpfRNW2z68jEUx6siZMfFeAndqopaMcC/+nItF/a
+	3fxLss1DPSB7ih0kLM3QAlyjezTjyco+8lxQEXwtE46wD4ET4ZKl+WX/DpEmtrlBW5HwDHjposm
+	a0InDyfyeHGN8U1P+R0R6XtRqW6hmiLfg8aIbBR6P399h3tcFAqv7L8py5slo9O59WJw9ppJtQJ
+	fGlMimX3e8SKJVXjk0xf9GHjTXbCBkp+hcmxYcfzXb6tByn/LUKkE=
+X-Received: by 2002:a17:907:6d22:b0:c51:40e:847a with SMTP id
+ a640c23a62f3a-c513a1e6fdfmr1639688066b.0.1795625053094; Wed, 25 Nov 2026
+ 08:44:13 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -106,95 +105,106 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261121012402.84848-1-tianyi@cloudflare.com> <3adef4b4d528780bae31f2fb02d0a08bf9c8ebd5.camel@gmail.com>
- <CAG4wq-f18SHytDb39SdJYzRPk-dzECjH_HCSiMGAQ721Zmfomg@mail.gmail.com>
- <CAKgT0UeWWherBt1MDcPF7R7jxt6E_3peo8VuxrgY3JdseM-0rg@mail.gmail.com>
- <CAG4wq-dizUz-6GB8Aj1wRTQBOzbHbT7pX9gom+AhR=5OWSyjzw@mail.gmail.com>
- <CAKgT0UffmbELMsGi8HRfu62MfC9VRYZ+TMNKFjZMWJyrV4t3jw@mail.gmail.com>
- <CAG4wq-cG1bseTFczZTjashN75J1Jsrv=u1ccuRsY-N1kZ=SXXg@mail.gmail.com>
- <CAKgT0UeNyyXKARjKR4nVVxNe3UB16WuXqxSz0cf4ZvCdb9A4_Q@mail.gmail.com> <20261125090732.69233-1-tianyi@cloudflare.com>
-In-Reply-To: <20261125090732.69233-1-tianyi@cloudflare.com>
-From: Alexander Duyck <alexander.duyck@gmail.com>
-Date: Wed, 25 Nov 2026 08:32:56 -0800
-X-Gm-Features: Aa3M54pUd6pmzCO8UswpNG_p1Cop8RfCo2MjSO4FX8Mgp7n0ftvtp2HqSVfaiy8
-Message-ID: <CAKgT0UcFnSvTO6ATw76qVHYxRusTYXpRVi0_GR5QnMhhoXwXsA@mail.gmail.com>
-Subject: Re: [PATCH net] ice: do not report CHECKSUM_COMPLETE when an XDP
- program is attached
-To: Tianyi Gao <tianyi@cloudflare.com>
-Cc: netdev@vger.kernel.org, intel-wired-lan@lists.osuosl.org, 
-	Tony Nguyen <anthony.l.nguyen@intel.com>, Przemek Kitszel <przemyslaw.kitszel@intel.com>, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Simon Horman <horms@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
-	Paul Greenwalt <paul.greenwalt@intel.com>, Alice Michael <alice.michael@intel.com>, 
-	Eric Joyner <eric.joyner@intel.com>, Jesse Brandeburg <jbrandeb@kernel.org>, 
-	Lorenzo Bianconi <lorenzo@kernel.org>, bpf@vger.kernel.org, kernel-team@cloudflare.com, 
-	tianyi.gao@linux.dev, Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+References: <ac22215d-3e58-4aab-851e-47c30836e058@app.fastmail.com>
+ <20261027231728.1466446-1-jthoughton@google.com> <32fad21b-5bad-4640-97df-ef0f638cd9e9@app.fastmail.com>
+ <CADrL8HX5vb1PGDpWzp-eR0rNfsMCVUhFa9vp_WZZx2eJZ+dfXQ@mail.gmail.com> <1a99e5fc-129e-41e3-8420-101bcf04b366@app.fastmail.com>
+In-Reply-To: <1a99e5fc-129e-41e3-8420-101bcf04b366@app.fastmail.com>
+From: James Houghton <jthoughton@google.com>
+Date: Wed, 25 Nov 2026 11:43:36 -0500
+X-Gm-Features: Aa3M54qTCDON0Zo2YJDXp5pBtwrXjTcYjv8NoqDjQS_XV_tl8JrBb-LQVlKEL3Q
+Message-ID: <CADrL8HUOZs-vWRyM9p+Na-=arRU+Gx_cWMLbxHmUYnho4fAUXg@mail.gmail.com>
+Subject: Re: [RFC PATCH 00/10] uaccess: Refuse and warn on user accesses when
+ current->mm is NULL
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	Pavel Begunkov <asml.silence@gmail.com>, Alexei Starovoitov <ast@kernel.org>, Jens Axboe <axboe@kernel.dk>, 
+	bpf@vger.kernel.org, Daniel Borkmann <daniel@iogearbox.net>, 
+	"David Hildenbrand (Red Hat)" <david@kernel.org>, David Sterba <dsterba@suse.com>, io-uring@vger.kernel.org, 
+	Jim Mattson <jmattson@google.com>, John Fastabend <john.fastabend@gmail.com>, 
+	Josh Poimboeuf <jpoimboe@kernel.org>, Kees Cook <kees@kernel.org>, kvm@vger.kernel.org, 
+	"Liam R. Howlett" <liam@infradead.org>, linux-btrfs@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-mm@kvack.org, linux-perf-users@vger.kernel.org, 
+	linux-scsi@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	Lorenzo Stoakes <ljs@kernel.org>, Chris Mason <mason@kernel.org>, 
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	Michal Hocko <mhocko@suse.com>, Ingo Molnar <mingo@redhat.com>, 
+	"Martin K. Petersen" <mkp@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Paolo Bonzini <pbonzini@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Steven Rostedt <rostedt@goodmis.org>, Mike Rapoport <rppt@kernel.org>, 
+	Sean Christopherson <seanjc@google.com>, Suren Baghdasaryan <surenb@google.com>, Thomas Gleixner <tglx@kernel.org>, 
+	"Vlastimil Babka (SUSE)" <vbabka@kernel.org>, Alexander Viro <viro@zeniv.linux.org.uk>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Nov 25, 2026 at 1:08=E2=80=AFAM Tianyi Gao <tianyi@cloudflare.com> =
-wrote:
+On Tue, Nov 24, 2026 at 5:02=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> wrote=
+:
 >
-> On Mon, 2026-11-23 at 16:17 -0800, Alexander Duyck wrote:
-> > Any reason why you couldn't just strip the GCS enable flags from the
-> > rings when you add the XDP program in ndo_bpf instead of having to add
-> > a check for every packet if the XDP program is present? That would be
-> > closer to what they did for the Mellanox NIC and wouldn't be adding
-> > code to the hot path. Then it is just a matter of also adding an info
-> > message that you are disabling this in the log so if somebody does
-> > have to figure out a regression it should be more obvious.
+> On Tue, Nov 24, 2026, at 22:10, James Houghton wrote:
+> > On Wed, Oct 28, 2026 at 7:14=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> w=
+rote:
+> >> On Wed, Oct 28, 2026, at 00:17, James Houghton wrote:
 >
-> Thank you for your valuable comments.
->
-> Clearing the flag in ndo_bpf alone is not enough, because
-> ice_vsi_alloc_rings() sets it again on a VSI rebuild, for example after
-> "ethtool -L" or a PF reset, while the program stays attached.
->
-> In v2 I will set ICE_RX_FLAGS_RING_GCS in ice_vsi_cfg_rxq(), which runs
-> every time a ring comes up, similar to what mlx5 does when it opens the
-> RQ.
->
-> v2 also logs an info message when a program is attached on a port
-> with GCS. I tested it on E830 with attach, detach and "ethtool -L",
-> and I will send it soon.
->
-> > Thinking in terms of what the final fix for this might look like,
-> > currently the drivers are already starting to carry stuff for frags to
-> > determine if they support jumbo frames via frags or not. I suspect we
-> > will likely need to do something similar when the time comes
-> > indicating if the program can avoid corrupting a checksum or not when
-> > it is stripping headers.
+> > So now in v2, the _nofault() helpers themselves do not check current->m=
+m.
 > >
-> > I am not super thrilled with the idea of this becoming standardized.
-> > In theory this would be much better if there was some way to pass the
-> > data out that the frame was mangled and what the checksum adjustment
-> > is to the total frame.
+> > I've uploaded a draft version of v2 here, in case you want to take a lo=
+ok:
+> >   https://github.com/48ca/linux uaccess-v2-wip
 >
-> 100% agree. We should be able to tell whether a frame was modified,
-> keep CHECKSUM_COMPLETE for the frames that were not, and give XDP
-> programs kfuncs to read and set the checksum status.
->
-> Unfortunately, today there is a big gap before we start that:
->
-> - [1] lets a program read the checksum status, including the
->   CHECKSUM_COMPLETE value.
-> - [2] lets a program set CHECKSUM_NONE or CHECKSUM_UNNECESSARY with
->   csum_level on the skb.
-> - Nothing lets a program pass a corrected CHECKSUM_COMPLETE value to
->   the skb. [3] lists this as future work.
+> I read through this now and it all looks good to me so far.
 
-Realistically speaking there is an easy solution to this in the
-program itself. It would be to look at using something like the
-REDIRECT action instead of just stripping the tunnels and passing it
-back to the original interface. It would then take the frame and stop
-processing the remaining descriptor data. As it stands that would be
-the more correct solution as you could then just redirect it to the
-tunnel interface I assume you have stacked on top of it and have it
-receive the frame instead of having received it at the interface that
-just head the header stripped.
+Wow you looked at that really quickly, thank you so much!
 
-It would also match up better with how the stack would actually expect
-this to work if you didn't have the XDP program in place.
+> >> Since in principle every user access should go through both
+> >> access_ok/mask_user_address and current->mm check at some point,
+> >> so combining the two as much as possible should help long-term
+> >> maintainability.
+> >
+> > You're right, and v2 has been restructured like this.
+> >
+> > - The check is in access_ok() itself: the generic version, plus the
+> > arm64 and riscv versions. __access_ok() remains a plain range check.
+> > - The callers of mask_user_address()/masked_user_*_access_begin()
+> > check current->mm explicitly. There are about a dozen such callers.
+> > - The unchecked accessors, __copy_{from,to}_user()
+> > and__copy_{from,to}_user_inatomic() (and arm64's
+> > copy_from_user_flushcache(), which also relies on an earlier
+> > access_ok()), keep an explicit check for now. Once their users are
+> > converted to the checked versions, those checks can be dropped.
+>
+> Ok, sounds all good. If we get more than handful of mask_user_address()
+> and masked_user_*_access_begin(), we can always revisit that interface
+> to make sure the check can't be skipped, but for now this seems
+> like a good tradeoff.
+
+Great!
+
+> > Compared to v1, this also covers get_user()/put_user()/clear_user() on
+> > arm64, powerpc, riscv and the asm-generic architectures, and arch code
+> > like signal frame setup that uses access_ok() followed by __put_user()
+> > or unsafe_*(). user_access_begin() no longer needs its own check.
+> >
+> > What's still not covered: x86's get_user()/put_user(), which do their
+> > own range check in asm, a few architecture-specific paths that call
+> > __access_ok() directly (e.g. on alpha and sparc32), and arch code that
+> > calls __get_user()/__put_user() without access_ok(), mostly trap
+> > handlers for user-mode faults. Probably best tackled later.
+>
+> ok
+>
+> >> There are probably few enough of these that we could address them
+> >> by either adding current->mm checks or converting them to use
+> >> the full versions instead where that is an obvious change like
+> >> that usb gadget driver.
+> >
+> > Sounds good. I'll send a separate series converting the obvious ones,
+> > starting with the usb gadget driver. I think that will be useful.
+> > Let's see how far I can get; hopefully I can drop
+> > __copy_{from,to}_user() completely.
+>
+> Ok, perfect!
+
+Thanks, Arnd! FWIW, there have been no syzkaller issues so far with
+this WIP v2. :)
