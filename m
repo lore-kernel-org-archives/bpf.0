@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.43
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.44
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795577606;
-	b=NTAnJ060Vz18adadLi3ENqCrHqP+eb36Zx0IKez5Q4EIScA8vAVGUWcYQqPBbQe0PKg+
-	 k6Emu3AmG4ML4noHGXlgQrci/vx41XFzOKnj4lBpph9Xa4kyA8XJTLtoM7rg7FeWAFSSm
-	 Tvvbr7FNhlciG9nsh5nNYeEBSM3frv7H3qfB+Z8XO30DKoOaeerSIEVGL/N1QBYpXX+fL
-	 678G+l5hj3DymQqLo98WzCg8uV9LdhjUeyifzlt9NgegB1Wp+4kiO3V4ztYskdyCVMP/v
-	 jFtdeuQB9ojp+SYDrigPbjiqsNpKVp2oQTAy4R4dy9y3M2+/qB99Jtg7j9l0S9Lc0Uw==
+	t=1795577611;
+	b=e611b64gyqJdJXVmhB49JLB7QACUyWYo6pouXOnZuWhE37kxBIICMqQ3tup4HhTTIyoT
+	 j6Yce6EVGjWx935LtFsmVsfeNnjh4qaRrcSkXccG360ZmsTf7NPfmqiTLfPodi+sDa4M5
+	 SQhJzMBZHwzK5ZsPQsdmaW6fDK2pgm4yDItJIonW6cc7cN/cupYaRt5R6grJMKy2Ji4HX
+	 7nuRGTp5EXzeNmBU3ksD6EU0ao+Nca1bU1sSILvbLeq8GjhC2xhsJP3Ryy/o9LJli/CfV
+	 ce71BfIIIL0AtJq4XKvZJbzFateyEyrIIfCjC4plK7qzQYaSP/ZA8R0CigRUPdZDk+A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795577606;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795577611;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=BM5sDaJIJ+bs/KbprmXTStxLdbr+JsO7JuypYmmZ90I=;
-	b=IpKYx5MlbyFfRi59r/KBUMmPg76OeYzxFRv1DZ9MqZ8hT1B1dhT+XzFYRiv9ic8RPkYv
-	 jHi8ZwATG/nqBma3pHVfPGa53/4D4CObqXl9SUzNWk9dm1A6g+/D0oYoCBx7sJJgzQFEJ
-	 voCVnDTXvhpeZhuKh7TxpVDV3+uTRnqOsYaYiz87EOus4j3FJgsFVjuosj07ckWTd4jEZ
-	 h4b9geRBt8GQ4vScC532+BP6ljLvGTYbhMEYUKg45Y4S9GUyYqFxWzP/WCbH+bQiFYc0e
-	 lfY1NOnIGwc7JJui+oDU3sDCQmFODOfaBe3xVJMm99JY5OvzzMCa+ftLBg048q0pGuA==
+	bh=MXi4VHUP+5SrX/Vd03Qer05Ni6osXUWxomJyle5l39I=;
+	b=z468y0xpCR0YyKwex+m2OnI+S6F9s/eowd5GXmnYtFJIlTKkeFXWRGR0htrRpgPo8F7U
+	 5LnasAop34BYPft6s6ObzXhU1zqon96PSlG3W/K5xqq9Gd+JJq/9SgP1fBeAvGGdPXxf9
+	 Hgs6zNiAj/FDp3jyK78curoxJRM+2QpkJPxvYatbSWlQ67g3yLKTgHifW3cv/jT3zhexN
+	 lVvWPe49aSSfGHzj2iERnf11dTofdc+TSYmpHk8QU/xy6JTfp8PayYpZwXL9BwXq5dUSQ
+	 RyFNRM7n3lXi1XMMkkBUZBUkOu7yb6xg5hPqyxIFNhaK8v0kwl8K7+DDyeLa6u0FFoQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=iPQveuYG;
-	arc=none smtp.remote-ip=209.85.216.43
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=t9Jy2ICY;
+	arc=none smtp.remote-ip=209.85.216.44
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7099606A31E
-	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 03:33:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B7099606A31E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85345606A321
+	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 03:33:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 85345606A321
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=iPQveuYG
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-3b44bdcea8aso2789128a91.1
-        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 19:33:25 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=t9Jy2ICY
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-3b41e627cadso3257072a91.1
+        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 19:33:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795577605; x=1796182405; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1795577611; x=1796182411; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=BM5sDaJIJ+bs/KbprmXTStxLdbr+JsO7JuypYmmZ90I=;
-        b=iPQveuYGo/aPOK8gD6R8Ojinljk9XXLrqcLB8tHVb7RtdjpeVODMhF3gNsCfzf1Msf
-         F/4p+6zfgG34TH56f7AQvCsFPG6TAdXSuAKes4s7FC1wAAuVtIGYROyabXPjsiXROUv6
-         bwbT+/wdDzYf7+40vo1eJqB/1OOV3Ft9L4sbx8l8/NGQdALp8TQjwTXiEA2tEptLCnFJ
-         4x1KDUtJv984GAEK8qGUfWMwtNkJJG2eKUTzzEf76ctpuczGkZ8zHpa3bTlGAFxTbkoQ
-         H13EUk/hqyig2NtZXGDjZEa0/Hs8+FH9JJ+syJO9irYOTDdUZtB+dZsMf7bgkM290yev
-         RrlQ==
+        bh=MXi4VHUP+5SrX/Vd03Qer05Ni6osXUWxomJyle5l39I=;
+        b=t9Jy2ICYJ9jtTB0yV2GzJ0Idl2JD5uqmVPapE2h2AHbvlsRp7KtctFAGN07ZbmXmGG
+         gkzAb//2pq5mg8rzWCCqgONIM6qxqCJXn6uAq7/cwoqjsVrugUVSl0d908b6J01J3W6i
+         ebWtsTGLdeU+RBPlnKbKK/3effXvVWSlp6b+cLe9ieF0+q441JlMYL1lT0ir4itR4qVq
+         LbTt7mR+MGmL+h0rqvAmwWh3H7buU7jofovSSQdEIPQNDchScjec3PoZ3Gkbd383THzJ
+         j3p9YkhP72ow6PCcR2uUAbL9uYtwGPGNp2gl8dVH4IXvrxc2mGgr9I1GrIIJ4ZFlSq7L
+         ncmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795577605; x=1796182405;
+        d=1e100.net; s=20260707; t=1795577611; x=1796182411;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=BM5sDaJIJ+bs/KbprmXTStxLdbr+JsO7JuypYmmZ90I=;
-        b=STfR+yvnVrlFGgorBgmroAS18pV52L2iVr3uJtjzUJ3+0zuuHC9djmnjXp8ASty3jQ
-         ki7QvejhZyCcaQELkKJlDCQim7BWLzIbRjsTdIVzv4FIpFWbT92SnVz4M+Nwjd174CJa
-         fel1ytu+nfib5psDJKazxzkv4WNI/VjerpQUX0UQLS5niqXglqxXYQttu00kH5wxcZTA
-         0J/HDsTT55F/mqiQ+wEXaJDeFIlMwOBrOjhaKpy+7TbF0ULb+lFjlIENpBKc7My/KArH
-         hoTt0EpH6X85c+qU2IUTyr4foXrHf1gSV+iGz4hugHOVnZBM12frdIE8yW/JBqi3FO8C
-         fe4g==
-X-Gm-Message-State: APuU4Z/s3CvuGxGbQdGL9zsmJ0OFAOCgA6OT/mmtJs1MfDrR3fIUZimQ
-	eXv8/lkyeMHrhgmlYAXz6V8OFboYjxSCNDana+cdQ3KfN+DY/4ZyJyIrUtRPa5TH
-X-Gm-Gg: AZFdTZcMYcwvNriAuou5zI9BRIckzyNumIbR0m4Kg2mttC+qByUixlLJlyM0pj0gQbW
-	CP/UrT4ZKhYjQroXZKJQg5mLyjUQaLDhm+Ccl1Q60dHKVmakfehcjYSTlfHMoQk34l0Lc6ygn4r
-	mo74YXkwk/W1HqwyUBOtwy09+fmqws5BN6GWgdSim635hyF1766JOX9HyuiaoW3dZkzE2NiK11f
-	+eQSaiReA7Vw/Djp5yboPHedZkOxMx724Io/fXF/sxlfAsNTSA0mANEkGBFYzC+WYxfCT/SzRFG
-	s+st2s+Bi0AzMFpRcAujcJiK9J/Uz9TgoozDJ01R74M43ANd76fnT3Y1afklTEVpeLIM8qkkU4r
-	OTWVbQ9tmYioNQIAFLQgPvtI509Y8tSgFKq1F7ltpt3WHjOG3U6F+3HndPvz9h61bhr8M5rtANE
-	0HJ2PVR51LeuqUX78Ht40jGQk0vAWYY2YoBQ2cEbrxH0znSkQjh5RZV7kmY4OB7fUhQs8k2H7Sh
-	zzjMQmKOXTHH4ZQKxkub4SMBmFFwZlYwK3InFm3VxsinQk25zHrUO0bp7Q5JLPAkhSaNiWbGlon
-	rLpOJztLUC0efU3dcGgpNlB6mqZ4ipNmEhbD+AcecEMG3leuB5+I1GhGld1IwQdmCMcuyOevmwc
-	iwEdyFf54uKdW5UBl+msgqRa5tbefe9j52uLzOGDkPzSzqEyIiPDOiyM3huNYE3DmSmVh2xpl90
-	s=
-X-Received: by 2002:a17:90b:3c11:b0:3a4:7195:ecba with SMTP id 98e67ed59e1d1-3b41c907eb4mr9431787a91.20.1795577604776;
-        Tue, 24 Nov 2026 19:33:24 -0800 (PST)
+        bh=MXi4VHUP+5SrX/Vd03Qer05Ni6osXUWxomJyle5l39I=;
+        b=xuugXc3Q0o9CiB3HZhP1X6QMx41Y1l6SGv/ZoKcZyIX6RrUZGyYqd67VwP+q8a26v4
+         KMzvHQuQIS2cNYoLUR8KEF6P5JtH+dxKMlMfOQJLOToPVGq5An2QhVVKdnE5V2+XL/1V
+         0Blp05KBf1WX6Y36yZt4OgE01yfD/J275uDD34r9lPeVvYasLCmxK+eIDpjf9yo8bfI8
+         iokQ2eNLrtL8f7mgJC03e3i5CPm1ZjFXNWPw7DEr+X2+ViDkcydToBeN8E457S/97lWS
+         oPQQXkFTyVeBtxJ6uO8f53X4eO6ssq1H+XL9Cgwr01baCUJ3lq8Nw/8gU/JZYqQWxFNp
+         NIaA==
+X-Gm-Message-State: APuU4Z8j/gY5iQNTglNPPno01SWENjim5Gsd7NYNFh2snUHifBrrwh/v
+	A2Eu510jmmBLs3+7aVO7SldVcOk2f1edxtPRxMaWPVQLeD1YfcIW0EiqWD+x/0az
+X-Gm-Gg: AZFdTZdCbimwcEJI+kTMDkKWsOfHrXaZmiII+potswkVMWJGlp8yiKnnpRykADnzHqg
+	mYJ9gYI011x0WhlD2Tfk67E4Sz1ItleYu0KWr478LmjJept+xqZ7SDRjQmlIFU1vQSo9eQX5+rt
+	UvrwytWs7sceLo3KZ8d/dO0EWPTya4EiSzU1gRREAs/rUs7d9jBeeAb03oOBZVK1TiKyuCYPJm1
+	9dfxXyXSslymLU8Ylbz/N03AtyXCWPn1LxF/A5UtERMUs/NE7GhKVFF3UrgyG9wMrWalSd57YiZ
+	z77zYyCigu0qNal4QUu5qZ5gaCLGUzcCsPu+/RV1oaLYNiTSKCbOjAea+W62+qgxzdg0Z4bCoYv
+	dEr/xYU3hcRWjf4cjn2V7XqfNlZKnUJluYtn0jW9fgE3vccuxjCBe7xlFJmpsUQZSCJ707zzmjl
+	8CQ64qZOEf2Ggti+B4xF8udFeHPSQXATcZlxG4rSWzVQf63BaUZhxZN4Lp+e0T/5cQcdth6T3Dg
+	Ak7aGOIg2FKvkC7zbnL+Dd1VyOfYt3EVUV5RCB8zYlCAzFXDy8Xuejwi9Rz25wCjAylvYNpaRfK
+	/Un4X+g0rpsWOG+ODjZMHBSBHDIVAd/pV/lIsCy5Ah+28WrKpid9sb2ZEzAnaIoja0vmm9mhdqQ
+	I3ITnYUWrACZH7v3Ce434gDc6IKt4WQQy96+vQEJaMw/V5xyC5Zc7Wd0DWx2n2ZQLJvoyGBL6LZ
+	8=
+X-Received: by 2002:a17:90b:4a48:b0:3ac:97bc:4c7b with SMTP id 98e67ed59e1d1-3b41c8fe3bbmr16659254a91.14.1795577610625;
+        Tue, 24 Nov 2026 19:33:30 -0800 (PST)
 Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.244])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b48b41928esm15096393a91.9.2026.11.24.19.33.24
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b44b8733e6sm9464744a91.3.2026.11.24.19.33.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Nov 2026 19:33:24 -0800 (PST)
+        Tue, 24 Nov 2026 19:33:30 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf 38/47] bpf: Clear the data that bpf_msg_push_data() adds
-Date: Wed, 25 Nov 2026 03:29:29 +0000
-Message-ID: <20261125032938.670542-39-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf 39/47] bpf: Fail loads from a network header that was not set
+Date: Wed, 25 Nov 2026 03:29:30 +0000
+Message-ID: <20261125032938.670542-40-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261125032938.670542-1-alexei.starovoitov@gmail.com>
 References: <20261125032938.670542-1-alexei.starovoitov@gmail.com>
@@ -104,29 +104,80 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-The helper puts a new page into the message as the allocator gave it.
-Bytes that the program does not write can be read by it, and are sent
-to the peer. Allocate zeroed memory.
+skb->network_header is 0 until something sets it. Loads at SKF_NET_OFF
+and bpf_skb_load_bytes_relative() start at skb->head then, and read
+headroom that nobody has written. qrtr and AF_XDP in copy mode make such
+skbs.
 
-Fixes: 6fff607e2f14 ("bpf: sk_msg program helper bpf_msg_push_data")
+Fail the load, like for the MAC header. A network header at skb->head
+counts as set when skb->data or the MAC header is there too. CAN and
+6LoWPAN make such skbs.
+
+Fixes: 2e07fa9cd3ba ("[SK_BUFF]: Use offsets for skb->{mac,network,transport}_header on 64bit architectures")
+Fixes: 0f5d82f187e1 ("net/filter: Permit reading NET in load_bytes_relative when MAC not set")
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- net/core/filter.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/linux/filter.h | 9 +++++++++
+ kernel/bpf/core.c      | 2 ++
+ net/core/filter.c      | 5 ++++-
+ 3 files changed, 15 insertions(+), 1 deletion(-)
 
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index 5cf3582823f5..84d770aea722 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -1055,6 +1055,15 @@ static inline void bpf_restore_data_end(
+ 	cb->data_end = saved_data_end;
+ }
+ 
++/*
++ * If nothing has set the header, it points to headroom that was not written.
++ * The packet starts at skb->head when skb->data or the MAC header is there.
++ */
++static inline bool bpf_skb_has_network_header(const struct sk_buff *skb)
++{
++	return skb->network_header || !skb->mac_header || !skb_headroom(skb);
++}
++
+ static inline u8 *bpf_skb_cb(const struct sk_buff *skb)
+ {
+ 	/* eBPF programs may read/write skb->cb[] area to transfer meta
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index b34d9bdaf67e..6742f5be8658 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -83,6 +83,8 @@ void *bpf_internal_load_pointer_neg_helper(const struct sk_buff *skb, int k, uns
+ 	u8 *ptr = NULL;
+ 
+ 	if (k >= SKF_NET_OFF) {
++		if (unlikely(!bpf_skb_has_network_header(skb)))
++			return NULL;
+ 		ptr = skb_network_header(skb) + k - SKF_NET_OFF;
+ 	} else if (k >= SKF_LL_OFF) {
+ 		if (unlikely(!skb_mac_header_was_set(skb)))
 diff --git a/net/core/filter.c b/net/core/filter.c
-index b9dbdd276b02..b4057a6cdd7c 100644
+index b4057a6cdd7c..2415cd90ab5d 100644
 --- a/net/core/filter.c
 +++ b/net/core/filter.c
-@@ -2902,7 +2902,7 @@ BPF_CALL_4(bpf_msg_push_data, struct sk_msg *, msg, u32, start,
- 	if (unlikely(copy + len < copy))
- 		return -EINVAL;
+@@ -232,7 +232,8 @@ static int bpf_skb_load_helper_convert_offset(const struct sk_buff *skb, int off
+ 		return offset;
  
--	page = alloc_pages(__GFP_NOWARN | GFP_ATOMIC | __GFP_COMP,
-+	page = alloc_pages(__GFP_NOWARN | GFP_ATOMIC | __GFP_COMP | __GFP_ZERO,
- 			   get_order(copy + len));
- 	if (unlikely(!page))
- 		return -ENOMEM;
+ 	if (offset >= SKF_NET_OFF)
+-		return offset - SKF_NET_OFF + skb_network_offset(skb);
++		return bpf_skb_has_network_header(skb) ?
++		       offset - SKF_NET_OFF + skb_network_offset(skb) : INT_MIN;
+ 
+ 	if (offset >= SKF_LL_OFF && skb_mac_header_was_set(skb))
+ 		return offset - SKF_LL_OFF + skb_mac_offset(skb);
+@@ -1862,6 +1863,8 @@ BPF_CALL_5(bpf_skb_load_bytes_relative, const struct sk_buff *, skb,
+ 		start = skb_mac_header(skb);
+ 		break;
+ 	case BPF_HDR_START_NET:
++		if (unlikely(!bpf_skb_has_network_header(skb)))
++			goto err_clear;
+ 		start = skb_network_header(skb);
+ 		break;
+ 	default:
 -- 
 2.55.0
 
