@@ -1,105 +1,58 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.181
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795589102;
-	b=hBDSsNFMbKb7Z0Pku/rikPaHPCA7LpkWgjdI8Gys/vYPTOxvbEi5puTHR/eDp090dH1c
-	 +1UbxZm6fuuQWvo7JvC238bSPR6rEmyc8wLJ83yR6/wABGHu8NW6xEopyO4mzgO3wb9Vi
-	 dfMIj/62SEBkYpilr/y+dhwZV6QMvKL8FMWAoPfu2JNWkUxEiJH6vs42to2PZl8uymH+K
-	 BJVr2q2iK5JdZOtzH09w/sGx7XeYr3YDV+gpxjRHK7UZuY2ohYO9LODVQ7o7QtQL3JfPw
-	 RbkWOLt2YrqtKk9IxQnl2TIlSk3I9lsgjbqaMiZGIAqp1q3nsI1BtbaYm74mWEE77SA==
+	t=1795589260;
+	b=o8ioq8lB8OQ/rRJSDHG6JEGn7eJyEv9wYH6HGUdSkPd20cpdnytYBY8TLk4uQz/qiK6f
+	 QtTnyuCQely+PxXLralDD5BJOmdLR2GasOFisd/iO1fR8LUPLzRK2rP7U2CKFd4eUFSd6
+	 yLHnplrDDnMjUfQdLH7Gb0tUFBvQwE0VZE45KMm7YAluvXysDfF6zUoo48irsqbH1LXmv
+	 I1VFbKDWv1QDtzz0M7yAIm3DXO9g939q8hFwJtN7I5zH+53hQCuRTGBAQcUIiqv1tQnO7
+	 OLBhWxA0gS91RX8QWTQIRPPKcNQ0eLEqoK7RpIOXXHvg649gujuM+uvTXoKe7OwyetQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795589102;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
-	 References:Content-Transfer-Encoding:MIME-Version;
-	bh=R3sbzhOnYUrS8wYvSIhWCG5ex9jxl9wVxRyhTnmBIp8=;
-	b=bQLyyF1v3gmjVLL3GYigLfIV7VRHKC1g4HIg1VzX5TuyyBoh+ZtkC+Nv3hehYmeK0Bdh
-	 oikD1WB6iJ2O0KOu1zzpBqtiIlmyRCTJeH2A4O+Te2R3z2Huz5eZ9YsvXSCbDIZda8GOH
-	 7WDFlvjOViX+3bBOMnVKu6am/tZCTBzMI2Q2uCl9OwfqO0VA4atqhftyVdbS3XBxJwN/a
-	 RHGPQ+HbNSv0gIb740qny5xXesrd8en9OmLuez68STM+Y9r9ombsa0KzdV9ODwDnwiSZv
-	 q21iw5om911PtXx2sswbnFJUf30KZ/kCipZT/TkyQAOHxfgab0gIpqQpa/d0KUukj3w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795589260;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=c6E3vhJF18VT/ALtmOG218hDUmfoGGhX7E17vVzgQpc=;
+	b=Ah4L1f8i2K2rQGZfUxEMVmOqAMbLbJAmiTVT0SOFDk/0NPPXzoxZCDPWC7f9L6GY1x5G
+	 Yrrvwm+mXOK7q/4B0OJDrUnUxhvRxy18OklfIV1YqoOTssbb4HizMwiBKsIAymascRuNF
+	 kj94Bl2AySeMIzix8uE6AmaRt6enONVn0pTTszNqzElTlib+Fp6hcW+A6amb6zXfW0Q6+
+	 R4h3OlZ05RvFlWwMwkPqnCfgC18lHXf1yw3ePMg+d6ubDG46QsLmHFtk974qygoXx+7oV
+	 nMK8s7D2dBeab8fCX1QFXGAqn52BttK0tY0KitOXPhq3xVH3OCAN3dr6TZk5aVpp4cw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=d5dyiyT1;
-	arc=none smtp.remote-ip=209.85.215.181
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZuOoomng;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 113D4606A32C
-	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 06:45:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 113D4606A32C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92618606A31E;
+	Wed, 25 Nov 2026 06:47:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=d5dyiyT1
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-cde0daf3a2aso2294744a12.3
-        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 22:45:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795589101; x=1796193901; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=R3sbzhOnYUrS8wYvSIhWCG5ex9jxl9wVxRyhTnmBIp8=;
-        b=d5dyiyT19Km7tDmbpxJjL4rEnANFAC86v3EYHetyWOXfRhF8nqTd1zj3BIgDx3qhR3
-         Otfrb/bMHdn/BzzA2hn4O8iQ8rCUMUo5W4QakiPooXQ5Q3ftn3MxeYEy1Hj4Clx9pPzq
-         6zxqQkKGx18KdULbG8PpcWWJHDQORxn+D9AZtMYg5AkJvOaq27sApC9cOwzgmJcQ5+8e
-         FzVqdhPMdbb/LCv1i9hsjVrKHje9UQq2gZYH8geza2XNhS4XLpqnaCrtDJnExFAhPVHJ
-         PklcmdBQqSgLJ5VGJFFXC66xij/lzTqgjLa6bkNrx7Vv/zG5xGwGotjjb7FdXpnCVFN2
-         /zzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795589101; x=1796193901;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=R3sbzhOnYUrS8wYvSIhWCG5ex9jxl9wVxRyhTnmBIp8=;
-        b=Ti64Mj2i/poCi2tfc5EMh/M2OYPVQUo8bG6lVVDXoTbBbuIAhCJrQfei0SXqR45i/R
-         Vl2ma5CswHcys2B8e3IZD/EyaDgOMoVLXgwCem8j4e9zrkJbF13OB7rCs7VKibRsY+O3
-         vXwTJw/Ie+DBnBRoqm6D2skFIDwHGhEL1GghtSBsqR8Kse4RmxN491W8fbFbpQcVdXpj
-         4NZXBDPEedu1zqNT9kNcrC8aHC/aJfyu96z4CoVGsLyrogaa4sK6BWqHL7CLflPXLNH4
-         njSIIO6npaID+ake3eOnSj6eKDkLiWhcbKTqweRouLpTJD5MhNxxZLi4ESzHqnMCD17E
-         RrfQ==
-X-Forwarded-Encrypted: i=1; AL+hErF/rxe5mtl0waJjmJtzZQPcbniQJ+GkBbYOutEbY8/Ts0PGvgNMfvTF6bWnFQ/wxnjwTEc=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8K7wKFVpi9ZjgG5XLmWQ470widtSyYQDTESBMOZ6A8zvjDZ1WJ
-	2i2NGf7Pj9gdxCc2H/nZACBmF+/aCgcSPQR16kJAcUImfpxUWQhM5Jep
-X-Gm-Gg: AZFdTZcsdqbsi6oigXUPMLkdc4+VYpUFFRuufhe4V4/cduEtp/yuTYxOWMDl3rMBzCE
-	9626xRJaM0ymbHJ5sKg0H8mL329umkT49HPkLARyA0MXPFWzproe3clsSWtGZUVT3GyBEEAZpVD
-	tQr35hVcDVPwRsSerg/MHvU4xR3JQxiVWCp1V1TeaHaSh+XIvqJCzUGZ6o3AkdHVclShsz5tdvB
-	d0+a6o5kAz1zBigthuX3xslkGXcP4qbZYlvm9e0eSi+UzVM9wjU0vJCVHDIcNHqmsM4hMYdkZpw
-	wq8kHXIz+x3xmb5MJaOEwVwVPS3ByBRs0DkDr/fJnG1xjm7Bm8PN0omC6Mp1ZwcmCrWw8kwDkOk
-	3fORdErGDuUA9+j8nSyMg3hO+P1z8BCHHCgHHB74Frh6arfEdIEs49KwXetIbRuG+P+egRGs85V
-	AhQjRKW0fPHQk9KJ6xr9cJ4wKEHr/+SzWUC339n9teES0BM4/TjNgglAvA5G1tv61T9y8sejtgn
-	eO0g8vmoRUHasLNC7L+dVkC/mVAmv1XeQPdpBYqTnwPLUcF1Xl03Bmjr8m9i7P8mGYuzzckgJwb
-	D9bTlupiIxZLzBtOa/0pw1q3gQ7B1/kWs7hr9655nUj66OVMGQ+dDFquwUhu+WwXrc2+AT2Gg5n
-	xSPVsUpT51ULZmg2vn7oaq6aQouTvmXLMHg==
-X-Received: by 2002:a17:90b:1b09:b0:3b4:d6a6:e5b with SMTP id 98e67ed59e1d1-3b4d6a60f6dmr3827042a91.33.1795589101097;
-        Tue, 24 Nov 2026 22:45:01 -0800 (PST)
-Received: from localhost ([153.61.198.249])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b405ecb486sm28789109a91.16.2026.11.24.22.45.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Nov 2026 22:45:00 -0800 (PST)
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 25 Nov 2026 06:45:00 +0000
-Message-Id: <DN437OYZ5FGP.20VLV7ZEXQ5YY@gmail.com>
-Cc: "Puranjay Mohan" <puranjay@kernel.org>, "Andrii Nakryiko"
- <andrii@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Eduard
- Zingerman" <eddyz87@gmail.com>, "Emil Tsalapatis" <emil@etsalapatis.com>,
- "Ihor Solodrai" <ihor.solodrai@linux.dev>, "Dave Hansen"
- <dave.hansen@linux.intel.com>, "Peter Zijlstra (Intel)"
- <peterz@infradead.org>, "Thomas Gleixner" <tglx@kernel.org>, "Ingo Molnar"
- <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>, <kkd@meta.com>,
- <kernel-team@meta.com>, "the arch/x86 maintainers" <x86@kernel.org>, "Linux
- Kernel Mailing List" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v1 1/3] x86/mm: Resolve BPF exception fixups
- for user address faults under SMAP
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Andy Lutomirski" <luto@kernel.org>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>, <bpf@vger.kernel.org>
-In-Reply-To: <df69ab5d-bc97-4651-8668-a2b3e4bb272a@app.fastmail.com>
-References: <20261009024925.3169077-1-memxor@gmail.com> <20261009024925.3169077-2-memxor@gmail.com> <df69ab5d-bc97-4651-8668-a2b3e4bb272a@app.fastmail.com>
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZuOoomng
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 402E21F000C6;
+	Wed, 25 Nov 2026 06:47:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795589260;
+	bh=c6E3vhJF18VT/ALtmOG218hDUmfoGGhX7E17vVzgQpc=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=ZuOoomng7Q0qCBf3+h0s8WhDgOeLPtQNBhGaQ7/q/g9+tToaiE3s8xa3c+h3BFVfd
+	 lE/dWb+paBw8VYwJdpNPvOJouCekbYBYXKBfuZN8V9kCSumeiH+dMppie69Y4tr3kl
+	 FvG8eBLYdLrtdpYVVyc89TOsec71ZwEJJveINY84Qb0r+fvo7478W3J5OzpFM0/YuL
+	 ie5dZMbS030VExWdAhTY7OoYC92yqcjK3eq/xpJa+pOpUBoGzzO6b3xAphe2e3r50Y
+	 c+lEzjS8EUwCO+zvwq6Y1S7+GG2Mbj5he07cCJOmgens0p4ggxiq5kCVaDvBQv6OGK
+	 sQea1O/gfXBIw==
+Message-ID: <sashiko-outbox-232735@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [RFC PATCH v2 19/30] riscv/unwind: Add Minimal DWARF CFI kernel
+ unwinder
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Ian Rogers" <irogers@google.com>, linux-trace-kernel@vger.kernel.org
+Cc: jpoimboe@kernel.org, rostedt@goodmis.org, peterz@infradead.org, mingo@redhat.com, tglx@kernel.org, bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org, catalin.marinas@arm.com, will@kernel.org, mark.rutland@arm.com, pjw@kernel.org, palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr, acme@kernel.org, namhyung@kernel.org, linux-perf-users@vger.kernel.org, mhiramat@kernel.org, ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, bpf@vger.kernel.org, nathan@kernel.org, nsc@kernel.org, linux-kbuild@vger.kernel.org, ojeda@kernel.org, ardb@kernel.org, linux-efi@vger.kernel.org, "Marc
+ Zyngier" <maz@kernel.org>, "Oliver Upton" <oupton@kernel.org>, kvmarm@lists.linux.dev, shuah@kernel.org, indu.bhagat@oracle.com, jremus@linux.ibm.com, wnliu@google.com, dylanbhatch@google.com, gary@garyguo.net
+In-Reply-To: <20261125061523.1540234-20-irogers@google.com>
+References: <20261125061523.1540234-1-irogers@google.com>
+ <20261125061523.1540234-20-irogers@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 25 Nov 2026 06:47:37 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -108,59 +61,110 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
 
-On Tue, Nov 24, 2026 at 08:22 PM Andy Lutomirski <luto@kernel.org> wrote:
-> Didn't we hash this out a decade ago or so?
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue to consider:
+- [Medium] riscv: ftrace: missing arch_ftrace_fill_perf_regs() breaks
+  fprobe unwind
+--
 
-Twice. Feb 2019 for probe_kernel_read() and Jan 2021 for PROBE_MEM:
-https://lore.kernel.org/all/300C4516-A093-43AE-8707-1C42486807A4@amacapital.net/
-https://lore.kernel.org/bpf/CALCETrVZRiG+qQFrf_7NaCZ9o9f2-aUTgLNJgCzBfsswpG7kTA@mail.gmail.com/
+commit 3d24292fed2450c8bd95936a258cfa1db43fe2ca
+Author: Ian Rogers <irogers@google.com>
 
-The problem in 2021 was a CPU without SMAP. There the fault handler
-can't tell a PROBE_MEM load of a user address from a valid uaccess.
-That part stays. Without SMAP the JIT emits the range check.
-With SMAP and AC clear a fault on a user address is never a valid uaccess.
+riscv/unwind: Add Minimal DWARF CFI kernel unwinder
 
-In the 2019 thread Linus proposed the same for __probe_kernel_read():
-no uaccess_begin(), SMAP refuses a user address, extable returns -EFAULT.
-https://lore.kernel.org/all/CAHk-=whNf_n1WXWW+ugAVeL5ZK0GcEP3cTYocju1nS85VtMjjQ@mail.gmail.com/
+This commit adds a Minimal DWARF CFI kernel unwinder
+(CONFIG_UNWINDER_DWARF_CFI) and reliable stack trace support for 64-bit
+RISC-V.
 
-> Can you at least explain how a non-range-checked pointer read of a non-verifiable pointer doesn't have a problem with, say, MMIO?
+> diff --git a/arch/riscv/include/asm/ftrace.h b/arch/riscv/include/asm/ftr=
+ace.h
+> index e5026cd8f022f..663831d950e57 100644
+> --- a/arch/riscv/include/asm/ftrace.h
+> +++ b/arch/riscv/include/asm/ftrace.h
+> @@ -217,6 +217,7 @@ ftrace_partial_regs(const struct ftrace_regs *fregs, =
+struct pt_regs *regs)
+>  	regs->sp =3D afregs->sp;
+>  	regs->s0 =3D afregs->s0;
+>  	regs->t1 =3D afregs->t1;
+> +	regs->cause =3D 0;
+>  	return regs;
+>  }
+> =20
 
-The range check doesn't know about MMIO. It refuses user addresses, the
-guard page, and VSYSCALL_ADDR and above.
-ioremap() space is in the vmalloc range, so it passes the check today.
-It passes copy_from_kernel_nofault_allowed() too.
-"compare" and "CPU" refuse the address, "load" reads it:
+[ ... ]
 
-                              user address,  kernel address
-                              RAM or a BAR   RAM     ioremap()
-  --------------------------  -------------  ------  ---------
-  copy_from_kernel_nofault()  compare        load    load
-  PROBE_MEM today             compare        load    load
-  PROBE_MEM, patch 2, SMAP    CPU            load    load
+> diff --git a/arch/riscv/include/asm/perf_event.h b/arch/riscv/include/asm=
+/perf_event.h
+> index bcc928fd3785c..30d0c6b37e910 100644
+> --- a/arch/riscv/include/asm/perf_event.h
+> +++ b/arch/riscv/include/asm/perf_event.h
+> @@ -14,9 +14,11 @@
+> =20
+>  #define perf_arch_fetch_caller_regs(regs, __ip) { \
+>  	(regs)->epc =3D (__ip); \
+> +	(regs)->ra =3D 0; \
+>  	(regs)->s0 =3D (unsigned long) __builtin_frame_address(0); \
+>  	(regs)->sp =3D current_stack_pointer; \
+>  	(regs)->status =3D SR_PP; \
+> +	(regs)->cause =3D ~0UL; \
+>  }
+>  #endif
+> =20
 
-A BAR that is mapped into user space is a user address.
-The device sees no read in all three rows.
+[ ... ]
 
-> Does anyone have a compelling argument as to why the vsyscall page is any different from a PCIe (virtual or otherwise) BAR other than the fact that the x86 arch code will OOPS you when you accidentally read the vsyscall page but you will just possibly deadlock or otherwise screw up more subtlely when hitting a different inappropriate page?
+> diff --git a/arch/riscv/kernel/stacktrace.c b/arch/riscv/kernel/stacktrac=
+e.c
+> index c7555447149bf..45d81aa11a8e2 100644
+> --- a/arch/riscv/kernel/stacktrace.c
+> +++ b/arch/riscv/kernel/stacktrace.c
 
-It's not different. The oops is the only reason for that check.
-syzbot hit the oops through bpf_probe_read_kernel(). Then 32019c659ecf
-added the vsyscall page to copy_from_kernel_nofault_allowed() and
-b599d7d26d6a added it to the JIT.
+[ ... ]
 
-> If not, then I think this series primarily serves to make x86 complicit in papering over a problem with eBPF: right now eBPF has a heuristic that is wrong, but with the patch set applied, eBPF can make the heuristic even more wrong and x86 will paper over the cases that it happens to be able to detect.
+> +static __always_inline int
+> +walk_stackframe_cfi(struct task_struct *task, struct pt_regs *regs,
+> +		    bool (*fn)(void *, unsigned long), void *arg,
+> +		    bool require_reliable)
+> +{
+> +	unsigned long fp, sp, pc, ra =3D 0, min_sp =3D 0, caller_fp =3D 0, call=
+er_pc =3D 0;
+> +	bool ra_valid =3D false, exact_pc =3D false, unreliable =3D false;
+> +	struct llist_node *kr_cur =3D NULL;
+> +	unsigned int used_stacks =3D 0;
+> +	int graph_idx =3D 0;
+> +	int level =3D 0;
+> +
+> +	if (!task)
+> +		task =3D current;
+> +
+> +	if (regs && regs->cause =3D=3D ~0UL && !regs->ra) {
+> +		if (require_reliable || task !=3D current)
+> +			return -EINVAL;
+> +		min_sp =3D regs->sp;
+> +		caller_fp =3D regs->s0;
+> +		caller_pc =3D regs->epc;
+> +		regs =3D NULL;
+> +	}
 
-The range check is not a heuristic for "safe to read". It's the user
-address part of get_kernel_nofault(), inlined. You asked for that in 2021.
-Its job is to keep user addresses away from the load. SMAP does the same
-job. With patch 2 PROBE_MEM reads the same addresses as
-copy_from_kernel_nofault().
+[Severity: Medium]
+Should arch/riscv/include/asm/ftrace.h also define
+arch_ftrace_fill_perf_regs()?
 
-In both threads you wanted probe_kernel_read() / get_kernel_nofault() to
-tell MMIO from RAM. arch/x86/mm/maccess.c has no such check.
-bpf_probe_read_kernel(), kprobe event args and kdb pass any address to it.
-So MMIO is a problem of every nofault reader, not of bpf and not of this
-series.
+fentry_perf_func() and fexit_perf_func() in kernel/trace/trace_fprobe.c
+allocate regs from the per-CPU __perf_regs[rctx] buffer via
+perf_trace_buf_alloc() and populate it with ftrace_fill_perf_regs().
+Without arch_ftrace_fill_perf_regs(), ftrace_fill_perf_regs() is a no-op
+that only calls ftrace_partial_regs().  If an earlier tracepoint or
+software perf event on the same CPU ran perf_arch_fetch_caller_regs(),
+__perf_regs[rctx] retains regs->cause =3D=3D ~0UL and regs->ra =3D=3D 0 alo=
+ng
+with the earlier event's sp, s0 and epc, causing walk_stackframe_cfi() to
+match the sentinel and filter the fprobe callchain against stale frame
+bounds (or if __perf_regs[rctx] was never initialized, regs->status =3D=3D 0
+causes user_mode(regs) to skip kernel callchain unwinding in
+get_perf_callchain()).
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261125061523.1540=
+234-1-irogers@google.com?part=3D19
