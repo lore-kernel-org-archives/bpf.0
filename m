@@ -1,74 +1,76 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.197
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.72
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795567761;
-	b=thIVfEl5Cyj4gVykPlqtFGRaUTvzVCydy31kl/+kQS7whleZAY4xd6woqFrILd86F2xK
-	 rcQCZQ8pE3qGxHeftW6XrvADjvOCp0tKlClDETYBsonzpkbQm2gUlMlmvc2pKufegoPvS
-	 naherOY0HRB3mXotxsXfLWwqImTcMnvVPoEsogmImlD5VGA+M75QBqWs+btW8MLXX2Cie
-	 l4sSlNkoPlgd+hFviHXtvSHOQ3C1pSDTrBqDB20XdR2k4/5v+P6OwelEMsCFziKhjTBKw
-	 eWDcTDe+ISXjif5xaqTQUFWEyc3b+sQfJNcYQOC/Kwb0OnD6hLayGnWlCLC4saitXEQ==
+	t=1795567766;
+	b=nNuxaDoEfMvVWaKTVeUgJvA/EZo+zuv8I0i1vtthtf1RomxFaFft3wNxqgUnkBYGKf4a
+	 YKtGql5M86zdgVJHNfYwgrJWEwipB6oJ/2jvRID5YIL3KxUONjl1NQePiA1XxLhd7iaWI
+	 EKpAjv57OeLC6HYxxp9b5q8WtJShoFbF0Vw8CnejHxBO3EA78BL9rdMlGBiZuDDZLs1tq
+	 CVDYm+U+6aZD0or371i4MQHnFUJCxwo3mpesKPz5ayXo6OjgpkumhO7wnWXAmJ1msG76W
+	 qOmKS0O5rQRDrK70KtOZ0tlvMz/uEoSWMcBACMrbEYpsP+JJRuVnHzm1zwl+nVt+M9w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795567761;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795567766;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:Mime-Version:
-	 X-Mailer:Message-ID:Subject:From:To:Cc:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=OSLpuH99oHeompfwZo3B6N7fbfKpZMQZXzH6A19PzVM=;
-	b=fot+HUrKPIp+ZEIFXUij91NX1TjGWaWSKMoUnOCMp7i3wl5JQP6FxRDfiacQPInjHYBi
-	 gvjxVdUvb2epxs+JC5T/GKqAy1UEU/4Ln9a4YiRMBf0VK53hJonoCj3LmrC3tzvi2KG+9
-	 YzvAnAcChguTO4ywxx4J05k+JV8rUhdG8mqGVmHPqoYsrIsfZes2YtYoym9muRAUoslOX
-	 RyriHvfANgiHKR+zX0cyVRDkYh1+xWSYpbdb4fUWQ+PV8vqbLGJez/MZ1lgqtkSyNNuEU
-	 OcpwKqy1lsCN6R+Kub1jqGO6OPCLvBPyqHqsyXe4A1DQdWZz+KHfYa2FF7OhGvBOxxA==
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
+	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=wZek5fBhh1JU0C6sLZIWGoXZ1M434xHxrJ06XU5jfz0=;
+	b=JSwewQxSd1f9Qj8ZiZQY3FhAnZDXg3Vek7roN3JTn63JU0F27W8M9eSkmlu5BElvyF4V
+	 j988j3VeHQ30zFIIpthXMHtGwEPHfBsb5oREoBgxO+z6sZun1kqIf6Olk2NI84I4RPDMC
+	 FS7np1Pj2DusBUgg9mpy2WeIv3p9iUBrHAg518nEPwqxXzS++QZLxUV/VrZ1pNqdRlgGg
+	 ngRZLtvFehQGn5Q9uCh/eHZY6h+upFJaEeRaNRhY7WS2WUcvNSfccvuNnOvaOVxmIfxdQ
+	 KJaLKCxOr3hgwpuby1u9nkkNMOswCqQxJj8RBJQgmab7Si/z8KHqNERP+9LUa51z7aw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--tweek.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=oTyRTbMG;
-	arc=none smtp.remote-ip=209.85.214.197
-Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com [209.85.214.197])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=iGlrTGhz;
+	arc=none smtp.remote-ip=209.85.216.72
+Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com [209.85.216.72])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0CEA606A321
-	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 00:49:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D0CEA606A321
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69338606A321
+	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 00:49:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 69338606A321
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tweek.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=oTyRTbMG
-Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-2f0578f1d51so50804555ad.3
-        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 16:49:20 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=iGlrTGhz
+Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-3b40b011aa4so6159151a91.0
+        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 16:49:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795567760; x=1796172560; darn=vger.kernel.org;
+        d=google.com; s=20260707; t=1795567765; x=1796172565; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:from:subject
-         :message-id:mime-version:date:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=OSLpuH99oHeompfwZo3B6N7fbfKpZMQZXzH6A19PzVM=;
-        b=oTyRTbMGmb7tBPj7rG68hAy0GONLcoOD0DoRc3AIxteCajXU6YmT2Ov330PckDwljQ
-         NAzfTYxtoxuWO3y1XoVr6/kWNY53DNjXsi6NTBI7ZpwOHRCka+57XPUh2k0s9ozX55Hn
-         rs74TpBXb2itpQI1P4kx2qsl+6YHp2hgiEWMaWOnAI7jfFJXfspy1WxqeLuItsobX3Qo
-         aeiLQuDW+J/jQVh65DhiMUpOYNju/0o/GwYmZkdZuMkeh8pSrkCWwmFEtBC5gBZRvJmW
-         yo+xLrEPkh+xJk6egO1BQTUDyj5B0so/KV8EfamlU6dS9tcGvsH9YnreMJ96rtwS5cpJ
-         5DNQ==
+         :message-id:references:mime-version:in-reply-to:date:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=wZek5fBhh1JU0C6sLZIWGoXZ1M434xHxrJ06XU5jfz0=;
+        b=iGlrTGhz18zUUA51CVS2Z4Ro5/WzzlBTc+eJLzLQgZMgZNM4NCOE29WlOtR8B8FJVR
+         MYXNmN0Ikb+JfRHx5NmzKHfX2NWLASNNOM72kLhE5TMqkxWbte1I7F1OgIIO++TNYgwJ
+         DyemdYenLhk7mwrI4GEE6nzM2Vetn3i17qEDlphha094MORdmRMXF52x+tvIa9iLeQzT
+         Aev/q6c9lyGK73eh/HZdJLdYRKe6rI1z7rm4XyT3Hh4mUBbIk+wprTRtBz7jKkHb78Z0
+         EdgvL6pcEkScv4jZi+orXZL+rqJM6o7QEteMWg/m5sbaGFHVRocKfHm0a94Y7nv5sLXF
+         Ak5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795567760; x=1796172560;
+        d=1e100.net; s=20260707; t=1795567765; x=1796172565;
         h=content-transfer-encoding:content-type:cc:to:from:subject
-         :message-id:mime-version:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=OSLpuH99oHeompfwZo3B6N7fbfKpZMQZXzH6A19PzVM=;
-        b=LCeUkuQKO3q76tuRfZpHx/VFqN/RZp1duKFMThLNp/dS2HZLZHXnhEv/PbwrvYS4lH
-         VRYbdrsdzBfx7ns9uylgzP3NDYTS5CkF2VT5SBlc4hARfpgNciEfsPBuF4QYFq4qZjux
-         AI0dWus5cSixfm77+tDjHN/PH14Hf3sEPdwlac8NnB8tkbZ9tI5ebyq10iS+bRGYcUhG
-         H7TNhHaOQsIJvScK0NCoKvlCSENUJj1A4qmZqCcCAd+S2ZunbkH3zHzDDslUSSjXwwtP
-         pjgzw+Pqf8YwLcCQ7vdaq7gf4mj4aFMqw/bqNXET1i5KfH+bBpc/W4dPGx1Erm2aMb01
-         +Ffw==
-X-Forwarded-Encrypted: i=1; AL+hErGkn8SmA7IMte379tNCQT9K16bVFb88eGrJjo/c79AsKUKcPpgqoz9MpoVaPYVX8dqIVAo=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8FQOZ0h4BityHQ2SBhQym7Y/ZfvNMjeosfvfxOjGWcVctv1aEs
-	H32yObAmab0S/18x8+5IoX0WCKtt8ZGM9ifZIlmsUdctVndM9+7TtGbXt3jrnSxzRdXhLfbWgOz
-	JRA==
-X-Received: from pfbcr10.prod.google.com ([2002:a05:6a00:f0a:b0:8b6:29f9:ce4c])
- (user=tweek job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:2587:b0:3ed:bdfd:23a8
- with SMTP id adf61e73a8af0-4014ce5d1femr17540776637.61.1795567759846; Tue, 24
- Nov 2026 16:49:19 -0800 (PST)
-Date: Wed, 25 Nov 2026 11:49:08 +1100
+         :message-id:references:mime-version:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=wZek5fBhh1JU0C6sLZIWGoXZ1M434xHxrJ06XU5jfz0=;
+        b=G1rNu9Gof8A93UO8UccPrFa6CGLBCdOg5UoCms330UNC0NPk3a32RZT5U1yooF1CLC
+         sklk8f3B5jzgIx5rynbTbg1+HbCrtIrkvL1MPF6pC2g5dbiSjcRt6xKGxhxodsfGcCGa
+         CBC3u5YC54zZCqoZTkHyCXQyn1ksJikHbbSgKEkZWb8P62kPiqa+JEiP8PVw4V1xvrhd
+         0qbeVK7xpaZ7HAP4gSQwHAHKgx16vYFiHgbrpHInClUaIrxOE0GZFZbnpmbmUUNYXHDD
+         CSgvJ4QalQyaQ0y9jqOwxyX131cqtYc9y6CSMVFyG7rzpaZWJm/LMc2hR9JIYGAyXDvE
+         lv0g==
+X-Forwarded-Encrypted: i=1; AL+hErEFjadbeVYcnjtw+nTzo57AOnYesmOG81F3o9RP69PNa0QEJfzPbF/ZnzapdIHZl+Fc9r8=@vger.kernel.org
+X-Gm-Message-State: APuU4Z90Br1uaOCd3biyRQQG8C+MM/K06tSTWXBCnm54WufdrVgJyvyY
+	U4pPdhQDuV7uze9tpIjPzMLSNitp/VGnxLP/wNRWcsMtiGXhQIdwH0TIAJc73Sz8/JDtPOWWywQ
+	Usg==
+X-Received: from pjbqb5.prod.google.com ([2002:a17:90b:2805:b0:3b4:a73:5d7c])
+ (user=tweek job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:2f8c:b0:3b4:10c3:c1b6
+ with SMTP id 98e67ed59e1d1-3b41c9286acmr15779393a91.25.1795567764334; Tue, 24
+ Nov 2026 16:49:24 -0800 (PST)
+Date: Wed, 25 Nov 2026 11:49:09 +1100
+In-Reply-To: <20261125004911.3937193-1-tweek@google.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -78,9 +80,10 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 Mime-Version: 1.0
+References: <20261125004911.3937193-1-tweek@google.com>
 X-Mailer: git-send-email 2.56.1.831.g720f3f5937-goog
-Message-ID: <20261125004911.3937193-1-tweek@google.com>
-Subject: [PATCH bpf 0/3] bpftool: Reject non-autoload programs for light skeletons
+Message-ID: <20261125004911.3937193-2-tweek@google.com>
+Subject: [PATCH bpf 1/3] selftests/bpf: Move verifier failure tests out of test_global_percpu_data
 From: "=?UTF-8?q?Thi=C3=A9baud=20Weksteen?=" <tweek@google.com>
 To: Quentin Monnet <qmo@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
 	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
@@ -94,55 +97,135 @@ Cc: "=?UTF-8?q?Thi=C3=A9baud=20Weksteen?=" <tweek@google.com>, bpf@vger.kernel.o
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-When generating a light skeleton (bpftool gen skeleton -L),
-bpf_object__load() skips non-autoload programs (e.g. SEC("?...")), but
-bpftool still emits struct bpf_prog_desc and link fields for all
-programs. This causes the loader program to store subsequent program FDs
-into preceding struct fields and leave trailing prog_fd fields
-unpopulated (0).
+Commit 4c9241bd731a ("selftests/bpf: Add tests to verify global percpu
+data") added test_global_percpu_data.c to LSKELS_EXTRA. Later, commit
+1ed2294b31fc ("selftests/bpf: Test verifier log for global percpu data")
+added two verifier failure tests (verifier_strncmp and
+verifier_snprintf), both marked as non-autoload (SEC("?kprobe")).
 
-Following the discussion on the earlier "skip non-autoload programs"
-series [1] and Andrii's feedback [2], this series returns to the initial
-approach [3] of rejecting non-autoload programs when generating light
-skeletons, while incorporating the prior review feedback (moving
-bpf_object__gen_loader()/bpf_object__load() earlier in do_skeleton() so
-post-load autoload adjustments are observed and documenting the
-restriction in bpftool-gen.rst).
+When bpftool generates light skeletons, non-autoload programs are
+skipped during loading, causing the loader program to store subsequent
+program FDs into incorrect skeleton struct fields (for example,
+dump_percpu_data's FD was stored into verifier_strncmp's descriptor,
+leaving dump_percpu_data.prog_fd unpopulated).
 
-Supporting runtime toggling of non-autoload programs in light skeletons
-was considered, but does not fit cleanly with signed light skeletons
-where the attested loader blob should remain authoritative.
+Move the two verifier failure tests to a dedicated test file,
+test_global_percpu_data_failure.c, and run them via RUN_TESTS in
+global_data_init.c. This leaves test_global_percpu_data.c with only
+autoloaded programs, allowing its light skeleton to be generated cleanly
+and preparing selftests for rejecting non-autoload programs in light
+skeletons.
 
-Patch 1 splits the two SEC("?kprobe") verifier failure tests out of
-test_global_percpu_data.c (which is in LSKELS_EXTRA) before Patch 2
-rejects them, so selftests continue to build at every commit. Patch 2
-implements the rejection in bpftool. Patch 3 adds a selftest verifying
-the rejection.
-
-[1] https://lore.kernel.org/bpf/20260918040919.3402577-1-tweek@google.com/
-[2] https://lore.kernel.org/bpf/CAEf4BzaeKXEC-gBbxo36wdAGwwZxqkL6pV=3Doo0dk=
-e4S2BmuRmg@mail.gmail.com/
-[3] https://lore.kernel.org/bpf/20260904031912.2133476-2-tweek@google.com/
-
-Thi=C3=A9baud Weksteen (3):
-  selftests/bpf: Move verifier failure tests out of
-    test_global_percpu_data
-  bpftool: Reject non-autoload programs for light skeletons
-  selftests/bpf: Test non-autoload rejection in light skeletons
-
- .../bpf/bpftool/Documentation/bpftool-gen.rst |  4 +-
- tools/bpf/bpftool/gen.c                       | 68 +++++++++++--------
- .../selftests/bpf/prog_tests/bpftool_gen.c    | 30 ++++++++
+Fixes: 1ed2294b31fc ("selftests/bpf: Test verifier log for global percpu da=
+ta")
+Signed-off-by: Thi=C3=A9baud Weksteen <tweek@google.com>
+---
  .../bpf/prog_tests/global_data_init.c         |  3 +-
- .../bpf/progs/test_global_percpu_data.c       | 23 -------
- .../progs/test_global_percpu_data_failure.c   | 30 ++++++++
- 6 files changed, 106 insertions(+), 52 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/bpftool_gen.c
+ .../bpf/progs/test_global_percpu_data.c       | 23 --------------
+ .../progs/test_global_percpu_data_failure.c   | 30 +++++++++++++++++++
+ 3 files changed, 32 insertions(+), 24 deletions(-)
  create mode 100644 tools/testing/selftests/bpf/progs/test_global_percpu_da=
 ta_failure.c
 
-
-base-commit: 84afebd853437e44cb71f718be11d90e4c1a59dd
+diff --git a/tools/testing/selftests/bpf/prog_tests/global_data_init.c b/to=
+ols/testing/selftests/bpf/prog_tests/global_data_init.c
+index 7c539cbcf3a1..dbb7de534f7d 100644
+--- a/tools/testing/selftests/bpf/prog_tests/global_data_init.c
++++ b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
+@@ -3,6 +3,7 @@
+ #include "bpf/libbpf_internal.h"
+ #include "test_global_percpu_data.skel.h"
+ #include "test_global_percpu_data.lskel.h"
++#include "test_global_percpu_data_failure.skel.h"
+=20
+ void test_global_data_init(void)
+ {
+@@ -372,7 +373,7 @@ static void test_global_percpu_data_rdonly_direct_write=
+(void)
+=20
+ static void test_global_percpu_data_verifier_log(void)
+ {
+-	RUN_TESTS(test_global_percpu_data);
++	RUN_TESTS(test_global_percpu_data_failure);
+ }
+=20
+ static void test_global_percpu_data_iter(void)
+diff --git a/tools/testing/selftests/bpf/progs/test_global_percpu_data.c b/=
+tools/testing/selftests/bpf/progs/test_global_percpu_data.c
+index 2765cd46e9af..bc748df4a6cc 100644
+--- a/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
++++ b/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
+@@ -42,29 +42,6 @@ int update_percpu_data(void *ctx)
+ 	return 0;
+ }
+=20
+-static const char fmt[] SEC(".percpu.fmt") =3D "data %d\n";
+-
+-SEC("?kprobe")
+-__failure __msg("R{{[0-9]+}} points to percpu_array map which cannot be us=
+ed as const string")
+-int verifier_strncmp(void *ctx)
+-{
+-	return bpf_strncmp("test", 5, fmt);
+-}
+-
+-SEC("?kprobe")
+-__failure __msg("R{{[0-9]+}} points to percpu_array map which cannot be us=
+ed as const string")
+-int verifier_snprintf(void *ctx)
+-{
+-	u64 args[] =3D { data };
+-	char buf[128];
+-	int len;
+-
+-	len =3D bpf_snprintf(buf, sizeof(buf), fmt, args, sizeof(args));
+-	if (len > 0)
+-		bpf_printk("snprintf: %s\n", buf);
+-	return 0;
+-}
+-
+ volatile const __u32 num_cpus =3D 0;
+ volatile const int num_off;
+ volatile const int elem_sz;
+diff --git a/tools/testing/selftests/bpf/progs/test_global_percpu_data_fail=
+ure.c b/tools/testing/selftests/bpf/progs/test_global_percpu_data_failure.c
+new file mode 100644
+index 000000000000..3a823acb42d7
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_global_percpu_data_failure.c
+@@ -0,0 +1,30 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_misc.h"
++
++int data SEC(".percpu") =3D -1;
++static const char fmt[] SEC(".percpu.fmt") =3D "data %d\n";
++
++SEC("?kprobe")
++__failure __msg("R{{[0-9]+}} points to percpu_array map which cannot be us=
+ed as const string")
++int verifier_strncmp(void *ctx)
++{
++	return bpf_strncmp("test", 5, fmt);
++}
++
++SEC("?kprobe")
++__failure __msg("R{{[0-9]+}} points to percpu_array map which cannot be us=
+ed as const string")
++int verifier_snprintf(void *ctx)
++{
++	u64 args[] =3D { data };
++	char buf[128];
++	int len;
++
++	len =3D bpf_snprintf(buf, sizeof(buf), fmt, args, sizeof(args));
++	if (len > 0)
++		bpf_printk("snprintf: %s\n", buf);
++	return 0;
++}
++
++char _license[] SEC("license") =3D "GPL";
 --=20
 2.56.1.831.g720f3f5937-goog
 
