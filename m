@@ -1,88 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.160.49
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.167.172
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795604617;
-	b=d9nm6RdmQhSkdZE/W4jb+ICVbdXBu/GxXvoewy959srpb5jRNdvbzwOkSSOwRJ25310N
-	 TGbRBvJrKygmy5e7BaJy91N0XmnhtN3slcUBZDzOYa3+qOkIoJcz+HQ5C1Jpt6uFHiN2k
-	 f3pqTvgZXtpt/kueNVYmf/47jW7YhsM2ppBe/bpXgdLi3Yx/XsO38puNLhu5xR39zDcoO
-	 M9R0zj8QdzxtyPFigb/BRqYV87QPxi7cEzqIuxupyqWcpX7gtWqDWSuQkfj1ncROgUuT8
-	 q9O2f705Z1Hp5ZaFeR7URORnvOt+AAtthAW+/ObXCSBiCAoTAdjPjbLf7BP8BBA3wSg==
+	t=1795604633;
+	b=IJD6BlMd0jnvBPz6aFjPqvl7IbQnUMjmLsy65iKWZsCbz4KKf3pkCWMYf60qYsfkpVRJ
+	 gygwiG9yM6X72BjojhNXCXbXL7cAzKMIPjB5nZ3YozHmtQrmYBuDpUKPx70tAya8v9UZF
+	 ZTxaOkpotZfTenZaXDVvcSH4Lxu+FAK+dykIedJX6T049ckR/ZWv/0mrYzBVX+3jC+xUO
+	 bgJnUlKGYuL1S5hv9rmvftpbCoZSh1HqtNXz0ZZAhOU4Dun5GWojp/q8pI0WSCaOwpN8D
+	 Cp66VykJXlgN9h+tolw5WAqRFTNTG1xik+jJubYnb6M7KJhwSRsnEzsjpMqjT2jKJDA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795604617;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795604633;
 	h=DMARC-Filter:Received:X-Google-DKIM-Signature:X-Gm-Message-State:
-	 X-Gm-Gg:X-Received:Received:Received:DKIM-Signature:From:Date:Subject:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:
-	 X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:X-Developer-Signature:
-	 X-Developer-Key:X-Last-TLS-Session-Version;
-	bh=01q8TemiEbPQScbgUzDguyMv2m06hdvW9i45NWYmZMY=;
-	b=Souzux+lSJH3UJrbRi3akA9bK+G2BosHVIXWmH5iTxFXscdiI+1hcce/6nSQPkpwOVuJ
-	 f2olJ+zi46+wvGu6+9H4C+SauHrdGj/qncILkuzV2ooKh28P/4RVhkjtMCyeMB3h0aOAA
-	 3soRZuMKXjDouf3/IAONyugbKmGN0Hy+UdxEOXzN6QNW27J0F84mpnbEnrJ3qh4UDpnj9
-	 5X1ikNgKAAniptzlXN0x8P3h7pYBWXSm2yP6HiaVpuBpfoRUMChCT+q4/HBZcpK21gznH
-	 2mttiINqCcJb1QkfKbG+wBcdXVygDILuQRtftk5uaHEHa7wZ5GZ6nRcwPhHCvSiLytQ==
+	 X-Gm-Gg:X-Received:Received:Received:DKIM-Signature:Mime-Version:
+	 Content-Transfer-Encoding:Content-Type:Date:Message-Id:Subject:Cc:To:
+	 From:X-Mailer:References:In-Reply-To:X-Last-TLS-Session-Version;
+	bh=mrSzuPMkqX4MWQZ1Vs04gvpO/41JB6WErbOM51m8MaU=;
+	b=ABFXk5ia+qKEjD80Nz5f1Kzt2i+Ifyb3FBESgPy/yMCP/ok94qt4knUEUkQXJ19nbsz9
+	 6h1C5x92TmBTBS8TGgY8jOy7nEuPwIGuHqM56suxlviPJ9eIobAIcu1SgKG3lm1biASR9
+	 8n9VJqewv80bx2Y73wQIyokZrmu3ZP2XpYn/sWnn2DBSZuQrZZE9xvdhsNjg7EuYPLku4
+	 NLeSPBObcauridNQJgixQLAzWaFaZqTt/0ims9B0yVXJNqeYkxb+PFpKzgYw93eYb/F7s
+	 5QWApuJQbc+SwChp4dmXoJ72T7aHpp2Euf1Q/rj+dHDNZcTDY4NstXwOYTCg+p/NsJQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=marliere.net;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=marliere.net header.i=@marliere.net header.a=rsa-sha256 header.s=dkim header.b="XQMJ/SGD";
-	arc=none smtp.remote-ip=209.85.160.49
-Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
+	dkim=pass header.d=marliere.net header.i=@marliere.net header.a=rsa-sha256 header.s=dkim header.b=mVZBe53b;
+	arc=none smtp.remote-ip=209.85.167.172
+Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39C61606A329
-	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 11:03:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 39C61606A329
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0349C606A31E
+	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 11:03:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0349C606A31E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marliere.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.a=rsa-sha256 header.s=dkim header.b=XQMJ/SGD
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-499f20c7054so2982501fac.0
-        for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 03:03:36 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.a=rsa-sha256 header.s=dkim header.b=mVZBe53b
+Received: by mail-oi1-f172.google.com with SMTP id 5614622812f47-57309bd40b1so2959073b6e.3
+        for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 03:03:52 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795604615; x=1796209415;
-        h=cc:to:message-id:content-transfer-encoding:content-type
-         :mime-version:subject:date:from:dkim-signature:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=01q8TemiEbPQScbgUzDguyMv2m06hdvW9i45NWYmZMY=;
-        b=vYH61pckH0sv1FOVqVL53zc+su7105Od31Vgei7rWyvbnGX9inr1dZD2ekpcBmq3ni
-         L00vW3gzCj5GKjHc0M98HhmfYiW29QYluDnu4UjYn/XiSx3pMjvWo8E4vb0nwpbtrBY1
-         8MfDWI4lQ5qrbWqwCTztf5Tu32YnfaRqhQyN6bN4GpED7vp1CZQV8u6SgSDKI9CsdI6r
-         oO5aFaPZghvUb4CmYBwhJwmq1MmPIVaeFHxKWaOv//+xZ7mZ9iJk6jd/k+Sv9NcOcsGy
-         nvsvi7dfMT/LIc8Gsyp74lDyfC7a2dGzjNaQeFcQ3YwnWnD0d4URra4sqz3VvpLEQqzg
-         pTBw==
-X-Gm-Message-State: APuU4Z826A+X1u2beGi8/PTvPvpWhG5ZNYONiKWoVCAd1wupEG7F4TAF
-	2pkp0YBah6ROIXyo1gI8YYDU3/m0k18/DAp9QtLg984Y4BJZnvf1wAtW
-X-Gm-Gg: AZFdTZfpZm3VDAPLGQVES602+Gx1mq8gAxcMs7I4ZiodowJESE7RkSty6gh4WYRUm/D
-	jHsC6VXfsfqfL0Oeu228o0yx7pLi/Ju5gcoou5RSx9QknRyDJej+E1AsWHqBxktdl557D7oqiWr
-	OXANMyAMQI5RtPirEqKmWG4jdonTHGUHCHXmUOYN7gBzrx7SAJNGm5DOIOIqRUKliKV1UEqTro7
-	I5iX6o+SwfDrdyAJEVY1k+01Xklu0Xpf6yNVFmEzMPhe11sRObXUYUSXawKlwB4aAbXs3c+Om0D
-	9f3a3gnL8n9Yie6t4QgfcdFIico0jN/uaTcHqgANrMIVpzZe8T2RY6pqspDmbfJLBxKWj71ApC8
-	a6mNPGYw9QOJqFkk+zOyzwcmWOwsw8cd+HHIzpIbZEBRL8uQ9YcilWRJ0wRYQ9gW3xuzWo4gAQN
-	mUG/3RrYY6CptSZut1c4LD+MkESlzEbeC8ruOQDudRX1GJz9B4CR09obo0tgZghMKu8oOt1+btv
-	rrDufJIt4cScN9ha9qQx2MFxwFcovaBNwn1LFTn6lMwwdVbaPnKXuhVqHXCUKoeoPuSbO5Nbbk9
-	3SHAhm/SsOa56yChI3+QyGZhX49WhknseVnryQ4xoDpjYnU7MwlA9wNrjjz8o6RCKj0WY2LRlPI
-	lxn+SILatR2S0vnSwz8S5ofFtXiG7ajY=
-X-Received: by 2002:a05:6870:be92:b0:49e:4895:2366 with SMTP id 586e51a60fabf-4bc8208f78dmr16261363fac.36.1795604614931;
-        Wed, 25 Nov 2026 03:03:34 -0800 (PST)
+        d=1e100.net; s=20260707; t=1795604632; x=1796209432;
+        h=in-reply-to:references:from:to:cc:subject:message-id:date
+         :content-type:content-transfer-encoding:mime-version:dkim-signature
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=mrSzuPMkqX4MWQZ1Vs04gvpO/41JB6WErbOM51m8MaU=;
+        b=01f4HU1RESHnVDDmsAbjEJG6yFGKVVlsYK9ZoUPpBu1jisw0/M45iMaIXeUOl372Ye
+         c900AK+RsxlLHKDHaghrfphMdikjBlsz+2rD19BpFc7BOpDx1/NphcitDXMOtaxyKOie
+         ywIzQLBhTQ1ZLqO8/kJ1uaAUM1KDqVWIiFOtk9ggRzwPxEdg2wm8m4Ec80SFiR1xmAj6
+         c6EUrE2mW5i8Z3BNGGcfjyU7eSIZa3fSyj0LF2gSs44kyOUuU7Nd9Yixbwreo7IxHHDO
+         w5HdUiSMz/udgD2MzlLs8GlXyf9dL2PF45dzWqvgwwG3Gw/AEt9GogRKBa517Mrz9jT4
+         lFcw==
+X-Gm-Message-State: APuU4Z8IqhOCtZ+NimG5LsXR7VciYH2nklH4oHd5Ff8ArjcnL7VBB4W5
+	I5OO3YJWJNSzu7gTG3UyHWzXJ5Svn4O/dz2RvwIhLO/MOxQ7Lb5sMd2r
+X-Gm-Gg: AZFdTZczNG5twK+VS6c23Mwo4VTHGkR+rsHRd66hG03F9s0HHdliJvxU42743w5Ez+E
+	SaLCIT23scpDO0e9F8t0r9c8pvVEoLhhVWyQyWDPx0Fmi280dKtpgmPfdRp6MbVSJWFRltCjIQa
+	vwqtmFgis1l1olRM4+2lu8nbkTYqw6DaXWgzbp+hBA8A8uNZmqTMTp5SCinkZlTZqScFH6mpp4o
+	YxeOfkCWjlo2K2jqOW4BDeBpP8cU3raUHR/azMKurbMLYARxVwj2CBLepD/V4FzL9xyYdf/Q0xr
+	cDE5vmjWy2BVargqw5HKFomoeOgyqOk7lnhx8hMWJEC42ULre9g0bBFg3BksnKDKAoCKB6zNBV3
+	z6docfq+WME0grufx6skBSnrZ8yjaxxmxm1KgfG5b+IsWxG2mQOhSCphtORCOn3xF/SigLaLeIW
+	Oyd4mU1rQgywZszjCxDsvCndzyfUdKGyDEji+S9M2OOmZKF7QcGV4Y6Vd5CmOFtf/0Hab05Q0kV
+	AuW/GNYYO7Ujol86RmuWL9y1sQYAsEKMuro3LdpcKhVKaTa6LwQpcBaDsn2r4lOplxdW0p9mj/f
+	uf/oXZdfCId49sG6kYMMzvi4w93cofcEbQfFI5BGYFoX3CNXNh5nziTQ0YSF28ieShFhtbXKTM+
+	lFzOtfFvz8QkTdtfUHpIFLtvrPZlQ7BE=
+X-Received: by 2002:a05:6808:3195:b0:564:5fe0:dd80 with SMTP id 5614622812f47-57a0c6b6b35mr18642000b6e.49.1795604631958;
+        Wed, 25 Nov 2026 03:03:51 -0800 (PST)
 Received: from mail.marliere.net (137.65.66.34.bc.googleusercontent.com. [34.66.65.137])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4bc5b07d766sm15946324fac.2.2026.11.25.03.03.32
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-57a35655a5bsm13720074b6e.13.2026.11.25.03.03.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Nov 2026 03:03:33 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 7B25F605F4;
-	Wed, 25 Nov 2026 11:03:26 +0000 (UTC)
+        Wed, 25 Nov 2026 03:03:51 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 2D3B7605F4;
+	Wed, 25 Nov 2026 11:03:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marliere.net;
-	s=dkim; t=1795604610;
+	s=dkim; t=1795604629;
 	h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding; bh=01q8TemiEbPQScbgUzDguyMv2m06hdvW9i45NWYmZMY=;
-	b=XQMJ/SGDl7Kg0X/2qnCdY3LpM1KMcJbFQ0pxQypPzVhm8COHEUxisIbsIrBUB90w/W7C6l
-	FiBNXIOvemLL7PGLJVDh3yMuTAj/lkfMZgpOElbRUHkvtK18Z4KkiAksbjtqBZXBkX3bnl
-	mOTh6XYG7PnBSeAaKBb5eolC7iYERs3DcwClqhAkrqbZEqO3kyX9rPGZAxmJcuERDotPgU
-	QiRWiWezc2dDmfpEMG9UMCgo/Gh+D7fF9RK3boj2/WhejBFcMPCfluXH6ebsw8UXjlggSz
-	lHH+Lat1Ni9B2+Jtpp3ogCZ6W/pLwFgDVD9wog+yicNu06IqZxSUoryofd6iHw==
-From: =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re_=28SUSE=29?= <ricardo@marliere.net>
-Date: Wed, 25 Nov 2026 08:03:18 -0300
-Subject: [PATCH v2] selftests/bpf: Fix kallsyms parsing with long Rust
- symbols
+	 content-transfer-encoding:in-reply-to:references;
+	bh=mrSzuPMkqX4MWQZ1Vs04gvpO/41JB6WErbOM51m8MaU=;
+	b=mVZBe53b+1iYEz2JUxIuiNR9+Py0/uSe5+otcdgdQWU7Taf9dvO+hB3dYAycHS4mpFX58G
+	vV6DZzVxJ5w8FUgTr4XqUexlvB7GaFWiW3OZc5E5vLnquW3/R7BVCiaQEAmhTwaI6KYcz+
+	WKMfwezQ7cQLflxSwa/Npl0fQJVmkwKtEmDNd5aNJMCbzuVVe0ajurUaD5bCcm6NTco6Ds
+	1vtjOlq9kbB/huibnDLki/qUWQ4E/tssU1ut6areHNAORl2PP6lefnfCyTkQSBxPYZQ5Pt
+	HHr38vyct1t04ZK9gvI9jxbGiJLcYvYDkBcVLc91Rz0kWIqh8m/9Uy61UkQceQ==
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -91,107 +87,79 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20261125-selftests-bpf-rust_sym-v2-1-6cf5cff663e6@marliere.net>
-X-B4-Tracking: v=1; b=H4sIAHXABmsC/4WOQQ6CMBBFr0K6ttoWMMGV9zDEtGWQGihkphAJ4
- e62eACX7/+Zl78xAnRA7JZtDGFx5EYfQZ0yZjvtX8BdE5kpoa5SqoIT9G0ACsTN1HKcKTxpHTh
- UphTGKJ1XmsXnCaF1n0P8qH9Ms3mDDcmWLowm4Aa1t12Kou0yaAqAqewchRHXY9Yik+TvgkVyy
- XNli1I0whYA90Fj7wDh7CGwet/3LxkB9r/uAAAA
-X-Change-ID: 20261124-selftests-bpf-rust_sym-e9b50bb2a39a
-To: Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Ihor Solodrai <ihor.solodrai@linux.dev>, 
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, 
- Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, 
- Gary Guo <gary@garyguo.net>, 
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
- Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
- Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
- Danilo Krummrich <dakr@kernel.org>, 
- Daniel Almeida <daniel.almeida@collabora.com>, 
- Tamir Duberstein <tamird@kernel.org>, 
- Alexandre Courbot <acourbot@nvidia.com>, 
- =?utf-8?q?Onur_=C3=96zkan?= <work@onurozkan.dev>
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, 
- =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re_=28SUSE=29?= <ricardo@marliere.net>, 
- Alexei Starovoitov <ast@kernel.org>
-X-Mailer: b4 0.16.0
-X-Developer-Signature: v=1; a=openssh-sha256; t=1795604604; l=2430;
- i=ricardo@marliere.net; h=from:subject:message-id;
- bh=v1+J5AyYE1mm1bqUO9cvlJ/WDdBXeTNjZKb0Tx2U1oQ=;
- b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgguRCc5X8/UX9M40lkMnr//aFGOhce
- x5ezt8MFNUFlqYAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QJv0PKQKIyXStomhGvoJ0TsvTJMYIsGcFuJ7wxLe8AAzeOf5WIoX9JVkQRmWrWDvJCSavAZ19If
- MyhLG1oF5KQg=
-X-Developer-Key: i=ricardo@marliere.net; a=openssh;
- fpr=SHA256:pzhe0fJpYLz+3cZ33FFPhIfaUElk9CXPFFXmalIH+1g
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 25 Nov 2026 08:03:46 -0300
+Message-Id: <DN48PTO1CTAC.3DAKV5TKHPXLJ@marliere.net>
+Subject: Re: [PATCH] selftests/bpf: Fix kallsyms parsing with long Rust
+ symbols
+Cc: <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <rust-for-linux@vger.kernel.org>
+To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>,
+ =?utf-8?b?UmljYXJkbyBCLiBNYXJsacOocmUgKFNVU0Up?= <ricardo@marliere.net>,
+ "Andrii Nakryiko" <andrii@kernel.org>, "Eduard Zingerman"
+ <eddyz87@gmail.com>, "Ihor Solodrai" <ihor.solodrai@linux.dev>, "Daniel
+ Borkmann" <daniel@iogearbox.net>, "Kumar Kartikeya Dwivedi"
+ <memxor@gmail.com>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu"
+ <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa"
+ <jolsa@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>, "Shuah Khan"
+ <shuah@kernel.org>, "Miguel Ojeda" <ojeda@kernel.org>, "Boqun Feng"
+ <boqun@kernel.org>, "Gary Guo" <gary@garyguo.net>,
+ =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, "Benno Lossin"
+ <lossin@kernel.org>, "Andreas Hindborg" <a.hindborg@kernel.org>, "Alice
+ Ryhl" <aliceryhl@google.com>, "Trevor Gross" <tmgross@umich.edu>, "Danilo
+ Krummrich" <dakr@kernel.org>, "Daniel Almeida"
+ <daniel.almeida@collabora.com>, "Tamir Duberstein" <tamird@kernel.org>,
+ "Alexandre Courbot" <acourbot@nvidia.com>, =?utf-8?q?Onur_=C3=96zkan?=
+ <work@onurozkan.dev>
+From: =?utf-8?b?UmljYXJkbyBCLiBNYXJsacOocmUgKFNVU0Up?=
+ <ricardo@marliere.net>
+X-Mailer: aerc 0.22.0-17-g7220139118bb
+References: <20261124-selftests-bpf-rust_sym-v1-1-32c450d0c4ee@marliere.net>
+ <DN3YHFL4G7NM.36YOROLVGCSN3@gmail.com>
+In-Reply-To: <DN3YHFL4G7NM.36YOROLVGCSN3@gmail.com>
 X-Last-TLS-Session-Version: TLSv1.3
 
-load_kallsyms_local_common() reads /proc/kallsyms with a 256-byte line
-buffer and stops parsing at the first line sscanf() cannot handle. Since
-commit b8a94bfb3395 ("kallsyms: increase maximum kernel symbol length to
-512"), symbols may be up to 511 characters, and on CONFIG_RUST=y kernels
-some mangled Rust symbols (e.g. drm_panic_qr helpers) overflow the buffer.
-fgets() splits such a line, the remainder fails to parse and every symbol
-after it is silently dropped.
+On Wed Nov 25, 2026 at 12:02 AM -03, Alexei Starovoitov wrote:
+> On Tue, Nov 24, 2026 at 03:33 PM Ricardo B. Marli=C3=A8re (SUSE) <ricardo=
+@marliere.net> wrote:
+>> -	char func[256], buf[256];
+>> +	char func[512], buf[1024];
+>
+> can we drop buf ?
 
-As a result ksym_get_addr() returns 0 for symbols like bpf_fentry_test1 and
-bpf_testmod_*, address lookups resolve to the last loaded symbol, and
-bpf_get_ksyms() fails with -EINVAL. This breaks bpf_cookie, fill_link_info,
-kprobe_multi_test, kprobe_multi_testmod_test, kprobe_multi_bench_attach,
-tracing_multi_bench_attach and stacktrace_ips.
+Sure, that works, thanks for the suggestion! Sent v2.
 
-Parse the file with fscanf() instead, bounding the symbol name to
-KSYM_NAME_LEN and discarding the rest of the line, as kallsyms_find()
-already does.
+>
+> diff --git a/tools/testing/selftests/bpf/trace_helpers.c b/tools/testing/=
+selftests/bpf/trace_helpers.c
+> index e871a26..06f6553 100644
+> --- a/tools/testing/selftests/bpf/trace_helpers.c
+> +++ b/tools/testing/selftests/bpf/trace_helpers.c
+> @@ -64,7 +64,7 @@ void free_kallsyms_local(struct ksyms *ksyms)
+>  static struct ksyms *load_kallsyms_local_common(ksym_cmp_t cmp_cb)
+>  {
+>  	FILE *f;
+> -	char func[256], buf[256];
+> +	char func[512];
+>  	char symbol;
+>  	void *addr;
+>  	int ret;
+> @@ -80,9 +80,7 @@ static struct ksyms *load_kallsyms_local_common(ksym_cm=
+p_t cmp_cb)
+>  		return NULL;
+>  	}
+> =20
+> -	while (fgets(buf, sizeof(buf), f)) {
+> -		if (sscanf(buf, "%p %c %s", &addr, &symbol, func) !=3D 3)
+> -			break;
+> +	while (fscanf(f, "%p %c %511s%*[^\n]\n", &addr, &symbol, func) =3D=3D 3=
+) {
+>  		if (!addr)
+>  			continue;
+> =20
+>
+> pw-bot: cr
 
-Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Signed-off-by: Ricardo B. Marlière (SUSE) <ricardo@marliere.net>
----
-Changes in v2:
-- Took Alexei's suggestion to drop buf and use fscanf() directly
-- Link to v1: https://patch.msgid.link/20261124-selftests-bpf-rust_sym-v1-1-32c450d0c4ee@marliere.net
----
- tools/testing/selftests/bpf/trace_helpers.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/trace_helpers.c b/tools/testing/selftests/bpf/trace_helpers.c
-index 6d7a4b8c4ab8..5f558280856f 100644
---- a/tools/testing/selftests/bpf/trace_helpers.c
-+++ b/tools/testing/selftests/bpf/trace_helpers.c
-@@ -64,7 +64,7 @@ void free_kallsyms_local(struct ksyms *ksyms)
- static struct ksyms *load_kallsyms_local_common(ksym_cmp_t cmp_cb)
- {
- 	FILE *f;
--	char func[256], buf[256];
-+	char func[512];
- 	char symbol;
- 	void *addr;
- 	int ret;
-@@ -80,9 +80,7 @@ static struct ksyms *load_kallsyms_local_common(ksym_cmp_t cmp_cb)
- 		return NULL;
- 	}
- 
--	while (fgets(buf, sizeof(buf), f)) {
--		if (sscanf(buf, "%p %c %s", &addr, &symbol, func) != 3)
--			break;
-+	while (fscanf(f, "%p %c %511s%*[^\n]\n", &addr, &symbol, func) == 3) {
- 		if (!addr)
- 			continue;
- 
-
----
-base-commit: 81c6c8c608b6075846d3bd5b6f57958300a56eda
-change-id: 20261124-selftests-bpf-rust_sym-e9b50bb2a39a
-
-Best regards,
---  
-Ricardo B. Marlière (SUSE) <ricardo@marliere.net>
 
