@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795615701;
-	b=t33PA0dCC4UzuSEf3J8Zznms2wDtnqPnQsMkOhEKQzsXHiwVw4MpgN2olPDxjrHJUZnZ
-	 cglQHKS0NYj1r+7Y+vLVEq/Y7yeW7O8xKd8gcnkBV0gcSB5R2fhyi7rCSJd0nBzkeG7Zm
-	 v8n8U8eAnYIxqMOAdwbNFcKZyuhD9yRPkJIcia7yI7eERb+2RaTKAS23B0Kr5D/S7SeOu
-	 xUdJYOHXSAT+Vtg/J3lZIinHRSj6/3kvbbhJydDFsgKKDHGdfGEjshy/ftPIYd1mghkTH
-	 1sNvegHyldQfWRR3thoQlWR4ObpTD00IiLWulPdfZ+PxYw2nelqBLgUfnVYMqkkMR5w==
+	t=1795615696;
+	b=YqmIj1Uy8VI1PvQHf/BUarBL7IvnRpvVICOT6w4GUXdkRJPhCYVGoR9hvdwSBkrIQR06
+	 eSAXHqNjJYnhJWnAsfIiwYBnTM/Ll1RzEQczM/n1i/TGMSKzgD4NGF/+A/HVxkFyebcJT
+	 ts0O6iWz55WfL206eZFluE+gPtOwGRoJcjhzhdXJ6MBlgA5NIONMXAoAnY7HDJTaZyCcn
+	 5c62oX4Ie+BwQIaNSLUZ1ZjX4GOOYmmbZ126R/vayZ56auJ8bfuYBE3IQphhJIzWc6bEB
+	 3kvj1y0OG611vdL95pDXryKQb9Jffi2MpswIXxU2OmCOpRuA2ijKwREHFjIEWosRpMg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795615701;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795615696;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=rWbz4RgCF0mlQGwOhlMOH54+5ikq+Qvq2ti0jqOYo1k=;
-	b=iQaf+rmCGm4lRWhjq/Mp1m3kh6sNDxiTKe1k0hmsCGcXazTTRvgacEl+GcLwPmWaVDPX
-	 6GX2oCsfunygOgn/u2ob6Ss0xrvBxLNwBQxznVBRo9Svh1r1AkQCEciGCxswFYxLxQVFc
-	 4y2Nrh28cbFXTtGMVA/zAp1s49fY31WA1YurQK8EMCecJTWzU5E9B9lHa/qkyLo+3Egqs
-	 mOC7F7Y6fFNojjioUiPTa0JyPOMCa4NXf5sVxb4jFSrWlBoJA0sgaJRqN9nfFYniAfYkH
-	 NyO1Qfuf2Ao6ENzr9p+HYqrJV/vDfNH2IZbv0MzxhvJBbOK0osvKkVnKw3TEgGHynew==
+	bh=uUVLwnKayt6g2P+NkpEhvsPO9KV0gc6su6pn44rfNmw=;
+	b=Hqe8nli7hEVUd1N+XGESO9JA3Fb93u9CtyXYCNWMnGaeonXiEDIF8V9/8XRgHOj0FYFW
+	 IbbF/G2zOhYkcplrA8/pDkLMqNHyvBLW2LH/HXttMJU2vl1FbIWgD2F94Hvw45g+MLZRO
+	 x/VZI0ONJCSZg9esDusBjbElB6X8jOAaf4Or4wNtOXC/ds9Q2JBSRCMFS6kNHgCKMTxlY
+	 5Uy8KZ7ZFc6VlLDQYnkP0oxoU0EwEDeLkk7SnRaE3LqoIGr/Qf1RvxBWexFNrNsQ8UkjK
+	 89yxfrSlJtJxTf0NolYspJ7BE9SBwdBTR+VLhT7tq5yvBVgRQXyLJ4LmVITETwK2TVA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=SfAuXdnA;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="alt/h17j";
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1696E606A335;
-	Wed, 25 Nov 2026 14:08:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67323606A681;
+	Wed, 25 Nov 2026 14:08:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=SfAuXdnA
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 428B71F00AD3;
-	Wed, 25 Nov 2026 14:08:17 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=alt/h17j
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C0A41F0157D;
+	Wed, 25 Nov 2026 14:08:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795615700;
-	bh=rWbz4RgCF0mlQGwOhlMOH54+5ikq+Qvq2ti0jqOYo1k=;
+	s=k20260515; t=1795615696;
+	bh=uUVLwnKayt6g2P+NkpEhvsPO9KV0gc6su6pn44rfNmw=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=SfAuXdnAXtBGaBMwNS99nVdUxqIxDGjd7OYcWhbS94XEEIr/U8mvXEy6yNUOJTDb9
-	 yVgCKqQHwWAn34Bc/KxmDBslb6RmvOKjK2MiecD1NJw5ksXT7rog7HrEzxbfBPivp0
-	 uWE+lwmSWF1KtoBwzl3FdfgR5WzonW06dtvDDNO8uq5FE48TgibttIU+jeVLRw7ci0
-	 iyEoCDHWeThD0jZkjPbjw5KyjWe4rnaNKm+qppCpqsfeSWL6oO8yy7IkXfxixvctOj
-	 C6ahV1ecYQtUq8iP9lfKc7ZGIojcFuF8NSj+QxM782j168YKbA86wkeffrGcRAJFsa
-	 udWjF2JFTF83g==
-Subject:
- Re: [PATCH net-next 06/15] xsk: Lend UMEM chunks to the page pools of a queue
+	b=alt/h17jzfl+c+EI4Fx//NL8vNX9t0T38Q9Oh2PqfCsaHyDbjZgxeyvlIGlBVdKMc
+	 cr+ldWTEA/yXws0IgxZxeQjkF0riLQYKPEhPkB0tohK0RWOR2Qhm34jTsbx9CaC+c9
+	 eJU9zOYnRiR9+vQngCqnkyGoq9I87AGTg4GDmIzZqGRhqfi1tX5yc5pBKEFJi5qGoz
+	 Fb8H2ejBfvh6Dklc08Q/r13cQOsKr7DpbRlMpFaTOZ4p6UecXQkB0cyTyLv3T47itN
+	 vHIy4lp5K4Z+jtDuY6/saTGCdEddhd22C9wmWywAHccSll45ubcKwZbtvaJO8YXJxE
+	 csYHqzSloxwIw==
+Subject: Re: [PATCH net-next 05/15] xdp: Run programs on buffers that must not
+ hold kernel structures
 From: netdev-bot+sashiko@kernel.org
 To: bjorn@kernel.org
 Cc: magnus.karlsson@intel.com, maciej.fijalkowski@intel.com,
@@ -63,10 +63,10 @@ Cc: magnus.karlsson@intel.com, maciej.fijalkowski@intel.com,
  dw@davidwei.uk, asml.silence@gmail.com, linux-rdma@vger.kernel.org,
  linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
  linux-kernel@vger.kernel.org
-Date: Wed, 25 Nov 2026 14:08:16 +0000
-Message-ID: <179561569684.3135.6558736307763434214@kernel.org>
-In-Reply-To: <20261124125654.183091-6-bjorn@kernel.org>
-References: <20261124125654.183091-6-bjorn@kernel.org>
+Date: Wed, 25 Nov 2026 14:08:12 +0000
+Message-ID: <179561569289.3135.1423395269344157578@kernel.org>
+In-Reply-To: <20261124125654.183091-5-bjorn@kernel.org>
+References: <20261124125654.183091-5-bjorn@kernel.org>
 X-sashiko-severity: High
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -80,10 +80,10 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 6 potential
+Thank you for your contribution! Sashiko AI review found 2 potential
 issue(s) to consider.
 
-Critical: 0 · High: 2 · Medium: 2 · Low: 2
+Critical: 0 · High: 1 · Medium: 0 · Low: 1
 
 If you believe none of the issues are legitimate, please reply to each
 issue of Medium severity or higher and explain why the AI is wrong.
@@ -91,265 +91,108 @@ If any of them are legitimate and you plan to respin, please let patchwork
 know by including "pw-bot: cr" as a separate line at the end of your reply
 (one such reply per series is enough).
 
-- [High] When a DRV_LAYOUT UMEM is shared across two queues of one netdev
-  whose per-queue DMA devices differ, xsk_sink_bind() gives the second…
-- [High] xsk: xsk_sink_take_fill() recycles old-pool chunks instead of
-  releasing them
-- [Medium] The 'chunk lent twice' check only works inside one sink, so a
-  UMEM shared across queues or devices with XDP_SHARED_UMEM gets around…
-- [Medium] xsk: xp_assign_dev() blocks standard zero-copy when
-  MP_XDP_ONLY is active
-- [Low] A DRV_LAYOUT bind accepts XDP_ZEROCOPY but delivers neither zero-
-  copy TX nor a zero-copy report.
-- [Low] xsk_sink_nl_fill() returns 0 and emits no attribute, so a page
-  pool backed by an AF_XDP sink cannot be identified in page-pool-…
+- [High] The new XDP_FLAGS_SINK contract in include/net/xdp.h says a
+  helper that checks bytes and reads them again later must check a copy,…
+- [Low] The commit message opens with "Currently, the core refuses native
+  XDP programs next to a memory provider." That was no longer true when…
 
 --
 
-xsk: Lend UMEM chunks to the page pools of a queue
+xdp: Run programs on buffers that must not hold kernel structures
 
-This adds a sink memory provider. With it, the chunks of a UMEM
-registered with XDP_UMEM_DRV_LAYOUT back the RX page pools of the bound
-queue, and the device lays out RX buffers in those chunks as it does in
-pages. FILL entries lend chunks to the kernel, the UMEM is DMA mapped
-once at bind, and binding requires a held native XDP program.
+This lets native XDP programs run on AF_XDP sink buffers (UMEM chunks
+that userspace may write at any time). Such buffers are marked with
+XDP_FLAGS_SINK and XDP_FLAGS_SINFO_EXT, and their shared info moves into
+the rxq. XDP_TX and XDP_PASS become XDP_DROP, and frame and skb
+construction refuse sink buffers.
 
-> diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c
-> index 5ec092f7cb6f7..7ece7d9e39376 100644
-> --- a/net/xdp/xsk_buff_pool.c
-> +++ b/net/xdp/xsk_buff_pool.c
+> Currently, the core refuses native XDP programs next to a memory
+> provider. An AF_XDP sink needs XDP to steer its packets and to use the
+
+[Severity: Low]
+Is this opening sentence still accurate at this point in the series?
+
+The previous commit, "net: Add memory providers that only feed XDP",
+already exempts MP_XDP_ONLY providers in dev_mp_blocks_xdp():
+
+net/core/dev.c:dev_mp_blocks_xdp() {
+    ...
+		if (ops && !(ops->flags & MP_XDP_ONLY))
+			return true;
+    ...
+}
+
+That commit also relaxed the dev_xdp_prog_count() check in
+__netif_mp_open_rxq() for XDP-only providers.
+
+This patch touches neither net/core/dev.c nor netdev_rx_queue.c. Could
+the message be reworded so it doesn't suggest that this patch lifts the
+refusal?
+
+> diff --git a/include/net/xdp.h b/include/net/xdp.h
+> index 944418111a86e..c7cb0ba4e16f4 100644
+> --- a/include/net/xdp.h
+> +++ b/include/net/xdp.h
 
 [ ... ]
 
-> @@ -211,6 +215,13 @@ int xp_assign_dev(struct xsk_buff_pool *pool,
+> @@ -95,6 +99,15 @@ enum xdp_buff_flags {
+>  	 * frame, see xdp_data_hard_end(): the frame must hold nothing else.
 >  	 */
->  	hlist_add_head(&pool->dev_node, &netdev->xsk_pools);
->  
-> +	if (pool->umem->flags & XDP_UMEM_DRV_LAYOUT) {
-> +		err = xsk_sink_bind(pool, netdev, queue_id, flags);
-> +		if (err)
-> +			goto err_unbind;
-> +		return 0;
-> +	}
-
-[Severity: Medium]
-After xsk_sink_bind() installs the provider on one queue,
-dev_get_min_mp_channel_count() returns non-zero for the whole device.
-It checks mp_params.mp_priv on every RX queue and does not skip
-MP_XDP_ONLY providers. Further down, xp_assign_dev() still uses it to
-gate classic zero copy:
-
-	if (dev_get_min_mp_channel_count(netdev)) {
-		err = -EBUSY;
-		goto err_unreg_pool;
-	}
-
-So once a DRV_LAYOUT socket is bound to one queue, a regular AF_XDP
-socket on another queue of the same device fails with -EBUSY if it
-asked for XDP_ZEROCOPY. Without that flag it silently falls back to
-copy mode.
-
-Earlier in this series, dev_mp_blocks_xdp() replaced this helper in
-dev_xdp_install(), netif_xdp_propagate() and the ethtool rings path,
-because an MP_XDP_ONLY provider does not stop native XDP. Was this
-caller left out on purpose? If not, would dev_mp_blocks_xdp() be the
-right test here? A sink on the queue being bound is already caught by
-the earlier xsk_get_pool_from_qid() check, so the device-wide test
-only needs to catch providers that block XDP.
-
-[Severity: Low]
-This branch returns success without setting pool->umem->zc, so xsk_bind()
-ends up with xs->zc = false. Should a bind that passes XDP_ZEROCOPY be
-accepted here?
-
-xsk_sink_bind() rejects XDP_COPY but lets XDP_ZEROCOPY through:
-
-	if (flags & XDP_COPY || !dev->queue_mgmt_ops ||
-
-TX on such a socket still goes through xsk_generic_xmit(). Also,
-getsockopt(XDP_OPTIONS) sets XDP_OPTIONS_ZEROCOPY only when xs->zc is
-true, so it reports copy mode even though RX is zero copy through the
-page pool.
-
-So a bind that asks for forced zero copy succeeds, TX runs in copy mode,
-and XDP_OPTIONS says the socket is not zero copy. The documentation patch
-later in the series says these sockets transmit in copy mode. It does not
-say that XDP_ZEROCOPY is accepted or what XDP_OPTIONS reports. Both become
-uAPI once registration accepts the flag. Could this be made consistent,
-either by rejecting XDP_ZEROCOPY or by reporting the RX mode?
-
-[ ... ]
-
-> diff --git a/net/xdp/xsk_sink.c b/net/xdp/xsk_sink.c
-> new file mode 100644
-> index 0000000000000..b78116f25e712
-> --- /dev/null
-> +++ b/net/xdp/xsk_sink.c
-
-[ ... ]
-
-> +static u32 xsk_sink_take_fill(struct xsk_sink *sink, struct page_pool *pp)
-> +{
-
-[ ... ]
-
-> +	for (i = 0; i < entries; i++) {
-> +		addr = ring->desc[(cons + i) & mask];
-> +		niov = &niovs[array_index_nospec((u32)(addr >> PAGE_SHIFT),
-> +						 nr)];
-> +		/* A chunk lent twice would be in two places at once */
-> +		if (unlikely(addr >= (u64)nr << PAGE_SHIFT ||
-> +			     READ_ONCE(niov->mp_state) == XSK_SINK_LENT)) {
-> +			fq->invalid_descs++;
-> +			continue;
-> +		}
+>  	XDP_FLAGS_SINFO_EXT		= BIT(3),
+> +	/* AF_XDP sink memory, see %MP_XDP_ONLY: the buffer may only go to the
+> +	 * AF_XDP socket of its queue. Userspace may write it at any time,
+> +	 * also while the kernel reads it. So the kernel takes bounds only
+> +	 * from its own fields, and only the XDP program and its helpers read
+> +	 * the bytes. A helper that checks bytes and reads them again later
+> +	 * must check a copy, see bpf_syncookie_th(). Nothing builds a frame
+> +	 * or an skb in the buffer.
+> +	 */
+> +	XDP_FLAGS_SINK			= BIT(4),
 
 [Severity: High]
-Once the next patch hands chunks back to userspace while they stay
-attached to the page pool that received into them, can this branch
-starve a new page pool on a queue restart?
+Where is bpf_syncookie_th() defined? I can't find it in this commit or
+later in the series. This comment is the only place the name appears.
 
-netdev_rx_queue_reconfig() calls ndo_queue_mem_alloc() and, for most
-drivers, ndo_queue_start() before ndo_queue_mem_free() destroys the
-old page pool. When the new pool pp first refills, every chunk that
-userspace posts back on FILL still has the old pool as owner, and
-sink->released is still empty.
+The syncookie helpers that XDP programs can call still read th->doff
+twice from packet memory:
 
-For each such chunk, xsk_sink_take_fill() marks it XSK_SINK_LENT,
-consumes the FILL entry and calls page_pool_put_unrefed_netmem() on
-the old pool. For a net_iov, __page_pool_page_can_be_recycled() is
-always true, so the chunk lands in owner->alloc.cache or owner->ring.
-page_pool_return_netmem(), and with it xsk_sink_release_netmem(),
-runs only when that ring is full. The chunk never reaches
-sink->released.
+net/core/filter.c:bpf_tcp_raw_gen_syncookie_ipv4() {
+    ...
+	if (unlikely(th_len < sizeof(*th) || th_len != th->doff * 4))
+		return -EINVAL;
 
-So xsk_sink_take_fill() can consume up to PP_ALLOC_CACHE_SIZE FILL
-entries and still return 0. xsk_sink_take_released() then finds
-nothing, and xsk_sink_alloc_netmems() returns 0 and bumps
-queue_empty_descs even though FILL was not empty. The driver's ring
-fill in ndo_queue_mem_alloc() or ndo_queue_start() can then fail, or
-the new queue comes up without buffers.
+	mss = tcp_parse_mss_option(th, 0) ?: TCP_MSS_DEFAULT;
+    ...
+}
 
-After page_pool_destroy() runs on the old pool, the chunks still held
-by userspace keep it inflight. Its ring is then scrubbed only from
-page_pool_release_retry(), once every DEFER_TIME. Until that happens,
-each refill of the new pool keeps pushing FILL chunks into the ring
-of a pool that is going away.
+tcp_parse_mss_option() then reads doff again to decide how many option
+bytes to walk:
 
-Should a chunk whose owner is not pp be released to the sink, or moved
-to pp directly, rather than recycled into the old pool? Once a new
-pool exists for the queue, does the old pool ever need these chunks
-back?
+	int length = (th->doff * 4) - sizeof(struct tcphdr);
 
-[Severity: Medium]
-Does this check still hold when the UMEM is shared with XDP_SHARED_UMEM
-across queues or devices?
+bpf_tcp_raw_gen_syncookie_ipv6() does the same thing. So does
+bpf_tcp_gen_syncookie(), which checks doff and then re-parses the
+options through tcp_v4/v6_get_syncookie().
 
-xp_assign_dev_shared() now sends DRV_LAYOUT UMEMs into xp_assign_dev()
-with flags = 0. A socket that shares the UMEM on another queue or device
-gets its own xsk_buff_pool and its own FILL ring. Then
-xsk_sink_bind()->xsk_sink_create() allocates a separate niov array over
-the same umem->chunks:
+The verifier only checks th_len bytes, because arg2 is ARG_PTR_TO_MEM and
+arg3 is ARG_MEM_SIZE_OR_ZERO. With a sink buffer, a userspace thread can
+change doff from 5 to 15 between the check and tcp_parse_mss_option().
+Could the parse then read up to 40 bytes beyond the region the verifier
+checked?
 
-	sink->area.niovs = kvcalloc(nr, sizeof(*niov), GFP_KERNEL_ACCOUNT);
+xdp_sink_mark() also sets XDP_FLAGS_SINFO_EXT on sink buffers, so
+xdp_data_hard_end() reserves no shared-info tailroom. A program can grow
+the tail to the end of the frame. If the TCP header sits at the end of
+the last UMEM chunk, can the extra read go past xdp_vaddr + xdp_vsize
+and fault in NAPI context?
 
-The mp_state checked here belongs only to this sink, and it is checked
-under this sink's lock. Suppose userspace posts the same chunk address on
-both FILL rings. Each sink sees XSK_SINK_USER and lends the chunk. Two RX
-queues then DMA into the same UMEM page, and both sockets later get that
-chunk back as free.
+Classic AF_XDP zero copy has the same double fetch, but there the
+shared-info tailroom keeps the extra read inside the chunk.
 
-The commit message says:
-
-  A chunk that is lent twice, or lies outside the UMEM, counts as an
-  invalid FILL entry, so userspace cannot make the device use a chunk
-  twice.
-
-Is this guarantee meant to cover the shared UMEM case? As far as I can
-tell, the end of the series refuses a second receiving socket only on the
-same pool. The cross-queue branch of xsk_bind() still creates a second,
-independent sink.
-
-[ ... ]
-
-> +static int xsk_sink_nl_fill(void *mp_priv, struct sk_buff *rsp,
-> +			    struct netdev_rx_queue *rxq)
-> +{
-> +	return 0;
-> +}
-
-[Severity: Low]
-Should this emit an attribute that identifies the provider?
-page_pool_nl_fill() calls:
-
-	if (pool->mp_ops && pool->mp_ops->nl_fill(pool->mp_priv, rsp, NULL))
-
-That call is the only way a page-pool dump says which memory provider
-backs a pool. In devmem, mp_dmabuf_devmem_nl_fill() emits
-NETDEV_A_PAGE_POOL_DMABUF and NETDEV_A_QUEUE_DMABUF, and io_uring zcrx
-emits its IO_URING nest.
-
-With this stub, a page pool backed by UMEM chunks looks like an ordinary
-pool in page-pool-get dumps. Queue dumps still show NETDEV_A_QUEUE_XSK
-through rxq->pool, but the page-pool side has nothing. The function is
-unchanged at the end of the series.
-
-[ ... ]
-
-> +int xsk_sink_bind(struct xsk_buff_pool *pool, struct net_device *dev,
-> +		  u16 queue_id, u16 flags)
-> +{
-
-[ ... ]
-
-> +	/* The device of the queue's page pools, which may differ per queue */
-> +	dma_dev = netdev_queue_get_dma_dev(dev, queue_id, NETDEV_QUEUE_TYPE_RX);
-> +	if (!dma_dev)
-> +		return -EOPNOTSUPP;
-> +
-> +	/* Without a program, drivers would build skbs from the buffers */
-> +	if (!dev_xdp_drv_prog_held(dev))
-> +		return -ENOENT;
-> +
-> +	err = xp_dma_map(pool, dma_dev, XSK_SINK_DMA_ATTR, pool->umem->pgs,
-> +			 pool->umem->npgs);
-
-[Severity: High]
-Can the second queue end up with IOVAs that were mapped for a different
-struct device here?
-
-Take a DRV_LAYOUT UMEM shared across two queues of one netdev.
-xp_dma_map() first calls xp_find_dma_map(), which matches only on the
-netdev:
-
-	if (dma_map->netdev == pool->netdev)
-		return dma_map;
-
-xp_init_dma_info() then copies that map's dma_pages into the pool and
-sets pool->dev = dma_map->dev, which is the first queue's device. Nothing
-compares dma_dev with dma_map->dev.
-
-xsk_sink_create() builds every net_iov DMA address from
-pool->dma_pages[i], but stores sink->dev = dma_dev, the second queue's
-device. So this check in xsk_sink_init() passes:
-
-	if (pp->p.dev != sink->dev || pp->p.offset + pp->p.max_len > PAGE_SIZE)
-
-The second queue's page pool then posts IOVAs from the first device's
-mapping to the second device. xsk_sink_alloc_netmems() also calls
-dma_sync_single_range_for_device(pp->p.dev, ...) on addresses that
-pp->p.dev never mapped.
-
-mlx5e_queue_get_dma_dev() returns ch->pdev, which differs per channel on
-multi-PF and socket-direct NICs. The mlx5 patch later in this series lets
-mlx5 RQs use this provider.
-
-If the two functions sit in separate IOMMU domains, won't the second
-device DMA to IOVAs that are unmapped in its domain, or mapped to
-something else there?
-
-The devmem bind path already rejects queues whose DMA devices differ, for
-this reason. Should xsk_sink_bind() do the same?
+Should this patch add the copy-and-check that the comment describes for
+these helpers? Or, if it is meant to come later, should the comment
+point to something that already exists?
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261124112707.118678-1-bjorn%40kernel.org
