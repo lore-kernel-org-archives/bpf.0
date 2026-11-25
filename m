@@ -1,48 +1,48 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795640406;
-	b=Navp+pUsawzPycdcdOdwRtY9iTzb8E2EQXWDzEeQDkQFYFhQ5WNUYOB96wa4YhKLwcjo
-	 3ieDKxEejf3bW4rQGusq1Dc+GDPSlL5kp/+qfYfds8SFPv2kTrDhroA+4v9Ks56qGllfb
-	 28PjWrL+LfctBYXsnSR8R/YPR+PMW40JmTsKkwfz+Ycqa0crEz83tn0maNo4TCJz4xsHA
-	 OuMRtenKdFxr9RksqCn6MuhNeMIj1ZFFfJ6ip38iPMrpkQkRhkgA6QFtdN8bD730NG3Xf
-	 M3M2U4fwa8lsKh6YTLZ/eYe90vcsSx8yTjeH8k3Fb7Yvq50ce81SHokr662gr7NpcMQ==
+	t=1795641006;
+	b=2De4KX4O5W7O45C85aq4k6j5fbo5RIBo8O2lJ1S/kxRBSmGLRywmEYiHaJ3eZ0fKKcvS
+	 KDgNt/pqwblJmREbIhIc9NtY0Sb56/c6wsBsHP4dQcPokD31ZQpnC1Y7Nx5IrZV/dp3Ob
+	 ZiVgIZjCp0lFv7Apmwmy7LwPHMVAYpZCSciW38ZWzHkwyhotvsRmxedw0JmvBs5EcA4rO
+	 V+1RzxW46tcEYmoib0tA32MtE5WVEZ+43TGzuqoeFdR6wVxeBHQymNVW09r1HLODrkcVG
+	 IWYxyFmgnJQo4mvVSqjYzwfqaxLZULtSsxhJNJKzz+YKkoGU5tG0ID8a0/Z1uSLND0Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795640406;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795641006;
 	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
 	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
 	 In-Reply-To:To:Cc;
-	bh=Ae+wuLaD5Oy4qebUY4jbFj5qLIe7o03Ea6QAoSb1edc=;
-	b=iLfOAUNTVk6FxoJ4JFOEr1jUHDYdHuGz6KKDa4lx8SVxWLL8PCy/PKV8Uhr5qAlwJEPA
-	 ecAXcr4IUZxGTKnRYA0DikiQU5lnVrPjNIglzd9C98s+Ko+XMfOJlWAnmIg10sJanVIvz
-	 sjpnZfhEjdNfLKxUkypVWAZt9X7ZeYg7PdoxHlo2X2GRpE3I71ZqQYLWxDLrTlU7m1opg
-	 Xn2NKTYUdUfJ9PM8XNK0qzjQhezeKX2e9TDr8xHB92xG/6a/uMHsnLL4LERDgZfekx28R
-	 wR32/H0Wi3Jgr+nuHKsTEaE5MQ4nq/laeJWVrrbwaiRp/s7WAA0RuermTH0lml67D4A==
+	bh=0X+rPPzIV5Pr2fJzolLCtfXji43CwXE71dJfT6bgs/0=;
+	b=4yfHQ6y3OvuB8t5+OaDKAScNEEoqx2KDklNYWOnFIU770BbcWa+EVmfxmYKUSH8QESsn
+	 4bDe2kdlYGohJ0JHRac9LBADEVzODoR3s/Mg6iImeycHdFu3xSIbfv0tFRCx2Tnv3cwsQ
+	 c9sJuR8iNdGm7ycc4PCN/26+7sbez3mWOzqdtT9zC6zeMLDRbe+iifXEr6v6zeIGwiDbF
+	 SGNASgRnbYKsrOZXpiHykvOpi+T8vD0H8rHNE7CSrrrYHA4e7GMZPUiEXbTKm7KyLTT60
+	 lc1AwXvMzws3jE9Sf740PyJ3q3CPDOxL45bOpdRbJHAOucnAMYI7dBuHo68V+qmlj/Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dbplnnqV;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="FF/YMzfU";
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92CB8606A32A;
-	Wed, 25 Nov 2026 21:00:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82BCA606A31E
+	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 21:10:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dbplnnqV
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32F231F000C0;
-	Wed, 25 Nov 2026 21:00:06 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=FF/YMzfU
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC7E41F000C0;
+	Wed, 25 Nov 2026 21:10:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795640406;
-	bh=Ae+wuLaD5Oy4qebUY4jbFj5qLIe7o03Ea6QAoSb1edc=;
+	s=k20260515; t=1795641005;
+	bh=0X+rPPzIV5Pr2fJzolLCtfXji43CwXE71dJfT6bgs/0=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=dbplnnqV/aUnI4EVaWt4cT9TjCHL4owChuD4/GvNs+9UC3Qxfgi8Mn85i7o62tzXk
-	 Fjq+amcWk4i1E/PdDC2A10owbR4e27pnovXfUPRcKBdD5uJaWzrxPNo3zuHUtlrqe7
-	 3xXv2atujDQ1mrrf2hxmixzIA1ZTpjJDprm6oIfvzZap3JTk3zIx3SLajjpz9Ig89A
-	 qClsGMJNJ9n6QVVHfDCEyjH9/hL6S6t4O1ETDTVR/k2sfYOO0vGMeEAzYY4dKzgTLt
-	 xikhDYY9w62K3GtEdQRBPPbQBsyo7UYY60vLwju2uwl4MoNu3rAxir6M/pmNuuE3ci
-	 9Gc8vBPnpy04A==
+	b=FF/YMzfUwvTSoLWOD6fK2mULsJHNn7EPar6CXQhPho1pyD9uiBQ7NKbTJpOoIs/PC
+	 P0WEXSwdmXfclzO1o81buRDmqjWKKzCFD/zFoR28TXZck2OqNLu03x1cLkUU5yHP1g
+	 XKyI/qbYBVyYC/PaRHj6+PUCcS871H3gkMYgOF1OArehvKvOKLAcaEnWU+fsklBPRj
+	 Hn65rXG2aISKATiPyqcCsuD7Oa8ef9/vWuSNw+/6rcTSu5C5rEw3Z/u2vsIX0jcHUs
+	 W5WcBLuDFvDKvx5oD6URMTSFWfy6wSRwjkkxE42Rv4fIHUUgfDgEuI72j/d5YKe7jN
+	 ijpWYxa18rolw==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 2783D3809A13;
-	Wed, 25 Nov 2026 21:00:06 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B43EC3809A13;
+	Wed, 25 Nov 2026 21:10:05 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -54,44 +54,40 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf 0/2] libbpf: Skip BPF token preparation for gen_loader
+Subject: Re: [PATCH bpf-next] libbpf: Fix dumping enum bitfields on big-endian
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <179564040476.1330987.5241146907149197485.git-patchwork-notify@kernel.org>
-Date: Wed, 25 Nov 2026 21:00:04 +0000
-References: <20261123045730.1960346-1-tweek@google.com>
-In-Reply-To: <20261123045730.1960346-1-tweek@google.com>
-To: =?utf-8?q?Thi=C3=A9baud_Weksteen_=3Ctweek=40google=2Ecom=3E?=@aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org
-Cc: andrii@kernel.org, eddyz87@gmail.com, ast@kernel.org,
- daniel@iogearbox.net, memxor@gmail.com, shuah@kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, martin.lau@linux.dev,
- song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
- emil@etsalapatis.com, ihor.solodrai@linux.dev, sidnayyar@google.com
+ <179564100453.1335727.1432980211567527079.git-patchwork-notify@kernel.org>
+Date: Wed, 25 Nov 2026 21:10:04 +0000
+References: <20261125081245.74091-1-dennylin0707@gmail.com>
+In-Reply-To: <20261125081245.74091-1-dennylin0707@gmail.com>
+To: Hungyu Lin <dennylin0707@gmail.com>
+Cc: andrii@kernel.org, bpf@vger.kernel.org, ast@kernel.org,
+ daniel@iogearbox.net, eddyz87@gmail.com, memxor@gmail.com,
+ martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+ jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
+ alan.maguire@oracle.com
 
 Hello:
 
-This series was applied to bpf/bpf-next.git (master)
+This patch was applied to bpf/bpf-next.git (master)
 by Andrii Nakryiko <andrii@kernel.org>:
 
-On Mon, 23 Nov 2026 15:57:28 +1100 you wrote:
-> When generating a loader program offline (obj->gen_loader), libbpf emits
-> loader instructions rather than issuing BPF syscalls on the host. While
-> other host-interaction steps in bpf_object_prepare() already skip
-> execution under obj->gen_loader, bpf_object_prepare_token() does not.
+On Wed, 25 Nov 2026 08:12:45 +0000 you wrote:
+> btf_dump_dump_type_data() reads an enum bitfield into the __s64
+> enum_val and passes &enum_val to btf_dump_enum_data(), where
+> btf_dump_get_enum_value() loads t->size bytes from that address. For
+> enums smaller than 8 bytes, those are the high-order bytes of enum_val
+> on big-endian, so every enum bitfield is dumped with value 0.
 > 
-> This causes offline loader generation (such as bpftool gen skeleton -L)
-> to probe /sys/fs/bpf and honor LIBBPF_BPF_TOKEN_PATH. If the build host
-> has a token-delegated bpffs mounted, libbpf acquires a token FD and ORs
-> BPF_F_TOKEN_FD into map_flags and prog_flags without gen_loader
-> serializing any token_fd, producing a broken loader blob.
+> Pass the address of the low-order t->size bytes of enum_val instead,
+> so the value is loaded the same way on both byte orders.
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf,1/2] libbpf: Skip BPF token preparation when generating loader
-    https://git.kernel.org/bpf/bpf-next/c/d92defe04ad5
-  - [bpf,2/2] selftests/bpf: Verify gen_loader skips BPF token preparation
-    (no matching commit)
+  - [bpf-next] libbpf: Fix dumping enum bitfields on big-endian
+    https://git.kernel.org/bpf/bpf-next/c/3cbbebf6819b
 
 You are awesome, thank you!
 -- 
