@@ -1,115 +1,45 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.57.50
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795643711;
-	b=lh9KAmQQQE9b7TYkKUGDFK/37UOz3DkufBrHZHD0mt7U9aCiP6HeP/jWOmRQyPZrUkXJ
-	 4QQTn6Mr9Hhw7aNpoLFGZNlcuYgXSWBnND3RNTsEvURz4jo3lHvlQrRCzhBx9Gzo5lQIh
-	 tjRxbPfXlIHmtp9+xO5AqAEWR1YFkfAlOYqgdZljQhWzYUHvortJsicHhhgpn5CULnNPv
-	 KcR9PYLcCGKyOchTNHk1up7SMj+mTAD8D8NFBnEfg3akuQcLrP78zxmE0y44dMV5+8tKx
-	 TsNuwMIMm5pkMh6yhh9nCpG075vben0+n3PSm8/arCj4yL3kgd0i9azh5AisGk9423g==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795643711;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:
-	 X-MS-Exchange-Authentication-Results:Received-SPF:Received:Received:
-	 Received:Received:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:X-NV-OnPremToCloud:X-EOPAttributedMessage:
-	 X-MS-PublicTrafficType:X-MS-TrafficTypeDiagnostic:
-	 X-MS-Office365-Filtering-Correlation-Id:X-MS-Exchange-SenderADCheck:
-	 X-MS-Exchange-AntiSpam-Relay:X-Microsoft-Antispam:
-	 X-Microsoft-Antispam-Message-Info:X-Forefront-Antispam-Report:
-	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
-	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-Id:
-	 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp:
-	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
-	 X-MS-Exchange-CrossTenant-FromEntityHeader:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=QTpSoLnio5RhblKNnsd3oq75w3jB9HKCfel0jbGbbUo=;
-	b=ttq5DDNc7Wk4aSgO9UBaO3ZfL6aqA5rLQ9je6mcbyTp7abV1BowfEav8KMMib3lzlpSH
-	 zDtYOI1eHMQgvjw/YhnLsMPJ9cISjwAYX61GrQC2q71qWdiZFTwFSd7NLKTO9zHOx+uXj
-	 +wCB6d9FjNQVUrky58awbTWNrH6NhhSUZxji2HCW8b6jPGJi7GvByJJH6q+wUC+ItIBSH
-	 R9opU3fv9W5qTdt+R87FYUCRFTEyzrPzH7K9PyOfb+i/U14+daP8J5vAz0/zjKjU/3BZC
-	 pfHEApu/IV8Z1zTMi5VwxsuLxggITzy4pBsB5HpXWpWTiMZp8uqjsygUOzXrSZ0Z8Pw==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=nvidia.com;
-	spf=fail smtp.mailfrom=nvidia.com;
-	dkim=pass header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=uskS6VU5;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.57.50
-Received: from BN8PR05CU002.outbound.protection.outlook.com (mail-eastus2azon11011050.outbound.protection.outlook.com [52.101.57.50])
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795643877;
+	b=oWsFZFLqWduz3gHFcDnvn6TMacgKsddbWdZ0gzZce0YlCgKY8wi3T5L56Rs0fJ0mlYVz
+	 GWTGeF3cB4WM0Y9Xi1MuBmoe0lEQ54upY9FgB5ghp5Ei7oNfABqQTfMcty4hTTw/Cpf0L
+	 FAHOvzZaURsK4CgGQdEpoLpWlBBYWiQU8a9WIw4VYvlPWGdKZK4JLRfuYEobrYmstDnBv
+	 uje8WyeewpEexN4W0Bq6Y3k+zSQSVu7wlYhjRoMiKnpZu3T4QWNPh6iy5Np/KrfEcxm2x
+	 kc/KMhKUTLRyHuXZshTaOGxmAf6IaZJan+y7MGu1jGtWtdNAFi4H1S4tdGqtx+EvQpA==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795643877;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=NdtF8LsP/A+ZsJC0Sryvgb8rANqF99f1f2N2Y5QleXY=;
+	b=RtWGw4282SiUmMXAoTyIoe1uywc4Dhq0dJMcFSg4Q+MoEzUZd7Unb5lfevct/cXwggBY
+	 OIVk/zpL1RoZqjoT/m58en49W4z+UI5XYhK/++xcNABde7rqzJpq6ubBw91JvKeWD9BG8
+	 C6lne0QLp8fJikUxsgLX0hJOVuDmA9o7imJ1crJq1Hu/S+pxaE+6EUeRhW/UCkqpUF4/W
+	 FdhRb56fGjoIqIRIQzt7S8FjW9BFcVM+GosfWrrtIYnEozvd52IpGm4tdna3hyhjhnzoU
+	 LnCGfEWkbKZbZQsc9JM0yhGvHH5Cdwa+isFTCGZZqcRT74oxLIvtwnfdO2fbAWRN0eQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=oKJuDHNn;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDF4D606A31E;
-	Wed, 25 Nov 2026 21:55:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CDF4D606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A7A4606A321
+	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 21:57:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=uskS6VU5
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=OXf07mhUOmjrqKg9eENjRda8Q7u3bxoyFLETu3BKIXG26m2feHBu2QjG6eLL/h7uguPv9MkTYqR1FGSZZLDlC6AvRYAuZTmQsh7Njua6wyHiYXlnwcOm75fHHr/xUM0h8CQeqBF1Cfc8IoIzT/ap/rfJJ/ka/oTJaXQwbElHYiIbJM1NBcH1jYuVPvZsyVJev4lj6zUcAutaen6du8WVdAjNU3V2hbjZPOOEexj8oKVvjKPT58BjaXK7l2mpxmUMfL+8DorD7J0Po2Cle74KA7rGLtG69EWj7cQqtRD6mZGxzea/pTY5XVL7Q0/DSoZfgVjRyPEXxspRFV128Z7sIw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QTpSoLnio5RhblKNnsd3oq75w3jB9HKCfel0jbGbbUo=;
- b=KI/FL6dBlGiv6xpSrgwCefJO7E2Tsxy88sBffCdSkG2jUkTCvID7uj4jD5gtRLqYYZN+Aa50MpkFihPVfLqaxQKCXuI8EXeJ3+pwiZX+oTyJ7lQA4A4p6zXpzr7hfDCF5YeaS/rg6F7LLhr7N7lQyJwCi9aiFK/3ewOweIpD2CSAsYKaQqpzeJNDhHoDfavCVbQ1iRDzEkCu2S/K8kMe4vrxijxHLXX2tqpEkq0Ul1bU2uq8yQmu1wqBKm3wUvD4iwm7g8Rk+P2DQZ+WLZZhu3mKJsmcoNLjkIkMbTDYXSnHKRqnCoPuD6+xpRxgWeHWmWN1q4yXOi1wAp82ZsU+gg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=mandelbit.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QTpSoLnio5RhblKNnsd3oq75w3jB9HKCfel0jbGbbUo=;
- b=uskS6VU5wCj0hOHXjqi9hHD3ua3kmdZSlnH57gQzr+IL8tLtcNcD5reesjcul76cnHOHcnAC3asJg9vBdE+BwvUScyhyiRP7+Z2RPKpwJxh2lKdjgkeHkoP9/9tqBA9ruWJTQiRIs4TURbnZYidyBW6b2+COamirD0a4tzcuXi1JUfKKNb/+9hJKklkeIXrOpcbMF8iXYJFewahE5uX2FTDnsIgf8j9iKaviSmyKLUoxC6VdT9KsY7/RDxubK2GKsxPSe1v4+AIqM9PK/d/OcmyiBGIVagJwneeck/+P9rcFMB8szTvDjISR0hPNqYGhAHZqu8nEWvfCHjZFVSbsZA==
-Received: from CH0PR03CA0212.namprd03.prod.outlook.com (2603:10b6:610:e7::7)
- by SA1PR12MB9490.namprd12.prod.outlook.com (2603:10b6:806:45b::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.639.13; Wed, 25 Nov
- 2026 21:55:05 +0000
-Received: from CH3PEPF0002457C.namprd04.prod.outlook.com
- (2603:10b6:610:e7:cafe::41) by CH0PR03CA0212.outlook.office365.com
- (2603:10b6:610:e7::7) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.662.7 via Frontend Transport; Wed, 25
- Nov 2026 21:55:01 +0000
-X-MS-Exchange-Authentication-Results: mx.microsoft.com 1; spf=pass (sender IP
- is 216.228.117.160) smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- CH3PEPF0002457C.mail.protection.outlook.com (10.167.252.22) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.662.3 via Frontend Transport; Wed, 25 Nov 2026 21:55:00 +0000
-Received: from rnnvmail203.nvidia.com (10.129.68.9) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.57; Wed, 25 Nov
- 2026 13:54:44 -0800
-Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail203.nvidia.com
- (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.57; Wed, 25 Nov
- 2026 13:54:43 -0800
-Received: from f43.com (10.127.8.9) by mail.nvidia.com (10.129.68.9) with
- Microsoft SMTP Server id 15.2.2562.57 via Frontend Transport; Wed, 25 Nov
- 2026 13:54:38 -0800
-From: Dragos Tatulea <dtatulea@nvidia.com>
-To: Antonio Quartulli <antonio@mandelbit.com>
-CC: <netdev@vger.kernel.org>, <saeedm@nvidia.com>, <tariqt@nvidia.com>,
-	<mbloch@nvidia.com>, <leon@kernel.org>, <cratiu@nvidia.com>,
-	<andrew+netdev@lunn.ch>, <davem@davemloft.net>, <edumazet@kernel.org>,
-	<kuba@kernel.org>, <pabeni@redhat.com>, <ast@kernel.org>,
-	<daniel@iogearbox.net>, <hawk@kernel.org>, <john.fastabend@gmail.com>,
-	<sdf@fomichev.me>, <linux-rdma@vger.kernel.org>, <bpf@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net-next v2] net/mlx5e: Prefetch the packet a few strides ahead in the linear MPWQE path
-Date: Wed, 25 Nov 2026 23:52:33 +0200
-Message-ID: <20261125215233.3422038-1-dtatulea@nvidia.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <674eb8ef-c93f-4926-a760-62df154ed3eb@mandelbit.com>
-References: <20261104195241.1883539-1-antonio@mandelbit.com> <a31e1e60-7e31-4a14-a087-428d1e3627f2@nvidia.com> <674eb8ef-c93f-4926-a760-62df154ed3eb@mandelbit.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=oKJuDHNn
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 465011F000C0;
+	Wed, 25 Nov 2026 21:57:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795643876;
+	bh=NdtF8LsP/A+ZsJC0Sryvgb8rANqF99f1f2N2Y5QleXY=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=oKJuDHNnw6ovmRuFI8Ou0pL5OSBPIaBGyyWpXeYwFv+n2UwKx7cMVM+cNp01jMol5
+	 lwc046w2VdyK2HOouPMiS6rucCa5TkXzOlY2my09G57nQCnAe0NFVAvAwPoBXC3Ns+
+	 Ui5c5rRE/2P2OeIfIX09He1c+z4HvEPH/4vs4ro8xp97cMmV2K4aS7IuxFUKRlWAX1
+	 2PEN5E+LMHgrcRtToS3SzwTzIaskJt25jKM9uYUxv5OWZhE9U7hL6QudrVrKiSSJZe
+	 4N0EyKuzeabsvrxo9KjsIMLfhHnMGHxoAXUqJEJVUh8Q3b2SbFn3NQVG3526NpLngX
+	 G0R92oNaq6FOQ==
+Content-Type: multipart/mixed; boundary="===============8085904527264693219=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -119,156 +49,92 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH3PEPF0002457C:EE_|SA1PR12MB9490:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1ea7a1b8-5337-468e-60c5-08df4b3ec11a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|1800799024|376014|7416014|36860700016|23010399003|261026121527099003|10067099003|22082099003|18002099003|261026140227099003|261028144727099003|261021121427099003|261021135927099003|261102123227099003|261022105027099003|56012099006|4143699003|11063799006|5023799004;
-X-Microsoft-Antispam-Message-Info:
-	7jJIvD8S7pBmoajPsGbx9QG7Yqx4HxJtQVRdt0sMuT3f7bABvum+PiXG2kD86768kjLhxCpsqNlMxd6kaMYxsTQpPV2aj0I6zO4WdTkmNUTXeIdc079durdjjso/H9T7DuSMOVI21IjxEVtcIxbGhkwD+WXuxUKh0urIXQ6Bz3vl1Wpxe3Uzx+W4CJOoSI2bwb0EWAurHO4tyhgDYDPymHCncxXG5tiVXN9AIuHyd2yT4D0V7TH8C4ySRTlJX997uj0gJA3qExT5K/cOC9a7SOfowEnx+uTTNfyCjIx+ZflL8qA7nx9yUM88ai3CumpOcx9FXZOtiRQRDHi4qxHrUtRVfMEJxYFvm+TjKAl6u/xk9udi3+5JcGtS/4zspDe+7TsP4B6eF4zfElI16TXAuccOl2b3IH7+Gia632HhBf5OuTnTcpXludgIp6kgA+JgWKnBptI2JTCFU5ya48UphQ+bmNurvSEbIghwuMXjOjkdkwSfZ1S39smVgiAf3Lgx76X1dI6thksORtAafRsoRUHpySIFAUtsEBsflaYmLXNikUqkB2rkQqzyYylk8Mn3V8702VVKgNwP/catdM6sHRhLRAWqQPirNh1TpjsAtxt9LhMe+dIPRBscd7kpw8yBrstmGAJ0VZKMaqh/I3cZNjiGPIvQIoQ09FeUGapyFpHZe1dK8qSzNnscSggmZylUH8N8n/zj9IzApOgpc+PI7A==
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(376014)(7416014)(36860700016)(23010399003)(261026121527099003)(10067099003)(22082099003)(18002099003)(261026140227099003)(261028144727099003)(261021121427099003)(261021135927099003)(261102123227099003)(261022105027099003)(56012099006)(4143699003)(11063799006)(5023799004);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	ALCXdlKHIpf6kNGWk3n8UsLyQ7KIQ1SurZIJptmLhZhdy5qOcox96yPv23WyHLov0dWnEmsaARv1OadQ9sgPaj6DV4vb7jTXgbi4IwQPJkVh3NhDNCTXVIH6mCXwhcdkJYZndP0qBVi98Bp1Q+6ybPf3p5zohO5wLrjDTTBiTyC4polDx6u32nYx0fgjpp3mjybe1TyRdr4DhjHRpPmXvhnIlhstRtPuLpv5OoO7vtMLZiREwbux5g4oNE3VTjFGyUiTYBewI/uiUrQXFBY80XuVx+9qqgZmlI5U3sbb9HqYBpT6P2ZhGclMG8IPrX+nbjR9/ntwWg4RKTUHBnwScOGDUlMQjWgSOiwBJpj2mOsU2lc9MAT3fyuRXTDMTAmAePYR5CMJImrgSS321odpnk3FAAIjoJsarq+bDsIzRsUxlK4C8kgyx+1XuwFtEDo6
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Nov 2026 21:55:00.8518
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1ea7a1b8-5337-468e-60c5-08df4b3ec11a
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CH3PEPF0002457C.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB9490
+Message-Id: <1bbb6f70251c5f33bb728521ba463dc33796749b1406e8e91f2ba51739ba2ae2@mail.kernel.org>
+In-Reply-To: <20261125212849.868523-4-a.s.protopopov@gmail.com>
+References: <20261125212849.868523-4-a.s.protopopov@gmail.com>
+Subject: Re: [PATCH v1 bpf-next 3/5] resolve_btfids: Exclude a set of functions by name
+From: bot+bpf-ci@kernel.org
+To: a.s.protopopov@gmail.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,jolsa@kernel.org,almagui@kernel.org,john.fastabend@gmail.com,bpf@vger.kernel.org
+Cc: a.s.protopopov@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Wed, 25 Nov 2026 21:57:55 +0000 (UTC)
 
-Hi Antonio,
+--===============8085904527264693219==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-On Tue, Nov 10, 2026 at 11:40:49 +0100, Antonio Quartulli wrote:
-> Hi Dragos,
->
-> On 06/11/2026 11:55, Dragos Tatulea wrote:
->> Thanks for your patch! These look indeed like enticing numbers. I'd
->> like to take some time to try this at scale and on other NICs (CX8)
->> and CPUs (Grace) and also check latency.
->
-> Thanks! In case it helps, I measured latency on my side in the meantime
-> (I don't have access to the monster Grace/CX8 equipment, but it's still
-> something :-)).
->
-First of all, thanks for your patience. I was on vacation, had to
-catch up with stuff and finally it took some time to get to a
-GB system.
+> resolve_btfids: Exclude a set of functions by name
 
-> Request/response over the bare ports (one transaction in flight, like
-> netperf UDP_RR/TCP_RR), same system as in the commit message: one RX
-> queue per port with its IRQ on a dedicated CPU, MTU 1500, default
-> coalescing (adaptive RX, rx-usecs 8, rx-frames 128), 10s per test,
-> prefetch off / v2 / v2 + next-WQE follow-up (see below) interleaved,
-> mean of 3 rounds:
->
->                       p50 (us)              p90 (us)
->                   off    v2    +next    off    v2    +next
->    UDP, 64 B     24.60  24.61  24.60   25.37  25.37  25.39
->    UDP, 1400 B   25.08  25.08  25.10   25.94  25.96  25.92
->    TCP, 64 B     24.65  24.64  24.66   25.48  25.46  25.85 (*)
->
->    (*) one round at 26.59, the other two at 25.47 and 25.50
->
-> p99 and p99.9 (37-45 us and 67-100 us) varied more between rounds than
-> between the variants, and nothing was lost. So no latency cost that I
-> could see at low rate.
->
-Thanks for checking the latency. I saw similar results. So I think
-we are good on that front.
+TL;DR:
+- Exclusion list may be incomplete: fmod_ret on copy_to_kernel_nofault()
+  returning -EFAULT could still break arm64 ftrace patching
+- Driver xdp metadata kfunc implementations may need excluding too
 
-Here goes the rest:
+> diff --git a/tools/bpf/resolve_btfids/fmodret.c b/tools/bpf/resolve_btfids/fmodret.c
+> --- a/tools/bpf/resolve_btfids/fmodret.c
+> +++ b/tools/bpf/resolve_btfids/fmodret.c
 
-The results are baseline (recent net-next) vs your v2 on AMD and a Grace
-Blackwell system. NIC is CX8. Results are medians of multiple runs.
+[ ... ]
 
-Single queue; IRQ, NAPI and the application all on one core, which
-is 100% busy in every test.
+> +static bool excluded_by_name(const char *name)
+> +{
+> +	static const char *const names[] = {
+> +		"copy_from_kernel_nofault",
+> +		"aarch64_insn_patch_text_nosync",
 
-AMD EPYC 9825 (Zen 5):
-                          throughput           cycles/packet
-  UDP 64B flood, Mpps    1.35 ->  1.44   +7%   1655 -> 1551   -6%
-  UDP 512B flood, Mpps   1.32 ->  1.43   +8%   1683 -> 1562   -7%
-  TCP 1 stream, Gb/s     23.9 ->  28.2  +18%   1125 ->  954  -15%
-  XDP_DROP read, Mpps    10.2 ->  18.4  +81%    219 ->  121  -45%
-  XDP_DROP no-touch,     23.3 ->  21.9   -6%     96 ->  102   +6%
-  XDP_TX, Mpps            5.5 ->  11.4 +106%    402 ->  196  -51%
+The commit message excludes aarch64_insn_patch_text_nosync() so that a
+program cannot make ftrace patching fail.  Is the list complete for that
+purpose?
 
-Grace Blackwell (ARM Neoverse V2, 64K page):
-                          throughput           cycles/packet
-  UDP 64B flood, Mpps    2.35 ->  2.58  +10%   1341 -> 1226   -9%
-  UDP 512B flood, Mpps   2.47 ->  2.56   +4%   1275 -> 1230   -4%
-  TCP 1 stream, Gb/s     34.0 ->  39.2  +16%   1120 ->  970  -13%
-  XDP_DROP read, Mpps    12.6 ->  19.6  +56%    255 ->  161  -37%
-  XDP_DROP no-touch,     36.0 ->  32.4  -10%     88 ->   97  +11%
-  XDP_TX, Mpps           11.0 ->  12.5  +14%    287 ->  253  -12%
+aarch64_insn_patch_text_nosync() fails only through:
 
-Results on Grace are a a bit noisier. But we can still get
-enough signal from them.
+aarch64_insn_write()
+  __aarch64_insn_write()
+    copy_to_kernel_nofault()
 
-So most results look good just as in your test. Except plain
-XDP_DROP which has a regression. Nothing to be surprised about
-here.
+copy_to_kernel_nofault() ends in "return -EFAULT", has the same shape as
+the excluded copy_from_kernel_nofault(), and is not in the list.
 
-Multi-queue TCP, one iperf3 stream per queue, again IRQ and iperf3
-on the same core:
+If an fmod_ret program on it returns -EFAULT, ftrace_modify_code() on arm64
+returns -EPERM without writing text, which looks like the same
+ftrace_bug() and stale trampoline failure described for x86.
 
-One TCP stream per queue over multiple queues (same pinning):
+The read side looks similar: aarch64_insn_read(), used by the arm64 ftrace
+code, returns the -EFAULT from copy_from_kernel_nofault().  Should
+copy_to_kernel_nofault(), and aarch64_insn_read()/aarch64_insn_write() if
+the scanner tags them, be added here?
 
-  queues   AMD Gb/s                Grace Gb/s
-     1      24.0 ->  28.4  +18%     33.9 ->  39.2  +16%
-     2      47.0 ->  56.3  +20%     67.4 ->  78.4  +16%
-     4      92.5 -> 110.5  +19%    134.9 -> 157.4  +17%
-     8     172.5 -> 206.5  +20%    263.9 -> 308.2  +17%
-    12     240.3 -> 265.5  +10%    382.8 -> 402.7   +5%
-    24     370.7 -> 371.7   +0%    413.1 -> 411.7   -0%
+> +		"bpf_remove_dentry_xattr_locked",
+> +		"bpf_set_dentry_xattr_locked",
 
-The AMD system has 12 CPUs per L3 domain with L3 cache of 32MB. The
-Grace ARM has a L3 cache of 112 MB for the whole 72 CPU socket.
+The commit message gives specialize_kfunc() calling these two in place of
+the tagged kfuncs as the reason for excluding them.  The same substitution
+applies to driver xdp metadata implementations returned by
+bpf_dev_bound_resolve_kfunc() and called from specialize_kfunc().
 
-Overall I think these results are quite good. I was expecting to
-see some issues at scale but nothing really stands out to be
-honest.
+For example veth_xdp_rx_hash() returns -ENODATA, takes only xdp_md, u32 *
+and enum pointers (none named bpf_* or btf_*), and has no bpf_kfunc tag, so
+has_bpf_types(), bpf_funcs[] and excluded_by_name() all let it through.
 
-I wondered how much each prefetch bings and gathered some data
-about that as well on the AMD system:
+If a program skips it, *hash and *rss_type stay unwritten while the
+verifier treats the kfunc outputs as written.  Does the by-name list need
+to cover these driver implementations too?
 
-                          v2    without   without   without
-                                page      headers   shinfo
-  UDP 64B flood          +7%     +7%       +3%       +7%
-  UDP 512B flood         +8%     +8%        0%       +8%
-  TCP 1 stream          +18%    +17%        0%      +18%
-  XDP_DROP read         +81%    +81%       -2%      +82%
-  XDP_DROP no-touch      -6%     -6%       -4%       -5%
-  XDP_TX               +106%   +106%       -1%      +108%
+> +	};
+> +	unsigned int i;
+> +
+> +	for (i = 0; i < sizeof(names) / sizeof(names[0]); i++)
+> +		if (!strcmp(name, names[i]))
+> +			return true;
+> +	return false;
+> +}
 
-It does look like the big bulk of the advantage comes from
-the header fetch.
+[ ... ]
 
-> I'm also testing a small follow-up: v2 doesn't prefetch when the stride
-> 4 ahead is in the next WQE, so the first strides of every WQE are never
-> prefetched. Following the WQ list to the next WQE (only when
-> cur_sz >= 2, so it is posted and its pages are allocated) removes 26-32%
-> of the remaining DRAM demand fills on the RX CPU and adds 1.8-3.3%
-> throughput, measured with TCP inside an ovpn UDP tunnel (where the RX
-> CPU is the bottleneck); its latency is the "+next" column above.
->
-> I had planned to send it as a follow-up patch, but I can also fold it in
-> a v3, whatever you prefer once you have your results.
->
-Do you have some results for this?
 
-Thanks,
-Dragos
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/45706808075
+--===============8085904527264693219==--
