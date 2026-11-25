@@ -1,74 +1,74 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.199
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795587366;
-	b=zZar9IA4TdTh6p7Xkb9oA4GcQaPvhauTCGkUrhPB6xoj1Mme8HBI4pJqeNG8oegeXRYE
-	 E6LiWc+x0GbK7yc+V7/24jlkGjF99NPz8BnETYs60AnELktKihmY5viaJNp+pJJMsuJVU
-	 UMmJF9KMaMfsORYaCjpe9ZwYOBwqCHNWopDswYUBQovlgXANygApMlYrAyZzFV0WjstAU
-	 01AayPgqrdwrFhXCNQ2ONq2WZSx9GtAesdHoj3XgLgMiyEjdqIyml+BvuqhObXIxFT5Ik
-	 wFT4Hps9wmpxV4HDKtauE+gmOZsQ+FqO66y0hC/d1qUn7DEpQzmgAPQNhJCdVsv5qOA==
+	t=1795587372;
+	b=tiLRvqetf5ffkidyV18LlzFN2hdGjxag32haf1suq3Dp0W81WBNxuTQRWbqVbWkFAdQn
+	 w+sJ6xslrp+DcwFpGKV18xsqmQQn2Lw5ax6HRn2yW26YMMDcffxzL4aOlY26GxrDIv5eB
+	 0rnF4D/NO6IdS6x6JvV4D9NKgMm7HnXmcvZCl+GNPgNWxSDoZogSEtizr8eYPi53vqtxz
+	 SRSP5aveF9KKXXxn6gQqIP+PO3vlrGhwE7DCZeLH5BU7RMOD6lxn3cc00erwsRrUD6OCS
+	 QHlT+pryauhShiKTjvsqb7ksUpraltOHZxfNMTvP8bswx6eFd01UFPpuDciiz2s7ACQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795587366;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795587372;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
 	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
 	 Content-Type;
-	bh=Tq8mjhDcSofx5kxw5eKn8LOnbaPk4exl2xG2U8WBwwQ=;
-	b=xAkapw61N2X0ICVfyzQfcuWOAx4IUVRCsjXaOboE1YI5AFnizA/RKYCYdbffgTx3Tevz
-	 wm0u28R+xo/OPEMPIr6RCoMTJArlWFMFoxE1/gCEYY9MyMcxs8tHcjR6/J9PgWbtPU+Mk
-	 Q8pkEVOAivS6ftZMtXXHaKYX+0FeWwGtkUuJ3IkjskGflgM01lvNhumVClskioRpoJgDV
-	 3W3V4l8N2BDInJHay7vbIIsISBMKYUg5DiQcX+l0QdkyYOc4at+1bKzzfZ9xu42Ows3Qa
-	 4UOmCR67E8LAzGNHpnVb6cdO9QKVep7RNx2gLw5+lUuCKbgkINDAMn6/5cKu2PcEpmw==
+	bh=bS1O6gZBZC8eMhEAflyw/nPs5CPcAQAclZg8OIJWUGg=;
+	b=Hq75wxJ5lBYXyuXXwXuyavu7vA870ASmC237gpo4W9fDst+SS6doD0yj9zGiHeXd7fLz
+	 1WMtTJF9Bme5JDvuQEpKdSCddvgcILRszYbChhp1j4mwjKsBNabn9DfyjlDemhep/0Xvf
+	 dF/CmeDbuwj23SlzGpNMNpXhmVb41ckEebPntdKSpuxPpFa7d8uD+Ot4rJu87IJU79vGh
+	 R0DEEDAaMvzjeCOvADZEb9fSFilUkx2t9a3YHIJcp5/AcVBBmUe885me0TmkVER+Hgged
+	 TaxdP8NvKd/Jd0oQXPASO7+gUlSX9sommmqwNU/oOFiSXJsTnIMICnbLGQ4nN5f3YVg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--irogers.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=XBc4yd4I;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b="Db/cRPFL";
 	arc=none smtp.remote-ip=74.125.82.199
 Received: from mail-dy1-f199.google.com (mail-dy1-f199.google.com [74.125.82.199])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77A54606DE73
-	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 06:16:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 77A54606DE73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCAF860A2614
+	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 06:16:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CCAF860A2614
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=XBc4yd4I
-Received: by mail-dy1-f199.google.com with SMTP id 5a478bee46e88-386c3309469so1559862eec.0
-        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 22:16:05 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Db/cRPFL
+Received: by mail-dy1-f199.google.com with SMTP id 5a478bee46e88-386b8624cf7so555040eec.1
+        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 22:16:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795587365; x=1796192165; darn=vger.kernel.org;
+        d=google.com; s=20260707; t=1795587371; x=1796192171; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Tq8mjhDcSofx5kxw5eKn8LOnbaPk4exl2xG2U8WBwwQ=;
-        b=XBc4yd4IuYHvDt/TolT0eq4CqFjuUCPoHs1qRWCRIlkUa0/ma9Bz2B/ehlL4XD70+/
-         L6+Ja9pugipWLAAQ5CWFoSAiRZ+G1rGhoR8HSno+f73YqXbyKxlpUifvKG4u34DS2l7r
-         QNEfZcEmteBBKozX5KWdb9OM3f6HoyiBGSJEalQ4Kt6uL2rD4/1QQ0j/syZ8y2ohh1np
-         NgY6X/O278pXS3bjNr3irHwfr0XCGHOGiJS+CY2d9wZ2yWz6tSDjK6XIYeK0FmHJ8k8c
-         oGYnKF5qiMgoLWaXUf06OGasQXvEIcn5I64ilKLYya0QeFqeTbZsop9rltdvX4QNJpBc
-         DV3Q==
+        bh=bS1O6gZBZC8eMhEAflyw/nPs5CPcAQAclZg8OIJWUGg=;
+        b=Db/cRPFLfYVCp+2GdQfozLgX7xQ22/ZFmmU+8ONn0ztqKNHD5GQP6wLynJKPPmdp9v
+         CjY4/zp3pIGiflimiES3q8iGcr0M9XMEu9XRaXQY1lXYRJ14v0lU/NxPyl3FNsagDWsm
+         meKiuP4xhYuX5egFh4+zDmRCql+CDY3MNDoZ2Vjuom3u46bjoTR/E4w4/qkQ6ljAvVBC
+         hvgS0Ll/7G0ispHlE9t1ZSd3RQtHvUMXRWroFpGoP5AjRsRc6A+psnQojtxX+CIgFxNl
+         d7rElfx3LYYsCEoXoomSKrJg9l0SUi1X9vw9lifNDMMI6qq86Rpbqhqk3PDRLQoncrjp
+         BmxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795587365; x=1796192165;
+        d=1e100.net; s=20260707; t=1795587371; x=1796192171;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=Tq8mjhDcSofx5kxw5eKn8LOnbaPk4exl2xG2U8WBwwQ=;
-        b=v0FqS+PSLOVP6A0Jtou2t7licQjQjP/dxz9Or/oyXaQKY6jrY37+5djP82c/0oqmZ2
-         i3292MT6eNwEGflifOH9ApzySdsNqFEEr12wMhbcky8rhFv+ABRw2FDbijj7GljSKIyk
-         RLDujLP5d6rXAAN4n+Cr/nh9Xvc6utwxWtP1lGLYWxKqxXHQ6H//8iSLl2B0PPyomR8S
-         GzD2TZzdA0FpJeVNlV1IV6ElON3612urrdAr4MiUh82uEW6KM8KcBQrQm0ps8sFObb6w
-         hY3mSa28axbrJNd9+n/8kWAimvD4iZm4isk6LtvruIrKNERithuRM9NvhGR9HDjiPSqq
-         tLDw==
-X-Forwarded-Encrypted: i=1; AL+hErG6Jm9otwMsEvc/3EI6V3QvhV1/zCDnVC9mlhXNWpGPvhj/+y/OzEv3DJupndjHk8RniqM=@vger.kernel.org
-X-Gm-Message-State: APuU4Z85r4gzl1B5jftPQofDAgKHZD+7dSzASYtWi4Dct8ssx2tCYb28
-	X4uMw7Xl1uQBUhJZxJYOz+qg506F+zeDykLo43MffSYTPigY99ExtfS/YdKti484W7alsFVVxX0
-	X6mpUYJutmA==
-X-Received: from dyckx5.prod.google.com ([2002:a05:7300:c7c5:b0:386:c57e:ee36])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7301:4201:b0:385:b8f4:755d
- with SMTP id 5a478bee46e88-385b8f47ad3mr17347048eec.20.1795587364179; Tue, 24
- Nov 2026 22:16:04 -0800 (PST)
-Date: Tue, 24 Nov 2026 22:14:57 -0800
+        bh=bS1O6gZBZC8eMhEAflyw/nPs5CPcAQAclZg8OIJWUGg=;
+        b=0IX3nMfiH6l0eUJKejB2PntGQab2yFU9drL8AYAgkNEPvzzIib3l2LrJnR6+Hofp/7
+         tQlgRX6SnyYIUXJY0M8suYqQhw5+9UcyjLRXhE6bsCxtpg7xDSx/t2QpKjnC0psJvqAw
+         0/BYU+CDXUwllPVOzlfDBG4q032OiKimukgd2XSrd02Otuu1ZNy7RzIO8kK0sgfGeYoK
+         KczGR2rSLo4r8xLlXPfVYoWFlChq1EUKoEKSZu1QjGKhvIIG7WZ4cSuC1o7uGFx4s/5z
+         MY7EEwkIGXAZna5KcvpYaAqgO5fAm2kPkv9LjMzIJZnkMfhuahaFs6dxl+FTdbcktI/n
+         Vhrg==
+X-Forwarded-Encrypted: i=1; AL+hErGl7/V9bxnI83hRw3LgOyjJcXrUPVCxoeuQdRSK09qVxFgs4RVZASXT8tuvJxNR/ot+3Es=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/2hLq1Tqg9TDvGehvjf01fH9Otsjgd8vcUCe7QfetaDnl5LPV7
+	YZhdB4aWFHneeQe6C/TbWrHoKQFZyAEjGIssaAjxLlaG6aeOF1SxyQzOV3IS1MaZXrMu9D+z46p
+	BTlVI90f6kw==
+X-Received: from dybou2.prod.google.com ([2002:a05:7300:e5c2:b0:384:c70c:3c65])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7301:269e:b0:376:5b99:a816
+ with SMTP id 5a478bee46e88-3856c2c3fb4mr17120337eec.3.1795587370674; Tue, 24
+ Nov 2026 22:16:10 -0800 (PST)
+Date: Tue, 24 Nov 2026 22:15:00 -0800
 In-Reply-To: <20261125061523.1540234-1-irogers@google.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -81,8 +81,9 @@ Precedence: list
 Mime-Version: 1.0
 References: <20261125061523.1540234-1-irogers@google.com>
 X-Mailer: git-send-email 2.56.1.831.g720f3f5937-goog
-Message-ID: <20261125061523.1540234-5-irogers@google.com>
-Subject: [RFC PATCH v2 04/30] x86: unwind_user: Support Minimal DWARF CFI user unwinding
+Message-ID: <20261125061523.1540234-8-irogers@google.com>
+Subject: [RFC PATCH v2 07/30] objtool/ibt: Ignore .eh_frame relocations during
+ ENDBR validation
 From: Ian Rogers <irogers@google.com>
 To: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
 	linux-arch@vger.kernel.org
@@ -102,113 +103,31 @@ Cc: jpoimboe@kernel.org, rostedt@goodmis.org, peterz@infradead.org,
 	wnliu@google.com, dylanbhatch@google.com, Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Provide unwind_user_cfi_arch() in arch/x86/include/asm/unwind_user.h for
-both 64-bit x86-64 (%rsp=7, %rbp=6, %rip=16) and 32-bit IA-32 compat
-(%esp=4, %ebp=5, %eip=8) user tasks, and select HAVE_UNWIND_USER_CFI on
-X86_64.
+When vmlinux.o is built with -fasynchronous-unwind-tables and
+CONFIG_X86_KERNEL_IBT=y, .eh_frame FDE headers contain PC-relative
+relocations referencing function start addresses across .text. Because
+.eh_frame is read-only unwind metadata rather than executable code or
+indirect branch targets, skip .eh_frame* sections during objtool's IBT
+relocation validation alongside .orc_unwind_ip and DWARF .debug_*
+sections.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- arch/x86/Kconfig                   |  1 +
- arch/x86/include/asm/unwind_user.h | 47 ++++++++++++++++++++++++++++++
- 2 files changed, 48 insertions(+)
+ tools/objtool/check.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 58dce0b66179..c8096cf66c38 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -300,6 +300,7 @@ config X86
- 	select HAVE_SYSCALL_TRACEPOINTS
- 	select HAVE_UACCESS_VALIDATION		if HAVE_OBJTOOL
- 	select HAVE_UNSTABLE_SCHED_CLOCK
-+	select HAVE_UNWIND_USER_CFI		if X86_64
- 	select HAVE_UNWIND_USER_FP		if X86_64
- 	select HAVE_USER_RETURN_NOTIFIER
- 	select VDSO_GETRANDOM			if X86_64
-diff --git a/arch/x86/include/asm/unwind_user.h b/arch/x86/include/asm/unwind_user.h
-index 6e469044e4de..1a6be08968c3 100644
---- a/arch/x86/include/asm/unwind_user.h
-+++ b/arch/x86/include/asm/unwind_user.h
-@@ -4,9 +4,17 @@
- 
- #ifdef CONFIG_UNWIND_USER
- 
-+#include <linux/unwind_dwarf_cfi.h>
- #include <asm/ptrace.h>
- #include <asm/uprobes.h>
- 
-+/**
-+ * unwind_user_word_size() - Return the user-space word size in bytes on x86
-+ * @regs: User-mode register state.
-+ *
-+ * Return: 8 for 64-bit user mode, 4 for 32-bit IA-32/compat mode, or 0 for
-+ * VM86 mode stacks which cannot be unwound.
-+ */
- static inline int unwind_user_word_size(struct pt_regs *regs)
- {
- 	/* We can't unwind VM86 stacks */
-@@ -15,22 +23,61 @@ static inline int unwind_user_word_size(struct pt_regs *regs)
- 	return user_64bit_mode(regs) ? 8 : 4;
- }
- 
-+/**
-+ * unwind_user_cfi_arch() - Populate x86/x86-64 DWARF register numbers
-+ * @ws: User word size in bytes (8 for x86-64, 4 for i386).
-+ * @arch: Output DWARF CFI architecture descriptor.
-+ *
-+ * Return: true if @ws is 4 or 8, false otherwise.
-+ */
-+static inline bool unwind_user_cfi_arch(unsigned int ws,
-+					struct dwarf_cfi_arch *arch)
-+{
-+	if (ws == 8) {
-+		*arch = (struct dwarf_cfi_arch){
-+			.ws	= 8,
-+			.sp_reg	= 7,	/* %rsp */
-+			.fp_reg	= 6,	/* %rbp */
-+			.ra_reg	= 16,	/* %rip */
-+		};
-+		return true;
-+	}
-+	if (ws == 4) {
-+		*arch = (struct dwarf_cfi_arch){
-+			.ws	= 4,
-+			.sp_reg	= 4,	/* %esp */
-+			.fp_reg	= 5,	/* %ebp */
-+			.ra_reg	= 8,	/* %eip */
-+		};
-+		return true;
-+	}
-+	return false;
-+}
-+
- #endif /* CONFIG_UNWIND_USER */
- 
- #ifdef CONFIG_HAVE_UNWIND_USER_FP
- 
-+/* Standard x86 frame record: {saved_bp, ret_addr} at [bp, bp + 2 * ws). */
- #define ARCH_INIT_USER_FP_FRAME(ws)			\
- 	.cfa_off	=  2*(ws),			\
- 	.ra_off		= -1*(ws),			\
- 	.fp_off		= -2*(ws),			\
- 	.use_fp		= true,
- 
-+/* At function entry before push %rbp: return address is at [sp, sp + ws). */
- #define ARCH_INIT_USER_FP_ENTRY_FRAME(ws)		\
- 	.cfa_off	=  1*(ws),			\
- 	.ra_off		= -1*(ws),			\
- 	.fp_off		= 0,				\
- 	.use_fp		= false,
- 
-+/**
-+ * unwind_user_at_function_start() - Check if @regs is at a function entry point
-+ * @regs: User-mode register state.
-+ *
-+ * Return: true if stopped on an entry uprobe before the frame prologue ran.
-+ */
- static inline bool unwind_user_at_function_start(struct pt_regs *regs)
- {
- 	return is_uprobe_at_func_entry(regs);
+diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+index 931c5c412f15..e631b0da9bad 100644
+--- a/tools/objtool/check.c
++++ b/tools/objtool/check.c
+@@ -4644,6 +4644,7 @@ static int validate_ibt(struct objtool_file *file)
+ 		if ((!strncmp(sec->name, ".discard", 8) &&
+ 		     strcmp(sec->name, ".discard.ibt_endbr_noseal"))	||
+ 		    !strncmp(sec->name, ".debug", 6)			||
++		    !strncmp(sec->name, ".eh_frame", 9)			||
+ 		    !strcmp(sec->name, ".altinstructions")		||
+ 		    !strcmp(sec->name, ".ibt_endbr_seal")		||
+ 		    !strcmp(sec->name, ".kcfi_traps")			||
 -- 
 2.56.1.831.g720f3f5937-goog
 
