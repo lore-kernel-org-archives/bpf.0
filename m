@@ -1,57 +1,52 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=207.46.229.174
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795629077;
-	b=MaGYsuePd7sX/Lmf3PhAkkMG7zVEgT8mIfYfgDajzzy3Ub5hUH/ha6N0nYY08NJyHMR6
-	 vKSIblbw5zJtfy1ZhHtXUfBTqPTWIUciw/bVWeYwQy0ISykzcLpB6H5sk27F34e1JPPb3
-	 v8G063593T98IEHO73ILSLa7ahuA2UZVPjmBdulysvqVcEr79PYOpjTNx9zyRIZOzqSjk
-	 ZoW0H902ozmCZljNOUxkVph9swOGpfP6HzxM5yspr0FZes+N5zKpopCVlZBU0dkWBqpLV
-	 B6QbA5Ct20KgjdM88whjuJ16EdNCm9Ze+9h6hVAbilDSzSpqFj0uhEGRGlEgS20XG/w==
+	t=1795629593;
+	b=JCoaPfHzQzF/+NSY2ZPSGDFtfMIR8Tt4N3fwkXSFXPtW+9jcMYxI8d/qZFki2SjXs0a5
+	 q99LDkLJIWbU/PlHREPQ/gsV5VINiJ06THmzUPGor94H+cvH+E1B5+doFkh7mCo26+ZOv
+	 ZbjZEsOW0Ci5XKHRsYBTjZSKhaKfYLYio/MkoRJGPzivrgXv0Z9M1RqmaABFgH6GMdmeY
+	 UAfhA0tVZtKtcys2uacZZhpWgBHDl18l/nhY6FNT0Qxu58VHfgJHO564oIhSrRnrWCQCm
+	 qTie0IgEzfktDySSbPkS2ppQMWg//BtsOL6tZtSkPzLvogEO4seAmrrhSN3sSu1IXnA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795629077;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=JE5JrAxX9WUiqjSIaRS/A9y1gmJ/dRrwKj0ZOnLSRi4=;
-	b=VYnXplSytDK+aXOluOdvBHZiOes0vlDWL1fRiIi9L/ZP74hI1khFVL1qnSIOED/egOf5
-	 Fn0ZWvDpemgM0hC6FBKdxBhcXtxZZAciIoALvo1q1lns4h3OhK4/dCe4SG4aTYQBaiDUB
-	 OwwAswqPFK34HoOOOdY608MyJRlxk9B0tXDzRK5NZCukEjNOZcnHBmC6uAA0JNd/y4oiQ
-	 NTAWv9WdLZlOscZTXqjFqEsiGnNNhYiG+ldTx2RC+7ZESx8NZD0Xc/gottht7lT5V+1jQ
-	 ch9R8l7SstDYh8nBqRcm/bOH+atjKvJBAizDg/KLTwTUjWyRTWZDRgbsCSEVWb62q3w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795629593;
+	h=DMARC-Filter:Received:Received:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:MIME-Version:Content-Transfer-Encoding:X-CM-TRANSID:
+	 X-Coremail-Antispam:X-CM-SenderInfo;
+	bh=j+S7/7WtpcADXEwVRba68L4BGjIYUbo5L1pEZB4YTDE=;
+	b=Soz/91XnGmUT7Y11wNRQZacVHX1biDxI1IDBMLY0nHwaJ9hx+t/ifU9dHwOwaLlqilOR
+	 wUxVZyLA2fG+T+YXVM3dN8qKeimQDz1EI6qbdVV5noetQEdC0gBt/CY4qtW7LkLpNCLXe
+	 fDzjRRXdyf3HIOHHOQO1tUgj7pqIdPIU6UeHRd3xDraRjkoOw4JHZySpyQxCj4z83CVYJ
+	 jJUt2fZmMqyCHjoF7O5a1GJk7jvV4gX3Z49KHzHL3jEu3vSZ/3G+azLfSYBaw8IZLAIB1
+	 IWDgdq1ymwSrHrzCUjXN9AdrbRj29YXks5sbpzQeQXl5L0Oep+Bai/D3Z8enJg1X8QQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Pw5ucimn;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9143F606A321
-	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 17:51:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Pw5ucimn
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 197191F000D3;
-	Wed, 25 Nov 2026 17:51:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795629077;
-	bh=JE5JrAxX9WUiqjSIaRS/A9y1gmJ/dRrwKj0ZOnLSRi4=;
-	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=Pw5ucimnhQvlw/0UTMyzC9yj5piY8hfalYMCjQjietpsezEIqqnVXq0ABRbe2wkKi
-	 MrxpUVfhj6bOLJFBm9c9uIRY7yYtXW25ipwgr7r8JxHtGYlaEe6OHq1r5ZYW/CV7tg
-	 dE7huH8GFkImDMFGXYrECHF/1N00dW9+ZNXns/KD3tWwJgVklATimOvcSBQ0ketqSC
-	 14SQCZKsZk3NtHFeQW8RczowGxBA24K2T983KKwNdtGaRnQoZYvxjzxyo0f7N8Th/M
-	 q7276JtC/XK5pV33579uwrCPZtAWCJcUjvZawiEXgmhfRao7DjBXM1bOqBcZdMBum1
-	 A4Zp9mYIW4Fag==
-Message-ID: <sashiko-outbox-233864@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf 1/4] bpf: Add bpf_insert_insns() to insert insns
- next to an insn
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Luis Gerhorst" <luis.gerhorst@fau.de>, bpf@vger.kernel.org
-In-Reply-To: <45c622fb6bba40629594679c01eed836d58acd89.1795625597.git.luis.gerhorst@fau.de>
-References: <20261125-nospec-result-reply-d60fdc6da8ef@fau.de>
- <cover.1795625597.git.luis.gerhorst@fau.de>
- <45c622fb6bba40629594679c01eed836d58acd89.1795625597.git.luis.gerhorst@fau.de>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 25 Nov 2026 17:51:16 +0000
+	dmarc=none header.from=hust.edu.cn;
+	spf=pass smtp.mailfrom=hust.edu.cn;
+	arc=none smtp.remote-ip=207.46.229.174
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [207.46.229.174])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B9DB606A321
+	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 17:59:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8B9DB606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hust.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hust.edu.cn
+Received: from hust.edu.cn (unknown [172.16.0.50])
+	by app1 (Coremail) with UTF8SMTP id IAEQrMBmrs8TIgdrPz0LAA--.49154S2;
+	Thu, 26 Nov 2026 01:59:47 +0800 (CST)
+Received: from pride-PowerEdge-R740.tailb307d0.ts.net (unknown [10.12.191.55])
+	by gateway (Coremail) with SMTP id _____wA3wjwQIgdrFXB0AA--.6775S2;
+	Thu, 26 Nov 2026 01:59:44 +0800 (CST)
+From: Quan Sun <m202672221@hust.edu.cn>
+To: bpf@vger.kernel.org,
+	kpsingh@kernel.org
+Cc: matt@bobrowski.net,
+	paul@paul-moore.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	emil@etsalapatis.com,
+	Quan Sun <m202672221@hust.edu.cn>
+Subject: [PATCH] bpf, lsm: Mark IPC control hook perm parameters nullable
+Date: Thu, 26 Nov 2026 01:59:41 +0800
+Message-ID: <51ae120f0b3cd8c20dbaaf02c9c384dc2afab6bc.1795627805.git.m202672221@hust.edu.cn>
+X-Mailer: git-send-email 2.43.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -60,146 +55,172 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:IAEQrMBmrs8TIgdrPz0LAA--.49154S2
+Authentication-Results: app1; spf=neutral smtp.mail=m202672221@hust.ed
+	u.cn;
+X-Coremail-Antispam: 1UD129KBjvJXoW3JFyUAF45WF15Gr1kWw18Grg_yoW7tryfpa
+	yUGw1UCr4kJr4IgFWfJFW8ua4ayrsY9ayUGFZFyry0yanxZw1Fqryjvr13CFWrCrs8G3y0
+	qrs0g34aga4UAaDanT9S1TB71UUUUjJqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUHYb7Iv0xC_Kw4lb4IE77IF4wAFc2x0x2IEx4CE42xK8VAvwI8I
+	cIk0rVWrJVCq3wA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjx
+	v20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2
+	z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAaw2AFwI
+	0_JF0_Jw1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCE
+	c2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0EF7xvrVAajcxG14
+	v26r4UJVWxJr1lYx0E74AGY7Cv6cx26r4fZr1UJr1lYx0Ec7CjxVAajcxG14v26r4UJVWx
+	Jr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkF7I0En4kS14v26r1q6r
+	43MxkIecxEwVCm-wCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26r4fZr1UJr1l
+	4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxV
+	WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI
+	7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
+	1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI
+	42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07b4xhJUUUUU=
+X-CM-SenderInfo: bpsqjlqxssjio6kx23oohg3hdfq/
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue to consider:
-- [High] bpf: adjust_insn_aux_data() overwrites zext_dst of original
-  insn
---
+The shm_shmctl(), sem_semctl() and msg_queue_msgctl() BPF LSM hooks are
+reached with a NULL struct kern_ipc_perm by the informational IPC
+commands:
 
-commit 4852fbba0f01b447927ce6cabc47568627f19025
-Author: Luis Gerhorst <luis.gerhorst@fau.de>
+  ipc/shm.c  shmctl_ipc_info()  security_shm_shmctl(NULL, IPC_INFO)
+  ipc/shm.c  shmctl_shm_info()  security_shm_shmctl(NULL, SHM_INFO)
+  ipc/sem.c  semctl_info()      security_sem_semctl(NULL, cmd)
+  ipc/msg.c  msgctl_info()      security_msg_queue_msgctl(NULL, cmd)
 
-bpf: Add bpf_insert_insns() to insert insns next to an insn
+None of these three hooks has a strong prototype in
+kernel/bpf/bpf_lsm_proto.c, so their BTF comes from the __weak
+prototypes generated from include/linux/lsm_hook_defs.h in
+kernel/bpf/bpf_lsm.c.  Those carry no __nullable suffix, so
+btf_ctx_access() types perm as a plain PTR_TO_BTF_ID and the verifier
+accepts a program that dereferences it unconditionally:
 
-This commit adds bpf_insert_insns() to insert instructions before or after
-an existing instruction while preserving all of the original instruction's
-insn_aux_data fields, and converts insertion sites in fixups.c to use it.
+  r6 = *(u64 *)(r1 + 0)     /* struct kern_ipc_perm *perm */
+  r7 = *(u32 *)(r6 + 96)    /* perm->seq */
 
-> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-> index a656634fa9e46..485feffe05363 100644
-> --- a/kernel/bpf/fixups.c
-> +++ b/kernel/bpf/fixups.c
-> @@ -170,82 +170,60 @@ enum bpf_patch_mode {
->  	BPF_PATCH_MOVE_TARGET,	/* targets of 'off' follow the original insn to =
-'off + len - 1' */
->  };
-> =20
-> +/* The patch does not contain the insn that it replaces. */
-> +#define BPF_PATCH_NO_ORIG	-1
-> +
->  /* single env->prog->insni[off] instruction was replaced with the range
->   * insni[off, off + cnt).  Adjust corresponding insn_aux_data by copying
->   * [0, off) and [off, end) to new locations, so the patched range stays =
-zero
-> + *
-> + * The aux data of the original insn stays with the insn if the range st=
-ill
-> + * contains it, at index 'orig'. Otherwise 'orig' is BPF_PATCH_NO_ORIG a=
-nd the
-> + * aux data moves to the last insn of the range.
->   */
->  static void adjust_insn_aux_data(struct bpf_verifier_env *env,
->  				 struct bpf_prog *new_prog, u32 off, u32 cnt,
-> -				 struct bpf_insn *original_insn,
-> -				 enum bpf_patch_mode mode)
-> +				 int orig, enum bpf_patch_mode mode)
->  {
->  	struct bpf_insn_aux_data *data =3D env->insn_aux_data;
->  	struct bpf_insn *insn =3D new_prog->insnsi;
-> +	u32 last =3D off + cnt - 1;
-> +	u32 keep =3D orig =3D=3D BPF_PATCH_NO_ORIG ? last : off + orig;
-> +	u32 target =3D mode =3D=3D BPF_PATCH_MOVE_TARGET ? keep : off;
-> +	bool indirect_target =3D data[off].indirect_target;
->  	u32 old_seen =3D data[off].seen;
-> -	u32 prog_len;
-> +	u32 prog_len =3D new_prog->len;
->  	int i;
-> =20
-> -	/* aux info at OFF always needs adjustment, no matter fast path
-> -	 * (cnt =3D=3D 1) is taken or not. There is no guarantee INSN at OFF is=
- the
-> -	 * original insn at old prog.
-> -	 */
-> -	data[off].zext_dst =3D bpf_insn_def32(new_prog, insn + off + cnt - 1) >=
-=3D 0;
-> -
-> -	if (cnt =3D=3D 1) {
-> -		/*
-> -		 * A non-memory accessing insn could have been replaced by a
-> -		 * memory accessing insn, systematically mark it for non-stack
-> -		 * access
-> -		 */
-> -		data[off].non_stack_access =3D bpf_is_mem_insn(insn + off);
-> -		return;
-> +	if (cnt > 1) {
-> +		env->insn_aux_data_len =3D prog_len;
-> +		memmove(data + last, data + off,
-> +			sizeof(struct bpf_insn_aux_data) * (prog_len - last));
-> +		/* The aux data of the original insn is at 'off' and 'last' now. */
-> +		data[keep] =3D data[last];
-> +		for (i =3D off; i <=3D last; i++)
-> +			if (i !=3D keep)
-> +				memset(data + i, 0, sizeof(struct bpf_insn_aux_data));
->  	}
-> -	prog_len =3D new_prog->len;
-> -	env->insn_aux_data_len =3D prog_len;
-> =20
-> -	memmove(data + off + cnt - 1, data + off,
-> -		sizeof(struct bpf_insn_aux_data) * (prog_len - off - cnt + 1));
-> -	memset(data + off, 0, sizeof(struct bpf_insn_aux_data) * (cnt - 1));
-> -	for (i =3D off; i < off + cnt - 1; i++) {
-> +	for (i =3D off; i <=3D last; i++) {
->  		/* Expand insni[off]'s seen count to the patched range. */
->  		data[i].seen =3D old_seen;
->  		data[i].zext_dst =3D bpf_insn_def32(new_prog, insn + i) >=3D 0;
->  		/*
-> -		 * In BPF_PATCH_MOVE_TARGET mode the original insn is the last
-> -		 * slot by construction.
-> +		 * A new insn can access memory. Systematically mark it for
-> +		 * non-stack access, only the original insn keeps its marking.
->  		 */
-> -		if (mode =3D=3D BPF_PATCH_KEEP_TARGET &&
-> -		    !memcmp(insn + i, original_insn, sizeof(struct bpf_insn))) {
-> -			data[i].non_stack_access =3D
-> -				data[off + cnt - 1].non_stack_access;
-> -			data[off + cnt - 1].non_stack_access =3D false;
-> -		} else if (bpf_is_mem_insn(insn + i)) {
-> -			data[i].non_stack_access =3D true;
-> -		}
-> +		if (orig =3D=3D BPF_PATCH_NO_ORIG || i !=3D keep)
-> +			data[i].non_stack_access =3D bpf_is_mem_insn(insn + i);
->  	}
+The trampoline passes the raw NULL through and the program faults:
 
-[Severity: High]
-Does setting data[i].zext_dst unconditionally across [off, last] clobber
-data[keep].zext_dst for the original instruction when called from
-bpf_insert_insns()?
+  BUG: KASAN: null-ptr-deref in bpf_prog_4c1689a6d8af2199+0x52/0x6e
+  Read of size 4 at addr 0000000000000060 by task 03_lsm_raw/89
+  Call stack:
+   bpf_prog_4c1689a6d8af2199+0x52/0x6e
+   bpf_trampoline_6442537938+0x61/0xfd
+   security_shm_shmctl+0x29/0x50
+   shmctl_ipc_info+0x1b/0x140
+   ksys_shmctl.constprop.0+0x22b/0x290
+   do_syscall_64+0x10b/0x5f0
+  BUG: kernel NULL pointer dereference, address: 0000000000000060
+  Oops: 0000 [#1] SMP KASAN PTI
 
-For BPF_ALU64 arithmetic on PTR_TO_ARENA, adjust_ptr_min_max_vals() sets
-aux->needs_zext =3D true and aux->zext_dst =3D true while leaving insn->cod=
-e as
-BPF_ALU64 until bpf_do_misc_fixups() rewrites it to BPF_ALU.  If
-bpf_insert_insns() runs on that instruction first (for example, inserting
-BPF_ST_NOSPEC() in bpf_convert_ctx_accesses() when aux->nospec is set),
-bpf_insn_def32(new_prog, insn + keep) sees BPF_ALU64 and overwrites
-data[keep].zext_dst to false while preserving data[keep].needs_zext =3D tru=
-e.
+Loading the program requires CAP_BPF, but triggering it requires
+nothing: ksys_shmctl() has no capability check ahead of IPC_INFO and
+SHM_INFO, and the hook is the first statement of shmctl_ipc_info(), so
+an unprivileged shmctl(0, IPC_INFO, buf) kills its own process while the
+attachment stays in place for every later caller.  With
+panic_on_oops=1 a single CAP_BPF principal takes down the host.
 
-After bpf_do_misc_fixups() converts the instruction to 32-bit BPF_ALU,
-bpf_opt_subreg_zext_lo32_rnd_hi32() sees zext_dst =3D=3D false: it skips
-BPF_ZEXT_REG on bpf_jit_needs_zext() architectures, and under
-BPF_F_TEST_RND_HI32 it emits rnd_hi32_patch to OR random bits into the
-upper 32 bits of the PTR_TO_ARENA register, causing subsequent
-BPF_PROBE_MEM32 dereferences to access outside the 4GB arena region.
+kernel/bpf/bpf_lsm.c defines every attachable hook as
 
-Conversely, for a 32-bit instruction where bpf_compute_live_registers()
-cleared zext_dst because the upper 32 bits are dead, bpf_insert_insns()
-resets data[keep].zext_dst back to true.
+	__weak noinline RET bpf_lsm_##NAME(__VA_ARGS__)
+	{
+		return DEFAULT;
+	}
 
-Should data[i].zext_dst also be updated only inside the
-"if (orig =3D=3D BPF_PATCH_NO_ORIG || i !=3D keep)" block?
+and notes that the linkage is weak "such that strong overrides can be
+implemented if need be", so an override has to be a definition rather
+than a declaration.  The bodies below return the defaults that
+include/linux/lsm_hook_defs.h declares for these three hooks (all 0), so
+the generated stubs keep behaving identically; only the parameter name
+recorded in BTF changes.
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1795625597.gi=
-t.luis.gerhorst@fau.de?part=3D1
+Add strong prototypes for the three hooks so that perm is typed
+PTR_MAYBE_NULL, the way mmap_file() and inode_init_security() are
+already handled.  With the annotations in place the identical program
+is rejected at load time:
+
+  1: R1=ctx() R6=trusted_ptr_or_null_kern_ipc_perm(id=1)
+  1: (61) r7 = *(u32 *)(r6 +96)
+  R6 invalid mem access 'trusted_ptr_or_null_'
+
+  Reason:
+    R6 may be NULL here (a nullable kernel object pointer). The program
+    could dereference NULL on this path, so the verifier cannot prove
+    this access is safe.
+
+and BPF_PROG_LOAD fails with EPERM.
+
+socket_getpeersec_dgram() passes a NULL struct sock on one path too,
+but its reachability from a BPF LSM program has not been confirmed, so
+it is left out here and can be handled separately.
+
+This is not a regression: the parameters were never annotated, and the
+NULL argument is part of the hook contract -- selinux_shm_shmctl() has
+carried the comment "No specific object, just general system-wide
+information" for IPC_INFO and SHM_INFO since the hook was added, so the
+callers are right and only the BPF side lacks the information.
+
+This change was drafted with an AI coding assistant during a BPF
+subsystem audit. I reviewed the code, built the kernel and ran the
+reproducer before and after, and take responsibility for it.
+
+Signed-off-by: Quan Sun <m202672221@hust.edu.cn>
+---
+
+Reproduce: boot bpf-next master (8dfce13340ae, 7.4.0-rc3-g8dfce13340ae,
+CONFIG_KASAN=y) in qemu, load a 4-instruction BPF_PROG_TYPE_LSM program
+attached to bpf_lsm_shm_shmctl that dereferences ctx offset 0 without a
+NULL check, then call shmctl(0, IPC_INFO, buf) from an unprivileged
+process.  The PoC is raw bpf(2) only, no libbpf and no skeleton.
+sem_semctl() and msg_queue_msgctl() are annotated for symmetry with the
+shm case; I did not run separate reproducers for those two paths.
+
+ kernel/bpf/bpf_lsm_proto.c | 29 +++++++++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
+
+diff --git a/kernel/bpf/bpf_lsm_proto.c b/kernel/bpf/bpf_lsm_proto.c
+index b81179ae2e0..7c48af32c2d 100644
+--- a/kernel/bpf/bpf_lsm_proto.c
++++ b/kernel/bpf/bpf_lsm_proto.c
+@@ -5,6 +5,7 @@
+ 
+ #include <linux/fs.h>
+ #include <linux/xattr.h>
++#include <linux/ipc.h>
+ #include <linux/bpf_lsm.h>
+ 
+ /*
+@@ -32,3 +33,31 @@ noinline int bpf_lsm_inode_init_security(struct inode *inode, struct inode *dir,
+ {
+ 	return -EOPNOTSUPP;
+ }
++
++/*
++ * Strong definitions of the IPC control BPF LSM hooks. The informational
++ * commands have no object to authorize, so they pass a NULL struct
++ * kern_ipc_perm: shmctl_ipc_info() and shmctl_shm_info() call
++ * security_shm_shmctl(NULL, IPC_INFO | SHM_INFO), semctl_info() calls
++ * security_sem_semctl(NULL, cmd) and msgctl_info() calls
++ * security_msg_queue_msgctl(NULL, cmd). The __nullable suffix marks perm as
++ * PTR_MAYBE_NULL so that BPF LSM programs have to check it before
++ * dereferencing it. Without these overrides the hooks fall back to the
++ * __weak prototypes generated from lsm_hook_defs.h in bpf_lsm.c, which carry
++ * no annotation and let the verifier type perm as non-nullable.
++ */
++noinline int bpf_lsm_shm_shmctl(struct kern_ipc_perm *perm__nullable, int cmd)
++{
++	return 0;
++}
++
++noinline int bpf_lsm_sem_semctl(struct kern_ipc_perm *perm__nullable, int cmd)
++{
++	return 0;
++}
++
++noinline int bpf_lsm_msg_queue_msgctl(struct kern_ipc_perm *perm__nullable,
++				      int cmd)
++{
++	return 0;
++}
+-- 
+2.43.0
+
