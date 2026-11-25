@@ -1,81 +1,81 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.42
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795641439;
-	b=J8izJG66s4g/0xAua4UrXCwRvGrc3P6LCJ3l/Lc1rV4nzi2L0k1dp9mdIuYn7EFnCYp7
-	 vISMKtdm5IZbfy5VVwmnifWIeXJ/h1qaUkE7sfXlu2rvgtLa76Zi15pSa+WLfNof2HymI
-	 vd8szmZ5PqN3fLjCZvndOIXul6IU+/4DIbLLrpOYAxu3xW7IdB/1o0su3Q75fPPtSuq5t
-	 UYmv1laZOYS91CuBl3ijv2vnTn20vqTMezpYgsOfaCwa1VD0YlaaflN6aPjSGIcpnyTkk
-	 /s9o+Va4dHQFccGWwWbL022PA5KBlPjDN8X/CVzbKrKxHEV8kSO3tWc5iciPq9BhQ0g==
+	t=1795641440;
+	b=Np7t2VlvkSkcpxduhLYoIDvdJhbZb8twp5ngL83meJCFXCJ3lkoWX5ToPZrb4GeQzrUz
+	 DFbhDDgjS92jm6d453URf/vi0zhGBXl8Rg3NUDp5nNiytJ4RqLdybu7aMjWt70QeSv3hw
+	 5PmpHvorCTL10cuYUHIwCkYfpnwfmon85ddpE3Xd3D0XmWHo7bLJQ4icm81sxryW1R05F
+	 03eY8alkwdzwCPm6aER8ZHwii39B3PZCzbhE+7BtCTp72cjf1/2WlMCoNhwK1i/y9pFEv
+	 Qxgdm9mNx0DPwMUDhJUvtgbxrbee3dpzH0RbHJjcpVLBHfF/um2H1TTQWv/kPbR2lSQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795641439;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795641440;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=+EJNolFkcyMayTjVz0D0mCGnaGEcUcJjZMC3XRXziEI=;
-	b=QUhweHwL84KiTM2kWAqSNXEtyIcXBwtvF38rik8XBW86+ZgeBR5T6N4XQqrTqpAYriwJ
-	 65bnUHlo/ENnjm3hMzMyVFjQbzTvU/oofmEuWQhvtqm2FTpRYX3k/U5VPTXeUpQf2jI6n
-	 Opu/t2IrFZu71xU4ujSgOS4GV3eO3OsuVWzFLwbMcwfyOgoEzq1NBxTLV0hN5TWb3S3kc
-	 UznpdEy1JoB/fbD4G6VMy0OIE+4qJ0pX6c8B4Nt1lWURS08NplLw5fxLLGLbArGCKUjAd
-	 f//AKAXnPcXdYNk+b/YjozBMl96f+GBXrBMdZAKaY3rfZ0h8Oj7XemXMg9dGneKP0Ew==
+	bh=2Aj8pKXRexLnII6etA3MQvP44ipeYWKng7vwOIf45jg=;
+	b=ni7F0EdjZkda4TWSdKhNM50GyNX6vaTy59bavfw/aylJpkUwp9kVQQ9m9xuoq8IMWU56
+	 Uka53/NJK0S2mP7ygqxV7Rqk0AXXV1jmsrBBjbrVZul9PCAMS4sxu63xc7oGgChQ3h5hi
+	 SMtTTGTiuHY+l2FYYAhP1FT5nQ2Nz+FlkgKIGaJ0eMxrqUoW6mgzTGHFhrCwiTLByychM
+	 xbG16mhF15F1r9JMH41HCxJFYWb4sRAN1HRzEq5a2C1GhNiZuEzlAA1A01RCpw7iDePWO
+	 VAv6Nr/AHdDitTGdYrMfuADRe1ehtgY5JDLS7jWkX6Ts4nxaO2MlQLmjybb0g7xPuqg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=VTPOtcbf;
-	arc=none smtp.remote-ip=209.85.128.43
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=hPGj9Xci;
+	arc=none smtp.remote-ip=209.85.221.42
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1844C606A33A
-	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 21:17:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1844C606A33A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDA3C606A33C
+	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 21:17:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CDA3C606A33C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=VTPOtcbf
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4b79502c27aso62780245e9.1
-        for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 13:17:18 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=hPGj9Xci
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-4a2f4ca0dcfso3614879f8f.1
+        for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 13:17:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795641437; x=1796246237; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1795641438; x=1796246238; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=+EJNolFkcyMayTjVz0D0mCGnaGEcUcJjZMC3XRXziEI=;
-        b=VTPOtcbfQYoj1pSpmrc0yBzRiFbJNnh1cLXoMUE41yFNXIoxd5+fiJMsLSR9BemO8P
-         nOKAZE2S8kyRm9lO18oTprb7nLoGnBQEjcPDL17aBLmHu0/yZVEgNL9xTms+ENPg/kqx
-         18hAjSrIxHGOT3VEAoAI47sLaGFxwcIsIAEld4oXpqaLAZSpc99fvEzbnTG6Cxfuf04J
-         Yrdq+oGSgQc/wqTwYxX8XSooLeCM2OwMMHniVZDWZjmG98ysfxE82CVcC7GhWgYYbKEZ
-         GxbaTY33YpNMEjIK0Jj0gr4zLauG/Q2rbbZ35Klm0TNX4c3eEXiYu3b4Hzh5vTWi5BbB
-         sq8Q==
+        bh=2Aj8pKXRexLnII6etA3MQvP44ipeYWKng7vwOIf45jg=;
+        b=hPGj9XciMA9vuiktexNbjiv0ZEiruT97VefrVG5CrCH8i/SKEDYQjO3aptIJkpxw3P
+         pd856y/KBbGFgBemz1LAVm5bkAV/PDz7JOCQKNbb3LlHS6D3EtBd1KKYwX1je/9ZoVnW
+         T+n3B4S371Zce4Ii4wZ+o700doprv7nUiOf/i8f9mYzO+OpH/HFRsRUbzU+HZG7xWnyb
+         VlE7B5ql019btj6VRWbNb3fNikAW6T0oMwXVjJZCjPLXS98nvdlp4JjGSLM2Aj4+jv+V
+         HIOOG9UYMjhwUWarkoIK3KWz4SaqwJA+iKks0AHLkxQ0ykEDBSVBjp2RGHMpIOu3xXME
+         SLDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795641437; x=1796246237;
+        d=1e100.net; s=20260707; t=1795641438; x=1796246238;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=+EJNolFkcyMayTjVz0D0mCGnaGEcUcJjZMC3XRXziEI=;
-        b=tV6dXcowf6R0dPWWUSUBoZdOsDoQMMJhU1CWY0NglsUGOrwCCUfyCS5lnjUK6ms6oH
-         5cNGAjP1ENtvGT/fh9r5jRByy2Rv/5l8iJbzEzbVnW3CFeH8RnIYrifSd/7Ut5pjpyth
-         L9XDWCuo112TI8xwPD0rxIdNLV5qhRxSBwCD4FyKFYzr4Hs5uyjYwHh4ruj39Yf0ixnb
-         jRtj801j/tBltH+CW1WA0b/3l5VRFD2crOZMCMLP+v9bSMpSoOMIXiKFn6paBBjfR8Jw
-         G8Yy0oYT27RyFq+Z1iFnZ4p4h333vChfgjFJTUIrsM9bnXQB3bWHhtEXhgrubweMwNPg
-         y5tw==
-X-Forwarded-Encrypted: i=1; AL+hErEzg8EiN4wvFxq08rBcKmsLPXW9reHLHGwazcb8PNxnVZNPJHSxPoIFsetcm1LE4fbiiNk=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+fRFDesWYF4AI1XeGE+05Lh9zHhnolnQPg1n9Edp6Li6v1AtbT
-	fUd3kjKPHXAPxmSpjj6fmNPgyDBfRS5Uq/Yhb8Xvax8iW/Rf8CmdgRM2
-X-Gm-Gg: AZFdTZd1qOQwkRmr5KdqYqctd1VvuxfyEeGlOSbRM4Y0ubFkuRpVAZ0zIE/aHdlc4V4
-	BIkhgt/+hfFN+TMQamUzKTG97+1A4GbJU6QlEmCFyzuN/I+i7oST+nIBm8QkRL3+qS3y/IEr5BT
-	OJ5avwUOW0jxq9LOT+xQ/nSGR6n6ilXi/NFRV6sFP9KX193fhTBYSXmS/NEYkwHMDWdnuDXEx2E
-	OgunwGSTvI1zZAtXF9ozz/iTIfiBxIglApheF8IhquU0mNXjLEhDYXkHucUQldt+Thp/9iqNGnb
-	+7t+lLJiowaX+QL6glxPfpvLarxugEMF0o+3Ix/meDoIVnjLJOHcFRDNKTkHzTnIQT1YZqEQrj5
-	fTN/fpgRH4iU5E3dMiwnZWVyR8Xn61lrDTQKUolWU7xzEGQ1jHjq0ZrNEA0eAqandfjEAgbCRMx
-	SNZ1HSRqlLjJWB/uFezL5yOrLb5/dGDDGut69hLuuXG5KYZx1CiPXUFdeYFo3cmoDBjiCtrN8B/
-	GgXx076o7XXzR0QiYV19IzCTAYbpMY1oxvqW8mhAPOo2qNi1b+IGrcdRhZDpyu33hs6aC01O0rA
-	NY1lvv69Zny4YRRPcEwblN59Mga8hAsa7vnqfDcCqqtgGTUz
-X-Received: by 2002:a05:600c:483:b0:4bb:a9f7:681 with SMTP id 5b1f17b1804b1-4bba9f70685mr18237615e9.3.1795641437409;
-        Wed, 25 Nov 2026 13:17:17 -0800 (PST)
+        bh=2Aj8pKXRexLnII6etA3MQvP44ipeYWKng7vwOIf45jg=;
+        b=dwPzRONaP4R/XFI9y6t9zuezRjNBLs4Fp+H5fv5IcUG2DTKBUBDVE8PA7oCwnLW0LP
+         OVu5rQduGeV+CkNAQyb+nS0QldCoUz9mMFxuEOk4iohYHGRoVwcI9pk/gj/EZUN5jFNQ
+         lWvhqzvQa2iQfCkDCgzpwXOEhPsImkXgBdSs3uwl+4YIucESTP5jxi7mCC0vSig3MW2x
+         Xxu6vqFBskwdjSQ/0un4rgubFdrlEG22GCdZKjkCjz1H3c1+rJE9gGiMiOEzoCerg3+M
+         I1VjkYtj6rlWtiPSiIZP5FkBtbPYwZPfmkSj/O2MfOgS1XWUpczftIoJrpbYNky0IIfc
+         ziAA==
+X-Forwarded-Encrypted: i=1; AL+hErEfxnE9Jkwv0unx6Vdfd/J2NGFpwA0phTQe2WMBtRA7FwGEoltmChSMP8NkbM8eAdePJ6c=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9iYwjTwyWSilKiLJ5k6QFaZVWiGDsLwp2B2nMU3gTjUkoW0Guu
+	XyixtKzKKvyqLvOgEbv7XuoPenzOnSKx1Sk4nsYX/Zg27myvLxoMMK0w
+X-Gm-Gg: AZFdTZebohd9BFxkNK+TNfNnIOnIijUL2xMBGvO65AYzS6h9x3GZAuJYiYK4CZB91W9
+	1nYMqgaF7JiTTHoco7DMH5+UG+qD/usTqd9ZvLjmUq8Ggsk/AGTHpGK4LOV6EVRVlvezPPU0VGr
+	mRsi5LBsjrCTE/8uyhe0Iw/pSAB+aDe8aacoiiBQgcNOCSqj5m3ITaEgG60+ZstI53iTpbabugv
+	82grJm0Wo2lLBFPJl4sDERy9Tln5fwfLuSx7dHgkK49SW+UGFz82XNToynKQsqoBhVQvhKoag6b
+	7bvb0cVsw2BsGYdpkMMhK07a2+3ECNeBSbt0yMBLndKWo3WRhEXIDXmTFl8zJ7ueCG/soav72Da
+	l341jldBrPyyyZunEiW+v6Utj/jBc9qZzHw1ZUBYG0MrMBXU5fiUPcqwbe61OEYs9uWh8RrGG8t
+	1Jz8tPUyOOStdSrNkmPjk9VL6z2jChXrOrYPw54U9HvK3Q2m6OKySOmNrwiGE1lb9lRkBpPXLTM
+	0TMOY1WRWCDyOgs5/xiZXO6XMRAKrxmj0ynBS4I17iSkWH0DoEd5QfmSaJLyxNPgl4aaWJAAiGm
+	PmRoMOO5nMcRfT1oUa30TUU6OdNdI7w/w5dyUnOHjK96azc=
+X-Received: by 2002:a05:6000:4616:b0:4a8:cf12:6f34 with SMTP id ffacd0b85a97d-4abaab6318fmr36906963f8f.4.1795641438188;
+        Wed, 25 Nov 2026 13:17:18 -0800 (PST)
 Received: from localhost.localdomain ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4ab6a67fe75sm41840507f8f.24.2026.11.25.13.17.16
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4ab6a67fe75sm41840507f8f.24.2026.11.25.13.17.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Wed, 25 Nov 2026 13:17:17 -0800 (PST)
 From: Anton Protopopov <a.s.protopopov@gmail.com>
@@ -89,9 +89,9 @@ To: Alexei Starovoitov <ast@kernel.org>,
 	John Fastabend <john.fastabend@gmail.com>,
 	bpf@vger.kernel.org
 Cc: Anton Protopopov <a.s.protopopov@gmail.com>
-Subject: [PATCH v1 bpf-next 4/5] resolve_btfids: Exclude the code of kernel/bpf and of the JIT
-Date: Wed, 25 Nov 2026 21:28:37 +0000
-Message-ID: <20261125212849.868523-5-a.s.protopopov@gmail.com>
+Subject: [PATCH v1 bpf-next 5/5] selftests/bpf: Test functions which must have no fmod_ret tag
+Date: Wed, 25 Nov 2026 21:28:38 +0000
+Message-ID: <20261125212849.868523-6-a.s.protopopov@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20261125212849.868523-1-a.s.protopopov@gmail.com>
 References: <20261125212849.868523-1-a.s.protopopov@gmail.com>
@@ -106,197 +106,83 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Not every function of kernel/bpf and of the JIT has a BPF type in its
-prototype, e.g. check_attach_modify_return() of the verifier,
-bpf_tramp_ftrace_ops_func() and bpf_arch_text_invalidate(). Read the
-symbols of kernel/bpf/built-in.a and arch/<arch>/net/built-in.a with
-the llvm-nm of llvm-config, which reads ELF objects and LTO bitcode,
-and do not tag these functions.
-
-Weak symbols count too, for the bpf_lsm_* stubs. Only one tagged
-function outside BPF has a weak copy in kernel/bpf, skb_copy_bits(),
-and it loses its tag. BPF helpers call it, so this is acceptable.
+Check in the BTF of vmlinux that the build has not tagged a few
+functions which return errors: ones which work on BPF objects, a
+kfunc, a helper, one of kernel/bpf, and those which are excluded by
+name.
 
 Signed-off-by: Anton Protopopov <a.s.protopopov@gmail.com>
 ---
- tools/bpf/resolve_btfids/Makefile   |  1 +
- tools/bpf/resolve_btfids/fmodret.c  | 80 ++++++++++++++++++++++++++++-
- tools/bpf/resolve_btfids/llvm-mc.sh |  8 ++-
- 3 files changed, 86 insertions(+), 3 deletions(-)
+ .../bpf/prog_tests/fmodret_untagged.c         | 60 +++++++++++++++++++
+ 1 file changed, 60 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/fmodret_untagged.c
 
-diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
-index 38b7caa98776..6d2a2b3582cb 100644
---- a/tools/bpf/resolve_btfids/Makefile
-+++ b/tools/bpf/resolve_btfids/Makefile
-@@ -93,6 +93,7 @@ LLVM_MC_HELP := CONFIG_BPF_FMODRET_SCAN=y needs a C++17 compiler (HOSTCXX=$(HOST
- 		llvm-dev, llvm-devel). See above what is wrong, or switch the option off
- or_llvm_mc_help := || { echo '$(LLVM_MC_HELP)' >&2; false; }
- HOSTCFLAGS_resolve_btfids += -DHAVE_LLVM_MC
-+HOSTCFLAGS_resolve_btfids += -DLLVM_NM='"$(shell $(LLVM_MC_SH) nm)"'
- CXX := $(HOSTCXX)
- CXXFLAGS := $(filter-out -Werror,$(HOSTCFLAGS_resolve_btfids)) -O2 \
- 	    $(or $(shell $(LLVM_MC_SH) cxxflags),$(error $(LLVM_MC_HELP)))
-diff --git a/tools/bpf/resolve_btfids/fmodret.c b/tools/bpf/resolve_btfids/fmodret.c
-index 5a392452471e..384efb5307ab 100644
---- a/tools/bpf/resolve_btfids/fmodret.c
-+++ b/tools/bpf/resolve_btfids/fmodret.c
-@@ -17,6 +17,7 @@
- #include <stdio.h>
- #include <stdlib.h>
- #include <string.h>
-+#include <unistd.h>
- 
- #include <bpf/btf.h>
- 
-@@ -103,6 +104,71 @@ static bool excluded_by_name(const char *name)
- 	return false;
- }
- 
-+#ifndef LLVM_NM
-+#define LLVM_NM "llvm-nm"
-+#endif
+diff --git a/tools/testing/selftests/bpf/prog_tests/fmodret_untagged.c b/tools/testing/selftests/bpf/prog_tests/fmodret_untagged.c
+new file mode 100644
+index 000000000000..59347f9b4e78
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/fmodret_untagged.c
+@@ -0,0 +1,60 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Functions which return errors, but which the build must not tag as fmod_ret targets */
++#include <test_progs.h>
++#include <bpf/btf.h>
 +
-+/* The code of BPF itself, in the build directory of vmlinux */
-+static const char * const bpf_archives[] = {
-+	"kernel/bpf/built-in.a",
-+	"arch/x86/net/built-in.a",
-+	"arch/arm64/net/built-in.a",
++#define TAG "bpf_fmodret_retval:"
++
++static const char * const funcs[] = {
++	/* They work on BPF objects */
++	"tracing_iter_filter",
++	"btf_kfunc_check_flag",
++	"bpf_mprog_detach",
++	/* A kfunc and a helper */
++	"bpf_sock_destroy",
++	"bpf_skb_load_bytes",
++	/* Of kernel/bpf */
++	"bpf_tramp_ftrace_ops_func",
++	/* By name */
++	"copy_from_kernel_nofault",
++	"bpf_set_dentry_xattr_locked",
++	"bpf_remove_dentry_xattr_locked",
 +};
 +
-+static int cmp_name(const void *a, const void *b)
++/* Has the build tagged the function FUNC_ID, or any function if FUNC_ID is 0? */
++static bool tagged(const struct btf *btf, int func_id)
 +{
-+	return strcmp(*(char * const *)a, *(char * const *)b);
++	int id;
++
++	for (id = 1; id < btf__type_cnt(btf); id++) {
++		const struct btf_type *t = btf__type_by_id(btf, id);
++		const char *name = btf__name_by_offset(btf, t->name_off);
++
++		if (btf_is_decl_tag(t) && (!func_id || t->type == func_id) &&
++		    !strncmp(name, TAG, strlen(TAG)))
++			return true;
++	}
++	return false;
 +}
 +
-+/* Read the symbols of bpf_archives[] into NAMES, sorted */
-+static int read_bpf_code(char ***names, size_t *nr)
++void test_fmodret_untagged(void)
 +{
-+	char cmd[sizeof(LLVM_NM) + 256] = LLVM_NM " --defined-only -j", *line = NULL;
-+	size_t i, size = 0;
-+	int err = 0;
-+	FILE *f;
++	struct btf *btf;
++	int i, id;
 +
-+	if (access(bpf_archives[0], F_OK)) {
-+		fprintf(stderr, "FAILED: --fmodret_scan: no %s\n", bpf_archives[0]);
-+		return -ENOENT;
++	btf = btf__load_vmlinux_btf();
++	if (!ASSERT_OK_PTR(btf, "btf__load_vmlinux_btf"))
++		return;
++	if (!tagged(btf, 0)) {
++		printf("%s:SKIP:no CONFIG_BPF_FMODRET_SCAN\n", __func__);
++		test__skip();
++		goto out;
 +	}
-+	for (i = 0; i < sizeof(bpf_archives) / sizeof(bpf_archives[0]); i++)
-+		if (!access(bpf_archives[i], F_OK))
-+			strcat(strcat(cmd, " "), bpf_archives[i]);
-+	f = popen(cmd, "r");
-+	if (!f)
-+		return -errno;
-+	while (getline(&line, &size, f) > 0) {
-+		char **p = *nr % 4096 ? *names : realloc(*names, (*nr + 4096) * sizeof(*p));
-+
-+		if (!p) {
-+			err = -ENOMEM;
-+			break;
-+		}
-+		*names = p;
-+		line[strcspn(line, "\n")] = 0;
-+		p[(*nr)++] = line;
-+		line = NULL;
-+		size = 0;
++	for (i = 0; i < ARRAY_SIZE(funcs); i++) {
++		id = btf__find_by_name_kind(btf, funcs[i], BTF_KIND_FUNC);
++		if (ASSERT_GT(id, 0, funcs[i]))
++			ASSERT_FALSE(tagged(btf, id), funcs[i]);
 +	}
-+	free(line);
-+	if (!feof(f) && !err)
-+		err = -EIO;
-+	if (pclose(f) && !err)
-+		err = -EINVAL;
-+	if (err) {
-+		fprintf(stderr, "FAILED: --fmodret_scan: %s\n", cmd);
-+		return err;
-+	}
-+	qsort(*names, *nr, sizeof(**names), cmp_name);
-+	return 0;
++out:
++	btf__free(btf);
 +}
-+
-+static bool is_bpf_code(char **names, size_t nr, const char *name)
-+{
-+	return bsearch(&name, names, nr, sizeof(*names), cmp_name);
-+}
-+
- /* Find kfuncs and helpers */
- static bool *find_bpf_funcs(const struct btf *btf)
- {
-@@ -260,11 +326,12 @@ static void set_protos(struct scan *scan, const struct image *img, const struct
- 
- int fmodret_tag(Elf *elf, struct btf *btf, int verbose)
- {
--	size_t nr_funcs = 0, nr_scanned = 0, nr_undecodable = 0, nr_tags = 0;
-+	size_t nr_funcs = 0, nr_scanned = 0, nr_undecodable = 0, nr_tags = 0, nr_bpf_code = 0, i;
- 	const struct btf *base = btf__base_btf(btf);
- 	__u32 id, nr_types = btf__type_cnt(btf);
- 	struct scan *scan = NULL;
- 	bool *bpf_funcs = NULL;
-+	char **bpf_code = NULL;
- 	struct image img;
- 	char counts[200];
- 	int err;
-@@ -281,6 +348,11 @@ int fmodret_tag(Elf *elf, struct btf *btf, int verbose)
- 	bpf_funcs = find_bpf_funcs(btf);
- 	if (!bpf_funcs)
- 		goto out;
-+	if (!base) {
-+		err = read_bpf_code(&bpf_code, &nr_bpf_code);
-+		if (err)
-+			goto out;
-+	}
- 
- 	for (id = base ? btf__type_cnt(base) : 1, err = 0; id < nr_types && err >= 0; id++) {
- 		const struct btf_type *t = btf__type_by_id(btf, id);
-@@ -308,6 +380,9 @@ int fmodret_tag(Elf *elf, struct btf *btf, int verbose)
- 			continue;
- 		if (excluded_by_name(name))
- 			continue;
-+		/* Skip the code of kernel/bpf and of the JIT */
-+		if (is_bpf_code(bpf_code, nr_bpf_code, name))
-+			continue;
- 		nr_scanned++;
- 		err = scan_func(scan, func, &values);
- 		if (err == -EINVAL) {
-@@ -340,6 +415,9 @@ int fmodret_tag(Elf *elf, struct btf *btf, int verbose)
- 		printf("  FMODRET %s\n", counts);
- 	}
- out:
-+	for (i = 0; i < nr_bpf_code; i++)
-+		free(bpf_code[i]);
-+	free(bpf_code);
- 	free(bpf_funcs);
- 	scan_close(scan);
- 	image_close(&img);
-diff --git a/tools/bpf/resolve_btfids/llvm-mc.sh b/tools/bpf/resolve_btfids/llvm-mc.sh
-index bc62c4e43406..919cf9480250 100755
---- a/tools/bpf/resolve_btfids/llvm-mc.sh
-+++ b/tools/bpf/resolve_btfids/llvm-mc.sh
-@@ -1,7 +1,7 @@
- #!/bin/sh
- # SPDX-License-Identifier: GPL-2.0-only
- #
--# usage: llvm-mc.sh SRCARCH [cxxflags | libs]
-+# usage: llvm-mc.sh SRCARCH [cxxflags | libs | nm]
- #
- # text_mc.cpp reads the machine code of the kernel arch SRCARCH with LLVM's MC
- # layer. Fail, and say why, if this host lacks what it takes to build it.
-@@ -9,7 +9,8 @@
- # one run of llvm-config. Whether text_mc.cpp works with this LLVM shows when the
- # tool is built, and in text_arch_init() when it starts.
- #
--# For the Makefile print the flags to compile text_mc.cpp, or the libraries.
-+# For the Makefile print the flags to compile text_mc.cpp, the libraries, or
-+# llvm-nm, which reads kbuild's objects for fmodret.c.
- #
- # The host's LLVM need not be the one which compiles the kernel, if any does.
- 
-@@ -56,4 +57,7 @@ libs)
- 	libs=$($LLVM_CONFIG --link-shared "$@") || die "no libraries of LLVM"
- 	echo $libs -lstdc++ -lm
- 	;;
-+nm)
-+	echo "$($LLVM_CONFIG --bindir)/llvm-nm"
-+	;;
- esac
 -- 
 2.43.0
 
