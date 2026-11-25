@@ -1,49 +1,97 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.52
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795641006;
-	b=2De4KX4O5W7O45C85aq4k6j5fbo5RIBo8O2lJ1S/kxRBSmGLRywmEYiHaJ3eZ0fKKcvS
-	 KDgNt/pqwblJmREbIhIc9NtY0Sb56/c6wsBsHP4dQcPokD31ZQpnC1Y7Nx5IrZV/dp3Ob
-	 ZiVgIZjCp0lFv7Apmwmy7LwPHMVAYpZCSciW38ZWzHkwyhotvsRmxedw0JmvBs5EcA4rO
-	 V+1RzxW46tcEYmoib0tA32MtE5WVEZ+43TGzuqoeFdR6wVxeBHQymNVW09r1HLODrkcVG
-	 IWYxyFmgnJQo4mvVSqjYzwfqaxLZULtSsxhJNJKzz+YKkoGU5tG0ID8a0/Z1uSLND0Q==
+	t=1795641434;
+	b=v+OyEatwIzDMTQ/Ucu76jrcPmMACP5SxWmBa2DXXxKC5/CCm0GXIkIYRgEm2wRpEMNO4
+	 QpLKoTKMc7NCSxJZ8yxyLeUYdw7Ylh5BDeu9D1FDd41zyzjGEFwdNKcSBaBhe8kjkwvUk
+	 oXJh332sUiJjB9yNbaZMWm53wNu0lWptviQ7Tag+34dTr9OuMTO4HAKtq6ZdpnlekaR2Y
+	 jeAcUfPPZOupRLZk8PLIgs+3mRff77z/ps5KgNH7MZ1hEdT8utLWFiB2kuSAH2KH/WZiZ
+	 7voR49l5Rhp7Bg5G5iUEhrh1Xswp8r2zdiFUjw0zqUavkj++tiPSHWGsSPjrJzkSM1Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795641006;
-	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
-	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc;
-	bh=0X+rPPzIV5Pr2fJzolLCtfXji43CwXE71dJfT6bgs/0=;
-	b=4yfHQ6y3OvuB8t5+OaDKAScNEEoqx2KDklNYWOnFIU770BbcWa+EVmfxmYKUSH8QESsn
-	 4bDe2kdlYGohJ0JHRac9LBADEVzODoR3s/Mg6iImeycHdFu3xSIbfv0tFRCx2Tnv3cwsQ
-	 c9sJuR8iNdGm7ycc4PCN/26+7sbez3mWOzqdtT9zC6zeMLDRbe+iifXEr6v6zeIGwiDbF
-	 SGNASgRnbYKsrOZXpiHykvOpi+T8vD0H8rHNE7CSrrrYHA4e7GMZPUiEXbTKm7KyLTT60
-	 lc1AwXvMzws3jE9Sf740PyJ3q3CPDOxL45bOpdRbJHAOucnAMYI7dBuHo68V+qmlj/Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795641434;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=iwfb5sHVIqvXq9ghgAUb3lAZtJU878pLWYMA3THKAJI=;
+	b=wg7bQxPQNmXsNO6Ss0oh9u6Ru5ubjkMZL3ajqElSC04vXdMYihI/QkHDKQTmbQn5MW/O
+	 z3Zv5PRSRhUEwgXnnAYlzYZku/EdKGiKoWoeg4OaJu4OT0u1zCN1jsixJYacpVPzlZPyB
+	 LOcSakHyd/bK3CX5Nw/xP788uZqr/dfqQ2y5zyE92ns1CJ5nHLFALHdPiM8zvMDqG9YTZ
+	 v7H3dwZQhRuW7YBDVaFstfGXZTNJrvubcGUL5PZLE2eBkztdlLepo1KnNbeT5X8IMEsZQ
+	 iRIjJlJdINTI8pqnky3eONCOSbSOH1ebVfJo8pPoaaHRlThA8BUN6xh0gNmPVxM9y5Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="FF/YMzfU";
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Tizg9VXK;
+	arc=none smtp.remote-ip=209.85.221.52
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82BCA606A31E
-	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 21:10:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5164A606A321
+	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 21:17:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5164A606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=FF/YMzfU
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC7E41F000C0;
-	Wed, 25 Nov 2026 21:10:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795641005;
-	bh=0X+rPPzIV5Pr2fJzolLCtfXji43CwXE71dJfT6bgs/0=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=FF/YMzfUwvTSoLWOD6fK2mULsJHNn7EPar6CXQhPho1pyD9uiBQ7NKbTJpOoIs/PC
-	 P0WEXSwdmXfclzO1o81buRDmqjWKKzCFD/zFoR28TXZck2OqNLu03x1cLkUU5yHP1g
-	 XKyI/qbYBVyYC/PaRHj6+PUCcS871H3gkMYgOF1OArehvKvOKLAcaEnWU+fsklBPRj
-	 Hn65rXG2aISKATiPyqcCsuD7Oa8ef9/vWuSNw+/6rcTSu5C5rEw3Z/u2vsIX0jcHUs
-	 W5WcBLuDFvDKvx5oD6URMTSFWfy6wSRwjkkxE42Rv4fIHUUgfDgEuI72j/d5YKe7jN
-	 ijpWYxa18rolw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B43EC3809A13;
-	Wed, 25 Nov 2026 21:10:05 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Tizg9VXK
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-48dee593f18so5853723f8f.3
+        for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 13:17:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795641433; x=1796246233; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=iwfb5sHVIqvXq9ghgAUb3lAZtJU878pLWYMA3THKAJI=;
+        b=Tizg9VXK5bDm3VE5gX59VRbCoEJ+KwrInRznvo2rzNaQ0yiSQ7gSbvwTgm0mLcAvyH
+         TJoxcf2mpEMFoVS4o1QILCVo0PIdV8DbKZRReZoZy27wpPaSi7wnmQjk7C4ZA/FiQLw8
+         n/ypNugubqHz6dU76GkgxmB/i1N+7bzLGVqDBub+4EwXNVPd4hqg6012C7A8v5HFZXCS
+         hSdLXoxEF8eN4mJGTxmZkJQV6LfUoI8+6/rMLbUBXNC0eMJTKMVbA4d1IMfx0ofXdyiI
+         xvF4pzKFiMWRQjtTucGjdYxMvPrB24OhdVRRHKaR7YQbYIuGkGzoKw6vbhvpByvwcEVj
+         iRnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795641433; x=1796246233;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=iwfb5sHVIqvXq9ghgAUb3lAZtJU878pLWYMA3THKAJI=;
+        b=IJTndWI9NIaw9EV27edrZThnQvMLEvuI1dAH++mMru6b/A4w7Y5rdv+jO22dn/deXb
+         ql2RYcXTElXXGSbktUzsdo5Hr3Zx+JQQ58Ajg+YCamPTpZHfT5E1rtQNHCXaL2AlesUK
+         zDssLW3l3fQs0o4V7a4+9tJ6JUDmXllDbDEgiMCWzqx54xEUeOml7O7+Di0cfLpEWs10
+         p40sikwbQnPBODnlGEpv8FnnTJQaK0tsMZguiiVgmepigzQ1K+oMxaIaABjRBc6T4B5k
+         1GZCo7TGgv/UojyPKF9CdHZmzvJJwaEEDyBersAn44zFUwB3awkA7Uy6YNC7mE0ZkzGx
+         c57A==
+X-Forwarded-Encrypted: i=1; AL+hErGkqcFp8OseitRzkYAcouhtzQ+lp4/sCAeZ1qodKyzLmKhLF6Si3tOCYoTdmTCrV1iyk1c=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8J3hu8pfXnxNF7+XzAPm8eUYDOsZBNKmWU3Hrbbv2D5f6HOz6d
+	yQxfbq8Zu+0lnYLKZBLSiA0VOIzyyBCMLL74yfXvTCGJ6HfISjAM60Ee
+X-Gm-Gg: AZFdTZffcXcf7dX1NQrZ2jVLyvdfx2r+NN5qf8E5X7vrfeW3DYdOKURxebBVdjUnIyV
+	GiQCfGImawSxKdjZ14tpX0sat+HLTnVFuN3+yuatg2MOFqWbYayYRRqOs/n91JXycYu8x08VfaJ
+	749ShYT7cZRliWoX8VflAZqkJjGXMu+EoqQA74iVkTKr4tAPUpKVt01mx3G3YuR63qbz/7nS8Mu
+	yhd3Cr4YvTFdCGFfcWIdPnV9QhYjN0PobONN81kGMlVqK0CvnFqFqVCk2UGdkd2/I1UF1kgZ0KR
+	v2tb/xOty1yunYZeBupBlPqoSH9ULlVnuUVhfcx0SyqJ4oSaICKcMMKn0lPwYMB3auIWVy8ducw
+	b8vQDnG4B7LxGNLCCXus1DFJFTHoddO9Jb7mUYI4ioElQoPjmkLKQ8SJ1KgoJWvnxI9Aga6GqdF
+	sSpkFNPMtknpsCwwPVfnGdrrZnm5yaZzke7gSFWPmj6mZq+9vLRjm4N7JCqTT8rPVO2S9+wK4k3
+	I3E0yq8LGx4kaSq0Ki1TQu4827kyIjONJn3wRWgwoSF2eibDO6JJeYNSy4HdR2utWKNQ0wFIWpD
+	C7xIVvSll4uM36jwBnma0WvBxLnmXm8iqSResl/of9M6P9aOVd6b2dbopwC1Cl/moVcC
+X-Received: by 2002:a05:6000:2c13:b0:4a7:9630:7b57 with SMTP id ffacd0b85a97d-4abb43dece6mr37287206f8f.44.1795641432466;
+        Wed, 25 Nov 2026 13:17:12 -0800 (PST)
+Received: from localhost.localdomain ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4ab6a67fe75sm41840507f8f.24.2026.11.25.13.17.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Nov 2026 13:17:11 -0800 (PST)
+From: Anton Protopopov <a.s.protopopov@gmail.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Alan Maguire <almagui@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	bpf@vger.kernel.org
+Cc: Anton Protopopov <a.s.protopopov@gmail.com>
+Subject: [PATCH v1 bpf-next 0/5] Do not tag selected functions as fmodret targets
+Date: Wed, 25 Nov 2026 21:28:33 +0000
+Message-ID: <20261125212849.868523-1-a.s.protopopov@gmail.com>
+X-Mailer: git-send-email 2.43.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -54,44 +102,50 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] libbpf: Fix dumping enum bitfields on big-endian
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <179564100453.1335727.1432980211567527079.git-patchwork-notify@kernel.org>
-Date: Wed, 25 Nov 2026 21:10:04 +0000
-References: <20261125081245.74091-1-dennylin0707@gmail.com>
-In-Reply-To: <20261125081245.74091-1-dennylin0707@gmail.com>
-To: Hungyu Lin <dennylin0707@gmail.com>
-Cc: andrii@kernel.org, bpf@vger.kernel.org, ast@kernel.org,
- daniel@iogearbox.net, eddyz87@gmail.com, memxor@gmail.com,
- martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
- jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
- alan.maguire@oracle.com
 
-Hello:
+With CONFIG_BPF_FMODRET_SCAN=y the build tags the functions that
+return errors, so that an fmod_ret program can attach to them. Among
+them are functions which BPF itself relies on: the verifier, the
+trampolines, kfuncs and helpers. As was suggested by Alexei in [1],
+we shouldn't tag such functions.
 
-This patch was applied to bpf/bpf-next.git (master)
-by Andrii Nakryiko <andrii@kernel.org>:
+Changes split into a few logcal pieces:
 
-On Wed, 25 Nov 2026 08:12:45 +0000 you wrote:
-> btf_dump_dump_type_data() reads an enum bitfield into the __s64
-> enum_val and passes &enum_val to btf_dump_enum_data(), where
-> btf_dump_get_enum_value() loads t->size bytes from that address. For
-> enums smaller than 8 bytes, those are the high-order bytes of enum_val
-> on big-endian, so every enum bitfield is dumped with value 0.
-> 
-> Pass the address of the low-order t->size bytes of enum_val instead,
-> so the value is loaded the same way on both byte orders.
-> 
-> [...]
+  * Patch 1 excludes the functions which use BPF types.
+  * Patch 2 excludes kfuncs and helpers.
+  * Patch 3 adds a static list of functions to exclude,
+    which contains only 3 functions for now.
+  * Patch 4 excludes the code of kernel/bpf/* and of JITs (x86 and arm).
+  * Patch 5 adds a corresponding selftest.
 
-Here is the summary with links:
-  - [bpf-next] libbpf: Fix dumping enum bitfields on big-endian
-    https://git.kernel.org/bpf/bpf-next/c/3cbbebf6819b
+In my arm64 vmlinux build this removes 774 tags, 13650 are left.
+Precisely,
 
-You are awesome, thank you!
+  * Patch 1, BPF types:        removes 575 targets
+  * Patch 2, kfuncs, helpers:  removes another 130 targets
+  * Patch 3, by name:          removes another 2 targets
+  * Patch 4, kernel/bpf, JITs: removes another 67 targets
+
+One implementation note: the llvm-nm was chosen to list names in Patch 4,
+because a) it handles any object independently of how the kernel is built
+b) BPF scan already requires llvm tools.
+
+  [1] https://lore.kernel.org/bpf/DN3P7509U44I.MLLYA1W3M3X9@gmail.com/
+
+Anton Protopopov (5):
+  resolve_btfids: Do not tag functions which work on BPF objects
+  resolve_btfids: Do not tag kfuncs and helpers
+  resolve_btfids: Exclude a set of functions by name
+  resolve_btfids: Exclude the code of kernel/bpf and of the JIT
+  selftests/bpf: Test functions which must have no fmod_ret tag
+
+ tools/bpf/resolve_btfids/Makefile             |   1 +
+ tools/bpf/resolve_btfids/fmodret.c            | 164 +++++++++++++++++-
+ tools/bpf/resolve_btfids/llvm-mc.sh           |   8 +-
+ .../bpf/prog_tests/fmodret_untagged.c         |  61 +++++++
+ 4 files changed, 231 insertions(+), 3 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/fmodret_untagged.c
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.43.0
 
