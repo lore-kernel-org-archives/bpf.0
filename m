@@ -1,102 +1,58 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.229.131
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=113.46.200.216
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795594397;
-	b=zyZnGwTwTQXH0reUgxmlFZbqJEEoV4hq6jtPSMmIQSbRJo0CzKGGc20BtBy1Kv2Ckdye
-	 fHxkvak2dNMDZCDDpxXSaEHHvsVkxtLeh9tC/g8FSSEkqk0gGSddcgko9KdLxpnvUaXib
-	 OY/2J/wl97U/eVVu+xEqPJVTE9PkGdof7KewJY6egiI5RnBXLOXB8mfHQB2YFMFd1pq0q
-	 SdVRJNI4IR5RDH9qF9pHfiYynlvMq0JE3ZwqVbYlD8Rnr8Gmn0YAx2cCQO4U8EICL44Ja
-	 1LmS56ECA7NujWfzmKbUCgB5a3RCjL44y5pc0H/dOqJ/4EMTEDGf6G9p5Zvne6yMhwg==
+	t=1795594693;
+	b=35FQmQA2ySmb8KSfPPwlyMU3+QdGV8aTe+djUAS/EvFxNzBAR0neSz8EjC1lnVm0jyWi
+	 5wXW7jmKSew2myjiQZZANh6AwvFZhjd4+9O1SnFg8GgYp0pbsDk8iPp2DWUoyRgeWJXS3
+	 wqUMrtzCjEOmHsTWdDps6EhXC1FVg91UFCIozN93W6Ub3M0RKdVQ5eKKKrzCjDq2EY3a2
+	 2qdKWuZihYbe1y4ARdp667Z5IsoIw4Jhgw2AAx4BFnKjw/jcuiRQzG5vuvN70hXSLpFNn
+	 ZYAqtUlEB2vyEm2UiDFJI47VsVKGJtJm2kjhZXG9hrOzWWS6JLNZM4tKSEuSpq+iE6w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795594397;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=2QHT5GJ4qZi7ncNmGPt18IUAQBZQUrxx2H1DMijk5Lg=;
-	b=tPUWWiWa8qP38mFn7oIHMyGZu0a4YnvX1b8q4zQNAdGcgQxqBpEKiSdeQcastDN0pbMH
-	 ucDeH3bd5m9TW96Q+oJxzyda7BKPAEkqnEYRC3pdBckcNdfhOvbrWQV+vvsA1PGbxb2Nj
-	 j9wjgk0wd78TY/V4tQF1M9ZAN+L/5bfRCh9z2yEzabqj8w4rOn2fH/riTx5GjkvsN2nlf
-	 GV+pZ0Ijs0eOPqnwFstOY8QeNQh9cTiafvhhQP/Ok8t0yLbfpgB8wlC4fGne8Ug/1fy5r
-	 0/Mox8ReWQjpjdLqdBIhs6aLqfaQmCca5LDUX53WUZoi++fcs8kAHOtMq5Peo2lD04g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795594693;
+	h=DMARC-Filter:dkim-signature:Received:Received:Received:Message-ID:
+	 Date:MIME-Version:User-Agent:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type:Content-Transfer-Encoding:X-Originating-IP:
+	 X-ClientProxiedBy;
+	bh=MbyGB8U9YRrniG9snzlWgjemL8IXXkOYk25rFewhrkE=;
+	b=zcGDSqfdkexhsYqIX0HuTFYOWsFhwpn7kALZWHzjq4nocJTntyK9qAOj2WkwJarGcO9u
+	 L7MhDOrlhJKYEZ8P+IZ6ADWJ/scSSLI5Vp8IPg/N7oNMN1TRDrOQu4nvfGToqaQv+Zpp/
+	 CNAUmH7Kj1E3NtFs5xQaJB5T56OilqX0b77z6H12W/e6WK88fNjsHfvS2MPGzRMRY6A/T
+	 EoGiBAq1OhLZkxXprgJ/Y2ILjXlGT2DjFnAtISPqyYuNYR3S3xBwmeSmZehefBHaFkvW8
+	 UqunvrKQa7Occerx3vDasNBkwMlkCAeXMRvahwLLgb53ULhxYue4FLYKCn5Dh6JclbQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=J5mFQDaV;
-	arc=none smtp.remote-ip=74.125.229.131
-Received: from mail-dl2-f3.google.com (mail-dl2-f3.google.com [74.125.229.131])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=huawei.com;
+	spf=pass smtp.mailfrom=huawei.com;
+	dkim=pass header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=Ycn2FL+t;
+	arc=none smtp.remote-ip=113.46.200.216
+Received: from canpmsgout01.his.huawei.com (canpmsgout01.his.huawei.com [113.46.200.216])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 778B0606A335
-	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 08:13:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 778B0606A335
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AEEA606A327;
+	Wed, 25 Nov 2026 08:18:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3AEEA606A327
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=J5mFQDaV
-Received: by mail-dl2-f3.google.com with SMTP id a92af1059eb24-1521c45a248so4831863c88.0
-        for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 00:13:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795594396; x=1796199196; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=2QHT5GJ4qZi7ncNmGPt18IUAQBZQUrxx2H1DMijk5Lg=;
-        b=J5mFQDaVHjb7tt6wnaez/rnR/zDv3jX/sjGZKII32hjAYWYvo1NPOB0quLoFkXDWjz
-         yR9O/QFa5RujlFva2mz08T7NXX2FnWLc6+nmQR61cCBpfMFgy+hBOk4C5kqgeGF4eWH8
-         2Sgee5BiAIaUotjyN5IKZwC+QBLDE9HKQmIUUASpbZZKaFILvw3shdU6RD/k2D8QC3MB
-         bKgrDk4kaACxfDlsHSZ/TV3I2MsXiHQuyCvfG7F0bHLQXbra1wKco5GibqzNFFBy4687
-         lHjXP5QUZ3Dz4QG4bIJFupCjBQvJi2WLCslYKQzfIEXup0knRr1x53vPRVX1SA6pFbXI
-         WhOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795594396; x=1796199196;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=2QHT5GJ4qZi7ncNmGPt18IUAQBZQUrxx2H1DMijk5Lg=;
-        b=wGh2MiSIo9g5i+cOhV5iJsWPPMzMup744sSRrcH5J+PoQvUL2ScDRaYVSTBWUg3HON
-         FQq0pJXC0f1nRvHQoEl2mbMI+L+7MGZKQTIkKAaoH0Zi5Lau+ql4O3BB4Ip3polTMi1V
-         wqMSGKIFOTNMRv4B2/xK7HZqgHyr9FZBiKTrEWSTKeNIrfhp1cQUYh9s9JhxKEI9hT1J
-         6QWOcMSVKhw0o/vndQefI6776xG34narsl0y5DuG0tDLj+H+282acSrtiA58WrTCVN0E
-         yghUwPxjUAtnEwpz0rbDmPdDXEOm5tWXsJhuWEIx0DjZn+htiCvJhMhtWSMN2MoPlCrI
-         xmdA==
-X-Forwarded-Encrypted: i=1; AL+hErH1ZnllMliNkNmJ4yrqVfcGnGzCr9S4bTeOH/m+3QW7r1VoVbLaDp2cMjNYYUqUvRa4P9o=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9fWbI7Ag5QpisTjBynbK7EnRGjrPUzehTFLbzOUtx4PYo4w0IX
-	T+yWXzF0UCRAnZ/3qPmI/UajQivD8TLpk3ET+nWhMMc2b2lM8aGXpDVr
-X-Gm-Gg: AZFdTZeT1bsXiTSWmYCZVDaSr5zr8sFUSM34dFNlxh12JxuXVfaxNCcIQxdJNUhu28T
-	KuOe7lRz5WoqXNwuRqIK84gEKjYjbEr0gj37o5pIqqugEJFP1XfRE/RYS3tl2mo4pf8qmN92CpM
-	h27LTA6QvcK20b9RZ4bkuN7UTqr/HeAOAP8UAVS8bUke6tRu/eoMmxiKgHAk0AsPPtREoDQFRfo
-	bXEuOqRTF0sIuoL8eSqPQcXpeP7YTTnRN3HBoqFdTQKCenS+9cXiF/SWJcMCzbId6fbFyepOox3
-	ghwQyBR2zJsmX9szzqrINh5s1MmRGBvV6nDYS8VES1U2UkqB4Ja/l9fFCmq9YtONmmyKO1r9Au2
-	xkS3YJiw2uZPMYur0f+1/AObtRplhwLW6Oj4w9The8nHQkz60LU4KrI5SDKcbBI9CXmt3QOyhYK
-	Z2ZbaqyRGXdc4K7DRLd+WPYi6dzam1T6ZKnAWk0ArBfm5NxvszlaLE7MoC74/Uh3VDhya8Dg7ra
-	fOwFxxmUTcPr+bImT/LqutXwC+pF6hbipvNTNu3gnakh6O5BUW1wbvbz5GHdsLz8ndjnK178281
-	Vru9hvk6OxghM295c77Bsa4kb91IcXyoh7P47kpjZrT5cCkTM3CSYbCCvMJzIXr/btZrewItv73
-	164h55caZkLGkvk2H3hotreVEDjoHodL8xsKeug==
-X-Received: by 2002:a05:7022:1103:b0:1b3:b3de:9232 with SMTP id a92af1059eb24-1b5568a15aamr15118215c88.9.1795594396325;
-        Wed, 25 Nov 2026 00:13:16 -0800 (PST)
-Received: from localhost.localdomain ([98.148.34.5])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1b5568592adsm39484090c88.15.2026.11.25.00.13.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Nov 2026 00:13:15 -0800 (PST)
-From: Hungyu Lin <dennylin0707@gmail.com>
-To: andrii@kernel.org,
-	bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	ihor.solodrai@linux.dev,
-	alan.maguire@oracle.com,
-	dennylin0707@gmail.com
-Subject: [PATCH bpf-next] libbpf: Fix dumping enum bitfields on big-endian
-Date: Wed, 25 Nov 2026 08:12:45 +0000
-Message-ID: <20261125081245.74091-1-dennylin0707@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=Ycn2FL+t
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=MbyGB8U9YRrniG9snzlWgjemL8IXXkOYk25rFewhrkE=;
+	b=Ycn2FL+tIkW1u9EHTKdSwJpvHnV15x8giz6KN/9y5ezCzneFIfeGfOxKe4NyUIApTEOQh4Dla
+	LDNrQ2Y+DenE39xInHvztvM4CrczFu3AC2fGRJ0QkdpSEvvHRHQzV4rNgKxvGBpKQNhuzM2DgTF
+	oYFztxIbNZ16gF5xCo2eLRc=
+Received: from mail.maildlp.com (unknown [172.19.162.197])
+	by canpmsgout01.his.huawei.com (SkyGuard) with ESMTPS id 4jZCG62Fvmz1T4fK;
+	Wed, 25 Nov 2026 16:17:18 +0800 (CST)
+Received: from kwepemk300018.china.huawei.com (unknown [7.202.194.246])
+	by mail.maildlp.com (Postfix) with ESMTPS id F249F40579;
+	Wed, 25 Nov 2026 16:18:07 +0800 (CST)
+Received: from [10.34.206.67] (10.34.206.67) by kwepemk300018.china.huawei.com
+ (7.202.194.246) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.45; Wed, 25 Nov
+ 2026 16:18:07 +0800
+Message-ID: <bbc7ff8b-ef89-45e1-9f6c-3596c5e5c921@huawei.com>
+Date: Wed, 25 Nov 2026 16:18:06 +0800
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -106,44 +62,118 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH -next -v2 6/8] lockdown: bound the status string with
+ scnprintf
+To: Cai Xinchen <caixinchen1@huawei.com>,
+	<nicolas.bouchinet@oss.cyber.gouv.fr>, <xiujianfeng@huawei.com>,
+	<paul@paul-moore.com>, <jmorris@namei.org>, <serge@hallyn.com>,
+	<shuah@kernel.org>, <kalevi@kolttonen.fi>
+CC: <linux-security-module@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <bpf@vger.kernel.org>,
+	<lujialin4@huawei.com>
+References: <20261110132818.2231593-1-caixinchen1@huawei.com>
+ <20261110132818.2231593-7-caixinchen1@huawei.com>
+From: Xiu Jianfeng <xiujianfeng@huawei.com>
+In-Reply-To: <20261110132818.2231593-7-caixinchen1@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: kwepems500001.china.huawei.com (7.221.188.70) To
+ kwepemk300018.china.huawei.com (7.202.194.246)
 
-btf_dump_dump_type_data() reads an enum bitfield into the __s64
-enum_val and passes &enum_val to btf_dump_enum_data(), where
-btf_dump_get_enum_value() loads t->size bytes from that address. For
-enums smaller than 8 bytes, those are the high-order bytes of enum_val
-on big-endian, so every enum bitfield is dumped with value 0.
+On 11/10/2026 9:28 PM, Cai Xinchen wrote:
+> Use scnprintf() instead of sprintf() when composing the lockdown status
+> string in lockdown_read().  The current set of levels fits well within the
+> 80 byte buffer, but sprintf() provides no protection if more or longer
+> labels are added later.  scnprintf() makes the buffer bounds explicit.
+> 
+> Store the level label strings in named arrays and point the matching
+> lockdown_reasons[] entries at them.  Their sizes are compile-time
+> constants, so a BUILD_BUG_ON() can verify that the status buffer is large
+> enough for all level labels, their trailing spaces, and the brackets
+> around the active one.
+> 
+> Signed-off-by: Cai Xinchen <caixinchen1@huawei.com>
+> ---
+>   security/lockdown/lockdown.c | 28 +++++++++++++++++++++++-----
+>   1 file changed, 23 insertions(+), 5 deletions(-)
+> 
+> diff --git a/security/lockdown/lockdown.c b/security/lockdown/lockdown.c
+> index 84efd533fe5a..26cac7628a48 100644
+> --- a/security/lockdown/lockdown.c
+> +++ b/security/lockdown/lockdown.c
+> @@ -14,13 +14,17 @@
+>   #include <linux/lsm_hooks.h>
+>   #include <uapi/linux/lsm.h>
+>   
+> +static const char lockdown_label_none[] = "none";
+> +static const char lockdown_label_integrity[] = "integrity";
+> +static const char lockdown_label_confidentiality[] = "confidentiality";
+> +
+>   /*
+>    * These are descriptions of the reasons that can be passed to the
+>    * security_locked_down() LSM hook, used for the denial message and the
+>    * securityfs status file.
+>    */
+>   static const char *const lockdown_reasons[LOCKDOWN_CONFIDENTIALITY_MAX + 1] = {
+> -	[LOCKDOWN_NONE] = "none",
+> +	[LOCKDOWN_NONE] = lockdown_label_none,
+>   	[LOCKDOWN_MODULE_SIGNATURE] = "unsigned module loading",
+>   	[LOCKDOWN_DEV_MEM] = "/dev/mem,kmem,port",
+>   	[LOCKDOWN_EFI_TEST] = "/dev/efi_test access",
+> @@ -41,7 +45,7 @@ static const char *const lockdown_reasons[LOCKDOWN_CONFIDENTIALITY_MAX + 1] = {
+>   	[LOCKDOWN_DBG_WRITE_KERNEL] = "use of kgdb/kdb to write kernel RAM",
+>   	[LOCKDOWN_RTAS_ERROR_INJECTION] = "RTAS error injection",
+>   	[LOCKDOWN_XEN_USER_ACTIONS] = "Xen guest user action",
+> -	[LOCKDOWN_INTEGRITY_MAX] = "integrity",
+> +	[LOCKDOWN_INTEGRITY_MAX] = lockdown_label_integrity,
+>   	[LOCKDOWN_KCORE] = "/proc/kcore access",
+>   	[LOCKDOWN_KPROBES] = "use of kprobes",
+>   	[LOCKDOWN_BPF_READ_KERNEL] = "use of bpf to read kernel RAM",
+> @@ -50,7 +54,7 @@ static const char *const lockdown_reasons[LOCKDOWN_CONFIDENTIALITY_MAX + 1] = {
+>   	[LOCKDOWN_TRACEFS] = "use of tracefs",
+>   	[LOCKDOWN_XMON_RW] = "xmon read and write access",
+>   	[LOCKDOWN_XFRM_SECRET] = "xfrm SA secret",
+> -	[LOCKDOWN_CONFIDENTIALITY_MAX] = "confidentiality",
+> +	[LOCKDOWN_CONFIDENTIALITY_MAX] = lockdown_label_confidentiality,
+>   };
+>   
+>   static enum lockdown_reason kernel_locked_down;
+> @@ -137,6 +141,16 @@ static ssize_t lockdown_read(struct file *filp, char __user *buf, size_t count,
+>   	char temp[80] = "";
+>   	int i, offset = 0;
+>   
+> +	/*
+> +	 * Size the buffer for the worst case: the active level is
 
-Pass the address of the low-order t->size bytes of enum_val instead,
-so the value is loaded the same way on both byte orders.
+The comment is incorrect, the total length is the same whichever level 
+is active.
 
-Fixes: 920d16af9b42 ("libbpf: BTF dumper support for typed data")
-Signed-off-by: Hungyu Lin <dennylin0707@gmail.com>
----
- tools/lib/bpf/btf_dump.c | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/tools/lib/bpf/btf_dump.c b/tools/lib/bpf/btf_dump.c
-index bbe86928b3ec..08a4bbbf4ffd 100644
---- a/tools/lib/bpf/btf_dump.c
-+++ b/tools/lib/bpf/btf_dump.c
-@@ -2665,7 +2665,14 @@ static int btf_dump_dump_type_data(struct btf_dump *d,
- 			if (err)
- 				break;
- 			enum_val = (__s64)print_num;
-+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
- 			err = btf_dump_enum_data(d, t, id, &enum_val);
-+#elif __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
-+			err = btf_dump_enum_data(d, t, id,
-+						 (void *)&enum_val + sizeof(enum_val) - t->size);
-+#else
-+# error "Unrecognized __BYTE_ORDER__"
-+#endif
- 		} else
- 			err = btf_dump_enum_data(d, t, id, data);
- 		break;
-
-base-commit: 8dfce13340aeba06d1b68cc7648f37762244be65
--- 
-2.43.0
+> +	 * confidentiality, with brackets and trailing spaces, plus the
+> +	 * terminating NUL.  The label sizeof() values include their own
+> +	 * NULs, so only three more bytes are needed.
+> +	 */
+> +	BUILD_BUG_ON(sizeof(temp) < sizeof(lockdown_label_none) +
+> +				    sizeof(lockdown_label_integrity) +
+> +				    sizeof(lockdown_label_confidentiality) + 3);
+> +
+>   	for (i = 0; i < ARRAY_SIZE(lockdown_levels); i++) {
+>   		enum lockdown_reason level = lockdown_levels[i];
+>   
+> @@ -144,9 +158,13 @@ static ssize_t lockdown_read(struct file *filp, char __user *buf, size_t count,
+>   			const char *label = lockdown_reasons[level];
+>   
+>   			if (kernel_locked_down == level)
+> -				offset += sprintf(temp+offset, "[%s] ", label);
+> +				offset += scnprintf(temp + offset,
+> +						    sizeof(temp) - offset,
+> +						    "[%s] ", label);
+>   			else
+> -				offset += sprintf(temp+offset, "%s ", label);
+> +				offset += scnprintf(temp + offset,
+> +						    sizeof(temp) - offset,
+> +						    "%s ", label);
+>   		}
+>   	}
+>   
 
