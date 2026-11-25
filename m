@@ -1,79 +1,96 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.74.67.63
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.42
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795601549;
-	b=KeP7l7Enl3ttz3xsjPg8jV4LWetfA8p4G+yddUn9prna5K8uIiKUJhJe4Hqinfe2+sbH
-	 z+63gNcFIFFrELZ8Pti71QF0pZC4RXQL4vUgMHrOMicBF3dDiRIxrlVlDa3WdDw1Lq7/J
-	 A18KGf9o7n6es6PUZ1TpVMglg2QKtxyiqgyOY6RDTm5vX93SqPJKQv0WTemiVYR9Qk+R0
-	 w73WcQvPqXUNRTFS71MFndC98Y0QOQGn6BIM/1CLwVa5OZqjiZIQDO7huErwapcXipwe6
-	 p2DlJy+YaFKLWPtVAv2ayQvMhKmulSH3Fu5ruJk0XS8Yo5+7TY/ShuU7Fg084bgl8Og==
+	t=1795601798;
+	b=XfFPqIRYs/KaOFCZbemKQozKU60Juyc4bnLiZFoeJvT9wlv2hXAdYfxH6EUBdEIa1PR0
+	 TL9LH4bYYZtheazJVNVjimwTscrNH1G2se4lxnh+2Do3EODoVDp9PZ/Wx9FJq0ThMxAv6
+	 AzkGQIVi8oNMNelXl/WqkNSnaYZGOmiiqeM4RwXH596HFNrlZ9t66ObsUm/U+vgnEDjkU
+	 ERMmEuBaDi7fPTVYwnvIZHkUVvuuSkVSNbwpBep69RYQn2WyX8THfenSF5Mpvvwy01zlx
+	 M1HPhty56tVTVQlY02yM9UinnHPHVGzIJigJsZttd7sQARLAqd1oqvnozqxjba0xLqQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795601549;
-	h=DMARC-Filter:Received:Date:From:To:Cc:Subject:Message-ID:References:
-	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To:
-	 DKIM-Signature;
-	bh=gNLzY4BwVKCseo7jPGBp/FH18c7BfmwO0rueLWEHRog=;
-	b=xFym/cPIL810elLmvjXqmTBQbt9cq0cdZzvFYNoZ4iLnp58r7GBWX1mHHgY4qRf8MMjp
-	 02lbZFJf+jzz8PFeE98SIOZYIFaVf9jv4hafFJYk5SWGr2IUUj85+Faj3aQKFNKyR4viX
-	 50F0NkkKjOCuWW8hwkIjnpt4Uy7S+h14Z3VS9ojAh+imjDVTCAncWk5GkF0+hkG6cjh/t
-	 jmTwhmLJLw5M++9omVI6nZk+1dUOJrGaAnNUVIATEv9ftsuIo0bfXPtBh7YJ5IswqY2aV
-	 s55mocHP64NhHaLGQJNS5gqERKn3CdFQy1MoxNUnjysy+T4EKOu5wC3MrLpv8QZcUlQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795601798;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=n/fp0GQXLHMkij5dYnsPmQSZdfgnjwNISi/V4P01h2k=;
+	b=fGN1hatKhpmpanBSFZtUrpzdhT6T9nN+CLZZ6nVfahS1EpLxUaOzb2oQH//55KnhkKfw
+	 jUiQgDlJ1Rkh41Pqpvxy5ZJhxWFV/V8SvXXO3yvqGWkoZ/qMPB5apVr9RTtDPqTGTcDuy
+	 dvMFuD7b3UwxtCPulgw9pTwoYus6iuZ7sbgmA4oPSjotMmNal5xMBiGYD32OqeerDOmnQ
+	 T39Ovgfvb0DRGGzmfpjCbwcLcm3tnW3FYC9Laj8fv5VK0hxw4DYSW4ljm1XnDC44CRopF
+	 0db0eu4Wd8HA8bZWFg3v9rZQlF56SZ/cUPwk+BTgY/RPO/6YrPHqQ7gYH7CyzeYM5fg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=poczta.fm;
-	spf=pass smtp.mailfrom=poczta.fm;
-	dkim=pass header.d=poczta.fm header.i=@poczta.fm header.a=rsa-sha256 header.s=dk header.b="CkSW/lbI";
-	arc=none smtp.remote-ip=217.74.67.63
-Received: from smtpo63.interia.pl (smtpo63.interia.pl [217.74.67.63])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=o5ig6Yvh;
+	arc=none smtp.remote-ip=209.85.128.42
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2141606A31E
-	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 10:12:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A2141606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=poczta.fm
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=poczta.fm
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAFC9606A31E
+	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 10:16:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DAFC9606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=poczta.fm header.i=@poczta.fm header.a=rsa-sha256 header.s=dk header.b=CkSW/lbI
-Received: from nr200 (unknown [80.68.231.31])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by poczta.interia.pl (INTERIA.PL) with ESMTPSA;
-	Wed, 25 Nov 2026 11:12:16 +0100 (CET)
-Date: Wed, 25 Nov 2026 11:12:14 +0100
-From: Slawomir Stepien <sst@poczta.fm>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	jiayuan.chen@linux.dev
-Cc: Daniel Borkmann <daniel@iogearbox.net>,
-	"David S . Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>, bpf@vger.kernel.org,
-	netdev@vger.kernel.org,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	Tianyi Gao <tianyi@cloudflare.com>,
-	Octavian Purdila <tavip@google.com>,
-	Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-	Lorenzo Bianconi <lorenzo@kernel.org>,
-	Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>,
-	Magnus Karlsson <magnus.karlsson@intel.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Eric Dumazet <edumazet@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Simon Horman <horms@kernel.org>,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=o5ig6Yvh
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4bba5e17728so4529375e9.2
+        for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 02:16:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795601796; x=1796206596; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=n/fp0GQXLHMkij5dYnsPmQSZdfgnjwNISi/V4P01h2k=;
+        b=o5ig6YvhV7pQuaTTlyfioipbMsbHRLkBILcF4lNeYWeKHVTD8FqHefitOkin8Pd4g2
+         pvwCs1AtAg8GV28DepZmxHId0Ux626N5sNvxFOktFet90wEBUZYP9sAQOOkm+o40gxg4
+         VMox/b9CdauQcbs9UqeIIylzdJRqS1tPwHY9kK7lCPmXrOOf17ldbFwCX4/waFVep15G
+         dXcxzaQFhAdHLWQjCTNYL/qK1fCpClIuzq0EyXXfLxuY3x9ZCFG3+Baku2ezNqhIYOm8
+         LAW2P+ny2Dx0OYiQfpAYvPGpshJs7CLZLpht1uZQBldbeqPkqa663ZwEAXE6QoRo641k
+         4YUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795601796; x=1796206596;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=n/fp0GQXLHMkij5dYnsPmQSZdfgnjwNISi/V4P01h2k=;
+        b=K9oQZq3oiAZjFNuWwFsrwwMtaYPAEwrcH9rr/NzDYgUv1ZzMvC+f7GjuPcaI9C1iKc
+         YvgaUp9I59nIewzpU/qGcXVCQtVv1BasWNR8gJkGosurtvwtfxGYGfez++1c+q5/2ORD
+         JwVKQP4IcTuJyzRLgV7m89LiWKCcgO7EpSCf+5veg2GX+0tLjVQgfGzlEZvlTQRoLsMx
+         YhGCK214ynpD2pOaKDxLINjzh+Hocqh9d37Wztz3lyLBl+z9iHm2+SLOzCJ0EQNl6ZOA
+         svMNgFe4uhcYu0XbPrkxl70qenP96ajQXm4+SelhPHCSrTJ/9IWocKv4MiU9kpXDNBT6
+         pgcg==
+X-Forwarded-Encrypted: i=1; AL+hErF236Zi5/NuJxGyjhfkiVUIQ24luchzWY2174+r0cSmgh/ZBrE3ap6RkYj01j7rUUonuf0=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9jzJ2jMhF3gNEPE8P6bqbBsnLat07jIZEx3zezWJIzHiJT4bY+
+	tHvYL33Ro+J6bEU9goZb6ysZSyKuZAtzsT72GXX22sCeZJ3V8By+eKvZ
+X-Gm-Gg: AZFdTZcVcTB/vw1u5Au4+G1gnAaam+beGAVkaGEGbUtsKvrQJkGitH546fuvlpqfCtN
+	INhicPmWzdgjEUtpuhV+FDTb+WglSNdRW1EZiyybEejxP9kwU41LHRBorsYB4GRrIauehyK24y2
+	yng+Bbwn9a41rXow6qBGhLlN8F9BiPO222plRGBVSORsjWFMer6E0oS2vdx5WB7Ew2S9fi4Kaaw
+	df/N8oBUem1jfxaAsxFxZe3gm8kqmdfVmK2tI/HUtDJeHEfJex0FDMyH+tfqR4YP6vUp+di0M/f
+	Fk5nNj7qJPr6/RNrc/Ag+f66XGfp5u8jmuHPyElLPzJCi8MTsXSn7+L+P+TLfjRjfWcbQ/xDHYU
+	Cwia+giF+wLWTrSGg7CyU4iLNLc2Rov8+lhefSj0EXakQAcOKaQh0BTtL/jUUByjeFnAwgCcmKN
+	/5OhIOPyUdkUYbIWIL3Rf8+zniEof3dJnXzgaev3HTsBvs7XWz/bycoAW//m7qwaw84Lh4RErBn
+	ifCtsa2ZoX339+Y348gU2YKRJlwJrtioCj+2agNQF9FqwXsXvnQL58GL5MbvRc8ftcUoVnd0L9a
+	rZ1kzekNS0GCSzNtpj5GHtV2SMECoMvkdFFJkZtJECzkz/s=
+X-Received: by 2002:a05:600c:4e0d:b0:4ab:e27d:e241 with SMTP id 5b1f17b1804b1-4bb88922c6amr329162445e9.15.1795601795865;
+        Wed, 25 Nov 2026 02:16:35 -0800 (PST)
+Received: from localhost.localdomain ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4ab6a68048esm34765938f8f.29.2026.11.25.02.16.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Nov 2026 02:16:35 -0800 (PST)
+From: Anton Protopopov <a.s.protopopov@gmail.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
 	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
 	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v8 bpf 0/7] xdp: fix page_pool leaks
-Message-ID: <awa0fvxzngTtIYVd@nr200>
-References: <20261124104016.532341-1-sst@poczta.fm>
- <DN3QVHST3PUQ.3NINFUW0FL9IW@gmail.com>
+	Alan Maguire <almagui@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	bpf@vger.kernel.org
+Cc: Anton Protopopov <a.s.protopopov@gmail.com>
+Subject: [PATCH v1 bpf-next 0/7] Tag fmod_ret functions that return ERR_PTR()
+Date: Wed, 25 Nov 2026 10:27:57 +0000
+Message-ID: <20261125102810.699464-1-a.s.protopopov@gmail.com>
+X-Mailer: git-send-email 2.43.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -83,270 +100,70 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DN3QVHST3PUQ.3NINFUW0FL9IW@gmail.com>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=poczta.fm; s=dk;
-	t=1795601540; bh=gNLzY4BwVKCseo7jPGBp/FH18c7BfmwO0rueLWEHRog=;
-	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-	b=CkSW/lbIqxnu8SM9tcMd1jFWP+JUPVIDM2ul10ZUK7lVhSvMMJzkHv7Xp+aJxyrbJ
-	 wDgTnnHiqKXewKZWk7C019oOIGT1rQGLx5j3f0qVM9Bp6wP6hixWKM7PL/zSLaM4fh
-	 bB8oAhTY6n2EL6PjyrxTj/ycnOiSLEIgMXvIMZ/Y=
+Content-Transfer-Encoding: 8bit
 
-On lis 24, 2026 21:04, Alexei Starovoitov wrote:
-> On Tue, Nov 24, 2026 at 02:40 AM Slawomir Stepien <sst@poczta.fm> wrote:
-> > Patch 1 prepares bpf_prog_test_run_xdp() for patch 3. Generic XDP runs
-> > on the rxq info of the device queue, which is shared with test_run; with
-> > patch 3 alone, any packet through generic XDP on lo makes later
-> > multi-buffer test runs free their frags as page_pool pages. Restoring
-> 
-> The store into the shared rxq is the problem.
-> Patch 3 does it for every packet on every CPU, for linear skbs too.
-> The comment in include/net/xdp.h says that rxq must not be updated
-> during NAPI poll.
-> On Dudu's patch I proposed to put rxq on stack:
-> https://lore.kernel.org/bpf/DMAP8LNBJRPN.2THUHLKURP25G@gmail.com/
-> It works for veth too.
-> An skb leaves veth as a MEM_TYPE_PAGE_SHARED frame, like today.
-> No need for xdp_convert_skb_to_buff(), veth_xdp_get_pp(), pp_cow,
-> rq->xdp_mem and patch 6.
+With CONFIG_BPF_FMODRET_SCAN=y the build tags the functions that
+return errors, so that an fmod_ret program can attach to them.
+But it looks only at the functions that return an integer.
+This set tags the functions that return ERR_PTR() too.
 
-Thanks for these points. This approach is less complex. Let me play with it and I will respin it in
-v9.
+One note is that it turned out that verifier already allowed
+to attach fmod_ret programs to functions returning pointers
+(see patch 2). Besides cleanups, the two main changes are:
 
-> Patches 6 and 7 never free a page_pool frag. Jiayuan's test does:
-> https://lore.kernel.org/bpf/20260911135711.109338-3-jiayuan.chen@linux.dev/
+  * From now on we disallow fmod_ret programs attaching to targets
+    returning pointers to return anything but -errno or 0 (meaning,
+    as in the integer case, "exec the original function").
 
-Jiayuan Chen, can I use your selftest then in v9? :)
+  * We tag new targets in resolve_btfids
 
-> Below replaces patches 1-5.
-> 
-> diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-> index faa837a..8bb015c 100644
-> --- a/drivers/net/veth.c
-> +++ b/drivers/net/veth.c
-> @@ -63,7 +63,6 @@ struct veth_rq {
->  	struct napi_struct __rcu *napi; /* points to xdp_napi when the latter is initialized */
->  	struct net_device	*dev;
->  	struct bpf_prog __rcu	*xdp_prog;
-> -	struct xdp_mem_info	xdp_mem;
->  	struct veth_rq_stats	stats;
->  	bool			rx_notify_masked;
->  	struct ptr_ring		xdp_ring;
-> @@ -642,6 +641,7 @@ static int veth_xdp_tx(struct veth_rq *rq, struct xdp_buff *xdp,
->  }
->  
->  static struct xdp_frame *veth_xdp_rcv_one(struct veth_rq *rq,
-> +					  struct xdp_rxq_info *rxq,
->  					  struct xdp_frame *frame,
->  					  struct veth_xdp_tx_bq *bq,
->  					  struct veth_stats *stats)
-> @@ -657,7 +657,8 @@ static struct xdp_frame *veth_xdp_rcv_one(struct veth_rq *rq,
->  		u32 act;
->  
->  		xdp_convert_frame_to_buff(frame, xdp);
-> -		xdp->rxq = &rq->xdp_rxq;
-> +		rxq->mem.type = frame->mem_type;
-> +		xdp->rxq = rxq;
->  		vxbuf.skb = NULL;
->  
->  		act = bpf_prog_run_xdp(xdp_prog, xdp);
-> @@ -669,7 +670,6 @@ static struct xdp_frame *veth_xdp_rcv_one(struct veth_rq *rq,
->  			break;
->  		case XDP_TX:
->  			orig_frame = *frame;
-> -			xdp->rxq->mem.type = frame->mem_type;
->  			if (unlikely(veth_xdp_tx(rq, xdp, bq) < 0)) {
->  				trace_xdp_exception(rq->dev, xdp_prog, act);
->  				frame = &orig_frame;
-> @@ -681,7 +681,6 @@ static struct xdp_frame *veth_xdp_rcv_one(struct veth_rq *rq,
->  			goto xdp_xmit;
->  		case XDP_REDIRECT:
->  			orig_frame = *frame;
-> -			xdp->rxq->mem.type = frame->mem_type;
->  			if (xdp_do_redirect(rq->dev, xdp, xdp_prog)) {
->  				frame = &orig_frame;
->  				stats->rx_drops++;
-> @@ -746,6 +745,9 @@ static void veth_xdp_get(struct xdp_buff *xdp)
->  	struct skb_shared_info *sinfo = xdp_get_shared_info_from_buff(xdp);
->  	int i;
->  
-> +	/* the buff holds plain page references from here on */
-> +	xdp->rxq->mem.type = MEM_TYPE_PAGE_SHARED;
-> +
->  	get_page(virt_to_page(xdp->data));
->  	if (likely(!xdp_buff_has_frags(xdp)))
->  		return;
-> @@ -755,6 +757,7 @@ static void veth_xdp_get(struct xdp_buff *xdp)
->  }
->  
->  static int veth_convert_skb_to_xdp_buff(struct veth_rq *rq,
-> +					struct xdp_rxq_info *rxq,
->  					struct xdp_buff *xdp,
->  					struct sk_buff **pskb)
->  {
-> @@ -773,7 +776,9 @@ static int veth_convert_skb_to_xdp_buff(struct veth_rq *rq,
->  	/* SKB "head" area always have tailroom for skb_shared_info */
->  	frame_sz = skb_end_pointer(skb) - skb->head;
->  	frame_sz += SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
-> -	xdp_init_buff(xdp, frame_sz, &rq->xdp_rxq);
-> +	/* the prog can free only frags and they came from skb_pp_cow_data() */
-> +	rxq->mem.type = MEM_TYPE_PAGE_POOL;
-> +	xdp_init_buff(xdp, frame_sz, rxq);
->  	xdp_prepare_buff(xdp, skb->head, skb_headroom(skb),
->  			 skb_headlen(skb), true);
->  
-> @@ -794,6 +799,7 @@ drop:
->  }
->  
->  static struct sk_buff *veth_xdp_rcv_skb(struct veth_rq *rq,
-> +					struct xdp_rxq_info *rxq,
->  					struct sk_buff *skb,
->  					struct veth_xdp_tx_bq *bq,
->  					struct veth_stats *stats)
-> @@ -815,7 +821,7 @@ static struct sk_buff *veth_xdp_rcv_skb(struct veth_rq *rq,
->  	}
->  
->  	__skb_push(skb, skb->data - skb_mac_header(skb));
-> -	if (veth_convert_skb_to_xdp_buff(rq, xdp, &skb))
-> +	if (veth_convert_skb_to_xdp_buff(rq, rxq, xdp, &skb))
->  		goto drop;
->  	vxbuf.skb = skb;
->  
-> @@ -830,7 +836,6 @@ static struct sk_buff *veth_xdp_rcv_skb(struct veth_rq *rq,
->  	case XDP_TX:
->  		veth_xdp_get(xdp);
->  		consume_skb(skb);
-> -		xdp->rxq->mem = rq->xdp_mem;
->  		if (unlikely(veth_xdp_tx(rq, xdp, bq) < 0)) {
->  			trace_xdp_exception(rq->dev, xdp_prog, act);
->  			stats->rx_drops++;
-> @@ -842,7 +847,6 @@ static struct sk_buff *veth_xdp_rcv_skb(struct veth_rq *rq,
->  	case XDP_REDIRECT:
->  		veth_xdp_get(xdp);
->  		consume_skb(skb);
-> -		xdp->rxq->mem = rq->xdp_mem;
->  		if (xdp_do_redirect(rq->dev, xdp, xdp_prog)) {
->  			stats->rx_drops++;
->  			goto err_xdp;
-> @@ -914,6 +918,11 @@ static int veth_xdp_rcv(struct veth_rq *rq, int budget,
->  			struct veth_xdp_tx_bq *bq,
->  			struct veth_stats *stats)
->  {
-> +	struct veth_priv *priv = netdev_priv(rq->dev);
-> +	struct xdp_rxq_info rxq = {
-> +		.dev = rq->dev,
-> +		.queue_index = rq - priv->rq,
-> +	};
->  	int i, done = 0, n_xdpf = 0;
->  	void *xdpf[VETH_XDP_BATCH];
->  
-> @@ -928,7 +937,7 @@ static int veth_xdp_rcv(struct veth_rq *rq, int budget,
->  			struct xdp_frame *frame = veth_ptr_to_xdp(ptr);
->  
->  			stats->xdp_bytes += xdp_get_frame_len(frame);
-> -			frame = veth_xdp_rcv_one(rq, frame, bq, stats);
-> +			frame = veth_xdp_rcv_one(rq, &rxq, frame, bq, stats);
->  			if (frame) {
->  				/* XDP_PASS */
->  				xdpf[n_xdpf++] = frame;
-> @@ -943,7 +952,7 @@ static int veth_xdp_rcv(struct veth_rq *rq, int budget,
->  			struct sk_buff *skb = ptr;
->  
->  			stats->xdp_bytes += skb->len;
-> -			skb = veth_xdp_rcv_skb(rq, skb, bq, stats);
-> +			skb = veth_xdp_rcv_skb(rq, &rxq, skb, bq, stats);
->  			if (skb) {
->  				if (skb_shared(skb) || skb_unclone(skb, GFP_ATOMIC))
->  					netif_receive_skb(skb);
-> @@ -1149,9 +1158,6 @@ static int veth_enable_xdp_range(struct net_device *dev, int start, int end,
->  						 NULL);
->  		if (err < 0)
->  			goto err_reg_mem;
-> -
-> -		/* Save original mem info as it can be overwritten */
-> -		rq->xdp_mem = rq->xdp_rxq.mem;
->  	}
->  	return 0;
->  
-> @@ -1180,7 +1186,6 @@ static void veth_disable_xdp_range(struct net_device *dev, int start, int end,
->  	for (i = start; i < end; i++) {
->  		struct veth_rq *rq = &priv->rq[i];
->  
-> -		rq->xdp_rxq.mem = rq->xdp_mem;
->  		xdp_rxq_info_unreg(&rq->xdp_rxq);
->  
->  		if (delete_napi)
-> diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-> index d6c9dc6..1d89b6f 100644
-> --- a/net/bpf/test_run.c
-> +++ b/net/bpf/test_run.c
-> @@ -1349,6 +1349,7 @@ int bpf_prog_test_run_xdp(struct bpf_prog *prog, const union bpf_attr *kattr,
->  	struct netdev_rx_queue *rxqueue;
->  	struct skb_shared_info *sinfo;
->  	struct xdp_buff xdp = {};
-> +	struct xdp_rxq_info rxq;
->  	int i, ret = -EINVAL;
->  	struct xdp_md *ctx;
->  	void *data;
-> @@ -1417,8 +1418,7 @@ int bpf_prog_test_run_xdp(struct bpf_prog *prog, const union bpf_attr *kattr,
->  	}
->  
->  	rxqueue = __netif_get_rx_queue(current->nsproxy->net_ns->loopback_dev, 0);
-> -	rxqueue->xdp_rxq.frag_size = PAGE_SIZE;
-> -	xdp_init_buff(&xdp, rxqueue->xdp_rxq.frag_size, &rxqueue->xdp_rxq);
-> +	xdp_init_buff(&xdp, PAGE_SIZE, &rxqueue->xdp_rxq);
->  	xdp_prepare_buff(&xdp, data, headroom, linear_sz, true);
->  	sinfo = xdp_get_shared_info_from_buff(&xdp);
->  
-> @@ -1426,6 +1426,11 @@ int bpf_prog_test_run_xdp(struct bpf_prog *prog, const union bpf_attr *kattr,
->  	if (ret)
->  		goto free_data;
->  
-> +	/* generic XDP uses the same rxq and its frags can be smaller */
-> +	rxq = *xdp.rxq;
-> +	rxq.frag_size = PAGE_SIZE;
-> +	xdp.rxq = &rxq;
-> +
->  	size = linear_sz;
->  	if (unlikely(kattr->test.data_size_in > size)) {
->  		void __user *data_in = u64_to_user_ptr(kattr->test.data_in);
-> diff --git a/net/core/dev.c b/net/core/dev.c
-> index 6140fd9..fe9f222 100644
-> --- a/net/core/dev.c
-> +++ b/net/core/dev.c
-> @@ -5684,6 +5684,7 @@ u32 bpf_prog_run_generic_xdp(struct sk_buff *skb, struct xdp_buff *xdp,
->  	void *orig_data, *orig_data_end, *hard_start;
->  	struct netdev_rx_queue *rxqueue;
->  	bool orig_bcast, orig_host;
-> +	struct xdp_rxq_info rxq;
->  	u32 mac_len, frame_sz;
->  	__be16 orig_eth_type;
->  	struct ethhdr *eth;
-> @@ -5707,6 +5708,13 @@ u32 bpf_prog_run_generic_xdp(struct sk_buff *skb, struct xdp_buff *xdp,
->  	if (skb_is_nonlinear(skb)) {
->  		skb_shinfo(skb)->xdp_frags_size = skb->data_len;
->  		xdp_buff_set_frags_flag(xdp);
-> +		/*
-> +		 * The frags came from skb_pp_cow_data(). xdp_rxq is shared
-> +		 * with other CPUs and with BPF_PROG_TEST_RUN, so use a copy.
-> +		 */
-> +		rxq = rxqueue->xdp_rxq;
-> +		rxq.mem.type = MEM_TYPE_PAGE_POOL;
-> +		xdp->rxq = &rxq;
->  	} else {
->  		xdp_buff_clear_frags_flag(xdp);
->  	}
-> @@ -5719,6 +5727,7 @@ u32 bpf_prog_run_generic_xdp(struct sk_buff *skb, struct xdp_buff *xdp,
->  	orig_eth_type = eth->h_proto;
->  
->  	act = bpf_prog_run_xdp(xdp_prog, xdp);
-> +	xdp->rxq = &rxqueue->xdp_rxq;
->  
->  	/* check if bpf_xdp_adjust_head was used */
->  	off = xdp->data - orig_data;
-> 
-> pw-bot: cr
+Patches 1-3 are fixes for the declared targets. Patch 1 requires the
+JIT for every fmod_ret program on a function which returns 64 bits,
+because the interpreter returns only 32 of them. Patch 2 removes a
+wrong comment in btf_ctx_access(): fmod_ret programs can already
+attach to functions which return pointers, they just can't read
+ret. Some functions on the error injection list return a pointer,
+like xe_device_create(). An fmod_ret program on such a function may
+return any value and the caller dereferences it. Patch 3 allows only
+NULL or an error pointer. Patch 4 tests it, together with an
+extension of a global function called from such a program.
+Patches 5-7 enable tagging for new functions and test them.
+
+In an arm64 vmlinux built with clang this series tags 1380 more
+functions: 15804 instead of 14424.
+
+As for the integer functions, among the callers of the new targets
+there are ones which do not check the error, and a few functions get
+a tag though they never return an error pointer: they turn one into
+NULL, as inet_frag_find() does with "IS_ERR_OR_NULL(prev) ? fq :
+prev". I do not fix this here, as this is a shared broblem with
+integer functions, a follow-up will be send later.
+
+Anton Protopopov (7):
+  bpf: Require the JIT for fmod_ret programs on 64-bit functions
+  bpf: Remove a wrong comment about fmod_ret targets
+  bpf: Allow only NULL or ERR_PTR() from fmod_ret on pointer functions
+  selftests/bpf: Test fmod_ret on a declared function that returns a
+    pointer
+  bpf: Check fmod_ret return values of tagged pointer targets in 64 bits
+  resolve_btfids: Tag the functions that return ERR_PTR()
+  selftests/bpf: Test fmod_ret on functions that return a pointer
+
+ kernel/bpf/btf.c                              |  3 --
+ kernel/bpf/verifier.c                         | 22 ++++++++--
+ tools/bpf/resolve_btfids/fmodret.c            | 11 +++--
+ .../selftests/bpf/prog_tests/fmodret_retval.c |  2 +-
+ .../selftests/bpf/prog_tests/modify_return.c  | 44 +++++++++++++++++++
+ tools/testing/selftests/bpf/progs/err.h       |  5 +++
+ .../selftests/bpf/progs/fmodret_retval.c      | 10 +++++
+ .../selftests/bpf/progs/modify_return_ext.c   | 12 +++++
+ .../selftests/bpf/progs/modify_return_ptr.c   | 43 ++++++++++++++++++
+ .../selftests/bpf/test_kmods/bpf_testmod.c    |  7 +++
+ .../bpf/test_kmods/bpf_testmod_retval.c       |  2 +-
+ 11 files changed, 149 insertions(+), 12 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/modify_return_ext.c
+ create mode 100644 tools/testing/selftests/bpf/progs/modify_return_ptr.c
 
 -- 
-Slawomir Stepien
+2.43.0
+
