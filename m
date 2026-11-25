@@ -1,45 +1,82 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.43
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795589282;
-	b=mV3NAxv74YpI6wJb/8Wwo86IchkrmkRqo/kU2Ix8vlIPySX0bJMMBKza2IzlHDZSWpHH
-	 gQGk7sbfy3geNdvjN9eb7hc4PP7epRRA30qW4PozjZ80n+RRneWt15MpPTQyA3uGgFUZk
-	 X5B7j7zZ0/YUhUjkzrLb9su77QTXu1d77MTtDulrMnq1pDF4M9r9Fpc1HDN26XGG9JHXO
-	 PkyiXL4KkvWgD+IX1Tq5F5gtgAdMKi/IeGhl5bL9pAgxACxFcUdoVCefhS0BJQLtokKbr
-	 Ed/D65mrnKKMONvPnm3pZDY2Hnbq73qCHDJGt93zYCv9WLb33e/Q4vFSsPLd5NnZgYA==
+	t=1795590222;
+	b=fNLhVlb2NNUVYXWy+EzZd5Gr6Hku/8KXCTmldqe6T/el+Hs8yBDmYZyDI4DfNGX/yniZ
+	 9ZSFclGVlprh+RjNvSTSf7y3Bm2RAJRKyIoImidOIiUJH1LCathaDBgE0afbL3PMNMQjL
+	 QryzHJCk8IDFUiUvq0Owmq9HU6VxWEKKAQDVOl8ugLIcGqccKLbUbo9IyBGgI8N1g3z9V
+	 /b4qAmDmaaPVQYTjHwXTjivf7RR5nxfOxMSWm5v2mgh3YD9gfA6YWt2NchJpnPaYrJrpY
+	 zdTFXNzqdbFEJ5oqdGYqHhM/Udu6k36pE+6eegrjdXNfX40hTM3UuPmcy3sTdtFcalA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795589282;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=w/FTXqrH5AIrzUuo8YH2Y9Z6F/zJk24rjcjm0U0HEHw=;
-	b=edsYtGe5z5tQmonDDCzzZn5mW0lSxZl/dbCJ/NFXH7AWIzNPveHxnH5GfMfRmUuNbmef
-	 ro97UQ40v+eaIcHTsEl8wXtnBRKU2q+2kGYih9Xk0qfDXSyJVPKI1fVLWvmVQTVBXbFk3
-	 WF+dYJuGY8+9ojoJLojb5h9u3eL0M+potjLeDRsRDLjjW387XG5/63aoKRVicVFi1zjOX
-	 yPY0CubV5daVSoSKaD4kGm3zASCdKnB+4j3OJR1YMksXLtkW55Hx4VpJJlaEAWKhS8A1H
-	 SGVCac6dzUHvc5PpVerOfSCfd/zt1iHbrdtz9cCbFUsE0wJQixwwbdEWQHmGP3MTLng==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795590222;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=UQC/K0jJ85LGO+otAnkAPpagW90dChlO7NHeMGClZuc=;
+	b=5Rn/QsxIOzSHJR/uidQa2JSz+VCPuU18+qWV+dnEgqsw4FCl5hu0g4I55p6PQsWLMgTC
+	 23dRryNoe/e2fDCBajJIXtz4Iyp3AtF9Ehf6S1QKgmoHeFVFSYULdXwtuLYK3mS5CAv3m
+	 cpOBqaImJZ0gZnwMaYRWO0MDjA8RwxOwN5yKxkH6qXHA0PjCPYeR8+U2y40ohqpwAcq5W
+	 Cm9SH3BiJnnb9+l1SHfEabThlKFFqa+BxqiDW2ttKW+KLX0gdGl2F0vXV7SWxxXD+cyty
+	 z0zoPT+9NHdfG9auvAapnxJiHBGB+DB6GiTbfRA61Ajnb+BVtxUUVuQIcA/Ms5KVSPQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=fail reason="signature verification failed" header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RGD2OyfZ;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=HbgLxcsM;
+	arc=none smtp.remote-ip=95.215.58.43
+Received: from mta1.migadu.com (out-43.mta1.migadu.com [95.215.58.43])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D892606A31E;
-	Wed, 25 Nov 2026 06:48:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCD9E606A31E
+	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 07:03:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DCD9E606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RGD2OyfZ
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B72A1F000C6;
-	Wed, 25 Nov 2026 06:47:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795589281;
-	bh=w/FTXqrH5AIrzUuo8YH2Y9Z6F/zJk24rjcjm0U0HEHw=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=RGD2OyfZOoXrJx6S4zQf9OrP6dpeguJeek9JYgL019ncKwNu3vVCRtpWDD1PVCyjH
-	 XGIiho4GvZQoNZDuGevBp+EdPfLyYnYBKxPYhI3VwGdOgdK+bWzvAHSM/CNeK406f7
-	 TmzV2LP8jrZy6nkvCbZuAwuWLkM7SYmVX6wmIu5tPdC2MBLMxztD5HB/cEmVBcFq9j
-	 QGm0OEgsUIqrWfLnEgHSGubLihKCRqAMN8vwCGfz5tjr+LPwWp0T2a6x/X04cNqxDv
-	 UVjUV9xvfT8hCmcg64r+XQoR+0gazgtCATLmvOzMBF+K6Igq+1vn67kLjJGMdMv5X4
-	 dj1EETaUgvHPQ==
-Content-Type: multipart/mixed; boundary="===============6730931518485205145=="
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=HbgLxcsM
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=pDXq/bQPSOMDN96qcxBcP6kE+pu/jJa6f6lXStcnJfo=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1795590219; v=1; x=1796195019;
+ b=HbgLxcsMrg4briJu3cPIHMw/qAR4RJ5Y6/jX/NYFNFbPwJuOf+7euM6hinXkwvAni6Sc7lMn
+ lvhVqW3F1YDiFgTQH3bZhMkPEEKOjiKIkqCN8aPDp1QLrbuiuBlH90omoHVN9ru42Zs1ZkK3aG5
+ 5w756FeQPOgs5j5BdzitCCfk=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 54d1b2241158fd04;
+	Wed, 25 Nov 2026 07:03:39 +0000
+X-Mizu-Trace-ID: 54d1b2241158fd04
+X-Migadu-Flow: FLOW_OUT
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: bpf@vger.kernel.org,
+	kpsingh@kernel.org,
+	matt@bobrowski.net
+Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Xu Kuohai <xukuohai@huawei.com>,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf v2 1/2] bpf, lsm: fix bpf_setsockopt() on a half set up child in inet_csk_clone
+Date: Wed, 25 Nov 2026 15:03:21 +0800
+Message-ID: <20261125070330.16625-1-jiayuan.chen@linux.dev>
+X-Mailer: git-send-email 2.43.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,72 +86,154 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <c5a12d8c446ae04259b5ff4edbcccd0326d5476575d18cdaa5050d57a50b9c51@mail.kernel.org>
-In-Reply-To: <20261125061523.1540234-5-irogers@google.com>
-References: <20261125061523.1540234-5-irogers@google.com>
-Subject: Re: [RFC PATCH v2 04/30] x86: unwind_user: Support Minimal DWARF CFI user unwinding
-From: bot+bpf-ci@kernel.org
-To: irogers@google.com,linux-kernel@vger.kernel.org,linux-trace-kernel@vger.kernel.org,linux-arch@vger.kernel.org
-Cc: jpoimboe@kernel.org,rostedt@goodmis.org,peterz@infradead.org,mingo@redhat.com,tglx@kernel.org,bp@alien8.de,dave.hansen@linux.intel.com,x86@kernel.org,catalin.marinas@arm.com,will@kernel.org,mark.rutland@arm.com,linux-arm-kernel@lists.infradead.org,pjw@kernel.org,palmer@dabbelt.com,aou@eecs.berkeley.edu,alex@ghiti.fr,linux-riscv@lists.infradead.org,acme@kernel.org,namhyung@kernel.org,linux-perf-users@vger.kernel.org,mhiramat@kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,bpf@vger.kernel.org,nathan@kernel.org,llvm@lists.linux.dev,nsc@kernel.org,linux-kbuild@vger.kernel.org,ojeda@kernel.org,rust-for-linux@vger.kernel.org,ardb@kernel.org,linux-efi@vger.kernel.org,maz@kernel.org,oupton@kernel.org,kvmarm@lists.linux.dev,shuah@kernel.org,linux-kselftest@vger.kernel.org,indu.bhagat@oracle.com,jremus@linux.ibm.com,wnliu@google.com,dylanbhatch@google.com,irogers@google.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yongho
- ng.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Wed, 25 Nov 2026 06:47:56 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
 
---===============6730931518485205145==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+security_inet_csk_clone() is called at the end of inet_csk_clone_lock().
+The child is locked, which is why the hook is in
+bpf_lsm_locked_sockopt_hooks, but it is not set up yet:
+icsk->icsk_ca_ops and the ipv6_pinfo still point to the ones of the
+listener, and the timers are not initialized.
 
-> x86: unwind_user: Support Minimal DWARF CFI user unwinding
+So bpf_setsockopt() from a lsm_cgroup prog is wrong there for:
 
-TL;DR: Nit only: unrelated comment additions in this x86 CFI patch aren't in
-the changelog; suggests moving them to a separate documentation patch.
+ - TCP_CONGESTION: puts icsk->icsk_ca_ops, which the child holds no
+   reference on.
+ - IPV6_TCLASS: writes to the ipv6_pinfo of the listener.
+ - SO_KEEPALIVE, TCP_KEEPIDLE: arm the keepalive timer before
+   tcp_init_xmit_timers() sets it up.
 
-> diff --git a/arch/x86/include/asm/unwind_user.h b/arch/x86/include/asm/unwind_user.h
-> --- a/arch/x86/include/asm/unwind_user.h
-> +++ b/arch/x86/include/asm/unwind_user.h
+Options considered:
+ 1. Remove the hook from bpf_lsm_locked_sockopt_hooks, as commit
+    5416c9aea832 ("bpf: Fix the kernel crash caused by bpf_setsockopt().")
+    did for socket_sock_rcv_skb. Not done, setting options like
+    SO_PRIORITY on the child is what the hook is used for and it works.
+ 2. Make these options work. This needs the child set up before the
+    hook, too much for a fix.
 
-[ ... ]
+So give the hook its own bpf_setsockopt() and return -EOPNOTSUPP for
+these options there. bpf_getsockopt() is left as is.
 
-> +/**
-> + * unwind_user_word_size() - Return the user-space word size in bytes on x86
-> + * @regs: User-mode register state.
-> + *
-> + * Return: 8 for 64-bit user mode, 4 for 32-bit IA-32/compat mode, or 0 for
-> + * VM86 mode stacks which cannot be unwound.
-> + */
->  static inline int unwind_user_word_size(struct pt_regs *regs)
+For example, SO_KEEPALIVE ends up with:
 
-[ ... ]
+  Oops: general protection fault, probably for non-canonical address 0xfbd59c0000000025: 0000 [#1] SMP KASAN PTI
+  KASAN: maybe wild-memory-access in range [0xdead000000000128-0xdead00000000012f]
+  RIP: 0010:__run_timers+0x5d2/0xab0
+  Call Trace:
+   <IRQ>
+   run_timer_base+0x107/0x190
+   run_timer_softirq+0x1a/0x40
+   handle_softirqs+0x251/0xa70
+   __irq_exit_rcu+0x1a8/0x260
+   irq_exit_rcu+0xe/0x30
+   sysvec_apic_timer_interrupt+0xc2/0x110
+   </IRQ>
 
-> +/* Standard x86 frame record: {saved_bp, ret_addr} at [bp, bp + 2 * ws). */
->  #define ARCH_INIT_USER_FP_FRAME(ws)			\
-
-[ ... ]
-
-> +/* At function entry before push %rbp: return address is at [sp, sp + ws). */
->  #define ARCH_INIT_USER_FP_ENTRY_FRAME(ws)		\
-
-[ ... ]
-
-> +/**
-> + * unwind_user_at_function_start() - Check if @regs is at a function entry point
-> + * @regs: User-mode register state.
-> + *
-> + * Return: true if stopped on an entry uprobe before the frame prologue ran.
-> + */
->  static inline bool unwind_user_at_function_start(struct pt_regs *regs)
-
-This isn't a bug, but the new comments on unwind_user_word_size(), the
-ARCH_INIT_USER_FP_* macros and unwind_user_at_function_start() don't look
-related to adding CFI support, and the changelog doesn't mention them.
-
-Would they fit better in a separate documentation patch, so this one only
-carries the x86 CFI register mapping and the Kconfig select?
-
-
+Fixes: 9113d7e48e91 ("bpf: expose bpf_{g,s}etsockopt to lsm cgroup")
+Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 ---
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+v1 -> v2 : fix some issues reported by AI.
+---
+ include/linux/bpf.h  |  1 +
+ kernel/bpf/bpf_lsm.c | 13 +++++++++++++
+ net/core/filter.c    | 42 ++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 56 insertions(+)
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/45561209846
---===============6730931518485205145==--
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 1dd9db16f324..207a3be3138d 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -4159,6 +4159,7 @@ extern const struct bpf_func_proto bpf_task_storage_delete_proto;
+ extern const struct bpf_func_proto bpf_for_each_map_elem_proto;
+ extern const struct bpf_func_proto bpf_btf_find_by_name_kind_proto;
+ extern const struct bpf_func_proto bpf_sk_setsockopt_proto;
++extern const struct bpf_func_proto bpf_sk_clone_setsockopt_proto;
+ extern const struct bpf_func_proto bpf_sk_getsockopt_proto;
+ extern const struct bpf_func_proto bpf_sk_setsockopt_nodelay_proto;
+ extern const struct bpf_func_proto bpf_unlocked_sk_setsockopt_proto;
+diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
+index ae23511fd811..bec940efd354 100644
+--- a/kernel/bpf/bpf_lsm.c
++++ b/kernel/bpf/bpf_lsm.c
+@@ -79,6 +79,16 @@ BTF_ID(func, bpf_lsm_inet_conn_established)
+ #endif
+ BTF_SET_END(bpf_lsm_locked_sockopt_hooks)
+ 
++/*
++ * List of LSM hooks that trigger on a locked child socket which is not
++ * set up yet, bpf_setsockopt is restricted there.
++ */
++BTF_SET_START(bpf_lsm_clone_sockopt_hooks)
++#ifdef CONFIG_SECURITY_NETWORK
++BTF_ID(func, bpf_lsm_inet_csk_clone)
++#endif
++BTF_SET_END(bpf_lsm_clone_sockopt_hooks)
++
+ /* List of LSM hooks that trigger while the socket is _not_ locked,
+  * but it's ok to call bpf_{g,s}etsockopt because the socket is still
+  * in the early init phase.
+@@ -282,6 +292,9 @@ bpf_lsm_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ 	case BPF_FUNC_setsockopt:
+ 		if (prog->expected_attach_type != BPF_LSM_CGROUP)
+ 			return NULL;
++		if (btf_id_set_contains(&bpf_lsm_clone_sockopt_hooks,
++					prog->aux->attach_btf_id))
++			return &bpf_sk_clone_setsockopt_proto;
+ 		if (btf_id_set_contains(&bpf_lsm_locked_sockopt_hooks,
+ 					prog->aux->attach_btf_id))
+ 			return &bpf_sk_setsockopt_proto;
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 53c042b267ab..f17b3c5dd473 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -5938,6 +5938,48 @@ const struct bpf_func_proto bpf_sk_setsockopt_proto = {
+ 	.arg5_type	= ARG_MEM_SIZE,
+ };
+ 
++/*
++ * security_inet_csk_clone() runs at the end of inet_csk_clone_lock(), the
++ * child is locked but not set up yet: its timers are not initialized, it
++ * holds no reference on icsk_ca_ops, an IPv6 child still points to the
++ * ipv6_pinfo of the listener and a MPTCP subflow has no msk.
++ */
++BPF_CALL_5(bpf_sk_clone_setsockopt, struct sock *, sk, int, level,
++	   int, optname, char *, optval, int, optlen)
++{
++	bool mptcp = sk_fullsock(sk) && sk_is_tcp(sk) && sk_is_mptcp(sk);
++
++	switch (level) {
++	case SOL_SOCKET:
++		if (optname == SO_KEEPALIVE ||
++		    (optname == SO_SNDBUF && mptcp))
++			return -EOPNOTSUPP;
++		break;
++	case SOL_TCP:
++		if (optname == TCP_KEEPIDLE || optname == TCP_CONGESTION ||
++		    (optname == TCP_NOTSENT_LOWAT && mptcp))
++			return -EOPNOTSUPP;
++		break;
++	case SOL_IPV6:
++		if (optname == IPV6_TCLASS)
++			return -EOPNOTSUPP;
++		break;
++	}
++
++	return _bpf_setsockopt(sk, level, optname, optval, optlen);
++}
++
++const struct bpf_func_proto bpf_sk_clone_setsockopt_proto = {
++	.func		= bpf_sk_clone_setsockopt,
++	.gpl_only	= false,
++	.ret_type	= RET_INTEGER,
++	.arg1_type	= ARG_PTR_TO_BTF_ID_SOCK_COMMON,
++	.arg2_type	= ARG_ANYTHING,
++	.arg3_type	= ARG_ANYTHING,
++	.arg4_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
++	.arg5_type	= ARG_MEM_SIZE,
++};
++
+ BPF_CALL_5(bpf_sk_getsockopt, struct sock *, sk, int, level,
+ 	   int, optname, char *, optval, int, optlen)
+ {
+-- 
+2.43.0
+
