@@ -1,57 +1,117 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.47
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795645182;
-	b=ZeZylVImlz7RVcM3FA9hW8yMrEnzwEAYwcIwj7C97914pRGlXpPgnQU7cEqyDmC4xtTM
-	 A62zd9t4BbOZ1R7tFij7DjObNf9ZJrkmwrGiN3zCNkfarckJpw7hKnBcXbeBKD6il2wqM
-	 +iemuRmph+JB8S/fHbxfPjBsQYToiMs64V29aUpgXUUV9O7WoyfBp5KezkNRa8VJWgquL
-	 xWv53XqaLKEyqnrXvL6VMFaRWcZX3PXSDYfcXNjMyQdRbLqsUKN4bUoqDp1Clt3X972n5
-	 MF5uR5MVsAF1Ce0wQ5ebouPrbKBFFDmmukQzZ0VPxE2N6EnU2EROc1zvOoOupKfKPvg==
+	t=1795646668;
+	b=C53dXXJOONoUAZZBlVWac7u+Ubb6QZYhA5mvCT2NjQDf+aW/LNl5Q0+Mtbv3le4i8544
+	 V6JlTuGNbVPJmqqj9/+arciyS6hpokh3mygqGBSsagzBD03/+g9J8g3DEZxKPLtvyNHvd
+	 MMt2mIOSN0PdGHmh0GiNjmmjQEUg6Czvt9xhJ6edcAeEPnVAbPtYe+y0vYQq7IP2OgJT7
+	 ragwn/2Br05TmLDTiQtEc6d2vPl9CJDG1bHXydNn6HoxrPTHwFuhS6ozygi9i4L8igQgN
+	 dxRM9vVCnz/2vgmup/u2C/zrsyYNUM3xq+XnyCXjC3Y1Ywv6inUGL5SLquSOSOmYZqg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795645182;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=ivsm1eBYLb471dcBskdb5pKBm+6ZflSWp/Zr7wSBNBI=;
-	b=pvwv2Cm+VQ3xFOi8enKqcg65gDAiYw2UPhafQqKtPSFtZpBE74xifYFLG5bGSRCJtTfs
-	 +TWBVLY6yLxfPM2Ph/lNLuq/OwQp/aYgn71vAwnAIk5vWW55KA8dV4GKGvcezavR0qKQb
-	 2S1YhdG7dMPm2pkz0fZPRNyKPyKSkxZho7l1KLAOtEgYn6AJe7RIYF5qKVKX51vY5L2w+
-	 J2L1VTE2AzP6lgBE1P/sSLHtOdF8Js0tNwEfYaLrviT0SW42O6YL4LN9FBmhgtoD+T/BF
-	 IIgFPGZ7uB4Do7Ltf0jekTlJU0U/Dzzn+6/pZFWyDu2RYcEDdd5MrrQ3jSmh8CL0zsw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795646668;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding;
+	bh=P59oydQPeSwr+tPqd2CX+2z+DDz1Tv1MFH2M49ikoZI=;
+	b=PT93RyaDw1TvMhYnz613Aclr56ViMh+XeipyD8kyPwt8FTKxJqkqS4nK66YFim9ruX2J
+	 +mT7eui38CaMy1QPULMn4R3RRmUMgzypOINsSmevTM/FkO5BddFLvGuANoEl2ryUlTMcv
+	 tOOrbBKC/YlU8roiR7sXobhl3wkR5ALmHPK7mRmQB3cBUmgjItOTIMhh+TdQgcJd2cqk9
+	 CIakN0tQ0zdAOgPyRD0QqnNpIeWnsfK+SS+ixA4q9/vDuBRWnWgTCfrAwjRhy50mtjTMM
+	 A/SEDMU5OmgAOsu7wHVAJIMMOfm6zlePBp4ul3wTli5ikNKacL5h9FEDjkShzTMnrLQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=oYSn5LXu;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=cloudflare.com;
+	spf=pass smtp.mailfrom=cloudflare.com;
+	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=f4Yjg+o5;
+	arc=none smtp.remote-ip=209.85.218.47
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90D52606A32D;
-	Wed, 25 Nov 2026 22:19:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2ABB9606A321
+	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 22:44:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2ABB9606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=oYSn5LXu
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AF521F000C0;
-	Wed, 25 Nov 2026 22:19:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795645181;
-	bh=ivsm1eBYLb471dcBskdb5pKBm+6ZflSWp/Zr7wSBNBI=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=oYSn5LXuci+eEoAO+CG0kzcayVybdp6EX94u4mmS3Ax8rUquII3v7jNbgQfONVOAQ
-	 CSBBMlLv3G49Ylgk+IpwzTzMvS3a3o3I6coxcVD6CDboXSpkhm/JrDR3+OQWOr2fsC
-	 8QUi1Q/KAB1oaBaFCGQtf1w1hIoNv9EddaYeAbhSpmgxe4rH0lK2pFzQhmOfAL7m6S
-	 rAirG8WNNSF/fhJ0a/Xc883tGMZuqfK+Tmh9RsEirec7uVm3s3KGf9N0gq+EZ1JtjO
-	 Y1FH/9mDtJVDAVBHMMQjAurn70hjqOL4u7xqat7X1rA3gnMdLQoxQji+MZhxPlZvDr
-	 o2hB8wPH0bAsg==
-Message-ID: <sashiko-outbox-234241@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v3 06/12] net/sched: add act_psp for psp
- transport mode
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Todd Freed" <toddfreed@meta.com>
-Cc: linux-rdma@vger.kernel.org, bpf@vger.kernel.org
-In-Reply-To: <20261124221758.3230929-7-toddfreed@meta.com>
-References: <20261124221758.3230929-1-toddfreed@meta.com>
- <20261124221758.3230929-7-toddfreed@meta.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 25 Nov 2026 22:19:41 +0000
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=f4Yjg+o5
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-c4d5b2db4bbso1200630366b.0
+        for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 14:44:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google09082023; t=1795646666; x=1796251466; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=P59oydQPeSwr+tPqd2CX+2z+DDz1Tv1MFH2M49ikoZI=;
+        b=f4Yjg+o52InzdJNjvABjrOWkTRff21bgbNuy+Ba5P4kWOKQN6ofIQHP+Gdt1wex4C8
+         EfR0NiToo92mJex+SEXg8qtF3pUBVWO2ioUbPZ+2mfyazWyZWJVM02qeRfTr/Jyi+Pui
+         v5Zb2elC5wcDZ33RJDhLmLDOUczvJ2remoooUn3z6KjUpNnv9Crv7nhWUw8cLNHXmIh/
+         M34YuzpFeuNN1bOYI4H+iDn0VV3UqbgsQtaZnk0GFViA1DYxm4Y30JdBsXR7zHJA/ZCh
+         9jrHzV1amS4JSDrbOZwrTjkduGab76yTwe/4rRxOJN6FqjqV+k9ptCRaxYjR3sHx9VMF
+         oXuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795646666; x=1796251466;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=P59oydQPeSwr+tPqd2CX+2z+DDz1Tv1MFH2M49ikoZI=;
+        b=h2qC3vQKdlw7WpHXpBBNXQVDW2qvut5Zfl6tYgYON1XkrVou1MquUfE/wLG5WFkpgh
+         yTcbNIMZ9vHS4RLxZfF0CW5mHDmFJTK5wdcHcvV0IMrxtJ0QghSR21qSlXPkwaPX4ymT
+         Ksdpzgr9ylEBp7JgKGWsNZRyNyExjgqEOm2N4FW11bXxg5s5024PO5xRYwdut0UNgfDF
+         zkr86GdfyNohn5Z2xOq7e17Jz6KhYgBDKIOpCaz1b7l6YxF2TwCWaV0qpvcPIWzl6U1w
+         s8HGeJk35OZL4eGM0Kl5nXlvDTqEC4DPQl1iTaRuTLjIlZ3ATLcVtaTsahAOcwVM/LMC
+         ErvQ==
+X-Forwarded-Encrypted: i=1; AL+hErGCuQbxccZJEPfSZMOjkM5E1KIZmT63AKjWbE2I4wfu738PuenUFuspS4boGFQzGwVvDQo=@vger.kernel.org
+X-Gm-Message-State: APuU4Z94rhW5CWCZhpkwJCI2sO/jqn2fpfWgjX1fXpBZl55MBn9Zf56l
+	6BUqnzKVoma8NKf/SIxY/s8dHH9fbm5r7gVeI2SFD4T3Hx8lYkL/yLDJabAaL19qMoM=
+X-Gm-Gg: AZFdTZcohix6/tANVjWZOgNzUfh6k6FNP6F2w0QBIXRcZFUAYJfowLCOaXsRlkZ+0En
+	ZlXJkvr1vO2vDI68kVJzthwmYbXbxVrMQKhf8ziHuM9IuIuNOqoGRvKD20jOtUCaZ0xIQy+4nLI
+	m8BQPuffmglFnAJEYjCvf/5FaR7H2RvI4HFTKJQ8SSEeSlcSCsT8YYO8PXbWQtE4NZpL8qBvNj8
+	zFE37+pILPJODIwpUfnJJzymio3Lv6TCFpmq9uEje6S7gzr2SYftVOx+2Cmu5kZqScaLuNihaDg
+	pOcZ7cK9xN7qoPhIwdwUa1mh+F2cdq84+J+6YyrVHpBfeNh/flZ+yCowLurIWJu+6n75daFPlSD
+	4I8ppsqz8Gg3XmTIK5664T1tfvJLWOQmWhmUXiAxlpFxr7fvfJIxF5u7ut9HmjDbeDLYxp8ZDQr
+	+Au91c5MsqcRd1AlpBvt1I70TlZkgIwdFvgfkvYefmeyXTvWu3Y9uR0yHMSez0Ja6cuV+64Nihq
+	kg3oHGaOomfKndCj9xjgmiSzzkV9DyVy5u99ipef8+5/9RR4KuFRFLxBPE7cGNE9jSgdicDj1/e
+	mHGeEjZ7+t0KvTVeOj5zCiVkz++Sb84F+X/rfiLEkA4HqwFiBaATRalcJg==
+X-Received: by 2002:a17:907:3f18:b0:c46:9711:e30e with SMTP id a640c23a62f3a-c5131a1601amr1649414366b.29.1795646666482;
+        Wed, 25 Nov 2026 14:44:26 -0800 (PST)
+Received: from L9JK9NPFH9 ([104.28.20.55])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c513ad00232sm717202666b.12.2026.11.25.14.44.24
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Wed, 25 Nov 2026 14:44:25 -0800 (PST)
+From: Tianyi Gao <tianyi@cloudflare.com>
+To: Alexander Duyck <alexander.duyck@gmail.com>
+Cc: Tianyi Gao <tianyi@cloudflare.com>,
+	netdev@vger.kernel.org,
+	intel-wired-lan@lists.osuosl.org,
+	Tony Nguyen <anthony.l.nguyen@intel.com>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Paul Greenwalt <paul.greenwalt@intel.com>,
+	Alice Michael <alice.michael@intel.com>,
+	Eric Joyner <eric.joyner@intel.com>,
+	Jesse Brandeburg <jbrandeb@kernel.org>,
+	Lorenzo Bianconi <lorenzo@kernel.org>,
+	bpf@vger.kernel.org,
+	kernel-team@cloudflare.com,
+	tianyi.gao@linux.dev,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Subject: Re: [PATCH net] ice: do not report CHECKSUM_COMPLETE when an XDP program is attached
+Date: Wed, 25 Nov 2026 22:44:20 +0000
+Message-ID: <20261125224421.79289-1-tianyi@cloudflare.com>
+X-Mailer: git-send-email 2.56.0
+In-Reply-To: <CAKgT0Ueso=OQ7=GJp7m8nr90kBUp-+N6ko+Qy4e29MZv6tLQfQ@mail.gmail.com>
+References: <20261121012402.84848-1-tianyi@cloudflare.com> <3adef4b4d528780bae31f2fb02d0a08bf9c8ebd5.camel@gmail.com> <CAG4wq-f18SHytDb39SdJYzRPk-dzECjH_HCSiMGAQ721Zmfomg@mail.gmail.com> <CAKgT0UeWWherBt1MDcPF7R7jxt6E_3peo8VuxrgY3JdseM-0rg@mail.gmail.com> <CAG4wq-dizUz-6GB8Aj1wRTQBOzbHbT7pX9gom+AhR=5OWSyjzw@mail.gmail.com> <CAKgT0UffmbELMsGi8HRfu62MfC9VRYZ+TMNKFjZMWJyrV4t3jw@mail.gmail.com> <CAG4wq-cG1bseTFczZTjashN75J1Jsrv=u1ccuRsY-N1kZ=SXXg@mail.gmail.com> <CAKgT0UeNyyXKARjKR4nVVxNe3UB16WuXqxSz0cf4ZvCdb9A4_Q@mail.gmail.com> <20261125090732.69233-1-tianyi@cloudflare.com> <CAKgT0UcFnSvTO6ATw76qVHYxRusTYXpRVi0_GR5QnMhhoXwXsA@mail.gmail.com> <20261125183125.25801-1-tianyi@cloudflare.com> <CAKgT0Ueso=OQ7=GJp7m8nr90kBUp-+N6ko+Qy4e29MZv6tLQfQ@mail.gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -60,98 +120,43 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue to consider:
-- [Medium] net/sched: act_psp: METADATA_PSP dst and skb->decrypted split
-  on fragmentation
---
+On Wed, 2026-11-25 at 14:02 -0800, Alexander Duyck wrote:
+> The thing is once you start making modifications to the frame all that
+> metadata should probably be thrown out anyway since none of it is
+> really valid.
 
-commit 8bbfc007284723c55c132cc556b51f47c5d07c71
-Author: Todd Freed <toddfreed@meta.com>
+I see what you mean now. Today the kernel does the opposite in both
+cases:
 
-net/sched: add act_psp for psp transport mode
+- When XDP changes the frame and returns XDP_PASS, the driver still
+  reports the RX hints of the old frame.
+- When XDP redirects a frame that it did not change, the RX hints are
+  lost.
 
-This commit adds the act_psp traffic control action to attach a PSP Tx
-association as a METADATA_PSP dst on egress (encap) or remove SKB_EXT_PSP
-Rx state (decap).
+The right time to drop them should be when the frame is modified, not
+whether it is redirected. I will look in this direction. Thank you,
+this really hits the nail on the head.
 
-> diff --git a/net/sched/act_psp.c b/net/sched/act_psp.c
-> new file mode 100644
-> index 0000000000000..757b15a812a20
-> --- /dev/null
-> +++ b/net/sched/act_psp.c
-[ ... ]
-> +static int tcf_psp_act(struct sk_buff *skb, const struct tc_action *a,
-> +		       struct tcf_result *res)
-> +{
-> +	struct tcf_psp *p =3D to_psp(a);
-> +	struct tcf_psp_params *params;
-> +
-> +	params =3D rcu_dereference_bh(p->params);
-> +
-> +	tcf_lastuse_update(&p->tcf_tm);
-> +	tcf_action_update_bstats(&p->common, skb);
-> +
-> +	switch (params->psp_action) {
-> +	case TCA_PSP_ACT_ENCAP:
-[ ... ]
-> +		/* Don't mix the association with another encryption
-> +		 * offload: the packet is already marked decrypted, or its
-> +		 * socket has an offload of its own
-> +		 */
-> +		if (unlikely(skb_is_decrypted(skb) || tcf_psp_sk_offload(skb)))
-> +			return tcf_psp_drop(p, skb, SKB_DROP_REASON_PSP_OUTPUT);
-> +		if (unlikely(!tcf_psp_set_transport_header(skb)))
-> +			return tcf_psp_drop(p, skb, SKB_DROP_REASON_PSP_OUTPUT);
-> +		skb_dst_drop(skb);
-> +		skb_dst_set(skb, dst_clone(&params->md->dst));
-> +		/* Must be encrypted: sk_validate_xmit_skb() drops it unless
-> +		 * it still carries the association when it is transmitted
-> +		 */
-> +		skb->decrypted =3D 1;
-> +		break;
-> +	case TCA_PSP_ACT_DECAP:
-> +		/* Only a packet the device decrypted: on transmit,
-> +		 * skb->decrypted means "device, please encrypt", which decap
-> +		 * must not undo.
-> +		 */
-> +		if (!skb_ext_find(skb, SKB_EXT_PSP))
-> +			break;
-> +		skb_ext_del(skb, SKB_EXT_PSP);
-> +		skb->decrypted =3D 0;
-> +		break;
-> +	}
+> If anything, the path you are taking now with disabling
+> CHECKSUM_COMPLETE is the opposite direction of how I would probably go
+> about this.
 
-[Severity: Medium]
-Can IP fragmentation split the METADATA_PSP dst from skb->decrypted and
-bypass the cleartext drop check in sk_validate_xmit_skb()?
+Agreed. Once XDP has the infrastructure to pass an adjusted
+CHECKSUM_COMPLETE to the driver, or to simply invalidate it once the
+frame is modified, we should bring it back.
 
-When a packet defragmented by act_ct is encapsulated by TCA_PSP_ACT_ENCAP
-and redirected via act_mirred -> tcf_dev_queue_xmit() ->
-sch_frag_xmit_hook() -> sch_fragment(), ip_copy_metadata() /
-ip6_copy_metadata() and sch_frag_xmit() copy the METADATA_PSP dst onto each
-new fragment without copying skb->decrypted:
+> That is why back in the day we had strongly encouraged
+> people to use non-zero UDP checksum on their tunnels and had added the
+> ability to convert the CHECKSUM_UNNECESSARY to CHECKSUM_COMPLETE when
+> decapsulating generic UDP tunnels.
 
-net/sched/sch_frag.c:sch_frag_xmit() {
-    ...
-	__skb_dst_copy(skb, data->dst);
-	*qdisc_skb_cb(skb) =3D data->cb;
-    ...
-}
+Yes, I fully agree, and thanks for the history behind it. I am glad
+that UDP over IPv6 requires a non-zero checksum in most cases, and that
+ice reports CHECKSUM_NONE for a zero checksum.
 
-If a subsequent TC action on the target device replaces or drops the dst,
-sk_validate_xmit_skb() sees neither skb_psp_md(skb) nor
-skb_is_decrypted(skb) and transmits the fragment in cleartext.
-
-Similarly, ip_copy_metadata() and ip6_copy_metadata() copy SKB_EXT_PSP via
-skb_ext_copy() without copying skb->decrypted, so an Rx PSP packet that is
-fragmented and later reassembled can enter TCA_PSP_ACT_ENCAP with
-SKB_EXT_PSP still attached and skb->decrypted =3D=3D 0; if TCA_PSP_ACT_DECAP
-then runs, it finds SKB_EXT_PSP and clears skb->decrypted =3D 0 while leavi=
-ng
-the METADATA_PSP dst attached.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261124221758.3230=
-929-1-toddfreed@meta.com?part=3D6
+Thanks,
+Tianyi
