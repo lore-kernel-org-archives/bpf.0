@@ -1,101 +1,88 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.43
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795625055;
-	b=yu7t6Riwh+wPOMWaiZRuj+Y1LytQSpFDWf2O3X+f6iv1nHRNRmP3PdDuazZ5tYzU2dp0
-	 9PezfFJ1DTSE8+7S7CweEVXK/wM8QCoNIv/jfRRxuL6Mti1/A6Uk4+Bo9Fgv2RFMlepcy
-	 lVipeihr+TP49Yir99qf9NbMMivOKj4Mfl76+7ChGQFXgzKLmvMBnMyiUjMVP4io6HgnO
-	 FWfYFI8uA70M/YD5LxXyQ11Lbs38yepY1QfDM68quiwS7aZ3xxTttVQObiELyWwhMxL4D
-	 AZ2w5lrr8SwGBYkldfP56rjuvfkzGtw5ED8tdoTdEH9kW0Se5xKn/e8jKUtGQN7FYfA==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795625055;
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.54
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795625141;
+	b=0png7wEbBV06OB4ZiJzuYKq6E4DCTturezW2IRW9HN+3Ontf4JQsWEyK9ELgpt/g0cbe
+	 pDQ/qOOeAikk4c53p7EcXplz9+7u7CBmxaZeR4JFDRzuELw/eR0GS48Kvumal3xoOgaGO
+	 njkp4fE3A6PgXjIiBFDcJuFS/dUYkrevvSK+3m4H8L+O/iUJ7SuZF4oHp3qO/IAUBzFyz
+	 WVC/mHDVGerfiBZHWtvjx1zm7C4D79m1i6bfoXDwrh2XEmnvSPBv5g1xsBnOur45OyZc8
+	 y50q46tMUINVUrPtco9hgv9l0rY2IH4iVhC2HCJsRJ1JQQXILi/Id84nRxP7yxX0bYg==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795625141;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=II/aro/lwWCAag041h9klo86GZWrpoxtriGNBQNlDMw=;
-	b=KZIhzftOL+Df09xDaH9RQzx598k1mlwW+S7HInbjKeo5Ulpv5VrV0FDk7etNr5e+tcKo
-	 V0Rc85Sazrr0UeCeq7SWj8CE/Nt/2h9zvm2RPnBDiFPrC0qrxz+hWjXF52kHnqYmf+wWY
-	 Dez0hC2W1OMNSLbO6sDd1Qfg6gepEbQzXAT+iDAqyrcF+Wb5U1FenmibIZuyX69s+vFOK
-	 +GYbAtCPxnZ507XuR9RS7o+lxYUBbewgDBKzqf0r6YTuVi0r3nLUXP8C87G8HuC1tnCy4
-	 PRZtVI9AuEEZUP1ES9emccDpoYjTN3JpjulZRKFrkYWUw6oIYhEsCfQlVoFF8KrkWzg==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=PKZ23RQe;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.43
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
+	 Content-Language:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=qzSNzkmnLjAnm2o7UEPNC82u2CvWGqHDymHqRLR8nws=;
+	b=UYefFA0GV1Cx0mnF41lSnFDwOtzb522ea2+OYItY2k0Y13mQZDTTXUpmwcB/yzxSbkje
+	 kb2YOnmxyyykmoe2N4BdRZ08N8GQQmMFptVAOo3rknRsqNwv3kBw2/SH0rrU88TRKgFZ+
+	 v1dLGQvO2PUvwBrCcK3/efsDBcbRD6gp2wtFai0OfwSokGtZvpYQhWpXUA7fDzxC4tQmu
+	 5tiA9+RgS/kPFB+SoJYKsmVwnpeS6prcO1jjBgUi/In9OAuhH/ab6JLA5s5ZHmQaWAmzA
+	 Vehrb9DtxcyVTY2lFE8Q6zR/ECD+ZPreYornVPW8Jm2rq6IZYzsWs51aA7Ev3Ls72KQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=suse.com;
+	spf=pass smtp.mailfrom=suse.com;
+	dkim=pass header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=VeMZMFlK;
+	arc=none smtp.remote-ip=209.85.221.54
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71388606A329
-	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 16:44:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 71388606A329
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A943606A680
+	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 16:45:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2A943606A680
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=PKZ23RQe
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-c4cb6834eaaso127066166b.2
-        for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 08:44:15 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795625054; cv=none;
-        d=google.com; s=arc-20260327;
-        b=IwoTTqnF4OVj2r8J4JVpS0MC9rWI9PwX5jrA8hx0OrqxoASnhZJOcN8HT5ScOnPod1
-         Em9yGWC0q63kbzrHAsaWnyRz63XAVTIK1aKx5A5HBP45euDRp+O9LoxZVJyYHyjMPvLC
-         jj0+8AbAU9/nHEhZWz5CdJfonQWOj63Kyng4XgTolCgKQk6JnBbQzqeDLxO8uAVZoKTN
-         KZ2Wv9EkH0Sc5yB7ywbyGZqMW7el7cMuYw5WL9AaLGS9RL9yY32pgU41N8SlKQtL8AN1
-         pLMjmP/wKVT0B7wW/FNvNNFk3GFyocj3LxJ0t6bdGALHqNTwazDYpswjt//Oz5mah8SN
-         R2YA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=II/aro/lwWCAag041h9klo86GZWrpoxtriGNBQNlDMw=;
-        fh=MIy7r8XiXHcGuZ9Lu47LUua1/9cgBrTmrSL1hKMbNBg=;
-        b=X3h0oyLwglRTTJhmWr7Qx1xqHmCAfqpzr5v4QkcCFuflDQf5dEvUpNTJ4SXrxislAa
-         ws7yyLjajC3X+hUFXZXJc2UQbLGCOLWiwc2yT/FV6WP6SUoSb2DGGw4b8eTvv8lvk3On
-         YXLfB0lqU4cOunSWo0o+yzNsuf1xWreisTC8ZEO9hEcPO2BKo+00z5wtJ534mmnhdAQ7
-         S+0CJLXxA+ToS71n7Vq9fZipSQRCvwQaCvqk5HK6CvWuLBV+9m42l1SXzVFkKSwCACeJ
-         fhrxeTfv1X6Y9DvnYa3Oglng1UWo71rBpuTqJR7RiqFqL/OwQ4I1fmf9IYc6xKuyjHai
-         X+qQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=VeMZMFlK
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-491971ac844so5413996f8f.2
+        for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 08:45:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795625054; x=1796229854; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=II/aro/lwWCAag041h9klo86GZWrpoxtriGNBQNlDMw=;
-        b=PKZ23RQeMEttotX4OBPRP2DbbrMEB51nwAQlsHi3Clsl60+KLwydytyVzIwS3CPrsp
-         gMCa0qLojqUmZPTj1WgDWb2vfDDzy8I3ouZC6AtzVQzGhYkAtsdS7I194LfKbKzPHVBH
-         9FjnQKv/TdlaTy27yqxtS+FRu+TCtlSdjsR4QOyB9tkMnDrs00BEwfTTEGdJNrrE0d1S
-         i0G3BgU+8ocwt4ScMKi+JN47+02WlDqK9aHu8g0fQCVcWCnmaTG9N306L0mPKog4H/f4
-         BgsXgGhnHP8RFqRdmh8kRVgxVbHO2JS8qa43xqFnpf9P4Z4Esbd1QfxvoHuOMiibIYtV
-         4BnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795625054; x=1796229854;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=suse.com; s=google; t=1795625138; x=1796229938; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=II/aro/lwWCAag041h9klo86GZWrpoxtriGNBQNlDMw=;
-        b=Ix9E9/tDnB0qjbhv3NLrqnhQQM8pho1yZVEhFFe6mg9+UGMY1NRH/9EplSGIzxO6A6
-         jGjKAQ+PSwhaTK7Qu44Emt/yQrYRuxsPj3DQ2C4ev/tY/1A3daHwoZZ4WEV6+gt+qR6+
-         e4yUu3Qj2ClpsmGQSe1rPXv4OCdUz9fx8uy8ujmXgS5CnuNOl8SvgckFK4kk8M+SpmX+
-         LS68mjqr1g5HFkwMJQ3kQ43NKxVIJUu/fFwrpa3Cu+61c73pmkUeMnRd79QpF8YncWS0
-         i1kfM0xeDtiiyNVxSeL7bT6fwNISTNL6sqSpD+aKNMi3mFsP5g99a3gAHAOV6b+v9CA3
-         RPaw==
-X-Forwarded-Encrypted: i=1; AL+hErGjdxUmTHRIAKosajgTFQES7TzMLEuV9KKjoGEVuzkyHKesJJY/XyyFnzNGLT0VUD0cIgY=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+z4BVYLGV7bOT18CbsyemLiOK6MT7Xuo4EQFr2TSyXbtIZAHJ5
-	c6ZmcCyMhjQRiDl75x2GjVpa7U6mYCWxe1U2Z8WTZNO+bVkY7O8f3R8W9JYgm38D+CEEey6uUfp
-	0RJMUWfhJkmZqsjjM5REKw2qwux2t2ZmDNYeY7YC+
-X-Gm-Gg: AZFdTZcdmXVLHwP3Ufi+TtqaXOEnatdg1A98nigG/hbsH6hhLMX+fs2WwLrZ0QvbZx9
-	AFd4KYjus73g3EBQj706nw8uEfInO3utLmiJBFlT3a64e7l4A0rn2jvsZBGPR6Qv2n3ZIHjAaSU
-	ykq6CxY88FAOKSnrW6rkrjVfR9Bbmjo1eOXc29QmQzaHPTmUopYC0tYAWeZNxeHYa288g+QfkHy
-	3fRzbRwD50ikNkENKFHguXDq/6NbV7euYCGNpfRNW2z68jEUx6siZMfFeAndqopaMcC/+nItF/a
-	3fxLss1DPSB7ih0kLM3QAlyjezTjyco+8lxQEXwtE46wD4ET4ZKl+WX/DpEmtrlBW5HwDHjposm
-	a0InDyfyeHGN8U1P+R0R6XtRqW6hmiLfg8aIbBR6P399h3tcFAqv7L8py5slo9O59WJw9ppJtQJ
-	fGlMimX3e8SKJVXjk0xf9GHjTXbCBkp+hcmxYcfzXb6tByn/LUKkE=
-X-Received: by 2002:a17:907:6d22:b0:c51:40e:847a with SMTP id
- a640c23a62f3a-c513a1e6fdfmr1639688066b.0.1795625053094; Wed, 25 Nov 2026
- 08:44:13 -0800 (PST)
+        bh=qzSNzkmnLjAnm2o7UEPNC82u2CvWGqHDymHqRLR8nws=;
+        b=VeMZMFlK4XeBzwrDD6z4Doe5ujZ5PmFlBvgdtXgvDNgqyB2+a2sCMN2wk+r327T/uW
+         /r2BhYppBsmLCfA6wEf9rqAgdyevRRA01ag2IXLdtngT05rT8V5qUBbFQDnjjQgYE2gf
+         VRO105Wv3wS0sYOzpdh62UmMxKFuJZsiAfPK9beaxT/i9ZUHpkfJOUrelw8QBpX9lGS4
+         m35Q/nRZpkrOo84dL5yj6BJK1saMLREXy289b+W8lcU1Li54eo2LPH2XZ2BzxTKFv4V2
+         TU/7Cyf6kqOyQ8kgJ2U5PgB/NbN2a8Bu0WSQShF93YOhfgaUMd2kQPQDvfuKKEMIIK8r
+         gfQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795625138; x=1796229938;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=qzSNzkmnLjAnm2o7UEPNC82u2CvWGqHDymHqRLR8nws=;
+        b=M+YIxP2QAkHoUuu3qFxf3kInMratnGfJGPWMrlholMBSYt2SmGkYU+J1IPKTlw1Wub
+         I2lyeqmyLb8388/45YKq79ZK5LsaGAS/40QSnWJZyY+2mwOfV5sR2wOmdzACLhYFUs0G
+         7MvjKe+RVeKPLIHP2kisNihimjefBfjDejFPgltrHz725eF8oyJKPD6vvBh+9Ok6XEgK
+         D8BNx5un7X8Cwez8+8TEq/bpPz19u3QtGFalMWn+0tFoWsqN+hv4YL+xHSXm7EaWpMPc
+         iuc4CkfGz1Ot4voXyaReYl6t0qnqovN/ajs3t11vYzkzrD4nQV8iPvltgpK/NffA/tht
+         Kp5w==
+X-Forwarded-Encrypted: i=1; AL+hErET64m40IQg8qXCUhgXAwZYUkCPLJWthwgYYtEcuehC2Jbh+07FZLkNp2RiAipB4qFnzBM=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/h6TFQN7mIqLxOnnG4pVDZ40+vYFCafGVDGX+sMdUynQspd+qw
+	anQKOMBGTU7rC1QLD8t7Vw8Euccmpc6nzAVA20meBTmiRsvcimDHlyrxXGYnVk7U6BY=
+X-Gm-Gg: AZFdTZdTE3K/1sbTWqiJ9pnYKoMRtAWExOc9BzPFeyXL4/rKAPQSyW6qCJ7ap0nHYGA
+	NSQAc7FBLFRlHV88x5PaUZuCfdBB4LPgdU92E75s8D+kckzcdYSD4CJP9jt/+Xlq76i3aLY1R7B
+	/IVrTbSUptFXDLo7ve3bc4qmI4VVps7HBYS+N/5FyPPOlF7DTBuUXZxqr6nBye8Qd1iIguPI86i
+	p49jR7+jcKHPvQu5q7Emv9KcdSonAl4mqyDMH9PW9FJCDCOyLQRdCCwM355/KVxtUYMGT7kCufw
+	LmB+dBIGLq4HtcF9een2EYMzm+RD+IUNpKBM+IL7jXJ09Ql//8GneUez1R+qiT97ELg6G/h7KwD
+	yigpxNax/H0e749kCUeoizc2BmhIQbbeyJgz42p9HoeVJoVWTW5bnzWGD1l8qy1uZZ9YSFOpy1P
+	yDXYjSX4ZZs75dUfvDOHoMyeNoJBofLcJL1FFblKXPtf/9vAyt4v6UWTe4AYKf+jF/81IPn7uz3
+	sGSQTm2gNbGT8tcwRkSF55u+y9dBsGcdy5/OA9tWsMSk1EP5MBH9GQz6Va+Z9k6KMw0s7/8dl61
+	q57DtE8HsG+cZTkwUtPRTJ+BfU/UAn53a+4GC/dETPyzPrg0gS853NlvyDr4lA7+8Q==
+X-Received: by 2002:a05:6000:4617:b0:48d:f464:6989 with SMTP id ffacd0b85a97d-4abb18cbe2cmr35982135f8f.27.1795625138335;
+        Wed, 25 Nov 2026 08:45:38 -0800 (PST)
+Received: from ?IPV6:2a07:de40:8100:0:89a9:fd0e:583d:4a53? ([2001:af0:8000:1409:193:86:92:181])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4ab6b110c50sm34852448f8f.37.2026.11.25.08.45.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 Nov 2026 08:45:37 -0800 (PST)
+Message-ID: <0c2e606e-e0b8-4466-b9dd-4db14cc35d1d@suse.com>
+Date: Wed, 25 Nov 2026 17:45:36 +0100
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -105,106 +92,91 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <ac22215d-3e58-4aab-851e-47c30836e058@app.fastmail.com>
- <20261027231728.1466446-1-jthoughton@google.com> <32fad21b-5bad-4640-97df-ef0f638cd9e9@app.fastmail.com>
- <CADrL8HX5vb1PGDpWzp-eR0rNfsMCVUhFa9vp_WZZx2eJZ+dfXQ@mail.gmail.com> <1a99e5fc-129e-41e3-8420-101bcf04b366@app.fastmail.com>
-In-Reply-To: <1a99e5fc-129e-41e3-8420-101bcf04b366@app.fastmail.com>
-From: James Houghton <jthoughton@google.com>
-Date: Wed, 25 Nov 2026 11:43:36 -0500
-X-Gm-Features: Aa3M54qTCDON0Zo2YJDXp5pBtwrXjTcYjv8NoqDjQS_XV_tl8JrBb-LQVlKEL3Q
-Message-ID: <CADrL8HUOZs-vWRyM9p+Na-=arRU+Gx_cWMLbxHmUYnho4fAUXg@mail.gmail.com>
-Subject: Re: [RFC PATCH 00/10] uaccess: Refuse and warn on user accesses when
- current->mm is NULL
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	Pavel Begunkov <asml.silence@gmail.com>, Alexei Starovoitov <ast@kernel.org>, Jens Axboe <axboe@kernel.dk>, 
-	bpf@vger.kernel.org, Daniel Borkmann <daniel@iogearbox.net>, 
-	"David Hildenbrand (Red Hat)" <david@kernel.org>, David Sterba <dsterba@suse.com>, io-uring@vger.kernel.org, 
-	Jim Mattson <jmattson@google.com>, John Fastabend <john.fastabend@gmail.com>, 
-	Josh Poimboeuf <jpoimboe@kernel.org>, Kees Cook <kees@kernel.org>, kvm@vger.kernel.org, 
-	"Liam R. Howlett" <liam@infradead.org>, linux-btrfs@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-mm@kvack.org, linux-perf-users@vger.kernel.org, 
-	linux-scsi@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	Lorenzo Stoakes <ljs@kernel.org>, Chris Mason <mason@kernel.org>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Michal Hocko <mhocko@suse.com>, Ingo Molnar <mingo@redhat.com>, 
-	"Martin K. Petersen" <mkp@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Paolo Bonzini <pbonzini@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Steven Rostedt <rostedt@goodmis.org>, Mike Rapoport <rppt@kernel.org>, 
-	Sean Christopherson <seanjc@google.com>, Suren Baghdasaryan <surenb@google.com>, Thomas Gleixner <tglx@kernel.org>, 
-	"Vlastimil Babka (SUSE)" <vbabka@kernel.org>, Alexander Viro <viro@zeniv.linux.org.uk>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v3 2/9] module: Add module_kallsyms_find_name()
+To: Samuel Wu <wusamuel@google.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ Randy Dunlap <rdunlap@infradead.org>, Luis Chamberlain <mcgrof@kernel.org>,
+ Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>,
+ Aaron Tomlin <atomlin@atomlin.com>, Alexander Viro
+ <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>,
+ Jan Kara <jack@suse.cz>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Petr Mladek <pmladek@suse.com>,
+ David Laight <david.laight.linux@gmail.com>, kernel-team@android.com,
+ linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-modules@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
+References: <20261113221248.3535369-11-wusamuel@google.com>
+ <20261113221248.3535369-13-wusamuel@google.com>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <20261113221248.3535369-13-wusamuel@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Nov 24, 2026 at 5:02=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> wrote=
-:
->
-> On Tue, Nov 24, 2026, at 22:10, James Houghton wrote:
-> > On Wed, Oct 28, 2026 at 7:14=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> w=
-rote:
-> >> On Wed, Oct 28, 2026, at 00:17, James Houghton wrote:
->
-> > So now in v2, the _nofault() helpers themselves do not check current->m=
-m.
-> >
-> > I've uploaded a draft version of v2 here, in case you want to take a lo=
-ok:
-> >   https://github.com/48ca/linux uaccess-v2-wip
->
-> I read through this now and it all looks good to me so far.
+On 11/13/26 11:12 PM, Samuel Wu wrote:
+> KALLSYMS_QUERY_BY_NAME, added later in this series, needs to find a
+> symbol name or prefix across module symbols in one pass.
+> module_get_kallsym() walks the module list from the head and runs an
+> export bsearch() for every symbol index.
+> 
+> Add module_kallsyms_find_name(), and put the shared query struct in
+> linux/kallsyms.h, so we have a more efficient linear walk.
+> 
+> Signed-off-by: Samuel Wu <wusamuel@google.com>
+> ---
+> [...]
+> diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
+> index 1ff8ce857d92..72006c9bad42 100644
+> --- a/kernel/module/kallsyms.c
+> +++ b/kernel/module/kallsyms.c
+> @@ -406,6 +406,63 @@ int module_get_kallsym(unsigned int symnum, unsigned long *value, char *type,
+>  	return -ERANGE;
+>  }
+>  
+> +/**
+> + * module_kallsyms_find_name - Find a module symbol by name or prefix
+> + * @symnum: in: index to start at; out: index of the match. The index
+> + *          counts the symbols of the searched modules in list order.
+> + * @q: name query; if @q->modname is set, only that module is searched
+> + * @value: set to the symbol address
+> + * @name: set to the symbol name (KSYM_NAME_LEN bytes)
+> + * @module_name: set to the module name (MODULE_NAME_LEN bytes)
+> + *
+> + * Undefined (SHN_UNDEF) symbols are skipped.
+> + *
+> + * Return: 0 on a match, or -ENOENT.
+> + */
+> +int module_kallsyms_find_name(unsigned int *symnum,
+> +			      const struct kallsyms_name_query *q,
+> +			      unsigned long *value, char *name,
+> +			      char *module_name)
 
-Wow you looked at that really quickly, thank you so much!
+Nit: kernel/module/kallsyms.c already contains a zoo of lookup functions
+with similar names. Adding module_kallsyms_find_name() adds more to the
+confusion, being similar to module_kallsyms_lookup_name() and
+find_kallsyms_symbol_value().
 
-> >> Since in principle every user access should go through both
-> >> access_ok/mask_user_address and current->mm check at some point,
-> >> so combining the two as much as possible should help long-term
-> >> maintainability.
-> >
-> > You're right, and v2 has been restructured like this.
-> >
-> > - The check is in access_ok() itself: the generic version, plus the
-> > arm64 and riscv versions. __access_ok() remains a plain range check.
-> > - The callers of mask_user_address()/masked_user_*_access_begin()
-> > check current->mm explicitly. There are about a dozen such callers.
-> > - The unchecked accessors, __copy_{from,to}_user()
-> > and__copy_{from,to}_user_inatomic() (and arm64's
-> > copy_from_user_flushcache(), which also relies on an earlier
-> > access_ok()), keep an explicit check for now. Once their users are
-> > converted to the checked versions, those checks can be dropped.
->
-> Ok, sounds all good. If we get more than handful of mask_user_address()
-> and masked_user_*_access_begin(), we can always revisit that interface
-> to make sure the check can't be skipped, but for now this seems
-> like a good tradeoff.
+I suggest calling it module_kallsyms_query_name() to match the
+kallsyms_name_query parameter and to express that this is a structured
+query, as opposed to a simple by-name lookup. It might be a good idea to
+similarly stick to "query" instead of "find" in kernel/kallsyms.c.
 
-Great!
+Otherwise, this looks ok to me from the modules perspective. Feel free
+to add:
 
-> > Compared to v1, this also covers get_user()/put_user()/clear_user() on
-> > arm64, powerpc, riscv and the asm-generic architectures, and arch code
-> > like signal frame setup that uses access_ok() followed by __put_user()
-> > or unsafe_*(). user_access_begin() no longer needs its own check.
-> >
-> > What's still not covered: x86's get_user()/put_user(), which do their
-> > own range check in asm, a few architecture-specific paths that call
-> > __access_ok() directly (e.g. on alpha and sparc32), and arch code that
-> > calls __get_user()/__put_user() without access_ok(), mostly trap
-> > handlers for user-mode faults. Probably best tackled later.
->
-> ok
->
-> >> There are probably few enough of these that we could address them
-> >> by either adding current->mm checks or converting them to use
-> >> the full versions instead where that is an obvious change like
-> >> that usb gadget driver.
-> >
-> > Sounds good. I'll send a separate series converting the obvious ones,
-> > starting with the usb gadget driver. I think that will be useful.
-> > Let's see how far I can get; hopefully I can drop
-> > __copy_{from,to}_user() completely.
->
-> Ok, perfect!
+Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
 
-Thanks, Arnd! FWIW, there have been no syzkaller issues so far with
-this WIP v2. :)
+-- 
+Thanks,
+Petr
