@@ -1,74 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.69
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.200
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795567914;
-	b=yVzb8i9koMMBjBXDXOcFSzl4lgZAv24t/v2gLiiQdmbxFaS9fAuHHKAnXmMMpyR0ZymU
-	 sko7SezM/rN+/5UWGiKhFvdD24+I7t2lHJmI9CN3VWtDgI3PCiIukz287t1+IHPSs/k3M
-	 3OYdBXWt7UeWgUeHTxcdJtEXJG2XtAlTMS80VrcAyg0636uS2G51U+nZ+jG0eTXhCaThv
-	 ZiQWxrtPkAzqDUpO6NJFuRvC+x1MH0Wi2gIa/aJpqJKgI06zODUuF18W/jx9dDAKfBwj4
-	 ObNUuosblaWm9ycgkmFqax7TBNuS04P/rtoULTMaUp+QoN2fUlyuHyQ8KMkzZFRuy9Q==
+	t=1795567917;
+	b=FO+lxUIYKiqDnwXTdTYYUIBSRLX3i0ol82EPfxU0Ht87O0rh/ec0Mfqr+XfzP382HESr
+	 6mAUKOzXEAfd0syXqKHBl/rRzX1xQgPiT9kNZGQ+fctaeu9zdBaYQ2X2z3G2x8R1X8BhZ
+	 attqN6DfzBPrB4hg7UwB5U1KF3DwnUUNZ98Hpp4ohNeyoI84byyFJOckPcZyq/eBSPb0r
+	 F+TYKtoSXoXbJG8oVVoZIKsxMV6BoBrWUKVvscGFuZSKd+JlZ3onQfAg7EK8kxV1BLvhD
+	 gvNm7kaMPjxn7zAeDIsYXW2o0mIbBfra++e38/Q84lHVi5upTvL8lu65k2VfQyINGWg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795567914;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795567917;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
 	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
 	 Content-Type;
-	bh=mOWZ5TjvlMkL4oBUD0ybCU/Vosi/rN1lSKG3xTizPns=;
-	b=kpsYHUDTa9n5OlXIOKiGFhhkvEAqgn3ZmCUr37+D3roQ7Z/Qo5GRak6V1/CIursDEPlP
-	 aAW4hY24aSWOQsSg97hTFunjYTGSlFypl3CETkdGQhDr/0P65CF8OIIdR/B2tzfO+VQ0l
-	 qjQz1QZPT7XByRYcaE9YdQeeWmPXrtMut4TF9npqJqIurHK6EZxtFeW0Yqbns6ggFnjic
-	 AuC17Ocxf8kUves5Q4nT8FSDx6G+BFpjsvoiOzdlU1+aCQI9qGbQ1bUkLEP2HkX1fCbjd
-	 tGUylr6F334ogkvyyKlF8LW9zW88UG9N2s31bnOF5LKN/SnkEvHuHS9gYRaltRQ6O2Q==
+	bh=gKi/h6FXem9B7oE2V26QtBZc7ZsOCscf8la+gKh9y0U=;
+	b=jfiQEVnmNLaFiqCragnVTHLGNMXSJGCPLXM64qafyrCpM0hkdxFgSLsVl3mpj0CgMPsc
+	 JBd1ect6vMMboUOh1aaY5jaGi0QzOsYGn8SWRnDzndvVPsNL1Esnt/tCVaYmC6HjA/RAm
+	 2/T9EdV67F/J/VnGxp0MNs8swdCjR+wX/I/KugxNoR+UH3OE7UNFeHGiFYEV8ECM+2tNi
+	 oFUWNe4uU91jFjFpkeJFINiFLPeB778+AxJmszK4Qu925WxLc5arg9M+HI5QlIuXpd01H
+	 ueIwhMdlYppLzkFaWtFeQn3EB5+ZZJL0fDEd/zZ1tV2RanArBrJhApAkrXcgNpDi7hg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--irogers.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=IP87fBqT;
-	arc=none smtp.remote-ip=74.125.82.69
-Received: from mail-dl1-f69.google.com (mail-dl1-f69.google.com [74.125.82.69])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=fx3zsleA;
+	arc=none smtp.remote-ip=74.125.82.200
+Received: from mail-dy1-f200.google.com (mail-dy1-f200.google.com [74.125.82.200])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D990A606A69D
-	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 00:51:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D990A606A69D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 410FE60A2629
+	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 00:51:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 410FE60A2629
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=IP87fBqT
-Received: by mail-dl1-f69.google.com with SMTP id a92af1059eb24-1b3a348a6dbso4291581c88.1
-        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 16:51:52 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=fx3zsleA
+Received: by mail-dy1-f200.google.com with SMTP id 5a478bee46e88-386a0f79047so5326401eec.1
+        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 16:51:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795567912; x=1796172712; darn=vger.kernel.org;
+        d=google.com; s=20260707; t=1795567916; x=1796172716; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=mOWZ5TjvlMkL4oBUD0ybCU/Vosi/rN1lSKG3xTizPns=;
-        b=IP87fBqTnTyIJM+Mkyo4ecmoPe5S0XmoTklc+Ox2cfsUN/znu4osfEFNvQllY7fXIc
-         EuYpi77UklzKNn6DcN18UmTh6m+6mZQUVBZL1YmvxR0VSzS8O6anky+HZw0wTx+Gpykg
-         sqgTLZeUM8JqVbo8B1pbwEosyPawN39sC04gKesN0CGiPuXzin6HXL8qOM+2k9GygKcP
-         KjYXuxiSCloIBIp3ExqcAmAyvBikhQ+F6w0/vqVaImqFAIf32xYS8exL4AVjPEFmOHlo
-         /nYxAgINhxDjXgh3PEeMN1+pNHu8jln7r/NEFa8ZNbUMVIJCiel3MM99akv2V8Rbk4XH
-         4A7w==
+        bh=gKi/h6FXem9B7oE2V26QtBZc7ZsOCscf8la+gKh9y0U=;
+        b=fx3zsleAnWfPaEDLhfNsNhBBC6N6iaB5fY16p53HLaZODE8uwWu0Un9A+VqxOMfCdR
+         NR40HE2LVpQHxfl5KMRyhjNEQU92cBKUWwuPr+KuEqAYezoqQbku2w6e7/GLlfOSvI8X
+         tyjFh+EnbzB/EM/hDcCYsNPbZsxa1T+d/SN74SMaY1pMcCeejlijE7uD83vndUbwPsj5
+         CzkvxO+xTL3d1ZYveEjQNzM0sQk4OQrBdx4GeTlNBnH840SigoStGIvHi+5CsPdVK8zW
+         gLPmW2a9ajySSx7rZCXlMpwb8hPx3UoNzRsi+cryKn5V/uKw/I1w1jXEOxGFIjDEUYBc
+         sFOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795567912; x=1796172712;
+        d=1e100.net; s=20260707; t=1795567916; x=1796172716;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=mOWZ5TjvlMkL4oBUD0ybCU/Vosi/rN1lSKG3xTizPns=;
-        b=jt80zakmbzpuC3w3yWLfI0FYa5MhABRYCDSO9r1LM6O0dY7wVKirnR94wGoGlxhFzg
-         mNpq9o40ks8qMhilMeqRcWiWeqz0xMm0RR/NjFRrOnPJtyQ/CppFN//rGvbBLl0i6zkx
-         N/1lrvdVTahePFfgZ+EanOOA4nd+6fgGVAVyNqTpMeJxfuTEfHeMUZHDqhpQXskoO45C
-         d1wiDc0povoz+myvk9rl7JKqNg699Rn7JryMKwqRv1R8BqlFKBUNBKyZou5qjSLFnlkh
-         y9Q6mnl8+822bfcrdCTLbhu+TsblM63iPeyJwRr/4dopqlf1Ko+4wlula+d1tHGEZM8Q
-         WPkQ==
-X-Forwarded-Encrypted: i=1; AL+hErEaCbXQt1KaCfiJOu+pzAJSMMFK7I62jTX1blXhBXkxqYHWKjS08rcTj3IfAamxlVCzDlE=@vger.kernel.org
-X-Gm-Message-State: APuU4Z++bKWIR5YMy5+iFylopUlpSGlPh/Rw0K6zvaGrY1dMDQrzj+6m
-	65bCmGvH+Uf3wA3eIueIgM+bGBE1ykybe7wRYFRrpCu0uuzslMBF3rgHJKZZjpkGdyiFUYCMJmF
-	NOVqyvuGMdg==
-X-Received: from dlgj1-n1.prod.google.com ([2002:a05:7023:e41:10b0:1a7:2bf1:46cc])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:701a:cc88:10b0:1b2:60ab:1e9d
- with SMTP id a92af1059eb24-1b55690cf1bmr17191341c88.37.1795567911530; Tue, 24
- Nov 2026 16:51:51 -0800 (PST)
-Date: Tue, 24 Nov 2026 16:51:04 -0800
+        bh=gKi/h6FXem9B7oE2V26QtBZc7ZsOCscf8la+gKh9y0U=;
+        b=kXZoRWOocmiyden5uOMq1Og6bPivXZ542BU6vdIU5Xu5Pv0xFzcOij6G4MTuGkDILB
+         DORTXn11R2n/tojviJJ4Ud0hia3MLuXt8eqqDBsZd7iDDfAH/Hdye+kS93QQGeg/e8j+
+         1gwvrMwg+lL5GLuY4NRIDWLhUgxjvG/tDurEmw62UOIbRzQTJQ7WeCpvWJ+zGVbHAoBo
+         ggL/3y4qfTznpqksK8HFWKPdlPXwAdK6H2D26ncE8pqeEIbhaPw1m9vhnJzthLKQZjgI
+         O/KtoeRZ2Jdp1F857UrvWAMWTVNstlr9A7HLCmbnTrfspBetpxuycv4Ga/3GVteyJn2f
+         VMyw==
+X-Forwarded-Encrypted: i=1; AL+hErGU/PxCCLBSe8dAjCWppBe7ajdZXO/HhQDVZB7URCokNPetnBgWp2OvMz8k/CscGzce+QU=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9YB3DcNKZ3jaqGr794Rl8VnqaXYyMtiT4HEwOqoHrODnl4RfO9
+	L9O8oSh19YRCdSTWjRNULGh35AqZSugEDEust6n+bxaZV57FmXNOdqLS2ZBrhZ0uLpKPLWvvcRn
+	hizAFr9RPwA==
+X-Received: from dycmv2.prod.google.com ([2002:a05:693c:2802:b0:386:b5d2:c426])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:693c:8803:20b0:386:9b9c:ef1b
+ with SMTP id 5a478bee46e88-3869b9cf99amr11788653eec.3.1795567916077; Tue, 24
+ Nov 2026 16:51:56 -0800 (PST)
+Date: Tue, 24 Nov 2026 16:51:06 -0800
 In-Reply-To: <20261125005108.1020003-1-irogers@google.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -81,9 +81,8 @@ Precedence: list
 Mime-Version: 1.0
 References: <20261125005108.1020003-1-irogers@google.com>
 X-Mailer: git-send-email 2.56.1.831.g720f3f5937-goog
-Message-ID: <20261125005108.1020003-16-irogers@google.com>
-Subject: [PATCH v4 15/19] perf symbol: Resolve symbols and callchains using
- build ID and offset
+Message-ID: <20261125005108.1020003-18-irogers@google.com>
+Subject: [PATCH v4 17/19] perf record: Add --buildid-offset option
 From: Ian Rogers <irogers@google.com>
 To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
@@ -101,743 +100,171 @@ Cc: Athira Rajeev <atrajeev@linux.ibm.com>, Alexei Starovoitov <ast@kernel.org>,
 	bpf@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-Update thread__find_map(), callchain resolution in machine.c, deferred
-callchain merging in sample__merge_deferred_callchain(), and perf
-report/script to resolve symbols and callchains using the build ID and
-file offset recorded in samples.
+Add the --buildid-offset flag to perf record to natively request
+PERF_SAMPLE_BUILD_ID_OFFSET and PERF_SAMPLE_CALLCHAIN_BUILD_ID_OFFSET
+from the kernel. This configures the evsel attributes by replacing
+the standard IP and CALLCHAIN bits with the build ID offset equivalents.
 
-Suggested-by: Namhyung Kim <namhyung@kernel.org>
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/builtin-report.c     |   4 +-
- tools/perf/builtin-script.c     |  28 ++++--
- tools/perf/util/callchain.c     | 153 +++++++++++++++++++++++-----
- tools/perf/util/event.c         |  36 +++++--
- tools/perf/util/evsel_fprintf.c |   9 +-
- tools/perf/util/machine.c       | 173 ++++++++++++++++++++++++--------
- 6 files changed, 315 insertions(+), 88 deletions(-)
+ tools/perf/Documentation/perf-record.txt |  6 ++++++
+ tools/perf/builtin-record.c              | 22 ++++++++++++++++++++--
+ tools/perf/util/evsel.c                  | 17 ++++++++++++++++-
+ tools/perf/util/record.c                 | 22 ++++++++++++++++++++++
+ tools/perf/util/record.h                 |  1 +
+ 5 files changed, 65 insertions(+), 3 deletions(-)
 
-diff --git a/tools/perf/builtin-report.c b/tools/perf/builtin-report.c
-index 6672a4d16529..a1041c8605ec 100644
---- a/tools/perf/builtin-report.c
-+++ b/tools/perf/builtin-report.c
-@@ -384,7 +384,7 @@ static int report__setup_sample_type(struct report *rep)
- 	    session->itrace_synth_opts->add_last_branch)
- 		sample_type |= PERF_SAMPLE_BRANCH_STACK;
+diff --git a/tools/perf/Documentation/perf-record.txt b/tools/perf/Documentation/perf-record.txt
+index 2351f7b4f5fc..d821303c923c 100644
+--- a/tools/perf/Documentation/perf-record.txt
++++ b/tools/perf/Documentation/perf-record.txt
+@@ -578,6 +578,12 @@ Specify vmlinux path which has debuginfo.
+ --buildid-all::
+ Record build-id of all DSOs regardless whether it's actually hit or not.
  
--	if (!is_pipe && !(sample_type & PERF_SAMPLE_CALLCHAIN)) {
-+	if (!is_pipe && !(sample_type & PERF_SAMPLE_CALLCHAIN_TYPE)) {
- 		if (perf_hpp_list.parent) {
- 			ui__error("Selected --sort parent, but no "
- 				    "callchain data. Did you call "
-@@ -410,7 +410,7 @@ static int report__setup_sample_type(struct report *rep)
- 
- 	if (symbol_conf.cumulate_callchain) {
- 		/* Silently ignore if callchain is missing */
--		if (!(sample_type & PERF_SAMPLE_CALLCHAIN)) {
-+		if (!(sample_type & PERF_SAMPLE_CALLCHAIN_TYPE)) {
- 			symbol_conf.cumulate_callchain = false;
- 			perf_hpp__cancel_cumulate(session->evlist);
- 		}
-diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
-index 376a4e0d7b0c..a490b6b525b5 100644
---- a/tools/perf/builtin-script.c
-+++ b/tools/perf/builtin-script.c
-@@ -498,7 +498,8 @@ static int evsel__check_attr(struct evsel *evsel, struct perf_session *session)
- 		return -EINVAL;
- 
- 	if (PRINT_FIELD(IP)) {
--		if (evsel__check_stype(evsel, PERF_SAMPLE_IP, "IP", PERF_OUTPUT_IP))
-+		if (evsel__check_stype(evsel, PERF_SAMPLE_IP | PERF_SAMPLE_BUILD_ID_OFFSET,
-+			       "IP", PERF_OUTPUT_IP))
- 			return -EINVAL;
- 	}
- 
-@@ -515,7 +516,8 @@ static int evsel__check_attr(struct evsel *evsel, struct perf_session *session)
- 		return -EINVAL;
- 
- 	if (PRINT_FIELD(SYM) &&
--	    !(evsel->core.attr.sample_type & (PERF_SAMPLE_IP|PERF_SAMPLE_ADDR))) {
-+	    !(evsel->core.attr.sample_type & (PERF_SAMPLE_IP | PERF_SAMPLE_ADDR |
-+					      PERF_SAMPLE_BUILD_ID_OFFSET))) {
- 		pr_err("Display of symbols requested but neither sample IP nor "
- 			   "sample address\navailable. Hence, no addresses to convert "
- 		       "to symbols.\n");
-@@ -527,7 +529,8 @@ static int evsel__check_attr(struct evsel *evsel, struct perf_session *session)
- 		return -EINVAL;
- 	}
- 	if (PRINT_FIELD(DSO) &&
--	    !(evsel->core.attr.sample_type & (PERF_SAMPLE_IP|PERF_SAMPLE_ADDR))) {
-+	    !(evsel->core.attr.sample_type & (PERF_SAMPLE_IP | PERF_SAMPLE_ADDR |
-+					      PERF_SAMPLE_BUILD_ID_OFFSET))) {
- 		pr_err("Display of DSO requested but no address to convert.\n");
- 		return -EINVAL;
- 	}
-@@ -1796,7 +1799,8 @@ static int perf_sample__fprintf_bts(struct perf_sample *sample,
- 		unsigned int print_opts = output[type].print_ip_opts;
- 		struct callchain_cursor *cursor = NULL;
- 
--		if (symbol_conf.use_callchain && sample->callchain) {
-+		if (symbol_conf.use_callchain &&
-+		    (sample->callchain || sample->callchain_bid.nr_offsets)) {
- 			cursor = get_tls_callchain_cursor();
- 			if (thread__resolve_callchain(al->thread, cursor,
- 						      sample, NULL, NULL,
-@@ -2755,13 +2759,18 @@ static void process_event(struct perf_script *script,
- 		fprintf(fp, " %s", cgrp_name);
- 	}
- 
--	if (PRINT_FIELD(IP)) {
-+	if (PRINT_FIELD(IP) ||
-+	    ((attr->sample_type & (PERF_SAMPLE_IP | PERF_SAMPLE_BUILD_ID_OFFSET)) &&
-+	     output[type].print_ip_opts &&
-+	     !(PRINT_FIELD(ADDR) || PRINT_FIELD(BRSTACK) ||
-+	       PRINT_FIELD(BRSTACKSYM) || PRINT_FIELD(BRSTACKOFF)))) {
- 		struct callchain_cursor *cursor = NULL;
- 
- 		if (script->stitch_lbr)
- 			thread__set_lbr_stitch_enable(al->thread, true);
- 
--		if (symbol_conf.use_callchain && sample->callchain) {
-+		if (symbol_conf.use_callchain &&
-+		    (sample->callchain || sample->callchain_bid.nr_offsets)) {
- 			cursor = get_tls_callchain_cursor();
- 			if (thread__resolve_callchain(al->thread, cursor,
- 						      sample, NULL, NULL,
-@@ -3005,10 +3014,11 @@ static int process_deferred_sample_event(const struct perf_tool *tool,
- 	fprintf(fp, "DEFERRED CALLCHAIN [cookie: %llx]",
- 		(unsigned long long)event->callchain_deferred.cookie);
- 
--	if (PRINT_FIELD(IP)) {
-+	if (output[type].print_ip_opts) {
- 		struct callchain_cursor *cursor = NULL;
- 
--		if (symbol_conf.use_callchain && sample->callchain) {
-+		if (symbol_conf.use_callchain &&
-+		    (sample->callchain || sample->callchain_bid.nr_offsets)) {
- 			cursor = get_tls_callchain_cursor();
- 			if (thread__resolve_callchain(al.thread, cursor,
- 						      sample, NULL, NULL,
-@@ -3089,7 +3099,7 @@ static int process_attr(const struct perf_tool *tool, union perf_event *event,
- 
- 	/* Enable fields for callchain entries */
- 	if (symbol_conf.use_callchain &&
--	    (sample_type & PERF_SAMPLE_CALLCHAIN ||
-+	    (sample_type & PERF_SAMPLE_CALLCHAIN_TYPE ||
- 	     sample_type & PERF_SAMPLE_BRANCH_STACK ||
- 	     (sample_type & PERF_SAMPLE_REGS_USER &&
- 	      sample_type & PERF_SAMPLE_STACK_USER))) {
-diff --git a/tools/perf/util/callchain.c b/tools/perf/util/callchain.c
-index 4e4696cfa6d4..57c6f940c2ad 100644
---- a/tools/perf/util/callchain.c
-+++ b/tools/perf/util/callchain.c
-@@ -1175,7 +1175,8 @@ int sample__resolve_callchain(struct perf_sample *sample,
- 			      struct addr_location *al,
- 			      int max_stack)
- {
--	if (sample->callchain == NULL && !symbol_conf.show_branchflag_count)
-+	if (sample->callchain == NULL && sample->callchain_bid.nr_offsets == 0 &&
-+	    !symbol_conf.show_branchflag_count)
- 		return 0;
- 
- 	if (symbol_conf.use_callchain || symbol_conf.cumulate_callchain ||
-@@ -1188,7 +1189,8 @@ int sample__resolve_callchain(struct perf_sample *sample,
- 
- int hist_entry__append_callchain(struct hist_entry *he, struct perf_sample *sample)
- {
--	if ((!symbol_conf.use_callchain || sample->callchain == NULL) &&
-+	if ((!symbol_conf.use_callchain ||
-+	     (sample->callchain == NULL && sample->callchain_bid.nr_offsets == 0)) &&
- 		!symbol_conf.show_branchflag_count)
- 		return 0;
- 	return callchain_append(he->callchain, get_tls_callchain_cursor(), sample->period);
-@@ -1914,32 +1916,137 @@ int sample__for_each_callchain_node(struct thread *thread,
- int sample__merge_deferred_callchain(struct perf_sample *sample_orig,
- 				     struct perf_sample *sample_callchain)
- {
--	u64 nr_orig = sample_orig->callchain->nr - 1;
--	u64 nr_deferred = sample_callchain->callchain->nr;
--	struct ip_callchain *callchain;
-+	if (sample_orig->deferred_bid && sample_callchain->callchain_bid.nr_offsets > 0) {
-+		struct perf_build_id *bid =
-+			(struct perf_build_id *)sample_orig->bid.deferred_storage;
-+		u64 offset = 0;
++--buildid-offset::
++Record build-id and DSO file offset instead of virtual instruction pointer
++addresses in samples and callchains (using PERF_SAMPLE_BUILD_ID_OFFSET and
++PERF_SAMPLE_CALLCHAIN_BUILD_ID_OFFSET). Implies --buildid-mmap and cannot be
++used with --no-buildid-mmap.
 +
-+		perf_sample__callchain_bid_entry(sample_callchain, 0, bid, &offset);
-+		sample_orig->bid.bid = bid;
-+		sample_orig->bid.offset = offset;
-+		if (!sample_orig->evsel ||
-+		    !(sample_orig->evsel->core.attr.sample_type & PERF_SAMPLE_IP))
-+			sample_orig->ip = offset;
-+		sample_orig->deferred_bid = false;
+ --buildid-mmap::
+ Legacy record build-id in map events option which is now the
+ default. Behaves indentically to --no-buildid. Disable with
+diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
+index 085d3648a30a..5796f13ffe8c 100644
+--- a/tools/perf/builtin-record.c
++++ b/tools/perf/builtin-record.c
+@@ -936,7 +936,8 @@ static int record__config_tracking_events(struct record *rec)
+ 	 * delay of waiting or event synthesis.
+ 	 */
+ 	if (opts->target.initial_delay || target__has_cpu(&opts->target) ||
+-	    perf_pmus__num_core_pmus() > 1) {
++	    perf_pmus__num_core_pmus() > 1 ||
++	    (opts->buildid_offset && evlist__nr_entries(evlist) > 1)) {
+ 		/*
+ 		 * User space tasks can migrate between CPUs, so when tracing
+ 		 * selected CPUs, sideband for all CPUs is still needed.
+@@ -3625,6 +3626,8 @@ static struct option __record_options[] = {
+ 		   "file", "vmlinux pathname"),
+ 	OPT_BOOLEAN(0, "buildid-all", &record.buildid_all,
+ 		    "Record build-id of all DSOs regardless of hits"),
++	OPT_BOOLEAN(0, "buildid-offset", &record.opts.buildid_offset,
++		    "Record build id offset instead of IP"),
+ 	OPT_BOOLEAN_SET(0, "buildid-mmap", &record.buildid_mmap, &record.buildid_mmap_set,
+ 			"Record build-id in mmap events and skip build-id processing."),
+ 	OPT_BOOLEAN(0, "timestamp-filename", &record.timestamp_filename,
+@@ -4162,6 +4165,20 @@ int cmd_record(int argc, const char **argv)
+ 		record.opts.record_switch_events = true;
+ 	}
+ 
++	if (rec->opts.buildid_offset) {
++		if (rec->buildid_mmap_set && !rec->buildid_mmap) {
++			pr_err("--buildid-offset cannot be used with --no-buildid-mmap.\n");
++			err = -EINVAL;
++			goto out_opts;
++		}
++		if (!perf_can_record_build_id()) {
++			pr_err("Missing support for build id in kernel mmap events required by --buildid-offset.\n");
++			err = -EINVAL;
++			goto out_opts;
++		}
++		rec->buildid_mmap = true;
 +	}
 +
-+	if (sample_orig->callchain_bid.nr_offsets >= 2 &&
-+	    sample_callchain->callchain_bid.nr_offsets > 0) {
-+		u32 nr_orig = sample_orig->callchain_bid.nr_offsets - 1;
-+		u32 nr_deferred = sample_callchain->callchain_bid.nr_offsets;
-+
-+		if (sample_orig->merged_callchain_bids)
-+			return -EINVAL;
-+
-+		if (sample_orig->callchain_bid.offsets[nr_orig - 1] ==
-+		    PERF_CONTEXT_USER_DEFERRED) {
-+			u32 max_orig_idx = 0, orig_bids_bytes = 0, def_bids_bytes = 0;
-+			u32 total_bids, aligned_bids_len;
-+			u32 total_offsets = nr_orig + nr_deferred;
-+			u8 *buf;
-+			u64 *offsets;
-+
-+			bool is_user_ctx = true;
-+
-+			for (u32 i = 0; i < nr_orig; i++) {
-+				u64 raw = sample_orig->callchain_bid.offsets[i];
-+				u8 idx;
-+
-+				if (raw >= PERF_CONTEXT_MAX) {
-+					is_user_ctx = (raw == PERF_CONTEXT_USER ||
-+						       raw == PERF_CONTEXT_GUEST_USER ||
-+						       raw == PERF_CONTEXT_USER_DEFERRED);
-+					continue;
-+				}
-+				if (!is_user_ctx)
-+					continue;
-+				idx = raw >> 56;
-+				if (idx >= 1 && idx <= sample_orig->callchain_bid.nr_build_ids &&
-+				    idx > max_orig_idx)
-+					max_orig_idx = idx;
-+			}
-+			for (u32 i = 0; i < max_orig_idx; i++) {
-+				u8 sz = sample_orig->callchain_bid.build_ids[orig_bids_bytes];
+ 	if (rec->buildid_mmap && !perf_can_record_build_id()) {
+ 		pr_warning("Missing support for build id in kernel mmap events.\n"
+ 			   "Disable this warning with --no-buildid-mmap\n");
+@@ -4352,7 +4369,8 @@ int cmd_record(int argc, const char **argv)
  
--	if (sample_orig->merged_callchain) {
--		/* Already merged. */
--		return -EINVAL;
--	}
-+				orig_bids_bytes += 1 + sz;
-+			}
-+			for (u32 i = 0; i < sample_callchain->callchain_bid.nr_build_ids; i++) {
-+				u8 sz = sample_callchain->callchain_bid.build_ids[def_bids_bytes];
+ 	evlist__warn_user_requested_cpus(rec->evlist, rec->opts.target.cpu_list);
  
--	if (sample_orig->callchain->nr < 2) {
--		sample_orig->deferred_callchain = false;
--		return -EINVAL;
-+				def_bids_bytes += 1 + sz;
-+			}
-+
-+			total_bids = max_orig_idx + sample_callchain->callchain_bid.nr_build_ids;
-+			if (total_bids > 254)
-+				return -EINVAL;
-+			aligned_bids_len = ALIGN(orig_bids_bytes + def_bids_bytes, sizeof(u64));
-+			buf = zalloc(aligned_bids_len + total_offsets * sizeof(u64));
-+			if (!buf)
-+				return -ENOMEM;
-+
-+			if (orig_bids_bytes)
-+				memcpy(buf, sample_orig->callchain_bid.build_ids, orig_bids_bytes);
-+			if (def_bids_bytes)
-+				memcpy(buf + orig_bids_bytes,
-+				       sample_callchain->callchain_bid.build_ids, def_bids_bytes);
-+
-+			offsets = (u64 *)(buf + aligned_bids_len);
-+			memcpy(offsets, sample_orig->callchain_bid.offsets,
-+			       nr_orig * sizeof(u64));
-+			for (u32 i = 0; i < nr_deferred; i++) {
-+				u64 raw = sample_callchain->callchain_bid.offsets[i];
-+				u8 idx = raw >> 56;
-+
-+				if (idx >= 1 &&
-+				    idx <= sample_callchain->callchain_bid.nr_build_ids) {
-+					u8 new_idx = idx + max_orig_idx;
-+
-+					raw = (raw & ((1ULL << 56) - 1)) | ((u64)new_idx << 56);
-+				}
-+				offsets[nr_orig + i] = raw;
-+			}
-+
-+			if (sample_orig->allocated_callchain_bids)
-+				free(sample_orig->callchain_bid.build_ids);
-+			sample_orig->callchain_bid.nr_build_ids = total_bids;
-+			sample_orig->callchain_bid.nr_offsets = total_offsets;
-+			sample_orig->callchain_bid.build_ids_len = aligned_bids_len;
-+			sample_orig->callchain_bid.build_ids = buf;
-+			sample_orig->callchain_bid.offsets = offsets;
-+			sample_orig->allocated_callchain_bids = true;
-+			sample_orig->merged_callchain_bids = true;
-+		}
+-	if (callchain_param.enabled && callchain_param.record_mode == CALLCHAIN_FP) {
++	if (callchain_param.enabled && callchain_param.record_mode == CALLCHAIN_FP &&
++	    !rec->opts.buildid_offset) {
+ 		if (EM_HOST == EM_AARCH64)
+ 			add_leaf_frame_caller_opts_aarch64(&rec->opts);
  	}
- 
--	callchain = calloc(1 + nr_orig + nr_deferred, sizeof(u64));
--	if (callchain == NULL)
--		return -ENOMEM;
-+	if (sample_orig->callchain && sample_callchain->callchain) {
-+		u64 nr_orig = sample_orig->callchain->nr - 1;
-+		u64 nr_deferred = sample_callchain->callchain->nr;
-+		struct ip_callchain *callchain;
-+
-+		if (sample_orig->merged_callchain) {
-+			/* Already merged. */
-+			return -EINVAL;
-+		}
-+
-+		if (sample_orig->callchain->nr < 2) {
-+			sample_orig->deferred_callchain = false;
-+			return -EINVAL;
-+		}
-+
-+		callchain = calloc(1 + nr_orig + nr_deferred, sizeof(u64));
-+		if (callchain == NULL)
-+			return -ENOMEM;
- 
--	callchain->nr = nr_orig + nr_deferred;
--	/* copy original including PERF_CONTEXT_USER_DEFERRED (but the cookie) */
--	memcpy(callchain->ips, sample_orig->callchain->ips, nr_orig * sizeof(u64));
--	/* copy deferred user callchains */
--	memcpy(&callchain->ips[nr_orig], sample_callchain->callchain->ips,
--	       nr_deferred * sizeof(u64));
-+		callchain->nr = nr_orig + nr_deferred;
-+		/* copy original including PERF_CONTEXT_USER_DEFERRED (but the cookie) */
-+		memcpy(callchain->ips, sample_orig->callchain->ips, nr_orig * sizeof(u64));
-+		/* copy deferred user callchains */
-+		memcpy(&callchain->ips[nr_orig], sample_callchain->callchain->ips,
-+		       nr_deferred * sizeof(u64));
-+
-+		sample_orig->merged_callchain = true;
-+		sample_orig->callchain = callchain;
-+	}
- 
--	sample_orig->merged_callchain = true;
--	sample_orig->callchain = callchain;
- 	return 0;
- }
-diff --git a/tools/perf/util/event.c b/tools/perf/util/event.c
-index 4a6b59fa9d82..ddb572d33b24 100644
---- a/tools/perf/util/event.c
-+++ b/tools/perf/util/event.c
-@@ -702,8 +702,8 @@ struct map *thread__find_map(struct thread *thread, struct perf_sample *sample,
- 	thread__zput(al->thread);
- 	al->thread = thread__get(thread);
- 
--	al->addr = sample->ip;
- 	al->cpumode = sample->cpumode;
-+	al->addr = sample->bid.bid ? sample->bid.offset : sample->ip;
- 	al->filtered = 0;
- 
- 	if (sample->cpumode == PERF_RECORD_MISC_KERNEL && perf_host) {
-@@ -732,15 +732,31 @@ struct map *thread__find_map(struct thread *thread, struct perf_sample *sample,
- 
- 		return NULL;
- 	}
--	al->map = maps__find(maps, al->addr);
--	if (al->map != NULL) {
--		/*
--		 * Kernel maps might be changed when loading symbols so loading
--		 * must be done prior to using kernel maps.
--		 */
--		if (load_map)
--			map__load(al->map);
--		al->addr = map__map_ip(al->map, al->addr);
-+
-+	if (sample->bid.bid && sample->bid.bid->size > 0) {
-+		struct build_id bid;
-+
-+		build_id__init(&bid, sample->bid.bid->data, sample->bid.bid->size);
-+		al->addr = sample->bid.offset;
-+		al->map = maps__find_by_build_id(maps, &bid);
-+		if (al->map != NULL) {
-+			if (load_map)
-+				map__load(al->map);
-+			/* al->addr is already a file offset */
-+		}
-+	} else {
-+		/* When bid.bid->size == 0, bid.ip holds the fallback virtual address. */
-+		al->addr = sample->bid.bid ? sample->bid.ip : sample->ip;
-+		al->map = maps__find(maps, al->addr);
-+		if (al->map != NULL) {
-+			/*
-+			 * Kernel maps might be changed when loading symbols so loading
-+			 * must be done prior to using kernel maps.
-+			 */
-+			if (load_map)
-+				map__load(al->map);
-+			al->addr = map__map_ip(al->map, al->addr);
-+		}
- 	}
- 
- 	return al->map;
-diff --git a/tools/perf/util/evsel_fprintf.c b/tools/perf/util/evsel_fprintf.c
-index 0f7a25500a44..91f52ead2562 100644
---- a/tools/perf/util/evsel_fprintf.c
-+++ b/tools/perf/util/evsel_fprintf.c
-@@ -131,7 +131,7 @@ int sample__fprintf_callchain(struct perf_sample *sample, int left_alignment,
- 	if (cursor == NULL)
- 		return fprintf(fp, "<not enough memory for the callchain cursor>%s", print_oneline ? "" : "\n");
- 
--	if (sample->callchain) {
-+	if (sample->callchain || sample->callchain_bid.nr_offsets) {
- 		callchain_cursor_commit(cursor);
- 
- 		while (1) {
-@@ -232,8 +232,11 @@ int sample__fprintf_sym(struct perf_sample *sample, struct addr_location *al,
- 	} else {
- 		printed += fprintf(fp, "%-*.*s", left_alignment, left_alignment, " ");
- 
--		if (print_ip)
--			printed += fprintf(fp, "%16" PRIx64, sample->ip);
-+		if (print_ip) {
-+			u64 ip = sample->bid.bid ? sample->bid.offset : sample->ip;
-+
-+			printed += fprintf(fp, "%16" PRIx64, ip);
-+		}
- 
- 		if (print_sym) {
- 			printed += fprintf(fp, " ");
-diff --git a/tools/perf/util/machine.c b/tools/perf/util/machine.c
-index c5a4a00db5c5..693eec1bbdbf 100644
---- a/tools/perf/util/machine.c
-+++ b/tools/perf/util/machine.c
-@@ -2253,7 +2253,9 @@ static int add_callchain_ip(struct thread *thread,
- 			    struct branch_flags *flags,
- 			    struct iterations *iter,
- 			    u64 branch_from,
--			    bool symbols)
-+			    bool symbols,
-+			      struct perf_build_id *bid,
-+			      u64 offset)
- {
- 	static __thread struct perf_sample sample;
- 	struct map_symbol ms = {};
-@@ -2267,6 +2269,8 @@ static int add_callchain_ip(struct thread *thread,
- 	al.sym = NULL;
- 	al.srcline = NULL;
- 	sample.ip = ip;
-+	sample.bid.bid = bid;
-+	sample.bid.offset = offset;
- 	if (!cpumode) {
- 		thread__find_cpumode_addr_location(thread, &sample, symbols, &al);
- 	} else {
-@@ -2331,6 +2335,9 @@ static int add_callchain_ip(struct thread *thread,
- 	ms.map = map__get(al.map);
- 	ms.sym = al.sym;
- 
-+	if (bid && bid->size > 0 && al.map)
-+		ip = map__unmap_ip(al.map, al.addr);
-+
- 	if (append_inlines(cursor, &ms, ip, branch, flags, nr_loop_iter,
- 			   iter_cycles, branch_from) == 0)
- 		goto out;
-@@ -2446,10 +2453,18 @@ static int lbr_callchain_add_kernel_ip(struct thread *thread,
- 
- 	if (callee) {
- 		for (i = 0; i < end + 1; i++) {
-+			struct perf_build_id bid_buf;
-+			struct perf_build_id *bid = NULL;
-+			u64 offset = 0;
-+
-+			if (i < (int)sample->callchain_bid.nr_offsets) {
-+				perf_sample__callchain_bid_entry(sample, i, &bid_buf, &offset);
-+				bid = &bid_buf;
-+			}
- 			err = add_callchain_ip(thread, cursor, parent,
- 					       root_al, &cpumode, chain->ips[i],
- 					       false, NULL, NULL, branch_from,
--					       symbols);
-+					       symbols, bid, offset);
- 			if (err)
- 				return err;
- 		}
-@@ -2457,10 +2472,18 @@ static int lbr_callchain_add_kernel_ip(struct thread *thread,
- 	}
- 
- 	for (i = end; i >= 0; i--) {
-+		struct perf_build_id bid_buf;
-+		struct perf_build_id *bid = NULL;
-+		u64 offset = 0;
-+
-+		if (i < (int)sample->callchain_bid.nr_offsets) {
-+			perf_sample__callchain_bid_entry(sample, i, &bid_buf, &offset);
-+			bid = &bid_buf;
-+		}
- 		err = add_callchain_ip(thread, cursor, parent,
- 				       root_al, &cpumode, chain->ips[i],
- 				       false, NULL, NULL, branch_from,
--				       symbols);
-+				       symbols, bid, offset);
- 		if (err)
- 			return err;
- 	}
-@@ -2534,16 +2557,25 @@ static int lbr_callchain_add_lbr_ip(struct thread *thread,
- 		 * Set the (first) leaf function's IP to sample->ip (the
- 		 * location of the sample) but if not recorded use entries.to
- 		 */
--		if (sample->ip)
-+		if ((sample->bid.bid && sample->bid.bid->size > 0) || sample->ip) {
- 			ip = sample->ip;
--		else
-+			flags = &entries[0].flags;
-+			*branch_from = entries[0].from;
-+			err = add_callchain_ip(thread, cursor, parent,
-+					       root_al, &cpumode, ip,
-+					       true, flags, NULL,
-+					       *branch_from, symbols,
-+					       sample->bid.bid, sample->bid.offset);
-+		} else {
- 			ip = entries[0].to;
--		flags = &entries[0].flags;
--		*branch_from = entries[0].from;
--		err = add_callchain_ip(thread, cursor, parent,
--				       root_al, &cpumode, ip,
--				       true, flags, NULL,
--				       *branch_from, symbols);
-+			flags = &entries[0].flags;
-+			*branch_from = entries[0].from;
-+			err = add_callchain_ip(thread, cursor, parent,
-+					       root_al, &cpumode, ip,
-+					       true, flags, NULL,
-+					       *branch_from, symbols,
-+					       /*bid=*/NULL, /*offset=*/0);
-+		}
- 		if (err)
- 			return err;
- 
-@@ -2568,7 +2600,7 @@ static int lbr_callchain_add_lbr_ip(struct thread *thread,
- 			err = add_callchain_ip(thread, cursor, parent,
- 					       root_al, &cpumode, ip,
- 					       true, flags, NULL,
--					       *branch_from, symbols);
-+					       *branch_from, symbols, /*bid=*/NULL, /*offset=*/0);
- 			if (err)
- 				return err;
- 			save_lbr_cursor_node(thread, cursor, i);
-@@ -2583,7 +2615,7 @@ static int lbr_callchain_add_lbr_ip(struct thread *thread,
- 		err = add_callchain_ip(thread, cursor, parent,
- 				       root_al, &cpumode, ip,
- 				       true, flags, NULL,
--				       *branch_from, symbols);
-+				       *branch_from, symbols, /*bid=*/NULL, /*offset=*/0);
- 		if (err)
- 			return err;
- 		save_lbr_cursor_node(thread, cursor, i);
-@@ -2594,16 +2626,25 @@ static int lbr_callchain_add_lbr_ip(struct thread *thread,
- 		 * Set the (first) leaf function's IP to sample->ip (the
- 		 * location of the sample) but if not recorded use entries.to
- 		 */
--		if (sample->ip)
-+		if ((sample->bid.bid && sample->bid.bid->size > 0) || sample->ip) {
- 			ip = sample->ip;
--		else
-+			flags = &entries[0].flags;
-+			*branch_from = entries[0].from;
-+			err = add_callchain_ip(thread, cursor, parent,
-+					       root_al, &cpumode, ip,
-+					       true, flags, NULL,
-+					       *branch_from, symbols,
-+					       sample->bid.bid, sample->bid.offset);
-+		} else {
- 			ip = entries[0].to;
--		flags = &entries[0].flags;
--		*branch_from = entries[0].from;
--		err = add_callchain_ip(thread, cursor, parent,
--				root_al, &cpumode, ip,
--				true, flags, NULL,
--				*branch_from, symbols);
-+			flags = &entries[0].flags;
-+			*branch_from = entries[0].from;
-+			err = add_callchain_ip(thread, cursor, parent,
-+					       root_al, &cpumode, ip,
-+					       true, flags, NULL,
-+					       *branch_from, symbols,
-+					       /*bid=*/NULL, /*offset=*/0);
-+		}
- 		if (err)
- 			return err;
- 	}
-@@ -2776,12 +2817,16 @@ static int resolve_lbr_callchain_sample(struct thread *thread,
- {
- 	bool callee = (callchain_param.order == ORDER_CALLEE);
- 	struct ip_callchain *chain = sample->callchain;
--	int chain_nr = min(max_stack, (int)chain->nr), i;
-+	int chain_nr, i;
- 	struct lbr_stitch *lbr_stitch;
- 	bool stitched_lbr = false;
- 	u64 branch_from = 0;
- 	int err;
- 
-+	if (!chain)
-+		return 0;
-+
-+	chain_nr = min_t(int, max_stack, chain->nr);
- 	for (i = 0; i < chain_nr; i++) {
- 		if (chain->ips[i] == PERF_CONTEXT_USER)
- 			break;
-@@ -2867,7 +2912,8 @@ static int find_prev_cpumode(struct ip_callchain *chain, struct thread *thread,
- 		if (ip >= PERF_CONTEXT_MAX) {
- 			err = add_callchain_ip(thread, cursor, parent,
- 					       root_al, cpumode, ip,
--					       false, NULL, NULL, 0, symbols);
-+					       false, NULL, NULL, 0, symbols,
-+					       /*bid=*/NULL, /*offset=*/0);
- 			break;
- 		}
- 	}
-@@ -2895,6 +2941,7 @@ static int thread__resolve_callchain_sample(struct thread *thread,
- 	struct branch_stack *branch = sample->branch_stack;
- 	struct branch_entry *entries = perf_sample__branch_entries(sample);
- 	struct ip_callchain *chain = sample->callchain;
-+	struct ip_callchain *alloc_chain = NULL;
- 	int chain_nr = 0;
- 	u8 cpumode = PERF_RECORD_MISC_USER;
- 	int i, j, err, nr_entries, usr_idx;
-@@ -2902,6 +2949,22 @@ static int thread__resolve_callchain_sample(struct thread *thread,
- 	int first_call = 0;
- 	u64 leaf_frame_caller;
- 
-+	if (!chain && sample->callchain_bid.nr_offsets > 0) {
-+		alloc_chain = malloc(sizeof(*chain) +
-+				     sample->callchain_bid.nr_offsets * sizeof(u64));
-+		if (!alloc_chain)
-+			return -ENOMEM;
-+		alloc_chain->nr = sample->callchain_bid.nr_offsets;
-+		for (i = 0; i < (int)sample->callchain_bid.nr_offsets; i++) {
-+			u64 offset = 0;
-+
-+			perf_sample__callchain_bid_entry(sample, i, NULL, &offset);
-+			alloc_chain->ips[i] = offset;
-+		}
-+		chain = alloc_chain;
-+		sample->callchain = alloc_chain;
-+	}
-+
- 	if (chain)
- 		chain_nr = chain->nr;
- 
-@@ -2912,8 +2975,10 @@ static int thread__resolve_callchain_sample(struct thread *thread,
- 						   root_al, max_stack,
- 						   !env ? 0 : env->max_branches,
- 						   symbols);
--		if (err)
--			return (err < 0) ? err : 0;
-+		if (err) {
-+			err = (err < 0) ? err : 0;
-+			goto out;
-+		}
- 	}
+diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
+index 9fa77e76aecb..d22dd91a1585 100644
+--- a/tools/perf/util/evsel.c
++++ b/tools/perf/util/evsel.c
+@@ -1745,7 +1745,7 @@ void evsel__config(struct evsel *evsel, const struct record_opts *opts,
+ 	attr->mmap2    = track && !perf_missing_features.mmap2;
+ 	attr->comm     = track;
+ 	attr->build_id = track && opts->build_id;
+-	attr->defer_output = track && callchain && callchain->defer;
++	attr->defer_output = track && ((callchain && callchain->defer) || opts->buildid_offset);
  
  	/*
-@@ -2976,22 +3041,26 @@ static int thread__resolve_callchain_sample(struct thread *thread,
- 					       root_al,
- 					       NULL, be[i].to,
- 					       true, &be[i].flags,
--					       NULL, be[i].from, symbols);
-+					       NULL, be[i].from, symbols,
-+					       /*bid=*/NULL, /*offset=*/0);
+ 	 * ksymbol is tracked separately with text poke because it needs to be
+@@ -1831,6 +1831,21 @@ void evsel__config(struct evsel *evsel, const struct record_opts *opts,
+ 	 */
+ 	evsel__apply_config_terms(evsel, opts, track);
  
- 			if (!err) {
- 				err = add_callchain_ip(thread, cursor, parent, root_al,
- 						       NULL, be[i].from,
- 						       true, &be[i].flags,
--						       &iter[i], 0, symbols);
-+						       &iter[i], 0, symbols,
-+						       /*bid=*/NULL, /*offset=*/0);
- 			}
- 			if (err == -EINVAL)
- 				break;
- 			if (err)
--				return err;
-+				goto out;
- 		}
- 
--		if (chain_nr == 0)
--			return 0;
-+		if (chain_nr == 0) {
-+			err = 0;
-+			goto out;
++	if (opts->buildid_offset && !evsel__is_offcpu_event(evsel)) {
++		if ((evsel->core.attr.sample_type & PERF_SAMPLE_IP) || track) {
++			evsel__reset_sample_bit(evsel, IP);
++			evsel__set_sample_bit(evsel, BUILD_ID_OFFSET);
++			if (!evsel->no_aux_samples && !attr->exclude_user)
++				attr->defer_callchain = 1;
 +		}
- 
- 		chain_nr -= nr;
- 	}
-@@ -3000,12 +3069,17 @@ static int thread__resolve_callchain_sample(struct thread *thread,
- 	if (chain && callchain_param.order != ORDER_CALLEE) {
- 		err = find_prev_cpumode(chain, thread, cursor, parent, root_al,
- 					&cpumode, chain->nr - first_call, symbols);
--		if (err)
--			return (err < 0) ? err : 0;
-+		if (err) {
-+			err = (err < 0) ? err : 0;
-+			goto out;
++		if ((evsel->core.attr.sample_type & PERF_SAMPLE_CALLCHAIN) &&
++		    !attr->exclude_callchain_user) {
++			evsel__reset_sample_bit(evsel, CALLCHAIN);
++			evsel__set_sample_bit(evsel, CALLCHAIN_BUILD_ID_OFFSET);
++			attr->defer_callchain = 1;
 +		}
- 	}
- 	for (i = first_call, nr_entries = 0;
- 	     i < chain_nr && nr_entries < max_stack; i++) {
- 		u64 ip;
-+		struct perf_build_id bid_buf;
-+		struct perf_build_id *bid = NULL;
-+		u64 offset = 0;
- 
- 		if (callchain_param.order == ORDER_CALLEE)
- 			j = i;
-@@ -3017,13 +3091,19 @@ static int thread__resolve_callchain_sample(struct thread *thread,
- 			continue;
- #endif
- 		ip = chain->ips[j];
-+		if (j < (int)sample->callchain_bid.nr_offsets) {
-+			perf_sample__callchain_bid_entry(sample, j, &bid_buf, &offset);
-+			bid = &bid_buf;
-+		}
- 		if (ip < PERF_CONTEXT_MAX)
-                        ++nr_entries;
- 		else if (callchain_param.order != ORDER_CALLEE) {
- 			err = find_prev_cpumode(chain, thread, cursor, parent,
- 						root_al, &cpumode, j, symbols);
--			if (err)
--				return (err < 0) ? err : 0;
-+			if (err) {
-+				err = (err < 0) ? err : 0;
-+				goto out;
-+			}
- 			continue;
- 		}
- 
-@@ -3049,21 +3129,32 @@ static int thread__resolve_callchain_sample(struct thread *thread,
- 
- 				err = add_callchain_ip(thread, cursor, parent,
- 						root_al, &cpumode, leaf_frame_caller,
--						false, NULL, NULL, 0, symbols);
--				if (err)
--					return (err < 0) ? err : 0;
-+						false, NULL, NULL, 0, symbols,
-+						/*bid=*/NULL, /*offset=*/0);
-+				if (err) {
-+					err = (err < 0) ? err : 0;
-+					goto out;
-+				}
- 			}
- 		}
- 
- 		err = add_callchain_ip(thread, cursor, parent,
- 				       root_al, &cpumode, ip,
--				       false, NULL, NULL, 0, symbols);
-+				       false, NULL, NULL, 0, symbols, bid, offset);
- 
--		if (err)
--			return (err < 0) ? err : 0;
-+		if (err) {
-+			err = (err < 0) ? err : 0;
-+			goto out;
-+		}
- 	}
- 
--	return 0;
-+	err = 0;
-+out:
-+	if (alloc_chain) {
-+		sample->callchain = NULL;
-+		free(alloc_chain);
 +	}
-+	return err;
- }
++
+ 	evsel->ignore_missing_thread = opts->ignore_missing_thread;
  
- static int unwind_entry(struct unwind_entry *entry, void *arg)
+ 	/* The --period option takes the precedence. */
+diff --git a/tools/perf/util/record.c b/tools/perf/util/record.c
+index 38e8aee3106b..77337e1318ab 100644
+--- a/tools/perf/util/record.c
++++ b/tools/perf/util/record.c
+@@ -110,6 +110,28 @@ void evlist__config(struct evlist *evlist, struct record_opts *opts, struct call
+ 			evsel->core.attr.comm_exec = 1;
+ 	}
+ 
++	if (opts->buildid_offset) {
++		bool has_callchain_bid = false;
++
++		evlist__for_each_entry(evlist, evsel) {
++			if ((evsel->core.attr.sample_type &
++			     PERF_SAMPLE_CALLCHAIN_BUILD_ID_OFFSET) &&
++			    !evsel->core.attr.exclude_callchain_user) {
++				has_callchain_bid = true;
++				break;
++			}
++		}
++		if (has_callchain_bid) {
++			evlist__for_each_entry(evlist, evsel) {
++				if (evsel->core.attr.defer_output &&
++				    evsel__is_dummy_event(evsel)) {
++					evsel__set_sample_bit(evsel, CALLCHAIN_BUILD_ID_OFFSET);
++					evsel->core.attr.exclude_callchain_kernel = 1;
++				}
++			}
++		}
++	}
++
+ 	/* Configure leader sampling here now that the sample type is known */
+ 	evlist__for_each_entry(evlist, evsel)
+ 		evsel__config_leader_sampling(evsel, evlist);
+diff --git a/tools/perf/util/record.h b/tools/perf/util/record.h
+index 411bb7276ad7..6c9568616177 100644
+--- a/tools/perf/util/record.h
++++ b/tools/perf/util/record.h
+@@ -55,6 +55,7 @@ struct record_opts {
+ 	bool	      kcore;
+ 	bool	      text_poke;
+ 	bool	      build_id;
++	bool	      buildid_offset;
+ 	unsigned int  freq;
+ 	unsigned int  mmap_pages;
+ 	unsigned int  auxtrace_mmap_pages;
 -- 
 2.56.1.831.g720f3f5937-goog
 
