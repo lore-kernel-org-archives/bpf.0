@@ -1,74 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.167.197
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.72
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795587407;
-	b=RWaSUInQIo13yvw5P/DrhaaNqTR8kYB+kXfTHHCHC2GpeagUnk4A62hp5qHnwl1O0AOU
-	 DjTMDMW1ID1zpAR2mO7zJwDebk0Psi1D1s16fK24uUxjnajudj5ebSwXTjkOGr+NJND+Y
-	 i8YrZcu7hTI/+3DXKmOUj16PB963m+TN1eJ56ImYG4sTCoK4mZdFEbXI0vVRLkUl4s6i+
-	 rcd95ePhSCRo/7yzxd0TCgiDvG9eBAPRnACB4ikfd0QPnmHe3o96TzuOc8wpY9D7Fm5xs
-	 HDEtKngiiDYz1+q7q1Cd92GjtTLmQC5iWDX4GH/5MF6JkdOwzn6XirFguQdF1BTy2Kg==
+	t=1795587402;
+	b=S/poe5QRwY4b5WjuhIKjFRQpD3N3M4DBTPxdREdBsWrwkWdfiBnbq/sEy6NMta668zI9
+	 lL2VoeDDXFqvkC62GsHVn/D3Va1oGESz2zhFTRwzHHpHPpqWC2bh0ogByJYeWOt1rkLjV
+	 XBjC4tc64moorzP4dpEKzWd3SLCt3JkzWEo4L3jcBk4RRB/Y8XqQ+L5pxqNL25C3QPKob
+	 yh/Lzx5mq3X0EmaN0DmaNMzUco7XzKZY6VlwHvFX9Nbsf1zjrjJ69oJqDsYWHIlI0DJoe
+	 K1uJaSjrCVU4xPnuNd9w2nqXKGnC77VxoCbX0Jp/rtqIpMXLicMLZtGt2ITsxEqggZQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795587407;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795587402;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
 	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
 	 Content-Type;
-	bh=opbvbiqLtMKnZidmW1akDPMoAVRaFGJF5QXg9EIzgwM=;
-	b=Jm3sq3WuQy5vj+hHBZpDyMrLkNJYMafD7YOWoi51ddxdMI9AEaDiVk+89m0sMyqwQPxq
-	 HZji6Yq6LR8RLbeJkZ9YOZUMfWCORyUszCcUjfLdMwQtEddEsGK++G+fYfVxzXNjL0Tt0
-	 vpsD7mgx0v0XTmGj5T7ms6Ryo/Fp5huFTlHXDGDRczAdd0zSJCpBSLYi9pb6+ztyO4tzG
-	 QovJJQiM7Ieuh8dqONIrPVbRsKmC0zYKREOqE+AS4jLDg1EN2WMft1gDUVpZCndGuWOnd
-	 D/u5Z9J2vx8Xker9toU1jhcieArSUFuxfrzq7WwarG5D/grZ78cQIL60w/fjQJ2l0rA==
+	bh=gUjLLzCguCuBffXxPgN2mAvT8efj2ZiewJ7WP1kxxP0=;
+	b=Tkrcxf7zc7PUiNxLx57fcgB0RfynGHj0U8tIt8BxvScTOJRNoHGePNDT+wU0/PILX+r9
+	 aJVkSiZIE2HmmX6+7iEmw/Ef2LHEfqf6j6fPYwi0CdGV2fJLiTG7Tb3LbTl0dTEa4hMjf
+	 QtL+t5KXQo9Vkxg51VuUrJPfN7lKGmldCm8OZ/fyoVAnXyqQl+4H272JR9T0uERaZAooF
+	 ZMwPBwzLjEFhdz/8yLOCWaZUWNgAjdr+VTDFmzXVsbnRpjXegSU3xh9rdXbIn5UB2rrSu
+	 SLsiCnWwX01p8RmgYer14jvMNYVMLX6n6RfymBC1H9OU8HusH0miK3S7k5m2GMPEaVQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--irogers.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=LWmlWqMW;
-	arc=none smtp.remote-ip=209.85.167.197
-Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com [209.85.167.197])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=f58UrJIA;
+	arc=none smtp.remote-ip=74.125.82.72
+Received: from mail-dl1-f72.google.com (mail-dl1-f72.google.com [74.125.82.72])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1EF5606C839
-	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 06:16:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A1EF5606C839
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34FE66076172
+	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 06:16:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 34FE66076172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=LWmlWqMW
-Received: by mail-oi1-f197.google.com with SMTP id 5614622812f47-4cc89e86e4dso6518276b6e.2
-        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 22:16:46 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=f58UrJIA
+Received: by mail-dl1-f72.google.com with SMTP id a92af1059eb24-1b55f4f3bb8so3024942c88.0
+        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 22:16:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795587406; x=1796192206; darn=vger.kernel.org;
+        d=google.com; s=20260707; t=1795587399; x=1796192199; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=opbvbiqLtMKnZidmW1akDPMoAVRaFGJF5QXg9EIzgwM=;
-        b=LWmlWqMW+uxHY9+EczXzMUqXcrnugfr6VwrSzE8xI7UgzP8lFmyNrIeCdBYYcwnY9s
-         +ejldJJI3KEoVdKxHB+kl0NoLQz09cLdb9KE2Uz1HvLyBvAMMDPT/hmfAmSlm8F5JToh
-         dYCVG9+etwW7qMNA0tz58xWoKnA7IUGHdvkCM4jmpQ87HGk1W2Pf67yQpQ6oKX39ivN8
-         fDZhMdQ9ayVtZXLHiRlTFbAU/LId6gvSEwjUJBAlwgBWyetijA8avc7deHdOp1GoYF4J
-         pYIlNixQtVbQGyaLbbm7KDiYX8koJu276mSfrsqE49IAuso33nDyJLjmrnWKPef8nlf/
-         fnOQ==
+        bh=gUjLLzCguCuBffXxPgN2mAvT8efj2ZiewJ7WP1kxxP0=;
+        b=f58UrJIAU1PdP+kkoYBNw3rScel+TrkqnEoN0o3Oifs28IT+2FJtJ20kMbbSMMeygg
+         9w1yfyPf7rgnGO9YhbuzT3dUuqPn5f6xjWrMsBia4RNdV4hY3tBKuEg/Hc2eKefKle+i
+         N2GXbz+gk+E2GZN6H5NhMsuCA14XYWMAgSXGbZj3XkAc5SFAw8qHNDl2tRPsPK316yrC
+         9ZoNu1Xcbtji7WrrNP8H21zJG0BgPQk4tHE6hOId2pvu9J9rYm8fn1Y/WI/tQojyMUxw
+         cS91zbr0UcR9mHVIHQj+UqORMR10ZSirylK2tjaTdO84oZfAqbuywBPlhLgCzWFN40lC
+         7i7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795587406; x=1796192206;
+        d=1e100.net; s=20260707; t=1795587399; x=1796192199;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=opbvbiqLtMKnZidmW1akDPMoAVRaFGJF5QXg9EIzgwM=;
-        b=PQvGDojt2VnL0s90ztJAtHNDXrXIetMgEj7eYRbFtsczokp4MVjqMz6mSSXrZ+6rdY
-         F6CTxpCi2+j9EUhjWCR4CiO1D4sI/0YhHnkSrygeXgEREzWPAB+mTFqqN/Dg+x7/YeuB
-         kKmtZnh6sR/NKQvHmzoM+fWE9Z9sAqy3ExhW4H/XPa0TkjOz7lbhRnA3PoUy67JueD/f
-         +kHhnr1hObMpI0xE41r5kV9RGx61jnOcElnugkp9m34Et/SWgarGsnUl6MW8tK8B5PiC
-         wD+coTwi3TsRXFLlqaTi3Iw1PjCzQPgrH49zP4e+kWRmjyKBQpWETRnvzjr4Xdj/3w/i
-         vw/Q==
-X-Forwarded-Encrypted: i=1; AL+hErEAJxS3rrafp6p8/NwBR6lyjNDE37qmtXK26Eo8b8a5s626sR54whx80v4APDpN7bjCVNk=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9ppZGij+pYR2Xnk+/uY+eaGCRA9d+R4sygwlJ7LynVyFPK67It
-	TUGO4OPV8Mfas1p9Pf5CWVe/0hObNKFECWvXskGxAL2+x+Wgtu4JSc3/jbglSO8630WUgefN6SS
-	6yrC6YH8/xA==
-X-Received: from oigu20-n1.prod.google.com ([2002:a05:6809:5d4:10b0:4f5:740:2bcf])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6808:319b:b0:4f5:eaac:5173
- with SMTP id 5614622812f47-57a0b84fa3dmr15864618b6e.57.1795587405164; Tue, 24
- Nov 2026 22:16:45 -0800 (PST)
-Date: Tue, 24 Nov 2026 22:15:17 -0800
+        bh=gUjLLzCguCuBffXxPgN2mAvT8efj2ZiewJ7WP1kxxP0=;
+        b=lEv9P8BAYgkVgTtkIhWfhqYNy5D2pq6RjTFUk5mlUWbu6eS7J35PHZoK9qqJphG69v
+         L5/dGwKCcLrvBaTHE6ZAYOTNQPfdK7itiZfyObVY1LTEdm1sAYLRC/6KHuHVvHumvWhl
+         f2diKfsWsBIgZpgqguIc/2dduNaoqZv6tqKfJEzcoYWxjruPiVF4PgGJD8HVqxbTc0DJ
+         FmQ8uRe2JRk/gArz535ggBjFmtd3gbbm4QQjcWOLNbZLgjyKyh6ftqaaPKoO3lDzd3F+
+         nE8v0fWHxblMT4a8fU6pzV7lk4sJm53KW9LFCjZyVR0cOmcgyR1BZvUzSZZoB9FdDdKX
+         xWtw==
+X-Forwarded-Encrypted: i=1; AL+hErEGGykcRNqN2oNCpja/vzsppB7Y/2AdfDiPaJRAad9H+B/RgD2t6dGWpKrPXlT58TCC1lw=@vger.kernel.org
+X-Gm-Message-State: APuU4Z82uE4Jq2O+0EofgUIgEbJY8zBc2G9kzppSNtjZR9uDeHKLLOaG
+	RM+yV87pn8WZQeYqMYDusvyefkqF228xt0GLQsSi+JXhxcX7KLmuCdoE8iHqiMvNj/nXO3mPT+K
+	yeGiX/DK8RA==
+X-Received: from dlbpv12.prod.google.com ([2002:a05:7023:90c:b0:1b5:3b6f:4e26])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:701a:cc95:20b0:144:fa57:c617
+ with SMTP id a92af1059eb24-1b5568f1200mr15770217c88.34.1795587399049; Tue, 24
+ Nov 2026 22:16:39 -0800 (PST)
+Date: Tue, 24 Nov 2026 22:15:14 -0800
 In-Reply-To: <20261125061523.1540234-1-irogers@google.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -81,9 +81,9 @@ Precedence: list
 Mime-Version: 1.0
 References: <20261125061523.1540234-1-irogers@google.com>
 X-Mailer: git-send-email 2.56.1.831.g720f3f5937-goog
-Message-ID: <20261125061523.1540234-25-irogers@google.com>
-Subject: [RFC PATCH v2 24/30] tools headers: Add linux/unwind_dwarf_cfi.h copy
- from the kernel sources
+Message-ID: <20261125061523.1540234-22-irogers@google.com>
+Subject: [RFC PATCH v2 21/30] scripts: Add eh_frame_min.py .eh_frame coverage
+ and size analyzer
 From: Ian Rogers <irogers@google.com>
 To: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
 	linux-arch@vger.kernel.org
@@ -103,216 +103,996 @@ Cc: jpoimboe@kernel.org, rostedt@goodmis.org, peterz@infradead.org,
 	wnliu@google.com, dylanbhatch@google.com, Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Copy include/linux/unwind_dwarf_cfi.h to
-tools/include/linux/unwind_dwarf_cfi.h for host unwinding verification
-tools under tools/, and add it to tools/perf/check-headers.sh.
+Add an optional standalone developer inspection script
+(scripts/eh_frame_min.py, not invoked by Kbuild) to analyze ELF32/ELF64
+relocatable objects (.o, .ko), vmlinux images, user-space executables,
+and shared libraries across x86_64, i386, arm64, arm, and riscv.
+
+It reports .text / .eh_frame / .eh_frame_hdr / .sframe / .orc_unwind
+section sizes, simulated minified .eh_frame savings, Minimal DWARF FDE
+coverage (and breakdown of any unsupported opcodes), kept SP/FP/RA vs.
+ignored GPR register rules, maximum DW_CFA_remember_state depth, and top
+DWARF CFA opcode counts.
+
+Example usage:
+  $ ./scripts/eh_frame_min.py vmlinux
+  $ ./scripts/eh_frame_min.py mm/vmscan.o kernel/fork.o
+  $ ./scripts/eh_frame_min.py /bin/bash /lib/x86_64-linux-gnu/libc.so.6
+  $ ./scripts/eh_frame_min.py --minify /tmp/eh_frame.min mm/vmscan.o
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/include/linux/unwind_dwarf_cfi.h | 181 +++++++++++++++++++++++++
- tools/perf/check-headers.sh            |   1 +
- 2 files changed, 182 insertions(+)
- create mode 100644 tools/include/linux/unwind_dwarf_cfi.h
+ scripts/eh_frame_min.py | 961 ++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 961 insertions(+)
+ create mode 100755 scripts/eh_frame_min.py
 
-diff --git a/tools/include/linux/unwind_dwarf_cfi.h b/tools/include/linux/unwind_dwarf_cfi.h
-new file mode 100644
-index 000000000000..3530794c8543
+diff --git a/scripts/eh_frame_min.py b/scripts/eh_frame_min.py
+new file mode 100755
+index 000000000000..9b6fa3822ae6
 --- /dev/null
-+++ b/tools/include/linux/unwind_dwarf_cfi.h
-@@ -0,0 +1,181 @@
-+/* SPDX-License-Identifier: GPL-2.0-only OR MIT */
-+#ifndef _LINUX_UNWIND_DWARF_CFI_H
-+#define _LINUX_UNWIND_DWARF_CFI_H
++++ b/scripts/eh_frame_min.py
+@@ -0,0 +1,961 @@
++#!/usr/bin/env python3
++# SPDX-License-Identifier: GPL-2.0-only OR MIT
++"""
++Offline ELF .eh_frame / Minimal DWARF CFA coverage and size analyzer.
 +
-+#include <linux/types.h>
++Note: This script is a standalone developer/benchmarking inspection tool and
++is NOT invoked during Kbuild (which uses the standalone C host tool in
++scripts/min_eh_frame.c when CONFIG_UNWINDER_DWARF_CFI_MINIFY=y).
 +
-+/*
-+ * Minimal DWARF Call Frame Information (CFI) unwinder subset.
-+ *
-+ * Evaluates a strictly bounded, non-Turing-complete subset of .eh_frame and
-+ * .eh_frame_hdr tables matching SFrame's stack-unwinding state model (plus
-+ * fixed-pattern DRAP stack-realignment and signal-frame expressions):
-+ *  - Advances PC monotonically through a single FDE (no backward jumps)
-+ *  - Tracks CFA = (SP | FP | scratch) + cfa_off or *(FP/SP + cfa_off)
-+ *  - Tracks stack save offsets for SP, FP, and RA (ignoring callee-saved GPR
-+ *    spills)
-+ *  - Rejects general DWARF expressions, register-to-register rules on SP/FP/RA,
-+ *    and DW_EH_PE_indirect FDE/table pointer encodings (skipping CIE
-+ *    personality and LSDA fields without dereferencing).
-+ */
++It parses ELF32/ELF64 relocatable objects (.o, .ko), vmlinux images, user
++executables, and shared libraries across x86_64, i386, arm64, arm, and riscv,
++reporting:
++  - .text, .eh_frame, .eh_frame_hdr, .sframe, and .orc_unwind section sizes
++  - Simulated minified .eh_frame + .eh_frame_hdr sizes and byte savings
++  - Minimal DWARF CFA FDE coverage (supported vs. unsupported FDEs & reasons)
++  - Kept FP/RA register rules vs. ignored general-purpose register spill ops
++  - Maximum DW_CFA_remember_state nesting depth and top DWARF CFA opcodes
 +
-+/* Hard safety bounds enforced on CIE/FDE lengths, offsets, and state stack */
-+#define DWARF_CFI_MAX_CIE_LEN		128U
-+#define DWARF_CFI_MAX_FDE_LEN		4096U
-+#define DWARF_CFI_MAX_CIE_DELTA		(64U * 1024U * 1024U)
-+#define DWARF_CFI_MAX_FDE_COUNT		(4U * 1024U * 1024U)
-+#define DWARF_CFI_MAX_STATE_STACK	4U
++Example usage (from the kernel tree root, invoke via ./scripts/eh_frame_min*):
++  1. Analyze a built vmlinux image (with or without build-time minification):
++       $ eh_frame_min.py vmlinux
 +
-+/**
-+ * enum dwarf_cfi_base - Base register or addressing mode for computing the CFA
-+ * @DWARF_CFI_BASE_UNDEFINED: CFA rule has not been established yet.
-+ * @DWARF_CFI_BASE_SP: CFA = stack pointer + cfa_off.
-+ * @DWARF_CFI_BASE_FP: CFA = frame pointer + cfa_off.
-+ * @DWARF_CFI_BASE_FP_INDIRECT: DRAP stack realignment: CFA = *(FP + cfa_off).
-+ * @DWARF_CFI_BASE_SP_INDIRECT: Signal trampoline frame: CFA = *(SP + cfa_off).
-+ * @DWARF_CFI_BASE_REG: Transient prologue/epilogue scratch register:
-+ *                      CFA = reg(cfa_reg) + cfa_off.
-+ */
-+enum dwarf_cfi_base {
-+	DWARF_CFI_BASE_UNDEFINED = 0,
-+	DWARF_CFI_BASE_SP,
-+	DWARF_CFI_BASE_FP,
-+	DWARF_CFI_BASE_FP_INDIRECT,
-+	DWARF_CFI_BASE_SP_INDIRECT,
-+	DWARF_CFI_BASE_REG,
-+};
++  2. Compare multiple kernel objects, loadable modules, or cross-arch builds:
++       $ eh_frame_min.py mm/vmscan.o kernel/fork.o fs/ext4/inode.o
++       $ eh_frame_min.py build_arm64/vmlinux build_riscv/vmlinux
 +
-+/**
-+ * enum dwarf_cfi_rule - Recovery rule for caller's SP, FP, or return address
-+ * @DWARF_CFI_RULE_SAME: Register retains its value from the current frame
-+ *                       (or defaults to CFA for SP).
-+ * @DWARF_CFI_RULE_OFFSET: Saved on the stack at *(CFA + off).
-+ * @DWARF_CFI_RULE_FP_OFFSET: Saved relative to FP at *(FP + off) (DRAP frame).
-+ * @DWARF_CFI_RULE_SP_OFFSET: Saved relative to SP at *(SP + off) (sigframe).
-+ * @DWARF_CFI_RULE_UNDEFINED: Explicitly undefined (DW_CFA_undefined); marks
-+ *                            the bottom of a stack (e.g. _start or clone).
-+ */
-+enum dwarf_cfi_rule {
-+	DWARF_CFI_RULE_SAME = 0,
-+	DWARF_CFI_RULE_OFFSET,
-+	DWARF_CFI_RULE_FP_OFFSET,
-+	DWARF_CFI_RULE_SP_OFFSET,
-+	DWARF_CFI_RULE_UNDEFINED,
-+};
++  3. Analyze existing user-space binaries and shared libraries:
++       $ eh_frame_min.py /bin/bash /lib/x86_64-linux-gnu/libc.so.6
 +
-+/**
-+ * struct dwarf_cfi_arch - Architecture DWARF register numbers and word size
-+ * @ws: Target address/word size in bytes (4 or 8).
-+ * @sp_reg: DWARF register number for the stack pointer.
-+ * @fp_reg: DWARF register number for the frame pointer.
-+ * @ra_reg: Default DWARF return-address column number.
-+ */
-+struct dwarf_cfi_arch {
-+	u8 ws;
-+	u8 sp_reg;
-+	u8 fp_reg;
-+	u8 ra_reg;
-+};
++  4. Emit a standalone minified .eh_frame section blob for differential tests:
++       $ eh_frame_min.py --minify /tmp/eh_frame.min mm/vmscan.o
 +
-+/**
-+ * struct dwarf_cfi_row - Evaluated Minimal DWARF unwind state at a target PC
-+ * @cfa_off: Byte offset added to the CFA base register before or as the CFA.
-+ * @sp_off: Byte offset used to load the saved SP when @sp_rule is an offset.
-+ * @fp_off: Byte offset used to load the saved FP when @fp_rule is an offset.
-+ * @ra_off: Byte offset used to load the saved RA when @ra_rule is an offset.
-+ * @cfa_base: CFA computation mode (&enum dwarf_cfi_base).
-+ * @cfa_reg: DWARF register number when @cfa_base is %DWARF_CFI_BASE_REG.
-+ * @sp_rule: Recovery rule for the stack pointer (&enum dwarf_cfi_rule;
-+ *           %DWARF_CFI_RULE_SAME indicates caller SP equals CFA).
-+ * @fp_rule: Recovery rule for the frame pointer (&enum dwarf_cfi_rule).
-+ * @ra_rule: Recovery rule for the return address (&enum dwarf_cfi_rule).
-+ * @signal: True if the CIE carries the 'S' signal/interrupt frame augmentation,
-+ *          indicating that the saved PC points directly to the interrupted
-+ *          instruction rather than after a call instruction.
-+ * @ra_signed: True on AArch64 when DW_CFA_AARCH64_negate_ra_state indicates
-+ *             that the saved return address carries a PAC signature.
-+ */
-+struct dwarf_cfi_row {
-+	s32 cfa_off;
-+	s32 sp_off;
-+	s32 fp_off;
-+	s32 ra_off;
-+	u8 cfa_base;
-+	u8 cfa_reg;
-+	u8 sp_rule;
-+	u8 fp_rule;
-+	u8 ra_rule;
-+	bool signal;
-+	bool ra_signed;
-+};
++Example output:
++  === build_arm64/vmlinux (arm64) ===
++    .text size              : 18,500,228 B
++    Original .eh_frame      :  2,294,092 B  (1 CIEs, 69,765 FDEs)
++    Original .eh_frame_hdr  :    558,132 B  (combined: 2,852,224 B)
++    Minified .eh_frame      :  2,285,920 B  (1 CIEs, -0.4% vs .eh_frame)
++    Minified + .eh_frame_hdr:  2,844,052 B  (-0.3% combined)
++    FDE bytecode payload    :  1,108,067 B -> 953,348 B (avg 13.7 B/FDE)
++    .sframe section         :  2,938,460 B
++    Minimal DWARF coverage  : 69,765 / 69,765 FDEs (100.00%)
++    Register ops kept/skip  : 125,630 kept (FP/RA), 0 ignored (other GPRs/args)
++    Max remember_state depth: 1
++"""
 +
-+/**
-+ * struct eh_frame_hdr_entry - Binary-search index entry for an FDE
-+ * @start_off: Signed 32-bit offset from the table base (or entry field) to the
-+ *             FDE's initial PC location.
-+ * @fde_off: Signed 32-bit offset from the table base (or entry field) to the
-+ *           start of the FDE record in .eh_frame.
-+ */
-+struct eh_frame_hdr_entry {
-+	s32 start_off;
-+	s32 fde_off;
-+};
++import argparse
++import os
++import struct
++import sys
++from collections import Counter
 +
-+#ifdef CONFIG_UNWIND_DWARF_CFI
++# DWARF register numbers per ELF e_machine (drap = transient stack-realign scratch regs)
++ARCH_REGS = {
++    62: {"name": "x86_64", "sp": 7, "fp": 6, "ra": 16, "drap": {1, 2, 5, 10, 13}},  # EM_X86_64
++    3:  {"name": "i386",   "sp": 4, "fp": 5, "ra": 8,  "drap": {1, 7}},              # EM_386 (%ecx, %edi)
++    40: {"name": "arm",    "sp": 13, "fp": 11, "ra": 14, "drap": set()},             # EM_ARM
++    183: {"name": "arm64", "sp": 31, "fp": 29, "ra": 30, "drap": set()},             # EM_AARCH64
++    243: {"name": "riscv", "sp": 2, "fp": 8, "ra": 1, "drap": set()},                # EM_RISCV
++}
 +
-+extern const u8 __start_eh_frame_hdr[];
-+extern const u8 __stop_eh_frame_hdr[];
-+extern const u8 __start_eh_frame[];
-+extern const u8 __stop_eh_frame[];
++DW_CFA_nop                          = 0x00
++DW_CFA_set_loc                      = 0x01
++DW_CFA_advance_loc1                 = 0x02
++DW_CFA_advance_loc2                 = 0x03
++DW_CFA_advance_loc4                 = 0x04
++DW_CFA_offset_extended              = 0x05
++DW_CFA_restore_extended             = 0x06
++DW_CFA_undefined                    = 0x07
++DW_CFA_same_value                   = 0x08
++DW_CFA_register                     = 0x09
++DW_CFA_remember_state               = 0x0a
++DW_CFA_restore_state                = 0x0b
++DW_CFA_def_cfa                      = 0x0c
++DW_CFA_def_cfa_register             = 0x0d
++DW_CFA_def_cfa_offset               = 0x0e
++DW_CFA_def_cfa_expression           = 0x0f
++DW_CFA_expression                   = 0x10
++DW_CFA_offset_extended_sf           = 0x11
++DW_CFA_def_cfa_sf                   = 0x12
++DW_CFA_def_cfa_offset_sf            = 0x13
++DW_CFA_val_offset                   = 0x14
++DW_CFA_val_offset_sf                = 0x15
++DW_CFA_val_expression               = 0x16
++DW_CFA_AARCH64_negate_ra_state      = 0x2d
++DW_CFA_GNU_args_size                = 0x2e
++DW_CFA_GNU_negative_offset_extended = 0x2f
 +
-+int dwarf_cfi_eval_fde_kmem(const u8 *fde, const u8 *eh_start,
-+			    const u8 *eh_end, unsigned long pc,
-+			    const struct dwarf_cfi_arch *arch,
-+			    struct dwarf_cfi_row *out_row);
++OPCODE_NAMES = {
++    0x00: "DW_CFA_nop",
++    0x01: "DW_CFA_set_loc",
++    0x02: "DW_CFA_advance_loc1",
++    0x03: "DW_CFA_advance_loc2",
++    0x04: "DW_CFA_advance_loc4",
++    0x05: "DW_CFA_offset_extended",
++    0x06: "DW_CFA_restore_extended",
++    0x07: "DW_CFA_undefined",
++    0x08: "DW_CFA_same_value",
++    0x09: "DW_CFA_register",
++    0x0a: "DW_CFA_remember_state",
++    0x0b: "DW_CFA_restore_state",
++    0x0c: "DW_CFA_def_cfa",
++    0x0d: "DW_CFA_def_cfa_register",
++    0x0e: "DW_CFA_def_cfa_offset",
++    0x0f: "DW_CFA_def_cfa_expression",
++    0x10: "DW_CFA_expression",
++    0x11: "DW_CFA_offset_extended_sf",
++    0x12: "DW_CFA_def_cfa_sf",
++    0x13: "DW_CFA_def_cfa_offset_sf",
++    0x14: "DW_CFA_val_offset",
++    0x15: "DW_CFA_val_offset_sf",
++    0x16: "DW_CFA_val_expression",
++    0x2d: "DW_CFA_negate_ra_state/window_save",
++    0x2e: "DW_CFA_GNU_args_size",
++    0x2f: "DW_CFA_GNU_negative_offset_extended",
++}
 +
-+int dwarf_cfi_unwind_eh_frame_hdr(const u8 *hdr, size_t hdr_size,
-+				  const u8 *eh_start, const u8 *eh_end,
-+				  unsigned long pc,
-+				  const struct dwarf_cfi_arch *arch,
-+				  struct dwarf_cfi_row *out_row);
++DW_EH_PE_omit     = 0xff
++DW_EH_PE_absptr   = 0x00
++DW_EH_PE_uleb128  = 0x01
++DW_EH_PE_udata2   = 0x02
++DW_EH_PE_udata4   = 0x03
++DW_EH_PE_udata8   = 0x04
++DW_EH_PE_sleb128  = 0x09
++DW_EH_PE_sdata2   = 0x0a
++DW_EH_PE_sdata4   = 0x0b
++DW_EH_PE_sdata8   = 0x0c
++DW_EH_PE_pcrel    = 0x10
++DW_EH_PE_indirect = 0x80
 +
-+int dwarf_cfi_scan_eh_frame_kmem(const u8 *eh_start, size_t eh_size,
-+				 const struct dwarf_cfi_arch *arch,
-+				 unsigned long base_addr,
-+				 struct eh_frame_hdr_entry *entries,
-+				 unsigned int max_entries,
-+				 unsigned int *out_count);
 +
-+int dwarf_cfi_unwind_user_eh_frame_hdr(unsigned long hdr_uaddr,
-+				       size_t hdr_size, unsigned long pc,
-+				       const struct dwarf_cfi_arch *arch,
-+				       struct dwarf_cfi_row *out_row);
++def read_uleb128(buf, pos, end):
++    val = 0
++    shift = 0
++    while pos < end:
++        b = buf[pos]
++        pos += 1
++        val |= (b & 0x7f) << shift
++        if not (b & 0x80):
++            return val, pos
++        shift += 7
++        if shift > 63:
++            raise ValueError("ULEB128 overflow")
++    raise ValueError("Truncated ULEB128")
 +
-+#if defined(CONFIG_UNWINDER_DWARF_CFI) && defined(CONFIG_MODULES)
-+/**
-+ * struct mod_dwarf_cfi_index - Sorted FDE lookup table for a loadable module
-+ * @num_fdes: Number of sorted FDE index entries in @entries.
-+ * @eh_frame: Pointer to the module's in-memory SHF_ALLOC .eh_frame section;
-+ *            also serves as the base address for @entries offsets.
-+ * @eh_frame_size: Size in bytes of the module's .eh_frame section.
-+ * @entries: Sorted binary-search table mapping PCs to module FDEs.
-+ */
-+struct mod_dwarf_cfi_index {
-+	unsigned int num_fdes;
-+	const u8 *eh_frame;
-+	size_t eh_frame_size;
-+	struct eh_frame_hdr_entry entries[] __counted_by(num_fdes);
-+};
 +
-+struct mod_dwarf_cfi_index *dwarf_cfi_mod_alloc(const void *eh_frame,
-+						size_t eh_frame_size,
-+						const struct dwarf_cfi_arch *arch);
-+void dwarf_cfi_mod_free_rcu(struct mod_dwarf_cfi_index *idx);
-+int dwarf_cfi_mod_eval(const struct mod_dwarf_cfi_index *idx, unsigned long ip,
-+		       const struct dwarf_cfi_arch *arch,
-+		       struct dwarf_cfi_row *out_row);
-+#endif
++def read_sleb128(buf, pos, end):
++    val = 0
++    shift = 0
++    while pos < end:
++        b = buf[pos]
++        pos += 1
++        val |= (b & 0x7f) << shift
++        shift += 7
++        if not (b & 0x80):
++            if b & 0x40:
++                val |= -(1 << shift)
++            return val, pos
++        if shift > 63:
++            raise ValueError("SLEB128 overflow")
++    raise ValueError("Truncated SLEB128")
 +
-+#endif /* CONFIG_UNWIND_DWARF_CFI */
 +
-+#endif /* _LINUX_UNWIND_DWARF_CFI_H */
-diff --git a/tools/perf/check-headers.sh b/tools/perf/check-headers.sh
-index 3e684c851a86..1b1bd04a6690 100755
---- a/tools/perf/check-headers.sh
-+++ b/tools/perf/check-headers.sh
-@@ -30,6 +30,7 @@ declare -a FILES=(
-   "include/linux/hash.h"
-   "include/linux/kmsan-checks.h"
-   "include/linux/list-sort.h"
-+  "include/linux/unwind_dwarf_cfi.h"
-   "include/uapi/linux/hw_breakpoint.h"
-   "arch/x86/include/asm/cpufeatures.h"
-   "arch/x86/include/asm/inat_types.h"
++def encode_uleb128(val):
++    if val < 0:
++        raise ValueError("Negative ULEB128")
++    out = bytearray()
++    while True:
++        b = val & 0x7f
++        val >>= 7
++        if val:
++            b |= 0x80
++        out.append(b)
++        if not val:
++            break
++    return bytes(out)
++
++
++def encode_sleb128(val):
++    out = bytearray()
++    more = True
++    while more:
++        b = val & 0x7f
++        val >>= 7
++        if (val == 0 and not (b & 0x40)) or (val == -1 and (b & 0x40)):
++            more = False
++        else:
++            b |= 0x80
++        out.append(b)
++    return bytes(out)
++
++
++def encoded_ptr_size(enc, addr_size):
++    if enc == DW_EH_PE_omit:
++        return 0
++    fmt = enc & 0x0f
++    if fmt == DW_EH_PE_absptr:
++        return addr_size
++    if fmt in (DW_EH_PE_udata2, DW_EH_PE_sdata2):
++        return 2
++    if fmt in (DW_EH_PE_udata4, DW_EH_PE_sdata4):
++        return 4
++    if fmt in (DW_EH_PE_udata8, DW_EH_PE_sdata8):
++        return 8
++    return None
++
++
++def read_encoded_ptr(buf, pos, end, enc, addr_size, sec_vaddr):
++    if enc == DW_EH_PE_omit:
++        return 0, pos
++    orig_pos = pos
++    fmt = enc & 0x0f
++    if fmt == DW_EH_PE_absptr:
++        fmt_str = "<Q" if addr_size == 8 else "<I"
++        val = struct.unpack_from(fmt_str, buf, pos)[0]
++        pos += addr_size
++    elif fmt == DW_EH_PE_udata2:
++        val = struct.unpack_from("<H", buf, pos)[0]
++        pos += 2
++    elif fmt == DW_EH_PE_sdata2:
++        val = struct.unpack_from("<h", buf, pos)[0]
++        pos += 2
++    elif fmt == DW_EH_PE_udata4:
++        val = struct.unpack_from("<I", buf, pos)[0]
++        pos += 4
++    elif fmt == DW_EH_PE_sdata4:
++        val = struct.unpack_from("<i", buf, pos)[0]
++        pos += 4
++    elif fmt == DW_EH_PE_udata8:
++        val = struct.unpack_from("<Q", buf, pos)[0]
++        pos += 8
++    elif fmt == DW_EH_PE_sdata8:
++        val = struct.unpack_from("<q", buf, pos)[0]
++        pos += 8
++    elif fmt == DW_EH_PE_uleb128:
++        val, pos = read_uleb128(buf, pos, end)
++    elif fmt == DW_EH_PE_sleb128:
++        val, pos = read_sleb128(buf, pos, end)
++    else:
++        raise ValueError(f"Unsupported pointer format 0x{enc:02x}")
++
++    adj = enc & 0x70
++    if adj == DW_EH_PE_pcrel:
++        val = (sec_vaddr + orig_pos + val) & ((1 << (addr_size * 8)) - 1)
++    elif adj != 0x00:
++        raise ValueError(f"Unsupported pointer adjustment 0x{enc:02x}")
++    return val, pos
++
++
++def parse_elf_sections(data):
++    if data[:4] != b"\x7fELF":
++        raise ValueError("Not an ELF file")
++    ei_class = data[4]
++    ei_data = data[5]
++    if ei_data != 1:
++        raise ValueError("Only little-endian ELF supported")
++    if ei_class == 2:
++        addr_size = 8
++        _, e_machine, _, _, _, e_shoff, _, _, _, _, e_shentsize, e_shnum, e_shstrndx = (
++            struct.unpack_from("<HHIQQQIHHHHHH", data, 16)
++        )
++        sh_fmt = "<IIQQQQIIQQ"
++    elif ei_class == 1:
++        addr_size = 4
++        _, e_machine, _, _, _, e_shoff, _, _, _, _, e_shentsize, e_shnum, e_shstrndx = (
++            struct.unpack_from("<HHIIIIIHHHHHH", data, 16)
++        )
++        sh_fmt = "<IIIIIIIIII"
++    else:
++        raise ValueError(f"Unknown ELF class {ei_class}")
++
++    sections = {}
++    if e_shoff == 0:
++        raise ValueError("ELF has no section headers")
++
++    if e_shnum == 0 or e_shstrndx == 0xffff:
++        sh0 = struct.unpack_from(sh_fmt, data, e_shoff)
++        if e_shnum == 0:
++            e_shnum = sh0[5]
++        if e_shstrndx == 0xffff:
++            e_shstrndx = sh0[6]
++
++    if e_shnum == 0 or e_shstrndx >= e_shnum:
++        raise ValueError("ELF has invalid section header counts")
++
++    shdrs = []
++    for i in range(e_shnum):
++        off = e_shoff + i * e_shentsize
++        shdrs.append(struct.unpack_from(sh_fmt, data, off))
++
++    shstr_off = shdrs[e_shstrndx][4]
++    shstr_sz = shdrs[e_shstrndx][5]
++    shstrtab = data[shstr_off : shstr_off + shstr_sz]
++
++    for sh in shdrs:
++        sh_name_idx = sh[0]
++        sh_type = sh[1]
++        sh_addr = sh[3]
++        sh_offset = sh[4]
++        sh_size = sh[5]
++        end_idx = shstrtab.find(b"\x00", sh_name_idx)
++        name = shstrtab[sh_name_idx:end_idx].decode("utf-8", errors="replace")
++        # SHT_NOBITS == 8
++        sec_bytes = b"" if sh_type == 8 else data[sh_offset : sh_offset + sh_size]
++        if name in sections:
++            # Accumulate sizes for multi-section objects (e.g. .text.*)
++            prev_addr, prev_sz, prev_b = sections[name]
++            sections[name] = (prev_addr, prev_sz + sh_size, prev_b)
++        else:
++            sections[name] = (sh_addr, sh_size, sec_bytes)
++
++    return e_machine, addr_size, sections
++
++
++def parse_cie(buf, entry_off, body_off, entry_end, addr_size, sec_vaddr):
++    pos = body_off
++    version = buf[pos]
++    pos += 1
++    nul = buf.find(b"\x00", pos, entry_end)
++    if nul < 0:
++        raise ValueError("Unterminated CIE augmentation string")
++    aug = buf[pos:nul].decode("ascii", errors="replace")
++    pos = nul + 1
++
++    if version == 4:
++        addr_size = buf[pos]
++        seg_size = buf[pos + 1]
++        pos += 2
++        if seg_size != 0:
++            raise ValueError("Non-zero segment selector size")
++
++    code_align, pos = read_uleb128(buf, pos, entry_end)
++    data_align, pos = read_sleb128(buf, pos, entry_end)
++    if version == 1:
++        ra_reg = buf[pos]
++        pos += 1
++    else:
++        ra_reg, pos = read_uleb128(buf, pos, entry_end)
++
++    fde_enc = DW_EH_PE_absptr
++    lsda_enc = DW_EH_PE_omit
++    has_z = False
++    is_signal = False
++
++    if aug.startswith("z"):
++        has_z = True
++        aug_len, pos = read_uleb128(buf, pos, entry_end)
++        aug_end = pos + aug_len
++        ap = pos
++        for ch in aug[1:]:
++            if ch == "L":
++                lsda_enc = buf[ap]
++                ap += 1
++            elif ch == "P":
++                p_enc = buf[ap]
++                ap += 1
++                _, ap = read_encoded_ptr(buf, ap, aug_end, p_enc & ~DW_EH_PE_indirect, addr_size, sec_vaddr)
++            elif ch == "R":
++                fde_enc = buf[ap]
++                ap += 1
++            elif ch == "S":
++                is_signal = True
++            elif ch == "B":
++                # BTI / PAC key on arm64
++                pass
++            else:
++                raise ValueError(f"Unknown CIE augmentation '{ch}' in '{aug}'")
++        pos = aug_end
++    elif aug != "":
++        raise ValueError(f"Unsupported non-z CIE augmentation '{aug}'")
++
++    return {
++        "offset": entry_off,
++        "version": version,
++        "aug": aug,
++        "addr_size": addr_size,
++        "code_align": code_align,
++        "data_align": data_align,
++        "ra_reg": ra_reg,
++        "fde_enc": fde_enc,
++        "lsda_enc": lsda_enc,
++        "has_z": has_z,
++        "is_signal": is_signal,
++        "has_indirect_fde": bool(fde_enc & DW_EH_PE_indirect),
++        "insns": bytes(buf[pos:entry_end]),
++    }
++
++
++def decode_and_minify_insns(insns, cie, arch, init_row=None, is_cie=False):
++    """
++    Decode CFI instructions, validate against Minimal DWARF subset, and emit
++    minified instructions keeping only PC advances and {CFA(SP|FP), SP, FP, RA}.
++    """
++    sp_reg = arch["sp"]
++    fp_reg = arch["fp"]
++    ra_reg = cie["ra_reg"]
++    tracked_regs = {sp_reg, fp_reg, ra_reg}
++
++    def reg_key(reg):
++        if reg == fp_reg:
++            return "fp"
++        if reg == ra_reg:
++            return "ra"
++        return "sp"
++
++    pos = 0
++    end = len(insns)
++    op_counts = Counter()
++    ignored_reg_ops = 0
++    kept_reg_ops = 0
++    max_state_depth = 0
++    reasons = []
++
++    if init_row is None:
++        row = {
++            "cfa_reg": None,
++            "cfa_off": 0,
++            "sp": ("same", 0),
++            "fp": ("same", 0),
++            "ra": ("same", 0),
++            "ra_signed": False,
++        }
++    else:
++        row = dict(init_row)
++
++    cie_base_row = dict(row)
++    state_stack = []
++
++    # Stream of abstract events: ("adv", delta_units) or ("op", raw_bytes)
++    events = []
++    pending_adv = 0
++
++    def emit_op(raw_bytes):
++        nonlocal pending_adv
++        if pending_adv > 0 and not is_cie:
++            events.append(("adv", pending_adv))
++            pending_adv = 0
++        events.append(("op", raw_bytes))
++
++    try:
++        while pos < end:
++            op = insns[pos]
++            pos += 1
++            hi = op & 0xc0
++            lo = op & 0x3f
++
++            if hi == 0x40:
++                op_counts["DW_CFA_advance_loc"] += 1
++                pending_adv += lo
++                continue
++            if hi == 0x80:
++                op_counts["DW_CFA_offset"] += 1
++                reg = lo
++                uoff, pos = read_uleb128(insns, pos, end)
++                off = uoff * cie["data_align"]
++                if reg in tracked_regs:
++                    kept_reg_ops += 1
++                    key = reg_key(reg)
++                    if row[key] != ("off", off):
++                        row[key] = ("off", off)
++                        emit_op(bytes([0x80 | reg]) + encode_uleb128(uoff))
++                else:
++                    ignored_reg_ops += 1
++                continue
++            if hi == 0xc0:
++                op_counts["DW_CFA_restore"] += 1
++                reg = lo
++                if reg in tracked_regs:
++                    kept_reg_ops += 1
++                    key = reg_key(reg)
++                    if row[key] != cie_base_row[key]:
++                        row[key] = cie_base_row[key]
++                        emit_op(bytes([0xc0 | reg]))
++                else:
++                    ignored_reg_ops += 1
++                continue
++
++            name = OPCODE_NAMES.get(op, f"DW_CFA_unknown_0x{op:02x}")
++            op_counts[name] += 1
++
++            if op == DW_CFA_nop:
++                continue
++            elif op == DW_CFA_advance_loc1:
++                if pos + 1 > end:
++                    raise ValueError("Truncated advance_loc1")
++                pending_adv += insns[pos]
++                pos += 1
++            elif op == DW_CFA_advance_loc2:
++                pending_adv += struct.unpack_from("<H", insns, pos)[0]
++                pos += 2
++            elif op == DW_CFA_advance_loc4:
++                pending_adv += struct.unpack_from("<I", insns, pos)[0]
++                pos += 4
++            elif op == DW_CFA_def_cfa:
++                reg, pos = read_uleb128(insns, pos, end)
++                uoff, pos = read_uleb128(insns, pos, end)
++                if reg not in (sp_reg, fp_reg) and reg not in arch["drap"]:
++                    reasons.append(f"def_cfa non-SP/FP reg={reg}")
++                if row["cfa_reg"] != reg or row["cfa_off"] != uoff:
++                    row["cfa_reg"] = reg
++                    row["cfa_off"] = uoff
++                    emit_op(bytes([DW_CFA_def_cfa]) + encode_uleb128(reg) + encode_uleb128(uoff))
++            elif op == DW_CFA_def_cfa_sf:
++                reg, pos = read_uleb128(insns, pos, end)
++                soff, pos = read_sleb128(insns, pos, end)
++                off = soff * cie["data_align"]
++                if reg not in (sp_reg, fp_reg) and reg not in arch["drap"]:
++                    reasons.append(f"def_cfa_sf non-SP/FP reg={reg}")
++                if row["cfa_reg"] != reg or row["cfa_off"] != off:
++                    row["cfa_reg"] = reg
++                    row["cfa_off"] = off
++                    emit_op(bytes([DW_CFA_def_cfa_sf]) + encode_uleb128(reg) + encode_sleb128(soff))
++            elif op == DW_CFA_def_cfa_register:
++                reg, pos = read_uleb128(insns, pos, end)
++                if not isinstance(row["cfa_reg"], int):
++                    reasons.append("def_cfa_register without reg+off CFA")
++                if reg not in (sp_reg, fp_reg) and reg not in arch["drap"]:
++                    reasons.append(f"def_cfa_register non-SP/FP reg={reg}")
++                if row["cfa_reg"] != reg:
++                    row["cfa_reg"] = reg
++                    emit_op(bytes([DW_CFA_def_cfa_register]) + encode_uleb128(reg))
++            elif op == DW_CFA_def_cfa_offset:
++                uoff, pos = read_uleb128(insns, pos, end)
++                if not isinstance(row["cfa_reg"], int):
++                    reasons.append("def_cfa_offset without reg+off CFA")
++                if row["cfa_off"] != uoff:
++                    row["cfa_off"] = uoff
++                    emit_op(bytes([DW_CFA_def_cfa_offset]) + encode_uleb128(uoff))
++            elif op == DW_CFA_def_cfa_offset_sf:
++                soff, pos = read_sleb128(insns, pos, end)
++                off = soff * cie["data_align"]
++                if not isinstance(row["cfa_reg"], int):
++                    reasons.append("def_cfa_offset_sf without reg+off CFA")
++                if row["cfa_off"] != off:
++                    row["cfa_off"] = off
++                    emit_op(bytes([DW_CFA_def_cfa_offset_sf]) + encode_sleb128(soff))
++            elif op == DW_CFA_offset_extended:
++                reg, pos = read_uleb128(insns, pos, end)
++                uoff, pos = read_uleb128(insns, pos, end)
++                off = uoff * cie["data_align"]
++                if reg in tracked_regs:
++                    kept_reg_ops += 1
++                    key = reg_key(reg)
++                    if row[key] != ("off", off):
++                        row[key] = ("off", off)
++                        raw = (bytes([0x80 | reg]) + encode_uleb128(uoff) if reg < 64
++                               else bytes([DW_CFA_offset_extended]) + encode_uleb128(reg) + encode_uleb128(uoff))
++                        emit_op(raw)
++                else:
++                    ignored_reg_ops += 1
++            elif op == DW_CFA_offset_extended_sf:
++                reg, pos = read_uleb128(insns, pos, end)
++                soff, pos = read_sleb128(insns, pos, end)
++                off = soff * cie["data_align"]
++                if reg in tracked_regs:
++                    kept_reg_ops += 1
++                    key = reg_key(reg)
++                    if row[key] != ("off", off):
++                        row[key] = ("off", off)
++                        emit_op(bytes([DW_CFA_offset_extended_sf]) + encode_uleb128(reg) + encode_sleb128(soff))
++                else:
++                    ignored_reg_ops += 1
++            elif op == DW_CFA_GNU_negative_offset_extended:
++                reg, pos = read_uleb128(insns, pos, end)
++                uoff, pos = read_uleb128(insns, pos, end)
++                off = -uoff * cie["data_align"]
++                if reg in tracked_regs:
++                    kept_reg_ops += 1
++                    key = reg_key(reg)
++                    if row[key] != ("off", off):
++                        row[key] = ("off", off)
++                        emit_op(bytes([DW_CFA_GNU_negative_offset_extended]) +
++                                encode_uleb128(reg) + encode_uleb128(uoff))
++                else:
++                    ignored_reg_ops += 1
++            elif op == DW_CFA_restore_extended:
++                reg, pos = read_uleb128(insns, pos, end)
++                if reg in tracked_regs:
++                    kept_reg_ops += 1
++                    key = reg_key(reg)
++                    if row[key] != cie_base_row[key]:
++                        row[key] = cie_base_row[key]
++                        raw = bytes([0xc0 | reg]) if reg < 64 else bytes([DW_CFA_restore_extended]) + encode_uleb128(reg)
++                        emit_op(raw)
++                else:
++                    ignored_reg_ops += 1
++            elif op == DW_CFA_undefined:
++                reg, pos = read_uleb128(insns, pos, end)
++                if reg in tracked_regs:
++                    kept_reg_ops += 1
++                    key = reg_key(reg)
++                    row[key] = ("undef", 0)
++                    emit_op(bytes([DW_CFA_undefined]) + encode_uleb128(reg))
++                else:
++                    ignored_reg_ops += 1
++            elif op == DW_CFA_same_value:
++                reg, pos = read_uleb128(insns, pos, end)
++                if reg in tracked_regs:
++                    kept_reg_ops += 1
++                    key = reg_key(reg)
++                    row[key] = ("same", 0)
++                    emit_op(bytes([DW_CFA_same_value]) + encode_uleb128(reg))
++                else:
++                    ignored_reg_ops += 1
++            elif op == DW_CFA_remember_state:
++                emit_op(bytes([DW_CFA_remember_state]))
++                state_stack.append((dict(row), len(events) - 1))
++                max_state_depth = max(max_state_depth, len(state_stack))
++                if len(state_stack) > 4:
++                    reasons.append(f"remember_state depth={len(state_stack)} > 4")
++            elif op == DW_CFA_restore_state:
++                if not state_stack:
++                    reasons.append("unmatched restore_state")
++                else:
++                    saved_row, rem_idx = state_stack.pop()
++                    if saved_row != row:
++                        row = saved_row
++                        emit_op(bytes([DW_CFA_restore_state]))
++                    else:
++                        # Nothing in {CFA, SP, FP, RA} changed inside remember/restore!
++                        # If remember_state is only followed by adv, elide the pair.
++                        elided = False
++                        if rem_idx < len(events) and events[rem_idx] == ("op", bytes([DW_CFA_remember_state])):
++                            if all(ev[0] == "adv" for ev in events[rem_idx + 1:]):
++                                extra_adv = sum(ev[1] for ev in events[rem_idx + 1:])
++                                del events[rem_idx:]
++                                pending_adv += extra_adv
++                                elided = True
++                        if not elided:
++                            emit_op(bytes([DW_CFA_restore_state]))
++            elif op == DW_CFA_GNU_args_size:
++                _, pos = read_uleb128(insns, pos, end)
++                ignored_reg_ops += 1
++            elif op == DW_CFA_AARCH64_negate_ra_state and arch["name"] == "arm64":
++                row["ra_signed"] = not row["ra_signed"]
++                emit_op(bytes([DW_CFA_AARCH64_negate_ra_state]))
++            elif op == DW_CFA_def_cfa_expression:
++                expr_len, pos = read_uleb128(insns, pos, end)
++                if pos + expr_len > end:
++                    raise ValueError("Truncated def_cfa_expression")
++                expr = insns[pos : pos + expr_len]
++                pos += expr_len
++                # Fixed DRAP / sigframe pattern: DW_OP_breg(FP|SP) <sleb128>, DW_OP_deref
++                if (len(expr) >= 3 and expr[-1] == 0x06 and
++                    expr[0] in (0x70 + fp_reg, 0x70 + sp_reg)):
++                    try:
++                        soff, epos = read_sleb128(expr, 1, len(expr) - 1)
++                    except ValueError:
++                        epos = -1
++                    if epos == len(expr) - 1:
++                        kind = "fp_indirect" if expr[0] == (0x70 + fp_reg) else "sp_indirect"
++                        row["cfa_reg"] = (kind,)
++                        row["cfa_off"] = soff
++                        emit_op(bytes([DW_CFA_def_cfa_expression]) + encode_uleb128(len(expr)) + expr)
++                        continue
++                reasons.append(name)
++            elif op in (DW_CFA_expression, DW_CFA_val_expression):
++                reg, pos = read_uleb128(insns, pos, end)
++                expr_len, pos = read_uleb128(insns, pos, end)
++                if pos + expr_len > end:
++                    raise ValueError("Truncated register expression")
++                expr = insns[pos : pos + expr_len]
++                pos += expr_len
++                if reg == sp_reg:
++                    if (op == DW_CFA_expression and len(expr) >= 2 and
++                        expr[0] == (0x70 + sp_reg) and row["cfa_reg"] == ("sp_indirect",)):
++                        try:
++                            soff, epos = read_sleb128(expr, 1, len(expr))
++                        except ValueError:
++                            epos = -1
++                        if epos == len(expr) and soff == row["cfa_off"]:
++                            ignored_reg_ops += 1
++                            continue
++                    reasons.append(f"{name} r{reg}")
++                    continue
++                if reg not in tracked_regs:
++                    ignored_reg_ops += 1
++                    continue
++                # Fixed DRAP / sigframe save pattern: DW_CFA_expression(FP|RA, DW_OP_breg(FP|SP) <sleb128>)
++                if (op == DW_CFA_expression and len(expr) >= 2 and
++                    expr[0] in (0x70 + fp_reg, 0x70 + sp_reg)):
++                    try:
++                        soff, epos = read_sleb128(expr, 1, len(expr))
++                    except ValueError:
++                        epos = -1
++                    if epos == len(expr) and (reg == fp_reg or expr[0] == (0x70 + sp_reg)):
++                        kept_reg_ops += 1
++                        rule = "fp_off" if expr[0] == (0x70 + fp_reg) else "sp_off"
++                        row["fp" if reg == fp_reg else "ra"] = (rule, soff)
++                        emit_op(bytes([DW_CFA_expression]) + encode_uleb128(reg) +
++                                encode_uleb128(len(expr)) + expr)
++                        continue
++                reasons.append(f"{name} r{reg}")
++            elif op == DW_CFA_register:
++                r1, pos = read_uleb128(insns, pos, end)
++                r2, pos = read_uleb128(insns, pos, end)
++                if r1 in tracked_regs:
++                    reasons.append(f"DW_CFA_register r{r1}->r{r2}")
++                else:
++                    ignored_reg_ops += 1
++            elif op == DW_CFA_val_offset:
++                r1, pos = read_uleb128(insns, pos, end)
++                _, pos = read_uleb128(insns, pos, end)
++                if r1 in tracked_regs:
++                    reasons.append(f"DW_CFA_val_offset r{r1}")
++                else:
++                    ignored_reg_ops += 1
++            elif op == DW_CFA_val_offset_sf:
++                r1, pos = read_uleb128(insns, pos, end)
++                _, pos = read_sleb128(insns, pos, end)
++                if r1 in tracked_regs:
++                    reasons.append(f"DW_CFA_val_offset_sf r{r1}")
++                else:
++                    ignored_reg_ops += 1
++            elif op == DW_CFA_set_loc:
++                _, pos = read_encoded_ptr(insns, pos, end, cie["fde_enc"], cie["addr_size"], 0)
++                reasons.append("DW_CFA_set_loc")
++            else:
++                reasons.append(name)
++                break
++    except (ValueError, struct.error, IndexError) as exc:
++        reasons.append(f"malformed_bytecode({exc})")
++
++    # Coalesce consecutive ("adv", d) events and drop trailing ("adv", d)
++    while events and events[-1][0] == "adv":
++        events.pop()
++
++    min_bytes = bytearray()
++    acc_adv = 0
++    for kind, payload in events:
++        if kind == "adv":
++            acc_adv += payload
++        else:
++            if acc_adv > 0:
++                if acc_adv <= 0x3f:
++                    min_bytes.append(0x40 | acc_adv)
++                elif acc_adv <= 0xff:
++                    min_bytes.extend([DW_CFA_advance_loc1, acc_adv])
++                elif acc_adv <= 0xffff:
++                    min_bytes.append(DW_CFA_advance_loc2)
++                    min_bytes.extend(struct.pack("<H", acc_adv))
++                else:
++                    min_bytes.append(DW_CFA_advance_loc4)
++                    min_bytes.extend(struct.pack("<I", acc_adv))
++                acc_adv = 0
++            min_bytes.extend(payload)
++
++    return {
++        "row": row,
++        "min_insns": bytes(min_bytes),
++        "op_counts": op_counts,
++        "ignored_reg_ops": ignored_reg_ops,
++        "kept_reg_ops": kept_reg_ops,
++        "max_state_depth": max_state_depth,
++        "unsupported_reasons": reasons,
++    }
++
++
++def build_minimal_cie_bytes(cie, min_cie_insns, align=4):
++    aug = b"zRS\x00" if cie["is_signal"] else b"zR\x00"
++    fde_enc = DW_EH_PE_pcrel | DW_EH_PE_sdata4
++    body = bytearray()
++    body.append(1)  # CIE version 1
++    body.extend(aug)
++    body.extend(encode_uleb128(cie["code_align"]))
++    body.extend(encode_sleb128(cie["data_align"]))
++    body.append(cie["ra_reg"])
++    body.append(1)  # augmentation data length = 1 ('R')
++    body.append(fde_enc)
++    body.extend(min_cie_insns)
++    # Total record is 4 (length) + 4 (CIE_id=0) + len(body), pad to align
++    rem = (8 + len(body)) % align
++    if rem:
++        body.extend(b"\x00" * (align - rem))
++    return struct.pack("<II", 4 + len(body), 0) + bytes(body)
++
++
++def build_minimal_fde_bytes(min_fde_insns, cie_offset_from_here, init_loc_rel=0, pc_range=0, align=4):
++    body = bytearray()
++    body.extend(struct.pack("<iI", init_loc_rel, pc_range))
++    body.append(0)  # zR augmentation data length = 0
++    body.extend(min_fde_insns)
++    rem = (8 + len(body)) % align
++    if rem:
++        body.extend(b"\x00" * (align - rem))
++    return struct.pack("<II", 4 + len(body), cie_offset_from_here) + bytes(body)
++
++
++def analyze_elf(path, out_min_path=None):
++    with open(path, "rb") as f:
++        data = f.read()
++
++    e_machine, addr_size, sections = parse_elf_sections(data)
++    if e_machine not in ARCH_REGS:
++        raise ValueError(f"Unsupported ELF e_machine={e_machine}")
++    arch = ARCH_REGS[e_machine]
++
++    if ".eh_frame" not in sections:
++        print(f"{path}: no .eh_frame section found")
++        return
++
++    eh_vaddr, eh_size, eh_buf = sections[".eh_frame"]
++    eh_hdr_size = sections.get(".eh_frame_hdr", (0, 0, b""))[1]
++    sframe_size = sections.get(".sframe", (0, 0, b""))[1]
++    orc_size = (sections.get(".orc_unwind", (0, 0, b""))[1] +
++                sections.get(".orc_unwind_ip", (0, 0, b""))[1])
++    text_size = sum(sz for name, (_, sz, _) in sections.items() if name.startswith(".text") or name in (".init.text", ".exit.text"))
++
++    cies = {}
++    cie_init_rows = {}
++    min_eh_stream = bytearray()
++    min_cie_offsets = {}
++
++    total_cies = 0
++    total_fdes = 0
++    supported_fdes = 0
++    unsupported_fdes = 0
++    unsupported_breakdown = Counter()
++    total_op_counts = Counter()
++    total_orig_insn_bytes = 0
++    total_min_insn_bytes = 0
++    total_ignored_ops = 0
++    total_kept_ops = 0
++    max_depth_seen = 0
++
++    pos = 0
++    end = len(eh_buf)
++    while pos + 4 <= end:
++        length = struct.unpack_from("<I", eh_buf, pos)[0]
++        entry_off = pos
++        pos += 4
++        if length == 0:
++            break
++        if length == 0xffffffff:
++            length = struct.unpack_from("<Q", eh_buf, pos)[0]
++            pos += 8
++        entry_end = pos + length
++        cie_id = struct.unpack_from("<I", eh_buf, pos)[0]
++
++        if cie_id == 0:
++            total_cies += 1
++            cie = parse_cie(eh_buf, entry_off, pos + 4, entry_end, addr_size, eh_vaddr)
++            res = decode_and_minify_insns(cie["insns"], cie, arch, is_cie=True)
++            cie["unsupported_reasons"] = list(res["unsupported_reasons"])
++            cies[entry_off] = cie
++            cie_init_rows[entry_off] = res["row"]
++            total_op_counts.update(res["op_counts"])
++
++            cie_key = (cie["code_align"], cie["data_align"], cie["ra_reg"], cie["is_signal"], res["min_insns"])
++            if not cie["unsupported_reasons"] and not cie["has_indirect_fde"] and cie_key not in min_cie_offsets:
++                min_cie_offsets[cie_key] = len(min_eh_stream)
++                min_eh_stream.extend(build_minimal_cie_bytes(cie, res["min_insns"], align=4))
++            cie["min_key"] = cie_key
++        else:
++            total_fdes += 1
++            cie_off = pos - cie_id
++            cie = cies[cie_off]
++            fpos = pos + 4
++            init_loc, fpos = read_encoded_ptr(eh_buf, fpos, entry_end, cie["fde_enc"], addr_size, eh_vaddr)
++            range_enc = (cie["fde_enc"] & 0x0f) & ~0x08
++            pc_range, fpos = read_encoded_ptr(eh_buf, fpos, entry_end, range_enc, addr_size, 0)
++            if cie["has_z"]:
++                aug_len, fpos = read_uleb128(eh_buf, fpos, entry_end)
++                fpos += aug_len
++            fde_insns = eh_buf[fpos:entry_end]
++            total_orig_insn_bytes += len(fde_insns)
++
++            res = decode_and_minify_insns(fde_insns, cie, arch, init_row=cie_init_rows[cie_off])
++            total_op_counts.update(res["op_counts"])
++            total_min_insn_bytes += len(res["min_insns"])
++            total_ignored_ops += res["ignored_reg_ops"]
++            total_kept_ops += res["kept_reg_ops"]
++            max_depth_seen = max(max_depth_seen, res["max_state_depth"])
++
++            reasons = list(cie["unsupported_reasons"]) + list(res["unsupported_reasons"])
++            if cie["has_indirect_fde"]:
++                reasons.append("indirect_fde_encoding")
++
++            if not reasons:
++                supported_fdes += 1
++                min_cie_off = min_cie_offsets[cie["min_key"]]
++                fde_id_pos = len(min_eh_stream) + 4
++                init_rel = (init_loc - (eh_vaddr + len(min_eh_stream) + 8)) if eh_vaddr else 0
++                if not (-0x80000000 <= init_rel <= 0x7fffffff):
++                    init_rel = 0
++                min_eh_stream.extend(
++                    build_minimal_fde_bytes(res["min_insns"], fde_id_pos - min_cie_off, init_rel, pc_range, align=4)
++                )
++            else:
++                unsupported_fdes += 1
++                for r in set(reasons):
++                    unsupported_breakdown[r] += 1
++
++        pos = entry_end
++
++    min_eh_stream.extend(b"\x00\x00\x00\x00")  # terminator
++    min_eh_hdr_size = 12 + supported_fdes * 8
++
++    if out_min_path:
++        with open(out_min_path, "wb") as outf:
++            outf.write(min_eh_stream)
++
++    pct_cov = (100.0 * supported_fdes / total_fdes) if total_fdes else 100.0
++    orig_total = eh_size + eh_hdr_size
++    min_total = len(min_eh_stream) + min_eh_hdr_size
++    eh_delta_pct = (100.0 * (len(min_eh_stream) / eh_size - 1.0)) if eh_size else 0.0
++
++    print(f"=== {path} ({arch['name']}) ===")
++    print(f"  .text size              : {text_size:10,d} B")
++    print(f"  Original .eh_frame      : {eh_size:10,d} B  ({total_cies} CIEs, {total_fdes:,d} FDEs)")
++    if eh_hdr_size:
++        total_delta_pct = 100.0 * (min_total / orig_total - 1.0)
++        print(f"  Original .eh_frame_hdr  : {eh_hdr_size:10,d} B  (combined: {orig_total:,d} B)")
++        print(f"  Minified .eh_frame      : {len(min_eh_stream):10,d} B  ({len(min_cie_offsets)} CIEs, {eh_delta_pct:+.1f}% vs .eh_frame)")
++        print(f"  Minified + .eh_frame_hdr: {min_total:10,d} B  ({total_delta_pct:+.1f}% combined)")
++    else:
++        print(f"  Minified .eh_frame      : {len(min_eh_stream):10,d} B  ({len(min_cie_offsets)} CIEs, {eh_delta_pct:+.1f}% vs .eh_frame)")
++        print(f"  Simulated .eh_frame_hdr : {min_eh_hdr_size:10,d} B  (linker-generated at final link)")
++    print(f"  FDE bytecode payload    : {total_orig_insn_bytes:10,d} B -> {total_min_insn_bytes:,d} B "
++          f"(avg {total_min_insn_bytes / max(supported_fdes, 1):.1f} B/FDE)")
++    if sframe_size:
++        print(f"  .sframe section         : {sframe_size:10,d} B")
++    if orc_size:
++        print(f"  .orc_unwind + _ip       : {orc_size:10,d} B")
++    print(f"  Minimal DWARF coverage  : {supported_fdes:,d} / {total_fdes:,d} FDEs ({pct_cov:.2f}%)")
++    print(f"  Register ops kept/skip  : {total_kept_ops:,d} kept (FP/RA), {total_ignored_ops:,d} ignored (other GPRs/args)")
++    print(f"  Max remember_state depth: {max_depth_seen}")
++    if unsupported_breakdown:
++        print("  Unsupported FDE reasons :")
++        for r, cnt in unsupported_breakdown.most_common():
++            print(f"    - {r}: {cnt}")
++    print("  Top DWARF CFA opcodes   :")
++    for op_name, cnt in total_op_counts.most_common(10):
++        print(f"    - {op_name:34s}: {cnt:8,d}")
++    print()
++
++
++def main():
++    epilog = (
++        "Examples:\n"
++        "  %(prog)s vmlinux\n"
++        "  %(prog)s mm/vmscan.o kernel/fork.o\n"
++        "  %(prog)s /bin/bash /lib/x86_64-linux-gnu/libc.so.6\n"
++        "  %(prog)s --minify /tmp/eh_frame.min mm/vmscan.o\n"
++    )
++    ap = argparse.ArgumentParser(
++        description="Analyze ELF .eh_frame coverage and size for Minimal DWARF CFI",
++        epilog=epilog,
++        formatter_class=argparse.RawDescriptionHelpFormatter,
++    )
++    ap.add_argument("files", nargs="+", help="ELF files (.o, .ko, vmlinux, DSO, executable) to analyze")
++    ap.add_argument("--minify", metavar="OUT", help="Write minified .eh_frame binary for the first file")
++    args = ap.parse_args()
++
++    for idx, path in enumerate(args.files):
++        out_p = args.minify if idx == 0 else None
++        analyze_elf(path, out_min_path=out_p)
++
++
++if __name__ == "__main__":
++    main()
 -- 
 2.56.1.831.g720f3f5937-goog
 
