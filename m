@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.176
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.170
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795577466;
-	b=r03cWydTEcHvf5wsxkNZUgQeB5Fydy+Igq3AFMFodEguMXRgRc0VmlBVf5+FsNjlDzOn
-	 cWvHBXVMVU5fU2I5iQCFLdBHuEXZdvVNO29fXceti6jTJqNynzST+zJF2wRbXhZfyCC+U
-	 hNI3wnhrFZGqlj2JQx2SoyEo2r6YibRxL1zX/osNIsrI20evjTK/SKb8KdIThc/sgP7FF
-	 v8hqOmnuSLOhgtTffY1Oei8rUhVa1eZquJfn3A8aSlzqhPM4vVhDdZlMBsNGR9DQfhulu
-	 XQNKApCWd5fKV+N7f00yHNSc0DfIVciP1KjG7lABVdDq7StngObB+a4ld8R7SDVMKJQ==
+	t=1795577472;
+	b=dsXXIZSnsg/gYhJaWJ2KDY9hQuZmz8iBNozjYXfn35p01+bMNlQkXhsj8vw6PzPYgRxZ
+	 iSTDiDmSq1v/rSNzL0A3dnQKXRrTdAXWUG41PWYccNfnYwAE+RcDohx5TDGrcigY64CPJ
+	 DMzjfjVUlfkG3eZE1kg+VZ2VuUqBBA3mezEy+gjsMAERDM+VOzQeE337U5uWAbRZFE08N
+	 3G1iEQpsgE3rspbDp11Ex+1rJ6Q+U6yiJ35EvjrGSDCwr8RsB3zt9CdOngoynNAQRiy4g
+	 /Cv0u50WZd6flMz+JoQUIf22o/eNP8BTPiPUmEgK27Tbcmq3MnpjEggddxF48cwyTOg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795577466;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795577472;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=GgS3xmZT1H37HzkF9Ikx4kPzdHj3TpCO+R3lHpwdEa8=;
-	b=aKE+S0BHBqdvJ+R/VeogdCDcZAYzcjrBeGWWPkI4WeP6n8wUbTVRpV2B4C3KWaJAdHc/
-	 j3XElD88sQ3/YWhgtRSecadyKVo8GtzVTu9TS7XtlGlnU7LVwFPDGkdtGG3Sm1QkWHN5e
-	 MHlqPP0DSuSuriuuGYkByautn1IcrLHaQB0nTaZhIWsJlgrsWaVNkOKYogr1JnZf+hbX9
-	 05ZswbWG+wacEmu9rb5cp+1hy2pYbhIT/r7guggXff7NmoA7BP1rEcDzYkcSSQREgKISb
-	 CfaGlWrqjO6A/c/smiAx0Aso5T2AWckIhiS608qzttt3HBv6JnBbEUg296GpOoEO9Lg==
+	bh=AH5fnMqI02M31nBbBb6vlGxHvk7Z+9nUL6CE0ryp7Ng=;
+	b=L8Xh2uzFrvFNL9QSearHHOLqEwMKuMCX9/MrGvBhJfMlyREjOcw97XmG6ffDdrfCJyNT
+	 /6c5gkCMC/6+W1fIzILLgV2Ev0oPJoZTg/vKy30aLZb14lxcn3kSJv+9WJyx3DsbOt60+
+	 1vfb4jibzzmApacUBfNaS/67tB6ly63nE0kWV4VSbA60lUi1R3mabGlPUccVAj1+bbUYy
+	 HopWHpTDflVEMD6BUfB+h2whYqkMXXuS7QfEeq31MYzsAvAZzqRVpyu95PQ9kZPmrdPIs
+	 ABE4sUFjzrcA25UWEPaFhackZQKndj/U9+3vNTGZIC6jiFYmwq864YJQpxavEOMZIjQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=jvlSWqrK;
-	arc=none smtp.remote-ip=209.85.215.176
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=rHTtiZvX;
+	arc=none smtp.remote-ip=209.85.214.170
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E99FC606A333
-	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 03:31:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E99FC606A333
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEC20606A31E
+	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 03:31:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AEC20606A31E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=jvlSWqrK
-Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-cde5a7d7849so2257145a12.0
-        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 19:31:05 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=rHTtiZvX
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2f04e3bf46dso37566295ad.2
+        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 19:31:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795577465; x=1796182265; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1795577471; x=1796182271; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=GgS3xmZT1H37HzkF9Ikx4kPzdHj3TpCO+R3lHpwdEa8=;
-        b=jvlSWqrK3hWt8LVvZusVjj+tHsfAcU0OKJLGCnryDWHp+pBGMX7AG+jaZ3qLayBL+p
-         cDqXsrDmwtdhvVnBCW9VO615gIeK6t7x+/44G4EgV7dbZIk3GNVU4kC3WEYpYYpON6/G
-         ai14faaDzVwSeR8yq8pqWYrGegeYfLPNMgHWkoAZKNh94UviI3q4bbKceiiPTJHecKn1
-         J9LogWXpqA7tucofeDAsEVNvnn67r3n59h1PH9RhwrZQKnbeaJxvM3X9vSiXMNLj0WIz
-         OXcUwAxIbsdiDb6K8qoGaumTtbIyDRGb/dGHdrdh9dSjEEkXz1Wa4hXDbxYvg5pFDr07
-         HWfw==
+        bh=AH5fnMqI02M31nBbBb6vlGxHvk7Z+9nUL6CE0ryp7Ng=;
+        b=rHTtiZvXBWXl1HXBKbWJXw2ns9j0yCUr+bHfiucG/dYnUKYVEmXlbA5SZGYZ5Pkb0v
+         R8bLdDEQXa1LC+xs/fB+Wjr8N1VvxTF67Jd68+40FHQs9jsbNQrp3janh5H6GyCoW7I1
+         bzEO8Q6jYQdAiAjlg2QRKiPuOm94nW1uP2buKakn/MXNhRSpznuq6AYhPlJ0HmmySInt
+         EVA6G7ZMz+fctTA+HQ1+fcPX2Uh1f2pvo7XV6PgOBoZC/bOUbwxFWbihjf5vK73U1SJH
+         jGjJvB63BUhCYXSjq1N46beZxLNyMAvzQCH6uIznvgrcJ1LpchkfFgV+buitEhgNNfVt
+         f4jg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795577465; x=1796182265;
+        d=1e100.net; s=20260707; t=1795577471; x=1796182271;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=GgS3xmZT1H37HzkF9Ikx4kPzdHj3TpCO+R3lHpwdEa8=;
-        b=dI/faa2W/xLQy9MQmA0NJ2emh4rRxOc47MV4I9uUvFt6Kd5C9U25mADehzatGsXJNC
-         KliC9I4K5yPzyq1DCc6DIANRER8leam17CXy9HCv9Fkajvvf+ZX6yTrV1CozauPByJJK
-         hrMhRi941ELppFnoIVzRbo7FCvJEmdnCs+xRvmnk/YuE8c6ddy0VFU8RoTWmCMBXH2fd
-         vyWPGj0DzasgPQtKhWEe4gSUfW7d6cOGkh7Eg/i2rmUCm87/PVjjQ/BJWIm1+L4RFkNz
-         CgZptMS+nICor1sGjt9nuM+TMmjaU55x7yJV62868sx4msRGGuRvVRUguSeDiutManjx
-         ETTA==
-X-Gm-Message-State: APuU4Z+BFn6GbVrTX8ycbCJOvnvquKrE1ksSs1xDeXseMnKXmfQmywP4
-	durHNoaZMeNFDyZsJPO/Ze+dm162atVnHAMro5KBRStvFUWpueiyDnQa75nO0A9+
-X-Gm-Gg: AZFdTZfDIgCtgVPqh8c4jC8vIblNf06/tnLNOUwvlFlPnDPoLp7w0jm2o7HValyBq8D
-	rx81eXQXnU+xKu40+zT2j6WZ5vkV8OjtLJ+Ct+11Y+htUOPXGuYMKkaycbE0FDoZCckO/R1Ft61
-	ddkuhrkxC/Ji9CPJMlcs/nC4BnXsXukLMmIYdQcrBnXyRMUXHDvsTcW+t6Xoh4NzqdGqQFsXA47
-	FvLv53lvk9fxUSRabwhUeSGR19dK80WvBDEmkkH54KrsEdhKLsoe4qRBdTOx0YedrPZCzXoJxua
-	JtYF44AGCFPJWqtCwCfCAkKms2QMgnluQE90QK1dofilrCCoRbzCSm71+gtVNfpyCqJq8NWr/mq
-	UPHqzMInu8u/+ZMjBtcHGYrUKNArwpsfmT3jOM9tKSNytl/7K8CeKwvGwrl6Ld/1uw0ZtnI5hzH
-	NWwQgF7YKdvF3knVeMKRp+gecH99KpCxqdbx3Y3w7jmUbfjfLXLDqschZqRJFEibSVh05wTTe44
-	KPEMed0tEZFo3ngbRf9yIm8V+czuMTT4EntQrPzdCqRyz3u3MP4nv0/hBgo1VT5AjQgEHSQx16d
-	18fi4uDj3vp7ZxAQKkgjAT51MMqcjmcAsguyIWqnDdTpKoUcJ3UBn5IgJQ8gdWRKUlvf0prSgQQ
-	/XgmzVPgXHl6cTOA4oqbqeqhXu0gw2lfckxuvw6JyIOzQwwTf96vWrINQZQm5+2OQqV5io6fhsk
-	kjCcNxQoMZg7GlhWKbtHM=
-X-Received: by 2002:a17:90b:4ec5:b0:3b3:a6b0:8991 with SMTP id 98e67ed59e1d1-3b41c96180amr15412332a91.60.1795577465155;
-        Tue, 24 Nov 2026 19:31:05 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.248])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2f03f0c1f42sm77353755ad.25.2026.11.24.19.31.04
+        bh=AH5fnMqI02M31nBbBb6vlGxHvk7Z+9nUL6CE0ryp7Ng=;
+        b=mndgNdQRAn4DPdEQWW2+yyO040Tueeq44WYuoxIR9p1poERejMfItb9VFyu6GEnZ1p
+         vFV+MPgGblOuwFv4k6zG3i0397CNjgx9PuFln60TtQa4IIE76JuFV7MGPpOZw+195UkB
+         LGucsJrIpA2PMaVwJyrj4Y3u5AU3oDYIazPE7yyYprftWGDIXv4WuLXZ7ZqP9kE9f5TA
+         FOZ85EjFDE7C60x+yHh0sfY32WRl1ghHZYimEyZwoUeyYfZz44F0GdCNCAtYloH+ZTZd
+         ys+t8TPc2SkUDFNNSTBgu+Vc/kb6c3O3VQgyRY+OHF6k1lBVC/y0oQHgjzZmpHYov7ZY
+         2Dlw==
+X-Gm-Message-State: APuU4Z8maCRRYNfdR+FBbtFt9EEO4lQqhN6xkZEqG3f+wTI+wG+WAWOl
+	HjDgspoCgmULWumrxJL+XRg0599rAYy9XLRTtZezk5oSZfvTAn6ITJvo23bzfZpy
+X-Gm-Gg: AZFdTZfXJjFh62FuRlpmwEQ9ARvbHzalb38ReeWZaJ1BoXE7DECFQuq2fMENlSzglHC
+	5e1OG5o0WX5GgD1m/3p4Dd0YHJOsw8GhWPt3iVg/2QZnkvKWhfXpqo0ZeYIcuZrHlQ8DA4Til+V
+	QlPIvFFzJm+53d3ohxI/VoxJ92kHPtlwwvjdI1kvRXFbF/Voz75V2Nx0VFMhQYnXkW+TsgDcNz9
+	DDeQdNiZjF5f2GVWVMohBsNgPkc4XzQkMnRWTD3D1/AJR7VT4Z2unxR1As6vlzarulHIuBs/D4w
+	PtXwK8BpWDyy5lVUyLcEHCAkOiAHUukDugOs2QOCH/dsR8jkG+oq1Qz10SzvTbROdBIKzY2muQa
+	bEk/gVvpps2VZ5ZkEv3v+ocOT7uL9E10rTDC6s/09lUttGpG2/gJAA94r5HBDHDupMUmmUn9BFM
+	qGc3oS72xuUG/ip7W/bbpXjmXVH7GNivwqqJi7nq+aECfS2y659tk3C3FsZg5+cKDx7zM8hyq+E
+	ckqN8vGHNR1CPheEqhZMbLA7Ia3NPn0I/FZ5P2KnvtBajggRmbbfww7J9EsoFRCsbKWp+/H2H3e
+	Aw1NwEA/+06SOiUBI3r09OGzt0QKiyH4q8mCXg3r/3PprSUSeOZRWdbk8zEXVoR1s4qTUCDgN9a
+	j1jlX5d+M9+i6i+981Ozg6j83uhEEL/H2VCBO4g6sbW4P9aW2aqg6fgWprtE/uTPBWt+jvW/oGU
+	8=
+X-Received: by 2002:a17:902:e80b:b0:2e9:660a:7944 with SMTP id d9443c01a7336-2f03f2689eemr169634155ad.58.1795577471049;
+        Tue, 24 Nov 2026 19:31:11 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.253])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2f03ee848c1sm77092555ad.10.2026.11.24.19.31.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Nov 2026 19:31:04 -0800 (PST)
+        Tue, 24 Nov 2026 19:31:10 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf 14/47] bpf: Add the symbol of a prog before its id
-Date: Wed, 25 Nov 2026 03:29:05 +0000
-Message-ID: <20261125032938.670542-15-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf 15/47] bpf: Do not fill jited line info for a hidden subprog
+Date: Wed, 25 Nov 2026 03:29:06 +0000
+Message-ID: <20261125032938.670542-16-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261125032938.670542-1-alexei.starovoitov@gmail.com>
 References: <20261125032938.670542-1-alexei.starovoitov@gmail.com>
@@ -104,44 +104,30 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-A prog can be taken by its id and run before bpf_prog_kallsyms_add().
-bpf_throw() does not find the main prog and oopses:
+func_idx of the default exception callback is func_cnt, and the test
+for hidden subprogs is off by one. The address of the callback goes to
+jited_linfo[0]. libbpf and bpftool refuse the jited line info of the
+prog.
 
-  KASAN: null-ptr-deref in range [0x0000000000000568-0x000000000000056f]
-  RIP: 0010:bpf_throw+0x129/0x220
-
-The exception table is found by the same symbol.
-
-Add the symbol first. bpf_prog_free() removes it when there is no id.
-
-Fixes: 3dec541b2e63 ("bpf: Add support for BTF pointers to x86 JIT")
-Fixes: f18b03fabaa9 ("bpf: Implement BPF exceptions")
+Fixes: 335d1c5b5452 ("bpf: Implement support for adding hidden subprogs")
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/syscall.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ kernel/bpf/core.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 571eec4f0cf5..03cb9f769398 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -3179,6 +3179,9 @@ static int bpf_prog_load(union bpf_attr *attr, bpfptr_t uattr, struct bpf_log_at
- 	if (err < 0)
- 		goto free_used_maps;
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 06a0413da489..2f6392ccef73 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -233,7 +233,8 @@ void bpf_prog_fill_jited_linfo(struct bpf_prog *prog,
+ 	const struct bpf_line_info *linfo;
+ 	void **jited_linfo;
  
-+	/* bpf_throw() and faults look for the symbol. The prog can run once it has the id. */
-+	bpf_prog_kallsyms_add(prog);
-+
- 	err = bpf_prog_alloc_id(prog);
- 	if (err)
- 		goto free_used_maps;
-@@ -3197,7 +3200,6 @@ static int bpf_prog_load(union bpf_attr *attr, bpfptr_t uattr, struct bpf_log_at
- 	 * Also, any failure handling from this point onwards must
- 	 * be using bpf_prog_put() given the program is exposed.
- 	 */
--	bpf_prog_kallsyms_add(prog);
- 	perf_event_bpf_event(prog, PERF_BPF_EVENT_PROG_LOAD, 0);
- 	bpf_audit_prog(prog, BPF_AUDIT_LOAD);
+-	if (!prog->aux->jited_linfo || prog->aux->func_idx > prog->aux->func_cnt)
++	if (!prog->aux->jited_linfo ||
++	    (prog->aux->func_idx && prog->aux->func_idx >= prog->aux->func_cnt))
+ 		/* Userspace did not provide linfo */
+ 		return;
  
 -- 
 2.55.0
