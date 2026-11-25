@@ -1,72 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=129.217.128.51
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795620227;
-	b=b+FI0rIelTaiD0bNpAri6NLsQ7bVVL9rfCLeJJRpNy5t1hD+yEH/Zs8yHrMKmYkvC0dc
-	 dyZWuWvsYNKymfiPLLupJky1nbLVmE+JQM/5aY9n49H/syFg8ilj9828kAYafO00m/Gwr
-	 p0KbH1rQJOH15uIFn9oCFaBao4F/m4ZpGaNJRk+IESLfvDOzVoq5CEgFx7bup/MM1JulW
-	 7MzBsUdP1OFDcddZPpqVl7nAlH4FRwTLyf08spcZvn2v8uSPWXubLemOmsBjd0LgMqr3m
-	 nqVEFxxA3eZ3SE0L+zBBYLBe1nm9jeRnLcUnuR/FCkG0a/PEEqzZaAy2SesozBI2+Ag==
+	t=1795620473;
+	b=W+Lx2MuN5uQHJLmvFRgVY9J6g0QjiIBoVAycQzemh0aZP6dvf1DHfOXRAAwz1m0LUupV
+	 LenbzJk0FSNLBJ5CZtYgvXtE5XltEwMYXQeYdd/fC+9Tga1YNwDgM0hNM2rhQ8tcYN2yc
+	 v67roxtm/Oxz16TPoVSRRFn1iauE3COrdI1knb5UCtYGvefFLajHub9GW3/o8MmbsNUgf
+	 MKQJskXeQyWC8ZJdqHML+ixC5VOkF5pVSaktJnoS9R/r2kD7AIGDkfnow5VssjY/0WQoI
+	 27WMkSG0Wu/gfZUP/Ld7/ifEjrt7ltpDgfxqSKaqbKZJpb5VAJl2Q3/TmqyZq1OjuRw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795620227;
-	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
-	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=i8WL8KVOFFwJaUNqpb8Y5QPC+4OxinZ301w/l2clA6k=;
-	b=L1PS9jrKZ094piofFM+kGtnLuRp2dLiRxLx76/E/+Kw9XzgBTEW1fr6lH4UjQRy6wmL2
-	 bsWHMb9nIYj1X190LrwETlCL4s8eN2eU8AnGa1+WGlo3gx+6JS2GikNNENnTcmMR0a/V0
-	 r65dQjDWcIpeElbK9HoKsEEZpJD5wjEBEdiGNNvSenLOjmTdjiCxc7T9JKN2lLS53gRkS
-	 gStFYY2gvlC8Hkbqwf7Jien3U/Lksb5okJy+cXJyPVH35yP4nBU1tvp+ePO8IihGyxgcJ
-	 EhEmMFHQ5Cgg8yD/z2Dp2nF6A7LPD0EMQ3qDncY9W6PlTvvuGlkO/4NeSz9IYXfVioA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795620473;
+	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
+	 In-Reply-To:References:X-sashiko-severity:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=TQMJOKB5egHcGgynmGG4EwUuLrxBDUpZJMqON6XcyvA=;
+	b=IJw3WNArco4bptSiq5jLsedLU/q6LH7m+Isi0o6csT+e7jwcxdReZY1DYHK9kaQjR5cD
+	 S893zhRgEPJCsG8FTrwJ7AhjiMusS48Lve3Q+IQgdUZ/bZFGz4sgA2b+FQUfS3/sTuKes
+	 zVf4pQMUWOQ7XqVnnremNKVpDCUGbibxwQLXiCQ9MhqwLmN/XVgwYjED8vREGXB7TVmDU
+	 yXP3+FBLYvTgxHpYC/i/hcHjbWhczR4FOvm//Awo7SmGpTsgs3IA5TZN9s75y+Xg9663I
+	 qULdHmjfDtjkofw+YxDkUJbmzhkbeIl0AByKQwEGboxl2fN5KLemF9EBmTDX7hbDj6w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=tu-dortmund.de;
-	spf=pass smtp.mailfrom=tu-dortmund.de;
-	dkim=pass header.d=tu-dortmund.de header.i=@tu-dortmund.de header.a=rsa-sha256 header.s=unimail header.b=FPnoMXV9;
-	arc=none smtp.remote-ip=129.217.128.51
-Received: from unimail.uni-dortmund.de (mx1.hrz.uni-dortmund.de [129.217.128.51])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ijdrdMAR;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DE76606A321;
-	Wed, 25 Nov 2026 15:23:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6DE76606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tu-dortmund.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tu-dortmund.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B82BD606A31E;
+	Wed, 25 Nov 2026 15:27:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=tu-dortmund.de header.i=@tu-dortmund.de header.a=rsa-sha256 header.s=unimail header.b=FPnoMXV9
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tu-dortmund.de;
-	s=unimail; t=1795620201;
-	bh=i8WL8KVOFFwJaUNqpb8Y5QPC+4OxinZ301w/l2clA6k=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=FPnoMXV90YdHIuiVRrB5NvAJOaRLZrtwR3WQMGS2T3cQOtnSZylxpMIlYxfEgn/n0
-	 6OFqx1iZxrs3t5pR7BUwjALRyKcnefWnuteKLxqBhsnmB9aFDb0FYAyKW0LHVFC/0O
-	 UuH/DzJw/CniCOyfQXFNriMS+yuspOB97sh8+b+g=
-Received: from simon-Latitude-5450.cni.e-technik.tu-dortmund.de ([129.217.186.207])
-	(authenticated bits=0)
-	by unimail.uni-dortmund.de (8.19.0.2/8.19.0.2) with ESMTPSA id 6APFNERQ004665
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Wed, 25 Nov 2026 16:23:20 +0100 (CET)
-From: Simon Schippers <simon.schippers@tu-dortmund.de>
-To: netdev@vger.kernel.org
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Tim Gebauer <tim.gebauer@tu-dortmund.de>,
-        =?UTF-8?q?Jonas=20K=C3=B6ppeler?= <j.koeppeler@tu-berlin.de>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowangio@gmail.com>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Stanislav Fomichev <sdf@fomichev.me>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Simon Schippers <simon.schippers@tu-dortmund.de>
-Subject: [PATCH net-next 3/3] veth: stop the txq as soon as the ptr_ring is full
-Date: Wed, 25 Nov 2026 16:23:11 +0100
-Message-ID: <20261125152311.805325-4-simon.schippers@tu-dortmund.de>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20261125152311.805325-1-simon.schippers@tu-dortmund.de>
-References: <20261125152311.805325-1-simon.schippers@tu-dortmund.de>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ijdrdMAR
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 291211F000C4;
+	Wed, 25 Nov 2026 15:27:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795620473;
+	bh=TQMJOKB5egHcGgynmGG4EwUuLrxBDUpZJMqON6XcyvA=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=ijdrdMARWt/P79rA/nv7dZGn4nIuZmRVHXrvsJd/KKUvyH/YKVN81Q21S58X0OyKn
+	 +VtdgAu4eTUaN/mnx2oB5zfHvyOVBMQobpiDswecyA98lyaMR4NvwDQajZp4W69MHg
+	 wJcqwbMRVkCQyyUaL89ECAwn0lPhtMpu/VIv5qpHvvzsU/JanDNGW6BHfG+zsXfge7
+	 XHdQv5GB8N99m+2j6jWcE6tPZkhu46lBdN4FF9/Es1Cg66RdHuASowVOC6VOSyutRK
+	 jao7Qf5J7ineiK1N5YgrKcfUD9rw2ki9B01JwgCJNFG1Gq3eS6wn74jHr66eCxsAxd
+	 ZfutpYoiEGAkQ==
+Subject: Re: [PATCH net v3 1/2] net: keep the TCP fixed-ID flags on the header
+ they describe
+From: netdev-bot+sashiko@kernel.org
+To: julius@bairaktaris.de
+Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@kernel.org,
+ kuba@kernel.org, pabeni@redhat.com, willemb@google.com, horms@kernel.org,
+ andrew+netdev@lunn.ch, dsahern@kernel.org, idosch@nvidia.com,
+ ncardwell@google.com, kuniyu@google.com, steffen.klassert@secunet.com,
+ herbert@gondor.apana.org.au, richardbgobert@gmail.com, ecree.xilinx@gmail.com,
+ andy.moreton@amd.com, alex.austin@amd.com, linux-net-drivers@amd.com,
+ saeedm@nvidia.com, tariqt@nvidia.com, mbloch@nvidia.com, leon@kernel.org,
+ linux-rdma@vger.kernel.org, alexei.starovoitov@gmail.com, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
+ martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+ jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
+ john.fastabend@gmail.com, sdf@fomichev.me, izaiahsun@gmail.com,
+ corbet@lwn.net, skhan@linuxfoundation.org, rdunlap@infradead.org,
+ shuah@kernel.org, bpf@vger.kernel.org, ipsec@lists.linux.dev,
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Date: Wed, 25 Nov 2026 15:27:50 +0000
+Message-ID: <179562047069.3135.2008249679354171410@kernel.org>
+In-Reply-To: <7c74b2076dc7dee1d481d39a135e0946d5e04145.1795284858.git.julius@bairaktaris.de>
+References: <7c74b2076dc7dee1d481d39a135e0946d5e04145.1795284858.git.julius@bairaktaris.de>
+X-sashiko-severity: Medium
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -76,104 +76,148 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-veth_xmit() stops the txq only once a produce has failed. The skb is
-then returned with NETDEV_TX_BUSY and requeued by the qdisc. Under a
-flood every refill of the ring after a wake ends this way, with a failed
-produce and a requeue.
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue(s) to consider.
 
-Check under the producer lock whether the produce has filled the ring,
-and stop the txq then, as for NETDEV_TX_BUSY but with the skb sent. The
-next skb waits in the qdisc and is not requeued. NETDEV_TX_BUSY stays
-for a ring that another producer, like XDP redirect, has filled.
+Critical: 0 · High: 0 · Medium: 1 (1) · Low: 0
 
-The stop is ordered as in the NETDEV_TX_BUSY path. The stop bit is set
-before the smp_mb() in __veth_xdp_flush(), which pairs with the
-smp_store_mb() in veth_poll(). Either the producer finds NAPI idle and
-schedules it, or the poll sees the stopped txq and wakes it.
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
 
-Same setup as in the previous patch, an AMD Ryzen 9 9950X with all
-cores on the same CCX at a fixed 4.3 GHz, compared to it:
+- [Medium] In xfrm_output(), the new FIXEDID->OUTER copy only runs for
+  TRANSPORT/BEET mode, but skb->encapsulation = 1 is set for every…
 
-  threaded NAPI     before          after           requeues
-  pktgen            1343008 pps      +0.2 +-0.4%     210594 -> 0
-  iperf3 TCP          33113 Mbit/s   +0.1 +-0.4%       4587 -> 3213
-  iperf3 UDP            363 Mbit/s   +1.2 +-0.6%         14 -> 14
+Pre-existing issues:
+- [Medium] tcp6_gro_complete() (net/ipv6/tcpv6_offload.c:81-102) ignores
+  NAPI_GRO_CB(skb)->ip_fixedid.
 
-iperf3 TCP keeps its requeues, the change is within noise. When the txq
-stops in the middle of a GSO segment list, the rest of the list goes
-back to the qdisc, and each segment counts as a requeue. The few UDP
-requeues show up with every kernel, also without this series.
+--
 
-With softirq NAPI and a single sender the ring does not fill, and the
-only change on that path is the __ptr_ring_check_produce() check.
-iperf3 changes by -0.1% to +0.4% there, with confidence intervals of
-0.4% to 0.9%.
-pktgen is 1.4 +-0.5% slower. The patch also moves the code of net/ by
-16 bytes, as veth is linked before it, and I could not separate the
-two.
+net: keep the TCP fixed-ID flags on the header they describe
 
-With the two iperf3 senders on one queue from the previous patch,
-throughput stays within 1.2% of it. The UDP requeues with threaded NAPI
-drop from 81520 to 48929 per run.
+This patch goes back to SKB_GSO_TCP_FIXEDID describing the innermost IPv4
+header. It replaces SKB_GSO_TCP_FIXEDID_INNER with
+SKB_GSO_TCP_FIXEDID_OUTER for the outermost header of an encapsulated
+packet. The outer flag is cleared where tunnel and BPF paths add or remove
+a header, xfrm_output() sets it for ESP transport and BEET offload, and the
+mlx5 and sfc drivers are converted.
 
-Signed-off-by: Simon Schippers <simon.schippers@tu-dortmund.de>
----
- drivers/net/veth.c | 25 ++++++++++++++++++++++---
- 1 file changed, 22 insertions(+), 3 deletions(-)
+> diff --git a/net/ipv4/tcp_offload.c b/net/ipv4/tcp_offload.c
+> index b84fcd07c7230..da0d8ba70c0cc 100644
+> --- a/net/ipv4/tcp_offload.c
+> +++ b/net/ipv4/tcp_offload.c
 
-diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-index 02ffc7ba59ab2..911da9893e82d 100644
---- a/drivers/net/veth.c
-+++ b/drivers/net/veth.c
-@@ -40,6 +40,11 @@
- #define VETH_XDP_TX_BULK_SIZE	16
- #define VETH_XDP_BATCH		16
- 
-+/* Returned by veth_xdp_rx() when the skb filled the ring. Internal to
-+ * veth, veth_xmit() returns NETDEV_TX_OK for it.
-+ */
-+#define VETH_RING_FULL		0x20
-+
- struct veth_stats {
- 	u64	rx_drops;
- 	/* xdp */
-@@ -312,10 +317,17 @@ static void __veth_xdp_flush(struct veth_rq *rq)
- 
- static int veth_xdp_rx(struct veth_rq *rq, struct sk_buff *skb)
- {
--	if (unlikely(ptr_ring_produce(&rq->xdp_ring, skb)))
--		return NETDEV_TX_BUSY; /* signal qdisc layer */
-+	struct ptr_ring *ring = &rq->xdp_ring;
-+	int ret = NET_RX_SUCCESS; /* same as NETDEV_TX_OK */
- 
--	return NET_RX_SUCCESS; /* same as NETDEV_TX_OK */
-+	spin_lock(&ring->producer_lock);
-+	if (__ptr_ring_produce(ring, skb))
-+		ret = NETDEV_TX_BUSY; /* signal qdisc layer */
-+	else if (__ptr_ring_check_produce(ring) == -ENOSPC)
-+		ret = VETH_RING_FULL;
-+	spin_unlock(&ring->producer_lock);
-+
-+	return ret;
- }
- 
- static int veth_forward_skb(struct net_device *dev, struct sk_buff *skb,
-@@ -388,6 +400,13 @@ static netdev_tx_t veth_xmit(struct sk_buff *skb, struct net_device *dev)
- 		else
- 			__veth_xdp_flush(rq);
- 		break;
-+	case VETH_RING_FULL:
-+		txq = netdev_get_tx_queue(dev, rxq);
-+		if (!qdisc_txq_has_no_queue(txq))
-+			netif_tx_stop_queue(txq);
-+		__veth_xdp_flush(rq);
-+		ret = NETDEV_TX_OK;
-+		break;
- 	case NETDEV_TX_BUSY:
- 		/* If a qdisc is attached to our virtual device, returning
- 		 * NETDEV_TX_BUSY is allowed.
+[ ... ]
+
+> @@ -473,9 +475,10 @@ INDIRECT_CALLABLE_SCOPE int tcp4_gro_complete(struct sk_buff *skb, int thoff)
+>  	th->check = ~tcp_v4_check(skb->len - thoff, iph->saddr,
+>  				  iph->daddr, 0);
+>  
+> -	BUILD_BUG_ON(SKB_GSO_TCP_FIXEDID << 1 != SKB_GSO_TCP_FIXEDID_INNER);
+> +	/* Bit 0 of ip_fixedid is the outermost header, bit 1 the inner one. */
+>  	skb_shinfo(skb)->gso_type |= SKB_GSO_TCPV4 |
+> -			(NAPI_GRO_CB(skb)->ip_fixedid * SKB_GSO_TCP_FIXEDID);
+> +		(((fixedid >> encap) & 1) * SKB_GSO_TCP_FIXEDID) |
+> +		((fixedid & encap) * SKB_GSO_TCP_FIXEDID_OUTER);
+
+[Severity: Medium]
+This is a pre-existing issue and this patch did not introduce it. Does the
+IPv6 counterpart need the same mapping?
+
+Take an IPv4 outer header over an IPv6 inner TCP flow, such as 6in4/SIT or
+VXLAN over IPv4 carrying IPv6. For the outer IPv4 header,
+gro_receive_network_flush() calls inet_gro_flush() with inner=false, which
+records:
+
+include/net/gro.h:inet_gro_flush() {
+    ...
+		NAPI_GRO_CB(p)->ip_fixedid |= 1 << inner;
+    ...
+}
+
+The flow is then merged as fixed-ID. tcp4_gro_complete() now maps that bit
+to SKB_GSO_TCP_FIXEDID_OUTER, but tcp6_gro_complete() never looks at
+ip_fixedid:
+
+net/ipv6/tcpv6_offload.c:tcp6_gro_complete() {
+    ...
+	th->check = ~tcp_v6_check(skb->len - thoff, &iph->saddr,
+				  &iph->daddr, 0);
+	skb_shinfo(skb)->gso_type |= SKB_GSO_TCPV6;
+    ...
+}
+
+So the outermost IPv4 header of such a packet never gets
+SKB_GSO_TCP_FIXEDID_OUTER. When the packet is forwarded and resegmented,
+inet_gso_segment() rewrites the fixed outer IDs as incrementing ones.
+
+Should tcp6_gro_complete() set SKB_GSO_TCP_FIXEDID_OUTER from bit 0 when
+skb->encapsulation is set?
+
+>  
+>  	tcp_gro_complete(skb);
+>  	return 0;
+> diff --git a/net/xfrm/xfrm_output.c b/net/xfrm/xfrm_output.c
+> index f1f612cd7b438..927e1535c47d7 100644
+> --- a/net/xfrm/xfrm_output.c
+> +++ b/net/xfrm/xfrm_output.c
+> @@ -805,6 +805,16 @@ int xfrm_output(struct sock *sk, struct sk_buff *skb)
+>  		xfrm_state_hold(x);
+>  
+>  		xfrm_get_inner_ipproto(skb, x);
+> +		/*
+> +		 * Transport and BEET mode keep the IPv4 header and its ID, so
+> +		 * the header that SKB_GSO_TCP_FIXEDID describes is the outer
+> +		 * one as well.
+> +		 */
+> +		if (!skb->encapsulation &&
+> +		    (x->props.mode == XFRM_MODE_TRANSPORT ||
+> +		     x->props.mode == XFRM_MODE_BEET) &&
+> +		    (skb_shinfo(skb)->gso_type & SKB_GSO_TCP_FIXEDID))
+> +			skb_shinfo(skb)->gso_type |= SKB_GSO_TCP_FIXEDID_OUTER;
+>  		skb->encapsulation = 1;
+>  
+>  		if (skb_is_gso(skb)) {
+
+[Severity: Medium]
+Can a tunnel mode SA still lose the fixed IDs of the packet's only IPv4
+header?
+
+skb->encapsulation = 1 is set for every crypto offloaded SA, but the copy
+to SKB_GSO_TCP_FIXEDID_OUTER is skipped for tunnel mode.
+
+A GSO packet that was decapsulated earlier keeps a stale non-zero
+skb->inner_protocol. inet_gro_complete() sets it for encapsulated GRO, and
+neither iptunnel_pull_offloads() nor skb_scrub_packet() resets it. After
+decap, such a packet has encapsulation=0 and SKB_GSO_TCP_FIXEDID set, and
+SKB_GSO_TCP_FIXEDID_OUTER has been cleared.
+
+If the packet is forwarded into a tunnel mode SA with offload, this check
+just below fires:
+
+			if (skb->inner_protocol && x->props.mode == XFRM_MODE_TUNNEL)
+				return xfrm_output_gso(net, sk, skb);
+
+Then xfrm_output_gso()->skb_gso_segment(skb, 0)->inet_gso_segment() runs at
+encap_level 0, sees skb->encapsulation == 1, and takes the new else branch:
+
+	} else {
+		fixedid = !!(skb_shinfo(skb)->gso_type &
+			     SKB_GSO_TCP_FIXEDID_OUTER);
+	}
+
+That reads 0 for the only IPv4 header, even though SKB_GSO_TCP_FIXEDID is
+the flag that describes it. The segments get incrementing IDs although GRO
+recorded fixed ones.
+
+The baseline code was also wrong here, because it read the stale flag of
+the removed header. Is this a remaining variant of the "forwarded into an
+ESP tunnel mode SA with crypto offload" case that the commit message says
+is fixed?
+
 -- 
-2.43.0
-
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/cover.1795284858.git.julius%40bairaktaris.de
