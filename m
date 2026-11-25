@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.178
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.173
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795577553;
-	b=Yz5aUteCENVoUt4nyqUg341kpB79mfP1jTxoXqBmsmHwluALRsMWlqUNVgqWCUBBTLnL
-	 Luvkc3DXUP5Nj5+SzIvXkMNWYM5BRjJghRVNsSCIgSJEcsto8t3E2q2caL1OvtJRtUXq2
-	 coOfbovPpvmidJKQKWew9Zhpzw85vLeO+ta6sZT78D/5yhbeUTnEWnVCwbaix8nAcRsKa
-	 DOd+e+oagOvMTLCDWmq7k2Crpmi7x/F0ftKVw4QZ++bC+dmzhezKsO6YfTY81OmAlVA/6
-	 moJ80CmEG/BcoGoJPpvHmLXZqnRV84QFLVL/POeJJxVawpn7mDZXKkZ/+rtiGvLN3mA==
+	t=1795577559;
+	b=zDxdhbViSBWJ1Ivdd+J1UD0y+P/H5qLKSq1io9P+R8qPHexGo6oYj+Duwe7c//nMdC7X
+	 c/5/pEhzoJhFhBfSN61Nd+H9bRNmPYbFRfUwW5ijVCXPSntmVccOqSRcmgf8eT40Ga39I
+	 kkT80bVaJYjVBTN8asR6dVaX/K5CLvEDmsD4++wkI6iTaFMNlLHuJheJMibaRHJMi9sC4
+	 MJI+YGc3D9GdKN1Kw4gzRqAzyea/KXLNog3ljrJUnrpvPAvAhdizEpmzlwdssaLCHejOa
+	 t8FuJ34wOlckz/UXtrt3is7XFBfpu+6M0NASoQ+w6Cq3cqiilf237mf+Ocbdv8GpSiw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795577553;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795577559;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=jsGvTT/YacWWQQHA+YDd4OLbVS25lDIoGagd+U7jfsI=;
-	b=xLU0e6edZ4+V0hPWX19nsKln7gfqnpSpVJ9D68V3aZhgEZFB0+7j5q5nGjnrYf5fYvA2
-	 AaNBSAvQFF0Q5wnZnS2Q/TCxgk67UjnSnrEumf1sscRaQcaFtouHovL0aLR9ndLm732ZG
-	 9IrEz6iQ5JGzIxN4DsONX0RP/XIjFjCrMvJVUH7SzbCRAQ/DM1LidrHOeT0I3OkCj+uGK
-	 jJnuq1RyKxLg7wcZcOCsK67cYbDDYwReyAixCsAXTkTGql3CvDbBnxGpTDv0VgtzS+8k0
-	 pscq3em8s6DyZPbw5CTHOBbdUDMfY4KW94GVT+I3smOoiqiuRa5RxTGseQtxjxKNkbg==
+	bh=CBGVKBb/QPPsiMGo1+ZYmcoy9YB7vqr7UdSPjBpsnT0=;
+	b=PrG3vOfYiRDRH7FpGFTwcV+H2/YD+OS6gYIXmevzGLmwHOKRGQlUbwMSLOZirAa/0mez
+	 zbg/sYVI6+3oIqsEspPabZQAk0Jw74MTO9f2Av27OApT7gCGikP7X14UdNwOO5tN9DNP7
+	 wVFGayzDLBYn8tPHpRQs5oe0RWKl+XCYA9yRxl4r25hA8I+2EOdvljK81Y0OrCOOxR5YO
+	 22s5bEPXi+E7PfQF5NzCJwY8vbsWZQgaNAliHzS/rMxJ92GQul4DNM6CvWK1N8E2EFAOB
+	 hCsY22W5C7BuP9JhahF8K41+PMw+06ABJIhLTk4ETinM3zDKHGfY1Qi9EkbdA1ELeLQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=0I8qh0X2;
-	arc=none smtp.remote-ip=209.85.210.178
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=G+UYg6Ey;
+	arc=none smtp.remote-ip=209.85.210.173
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70697606A31E
-	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 03:32:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 70697606A31E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76D4B606A329
+	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 03:32:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 76D4B606A329
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=0I8qh0X2
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-8a4c72951b8so3371061b3a.3
-        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 19:32:33 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=G+UYg6Ey
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-8b6b22be970so2039186b3a.1
+        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 19:32:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795577553; x=1796182353; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1795577559; x=1796182359; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=jsGvTT/YacWWQQHA+YDd4OLbVS25lDIoGagd+U7jfsI=;
-        b=0I8qh0X2cnD186Bn62tvgrc/Dvaq8YAykw6kGMIK0N8rrQhjITNhMtzBrdXbaMdlmi
-         eCD8YoOXP/qqsZW8G/u8Wg4s5mQmhOAXMtSvxFrwB2r9gN5N14ZMwp2fTwepnfoIMmiI
-         /Q0gqOBpjy0fAdifTdpoMesW82nBsNpEIEEEELgNp+3FqKwdUm4y5BzAAm+tvsHkVKzm
-         SOIHiG7wrtJDoTldzt7+ue5QfNzutp6HwhnEI7yu52naIa0+jBZPWMS3/lgW7xWLOa8b
-         keyUqUEydTiz1fCu8rG1nV8ibECgIPlqIHbmR9T9+n+o0SGN2CGrPaeJ03ClgDZ5EoHA
-         xknA==
+        bh=CBGVKBb/QPPsiMGo1+ZYmcoy9YB7vqr7UdSPjBpsnT0=;
+        b=G+UYg6EycpU9TL1Qe8ELJXP5kvLztGOVy0mlIJW43dKUUwVa1mlvox9PfWaCi0ngy7
+         c5xRaFTp/TihsRyACTtKiIC0otH38v53YLSQlF3140ExJkw64cmyBQgjPJFIFdgpRLBU
+         OQKzHTlaKBfZHP+UWllTWwxbJ/sCTMWgJPkWtKaH3JgpJBlBPUczDIgU7h55wwK9vgIO
+         8O6ousiqn5duuu6g7oH57VqEmC3kK/2Bu0w8qdTw9kfCHoxyA7JA8a6oo+WTtwnyUHyQ
+         JzZTg6D3BRAur7HFbOmrqsMbQVjx13i9QwhzLyKD0tMNqJOVw0PE0PhBBW0ZkC0LaRTi
+         chZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795577553; x=1796182353;
+        d=1e100.net; s=20260707; t=1795577559; x=1796182359;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=jsGvTT/YacWWQQHA+YDd4OLbVS25lDIoGagd+U7jfsI=;
-        b=j+wCgS95717LD4lB2+sbX3hPIIFZgjJSVvfTkuh1IkzEMufLqFJDJwyMAviCn0Bbtm
-         rvJ33bIfleaWVtUxzPag9XDvUyvceh/nAIsGG5FQP2wFpiEpIcIDbHA8eanjhI3ZC7iM
-         hpseerzsKiD94YkngQXsuKDVHkB//7vhFJ4Az0w0Lwu3AfPNCf2fhIVxC5zkCxjd6DZE
-         wYEfDX/GjfuxRLeAmwGSh5oDhnSvRtcpoHA7roIWfq91aK4xy7Trwc8ciYVd6LSofbF6
-         ZAuT50MVyhI1FbSxIcQ1NE3oej5Y+7UtiR+NGajfC0Ryqd9cN6bbj66rI9q5fEg2OaoU
-         u/ZA==
-X-Gm-Message-State: APuU4Z+5NStgkqlEHPjlsGmrApWuEDg4Icb5jnAZkVFTGAZyjJ7EqI5z
-	4p+RO8Qrv2a9RzajlsA9sNgyvmVj4T8mwkxS/wFqJHotSAvotdllqeqS2EHmhdzS
-X-Gm-Gg: AZFdTZfDxFVD6rEWFBXs+wlk5uYBz6kZf+Jz2G52wPnvOAH03ZyK4gt0RMUaVDLnMbT
-	nyxMktXVRuDrnD5ZtPGovqSKORRPH5oYbeb4OM71aQwmZ8KQjae6H+dcMbUG5xjd/OMmLUKBSgF
-	A9LN+x2f5w3ILIZyVzxz6fgNnVCA+ovEvS/LmatTM1TOUMcxCVc8Pz6mM5K8LOJWGseRRGR8Ar6
-	T6aa9ThiQGOVO7nrFdtXmFlzdt09+CzSgp+noPWxur0kbdo4rTtHfJ5qS1TKvn41dTxbBoOm0hv
-	PffCDAuqAaczbD0zWnBXo6yxoMztdgavJIyJBWkwhS87B28fIcafvHH0vLRPftBFQ7xUltELC4j
-	RmyPA7SdfEpRyEN0V3jwG+MFZ+FgeYVsGJ2570ynYdA7hH70poVxt8W8GVC9buiTMOd4GrM2clh
-	IJQGoHlS5w5O9QKlnNLBYRLgdKUuU7HO44pApqWk8vRT/Wy+84mDyNWuq5ONHGEeKXKVczRbMy6
-	s2cyP59i5NvwtW4takpwJVrPt8mQe7VXQhMcpb/R6lNQuNOTEcRdirFi8UJ98Dg5r5uQXjppv4S
-	wlWpsz2Sgt0+P64as7ElI2FeCxEahhWIJIny4XlzBybBk7Wpmu6cNg3noYixDNFMyp4jfVJtKIh
-	EwqOT1TsnG7iyZIFpuwxHvmg7SN4K9OpUlU/FReGPnKdqGlBHfxlwDUh9UqKN1xVKjc+awH/pTQ
+        bh=CBGVKBb/QPPsiMGo1+ZYmcoy9YB7vqr7UdSPjBpsnT0=;
+        b=dS+GvR3tMS62nFuw8TdTor+qqMGE7mRPacScHBoJ3Utdv4DEB4qvY5NwXo4s/4SQfQ
+         wzEQyn0gN1JpE3Um3BSNWKsxdVxnhrZLAHApP/w120VbiSIFORBa757i/y1/ysBzX+uP
+         hQxhbFHI192WVZ5ulqL8pRt+nBt/nLfTup3FpZqdQblCW8UNZZE+28JwOt9E3EsUVd9o
+         ny6LTnjzZyzktooU77FZItStcjpn99o/Ofvz/NNk6VM2ZT8d9fNWVDKn1laRzHG6GbRr
+         JVNM61D399sML+UWurq5UVVCGA4BnSbcb3Bv9BSB7jphCopwkYqsG/mIx/o5Jhev2T0u
+         m43w==
+X-Gm-Message-State: APuU4Z9mTM8Rd7851/MnWdGW6pjF/xFYuj084DoNKXHMAf+O6DB18kFS
+	cC4SIX5mZaPQ7NlMPXrEELoKHqxMKjZOr02R8bYZRTVxG2m5LLOuFylfGv7wf/Om
+X-Gm-Gg: AZFdTZdvoL5mHj2c5FyrYay4P7XoPHQEFUbpcFfEAM26rkEapNwlZKVpUrdp+Tlss2h
+	D8M88eI9TLQuRFrWVY0Ort/bnnRPJ7JBOgM4vq+V+rTLsWq1EbOx6j40AqbV8R7aeT+oxM3aLuZ
+	Sih3gM1Z52U1G2/R5UbKYj0EY0K0dBnIfo24lPqb8fhOYnc6ga1F4mo5BOxfkGPGQbshZ2PesHJ
+	ONSRosNDusUhGERLbpnOgvDyS6+XYXQXGE4WNVc9kgv2M6WlMP3Rcin7eehM184PqxV5R7ITig8
+	gaSLgl7+whvh4ZnloAFMuOTnF6huTmtnv4t0XtHG6lzSNcNDvGpJo6EC5lJ8ZDKvZ+yllhgbM3F
+	K5fzeMhSgT5DJnHtVNSfeZNfxD10Uun+b/WEjTxnPXkSiB2/xwdEb/xrnX+tRhPDpDYylvToNgZ
+	nDofQD87eHgDZ3AUTvUzIjyaWT4IOVnUAcpbn+gzpp5w+rfXrYjvBO+pdXnXeYTte/Ix7iowiwL
+	zIm3NCZTqaZQfdTXssML2iwx1wv0odkPkLLBvYDTPMzXtYQxqSsVIddDYbl8rg473BgDSyxgN7I
+	3PDt1B6TxSjgaAVMaKi6NseZaYY08DQZee6Pa+Gph1wc8VtOMg9NSG41Kse6x+BKpOWFYNGdUW2
+	cGBGCvAfSXgwbdbVs0K45nsZl1PpGSb1XBRzsCnrAVs4erHq6W/+2OywPgDggpihj03TLh9wfxw
 	==
-X-Received: by 2002:a05:6a00:4391:b0:899:5183:acdb with SMTP id d2e1a72fcca58-8c8796a7efemr13670715b3a.1.1795577552858;
-        Tue, 24 Nov 2026 19:32:32 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.244])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8c872e457d1sm7778159b3a.30.2026.11.24.19.32.32
+X-Received: by 2002:a05:6a00:44c7:b0:886:5938:cdd4 with SMTP id d2e1a72fcca58-8c87baccf21mr15013981b3a.19.1795577558584;
+        Tue, 24 Nov 2026 19:32:38 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.245])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8c872e45eccsm8128847b3a.31.2026.11.24.19.32.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Nov 2026 19:32:32 -0800 (PST)
+        Tue, 24 Nov 2026 19:32:38 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf 29/47] bpf: Require CAP_PERFMON for dumps of xlated insns
-Date: Wed, 25 Nov 2026 03:29:20 +0000
-Message-ID: <20261125032938.670542-30-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf 30/47] bpf: Zero bpf_list_head in copies of map values
+Date: Wed, 25 Nov 2026 03:29:21 +0000
+Message-ID: <20261125032938.670542-31-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261125032938.670542-1-alexei.starovoitov@gmail.com>
 References: <20261125032938.670542-1-alexei.starovoitov@gmail.com>
@@ -104,32 +104,39 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-The verifier puts addresses of the kernel to insns: for ksyms, inlined
-helpers and hidden arguments. The dump of xlated insns hides the ones of
-maps and calls only, the others look like constants by then. Give no
-dump, as for a blinded program, to who has no CAP_PERFMON and can't read
-kallsyms.
+Lookups from user space copy the value to a buffer and init special
+fields there. An empty list_head points to itself. The caller gets the
+address of the buffer.
 
-Fixes: 2c78ee898d8f ("bpf: Implement CAP_BPF")
+Fill the fields with zeros. It's what a new element of a map has.
+bpf_refcount in a value reads as 0.
+
+Fixes: 3e81740a9062 ("bpf: Centralize btf_field-specific initialization logic")
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/syscall.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ include/linux/bpf.h | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index e82ae48c0bc0..7e1085d6a67e 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -5261,7 +5261,8 @@ static int bpf_prog_get_info_by_fd(struct file *file,
- 		struct bpf_insn *insns_sanitized;
- 		bool fault;
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 448431c4cd2d..5d4b0e5d56dc 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -566,7 +566,14 @@ static inline void bpf_obj_init(const struct btf_record *rec, void *obj)
+  */
+ static inline void check_and_init_map_value(struct bpf_map *map, void *dst)
+ {
+-	bpf_obj_init(map->record, dst);
++	const struct btf_record *rec = map->record;
++	int i;
++
++	if (IS_ERR_OR_NULL(rec))
++		return;
++	/* Not bpf_obj_init(): an empty list_head has the address of 'dst' */
++	for (i = 0; i < rec->cnt; i++)
++		memset(dst + rec->fields[i].offset, 0, rec->fields[i].size);
+ }
  
--		if (!prog->blinded || bpf_dump_raw_ok(file->f_cred)) {
-+		/* The verifier puts addresses to ld_imm64 and mov insns */
-+		if (bpf_dump_raw_ok(file->f_cred) || (!prog->blinded && perfmon_capable())) {
- 			insns_sanitized = bpf_insn_prepare_dump(prog, file->f_cred);
- 			if (!insns_sanitized)
- 				return -ENOMEM;
+ /* memcpy that is used with 8-byte aligned pointers, power-of-8 size and
 -- 
 2.55.0
 
