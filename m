@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.182
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795577640;
-	b=z1YoEXF/GlkIoi76LNOVY0l2q2PEKE5m4UwFho7yWJoukRytL2SyGG2AXAk51mRS0eVd
-	 Pe63FcaDb00578B99mWU1oikdFo4NmfU7cLbGsuzUXah3TCDxNa6ncmObwxzOHW7KoAEu
-	 Qqpi5TwRJgsLEym5hLVp2dmsEEWE7Ih0bcf5mzFt/Euh4DZaCFNDq9rsfrtGJjsgwRUN0
-	 nVT7Q2eXps85Z9ZHrvXkATnmsVVYxKf45Mzhx9GfYhoOPBI+2ZfV1oSt9aOLby4/U/37o
-	 1XfYlv+6xq6Zvv/3mleI/hMWMZZb38ZFnG1NyMu6EACx2+SxCOTUFpuHGX8j0s6NgfQ==
+	t=1795577646;
+	b=L5bcak8pvTIFSJ1evE/AJR6A3cmWo4CGY37mdT80wIVwcNaLV6jx5o6kHmvq3/SEIcEp
+	 LpYHamaf0mAm4lxxZXt3i7ZyRoSutFqQPQqLPketMYBbPQ3iu9jZyU2FgYsvsO+5d6TjL
+	 co7FIZMtLTonkTMTIsVJYj6YP8E0+GyMc6xoRgY1cNAX43yPQZElBxpryq/qDCVnv8aDm
+	 +IapGJd92IicDueTIpIQy5Te2A9DNynC8UR8/Owt3eir8EUxbzlnZR5sUpvo81IDyx6IH
+	 m5pv90JRJdX4Pxkpf+MnD+DwKNbx6ckDGyRReG8Kxrln7tlrbJUBuDtAl5+2L6R/YyQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795577640;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795577646;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=3mfZGr+6bmCifHnk7QkuqcoaDhxtYV5y0WVJUG+A1WQ=;
-	b=Mz50WbtD8n6re0nsPSDzdAp1YQG4GMTr+kODhGKHQ0gTbjDQnqS/SqE1G5/9TG5wrj5M
-	 p/A0TAnLD/1Zt7V1I98sD7LvUD5ltgU1JUOqckrkvjZB0fsxtXCQCUI9Qvc02dRaDpkaY
-	 VmZD/R0oXN/CruguH/BiDFZNn56NOh58T49H3Tdqx3Jw2gpdqGpKoRBtf4wnk9V/MZWeP
-	 jt8ZXtqm/gBNA+aVwzAWACCIKG7otR6Q+zoMmsX+rVXzX6J6hQfiYk1iwzB6wGfTx4SFa
-	 giUrDPRKFx143CB+vy/GY9bryRqVQcu3yhYhSkrYpaH0fQYKnQKVoCRvq2wE+3PTuoA==
+	bh=1zcodIsOsWvRz0EdhH18XfWhfm5oRn7Zc1+7JApbH0I=;
+	b=vv5Sj5u6Jxrcu9S1l+OB6t6NwgWYaOgif7c6nFXId4zopQA3/LD+IqVG8kLy5/YxITOK
+	 RfXx/bcdK/u0seHyYiGLccvTaCqxrRF3WRRRbgmfRtIVpAmIphhrtpJHujHOYmSAsm0dr
+	 v8w1ZwkjUNagh3mBQLFq99EIjxT+wFHiIlE/U+/anpi8Q+IwQ4Gg4bQ5XXC+EhLlyke3L
+	 tUjKmXiBZEI6sLEMUUFEyxSUO48uySHCzjgW0JRqAgwdlQz60fGSu8MeKlGl2FtfL5QKc
+	 7o1nLsw0b83GBnscCeobinQlAMUEOBnJ01+rRo6WxjfSg5jCIJg4D0e0mBsOLxEZD2A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=HenepCak;
-	arc=none smtp.remote-ip=209.85.214.178
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=tZQq2AgN;
+	arc=none smtp.remote-ip=209.85.210.182
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 514ED606A31E
-	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 03:34:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 514ED606A31E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0E99606A31E
+	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 03:34:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E0E99606A31E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=HenepCak
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2f0918f9e6cso12421025ad.1
-        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 19:34:00 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=tZQq2AgN
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-8c6c06b3321so4123186b3a.3
+        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 19:34:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795577640; x=1796182440; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1795577645; x=1796182445; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=3mfZGr+6bmCifHnk7QkuqcoaDhxtYV5y0WVJUG+A1WQ=;
-        b=HenepCakaxccoYcT1rqhlCFIg5jUT4yrMgNuOad5wDk2toXJQXmZsacNg8k3gmv7yq
-         irnKGV/gNNhPm7Q7xkBnXYo0A3oNB0ts4n+93pb+dEmIE8uM1zXHdNGpUK5lG52kPtK9
-         9RD3xMzVUog8+JDgVv/YB0nr5qSBz1iXETNVes5cn5Rt9AM1LkstQFQbDGArTAmHPgl+
-         0MvCJ05KWQKbRe2oHgzdjPT7Y3TwFLEStq+DG+pancDtFSP8oISxqkmHLzRqGpR1O+Tu
-         92MIL34qQShAQlJkmejTY2r0mbeEgrJQmfJHFaTkgKiRmLu51OemP/6ezE64MpsOokRj
-         J4bQ==
+        bh=1zcodIsOsWvRz0EdhH18XfWhfm5oRn7Zc1+7JApbH0I=;
+        b=tZQq2AgNFQ/RzJm4jUSO/3Uke5KP6v5Fc1bXnCVV0VpqV9EbcFatN8O+afykYfyX6V
+         b+Dq7rX/WdOX12E9RQd+GWgJvmR5EU9CBkmpVF0seQL3ANr07gkFt91aXNciILJ0cSz1
+         IX4y78XH3bK8gjDgqltG9oVSY2z1RYMEOFVeG02u7b0eflzYMTq0S3cUturYcdsfQPed
+         5qUmaIdI6MU544oOV8lIDi1yPTpL4VchkBHRMPTwcqA1lWzlNGEuR45qxJvyjn0+ZlSg
+         FgEPfLjB4GjwYX1/U8sVMpwGJIFs0f9XtvMQa7E4KiQzCOxzPiEuTzqBbGQrblH6CdzF
+         oESw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795577640; x=1796182440;
+        d=1e100.net; s=20260707; t=1795577645; x=1796182445;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=3mfZGr+6bmCifHnk7QkuqcoaDhxtYV5y0WVJUG+A1WQ=;
-        b=2X1TGkPo123n1JRYZUbGPdON7hXS46SqQoWohMs6m2xEkLbeDq3C7ijvvEnwOjOmKt
-         15qJdyzMBY5Zwi8zesE70IUlIuZ1uB9kbyKNiyFLJHmlCodOwCj5n/BfOfqy+EN+3IB7
-         FqAQPIGF3i8jQ9ce+NVJR7D+h40ERpQUustYoz75F6HQCYIysKhbFGnYl+mdx3S0krYU
-         5EOJKRml1/6nRu/V+NrHcC3qExDgMzB3/pVC2MgXtL5ehqQRDbNBosdN9Bl6AmoL5MZr
-         T0SHYFj5TetyraJvZXAcBGBXSX0+0lT86DPf6G4ef/U+gokDci/+gSFZp/XavmWLyZND
-         hhAA==
-X-Gm-Message-State: APuU4Z/PBGWYQLh5W5ABQqp+7pn28M1B7nuLj6eDarU6vzBIT8ABuJnN
-	7HAmceVj/IDebq08jsMbrqsgG9EnK6R35a6pFcP0Y9XWXEoERQ7slitnbK+BWEuE
-X-Gm-Gg: AZFdTZfbVbr9AwDeJ8z0vL0X7nVxRyPy9YYhix9jQBPQTWLuWRraLl1iWRvKWqyLUvC
-	YWUoe5isOAbzVPuNDBMnrICAbXOP+Mx+otqg00sLimWVsGxOXf1zZsEInjKNe/c0m9reqM5Ioch
-	/rZhQRmSt8yGnZg0wMpIbmV6elD/qlL34OnTLeDlflw+NhaKx38M12gF+CvYDuREwcPtIccl1Oq
-	QezcAd+labIFfFG+LujVd4YGSUm/pcRA0BGK+f1xx/0TtBQz/3iz9NKM5//Vsqr7u6BBUD2I+br
-	QMoJ0JTzsX4LyuPe+oXXGCrAVJUadTR02iWXZ6pmp6xniV+zZzms0wsCx7hn+lGrNDSD5oBtzxK
-	ca9peJQPUO2etfmFo6tTRaIMAeM4Hy+GaZBYfBrMMVvakX//98cMEFZgZ2N+Affpya2Jw+4f9ld
-	jgkmXKL81H8Gp8WPvLX+AGOUl/sFBvvrDgtWiUFFWW+zmmaQjhP68buNwdthSYmfzejq2gfzS89
-	t8+Ys+LW0/3DeEtwQV3qQMTuXKWl3Nb+oC1x9yRP4JWY/gUKDt1s3A9DCJ5zGo6pKmnz/udt6GF
-	hIVCWrAqkJIRItU4nePcA4KF1cb/cYyOVkpS4J/h56JC5q9K/MO6xeaq/9Kyq8PNlOo/Ra8jexC
-	KyMU+EBvLKeihv86fyvwK+dutzakZIybqpa/bDmpll4Z2ppYfQl/Rh8VylpT5c2aKIEnCIqwHvA
+        bh=1zcodIsOsWvRz0EdhH18XfWhfm5oRn7Zc1+7JApbH0I=;
+        b=RERZVXHNyvDuEz6OQIhMrzBlPKPL7/qA8/+EQfXxMQv2CePa+7BvBRuvIZdKRsA0px
+         +SLVcDJonHAb/xe0sbNQNmOfhCkXXwlkJEVeL3LKzVUbRNuae2dB4W9UHCZXaPKpk7VM
+         xkIrVK2lvcWpgJuApo770TM2GWPiW2Sg9BptQWzGGD1YpsRWA5c2xZtt6ikVo3nP1sLP
+         FAqRJQOM1I+F83jR8/r/JkKKipcRrG/MmLhOqnlHVmSWFFv7CZiR1zqsIJ0cdAwz3JhJ
+         tCs+76qnvA9q76d+818vKVh1iduEf+rNkPaiC0WxWXF2jqc8/OD2armg+99BBLj+12TV
+         DIbw==
+X-Gm-Message-State: APuU4Z/+s4yCfhZmhGMf/gWeajyc5jqJc3uaFf4QJSWEAep4n+1DYuvl
+	98XI631xfIpS/nVkZHkFHG0ogJOixvYGeSd5gUDZtVCCsu7hp2iQHU82YuEOyIuT
+X-Gm-Gg: AZFdTZd9CtbwVYdS05ePUXafW9+KKMizh1WuNiM2353hEkcOrnY08C9VIAo4GUgeuYx
+	8h6cXIvGK7YyctYV65a4jAXfiKGonrXtz+w3HRIBse/MG1wkt2oUEB7K+xpiCNmywNj0sSb5oj0
+	ywg7cMaHTYQxDLlzb8r7E1g+ALES62LPJuttzP3H3bYnsUbUX1y+YA67ZAe6t9lVe6VVkJ6YLf7
+	yI0G9LfchhU7Ng8ERcLjdIfK4KwDi5Wk0pisvKZD7KMYyOjUqMciMGD2jECgDeKzfAqHTYFNgEq
+	TA7+LaiBRb6t/g0/6VTALwFi0St4kcNBNsw9tp8KnJnHqDmS5Olmoh1bu3GILNKnfhRutrz7abZ
+	dARxjVbj0/+JTf4IQzPhmtUYrdMxmMQnBg2ndNNXFdx8yuEb3Kr2UEHOuKZJ57Nty2Cen2rtrmB
+	eyZUdoFDzZZxgQrNZ+HCxfl5JDZT1mdgWJDAVlojyBKNl3SdCODnUZ8LuO3+QllOKFq0svP1jZ4
+	by/WG6kXMZvySQBE1WSR6OZJbP2b0NZmT9Usw/UWdGoCp8EyqRTLxqasBqEgdX6fI3Jtbi5gSDf
+	RmV0GQvW0A2+GcHlT79S/YLnb5Xh+dTdepRDskBh3o8pS+uItJaN6IKtN99kfKtUswBlPbHdNjH
+	sgWhQLVwCRqkfSI2rDKUWa7RpskyqooB6pXVqOcv8y86DeIpm9mV84mcgWdAB3jCye+3tNUvJkQ
 	==
-X-Received: by 2002:a17:902:fc84:b0:2f0:3c38:914f with SMTP id d9443c01a7336-2f03f2363aemr154601735ad.45.1795577639483;
-        Tue, 24 Nov 2026 19:33:59 -0800 (PST)
+X-Received: by 2002:a05:6a00:4f89:b0:89e:3ccd:b3c7 with SMTP id d2e1a72fcca58-8c87c8657cfmr13816717b3a.33.1795577645234;
+        Tue, 24 Nov 2026 19:34:05 -0800 (PST)
 Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.253])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2f03f0c1aa3sm76921465ad.21.2026.11.24.19.33.59
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8c872e4c43bsm7938071b3a.26.2026.11.24.19.34.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Nov 2026 19:33:59 -0800 (PST)
+        Tue, 24 Nov 2026 19:34:04 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf 44/47] bpf, sockmap: Keep the parser and sk_data_ready in sync
-Date: Wed, 25 Nov 2026 03:29:35 +0000
-Message-ID: <20261125032938.670542-45-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf 45/47] bpf, sockmap: Hold the psock of the work in sk_psock_backlog()
+Date: Wed, 25 Nov 2026 03:29:36 +0000
+Message-ID: <20261125032938.670542-46-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261125032938.670542-1-alexei.starovoitov@gmail.com>
 References: <20261125032938.670542-1-alexei.starovoitov@gmail.com>
@@ -104,84 +104,32 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-sk_psock_strp_data_ready() takes the psock that the socket has at the
-call. An update from a program does not wait for the owner of the
-socket, so that is not always the psock that has set the callback, and
-it may have no parser. strp_data_ready() dereferences a NULL strp->sk
-then. Look at SK_PSOCK_RX_STRP_ENABLED, it is set under
-sk_callback_lock. The event is dropped, as it is when the socket has no
-psock.
+The socket can leave its map and come back after the test of
+SK_PSOCK_TX_ENABLED. sk_psock_get() takes a reference to the new psock
+then, and the work puts the old one that has none left. The new one and
+its socket are never freed.
 
-A socket can be in a map with a verdict program and not have it, the
-program was attached after the update. Another map can start the parser
-then. The delete from the first map restores sk_data_ready and nobody
-stops the parser:
+Take the reference that is put.
 
-  WARNING: net/strparser/strparser.c:451 at strp_done+0xef/0x130
-
-Stop the parser when its callback goes away. The psock can outlive the
-stop, and a later update must not run strp_init() on works that are
-still pending. Start the stopped parser again instead.
-
-Fixes: 0126240f448d ("bpf: sockmap: Allow update from BPF")
-Fixes: ef5659280eb1 ("bpf, sockmap: Allow skipping sk_skb parser program")
+Fixes: 8259eb0e06d8 ("bpf, sockmap: Avoid using sk_socket after free when sending")
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- net/core/skmsg.c    | 12 +++++++++---
- net/core/sock_map.c |  3 ++-
- 2 files changed, 11 insertions(+), 4 deletions(-)
+ net/core/skmsg.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-index 8a3b8536c0c2..1a0029f276e2 100644
+index 1a0029f276e2..005e09121f00 100644
 --- a/net/core/skmsg.c
 +++ b/net/core/skmsg.c
-@@ -1149,7 +1149,9 @@ static void sk_psock_strp_data_ready(struct sock *sk)
- 	psock = sk_psock(sk);
- 	if (likely(psock)) {
- 		read_lock_bh(&sk->sk_callback_lock);
--		strp_data_ready(&psock->strp);
-+		/* This psock may be not the one that has set the callback */
-+		if (likely(sk_psock_test_state(psock, SK_PSOCK_RX_STRP_ENABLED)))
-+			strp_data_ready(&psock->strp);
- 		read_unlock_bh(&sk->sk_callback_lock);
- 	}
- 	rcu_read_unlock();
-@@ -1157,7 +1159,7 @@ static void sk_psock_strp_data_ready(struct sock *sk)
- 
- int sk_psock_init_strp(struct sock *sk, struct sk_psock *psock)
- {
--	int ret;
-+	int ret = 0;
- 
- 	static const struct strp_callbacks cb = {
- 		.rcv_msg	= sk_psock_strp_read,
-@@ -1165,7 +1167,11 @@ int sk_psock_init_strp(struct sock *sk, struct sk_psock *psock)
- 		.parse_msg	= sk_psock_strp_parse,
- 	};
- 
--	ret = strp_init(&psock->strp, sk, &cb);
-+	/* A stopped parser keeps its works and its skb until strp_done() */
-+	if (sk_psock_test_state(psock, SK_PSOCK_RX_STRP_ENABLED))
-+		psock->strp.stopped = 0;
-+	else
-+		ret = strp_init(&psock->strp, sk, &cb);
- 	if (!ret)
- 		sk_psock_set_state(psock, SK_PSOCK_RX_STRP_ENABLED);
- 
-diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-index 0d7a8d9405d1..ac62174e8e01 100644
---- a/net/core/sock_map.c
-+++ b/net/core/sock_map.c
-@@ -169,7 +169,8 @@ static void sock_map_del_link(struct sock *sk,
- 
- 	write_lock_bh(&sk->sk_callback_lock);
- 	if (psock->saved_data_ready) {
--		if (strp_stop)
-+		/* The parser can be from another map, it loses sk_data_ready too */
-+		if (strp_stop || psock->progs.stream_parser)
- 			sk_psock_stop_strp(sk, psock);
- 		if (verdict_stop)
- 			sk_psock_stop_verdict(sk, psock);
+@@ -694,7 +694,7 @@ static void sk_psock_backlog(struct work_struct *work)
+ 	 * before sk_socket freed. If refcnt increment fails, it indicates
+ 	 * sock_map_close() completed with sk_socket potentially already freed.
+ 	 */
+-	if (!sk_psock_get(psock->sk))
++	if (!refcount_inc_not_zero(&psock->refcnt))
+ 		return;
+ 	mutex_lock(&psock->work_mutex);
+ 	while ((skb = skb_peek(&psock->ingress_skb))) {
 -- 
 2.55.0
 
