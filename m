@@ -1,118 +1,128 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.54
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.173
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795631514;
-	b=WcM6RJB3pIatFFnP0m0iZBvGHK1sDz/SpFkuIvWqKc3+cNJsrtk5WBS2enhniT1xhzVf
-	 7GH+e3fcX2ROblop4Pw+jdmA6WLkJP/szC3LvAWMhloHt+sh6VJELPldVdl8eYnUjXDXX
-	 tWSTeEweKdnsFpNXg28+YhnLHA8f06+KLgX/kgzHAsnR8IngfUrj81iVHfvMp/0uozLXs
-	 HaVomzMe9h+tHfdDpNltn0820tSJn/sNWiAiX33TSBVa0XTPFZWSPGuUJ7YN5EySSzKK9
-	 aCnjEja/jOjGMqVHa/LrWZNESNMujTkeKgab6NbXFSSOv4NMcR+8RsWZtYlOuPKXC3Q==
+	t=1795633013;
+	b=e2CLFq0oMwsCVRtaepg1+tSIZtBmm2lGWuBsI2Pc+OA1AO2q7t+3TsNXPaaLFkwFJBbP
+	 Rp9K4S7i95HFwfSjSWAm7ytao5Cn/tBdoanwfTKN/Z2aeYXfyISoXWvjZXNkmtCeq9LOO
+	 onUkRmtrE8UZvJh7iB+MghPAyLtuUHjrxS6obGDjacYeWLmCi+fuDIU2aMucSVt0cVl4t
+	 R+mq4lmU+lzgJGdS6OvkmkWWQced/iw12bSevfPa6+WgiZJrUgOQfrEb6oADnTkgf1BSi
+	 WE+ZaJIJZCgxaQozfqHVq7ZnjAVb2zlCV3vBCXzsyxcy2wBqS6E4+g07D7BPjHM+5XQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795631514;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795633013;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=c9NWxL0URY5wSNoGWrryAkeMpSu11Af5bqDWyaekRIQ=;
-	b=XqKxQexB0Fl1ewbyVwT8FB3y5SVLyITNxJfINjgu8koLT/S0ZhRYInSUVSeAnlrjdj5f
-	 +8kB4jOf5BfJKItbRanI7tDvZmoPp3tw2QDbVWmWZKxabwW0CDZ2Yxs8vgnSFWnEsLrvF
-	 Z3QvPGJHLkDbVTOxDLKNyzJ5wKom5ErhagvlS3zjrCloPjrloEvTy5CLNtiT8ex3ADYo+
-	 6L+guF089qL+K1LIoVgvNbyD7T6/C2E/C90c5ka3hWAhFHkKF6lTwqvqFCYzL9mHAP3il
-	 lGpcQ5opW18NNZVVnOtCbI2fPT6qzFpFtkq1gvtxjWs3b79zgBGwYQzwge/Tj9hMgdw==
+	 Date:From:To:Cc:Subject:Message-ID:Mail-Followup-To:References:
+	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=x2h3D7iH3Wc1HTtPjxPO82bLSMmVOqCjIHCRJWs8yZY=;
+	b=0zm+BH8E7a+EgB0zssj12VZ+GzFUtRO7CjP29D8aBSLCC+ugNYBm2FzfmJO/bpmZbhwt
+	 oN4KMdOPMZlW7EEMGOFe/hgDryoIi9ROnGIDSNdZossoqF4rPmciAu1WUuc6ANGMvftbI
+	 O3Q5e3O4mHnm87JAsMJaQnNgS9drXtD5/rvxwl4Lppq1cHihDJ+SSEwDVxKz0voPJ/PGs
+	 BNGgEItc4/gOYFT+UM3moziFFBohBmaOCC7aLDHCyLsCaaSqtjOnQNn0kQzRFBh0XIJgK
+	 3bvTdly3BkKG9q9TEKLf8hPFz8GxnKpFzEFvseHVEZjxu1e40DdlOSFw1A9LukGTjrQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=cloudflare.com;
-	spf=pass smtp.mailfrom=cloudflare.com;
-	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=aw1a9JAb;
-	arc=none smtp.remote-ip=209.85.218.54
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+	dmarc=none header.from=dama.to;
+	spf=none smtp.mailfrom=dama.to;
+	dkim=pass header.d=dama-to.20260707.gappssmtp.com header.i=@dama-to.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=b5Wmhyhn;
+	arc=none smtp.remote-ip=209.85.214.173
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2CB4606A32C
-	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 18:31:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C2CB4606A32C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C133606A326
+	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 18:56:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2C133606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=dama.to
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=aw1a9JAb
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-c4203bbb1e9so1025284466b.3
-        for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 10:31:53 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=dama-to.20260707.gappssmtp.com header.i=@dama-to.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=b5Wmhyhn
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2f0426a65e0so38997725ad.3
+        for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 10:56:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1795631512; x=1796236312; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=c9NWxL0URY5wSNoGWrryAkeMpSu11Af5bqDWyaekRIQ=;
-        b=aw1a9JAbqZNeXN/uQOFkv/A5Bp+ErDRYSZtNb+3O8jd8/FYFaaZW5YyhqWuY9PmP6Z
-         NOXKeasRmYrqB0agWOj1PHJf1AFONdaA6PHNlGtTMCqzQ0j1BJUSwGVLag4jWrh40thr
-         Mcmv4LYbb1Nq5MSMMZV58sWSrs8WbV9oZMBQPVowkcRz1GtDNjt6Ss/XZ+ximZ8UIb+I
-         BsO/7nwIuaJgLegTqTdtUdBFTtbf+IUgLkBRFcZW1/x5pn2GiksScU8LUGBCwCR/mt+i
-         d2R1MYTGeSW3SdW36cHEuhzrCAmx7qO4apSZubpwbl3ncOnAET+apmjFCVKf1wJSZR6K
-         At8w==
+        d=dama-to.20260707.gappssmtp.com; s=20260707; t=1795633012; x=1796237812; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:mail-followup-to:message-id:subject:cc:to:from:date:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=x2h3D7iH3Wc1HTtPjxPO82bLSMmVOqCjIHCRJWs8yZY=;
+        b=b5WmhyhnSs8usJCaJ7KbKAhmll/C/7YWMVAQRARG7p5UNbK6itmqgFoatTQX5p/Iq1
+         KoAKn3SnqD2uIElQ6be6THf6gL4V+4jboRwBsLXWZY7YTMHd5KX7QXBzlkfuOyVRAi55
+         1H0GMMVtlzh2jMYKU3X2WTWt7moR122iHeUE4tBA2NvhhmNnjeQ3e4YIaLfgxgC25P2u
+         rC8O/JJZYsmAYoUJ2fo61Puyx1KbesMy+A7Vf1f6OMwfWeD0IcnO45eS5/C7etAWUGRn
+         g/RmSddNhVJcPjfNwVYs2jc7RG/tw3ph+62jKnCom0D/aSe9jEnzFmF/fHlGyQdanihT
+         2cKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795631512; x=1796236312;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=c9NWxL0URY5wSNoGWrryAkeMpSu11Af5bqDWyaekRIQ=;
-        b=KYgeYG7gKiUKDbVNS+ur/uCSFwOrCU2ft0QOA67K0KMIkzjTP3d8+4NPGNWJHTjvaR
-         C0azWuuCEsdAByuYzi4caMDH/UTzrKVgD/qF5Mx5nyR86DPw6sxO7dZT5i48yXEwRbEO
-         xhyt2K0G7IVejy1/ELih+j4PzS2te2EyKihRrhqAnOmHXhFtUZ1cLiRK6VIcpGyYP8Uy
-         8HKSMhWtlazyZEA2e/G2Mm3O5up2zQ4JnInFdBTG+coOV5dwvh7K3ttk4wuZyKCe35no
-         Pu/2uWjvF8sqetqlrOE7BLIdPBTv3Tc19csGMkZWGKjB2395uyfXB5SFKHu2FKNeO5eG
-         ShWg==
-X-Forwarded-Encrypted: i=1; AL+hErHsg+L4tvs1NdZ90klg01ix/U9nbl4g180V4tiiwN69VEnq1PIdW1MWkXW0dngb2BibvN0=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8NF29P0KWO/2gNnUQmO4k/seyv+oflg0cZIYQIT+RHR4DX7xAa
-	9OYd3Bjb3GGW+6CFG5HLVnDfRW/V4+kzIhePyGVDwESG8VJ26mjCRTZQj4BM2oAbGQI=
-X-Gm-Gg: AZFdTZeGm1cvMkubIdv2S/iHBB2guw56LaQF+42zj5l6HzlGnP4DhDKtacAIvwkh0Km
-	v9fJ6FILORgtIvUCEqlgEtvbadrHZ3KVK7WQ7Ybq1j2oXFWgZE+WKcI3/0BihQSBK1MeKu2AKsn
-	XLqodEQ/SUrKZ7YnQ/Fq7asVvLVVePO7wUD5JZNsf0+qP68k6oBUqJh08kjudtFkt0eQG3Pq57f
-	ma/cQrJT2rdsHxMWXvuEkCTFP/uNxCfgQCLNfHCaPBAGEwqete9KGduc5W+tgPXjztvbalr2gJv
-	r7e9A2iOv2TH2xXVaDeHz+2KKCYzve02kZhZByBLC+WDH6Kfkz9Ki4YtEX1HIJz4ZMZeyWd5W8Y
-	oeStezLd0POj7osq/HBSCYIdrJj5Fuu9FqpB3T4PXLbpDS4Os3b/kJZSb6czOWbclNii5oY90s0
-	brub3CRTomBeppRp148jdkLgd6I8xvRZP15n5viNclaarm2G+Ktur/SI1U4d2t50fii8Zl/HuNm
-	zj1LKOeSpet1wWVQHLA6sZvzC/HWLoiPG3a7cp3JGMjQM0/9CBr215HBd5sGR/LWXxb0fT1oeIo
-	CEzs3awRz+KhTLPSWx1sJZTOMww75gaQ17QlFKASPFrjW5k=
-X-Received: by 2002:a17:907:a88f:b0:c46:d493:501a with SMTP id a640c23a62f3a-c513a8410d9mr1669468866b.22.1795631511890;
-        Wed, 25 Nov 2026 10:31:51 -0800 (PST)
-Received: from L9JK9NPFH9 ([2a09:bac6:37ad:1e5a::306:5])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c513afe01a0sm686554566b.68.2026.11.25.10.31.50
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Wed, 25 Nov 2026 10:31:51 -0800 (PST)
-From: Tianyi Gao <tianyi@cloudflare.com>
-To: Alexander Duyck <alexander.duyck@gmail.com>
-Cc: Tianyi Gao <tianyi@cloudflare.com>,
-	netdev@vger.kernel.org,
-	intel-wired-lan@lists.osuosl.org,
-	Tony Nguyen <anthony.l.nguyen@intel.com>,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+        d=1e100.net; s=20260707; t=1795633012; x=1796237812;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:mail-followup-to:message-id:subject:cc:to:from:date
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=x2h3D7iH3Wc1HTtPjxPO82bLSMmVOqCjIHCRJWs8yZY=;
+        b=BqKhcud5INe/ufAVehXinurntR1jgPju9avos4GacI7ViyDlk03KhkJGek7wruCCYo
+         6mfz4KSunSHNyOKoAqtbuXSfC6F3GbWlHoaM19mTmfUJpnQXCl1t/qDHkVba2Ms+HiFP
+         97lyZolVxuubeA3bXZY7x9emIhtbN/ceJivRvFYHsMfTu/aJTR2EmhvsvTBUg2TRPL5L
+         Y1kgvBFsjxtTJR7STuZP51R4t9GF2QqihxLuYxpuJ8QRElYlA6gcYlwajp96tS4Mm/jD
+         5fVOUpG1gO3AJmcBLb396hvI9Z1pdGSNtAVWZNVIagTLzRgk7QOrgxNTsj3OTwKEXfKX
+         H8Cg==
+X-Forwarded-Encrypted: i=1; AL+hErEYSjLJD3qSKbpf2yHidYdaiDcTJYhpeWhxhTIH+wQXDdvSfhpk1wI5YEv7+iOF7AgeXLY=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+4eASQq23RcskYtSSoEcaRgqaunecsOZmw6M5Y1+XzDtFay0fK
+	3LQkRWZTtpFTCNxXCn5nSo53IeFFivFnWVZI6KjmE7zbm57xGL9B9swIK6buaIxWXrU=
+X-Gm-Gg: AZFdTZekIy5IJ/jnyQR4pWyDHijhKqnj8BFe4wMhKRQyzzxERJvrUrZ7S0X1yuuPo4I
+	eHbZAt5UJZmBIj4wWzj5QC6TstqqoNtvSyD/V6LUEdF/DCPI0eYsFqQmj8CwIgbAnMcEak3DnwZ
+	iuDmiDjN5/PoZXq6w+HM5m/5o4V4ns2NFLgqvG5ngVIQ5aZBRVEWomQWrheI9U8uw+VYaHKYjxQ
+	G4hMDczVcVirnfKy7AWHqJIaFiYYdnBsBnAXjGsJUGexbmHk6ebtddlj5NAhyEccYsK9z/8o0JT
+	LMyXeMi27/BbS7zZthVxjbcZLpzJwXqywQiduIVpmpxlza7OZC4QJybHLPtbxMTpXsihEgZtdEm
+	wJUioY4QUX406+eEj+VwdVuk/3dNenxVs/+cUGjxrLym5EqG5uSOiw6KsfpxD/JoEbCSxcMt28K
+	Xh+DyVvUnNcLkrU9EIwuzYhLaKzxkrYZgu1cFg0xdcMHn3vmW+3DJA5JZjkwmLMgGUJjDs6Ettz
+	jzxZLqLcdUEqdSqgrkyVo2h+Te0KqApA7UH8s6ZRFBBr0l0LypGdwM9RPIX+jX4ObnFuIryVUT9
+	WtKvujLTSMytyqLpogol0Ia1lTQT0IQaLCW2dqGTWm2vbZJ/hbCN88FOE8DHQkQ=
+X-Received: by 2002:a17:902:ce0a:b0:2f0:dc93:78a4 with SMTP id d9443c01a7336-2f0dc937b50mr22557595ad.26.1795633012514;
+        Wed, 25 Nov 2026 10:56:52 -0800 (PST)
+Received: from localhost ([2a03:2880:2ff:4::])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cde6d05782asm9137503a12.24.2026.11.25.10.56.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Nov 2026 10:56:50 -0800 (PST)
+Date: Wed, 25 Nov 2026 10:56:49 -0800
+From: Joe Damato <joe@dama.to>
+To: Joshua Washington <joshwash@google.com>
+Cc: netdev@vger.kernel.org, Harshitha Ramamurthy <hramamurthy@google.com>,
 	Andrew Lunn <andrew+netdev@lunn.ch>,
 	"David S. Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
 	Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Jesper Dangaard Brouer <hawk@kernel.org>,
 	John Fastabend <john.fastabend@gmail.com>,
 	Stanislav Fomichev <sdf@fomichev.me>,
-	Paul Greenwalt <paul.greenwalt@intel.com>,
-	Alice Michael <alice.michael@intel.com>,
-	Eric Joyner <eric.joyner@intel.com>,
-	Jesse Brandeburg <jbrandeb@kernel.org>,
-	Lorenzo Bianconi <lorenzo@kernel.org>,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	bpf@vger.kernel.org,
-	kernel-team@cloudflare.com,
-	tianyi.gao@linux.dev
-Subject: Re: [PATCH net v2] ice: do not report CHECKSUM_COMPLETE when an XDP program is attached
-Date: Wed, 25 Nov 2026 18:31:33 +0000
-Message-ID: <20261125183134.25863-1-tianyi@cloudflare.com>
-X-Mailer: git-send-email 2.56.0
-In-Reply-To: <CAKgT0UcvdZgtNtURJGPqAJ3dPGnCpa1DbpX_KBbEmoK==WXNSg@mail.gmail.com>
-References: <20261125095201.98279-1-tianyi@cloudflare.com> <CAKgT0UcvdZgtNtURJGPqAJ3dPGnCpa1DbpX_KBbEmoK==WXNSg@mail.gmail.com>
+	Jordan Rhee <jordanrhee@google.com>,
+	Willem de Bruijn <willemb@google.com>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Matt Olson <maolson@google.com>,
+	Jacob Keller <jacob.e.keller@intel.com>,
+	Debarghya Kundu <debarghyak@google.com>,
+	Ankit Garg <nktgrg@google.com>,
+	Eddie Phillips <eddiephillips@google.com>, bpf@vger.kernel.org
+Subject: Re: [PATCH net-next] gve: add rx_critical_low_bufs ethtool statistic
+Message-ID: <awcvcbCfQDQFrv/1@devvm20253.cco0.facebook.com>
+Mail-Followup-To: Joe Damato <joe@dama.to>,
+	Joshua Washington <joshwash@google.com>, netdev@vger.kernel.org,
+	Harshitha Ramamurthy <hramamurthy@google.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Jordan Rhee <jordanrhee@google.com>,
+	Willem de Bruijn <willemb@google.com>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Matt Olson <maolson@google.com>,
+	Jacob Keller <jacob.e.keller@intel.com>,
+	Debarghya Kundu <debarghyak@google.com>,
+	Ankit Garg <nktgrg@google.com>,
+	Eddie Phillips <eddiephillips@google.com>, bpf@vger.kernel.org
+References: <20261124223009.331936-1-joshwash@google.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -123,25 +133,36 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 8bit
+Content-Disposition: inline
+In-Reply-To: <20261124223009.331936-1-joshwash@google.com>
 
-Thanks for the reviews and the ack, Olek, Przemek and Alex.
+On Tue, Nov 24, 2026 at 02:30:09PM -0800, Joshua Washington wrote:
+> From: Eddie Phillips <eddiephillips@google.com>
+> 
+> Commit b65352a1bac6 ("gve: fix Rx queue stall on alloc failure") added a
+> starvation recovery timer to the DQO Rx path to prevent permanent queue
+> stalls under severe memory pressure.
+> 
+> Existing allocation failure counters (such as rx_buf_alloc_fail and
+> netdev queue alloc_fail) count every individual failed buffer allocation
+> and do not distinguish transient, recoverable failures from severe
+> buffer exhaustion where fewer than GVE_RX_BUF_THRESH_DQO (32) buffers
+> remain available to hardware and starvation recovery is required.
+> 
+> Add a new "rx_critical_low_bufs" ethtool statistic for the DQO Rx path
+> in gve_rx_post_buffers_dqo(). The counter increments on each refill
+> attempt that leaves fewer than GVE_RX_BUF_THRESH_DQO buffers available
+> to hardware and arms or reschedules the starvation recovery timer via
+> mod_timer(). It is exposed both per-queue (rx_critical_low_bufs[%u]) and
+> as an interface-wide aggregate (rx_critical_low_bufs).
+> 
+> Signed-off-by: Eddie Phillips <eddiephillips@google.com>
+> Signed-off-by: Jordan Rhee <jordanrhee@google.com>
+> Signed-off-by: Joshua Washington <joshwash@google.com>
+> ---
+>  drivers/net/ethernet/google/gve/gve.h         |  1 +
+>  drivers/net/ethernet/google/gve/gve_ethtool.c | 17 ++++++++++++++---
+>  drivers/net/ethernet/google/gve/gve_rx_dqo.c  |  3 +++
+>  3 files changed, 18 insertions(+), 3 deletions(-)
 
-Also adding back Maciej's ack, as Przemek suggested:
-
-Acked-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-
-On Wed, 2026-11-25 at 09:11 -0800, Alexander Duyck wrote:
-> I would rank it up there with the e1000e jumbo frames packet
-> truncation issue/fix from back in the day
-> (CVE-2009-4536/CVE-2009-1385).
-
-Thank you for the pointer. It is interesting to see how it was exploited
-back then.
-
-As you said, this case needs an XDP program that changes the packet and
-still returns XDP_PASS. So far I have not noticed a way that it can be
-stacked with other bugs, but I will keep it in mind.
-
-Thanks,
-Tianyi
+Reviewed-by: Joe Damato <joe@dama.to>
