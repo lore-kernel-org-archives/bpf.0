@@ -1,128 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795633013;
-	b=e2CLFq0oMwsCVRtaepg1+tSIZtBmm2lGWuBsI2Pc+OA1AO2q7t+3TsNXPaaLFkwFJBbP
-	 Rp9K4S7i95HFwfSjSWAm7ytao5Cn/tBdoanwfTKN/Z2aeYXfyISoXWvjZXNkmtCeq9LOO
-	 onUkRmtrE8UZvJh7iB+MghPAyLtuUHjrxS6obGDjacYeWLmCi+fuDIU2aMucSVt0cVl4t
-	 R+mq4lmU+lzgJGdS6OvkmkWWQced/iw12bSevfPa6+WgiZJrUgOQfrEb6oADnTkgf1BSi
-	 WE+ZaJIJZCgxaQozfqHVq7ZnjAVb2zlCV3vBCXzsyxcy2wBqS6E4+g07D7BPjHM+5XQ==
+	t=1795635293;
+	b=l4ScD/vGhYAWVfxUVUAUiqzKOWUEx60VX9j9Rs6PTQUbYzjkCqE8jKia5fGoImNVvJWX
+	 CBZZsvzNHo7wlNTykzLDRgvu5rnRROnlZp0sDI5YP2Kghu0KKGejbyk4Tvtz1obXbhpQ6
+	 28UvXJyg//ZX6XhlEtQuEB2hxNv/Ux/I0UAmE/c2n2e7iL2C5n63zBBQjMipMm2T+5b9D
+	 JuCZeNAMWW4p1M5WShvD/hQ1BbmIkeM1ZeDxxaJrm+9Rf6rYJQfDmIy+uCa/5AlUgsSIl
+	 Ib8zgyLq0ty68O1KIZtVGRZ6uuhhtFCJ+pt9xAjNuMhoEBfwnO8QQznqkGhQ4RruR1Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795633013;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:Mail-Followup-To:References:
-	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=x2h3D7iH3Wc1HTtPjxPO82bLSMmVOqCjIHCRJWs8yZY=;
-	b=0zm+BH8E7a+EgB0zssj12VZ+GzFUtRO7CjP29D8aBSLCC+ugNYBm2FzfmJO/bpmZbhwt
-	 oN4KMdOPMZlW7EEMGOFe/hgDryoIi9ROnGIDSNdZossoqF4rPmciAu1WUuc6ANGMvftbI
-	 O3Q5e3O4mHnm87JAsMJaQnNgS9drXtD5/rvxwl4Lppq1cHihDJ+SSEwDVxKz0voPJ/PGs
-	 BNGgEItc4/gOYFT+UM3moziFFBohBmaOCC7aLDHCyLsCaaSqtjOnQNn0kQzRFBh0XIJgK
-	 3bvTdly3BkKG9q9TEKLf8hPFz8GxnKpFzEFvseHVEZjxu1e40DdlOSFw1A9LukGTjrQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795635293;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:In-Reply-To:References:
+	 Date:Message-ID:MIME-Version:Content-Type;
+	bh=dYZOemA/qTJTEoh2g11GwnoMyEY6Vi5ttKSGXwzq7LY=;
+	b=xZtVKMkYUPlFg0FRYM0HdKx1w8m4osRxP2CuBxvd1K/A58baDMTHHh8CkZn+ZcpsKGIK
+	 arRZb7IkwV2Dm5zCaFTw/3tzMMXN9wqyA5UJg+goSzpBADyL86zEBAevVucz01iEAgUG6
+	 fCYlo+FpAR04Z7VAdpOxuFRin4ppg0vWAkSY96H6WhCse2OC6Vny/M7c4lVhLyPJHTw4P
+	 tXnuBe+aGtquCJIjmiAePq76C7ZQwfz+UHEEWfaLGSxV5Cxae/9Vbx8g2Vg4mAeM7oi6U
+	 Rw5cY71EOnxtAoztdopTKl0SeabB0XDiydEcge4WjwIhr9iNdH5ByPPaArIwpKbuF/Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=dama.to;
-	spf=none smtp.mailfrom=dama.to;
-	dkim=pass header.d=dama-to.20260707.gappssmtp.com header.i=@dama-to.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=b5Wmhyhn;
-	arc=none smtp.remote-ip=209.85.214.173
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cKi3ccR2;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C133606A326
-	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 18:56:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2C133606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=dama.to
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A31B6606A31E;
+	Wed, 25 Nov 2026 19:34:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dama-to.20260707.gappssmtp.com header.i=@dama-to.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=b5Wmhyhn
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2f0426a65e0so38997725ad.3
-        for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 10:56:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dama-to.20260707.gappssmtp.com; s=20260707; t=1795633012; x=1796237812; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:mail-followup-to:message-id:subject:cc:to:from:date:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=x2h3D7iH3Wc1HTtPjxPO82bLSMmVOqCjIHCRJWs8yZY=;
-        b=b5WmhyhnSs8usJCaJ7KbKAhmll/C/7YWMVAQRARG7p5UNbK6itmqgFoatTQX5p/Iq1
-         KoAKn3SnqD2uIElQ6be6THf6gL4V+4jboRwBsLXWZY7YTMHd5KX7QXBzlkfuOyVRAi55
-         1H0GMMVtlzh2jMYKU3X2WTWt7moR122iHeUE4tBA2NvhhmNnjeQ3e4YIaLfgxgC25P2u
-         rC8O/JJZYsmAYoUJ2fo61Puyx1KbesMy+A7Vf1f6OMwfWeD0IcnO45eS5/C7etAWUGRn
-         g/RmSddNhVJcPjfNwVYs2jc7RG/tw3ph+62jKnCom0D/aSe9jEnzFmF/fHlGyQdanihT
-         2cKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795633012; x=1796237812;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:mail-followup-to:message-id:subject:cc:to:from:date
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=x2h3D7iH3Wc1HTtPjxPO82bLSMmVOqCjIHCRJWs8yZY=;
-        b=BqKhcud5INe/ufAVehXinurntR1jgPju9avos4GacI7ViyDlk03KhkJGek7wruCCYo
-         6mfz4KSunSHNyOKoAqtbuXSfC6F3GbWlHoaM19mTmfUJpnQXCl1t/qDHkVba2Ms+HiFP
-         97lyZolVxuubeA3bXZY7x9emIhtbN/ceJivRvFYHsMfTu/aJTR2EmhvsvTBUg2TRPL5L
-         Y1kgvBFsjxtTJR7STuZP51R4t9GF2QqihxLuYxpuJ8QRElYlA6gcYlwajp96tS4Mm/jD
-         5fVOUpG1gO3AJmcBLb396hvI9Z1pdGSNtAVWZNVIagTLzRgk7QOrgxNTsj3OTwKEXfKX
-         H8Cg==
-X-Forwarded-Encrypted: i=1; AL+hErEYSjLJD3qSKbpf2yHidYdaiDcTJYhpeWhxhTIH+wQXDdvSfhpk1wI5YEv7+iOF7AgeXLY=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+4eASQq23RcskYtSSoEcaRgqaunecsOZmw6M5Y1+XzDtFay0fK
-	3LQkRWZTtpFTCNxXCn5nSo53IeFFivFnWVZI6KjmE7zbm57xGL9B9swIK6buaIxWXrU=
-X-Gm-Gg: AZFdTZekIy5IJ/jnyQR4pWyDHijhKqnj8BFe4wMhKRQyzzxERJvrUrZ7S0X1yuuPo4I
-	eHbZAt5UJZmBIj4wWzj5QC6TstqqoNtvSyD/V6LUEdF/DCPI0eYsFqQmj8CwIgbAnMcEak3DnwZ
-	iuDmiDjN5/PoZXq6w+HM5m/5o4V4ns2NFLgqvG5ngVIQ5aZBRVEWomQWrheI9U8uw+VYaHKYjxQ
-	G4hMDczVcVirnfKy7AWHqJIaFiYYdnBsBnAXjGsJUGexbmHk6ebtddlj5NAhyEccYsK9z/8o0JT
-	LMyXeMi27/BbS7zZthVxjbcZLpzJwXqywQiduIVpmpxlza7OZC4QJybHLPtbxMTpXsihEgZtdEm
-	wJUioY4QUX406+eEj+VwdVuk/3dNenxVs/+cUGjxrLym5EqG5uSOiw6KsfpxD/JoEbCSxcMt28K
-	Xh+DyVvUnNcLkrU9EIwuzYhLaKzxkrYZgu1cFg0xdcMHn3vmW+3DJA5JZjkwmLMgGUJjDs6Ettz
-	jzxZLqLcdUEqdSqgrkyVo2h+Te0KqApA7UH8s6ZRFBBr0l0LypGdwM9RPIX+jX4ObnFuIryVUT9
-	WtKvujLTSMytyqLpogol0Ia1lTQT0IQaLCW2dqGTWm2vbZJ/hbCN88FOE8DHQkQ=
-X-Received: by 2002:a17:902:ce0a:b0:2f0:dc93:78a4 with SMTP id d9443c01a7336-2f0dc937b50mr22557595ad.26.1795633012514;
-        Wed, 25 Nov 2026 10:56:52 -0800 (PST)
-Received: from localhost ([2a03:2880:2ff:4::])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cde6d05782asm9137503a12.24.2026.11.25.10.56.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Nov 2026 10:56:50 -0800 (PST)
-Date: Wed, 25 Nov 2026 10:56:49 -0800
-From: Joe Damato <joe@dama.to>
-To: Joshua Washington <joshwash@google.com>
-Cc: netdev@vger.kernel.org, Harshitha Ramamurthy <hramamurthy@google.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Jordan Rhee <jordanrhee@google.com>,
-	Willem de Bruijn <willemb@google.com>,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	Matt Olson <maolson@google.com>,
-	Jacob Keller <jacob.e.keller@intel.com>,
-	Debarghya Kundu <debarghyak@google.com>,
-	Ankit Garg <nktgrg@google.com>,
-	Eddie Phillips <eddiephillips@google.com>, bpf@vger.kernel.org
-Subject: Re: [PATCH net-next] gve: add rx_critical_low_bufs ethtool statistic
-Message-ID: <awcvcbCfQDQFrv/1@devvm20253.cco0.facebook.com>
-Mail-Followup-To: Joe Damato <joe@dama.to>,
-	Joshua Washington <joshwash@google.com>, netdev@vger.kernel.org,
-	Harshitha Ramamurthy <hramamurthy@google.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Jordan Rhee <jordanrhee@google.com>,
-	Willem de Bruijn <willemb@google.com>,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	Matt Olson <maolson@google.com>,
-	Jacob Keller <jacob.e.keller@intel.com>,
-	Debarghya Kundu <debarghyak@google.com>,
-	Ankit Garg <nktgrg@google.com>,
-	Eddie Phillips <eddiephillips@google.com>, bpf@vger.kernel.org
-References: <20261124223009.331936-1-joshwash@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cKi3ccR2
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D4A21F000C4;
+	Wed, 25 Nov 2026 19:34:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795635293;
+	bh=dYZOemA/qTJTEoh2g11GwnoMyEY6Vi5ttKSGXwzq7LY=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date;
+	b=cKi3ccR2YGoo7Tc8miltHOfUD8mmvx6/MHxsMi0eT3eS6LDkCqxwMCkwEW6puFpIS
+	 xppn7v12LpUDEfpfCx6LtMW9vdZUHRVOWstgH+/RFzUFuz1+a/kbo/qQyeUV2KAmAT
+	 /iq2nVXN4vLgHIpAvud5FKM2AeDGFbTD+svS6gb9346St9wi+yalpd7RtIluHBLdE6
+	 219PQmUySdaQChKecr+DPTnNnq2IiWJTUOwUrdjnUJ8GlITA2YWu+IbZoPjG7PDyM5
+	 J5Vzd4Vzayyf/MRo77TesrYiHMVus61hL0QbSvrciZHUbcQZCuYXWOG9QQ+qWkIb5V
+	 DGK/xnFnTvfGg==
+From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To: netdev-bot+sashiko@kernel.org
+Cc: magnus.karlsson@intel.com, maciej.fijalkowski@intel.com,
+ davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org,
+ pabeni@redhat.com, andrew+netdev@lunn.ch, ast@kernel.org,
+ daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
+ andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
+ ilias.apalodimas@linaro.org, alexanderduyck@fb.com, saeedm@nvidia.com,
+ tariqt@nvidia.com, mbloch@nvidia.com, leon@kernel.org,
+ michael.chan@broadcom.com, pavan.chebbi@broadcom.com, corbet@lwn.net,
+ shuah@kernel.org, bpf@vger.kernel.org, netdev@vger.kernel.org,
+ stuclar@meta.com, sdf@fomichev.me, horms@kernel.org, martin.lau@linux.dev,
+ almasrymina@google.com, song@kernel.org, yonghong.song@linux.dev,
+ jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
+ rdunlap@infradead.org, kernel-team@meta.com,
+ dimitri.daskalakis1@gmail.com, bobbyeshleman@meta.com,
+ mohsin.bashr@gmail.com, kees@kernel.org, leitao@debian.org,
+ maxime.chevallier@bootlin.com, cuitao@kylinos.cn,
+ vadim.fedorenko@linux.dev, mike.marciniszyn@gmail.com, kuniyu@google.com,
+ jiayuan.chen@linux.dev, mkarsten@uwaterloo.ca, razor@blackwall.org,
+ dw@davidwei.uk, asml.silence@gmail.com, linux-rdma@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next 01/15] xdp: Let memory providers offer XDP a
+ view of their net_iovs
+In-Reply-To: <179561567567.3135.2081478467669976102@kernel.org>
+References: <20261124125654.183091-1-bjorn@kernel.org>
+ <179561567567.3135.2081478467669976102@kernel.org>
+Date: Wed, 25 Nov 2026 20:34:49 +0100
+Message-ID: <87v75kogbq.fsf@all.your.base.are.belong.to.us>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -132,37 +78,75 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261124223009.331936-1-joshwash@google.com>
+Content-Type: text/plain
 
-On Tue, Nov 24, 2026 at 02:30:09PM -0800, Joshua Washington wrote:
-> From: Eddie Phillips <eddiephillips@google.com>
-> 
-> Commit b65352a1bac6 ("gve: fix Rx queue stall on alloc failure") added a
-> starvation recovery timer to the DQO Rx path to prevent permanent queue
-> stalls under severe memory pressure.
-> 
-> Existing allocation failure counters (such as rx_buf_alloc_fail and
-> netdev queue alloc_fail) count every individual failed buffer allocation
-> and do not distinguish transient, recoverable failures from severe
-> buffer exhaustion where fewer than GVE_RX_BUF_THRESH_DQO (32) buffers
-> remain available to hardware and starvation recovery is required.
-> 
-> Add a new "rx_critical_low_bufs" ethtool statistic for the DQO Rx path
-> in gve_rx_post_buffers_dqo(). The counter increments on each refill
-> attempt that leaves fewer than GVE_RX_BUF_THRESH_DQO buffers available
-> to hardware and arms or reschedules the starvation recovery timer via
-> mod_timer(). It is exposed both per-queue (rx_critical_low_bufs[%u]) and
-> as an interface-wide aggregate (rx_critical_low_bufs).
-> 
-> Signed-off-by: Eddie Phillips <eddiephillips@google.com>
-> Signed-off-by: Jordan Rhee <jordanrhee@google.com>
-> Signed-off-by: Joshua Washington <joshwash@google.com>
-> ---
->  drivers/net/ethernet/google/gve/gve.h         |  1 +
->  drivers/net/ethernet/google/gve/gve_ethtool.c | 17 ++++++++++++++---
->  drivers/net/ethernet/google/gve/gve_rx_dqo.c  |  3 +++
->  3 files changed, 18 insertions(+), 3 deletions(-)
+netdev-bot+sashiko@kernel.org writes:
 
-Reviewed-by: Joe Damato <joe@dama.to>
+> Thank you for your contribution! Sashiko AI review found more severe
+> issue(s) in other patches of this series. This mail is only an FYI, in case
+> you want to address the nit picks below when you respin.
+>
+> Low priority / nit picks for your consideration:
+>
+> - [Low] Two comments in include/net/xdp.h now contradict each other.
+>
+> --
+>
+> xdp: Let memory providers offer XDP a view of their net_iovs
+>
+> This commit lets a net_iov area expose an XDP view: an address and size
+> for its net_iovs, plus a shift that gives the per-net_iov stride. It adds
+> xdp_netmem_address() and xdp_frag_address(). The XDP buffer helpers in
+> net/core/filter.c now use them, so they can read and write frags backed by
+> net_iovs that have a view.
+>
+>> diff --git a/include/net/xdp.h b/include/net/xdp.h
+>> index 07231adfb5f82..1629e347b71fb 100644
+>> --- a/include/net/xdp.h
+>> +++ b/include/net/xdp.h
+>> @@ -164,6 +164,40 @@ xdp_init_buff(struct xdp_buff *xdp, u32 frame_sz, struct xdp_rxq_info *rxq)
+>>  #endif
+>>  }
+>>  
+>> +/* XDP view of net_iovs: a memory provider may give XDP an address for its
+>> + * net_iovs, see &net_iov_area.xdp_vaddr. XDP code may read and write a
+>> + * net_iov only through these helpers, and only if its provider offers a
+>> + * view; such buffers must not become skb frags or xdp_frames. For the core
+>> + * and the stack every net_iov stays unreadable: netmem_address() and
+>> + * skb_frag_address() give NULL for it. A net_iov without a view gives NULL
+>> + * here too, so a reader that does not use these helpers fails closed.
+>> + */
+>
+> [Severity: Low]
+> This isn't a bug, but does this comment now contradict the older one on
+> XDP_FLAGS_FRAGS_UNREADABLE in the same header?
+>
+> include/net/xdp.h:
+> 	/* frags have unreadable mem, this can't be true for real XDP packets,
+> 	 * but drivers may use XDP helpers to construct Rx pkt state even when
+> 	 * XDP program is not attached.
+> 	 */
+> 	XDP_FLAGS_FRAGS_UNREADABLE	= BIT(2),
+>
+> The new block says XDP code may read and write net_iov frags when the
+> provider offers a view. That means XDP programs are expected to run on
+> buffers with net_iov frags.
+>
+> xdp_buff_add_frag() still sets the flag for every net_iov frag, whether or
+> not it has a view. After the later patch "xdp: Run programs on buffers
+> that must not hold kernel structures", it sets both
+> XDP_FLAGS_FRAGS_UNREADABLE and XDP_FLAGS_SINK on NET_IOV_XSK frags:
+>
+> 	if (unlikely(netmem_is_net_iov(netmem))) {
+> 		xdp_buff_set_frag_unreadable(xdp);
+> 		/* AF_XDP sink memory may only go to the socket of its queue */
+> 		if (netmem_to_net_iov(netmem)->type == NET_IOV_XSK)
+> 			xdp->flags |= XDP_FLAGS_SINK;
+> 	}
+>
+> Native XDP programs then run on those buffers, so real XDP packets carry
+> the flag. At the end of the series, the old comment is unchanged.
+>
+> Could the XDP_FLAGS_FRAGS_UNREADABLE comment be updated to match?
+
+Yes, I'll fix this in the next version.
