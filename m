@@ -1,57 +1,57 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795611614;
-	b=2sxjlykzaRisQKMonoEqzpi56GQCkk2On5uFakP8pekPKQ9y6Bm/uuFj+YDUO7HUYnsx
-	 VMYMcaDCLx2vCB8Zall0VWEkBlXdjafw0alVAq3iTxwx/vI354HNvwPFiVC2giE+2ZzFK
-	 A32XoN3qL5GQcq6kuVR9TsIq4pAAmb4UDxWWkp2TRCuRn8BcS0Q60B52AkG++sz/rwsSj
-	 M+X37X8VKDdgIRz92/ig2FV2iCBkWOUOmkRvti/E/WeAYqhlohAygld/jQmYVB6YVCWxA
-	 ByJ4aBm/9YogtU+K2LMsUOUWftgj+tDLIPcoUSjVcGfiqetWLrB5vsiMZ4XmPlhwr/Q==
+	t=1795611610;
+	b=R5O3wef9WO4zuo2ACK+Uhe81Hm41FD7XoefmKujf6ZjRdahvJjQYBKsxdDyvvk6lq+TP
+	 bHNzB432tGxbERI3fgx+qVuMflrIdLR3g66v2j1TqjstaOH31ellFL7lwORJnoQNjrOQt
+	 lvoFde8YbM33Xzj6vA3L5oujqK/NTzwj8EvV2x3GYJQNSHoV81kD9jcm4nIIdZgJUTpXg
+	 K/OzG2vqMLFO7843iCpME4ExHoMIMcnuTcx35Oj7g9kwe1psxJSvLvYYxjmqh/AMUMN61
+	 Qj2NmvMpVtaUbopHkTmmK4H356P+qxyhkM8fRAqZTesN00ClUSwfOIFxf9HW7e5ociQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795611614;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795611610;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=teUXdgF3Q1iwMvSJnDYofJDUIEsTDxCe5AEiTGPEreY=;
-	b=sxkO/VOftGCKeBu/NQOlrQVSQqFRxCaxQR8Y74IXa6xWyqvCKyaETvNQGEq7lKQ0QJuZ
-	 d6slpEBZJH20JI1DoyS1/spCV8RDbo//e/VgbXtXd/ljGzl6/UrXBFLgO3g/57yAh+9WD
-	 NHBvYgeqaAv/2+fo4uqw1XGsFeHAYm5RPqVhlnnrtZWAVCuxalAFzIdX03W/quPdyUTaq
-	 YdU8rdaAu6zKgn2T2V5aq0TSbaFwUds0DL5hBIxXfvOOHgfygw6xZbhxEijQXdc8OgOKx
-	 Z7J/2vAyq77vJRcUAFE6g0lb2maprtsU33e7EEEMoY5Vy6LW4zTVm5f7zoZxLPjcLRw==
+	bh=Tmfio9WikqIFyA5w25ZA6vSkJ2HuBHEoZrRBuC5c0as=;
+	b=D0mCbImRwNZTTVcBfvKP9j26EMdBV/jI1DhSW2BEGr5t6qVZZopExMuKnq8EjGZ+pZI9
+	 wVMdHDpQa3V0KLkf1jgtJCEMEkQ7CmdT2XOCk9+lc9VCxAtYTehnat57ZDFsAlZBC+5O7
+	 zYnAGWw+YdTEEfhBHIqbNuP4DAKWHNIUq+Sw3SIiY2WZ5gI73ckCvylItOD0qoughgMUF
+	 bBObJHVhkjmHMxsSPP5qfpcDJ/M/rgvuMa7bbNeKaJHLm0atfryfB0zMv9MnDrmwjzusf
+	 Ay3Za68wt/RePXfDmm++a79nAYOyUc2WYBea0iERQlBoc64UDoe+6ojC0hXWtBm2MoA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UYL57BdN;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=b0MBz0KQ;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B19AB60A2603;
-	Wed, 25 Nov 2026 13:00:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78330606A6A6;
+	Wed, 25 Nov 2026 13:00:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UYL57BdN
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 699C31F000C0;
-	Wed, 25 Nov 2026 13:00:14 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=b0MBz0KQ
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B45C1F000D0;
+	Wed, 25 Nov 2026 13:00:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795611614;
-	bh=teUXdgF3Q1iwMvSJnDYofJDUIEsTDxCe5AEiTGPEreY=;
+	s=k20260515; t=1795611610;
+	bh=Tmfio9WikqIFyA5w25ZA6vSkJ2HuBHEoZrRBuC5c0as=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=UYL57BdN4MIjJF8aNX7/7r9z09CtEUlP6JyJzwVcQ79/iTZ1DgvdYIZQZAwSSco4s
-	 CJLCRRGwsadq1JUaEQd88JqoMPvHPAKNgiuKhF0uV0mXB1OyjUATbbabEhROT78Sb5
-	 r33YS+tCCTBih7LBtpYpQZopVzaKp6/tHI5DwNWIEMgxe6N8Oys4w8VHl/yTmmAHGz
-	 omKw6msVIchiao260e954eKaOAGoDUMYZX4TETMf9JC4Lm3hUCo39vwVYijXRzPSfK
-	 IUq/sriwWLRyXYqyO1MTH6wfbcvawe3Iqh94Oo4+ATQdxso0ZKixZ+VkhfVPrTzDyf
-	 EsrtwAvgGhzkg==
-Message-ID: <sashiko-outbox-233418@kernel.org>
+	b=b0MBz0KQmCZbF84Ufarz8Yi31Vy3h+c2T9j93ANFAuBY/ghAurZzym1dmIf7jQ5kg
+	 Zk7HmS/9kbX5gdPNn4KaoKK0lsUMp6wB1m/NIiRPEC4Ri7lX4Ss4QNIEnXPw99oCIl
+	 bnNaDY+cBvbibr8nI6eYaVqmXIIv10DMHdccosK1zP/YCwDroueEx0tM8qI1CpUwAJ
+	 vd0R9HEwhO3x8bvEYWZ7OincqG0RN9rmdNrM155UgrCpAKYWzNF5XNDNFC0FTTUJS5
+	 Dk+X1bk+aU64HiGvo3ltmjw7xlh3GidRLLc287bpuwr7ZSa0wdDR5QBRikH+sMu+Ru
+	 DH17lBrbwlxKg==
+Message-ID: <sashiko-outbox-233411@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next 08/15] xsk: Receive in the device's buffer
- layout
+Subject: Re: [PATCH net-next 01/15] xdp: Let memory providers offer XDP a
+ view of their net_iovs
 Reply-To: sashiko-reviews@lists.linux.dev
 To: =?utf-8?b?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, bpf@vger.kernel.org
 Cc: linux-rdma@vger.kernel.org
-In-Reply-To: <20261124125654.183091-8-bjorn@kernel.org>
+In-Reply-To: <20261124125654.183091-1-bjorn@kernel.org>
 References: <20261124112707.118678-1-bjorn@kernel.org>
- <20261124125654.183091-8-bjorn@kernel.org>
+ <20261124125654.183091-1-bjorn@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 25 Nov 2026 13:00:14 +0000
+Date: Wed, 25 Nov 2026 13:00:09 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -61,150 +61,71 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue to consider:
-- [Medium] xsk: skipped synchronous unbind in xsk_sink_release() for
-  TX-only pool
-It also noticed 1 related pre-existing issue this patch does not
+Thank you for your contribution! Sashiko AI review found no new issues
+in this patch, but noticed 1 related pre-existing issue it does not
 introduce:
-- [High] xsk: data race on pool->cached_need_wakeup in
-  xsk_set_rx_need_wakeup() [1]
+- [High] bpf: missing IS_ERR() check on bpf_xdp_pointer() in
+  bpf_dynptr_slice() [1]
 --
 
-commit 66e818b77c20713dcc88b2972bf6bf3dfff915da
+commit c810409b8d143cccffd67910e9b5cc0e3963ba70
 Author: Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org>
 
-xsk: Receive in the device's buffer layout
+xdp: Let memory providers offer XDP a view of their net_iovs
 
-This commit wires up XDP_UMEM_DRV_LAYOUT so AF_XDP sockets can register a U=
-MEM
-in the device's buffer layout, install the sink memory provider on bind, and
-wake the queue NAPI from recvmsg() and poll().
+This commit adds an optional XDP virtual address view to net_iov_area and
+introduces xdp_netmem_address() and xdp_frag_address() so XDP helpers can
+read and write provider-backed net_iovs when a view is present.
 
-> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-> index 0753fac8d4a85..c015894a6ccba 100644
-> --- a/net/xdp/xsk.c
-> +++ b/net/xdp/xsk.c
-> @@ -55,7 +55,8 @@ void xsk_set_rx_need_wakeup(struct xsk_buff_pool *pool)
->  		return;
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index f42ecfb5841f9..d5774b2577e72 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -4310,7 +4310,7 @@ void bpf_xdp_copy_buf(struct xdp_buff *xdp, unsigne=
+d long off,
+>  			break;
 > =20
->  	pool->fq->ring->flags |=3D XDP_RING_NEED_WAKEUP;
-> -	pool->cached_need_wakeup |=3D XDP_WAKEUP_RX;
-> +	WRITE_ONCE(pool->cached_need_wakeup,
-> +		   pool->cached_need_wakeup | XDP_WAKEUP_RX);
->  }
->  EXPORT_SYMBOL(xsk_set_rx_need_wakeup);
-> =20
-> @@ -72,7 +73,8 @@ void xsk_set_tx_need_wakeup(struct xsk_buff_pool *pool)
+>  		ptr_off +=3D ptr_len;
+> -		ptr_buf =3D skb_frag_address(next_frag);
+> +		ptr_buf =3D xdp_frag_address(next_frag);
+>  		ptr_len =3D skb_frag_size(next_frag);
+>  		next_frag++;
 >  	}
->  	rcu_read_unlock();
-> =20
-> -	pool->cached_need_wakeup |=3D XDP_WAKEUP_TX;
-> +	WRITE_ONCE(pool->cached_need_wakeup,
-> +		   pool->cached_need_wakeup | XDP_WAKEUP_TX);
->  }
->  EXPORT_SYMBOL(xsk_set_tx_need_wakeup);
-> =20
-> @@ -82,7 +84,8 @@ void xsk_clear_rx_need_wakeup(struct xsk_buff_pool *poo=
-l)
->  		return;
-> =20
->  	pool->fq->ring->flags &=3D ~XDP_RING_NEED_WAKEUP;
-> -	pool->cached_need_wakeup &=3D ~XDP_WAKEUP_RX;
-> +	WRITE_ONCE(pool->cached_need_wakeup,
-> +		   pool->cached_need_wakeup & ~XDP_WAKEUP_RX);
->  }
->  EXPORT_SYMBOL(xsk_clear_rx_need_wakeup);
-> =20
-> @@ -99,7 +102,8 @@ void xsk_clear_tx_need_wakeup(struct xsk_buff_pool *po=
-ol)
->  	}
->  	rcu_read_unlock();
-> =20
-> -	pool->cached_need_wakeup &=3D ~XDP_WAKEUP_TX;
-> +	WRITE_ONCE(pool->cached_need_wakeup,
-> +		   pool->cached_need_wakeup & ~XDP_WAKEUP_TX);
->  }
->  EXPORT_SYMBOL(xsk_clear_tx_need_wakeup);
 
 [Severity: High]
-This problem wasn't introduced by this patch, but can concurrent updates to
-pool->cached_need_wakeup lose wakeup flags [1] when RX and TX run in
-separate NAPI contexts?
+This problem wasn't introduced by this patch, but can bpf_xdp_copy_buf()
+walk uninitialized sinfo->frags and dereference wild pointers in
+xdp_frag_address() when bpf_dynptr_slice() ignores an ERR_PTR() return from
+bpf_xdp_pointer() [1]?
 
-On drivers with separate RX and TX NAPI instances sharing the same
-xsk_buff_pool (such as virtio_net), WRITE_ONCE() still performs a non-atomic
-read-modify-write on pool->cached_need_wakeup:
+kernel/bpf/helpers.c:bpf_dynptr_slice() {
+    ...
+	case BPF_DYNPTR_TYPE_XDP:
+	{
+		void *xdp_ptr =3D bpf_xdp_pointer(ptr->data, ptr->offset + offset, len);
+		if (!IS_ERR_OR_NULL(xdp_ptr))
+			return xdp_ptr;
 
-CPU0 (RX NAPI)                    CPU1 (TX NAPI)
-xsk_set_rx_need_wakeup()          xsk_set_tx_need_wakeup()
-  read pool->cached_need_wakeup
-                                    read pool->cached_need_wakeup
-  write XDP_WAKEUP_RX
-                                    write XDP_WAKEUP_TX  <-- drops RX flag
-
-Dropping XDP_WAKEUP_RX or XDP_WAKEUP_TX stops userspace from waking the
-queue to replenish the FILL ring or drain the TX ring, stalling packet
-processing.
-
-[ ... ]
-
-> @@ -1585,6 +1605,29 @@ static void xsk_delete_from_maps(struct xdp_sock *=
-xs)
->  	}
->  }
-> =20
-> +/* The pool may outlive the socket, see xp_put_pool(). A queue in the
-> + * device's buffer layout stops receiving when its receiving socket goes,
-> + * so that its program can go right after.
-> + */
-> +static void xsk_sink_release(struct xdp_sock *xs)
-> +{
-> +	struct xsk_buff_pool *pool =3D READ_ONCE(xs->pool);
-> +	struct net_device *dev;
-> +
-> +	if (!pool || !READ_ONCE(pool->sink))
-> +		return;
-> +
-> +	rtnl_lock();
-> +	dev =3D pool->netdev;
-> +	if (dev) {
-> +		netdev_lock_ops(dev);
-> +		if (pool->sink && xsk_sink_sock(pool->sink) =3D=3D xs)
-> +			xsk_sink_unbind(pool);
-> +		netdev_unlock_ops(dev);
-> +	}
-> +	rtnl_unlock();
-> +}
-
-[Severity: Medium]
-Does xsk_sink_release() skip xsk_sink_unbind() when a TX-only socket creates
-a pool with XDP_UMEM_DRV_LAYOUT and closes before any RX socket binds?
-
-xsk_bind() allows a socket with xs->tx set and xs->rx =3D=3D NULL to create=
- a
-pool, and xp_assign_dev() unconditionally calls xsk_sink_bind() when
-XDP_UMEM_DRV_LAYOUT is set. Because xsk_sink_add_sock() only sets sink->xs
-when xs->rx is non-NULL, sink->xs remains NULL:
-
-net/xdp/xsk_sink.c:xsk_sink_add_sock() {
-	if (xs->rx && !sink->xs) {
-		/* The NAPI acquires the socket once it is set up */
-		smp_store_release(&sink->xs, xs);
+		if (!buffer__nullable)
+			return NULL;
+		bpf_xdp_copy_buf(ptr->data, ptr->offset + offset, buffer__nullable, len, =
+false);
+		return buffer__nullable;
 	}
+    ...
 }
 
-When the TX-only socket is closed, xsk_sink_sock(pool->sink) =3D=3D xs is f=
-alse
-(NULL !=3D xs), so xsk_sink_unbind() is not run synchronously in xsk_releas=
-e().
-Because AF_XDP sockets use SOCK_RCU_FREE and xp_put_pool() defers pool
-destruction to a workqueue, the MP_XDP_ONLY provider stays attached after
-close() returns and causes an immediate XDP program detach to fail with
--EBUSY.
+bpf_dynptr_from_xdp() caches the initial packet length in ptr->size, which
+becomes stale if the packet is shrunk with bpf_xdp_adjust_tail().  A slice
+request within the old size but past the new length passes
+bpf_dynptr_check_off_len() and causes bpf_xdp_pointer() to return
+ERR_PTR(-EINVAL).  When buffer__nullable is non-NULL, bpf_dynptr_slice()
+Still calls bpf_xdp_copy_buf(), which assumes fragments exist whenever
+off + len exceeds the linear area and reads uninitialized
+skb_shared_info->frags on a single-buffer xdp_buff.
 
-[1] https://sashiko.dev/#/bug/linux-3603ff9e-34c0-4710-bf99-5f028a2aa37d
+[1] https://sashiko.dev/#/bug/linux-aa57c490-a988-47e9-b527-87c8137088ea
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261124112707.1186=
-78-1-bjorn@kernel.org?part=3D8
+78-1-bjorn@kernel.org?part=3D1
