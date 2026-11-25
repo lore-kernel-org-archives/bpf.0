@@ -1,74 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.198
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.199
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795587370;
-	b=LWa3x0gtG2u8UgxHVnAuq86GJuOwTwi2bjlDV4KSkHEw2nyjxGYDlTzzDmBUk6ljKIR/
-	 QPXJ41B0emi6uqmleAwE5CezmphgljCX8EVqTNCE5Sm0xYJ+wj7anKsFGkQsNZzGi1pm3
-	 /52ugcorLIQQyRPNjEZwLqZh7edQgPsSRJW7wztftqSazM+Y79h5J2078I6c5JBG15DEO
-	 PkhSU2tQaOUjcwIpP4AG0YjYoysoml8Qg/FY8yqVZxruGEBXj7ZqICzK/QvIX0dYGhtfu
-	 xpnzGUYzfW2Rk+KniA/vWBJDzUtWvNniqv/DKC/kQEm9FU+6J1aIFNrPvhlrKakxQCw==
+	t=1795587366;
+	b=zZar9IA4TdTh6p7Xkb9oA4GcQaPvhauTCGkUrhPB6xoj1Mme8HBI4pJqeNG8oegeXRYE
+	 E6LiWc+x0GbK7yc+V7/24jlkGjF99NPz8BnETYs60AnELktKihmY5viaJNp+pJJMsuJVU
+	 UMmJF9KMaMfsORYaCjpe9ZwYOBwqCHNWopDswYUBQovlgXANygApMlYrAyZzFV0WjstAU
+	 01AayPgqrdwrFhXCNQ2ONq2WZSx9GtAesdHoj3XgLgMiyEjdqIyml+BvuqhObXIxFT5Ik
+	 wFT4Hps9wmpxV4HDKtauE+gmOZsQ+FqO66y0hC/d1qUn7DEpQzmgAPQNhJCdVsv5qOA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795587370;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795587366;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
 	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
 	 Content-Type;
-	bh=ZvfWqaB0nFxucxNwNfxUIvrX7JKFCnM6p4UbWiRwSLk=;
-	b=tQ747ufb4QRHUlIffMsZuSEMzQq2mBErOWGQjK2yF5hMEENHIzYxQWDQMviUCTQEUlL6
-	 DJ22LzTTifV8jLY28hb5fdPAiPdicI1A6KY3aVinUQSCcXe9PcI2lI9QhK1hjG0SL8jV9
-	 9votQ51XGM2ZNmIzxD0s0s4IFXFsPel8pVTSLg8nURs8HIX3LnqN4FEfIUcj0vfmn6lce
-	 Dix/68HgiGqrKLrK0ofS2iuz2vdv0fyON3x4hpBKaTRUe054o8o8QK4OtepIowhwP35ts
-	 z3t9r/zOPisHN1RSrNZPuBQqrzm4biYpuvxS68KzIwphCu+U1MZIk7n6UWPaWq4DUdQ==
+	bh=Tq8mjhDcSofx5kxw5eKn8LOnbaPk4exl2xG2U8WBwwQ=;
+	b=xAkapw61N2X0ICVfyzQfcuWOAx4IUVRCsjXaOboE1YI5AFnizA/RKYCYdbffgTx3Tevz
+	 wm0u28R+xo/OPEMPIr6RCoMTJArlWFMFoxE1/gCEYY9MyMcxs8tHcjR6/J9PgWbtPU+Mk
+	 Q8pkEVOAivS6ftZMtXXHaKYX+0FeWwGtkUuJ3IkjskGflgM01lvNhumVClskioRpoJgDV
+	 3W3V4l8N2BDInJHay7vbIIsISBMKYUg5DiQcX+l0QdkyYOc4at+1bKzzfZ9xu42Ows3Qa
+	 4UOmCR67E8LAzGNHpnVb6cdO9QKVep7RNx2gLw5+lUuCKbgkINDAMn6/5cKu2PcEpmw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--irogers.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=dqUm0cNE;
-	arc=none smtp.remote-ip=74.125.82.198
-Received: from mail-dy1-f198.google.com (mail-dy1-f198.google.com [74.125.82.198])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=XBc4yd4I;
+	arc=none smtp.remote-ip=74.125.82.199
+Received: from mail-dy1-f199.google.com (mail-dy1-f199.google.com [74.125.82.199])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC418607026D
-	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 06:16:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DC418607026D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77A54606DE73
+	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 06:16:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 77A54606DE73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=dqUm0cNE
-Received: by mail-dy1-f198.google.com with SMTP id 5a478bee46e88-384c78aa0dbso7370344eec.0
-        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 22:16:09 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=XBc4yd4I
+Received: by mail-dy1-f199.google.com with SMTP id 5a478bee46e88-386c3309469so1559862eec.0
+        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 22:16:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795587369; x=1796192169; darn=vger.kernel.org;
+        d=google.com; s=20260707; t=1795587365; x=1796192165; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=ZvfWqaB0nFxucxNwNfxUIvrX7JKFCnM6p4UbWiRwSLk=;
-        b=dqUm0cNErgaRAEUPYJQ+C2aQeBVECFULmkK7SyU1jw89xHBayxTsokr7FednalnuQl
-         LF43lcFwo5l+qx62UerhTqZJ5kksYPoSwn+pbJD09YMY2Rgqs2aEuf0JLinvNoEsFbIU
-         tMkdw3PvUDnaQ71k9tDeX8o1WZB48up/i04Sn3qtRx9Wzdge2XbmwICpSmwi6zvEKF5Y
-         3Z+TVSg0w6scWjNRHOsPXW0WAJ5g5SdwfOvXFNNQjQZiw6ntchczB+2E2aMQZzsRS1bJ
-         k+xDdsowoIN4qZcla7yehfclkvTvQOjwUuuHHKEGWUKmupVMGrrg2jXfw8lH9eqqmPSV
-         aAww==
+        bh=Tq8mjhDcSofx5kxw5eKn8LOnbaPk4exl2xG2U8WBwwQ=;
+        b=XBc4yd4IuYHvDt/TolT0eq4CqFjuUCPoHs1qRWCRIlkUa0/ma9Bz2B/ehlL4XD70+/
+         L6+Ja9pugipWLAAQ5CWFoSAiRZ+G1rGhoR8HSno+f73YqXbyKxlpUifvKG4u34DS2l7r
+         QNEfZcEmteBBKozX5KWdb9OM3f6HoyiBGSJEalQ4Kt6uL2rD4/1QQ0j/syZ8y2ohh1np
+         NgY6X/O278pXS3bjNr3irHwfr0XCGHOGiJS+CY2d9wZ2yWz6tSDjK6XIYeK0FmHJ8k8c
+         oGYnKF5qiMgoLWaXUf06OGasQXvEIcn5I64ilKLYya0QeFqeTbZsop9rltdvX4QNJpBc
+         DV3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795587369; x=1796192169;
+        d=1e100.net; s=20260707; t=1795587365; x=1796192165;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=ZvfWqaB0nFxucxNwNfxUIvrX7JKFCnM6p4UbWiRwSLk=;
-        b=bmXqjxXh24AqWdQnyx5rqqVMqhQRBOqh7zYRm/UVeBTB1WVSMh31U2yYor8JPwAusv
-         7AFe7suRLBiaMSPn6f73lMQMmLD71Qu+XMtRkw/8+cttS0Ay613sfq1yee27IbzRI7fy
-         aMx+6sFiKmd045Od6YpMbM71Z+Logq0vMECk3OZpAnpk2XLMQIsSofF9pIvDoetKYrEU
-         kmSJNcgCIYkrZD4bFeZDzoPdbeZmbp6iF+dMJ0+5M9oa2wiJFxJAO8p+NNHt5sz4H0zu
-         C8exF8sCTcKpMWjJWA5QvnH5dSDRIHB39vEoTa8HK9I19VuVe4Dtqe+0113ee4dKgpux
-         Qiyw==
-X-Forwarded-Encrypted: i=1; AL+hErHVRTpETzDNW9NzBawRiL9XYYvFNG+EKIjF3PL6ny1sziaiStSwlqmX77HH2C2Xnrn/s28=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+W+/EhoTlRJjGeA8pACICxGWvbX0j2XiKVuAiXa1PGNMf31tky
-	ZTMdkYcIScKdHzuX/6C/SfJJmIwf34i2MM2naVq2114MHvlAFddCKtDqjRuwoHNwl3Ahs9ZoFY2
-	xs4sVlMQVnA==
-X-Received: from dyblf45.prod.google.com ([2002:a05:7301:a2d:b0:375:861c:512e])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:693c:8953:20b0:386:a70b:75dc
- with SMTP id 5a478bee46e88-386a70b7837mr10351275eec.11.1795587368701; Tue, 24
- Nov 2026 22:16:08 -0800 (PST)
-Date: Tue, 24 Nov 2026 22:14:59 -0800
+        bh=Tq8mjhDcSofx5kxw5eKn8LOnbaPk4exl2xG2U8WBwwQ=;
+        b=v0FqS+PSLOVP6A0Jtou2t7licQjQjP/dxz9Or/oyXaQKY6jrY37+5djP82c/0oqmZ2
+         i3292MT6eNwEGflifOH9ApzySdsNqFEEr12wMhbcky8rhFv+ABRw2FDbijj7GljSKIyk
+         RLDujLP5d6rXAAN4n+Cr/nh9Xvc6utwxWtP1lGLYWxKqxXHQ6H//8iSLl2B0PPyomR8S
+         GzD2TZzdA0FpJeVNlV1IV6ElON3612urrdAr4MiUh82uEW6KM8KcBQrQm0ps8sFObb6w
+         hY3mSa28axbrJNd9+n/8kWAimvD4iZm4isk6LtvruIrKNERithuRM9NvhGR9HDjiPSqq
+         tLDw==
+X-Forwarded-Encrypted: i=1; AL+hErG6Jm9otwMsEvc/3EI6V3QvhV1/zCDnVC9mlhXNWpGPvhj/+y/OzEv3DJupndjHk8RniqM=@vger.kernel.org
+X-Gm-Message-State: APuU4Z85r4gzl1B5jftPQofDAgKHZD+7dSzASYtWi4Dct8ssx2tCYb28
+	X4uMw7Xl1uQBUhJZxJYOz+qg506F+zeDykLo43MffSYTPigY99ExtfS/YdKti484W7alsFVVxX0
+	X6mpUYJutmA==
+X-Received: from dyckx5.prod.google.com ([2002:a05:7300:c7c5:b0:386:c57e:ee36])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7301:4201:b0:385:b8f4:755d
+ with SMTP id 5a478bee46e88-385b8f47ad3mr17347048eec.20.1795587364179; Tue, 24
+ Nov 2026 22:16:04 -0800 (PST)
+Date: Tue, 24 Nov 2026 22:14:57 -0800
 In-Reply-To: <20261125061523.1540234-1-irogers@google.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -81,9 +81,8 @@ Precedence: list
 Mime-Version: 1.0
 References: <20261125061523.1540234-1-irogers@google.com>
 X-Mailer: git-send-email 2.56.1.831.g720f3f5937-goog
-Message-ID: <20261125061523.1540234-7-irogers@google.com>
-Subject: [RFC PATCH v2 06/30] kbuild: Wire up CONFIG_UNWINDER_DWARF_CFI_MINIFY
- object pass
+Message-ID: <20261125061523.1540234-5-irogers@google.com>
+Subject: [RFC PATCH v2 04/30] x86: unwind_user: Support Minimal DWARF CFI user unwinding
 From: Ian Rogers <irogers@google.com>
 To: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
 	linux-arch@vger.kernel.org
@@ -103,172 +102,113 @@ Cc: jpoimboe@kernel.org, rostedt@goodmis.org, peterz@infradead.org,
 	wnliu@google.com, dylanbhatch@google.com, Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Invoke scripts/min_eh_frame on standard kernel C, Rust, and post-LTO
-composite .o objects when CONFIG_UNWINDER_DWARF_CFI_MINIFY is enabled,
-recording scripts/min_eh_frame as a rebuild dependency in .*.cmd files.
-
-Across full vmlinux builds on x86-64, ARM64, and RISC-V, minification
-achieves 100.00% FDE coverage and reduces .eh_frame size 18%-28% below
-SFrame v3 (.sframe).
+Provide unwind_user_cfi_arch() in arch/x86/include/asm/unwind_user.h for
+both 64-bit x86-64 (%rsp=7, %rbp=6, %rip=16) and 32-bit IA-32 compat
+(%esp=4, %ebp=5, %eip=8) user tasks, and select HAVE_UNWIND_USER_CFI on
+X86_64.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- rust/Makefile              |  4 +++-
- scripts/Makefile.build     | 12 ++++++++++--
- scripts/Makefile.lib       | 13 +++++++++++--
- scripts/Makefile.vmlinux_o |  8 +++++++-
- 4 files changed, 31 insertions(+), 6 deletions(-)
+ arch/x86/Kconfig                   |  1 +
+ arch/x86/include/asm/unwind_user.h | 47 ++++++++++++++++++++++++++++++
+ 2 files changed, 48 insertions(+)
 
-diff --git a/rust/Makefile b/rust/Makefile
-index 0165626decbe..1238b4ac661d 100644
---- a/rust/Makefile
-+++ b/rust/Makefile
-@@ -668,7 +668,8 @@ quiet_cmd_rustc_library = $(if $(skip_clippy),RUSTC,$(RUSTC_OR_CLIPPY_QUIET)) L
- 		$(CC_FLAGS_RUST_INLINE_HELPERS) -Wno-override-module -c $(patsubst %.o,%.m.bc,$@) -o $@ \
- 		$(cmd_ld_single)) \
- 	$(if $(rustc_objcopy),;$(OBJCOPY) $(rustc_objcopy) $@) \
--	$(cmd_objtool)
-+	$(cmd_objtool) \
-+	$(cmd_min_eh_frame)
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 58dce0b66179..c8096cf66c38 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -300,6 +300,7 @@ config X86
+ 	select HAVE_SYSCALL_TRACEPOINTS
+ 	select HAVE_UACCESS_VALIDATION		if HAVE_OBJTOOL
+ 	select HAVE_UNSTABLE_SCHED_CLOCK
++	select HAVE_UNWIND_USER_CFI		if X86_64
+ 	select HAVE_UNWIND_USER_FP		if X86_64
+ 	select HAVE_USER_RETURN_NOTIFIER
+ 	select VDSO_GETRANDOM			if X86_64
+diff --git a/arch/x86/include/asm/unwind_user.h b/arch/x86/include/asm/unwind_user.h
+index 6e469044e4de..1a6be08968c3 100644
+--- a/arch/x86/include/asm/unwind_user.h
++++ b/arch/x86/include/asm/unwind_user.h
+@@ -4,9 +4,17 @@
  
- rust-analyzer:
- 	$(Q)MAKEFLAGS= $(srctree)/scripts/generate_rust_analyzer.py \
-@@ -721,6 +722,7 @@ endif
- define rule_rustc_library
- 	$(call cmd_and_fixdep,rustc_library)
- 	$(call cmd,gen_objtooldep)
-+	$(call cmd,gen_min_eh_framedep)
- 	$(call cmd,gendwarfksyms)
- endef
+ #ifdef CONFIG_UNWIND_USER
  
-diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-index 6127feb970c6..ced0f630f566 100644
---- a/scripts/Makefile.build
-+++ b/scripts/Makefile.build
-@@ -281,6 +281,10 @@ ifdef CONFIG_OBJTOOL
- $(obj)/%.o: private objtool-enabled = $(if $(is-standard-object),$(if $(delay-objtool),$(is-single-obj-m),y))
- endif
++#include <linux/unwind_dwarf_cfi.h>
+ #include <asm/ptrace.h>
+ #include <asm/uprobes.h>
  
-+ifdef CONFIG_UNWINDER_DWARF_CFI_MINIFY
-+$(obj)/%.o: private min-eh-frame-enabled = $(if $(filter-out scripts/mod/empty.o,$@),$(is-standard-object))
-+endif
++/**
++ * unwind_user_word_size() - Return the user-space word size in bytes on x86
++ * @regs: User-mode register state.
++ *
++ * Return: 8 for 64-bit user mode, 4 for 32-bit IA-32/compat mode, or 0 for
++ * VM86 mode stacks which cannot be unwound.
++ */
+ static inline int unwind_user_word_size(struct pt_regs *regs)
+ {
+ 	/* We can't unwind VM86 stacks */
+@@ -15,22 +23,61 @@ static inline int unwind_user_word_size(struct pt_regs *regs)
+ 	return user_64bit_mode(regs) ? 8 : 4;
+ }
+ 
++/**
++ * unwind_user_cfi_arch() - Populate x86/x86-64 DWARF register numbers
++ * @ws: User word size in bytes (8 for x86-64, 4 for i386).
++ * @arch: Output DWARF CFI architecture descriptor.
++ *
++ * Return: true if @ws is 4 or 8, false otherwise.
++ */
++static inline bool unwind_user_cfi_arch(unsigned int ws,
++					struct dwarf_cfi_arch *arch)
++{
++	if (ws == 8) {
++		*arch = (struct dwarf_cfi_arch){
++			.ws	= 8,
++			.sp_reg	= 7,	/* %rsp */
++			.fp_reg	= 6,	/* %rbp */
++			.ra_reg	= 16,	/* %rip */
++		};
++		return true;
++	}
++	if (ws == 4) {
++		*arch = (struct dwarf_cfi_arch){
++			.ws	= 4,
++			.sp_reg	= 4,	/* %esp */
++			.fp_reg	= 5,	/* %ebp */
++			.ra_reg	= 8,	/* %eip */
++		};
++		return true;
++	}
++	return false;
++}
 +
- ifneq ($(findstring 1, $(KBUILD_EXTRA_WARN)),)
- cmd_warn_shared_object = $(if $(word 2, $(modname-multi)),$(warning $(kbuild-file): $*.o is added to multiple modules: $(modname-multi)))
- endif
-@@ -371,11 +375,13 @@ quiet_cmd_rustc_o_rs = $(RUSTC_OR_CLIPPY_QUIET) $(quiet_modtag) $@
- 		$(CC) $(CLANG_FLAGS) $(filter-out $(CC_FLAGS_LTO),$(KBUILD_CFLAGS)) \
- 		$(CC_FLAGS_RUST_INLINE_HELPERS) -Wno-override-module -c $(patsubst %.o,%.m.bc,$@) -o $@ \
- 		$(cmd_ld_single)) \
--	$(cmd_objtool)
-+	$(cmd_objtool) \
-+	$(cmd_min_eh_frame)
+ #endif /* CONFIG_UNWIND_USER */
  
- define rule_rustc_o_rs
- 	$(call cmd_and_fixdep,rustc_o_rs)
- 	$(call cmd,gen_objtooldep)
-+	$(call cmd,gen_min_eh_framedep)
- endef
+ #ifdef CONFIG_HAVE_UNWIND_USER_FP
  
- $(obj)/%.o: $(obj)/%.rs FORCE
-@@ -518,14 +524,16 @@ $(obj)/lib.a: $(lib-y) FORCE
- 	$(call if_changed,ar)
++/* Standard x86 frame record: {saved_bp, ret_addr} at [bp, bp + 2 * ws). */
+ #define ARCH_INIT_USER_FP_FRAME(ws)			\
+ 	.cfa_off	=  2*(ws),			\
+ 	.ra_off		= -1*(ws),			\
+ 	.fp_off		= -2*(ws),			\
+ 	.use_fp		= true,
  
- quiet_cmd_ld_multi_m = LD [M]  $@
--      cmd_ld_multi_m = $(LD) $(ld_flags) -r -o $@ @$< $(cmd_objtool)
-+      cmd_ld_multi_m = $(LD) $(ld_flags) -r -o $@ @$< $(cmd_objtool) $(cmd_min_eh_frame)
++/* At function entry before push %rbp: return address is at [sp, sp + ws). */
+ #define ARCH_INIT_USER_FP_ENTRY_FRAME(ws)		\
+ 	.cfa_off	=  1*(ws),			\
+ 	.ra_off		= -1*(ws),			\
+ 	.fp_off		= 0,				\
+ 	.use_fp		= false,
  
- define rule_ld_multi_m
- 	$(call cmd_and_savecmd,ld_multi_m)
- 	$(call cmd,gen_objtooldep)
-+	$(call cmd,gen_min_eh_framedep)
- endef
- 
- $(multi-obj-m): private objtool-enabled := $(delay-objtool)
-+$(multi-obj-m): private min-eh-frame-enabled := $(CONFIG_LTO_CLANG)
- $(multi-obj-m): private part-of-module := y
- $(multi-obj-m): %.o: %.mod FORCE
- 	$(call if_changed_rule,ld_multi_m)
-diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
-index 19e96b30a122..b27bcd50daf7 100644
---- a/scripts/Makefile.lib
-+++ b/scripts/Makefile.lib
-@@ -222,6 +222,12 @@ objtool-enabled := y
- 
- endif # CONFIG_OBJTOOL
- 
-+ifdef CONFIG_UNWINDER_DWARF_CFI_MINIFY
-+min_eh_frame := $(objtree)/scripts/min_eh_frame
-+cmd_min_eh_frame = $(if $(min-eh-frame-enabled), ; $(min_eh_frame) $@)
-+cmd_gen_min_eh_framedep = $(if $(min-eh-frame-enabled), { echo ; echo '$@: $$(wildcard $(min_eh_frame))' ; } >> $(dot-target).cmd)
-+endif
-+
- # Useful for describing the dependency of composite objects
- # Usage:
- #   $(call multi_depend, multi_used_targets, suffix_to_remove, suffix_to_add)
-@@ -265,7 +271,8 @@ endif
- quiet_cmd_cc_o_c = CC $(quiet_modtag)  $@
-       cmd_cc_o_c = $(CC) $(c_flags) -c -o $@ $< \
- 		$(cmd_ld_single) \
--		$(cmd_objtool)
-+		$(cmd_objtool) \
-+		$(cmd_min_eh_frame)
- 
- define rule_cc_o_c
- 	$(call cmd_and_fixdep,cc_o_c)
-@@ -273,17 +280,19 @@ define rule_cc_o_c
- 	$(call cmd,checksrc)
- 	$(call cmd,checkdoc)
- 	$(call cmd,gen_objtooldep)
-+	$(call cmd,gen_min_eh_framedep)
- 	$(call cmd,gen_symversions_c)
- 	$(call cmd,record_mcount)
- 	$(call cmd,warn_shared_object)
- endef
- 
- quiet_cmd_as_o_S = AS $(quiet_modtag)  $@
--      cmd_as_o_S = $(CC) $(a_flags) -c -o $@ $< $(cmd_objtool)
-+      cmd_as_o_S = $(CC) $(a_flags) -c -o $@ $< $(cmd_objtool) $(cmd_min_eh_frame)
- 
- define rule_as_o_S
- 	$(call cmd_and_fixdep,as_o_S)
- 	$(call cmd,gen_objtooldep)
-+	$(call cmd,gen_min_eh_framedep)
- 	$(call cmd,gen_symversions_S)
- 	$(call cmd,warn_shared_object)
- endef
-diff --git a/scripts/Makefile.vmlinux_o b/scripts/Makefile.vmlinux_o
-index 0b37bd5dc3a4..160d43fbb393 100644
---- a/scripts/Makefile.vmlinux_o
-+++ b/scripts/Makefile.vmlinux_o
-@@ -52,6 +52,10 @@ vmlinux-objtool-args-$(if $(KLP_SYMIDS),y)		+= --klp-symids
- 
- objtool-args = $(vmlinux-objtool-args-y) --link
- 
-+ifdef CONFIG_UNWINDER_DWARF_CFI_MINIFY
-+min-eh-frame-enabled := $(CONFIG_LTO_CLANG)
-+endif
-+
- # Link of vmlinux.o used for section mismatch analysis
- # ---------------------------------------------------------------------------
- 
-@@ -64,13 +68,15 @@ quiet_cmd_ld_vmlinux.o = LD      $@
- 	$(addprefix -T , $(initcalls-lds)) \
- 	--whole-archive vmlinux.a --no-whole-archive \
- 	--start-group $(KBUILD_VMLINUX_LIBS) --end-group \
--	$(cmd_objtool)
-+	$(cmd_objtool) \
-+	$(cmd_min_eh_frame)
- 
- cmd_check_function_names = $(srctree)/scripts/check-function-names.sh $@
- 
- define rule_ld_vmlinux.o
- 	$(call cmd_and_savecmd,ld_vmlinux.o)
- 	$(call cmd,gen_objtooldep)
-+	$(call cmd,gen_min_eh_framedep)
- 	$(call cmd,check_function_names)
- endef
- 
++/**
++ * unwind_user_at_function_start() - Check if @regs is at a function entry point
++ * @regs: User-mode register state.
++ *
++ * Return: true if stopped on an entry uprobe before the frame prologue ran.
++ */
+ static inline bool unwind_user_at_function_start(struct pt_regs *regs)
+ {
+ 	return is_uprobe_at_func_entry(regs);
 -- 
 2.56.1.831.g720f3f5937-goog
 
