@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.172
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.49
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795577495;
-	b=YN3et9vEB6wrzjlGM4yCxqGnQJSUvqrnHBV24gFmgboFE4WHVIwv9qyfiWCs3X3eNCdq
-	 qq5O6bTVmLOuVLqs32wzhtIyWRnopaTyDVybXwgMLAOGAuaTR+o1Hn8mG3FusrgCzJ55D
-	 CzQnCwv+aZJ7EY6SDZRDPkr4a6R7N5jp8/8PmpK2e4tUIuWA1yQ6t9A0OVVUb2QVATNWm
-	 oqqFQhjy73oujnRpSkEvQ9ek/Xj8/PEBinoKrDtfZI8/KpqHe5uVE+iUoyHFL9hUhweHq
-	 thepVs1rp3XKCbwBwDMtN/E0p+xrMjdREaDhh5vfW1tYyGfIZcl6TgRJ1QEsRe4clEA==
+	t=1795577501;
+	b=1ezZJc/UPKyJsuG1VgJXJ44OEH0Ng1nJgk1+Bw+qvjpaQqQoUoGMAIvIsSFcCZ9TTe4P
+	 05OlgGOP8gkjtakdI+RCg6+mxW0bIZyrsLswbUuu/vcLPTKkVBgs4lv7mR3IJkqpk8qeT
+	 xjvajYIRTDV3CD9FDQV4MEpbNNbMILSGOrf/BLHUnECHtNpZqS8UJyv32Ft+DcltG4ryG
+	 a15a7BvFwhnLawQwtYHQ2JJ6lB5yGZiV997UjupaHSHpz13VvU0CoTYi+CzWChgxqFJSu
+	 g86tsr3MD5pKe/GS/zKXGppw1toIWzV2DCArCeTs0BBiQyYDzRBKp5fOXUy8Z8/6ffQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795577495;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795577501;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=IGeYop8QFo4Dh+O2L3u67JkSJGivN//i0lkXH46Igig=;
-	b=IEnL0fW0n4NtRn8shYi3RIvFWzhEdOo7dV+AQTzbn82jRrBejcVIAykCXNt7ui9eM0au
-	 YZcgKMj1eOjIZiuAFr389hy5l6ruiSXfk+Q0j39ushnBhVKx8LlVo3QnaDcvKXULGnjBN
-	 4EZxMtfw/kCu9ckntN7v0gLSdxToqG0ogxPwYbpKYJNhx3EMFgkkhdCLXrVUKCWCyY4Tx
-	 eplyBKDHUCMHsMxiYT4THwX5oP+iKdfq1zqxdvbH1zCcUZconcIh/DRd12fzd+D6myE1j
-	 c4H+NLL6JmKZoAOxF3iIoG8yCPuIc9JR+ewyMQdLvEbAdSXTITXFiN6mDIDBEDdr3tQ==
+	bh=HVAJBAmjGbPAOjSl65DCtf2SbsUtmSEnDzK6RS98Q0s=;
+	b=TWyxpSwvqmMJUgh1+TLrL0oLjjH32sKiTpUB/Uurm44Y40ebtd0e0lfy3t/JqT7MOyCs
+	 rJmTz4lKKpy4mqGLin1UiM4u7R/PvCBGmMtOAsMor9I9E4IIGAqnpnWxq7WnT7tHzARXD
+	 vbL1g/+Y6ZGI5rV76ey76kQddWDmzczlF6hfz/5LxeS3g0QKs6SUUjNriracFfQUiFoYB
+	 54MYw+FtTk8Ue2k17LYxSNJrllskbsdftSCOwGZCsKJbdgILanv4Qtqc6X3wC70/WsIrT
+	 8NLKG02NPZ6K97bXC10qqtm+S6UIwR3VTqIeAo7LYZe9/Eccc3QS3N2JM1xaoz+EQEQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=UNklbvYV;
-	arc=none smtp.remote-ip=209.85.215.172
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=x4JPgZp6;
+	arc=none smtp.remote-ip=209.85.216.49
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07B9E606A31E
-	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 03:31:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 07B9E606A31E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0331606A31E
+	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 03:31:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E0331606A31E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=UNklbvYV
-Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-cdba1bbde0bso2038549a12.2
-        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 19:31:34 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=x4JPgZp6
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-3b413d04c93so3065861a91.1
+        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 19:31:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795577494; x=1796182294; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1795577500; x=1796182300; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=IGeYop8QFo4Dh+O2L3u67JkSJGivN//i0lkXH46Igig=;
-        b=UNklbvYVA0bS5VMGwJnuRV6p/4CIFtaV5ZAGb8DH0AfCoqgwVFIX5VmrMN+5dnxt5Z
-         f3qxsuKwR8ad6x61b0PnO+oyLhY6gGcGTPI0ptnXBqnAmfTnjNIA+YU3Imw3AxmtrVfF
-         wwyrzPTZWk4hNVVN96mK1lkdsRejsCTxXhQOsCYfdT716QEyT8QoGL9+ruDiOO2w1i4v
-         vEA/w8W0thY/k/vt+ssxSvgbZN9bEhUoz4UzE6JkundHWlBTkTNjUXDxF2/ii+wfyGMG
-         LphBW1fj17Y1Od/LoOM6EMfvGsJnT49rM5B9Hw+Zd9CTx3EokTo/4uaqw9Pv7chvzypQ
-         aH8Q==
+        bh=HVAJBAmjGbPAOjSl65DCtf2SbsUtmSEnDzK6RS98Q0s=;
+        b=x4JPgZp6pT7wrVq1pwuY/zxlpYp8hqZaFPhvC37Nm+H2LUcN33lq2JglAF1Oh1sN0y
+         Q9WWMcikWR2eVCKLJUyuXp8AlqANg7T9oWX7DX9DD0U7Vi8mqQ+4l1TDneZ3oL4cvRTx
+         7DhEDyyzA6woXnmTifeCLlxvOa/YfhrEc2AiGMoqlOP0o1UmB0WUbL3YWh3XYn/QNd0B
+         QrfZ/CQrbihVP7u3ChUHw8uAkKHdkfKqxTvUSM8x7Xs9XsEXGWsi1zw9Vldquj6kxTvT
+         vqi7EReWIi1HeH99ONp3+pMKRM5RYHVYS/kMwg6Q7MRljYaTM6rMj1YN41zsLut3rrbb
+         zWYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795577494; x=1796182294;
+        d=1e100.net; s=20260707; t=1795577500; x=1796182300;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=IGeYop8QFo4Dh+O2L3u67JkSJGivN//i0lkXH46Igig=;
-        b=GKhYMKct47i8q0vxp2uKPzm/xD/Bk3f0oRZU+yZVXEQo4BC1ALDXt1f6Zjj/kYNzpw
-         TbeLnL69XMJTREH/BMtKtzHXDACojGDGkbGIFcwNejY26Q8qC9n/Id6lsXssVlEHLYER
-         yTL3cNvk5kyS7uhfIEC40rUx0AcBjXnzsgsuN9E2/TpEXuhHndI8jugDkPx0V1QZdBu8
-         RMkxFUJK4qnlz5lsYlkaTkfXQpnGTqLeMyIeE4wQcWmXVkZ0hGYJ1dcGkaI4faUshWXE
-         Tm6v2VrLVgkp+qiaoGAQ8YiFcsBGfA2d1pOzQOyY/BukOIC8QMgqxdJI9nAHkwOre65G
-         /0hg==
-X-Gm-Message-State: APuU4Z8gpgiZQAdkAt2jISnxACzwUGvCmg8A5LnzMSNrEoZZ4TxTrOGT
-	5e7fsxvFF0QUJk5S7LUutfVp6kD5IJdOFOplzz5/+f1yTEzYzxJTv3+np3iHXOB2
-X-Gm-Gg: AZFdTZegvA8eOrr6ALV/JeUxhTw4h//xAbAmFrlAKRqP8jdFSe3G1Gv6fa9akDcmKIl
-	feraNDz+ViPlLMo4X/reEiW+rhEymRBgGAK7EmnpdGuyBUfBQBKYCNJckmvN5nhrUzE5RbMvA56
-	PiLmU632nWG6h/iujyhhzpqJ2turjJZUN8pCXGlngV2ZffDPK/k42Y0OfBZ0qQmdO8tkJk0E1Tc
-	n+uBjV0by8/emk7Biw2nJFTI4Agthxpd/DFgJb2g/rFeU16eJ5u4ko56uK58e3K7JSDBIZLHbY2
-	qL5F+ENwRTabPltxeY9xf1WfLoDdR3DHNA5UbQhs+y8RI0WR68Bwo8XpTnUHz5nrb1gVnqhGpd9
-	zfmZcAd3qOxxbq/cbFAohrZMsS8FoRWcUcdiYUwhuGOvYBbTiYAx3umfq8gRe6RzhQxxzZT2OLj
-	O+EiDSOz5m9SbBeCgWA+8WzjY/LALnn9qKp4Qlj1ODyxnioI7yAy86BJJDRtEXgfp8ayuop3Trn
-	umZ5l0Kz4JC7+Lt1B37SyCNKDCyhdqYfhGbeqqhxNkSrT8b1z2OALxP7tyAJEU944HvZew+W9cR
-	77kioIkb2IIBJuSAQDyaMJLQkezfsNF1ldGpiO0Ihy+rqQ+4clLM5K6ePx64m5oTgYl3L6zjx7r
-	s14ljBBUdmRCYPNGchbAjbiOYhSLAboo1ypyCiLz1EX2GU5nH7yh5T9IDP28QAC4Rry2EdkbzHy
-	QnhLSOrNmI7aYfx5rqSXgB
-X-Received: by 2002:a17:90b:3b47:b0:3b1:83d4:5d33 with SMTP id 98e67ed59e1d1-3b41c99524bmr16017446a91.60.1795577494142;
-        Tue, 24 Nov 2026 19:31:34 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.245])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b41ad8ef99sm26159736a91.12.2026.11.24.19.31.33
+        bh=HVAJBAmjGbPAOjSl65DCtf2SbsUtmSEnDzK6RS98Q0s=;
+        b=0L5Vih8eEPyoKKnA6k9/nzIZCr4ix38Dtf2aSs/PHWaza3b0sBBKYc7uswqFvVMlpq
+         N0ppgz7ZBhNsO8f3Ryov1tsW2OExTD9tLcCdbPK8C62wotVCEJR/1/GCQS/iE2LjX2Wx
+         neVdk0UBCMrus/U2DaEruAcPYqsaxfYykHacqVupmWg78ShM1aJ8mZKjxe2yW38I5NxY
+         JYdeUSjsZTVtYx3mCZcsTOMAE/c7B4/+TU1vCEfNtFHb5XMyoS1+Tt6BCdLrTdZwVMXR
+         DhQJdwcmA/voXYWF3zMZ5qXkRitGLufgItpBV7ITZolQU72Necqp0PNeTDJS5bMU+pTx
+         7mDQ==
+X-Gm-Message-State: APuU4Z+bCR9Qaa39u+wqjRRIIkx7c72tjeBh05uKfvg1R0GQV8U5md7n
+	0g78iMmLsy3/hcs7nzF3gBmHMkOg9MzsJmEIwDdyo2rNqCRibBXamPUkM23PXf+Z
+X-Gm-Gg: AZFdTZeZODAJVVwJz2c6KgHnlapo1HR3fUgObqz1FHwIsWjdi+lFyy76DpGpp7uVmYg
+	WY/SvKvGmo/PHrUQlN316JkP4b0B1+FP4HG72/tpb7Vr9oK6HkO7F53ZpNr19aIJgQPycvdmsPv
+	dK3qVt7b5G5UNCB8mECX+fwvIX0dG76+DCLlJVnwxJukw/Ro1ldyFbeTUC7i3NPFmngSOZyrguG
+	SlLeIaN3vJ+bHO7Rj7HggMlXTKyFFRIzbF0ON026Qo4/S8A+25NEuV16uGtuMIvxU69t/YRCFYH
+	k0GKQ7DyvYLAKQbxvks1HqN7BCchXwzgxFM7hFNditcbj+E4SCaDMSS+Tim3BgCXU/sfQj7JzXC
+	l90vjdPJGp3eeIHqgaQqcYJrYLCnLTuxfwjMzrzhQ04Xh9TaxJJ8yMqr6k6haeX/EUSS+acw8xX
+	O+uXEX6E1CjdlZ/E/TVsqsrRJGgCX3XqYTDfyFbdYWqLPOBhg9MXUZFLHou8e6L1ArCOwsuuWVg
+	OZMLYDg+vU8oaTrbaRPUua04NDOKTO8gRz9mhNrIIUkBkxWYuvwHVyz+VuO6tcbkPpNFEYannEv
+	7Un4ZIyBewwSSEWIEUbyjo26ZnMj4FmVDQL5xKCYZ3hB1cS3T9yb+obf8JwoS0yI8yUCIUee9aK
+	1lPjxhinR/UlTVX7E616qoih74aGuI84jQn1sbdqgm2mmVn9BjgEd2bnNvnWr0vzsN1wKc2q1Ij
+	Q=
+X-Received: by 2002:a17:90b:2b46:b0:3ac:7f4c:a68c with SMTP id 98e67ed59e1d1-3b41cb0d0e2mr17073693a91.49.1795577500009;
+        Tue, 24 Nov 2026 19:31:40 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.254])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2f0b58fce71sm23958595ad.45.2026.11.24.19.31.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Nov 2026 19:31:33 -0800 (PST)
+        Tue, 24 Nov 2026 19:31:39 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf 19/47] bpf: Take bpf_lock with interrupts disabled
-Date: Wed, 25 Nov 2026 03:29:10 +0000
-Message-ID: <20261125032938.670542-20-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf 20/47] bpf: Bound the time that dumps of the stack take
+Date: Wed, 25 Nov 2026 03:29:11 +0000
+Message-ID: <20261125032938.670542-21-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261125032938.670542-1-alexei.starovoitov@gmail.com>
 References: <20261125032938.670542-1-alexei.starovoitov@gmail.com>
@@ -104,46 +104,140 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-A program can disable interrupts with bpf_local_irq_save().
-bpf_setsockopt(TCP_CONGESTION) can put the last reference of a
-struct_ops map there, which removes the symbols of the trampolines with
-spin_lock_bh(). Use the irqsave lock, as bpf_map_free_id() does.
-PREEMPT_RT is as before, both locks sleep there.
+may_goto looks at the time once in BPF_MAX_TIMED_LOOPS trips. A dump of
+the stack takes long, and it is staged before the stream is asked for
+room. A may_goto loop over bpf_stream_print_stack(), or one that faults
+in an arena on each trip, holds up RCU tasks and can end in a soft
+lockup.
 
-Fixes: 5db69b0fbdc8 ("bpf: Make struct_ops tasks_rcu grace period optional")
+Let the next may_goto of the program look at the time after a dump.
+Remember the length of a report that did not fit, and skip the next ones
+until a reader has made room for it.
+
+Fixes: d7c431cafcb4 ("bpf: Add dump_stack() analogue to print to BPF stderr")
+Fixes: 63328bb23f26 ("bpf: Add bpf_stream_print_stack stack dumping kfunc")
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/core.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ include/linux/bpf.h    |  5 ++++-
+ include/linux/filter.h |  1 +
+ kernel/bpf/core.c      |  9 +++++++++
+ kernel/bpf/stream.c    | 21 +++++++++++++++++++--
+ 4 files changed, 33 insertions(+), 3 deletions(-)
 
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index e98d26cf6ced..448431c4cd2d 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1841,6 +1841,7 @@ struct bpf_stream {
+ 	struct llist_node *backlog_tail; /* tail of the list above */
+ 	wait_queue_head_t waitq;
+ 	struct irq_work notify_work;
++	int refused;		/* length of the last stage that did not fit */
+ 	bool notify_used;	/* notify_work was queued at least once */
+ 	bool dead;
+ };
+@@ -4339,6 +4340,7 @@ int bpf_prog_stream_init(struct bpf_prog *prog, gfp_t gfp_extra_flags);
+ void bpf_prog_stream_free(struct bpf_prog *prog);
+ int bpf_prog_stream_read(struct bpf_prog *prog, enum bpf_stream_id stream_id, void __user *buf, u32 len);
+ int bpf_prog_stream_new_fd(struct bpf_prog *prog, enum bpf_stream_id stream_id, u32 flags);
++bool bpf_stream_has_room(struct bpf_prog *prog, enum bpf_stream_id stream_id);
+ void bpf_stream_stage_init(struct bpf_stream_stage *ss);
+ void bpf_stream_stage_free(struct bpf_stream_stage *ss);
+ __printf(2, 3)
+@@ -4353,7 +4355,8 @@ int bpf_stream_stage_dump_stack(struct bpf_stream_stage *ss);
+ #define bpf_stream_stage(ss, prog, stream_id, expr)            \
+ 	({                                                     \
+ 		bpf_stream_stage_init(&ss);                    \
+-		(expr);                                        \
++		if (bpf_stream_has_room(prog, stream_id))      \
++			(expr);                                \
+ 		bpf_stream_stage_commit(&ss, prog, stream_id); \
+ 		bpf_stream_stage_free(&ss);                    \
+ 	})
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index 5a664d706ee9..5cf3582823f5 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -1334,6 +1334,7 @@ u64 bpf_arch_uaddress_limit(void);
+ void arch_bpf_stack_walk(bool (*consume_fn)(void *cookie, u64 ip, u64 sp, u64 bp), void *cookie);
+ u64 arch_bpf_timed_may_goto(void);
+ u64 bpf_check_timed_may_goto(struct bpf_timed_may_goto *);
++void bpf_timed_may_goto_check_time(const struct bpf_prog *prog);
+ void bpf_timed_may_goto_save(const struct bpf_prog *prog, struct bpf_timed_may_goto *saved);
+ void bpf_timed_may_goto_restore(const struct bpf_prog *prog, struct bpf_timed_may_goto *saved);
+ bool bpf_helper_changes_pkt_data(enum bpf_func_id func_id);
 diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 2f6392ccef73..47c43e8099dc 100644
+index 47c43e8099dc..50d175fcef69 100644
 --- a/kernel/bpf/core.c
 +++ b/kernel/bpf/core.c
-@@ -648,11 +648,10 @@ static struct latch_tree_root bpf_tree __cacheline_aligned;
- 
- void bpf_ksym_add(struct bpf_ksym *ksym)
- {
--	spin_lock_bh(&bpf_lock);
-+	guard(spinlock_irqsave)(&bpf_lock);
- 	WARN_ON_ONCE(!list_empty(&ksym->lnode));
- 	list_add_tail_rcu(&ksym->lnode, &bpf_kallsyms);
- 	latch_tree_insert(&ksym->tnode, &bpf_tree, &bpf_tree_ops);
--	spin_unlock_bh(&bpf_lock);
+@@ -3713,6 +3713,15 @@ void bpf_timed_may_goto_restore(const struct bpf_prog *prog, struct bpf_timed_ma
+ 		*cur = *saved;
  }
  
- static void __bpf_ksym_del(struct bpf_ksym *ksym)
-@@ -666,9 +665,8 @@ static void __bpf_ksym_del(struct bpf_ksym *ksym)
++/* A walk of the stack is too long for BPF_MAX_TIMED_LOOPS trips. The next one looks at the time. */
++void bpf_timed_may_goto_check_time(const struct bpf_prog *prog)
++{
++	struct bpf_timed_may_goto __percpu *tmg = prog->aux->main_prog_aux->timed_may_goto;
++
++	if (tmg && this_cpu_read(tmg->count))
++		this_cpu_write(tmg->count, 1);
++}
++
+ /* for configs without MMU or 32-bit */
+ __weak const struct bpf_map_ops arena_map_ops;
+ __weak u64 bpf_arena_get_user_vm_start(struct bpf_arena *arena)
+diff --git a/kernel/bpf/stream.c b/kernel/bpf/stream.c
+index 83e803ea54ef..65f65876afdb 100644
+--- a/kernel/bpf/stream.c
++++ b/kernel/bpf/stream.c
+@@ -74,7 +74,9 @@ static int bpf_stream_consume_capacity(struct bpf_stream *stream, int len)
  
- void bpf_ksym_del(struct bpf_ksym *ksym)
+ static void bpf_stream_release_capacity(struct bpf_stream *stream, int len)
  {
--	spin_lock_bh(&bpf_lock);
-+	guard(spinlock_irqsave)(&bpf_lock);
- 	__bpf_ksym_del(ksym);
--	spin_unlock_bh(&bpf_lock);
+-	atomic_sub(len, &stream->capacity);
++	if (atomic_sub_return(len, &stream->capacity) + READ_ONCE(stream->refused) <
++	    BPF_STREAM_MAX_CAPACITY)
++		WRITE_ONCE(stream->refused, 0);
  }
  
- static bool bpf_prog_kallsyms_candidate(const struct bpf_prog *fp)
+ static void bpf_stream_notify(struct irq_work *work)
+@@ -490,6 +492,15 @@ void bpf_prog_stream_free(struct bpf_prog *prog)
+ 	}
+ }
+ 
++/* A dump of the stack is expensive, and a loop can ask for one on each trip */
++bool bpf_stream_has_room(struct bpf_prog *prog, enum bpf_stream_id stream_id)
++{
++	struct bpf_stream *stream = bpf_stream_get(stream_id, prog->aux);
++
++	return stream && atomic_read(&stream->capacity) + READ_ONCE(stream->refused) <
++			 BPF_STREAM_MAX_CAPACITY;
++}
++
+ void bpf_stream_stage_init(struct bpf_stream_stage *ss)
+ {
+ 	init_llist_head(&ss->log);
+@@ -531,13 +542,19 @@ int bpf_stream_stage_commit(struct bpf_stream_stage *ss, struct bpf_prog *prog,
+ 	struct bpf_stream *stream;
+ 	int ret;
+ 
++	bpf_timed_may_goto_check_time(prog);
++
+ 	stream = bpf_stream_get(stream_id, prog->aux);
+ 	if (!stream)
+ 		return -EINVAL;
++	if (!ss->len)
++		return 0;
+ 
+ 	ret = bpf_stream_consume_capacity(stream, ss->len);
+-	if (ret)
++	if (ret) {
++		WRITE_ONCE(stream->refused, min(ss->len, BPF_STREAM_MAX_CAPACITY / 2));
+ 		return ret;
++	}
+ 
+ 	list = llist_del_all(&ss->log);
+ 	head = tail = list;
 -- 
 2.55.0
 
