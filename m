@@ -1,61 +1,63 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795608634;
-	b=IT4J060VruZdnyjAK7mD7pn0pXRnPQR/JEK2z1cJyQTH6+To4gSY6Csmi/UYv4k5VCPi
-	 +1bOnAhRHmFOwzSbZUceb82qB26qMmhCxuktUQtuzPQ9NRHzOXVm37+Z4a6V9bfFhL+6a
-	 thlvwDMqW+ynDfyMS67+oXaV2LNqh7pPeIZq3itGH05EFwKXvfuEdLpcaQhQ40hO/3d7c
-	 V+gYH6KR6D8h5z1ejL9ZEi2nReNaZmGt8oAA4twIcPmPcPbDQeVYGaUjtm6MbOkn05FCs
-	 Mig925XPfzuNb0vuacYY8f67xTfCMgQ9v5HJia5zt0hVTnan1Z/vqmJCEFQd9t9XQCg==
+	t=1795608720;
+	b=oIbXqyAoaWojZdJS/OwLGPtx2n6qVlm7bQ1vX2/K2U/uABAYmr5twF/AOfqs5OxAoCgS
+	 V/KYy/6CrFD5uQpjTizMlbwbe3Yux5R1qS9gsz9i8UhjTtVaaTzSvYqxWBSF9Zng6Ky/a
+	 aDAwYDhI78jYdkKSKT2vRkj82bM7cg91u1roXlC9VubKRIeuA21qYCMWL05hpzNeSKigk
+	 zIiCL+GdY9hwYv5WoIO2tz4osYbpWlTSs9k9DLYnuPj1/tNZ+sgDanKFvBGnVn4QoWyjy
+	 TUEf8vZ7ilh0eiSQcKmnxnu/OFbmFzwGRpkYz3/c9pSCt+HdCA+QcNB+ZxKKBEtGhaw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795608634;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:In-Reply-To:References:
-	 Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=lwSVIkf4H5DLmHZtAVdmdeInMPNEa97LYtHNs6tNosc=;
-	b=GnLBw7BRWSNNhyisu9VDYxrt3lBYeEijeSuaZ9n09K85Hr7VrYs9Wvnr+lANjoaN32QC
-	 2OFyTCfmM8BCDtYaIL3wHGXDl4XDM8PBEO3Ah9JHAn7FrwnpcxRnmwp83vWOt+A44nKog
-	 /TGq/tQOefazh9rzR6eHJgL97ooLjZN/Q7anJ6IK6RCoajDhy7wopY0eNwuJAIpcdRqs1
-	 6AI75fiYtI0M9g8wUdPmlpws31fGOdm7Ec4paQAbC8MaDq/FkcWKunlvQY6gibRYgf/DZ
-	 e5DWksuTg2wDR2ZpN5c7XRjqKmY5Lt+2KLSJPXo3LRdpQCQVPw3y633N4GcmVw1k+xQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795608720;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:
+	 Content-Transfer-Encoding:In-Reply-To;
+	bh=zoIAFYAcrw2In7mPsz0I79pd13SW8TJXMyFwyHpwC1k=;
+	b=4UBmW+lVZSsM7Zol7m6Ahlotz3ChODw959qPjWytFH8dsvVEfeSvKe2kitCfFHZ3uZiR
+	 PIHbt4AD7Z2unRlq5H91N11Ljk3P4xBkQcARCRTJd+48BoarRL0BLMaNyTeAu+k53Ca8b
+	 zVA/LMm3s46p2+SlN11XPY2vVx2UydZjtUw7liA4bQ9PvAe9xkw/5FREVB8SubYQstw+m
+	 zFWsKHhfQfQ3fAOvTWqaknqkQpL+NJoY/4dSzNrxSQU0YHQeJUCp+73hDvbzM+xElVi/d
+	 FblsIzDcqontQh8aSnyyTD1EkD/b25QvQqGFmpuhKBJ9mxP0rWHGgu33XfKvCekBtoQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Zvtvl9bg;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UDXyQVo9;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 867FA606A321;
-	Wed, 25 Nov 2026 12:10:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A99CE606A31E;
+	Wed, 25 Nov 2026 12:12:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Zvtvl9bg
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F3701F000CA;
-	Wed, 25 Nov 2026 12:10:33 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=UDXyQVo9
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE2691F000CA;
+	Wed, 25 Nov 2026 12:11:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795608634;
-	bh=lwSVIkf4H5DLmHZtAVdmdeInMPNEa97LYtHNs6tNosc=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=Zvtvl9bgrWc8ubcSi6DKWZ980FQrQMLOyDC8fjuSOaa8vFx2sWdZDNsxmsk4ufmTt
-	 bqaY1kiN0Xzbi59rROhKsCAT03CHk5IrJLeZuyWMRn9lS68gl7dcG0PjfNQwE8KGDx
-	 A/NzKx9wIddutlkFkTVVGJBBO+x/l0rGUma2ob7ajknXwhhvK3Zfe7rhTeUSP2sGD3
-	 Na254HfDnwACCz95R+RDmaHc785HiG9xfxOn80BVCkvuHyRsXvsYOBKYhc898dXuAh
-	 /iM18DYBVjkKh6osIjPJ9Fnh/HpX+Xmh/2hILRcMYGQ9eUt9nzMHEsk9nOBSxKVfI7
-	 RlrjJzZlUrPkg==
-From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To: Kyuwon Cho <kyuwoncho18@gmail.com>, Magnus Karlsson
- <magnus.karlsson@intel.com>, Maciej Fijalkowski
- <maciej.fijalkowski@intel.com>
-Cc: Stanislav Fomichev <sdf@fomichev.me>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski
- <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Willem de Bruijn
- <willemb@google.com>, Simon Horman <horms@kernel.org>, Alexei Starovoitov
- <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard
- Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
- netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH net v2] xsk: keep the charged page count when pinning a
- umem fails
-In-Reply-To: <179556786851.2007362.7849536379916971930@gmail.com>
-References: <179556786851.2007362.7849536379916971930@gmail.com>
-Date: Wed, 25 Nov 2026 13:10:30 +0100
-Message-ID: <87zeuxnmbt.fsf@all.your.base.are.belong.to.us>
+	s=k20260515; t=1795608720;
+	bh=zoIAFYAcrw2In7mPsz0I79pd13SW8TJXMyFwyHpwC1k=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=UDXyQVo9ECntjvpQbMJ/hC9fIhbVdR2aq4mM07ICQmsBluEJnMw5Ew6ycPsnPcXgN
+	 NSnZ4LttzwNCF1DLgS0McSQRLtvQNhEzNGSnNHLG+BgTcnVqxQJOcYZq1ZNhpjwAOr
+	 MK2gVwEXQyqOcgotezSvv4KSlBUnBdwn3K3/EtmDeyrXO4xqs+YFWmsjdhambuX9er
+	 ikcTTeaXXypizqg0q02qJ9ssWdRN8Pt2dc06DXLDy+5vpiUzHAutcK2pK5wA+5OZ29
+	 j9QCRqj4Qyp7IJZCUUd3iVqz7ichk2hcGRiOzEYJl1LikyJGa03l4rYeMuEu4CwvP3
+	 l1+KJWq8amdPQ==
+Date: Wed, 25 Nov 2026 12:11:53 +0000
+From: Simon Horman <horms@kernel.org>
+To: netdev-bot+sashiko@kernel.org
+Cc: m-malladi@ti.com, marco.crivellari@suse.com, kees+treewide@kernel.org,
+	laixiangwu@cmss.chinamobile.com, philippe.schenker@impulsing.ch,
+	haokexin@gmail.com, devnexen@gmail.com, jacob.e.keller@intel.com,
+	sdf@fomichev.me, john.fastabend@gmail.com, hawk@kernel.org,
+	daniel@iogearbox.net, ast@kernel.org, pabeni@redhat.com,
+	kuba@kernel.org, edumazet@kernel.org, davem@davemloft.net,
+	andrew+netdev@lunn.ch, bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, srk@ti.com, vigneshr@ti.com,
+	danishanwar@ti.com
+Subject: Re: [PATCH net-next 1/2] net: ti: icssg-prueth: Add multi-flow RX
+ support with per-flow NAPI
+Message-ID: <20261125121153.GU31322@horms.kernel.org>
+References: <20261118184729.2302130-2-m-malladi@ti.com>
+ <179537406410.3135.5804903978186343042@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -66,29 +68,63 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <179537406410.3135.5804903978186343042@kernel.org>
 
-Kyuwon Cho <kyuwoncho18@gmail.com> writes:
+On Sun, Nov 22, 2026 at 07:01:04PM +0000, netdev-bot+sashiko@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 19 potential
+> issue(s) to consider.
+> 
+> Critical: 2 · High: 1 · Medium: 12 · Low: 4
+> 
+> If you believe none of the issues are legitimate, please reply to each
+> issue of Medium severity or higher and explain why the AI is wrong.
+> If any of them are legitimate and you plan to respin, please let patchwork
+> know by including "pw-bot: cr" as a separate line at the end of your reply
+> (one such reply per series is enough).
+> 
+> - [Critical] SR1 data RX path is out of bounds.
+> - [Critical] SR1 management-channel buffers get invalid DMA addresses.
+> - [High] On a running interface, a failed XSK enable/disable leaves the
+>   flow half torn down, and the next ndo_stop then hangs or the driver…
+> - [Medium] Multi-flow RX does not work on AM65x SR2 ('ti,am654-icssg-
+>   prueth'), which uses NAVSS UDMA rather than PKTDMA, but the driver…
+> - [Medium] SR1 management-channel teardown is incomplete compared with
+>   before the patch.
+> - [Medium] Misplaced error label in SR1 emac_ndo_open().
+> - [Medium] An AF_XDP pool bound while the interface is down silently
+>   stops working after ndo_open.
+> - [Medium] All flows share one desc_pool, and the XSK runtime refill
+>   budget comes from the pool-wide free count, which other CPUs change…
+> - [Medium] The SR1 data-flow page pool is never destroyed.
+> - [Medium] SR1 now gets an RX coalescing hrtimer but never cancels it.
+> - [Medium] prueth_xsk_pool_disable() can return an uninitialised value.
+> - [Medium] On a running interface, XSK enable/disable now reconfigures a
+>   single flow while the shared UDMA RX channel stays enabled.
+> - [Medium] Racy irq_disabled handling in prueth_destroy_rxq() and the
+>   prueth_create_rxq() error path.
+> - [Medium] RX drop and error counters can lose updates now that RX runs
+>   in several NAPIs at once.
+> - [Medium] A coalesce setting is not applied to RX flows added later.
+> - [Low] The ethtool channel range does not match what SR1 implements.
+> - [Low] In the SR1 mgm flow setup in emac_ndo_open(), the IRQ check is
+>   wrong for the signed field.
+> - [Low] Leftover field and mixed-in cleanups.
+> - [Low] net: ti: icssg: missing skb_record_rx_queue() in RX packet paths
 
-> xdp_umem_reg() charges umem->npgs pages to the user's locked_vm before
-> it pins the umem. When pin_user_pages() pins fewer pages than asked,
-> xdp_umem_pin_pages() overwrites umem->npgs with the pinned count so that
-> xdp_umem_unpin_pages() releases only those, and xdp_umem_unaccount_pages()
-> then gives back only that many. The rest of the charge is never returned.
->
-> A short pin happens when the tail of the umem area is not mapped. With
-> RLIMIT_MEMLOCK at 16 pages, three registrations of an 8-page area whose
-> last 4 pages are unmapped leave the user able to register only 4 pages,
-> for as long as the user has a process running.
->
-> Unpin the pinned pages directly and leave umem->npgs as charged.
->
-> Fixes: c0c77d8fb787 ("xsk: add user memory registration support sockopt")
-> Reported-by: Sashiko <sashiko-bot@kernel.org>
-> Closes: https://lore.kernel.org/all/20260421172951.A7052C2BCB5@smtp.kerne=
-l.org/
-> Signed-off-by: Kyuwon Cho <kyuwoncho18@gmail.com>
+This is quite a list of issues. And I would appreciate if you could
+respond to them as requested above. For patch 1/2, the four that look most
+likely to require a respin are:
 
-Nice catch!
+  - [Critical] SR1 data RX path is out of bounds.
+  - [Critical] SR1 management-channel buffers get invalid DMA addresses.
+  - [High] On a running interface, a failed XSK enable/disable leaves the
+    flow half torn down, and the next ndo_stop then hangs or the driver...
+  - [Medium] Multi-flow RX does not work on AM65x SR2 ('ti,am654-icssg-
+    prueth'), which uses NAVSS UDMA rather than PKTDMA, but the driver...
 
-Reviewed-by: Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org>
+Patch 2/2 likely needs attention as well, but I have not reviewed it.
+
+-- 
+pw-bot: changes-requested
