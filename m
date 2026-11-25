@@ -1,58 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.206
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795588634;
-	b=I5TVFQUYGv1LEF0JKiBcD+D7qAeVqo9bv3+EYh1oYhhiTCwEbu9bryFu6AezYpgvleTJ
-	 C8GhJYXKYNwM4d7CVJMBHfP68K2f6iy2nDuViSRyyjSW8tRiH3NkG5cDAeCTfNdz1Biye
-	 gdIht0rZTowgK4XpI3yfsc+/Wn37sV87CJqyZoVRf85uUrp3oai2urWZ0D5JfRHECbqLm
-	 3HvAAq0JR7SAjmenZiO9XHXAFopyGXAOTZ30IZP1lE6UHM8cvUpAfnloNX/U033aWijd9
-	 1z4OgqeJfwVsMkUoYrofcRFvH4Yigro8hOIgnRiNRn5m9oe8LS5Fz/No+IHo+tAj+Hw==
+	t=1795588641;
+	b=hWvrhBWosscJES2fUldxkYNin5ubcTtChfMKZuyWmVc1N900HzKmenQpPvcGnRDp0IAz
+	 ACqfv7czpOPESubW2A7NfWa7KWor49uvgsVioJDt5D4YiAom4mVGb7h2JjFBmv1sWXsAV
+	 pcaNovTifNIJKSC/LMVF+LpVAx4eRQPGcaCd7UMAZKiPTb9dyiNhPijLgT/9sr2Lhazej
+	 5ItlfgNYLy/4oX2FS9ZatB7ziT9WkTrq21taZMrAFzFG5r7x4tY4sHJDw2yZaq4Lwx3yN
+	 E1abnFMJE8FMKuiFbwUlz+pqbGezslORMAX9FByTNqtTaysp30MVY0xfBVZCwol0/8w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795588634;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=RszRfCKfbcgcbLkX4hDIS/N4LcUZfX68oWST1IeO/EU=;
-	b=3/phIeEpHSwFl2byFCPrQRqnQEXa/KRVT2wmNRrLXP22uCTvQHboTWHcin7sizcgBs8f
-	 cmk8nbM7EynWkTL+MAE6bnh4aFVCtlI976EgA8ntdPQhQM4pGs6hzsgk3pkdqNt9OVsdT
-	 P/CP6pwI3u3TvMZNBunYoXDC1C4mDXfV+7no1JtL4u8nwzZQbye/1J8E7a9HDTERUSJF4
-	 8oAjWE5tP4LysGtq5dfc40we8K8ozICxYtmOfTs2IfvFEBPrJkgvRJdoe5nAuVIpPpfFJ
-	 icm/F+4fgdeSYg00b8WPUfDjEKJE2lfeRrJT6dfS1je6RrR4H49L014Yrhbl7xaqseg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795588641;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=q/Rj58SaH5amWTyNmer9CsZ6IqXDXPNCk/zSC3unopI=;
+	b=4quSZr5a0puSqKJfSzzXXwGTqP2SJlUcA7T+I0/rC2r28GkbiXghd3DBPhvmb2eU+NMZ
+	 UgBVPHgxFVduhwE5cPKbbxAujKQ7w83D2uFP63bGMzIl0ZwgGt77u526sBserBb+0pRQx
+	 QsQIQv+4t0yhw1NwDaew1CyTRdSdf5Oeir0I9zU1luOIROSPUGKJ9SI3LQo+A+GVj2msS
+	 oK29BazYFtu6HF9KDftQq703YH0h4IAgwd5r7wp+eqLOHlObE8ywqhu6ZO3jE4VastfR0
+	 wgBbs9irmtRLqrPpFUMw7zwn3lc4RiySEuqSiV6bWNGguahz87AO7+zQtSVjoq7UBvA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nibebcfs;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=q5d6DVJR;
+	arc=none smtp.remote-ip=95.215.58.206
+Received: from mta1.migadu.com (out-206.mta1.migadu.com [95.215.58.206])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8514E606A31E;
-	Wed, 25 Nov 2026 06:37:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DBF4606A31E
+	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 06:37:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5DBF4606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nibebcfs
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52B211F000D0;
-	Wed, 25 Nov 2026 06:37:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795588634;
-	bh=RszRfCKfbcgcbLkX4hDIS/N4LcUZfX68oWST1IeO/EU=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=nibebcfsU9mj8cSUzsxuTfZ9vOxoWLO3oET56dfD2Y7MfogwFR89AkVQMhRpQg9Jt
-	 vWQ3sz5AzLFKLMMMRuz2HxjMvvXR9q/uEuHApp4+pCN/bE4bS7DSU64GD7VBpgjcSZ
-	 VclnJDdLZq51vZ1Hi2HreXdqr/+FSglVL+H5cSDzoFB7CunHviXlCsu2v5p7i8JN4U
-	 XhoR7z3G94TKFFNF+HbtnftZD/18xrVcrOXYuj04Yl08H+HfPVoMqRt8TfOjGuvEoM
-	 VIM8/nus6WVMG6qNtyHMynSjsviOxGptUUYyAdF4YbBaM01R0NGNBFwvqOstqMPWL6
-	 KrRrLw8mVs8og==
-Message-ID: <sashiko-outbox-232718@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [RFC PATCH v2 26/30] tools/unwind: Add standalone libLLVM
- Minimal DWARF CFI verifier
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Ian Rogers" <irogers@google.com>, linux-trace-kernel@vger.kernel.org
-Cc: jpoimboe@kernel.org, rostedt@goodmis.org, peterz@infradead.org, mingo@redhat.com, tglx@kernel.org, bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org, catalin.marinas@arm.com, will@kernel.org, mark.rutland@arm.com, pjw@kernel.org, palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr, acme@kernel.org, namhyung@kernel.org, linux-perf-users@vger.kernel.org, mhiramat@kernel.org, ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, bpf@vger.kernel.org, nathan@kernel.org, nsc@kernel.org, linux-kbuild@vger.kernel.org, ojeda@kernel.org, ardb@kernel.org, linux-efi@vger.kernel.org, "Marc
- Zyngier" <maz@kernel.org>, "Oliver Upton" <oupton@kernel.org>, kvmarm@lists.linux.dev, shuah@kernel.org, indu.bhagat@oracle.com, jremus@linux.ibm.com, wnliu@google.com, dylanbhatch@google.com, gary@garyguo.net
-In-Reply-To: <20261125061523.1540234-27-irogers@google.com>
-References: <20261125061523.1540234-1-irogers@google.com>
- <20261125061523.1540234-27-irogers@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 25 Nov 2026 06:37:11 +0000
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=q5d6DVJR
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=Rue6WWUDqbUiDGZQOImbpN9tuORsHUiNUGcW6y17oMA=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1795588638; v=1; x=1796193438;
+ b=q5d6DVJRa8oAnf8vyrkzerITtkrT4wiX6G9nDh5BbJ4elSbjbcPOb0p1hagSUsbbtuAP9WWg
+ +UxdMf+FdxYmKXg94zEJq2QJAiTTQdQ9Pzo3JqHN9hEZdkmjAu3uIzjd3UJWINIXtyEKktd3pqJ
+ qQg7xqQdikA3H7se/iDAORhE=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 52e2bc64e5274c4c;
+	Wed, 25 Nov 2026 06:37:17 +0000
+X-Mizu-Trace-ID: 52e2bc64e5274c4c
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <663c0be8-60c8-45d6-baf6-5bc4ac0ae173@linux.dev>
+Date: Wed, 25 Nov 2026 14:37:10 +0800
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -61,93 +57,184 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net] tcp: fix CA module refcount underflow in
+ tcp_v4_syn_recv_sock()
+To: netdev-bot+sashiko@kernel.org
+Cc: netdev@vger.kernel.org, edumazet@kernel.org, ncardwell@google.com,
+ kuniyu@google.com, davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+ horms@kernel.org, fw@strlen.de, daniel@iogearbox.net,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+References: <20261124062625.264148-1-jiayuan.chen@linux.dev>
+ <179558800299.3135.4905748131998876050@kernel.org>
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <179558800299.3135.4905748131998876050@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issues to consider:
-- [Medium] tools/unwind: missing host arch include path breaks build on
-  RISC-V hosts
-- [Low] tools/unwind: uint64_t overflow in verifyFile() kmem_arena
-  bounds check
---
 
-commit 8799e1737c7df626cec2cf3930d6a2c81661a407
-Author: Ian Rogers <irogers@google.com>
 
-tools/unwind: Add standalone libLLVM Minimal DWARF CFI verifier
+On 11/25/26 2:26 PM, netdev-bot+sashiko@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 2 potential
+> issue(s) to consider.
+> 
+> Critical: 0 · High: 0 · Medium: 1 · Low: 1
+> 
+> If you believe none of the issues are legitimate, please reply to each
+> issue of Medium severity or higher and explain why the AI is wrong.
+> If any of them are legitimate and you plan to respin, please let patchwork
+> know by including "pw-bot: cr" as a separate line at the end of your reply
+> (one such reply per series is enough).
+> 
+> - [Medium] The new error path in tcp_v4_syn_recv_sock()
+>   (net/ipv4/tcp_ipv4.c) jumps to clear_ca_and_exit when…
+> - [Low] The commit message presents the bug as a module refcount
+>   underflow that shows up as a module_put() WARNING.
+> 
+> --
+> 
+> tcp: fix CA module refcount underflow in tcp_v4_syn_recv_sock()
+> 
+> The child socket inherits icsk_ca_ops from the listener without taking a
+> reference. If inet_csk_route_child_sock() fails, the child then puts the
+> listener's reference. This patch clears icsk_ca_ops on that error path and
+> makes tcp_cleanup_congestion_control() skip a socket that has no CA.
+> 
+>> If inet_csk_route_child_sock() fails in between, we go to put_and_exit
+>> and tcp_done() ends up in tcp_cleanup_congestion_control(), which puts
+>> the reference unconditionally. The one dropped belongs to the listener.
+> 
+> [Severity: Low]
+> 
+> Is the impact larger than a refcount underflow warning?
+> 
 
-This commit adds a standalone host tool (tools/unwind/verify_cfi) that links
-against kernel/unwind/dwarf_cfi.c and compares its unwind results against
-libLLVM's reference DWARFUnwindTable.
+> module_put() uses atomic_dec_if_positive() and only warns when the count
+> would go negative:
+> 
+> kernel/module/main.c:module_put() {
+>     ...
+> 		ret = atomic_dec_if_positive(&module->refcnt);
+> 		WARN_ON(ret < 0);	/* Failed to put refcount */
+>     ...
+> }
+> 
+> While the listener still holds its reference, the child's put in
+> tcp_cleanup_congestion_control() succeeds silently and uses up the
+> listener's reference. The quoted WARN only fires after earlier occurrences
+> have already drained that reference.
+> 
+> Once that has happened, try_release_module_ref() lets rmmod of tcp_bbr
+> succeed while the listener's icsk_ca_ops still points into the module.
+> Later children read icsk_ca_ops->owner through bpf_try_module_get() in
+> tcp_ca_openreq_child(), and closing the listener calls ->release() on it.
+> Could either of these be a use-after-free?
+> 
+> If the count has dropped below the base instead, rmmod would hit
+> BUG_ON(ret < 0) in try_release_module_ref().
+> 
+> For BPF struct_ops congestion control, bpf_module_put() goes through
+> bpf_struct_ops_put() -> bpf_map_put():
+> 
+> include/linux/bpf.h:bpf_module_put() {
+> 	if (owner == BPF_MODULE_OWNER)
+> 		bpf_struct_ops_put(data);
+> 	else
+> 		module_put(owner);
+> }
+> 
+> In that case the extra put drops a struct_ops map reference while the
+> listener is still using the map.
+> 
+> Could the commit message describe this impact, for the benefit of stable
+> maintainers?
+> 
 
-> diff --git a/tools/unwind/Makefile b/tools/unwind/Makefile
-> new file mode 100644
-> index 0000000000000..ca6b84dbd31a3
-> --- /dev/null
-> +++ b/tools/unwind/Makefile
-> @@ -0,0 +1,123 @@
+It's meanless, we can't enumerate all cases‌ into commit message.
 
-[ ... ]
 
-> +TOOLS_INCLUDES :=3D -I$(srctree)/tools/include -I$(srctree)/tools/includ=
-e/uapi \
-> +		  -I$(srctree)/tools/arch/x86/include
+>> diff --git a/net/ipv4/tcp_cong.c b/net/ipv4/tcp_cong.c
+>> index e3f462f161dd6..0f99405a78b11 100644
+>> --- a/net/ipv4/tcp_cong.c
+>> +++ b/net/ipv4/tcp_cong.c
+>> @@ -271,6 +271,9 @@ void tcp_cleanup_congestion_control(struct sock *sk)
+>>  {
+>>  	struct inet_connection_sock *icsk = inet_csk(sk);
+>>  
+>> +	if (!icsk->icsk_ca_ops)
+>> +		return;
+>> +
+>>  	if (icsk->icsk_ca_initialized && icsk->icsk_ca_ops->release)
+>>  		icsk->icsk_ca_ops->release(sk);
+>>  	icsk->icsk_ca_initialized = 0;
+>> diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c
+>> index 2fc92a7884fc8..8aa52376cf0aa 100644
+>> --- a/net/ipv4/tcp_ipv4.c
+>> +++ b/net/ipv4/tcp_ipv4.c
+>> @@ -1732,7 +1732,7 @@ struct sock *tcp_v4_syn_recv_sock(const struct sock *sk, struct sk_buff *skb,
+>>  	if (!dst) {
+>>  		dst = inet_csk_route_child_sock(sk, newsk, req);
+>>  		if (!dst)
+>> -			goto put_and_exit;
+>> +			goto clear_ca_and_exit;
+>>  	} else {
+>>  		/* syncookie case : see end of cookie_v4_check() */
+>>  	}
+>> @@ -1789,6 +1789,9 @@ struct sock *tcp_v4_syn_recv_sock(const struct sock *sk, struct sk_buff *skb,
+>>  exit:
+>>  	tcp_listendrop(sk);
+>>  	return NULL;
+>> +clear_ca_and_exit:
+>> +	/* newsk holds no reference on the inherited CA yet. */
+>> +	inet_csk(newsk)->icsk_ca_ops = NULL;
+> 
+> [Severity: Medium]
+> 
+> Does this comment hold in all cases?
+> 
 
-[Severity: Medium]
-Does hardcoding only tools/arch/x86/include in TOOLS_INCLUDES break the bui=
-ld
-on RISC-V hosts?
 
-dwarf_cfi_host.c includes kernel/unwind/dwarf_cfi.c, which pulls in
-tools/include/linux/nospec.h -> tools/include/asm/barrier.h ->
-tools/arch/riscv/include/asm/barrier.h -> <asm/fence.h>.  Without
--I$(srctree)/tools/arch/$(HOSTARCH)/include (via ../scripts/Makefile.arch),
-the compiler cannot find tools/arch/riscv/include/asm/fence.h when building
-on riscv64.
 
-> diff --git a/tools/unwind/verify_cfi.cpp b/tools/unwind/verify_cfi.cpp
-> new file mode 100644
-> index 0000000000000..15d99ba57ce35
-> --- /dev/null
-> +++ b/tools/unwind/verify_cfi.cpp
-> @@ -0,0 +1,789 @@
+> tcp_create_openreq_child() calls inet_csk_clone_lock(). That function moves
+> the child to TCP_SYN_RECV and then calls security_inet_csk_clone(), all
+> before the route lookup above:
+> 
+> net/ipv4/inet_connection_sock.c:inet_csk_clone_lock() {
+>     ...
+> 	inet_sk_set_state(newsk, TCP_SYN_RECV);
+> 
+> 	inet_clone_ulp(req, newsk, priority);
+> 
+> 	security_inet_csk_clone(newsk, req);
+>     ...
+> }
+> 
+> bpf_lsm_inet_csk_clone is listed in bpf_lsm_locked_sockopt_hooks in
+> kernel/bpf/bpf_lsm.c. A BPF_LSM_CGROUP program attached there can
+> therefore call bpf_setsockopt(TCP_CONGESTION) on the child:
+> 
+> sol_tcp_sockopt_congestion()
+>   do_tcp_setsockopt()
+>     tcp_set_congestion_control()
+>       bpf_try_module_get(ca, ca->owner)  <- takes a reference on the new CA
+>       tcp_reinit_congestion_control()
+>         tcp_init_congestion_control()    <- ca->init(),
+>                                             icsk_ca_initialized = 1
+> 
 
-[ ... ]
+It's not for net tree and I have already sent a fix to bpf tree. 
 
-> +static int verifyFile(const char *path, const VerifyOptions &opts)
-> +{
+I also intentionally mentioned it under diff stat to suppress this review
+but I think I failed:
 
-[ ... ]
+'''
+   ...
+   Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+   ---
+   security_inet_csk_clone() -> bpf_setsockopt(TCP_CONGESTION) from a
+   lsm_cgroup prog has a similar problem, the child puts a reference it
+   never took. That one is being fixed in the bpf tree.
+   ...
+'''
 
-> +	uint64_t min_eh_vma =3D std::min(eh_hdr_vma, eh_vma);
-> +	uint64_t max_eh_end =3D std::max(eh_hdr_vma + eh_hdr_bytes.size(),
-> +				       eh_vma + eh_bytes.size());
-> +	std::vector<uint8_t> kmem_arena;
-> +	bool can_test_kmem =3D
-> +		(max_eh_end >=3D min_eh_vma) &&
-> +		(max_eh_end - min_eh_vma) <=3D (64ULL * 1024 * 1024) &&
-> +		isRelativeEhEncoding((uint8_t)eh_hdr_bytes[1]) &&
-> +		isRelativeEhEncoding((uint8_t)eh_hdr_bytes[3]);
-> +	const uint8_t *kmem_hdr =3D nullptr;
-> +	const uint8_t *kmem_eh_start =3D nullptr;
-> +	const uint8_t *kmem_eh_end =3D nullptr;
-> +	if (can_test_kmem) {
-> +		kmem_arena.assign(max_eh_end - min_eh_vma, 0);
-> +		memcpy(kmem_arena.data() + (eh_hdr_vma - min_eh_vma),
-> +		       eh_hdr_bytes.data(), eh_hdr_bytes.size());
-> +		memcpy(kmem_arena.data() + (eh_vma - min_eh_vma),
-> +		       eh_bytes.data(), eh_bytes.size());
-
-[Severity: Low]
-Can an integer overflow in the section end calculation bypass the kmem_arena
-bounds check and write out of bounds?
-
-In a malformed ELF file where one section end addition wraps around 64 bits
-(for example eh_hdr_vma + eh_hdr_bytes.size()) while the other does not,
-std::max() selects the un-wrapped end address.  max_eh_end >=3D min_eh_vma =
-and
-the 64 MiB limit can then both hold, leaving kmem_arena smaller than
-(eh_hdr_vma - min_eh_vma) + eh_hdr_bytes.size() when memcpy() runs.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261125061523.1540=
-234-1-irogers@google.com?part=3D26
