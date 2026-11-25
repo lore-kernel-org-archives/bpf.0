@@ -1,56 +1,113 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.178
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795579119;
-	b=kV+6JSDq5HwHWU3MGAFfdXzsD0TIjvhxIR0AAqb6qQy4sXPsvd4qLkK/jGmqI+xC1Hs0
-	 baGJtHx2AVvetF/Hy+6C+Z6/rSi3ZoaCp6mg/aQRFv/rLSLEDc5JSKMjKcQ63fc+DLm52
-	 tzfJxvHCH+dcPYEeYI3gMUzZwGVbQtqAJZ6DLpOSEDP7E5Zu/Dr3CmFm1MLjMkKS8I0oH
-	 Fw9GLnbKUBbolQRmXNHNlufknteTTC/HIOt6BfdXWRpKvf/iXAIGKKgTx2qntvg0tKyOi
-	 tLkAPRyoDX5GswE6WhvyVha7u17BGwZtGvzrAJDhrtPLALSw+k9PQgzjg30xcQg7g8A==
+	t=1795579291;
+	b=0NFky005wFNQwMAcVt38i9lVHKEvPdWGxHRCT6Weake5wqntHSELrGyI45EOdgobG31Y
+	 UUZQqy+qMZZ1FP/mgCPqCTSbwZ1Q3XocSK3n//CKnKVqm4jAdGoZmR30cDzfzlQVxKohX
+	 h3DKsDGVJ+O42ZyvWAuKfKQ6eNNSyBHRreRbdDb8JYjqFGlYmGn/ZXbbWOEJ0KL6SOWks
+	 vWw5anNS0YZChppoBAI7+H/2L18jtIarKpzG+dYY8ulF9qqScjrZ1n6MRv8eO6UqbTjGW
+	 71l33yUSEILARhvqEs3b9EYB7lSYWe0INQYX/PQWqRyfhAD4UavJdx5yBvuNjxDR64w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795579119;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=XmXRLQXvMdBgfCtRsm9MEi9YqjF67aBXCT2lVfjQBDM=;
-	b=gnzgGYtagMl12odSVVd68gP13jAWErW5O99ZO0VaiVxWnpDbsm4xqXUvVzU2+6LrOu1P
-	 4BOCegP+UCG1skgjsGjgt5QOidyh8ErlBqlPJmbMQWnGMNj1nOIc6fkEzNxVl1MLeH9gk
-	 bBsxhQIHZxmiihrB/LfGQlLNEkV7HlMcaQe5sS9JqQN2Bq4DJTamDJq3mow2Mpzf8l3TM
-	 MCUOnKr+PjJxvXvJ1fDabdURFy645pkrEKee653NmM4By3s068EH3QYF1lTGQJIPuUMtN
-	 1YU2aZ133WEHlEM6J/j/2VU6lCN9nKkyQlxpt5lDtGgxQ6+l3FfiPTVIBQv+A25+LiA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795579291;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=6REgkPS8nzDDPYO6M6ZYR52ogu8+a8y/VCwAF9sUv5o=;
+	b=UHnFkoZ8Y7jhhmfIKT6jXfEoaX7ux+7KxzkA5mzH0TAG5EYwKIe8+k4ZfkJ9OO0uZj5/
+	 P9a7PAiVcMnRR9nWfQAOvm1wNwOgjNEBLIYVYNzp9PRtOYsM6S/Ej5ZmBnE3FegfWGG3Z
+	 BTyxwGW/AaFBsRJ6vnEHAuSImOoiDb9i6VAsnWoA1qtSDBgqp0ec4hituDDlb0ZMxTsW8
+	 mVd1+ZvEPZvgkg+IQ36UEQsWyE70Jod/Ejh+e5qMp0lX3uIAoUK+rJEETtqbIv6ElvohH
+	 YZFH4DnLfQQt61bKkcffmqhThoTWNee4SFCxmDg9ChriB+vPIIh1u3iRUiARp+EdjrQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZYtVEUC2;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ZT78E86w;
+	arc=none smtp.remote-ip=74.125.82.178
+Received: from mail-dy1-f178.google.com (mail-dy1-f178.google.com [74.125.82.178])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBA35606A31E
-	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 03:58:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77BC1606A31E
+	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 04:01:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 77BC1606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZYtVEUC2
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05E771F000C0;
-	Wed, 25 Nov 2026 03:58:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795579119;
-	bh=XmXRLQXvMdBgfCtRsm9MEi9YqjF67aBXCT2lVfjQBDM=;
-	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=ZYtVEUC2djU53HhB223Mze9Kcl6g9taTtT2tzYwtFI4su1i11KAklUcacoecyo4bv
-	 CrvWh8cXDBjtHqqwJOIkX2uzbwvDelS3PZc27EZHfXYpi266AY/5JxwEnBFjTkDoHJ
-	 hR6ZNL7c2wWM4J4jwspPCXSpdlRhCU6PCBeb7ic+Zhfz9ybEJhPuaMxmixvfFfXdkq
-	 6JmYU5yAe4NE06WGiL8YKak674r+omkY69KIjEdJZfjVYEuLPjwsSWQoVugFSKijdL
-	 vKdsQJXHg2RyXBeG09wefFPbZ+y3b5yfHtLImDczPc09OEYieG4Zbpaq0fBd4NtA5f
-	 FmEB/YxoRCdiA==
-Message-ID: <sashiko-outbox-232540@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf 07/47] bpf: Compare what a hook tells next to its
- prototype at tail calls
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-In-Reply-To: <20261125032938.670542-8-alexei.starovoitov@gmail.com>
-References: <20261125032938.670542-1-alexei.starovoitov@gmail.com>
- <20261125032938.670542-8-alexei.starovoitov@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 25 Nov 2026 03:58:38 +0000
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ZT78E86w
+Received: by mail-dy1-f178.google.com with SMTP id 5a478bee46e88-385d8a00598so7781518eec.1
+        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 20:01:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795579291; x=1796184091; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=6REgkPS8nzDDPYO6M6ZYR52ogu8+a8y/VCwAF9sUv5o=;
+        b=ZT78E86wQe3bgt5nxImE5+aVBs7YtYvND66iVpyhs1/A9gNHPkXnPWIFJTwm6HEtmj
+         k22zmdcmU3/DR92JOkZ2XTpF3ZzjuPFZPvQXXi5LlK5ozQztsKXJhclNqRSxc7u1JBRR
+         hVstKwp7XzzEaBvmewUFjLvKvJuVPJu+blAcCzgfH6BFOH46y1K2IdTuqq5MlS/dXXKC
+         vrS9A5jrqkfSYpZnZWh/YTCJuv4YiBCuqCIaM9s1kiz/manx5VCl97QbOrOsuMUjp5eh
+         ZKEcl5P32ExOK/pMkfDMAXjTwxs2MMYhaYTIqZejtG9+YDkt8fJ12jYor+qYuawzHxcs
+         CG3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795579291; x=1796184091;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=6REgkPS8nzDDPYO6M6ZYR52ogu8+a8y/VCwAF9sUv5o=;
+        b=vUbcNhnKz4Rg1uaFOrniab0cjM1/L4sqQm/6v18qY9n++LWiN9dpehj2QYIpYnoFd6
+         3tW8Oqiaa3KihH2Xbh41yFl2fKgsq3xn4Lj6BEwslYowG2D1uYp2B70jUoyFeV6ee9u8
+         EZC0s9HUUgnUN/4Uw9pH7u5H3buLNTRKWSHUG3FdEXgBwganLCD/s2/uZL0hPrifcVbg
+         W9DlDRBnYGJjlx3ojpZb4c38BnZnBs6SK4Y1RZ+ryCbxDV7PFE/dlPPuFMEc9QQN/eMv
+         rdwTAPuqNpANroltZj56TJAoeJ+NjwSR35ozYXoh4ZZ1vyu7kWSeoc1CiF2DIAaKiMeL
+         d1JQ==
+X-Forwarded-Encrypted: i=1; AL+hErGYiOYONJRIvnFYnwAWblSKxX/WZMINnViuTx9O8LJECEz2Lrohe/gaPwyzTxEHtNEqNYM=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+z7yITew9Gnl5RtdxPwC5M/iddWocFhvTh9Vb4esOZAAu1g19M
+	dmgXc9FRIlZB+5EQ8QCepuLaldMvjatvShFTHtzya+xOz0HtnhAl/kZF
+X-Gm-Gg: AZFdTZeXqADvUwb1rmQdtNf+eTIC5HlJ9a98r2/rgMVA6jQQvHjcYXKKEYygeLMEWtM
+	oVol8cJgxglna+RPgcyM4Ayfd0E6ACKD3OzyTzU7BIPBp7BwSv/DBudsY1ElhHxwT5jBMKoCHvv
+	vAVc99erOXZs4LQQspmmIwdnolaOImfLmswXNCnb90/IeKguVIoeD3rT9D5U0xgQX2AcFWjghH4
+	Itl1sG5D528WLtZJWK/VKOqz4emW9E9BXTO9niVdSq1awcBGXa4HyMNGc1bWtmBfEw0gZNLzWXG
+	TZ9ebFJXvNAYN9XhgoDIwA1vfaYjCVfha/pxSs7stlmJqV8EsvpCX5Xu8w8ON+L2Uk7Du9aO4ae
+	epn+14TopnqKJt8/PS+jSF0UZ5aSrS+imYJhgT0mKvpHylJUBUD+eEFinl6bqIR5/g4WCN2wccY
+	1u+BI/EPJzfcxh5i7zJKJiovtTqqdCRl3A6x8BnrFa2DJ4VJ1PE5PaLq5lxQ4+Ax1WCoV+WNzEG
+	Ot6PR4B3MXJ+nF72mQIhDyPJHsZ6M9KqnLVl0gTIvADMQjC9DBjPnCSdybGBcsbXfT0yWiMCPFC
+	vyCvX9bxS/kSZXjr3qUTjQy1s766d2B1XA/ZcqRqIJddWnBrMORan/zgALuFiL+tVw==
+X-Received: by 2002:a05:7301:2419:b0:367:185e:867a with SMTP id 5a478bee46e88-38571027a5dmr18690085eec.38.1795579290373;
+        Tue, 24 Nov 2026 20:01:30 -0800 (PST)
+Received: from cps-manycore-1 ([147.46.174.222])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-386b1965c02sm19892400eec.27.2026.11.24.20.01.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Nov 2026 20:01:29 -0800 (PST)
+From: Sechang Lim <rhkrqnwk98@gmail.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: John Fastabend <john.fastabend@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Bradley Morgan <bradley.morgan@linux.dev>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+	Joel Fernandes <joelagnelf@nvidia.com>,
+	Josh Triplett <josh@joshtriplett.org>,
+	Boqun Feng <boqun@kernel.org>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Lai Jiangshan <jiangshanlai@gmail.com>,
+	Zqiang <qiang.zhang@linux.dev>,
+	rcu@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: [PATCH bpf-next v2] bpf: Add rcu_read_unlock_special() into btf id deny list
+Date: Wed, 25 Nov 2026 04:01:02 +0000
+Message-ID: <20261125040106.2200628-1-rhkrqnwk98@gmail.com>
+X-Mailer: git-send-email 2.56.1
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -59,73 +116,58 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue to consider:
-- [High] bpf: helper restrictions bypassed via bpf_prog_hook_key() on
-  tail calls
---
+The BPF trampoline takes and drops the RCU read lock itself. When the
+outermost rcu_read_unlock() finds ->rcu_read_unlock_special.s set, it
+calls rcu_read_unlock_special(). If a fentry program is attached to
+rcu_read_unlock_special(), the unlock on the trampoline exit path still
+sees .s set and calls rcu_read_unlock_special() again, which recurses
+until the stack overflows:
 
-commit 641147c8dfcc1727cd4d5af22656fb851b62f335
-Author: Alexei Starovoitov <ast@kernel.org>
+  BUG: TASK stack guard page was hit at ffffc90001657ff8
+  ...
+   bpf_trampoline_6442575622+0x5e/0xac
+   rcu_read_unlock_special+0x5/0x490
+   __rcu_read_unlock+0x9c/0x120
+   rcu_read_unlock_migrate+0x93/0x220
+   bpf_trampoline_6442575622+0x5e/0xac
+   rcu_read_unlock_special+0x5/0x490
+   ...
 
-bpf: Compare what a hook tells next to its prototype at tail calls
+With fexit it recurses even earlier, from percpu_ref_get() in
+__bpf_tramp_enter(), which takes and drops the RCU read lock before the
+program runs.
 
-This commit compares hook-specific properties alongside function prototypes
-when checking program compatibility for tail call maps.
+__rcu_read_unlock() is in the deny list for the same reason. Add
+rcu_read_unlock_special() too.
 
-> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> index 14b8ee05e5063..06a0413da4897 100644
-> --- a/kernel/bpf/core.c
-> +++ b/kernel/bpf/core.c
-> @@ -2515,6 +2515,18 @@ static unsigned int __bpf_prog_ret0_warn(const voi=
-d *ctx,
->  	return 0;
->  }
-> =20
-> +/* What the verifier took from the hook, next to its prototype */
-> +static u64 bpf_prog_hook_key(const struct bpf_prog *fp)
-> +{
-> +	if (IS_ENABLED(CONFIG_BPF_SYSCALL) && fp->aux->attach_btf_trace)
-> +		return btf_raw_tp_null_mask(fp);
-> +	if (fp->type =3D=3D BPF_PROG_TYPE_TRACING && fp->expected_attach_type !=
-=3D BPF_TRACE_ITER)
-> +		return fp->aux->saved_dst_ctx_type;
+Suggested-by: Alexei Starovoitov <ast@kernel.org>
+Reviewed-by: Bradley Morgan <bradley.morgan@linux.dev>
+Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
+---
+v2:
+- Deny the attach in btf_id_deny instead of marking the function
+  notrace (Alexei)
 
-[Severity: High]
-Can a kernel-function tracing program bypass per-function helper restrictio=
-ns
-by tail-calling another tracing program that shares the same deduplicated
-attach_func_proto?
+v1: https://lore.kernel.org/rcu/20261124185659.1370644-1-rhkrqnwk98@gmail.com/
 
-For kernel-function tracers, dst_prog is NULL, so saved_dst_ctx_type is 0 f=
-or
-all of them.  The verifier, however, grants or denies helpers per target
-function in bpf_d_path_allowed() (by attach_btf_id) and
-bpf_sk_storage_tracing_allowed() (by attach_func_name):
+ kernel/bpf/verifier.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-kernel/trace/bpf_trace.c:bpf_d_path_allowed() {
-	...
-	if (btf_id_set_contains(&btf_allowlist_d_path,
-				prog->aux->attach_btf_id))
-		return true;
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index e7013ed8cadd..0e8afc0250b5 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -24735,6 +24735,7 @@ BTF_ID(func, preempt_count_sub)
+ #ifdef CONFIG_PREEMPT_RCU
+ BTF_ID(func, __rcu_read_lock)
+ BTF_ID(func, __rcu_read_unlock)
++BTF_ID(func, rcu_read_unlock_special)
+ #endif
+ BTF_SET_END(btf_id_deny)
+ 
+-- 
+2.56.1
 
-	if (btf_id_set_contains(&btf_allowlist_d_path_fentry,
-				prog->aux->attach_btf_id))
-		return prog->expected_attach_type =3D=3D BPF_TRACE_FENTRY;
-	...
-}
-
-For example, filp_close() (in btf_allowlist_d_path) and filp_close_sync()
-(in btf_allowlist_d_path_fentry) have identical signatures and parameter
-names in fs/open.c, so they share the same BTF_KIND_FUNC_PROTO in vmlinux
-BTF.  An fexit/filp_close_sync program can therefore tail-call an
-fexit/filp_close program and run bpf_d_path(&filp->f_path, ...) after
-fput_close_sync() has already freed filp and its dentry, causing a
-use-after-free.  Likewise, fentry/bpf_sk_storage_free shares its prototype
-with fentry/sk_free and can tail-call it to invoke bpf_sk_storage_get() or
-bpf_sk_storage_delete() while sk->sk_bpf_storage is being freed.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261125032938.6705=
-42-1-alexei.starovoitov@gmail.com?part=3D7
