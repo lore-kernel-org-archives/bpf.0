@@ -1,74 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.71
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.200
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795587386;
-	b=voW5mskeuw4ZB/eQNgGTxiFSCwlKK4aVlis6O1LBjv/nXpeB2hr0U+oLjKx+AMqghAgD
-	 M/wUZlUVZgpdJsglRHbtJfcjmd9zf1YayzoJhCaV8ixZy4VEsZVUm1qr3jr7eXnXqrJ5Q
-	 Fx7PYMgrKA/lcHl7ZYqkg0JnoASho0T1VWdenQnR7xKwL9LiLjFZcMV07Cv0ySEQu89dK
-	 kAUqFyJjH0jVt5L55J1ngtWZJoKqKwmqLomQuXN06Hxsy5sOF+TeID+Dohj+XZV0nq1qE
-	 NrLg5d2hJtoljEJtwtlUit7J/0nd7Thr4ge4U1+TcetVTII0nCDjziwmeoFYt5Q6cyQ==
+	t=1795587392;
+	b=WcD6ENjkK5XgQl8HaETg4UNXdibIiAhlabXa4K5LtkPWrgvQynlNuy4eZNeoy1mIGf+R
+	 RmYCj648DtresbH9YLYQqCEN5+U7k9anWMojgJLsHLhnBwa/9FXaaTUKdOgaQeEWfo3CN
+	 TjFdxBRP8po94jmvCnzw48DYyTmUNR/utPinkCqavsPj3Qs/OEe/CNXEIIoYFw6h54Mq0
+	 y4AtOUU1Q5tTr82PwCC1RalVqYwBc8A0GZ6k1SOMJWQfGrhTBXjiZaSpQEVBv8adnqbca
+	 OUhfGzXYcGINaFhU7ZMjsaH8XuqG+qoAZgwTiRfGLQa0i5zulHJJkLDcRRVuUanMAFg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795587386;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795587392;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
 	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
 	 Content-Type;
-	bh=AdyfYbqQ/HNRByTzpopFuDR8r0ryyJKSQ/AYqA2vA7w=;
-	b=ZDqf6ZVC+7xeQDKkkQzHsKuqLEl5MPLo+kPobT2vL8TR5v82sZhkhLZ48ZwEpw77XXOm
-	 PYv7uAvyPkFmAg0mb6TzVlaaDFp4J8a6oPHnmG5cVcCj1fclFvHC410WOp/w13VfokQ2U
-	 fNMGKWtysvZGOZe2YPYx/SOXj2RpY034iuCrvZTJmBPvx7Th/fJCwL4ZT85ZAYsrTJMYw
-	 +h4Zks2RDAkSvga2rD8DtP3aT6kFBxUVvgmdXDju1FMjZaNOqj1ze/E6Cjn9O6tsYWnNm
-	 3PddlwDhFzcdSwOK6sDSoOlFuNZ+z8KQzx4Q9/obrG5jyY5nv1XLuBV60I7MgtP2x2w==
+	bh=ziD/5SVNpVvJrFTksFhEkRTwEv+vEsuDld5BMClPtX4=;
+	b=PITK8Z7RHz+t9v5O9wPUdgdnLloafS7qepoR8MAPt48wQqb5fvkP+FExRWBXLmqh3zYa
+	 hOfFS1YDNh4IA//4/hgVdeujYRACKg2heilqlkMQpfoBgq3SFgFwWcOqm408Agh/l8Kd9
+	 ryHRKFypGKXPj5xHIZPnWLHX3Uzl+4O46W5ghwcsnoC0NvrWfo52VB+8cCQcJNCnAZbL2
+	 gQTwIJ3HPGfTAYbwFg5pT5yt5k7uy60ym0RO9g1j6z13BHJFcc+1dCcuugm6TxA0wZT9A
+	 l+RQTmYxldUjJBUhm449ELbHg46jARReJ1pl+CtgY2AdqJytWgHKyDtuzOY5DFlu5rA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--irogers.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=ASaD2ruH;
-	arc=none smtp.remote-ip=209.85.210.71
-Received: from mail-ot1-f71.google.com (mail-ot1-f71.google.com [209.85.210.71])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=bPzgH20l;
+	arc=none smtp.remote-ip=74.125.82.200
+Received: from mail-dy1-f200.google.com (mail-dy1-f200.google.com [74.125.82.200])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DE736070A00
-	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 06:16:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8DE736070A00
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C4BD606A999
+	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 06:16:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5C4BD606A999
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=ASaD2ruH
-Received: by mail-ot1-f71.google.com with SMTP id 46e09a7af769-8628955a085so5679424a34.3
-        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 22:16:26 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=bPzgH20l
+Received: by mail-dy1-f200.google.com with SMTP id 5a478bee46e88-384c78aa0dbso7370634eec.0
+        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 22:16:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795587385; x=1796192185; darn=vger.kernel.org;
+        d=google.com; s=20260707; t=1795587391; x=1796192191; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=AdyfYbqQ/HNRByTzpopFuDR8r0ryyJKSQ/AYqA2vA7w=;
-        b=ASaD2ruHwL5oGIneb2jsTM9ytb9Cw+DFmogXKOfvIB5tEAOXr+LWLXyDNl0acN41ec
-         RXE9luUcg9ozU4ArAc4EfU6WTDYLhuY7UKm5Tx74/1sW9r5cgmL1s7rHIK9ZVHj/bz1m
-         Me3dikLyEbGjKh9vzGcAF6EemPAOX9buBnmjwFdw/kvyvJ4yijVptoDrCkVmPaw72k38
-         E7P7nN0ZI3w5zbHy7rYryd/QDFS383G/NEMEhbXLBA0Y3azKvVb3r7t6WGGm+8cl7E8t
-         LMROI19Z8lWnvc6HHjucO/PIIGho2+qIiZ+qiQjtrBiFqoYPYAYUFBKGaSPI8xraTJAG
-         Y0CQ==
+        bh=ziD/5SVNpVvJrFTksFhEkRTwEv+vEsuDld5BMClPtX4=;
+        b=bPzgH20lIs6i7BC22QHQ+O9Q0bT31Xauu6UrJ+nt6GCs9AVKCvLs0lWWLr3NubX3Au
+         QDqWzDD1zwEtb4/EnteDezQrSaJhpEp2XMjmSb7BS5uHwD14Al7zfYmi1JwDJ7Y++8bj
+         GAzrzGLCccvT1bbZrqeRj5ubwYeHDLGt3nG9+Di07/QdpEN8WpXC3X8mhHocns5AVw0S
+         GewcktUHgPxcqJmZmD8rNxqn9jsXdklqXIVEr1JIQdPzOet1CtkHWoCO/ASDNmACJAoh
+         aT3mLPeZb/wB12C+i6qWfsoPe+cGxYamoZ6u8hQRGs0X7/cxPyOnK65GvGPMrVcGe/67
+         PWJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795587385; x=1796192185;
+        d=1e100.net; s=20260707; t=1795587391; x=1796192191;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=AdyfYbqQ/HNRByTzpopFuDR8r0ryyJKSQ/AYqA2vA7w=;
-        b=ISX/Ve26JDd282BkFawngDmlMTNvI6I2pteliHpMqIi367VlreaOqgM5Tadfl+B16p
-         dsnqgwvm/oEppZSrdKmZdOrY1N9HjcBPvDy+eqAqAz6yWrc1VHKJvz0avkQ0D0r3rTk6
-         Uef39mncepbjc83anblAreHCa0L3nuo2otapDjU9vyaWG7Sz1nb7iEM8tgJBw8kklzha
-         aN8fHim/dIR0ZhwEE8so72qYz5bcYhIracv/4S55Jg3hKT+FhQe09IWVLggDt1LmenQK
-         Uf1UvxJTSSsUAaYM+fKxigrZk1CAyIBqrwjZzheNr5E9nPuQgmgc4RXR41xr9Xd4rsRe
-         Wl7w==
-X-Forwarded-Encrypted: i=1; AL+hErGoVHTH1oQMELBChxAzXfDj2ToGYEF7Yl57sPt+wQ2HFgMWuP2zbXeiRxHHP9/KDfmIQ7k=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/mJ3BfHnU9HiXaYEeOoViWu7jGx1nvFXTz9bWQuXw+wpIrfl8P
-	vUGglZmiLehd+LL9HEMzAbfKcSCy5jmZkoSs4brbJAjEsN/1yR/Xb16mgF2CJ38v5R9GgTlsG2w
-	uefe2XhUFbA==
-X-Received: from oix3-n1.prod.google.com ([2002:a05:6808:a543:10b0:56d:7b0c:945f])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6808:2208:b0:4d6:92b3:5c8d
- with SMTP id 5614622812f47-57a0dd479f9mr21031753b6e.67.1795587385204; Tue, 24
- Nov 2026 22:16:25 -0800 (PST)
-Date: Tue, 24 Nov 2026 22:15:07 -0800
+        bh=ziD/5SVNpVvJrFTksFhEkRTwEv+vEsuDld5BMClPtX4=;
+        b=C9CYXT8q4Y4hejZZbhyNqV1ZLUdK0CElAkvCYXd4pb6a1YYqv1g0DaNtfk3vo7ZBCS
+         g/9jlKz1f0U20yijd/X1Xgc4PWpJSn6Y80ppY5ZDhW7kw/Q6r+oE5F9K/uxtvT9BPklD
+         T5H7Y3eaXPI2xttmxXqjPpXrzzcQYXkd8+Y5LSAIdqrLggSjsj1xWziAyu0WCMaVjc1d
+         gUeRZF0wxJKeKSXl/EAoRhd4xUFYW/oYV7Jvr1dbDiD+v2NOpdf5tS+WU/TLaxW+Qp6+
+         BvrjR+C5Zntv7tKazCLt/LryhTvKGXeuVekSgABJZjtgfvFBMZua2JQ+ac4j0TZNOYUj
+         ONYQ==
+X-Forwarded-Encrypted: i=1; AL+hErEDRdnt22uc+q4Y/NZdnz+Na58aMDTUCsvlI4y8C3qeSxHju1MnRIhKwKdX+tULgW62Jis=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/C26GO0Z09LFgpElL0mT3Q87Anh8tcihzueilJPDQPNcHu7vxI
+	LIUYZJV5/6iSiTRyJRwaHDpcI7HaDUz19s6ooas8wtzIx4DIj70i3FSRxbL2c3pXE6O+brF21lS
+	6wpk0nfDLlw==
+X-Received: from dyba2.prod.google.com ([2002:a05:693c:63c2:b0:386:9a0b:1f64])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:693c:60d7:b0:386:a01f:a31e
+ with SMTP id 5a478bee46e88-386a01fa8a5mr13485947eec.29.1795587391007; Tue, 24
+ Nov 2026 22:16:31 -0800 (PST)
+Date: Tue, 24 Nov 2026 22:15:10 -0800
 In-Reply-To: <20261125061523.1540234-1-irogers@google.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -81,8 +81,8 @@ Precedence: list
 Mime-Version: 1.0
 References: <20261125061523.1540234-1-irogers@google.com>
 X-Mailer: git-send-email 2.56.1.831.g720f3f5937-goog
-Message-ID: <20261125061523.1540234-15-irogers@google.com>
-Subject: [RFC PATCH v2 14/30] arm64: unwind_user: Support Minimal DWARF CFI
+Message-ID: <20261125061523.1540234-18-irogers@google.com>
+Subject: [RFC PATCH v2 17/30] riscv: unwind_user: Support Minimal DWARF CFI
  and FP user unwinding
 From: Ian Rogers <irogers@google.com>
 To: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
@@ -104,152 +104,123 @@ Cc: jpoimboe@kernel.org, rostedt@goodmis.org, peterz@infradead.org,
 Content-Type: text/plain; charset="UTF-8"
 
 Wire up CONFIG_HAVE_UNWIND_USER_CFI and CONFIG_HAVE_UNWIND_USER_FP on
-arm64 by providing arch/arm64/include/asm/unwind_user.h and
-unwind_user_sigreturn():
+MMU-enabled RISC-V kernels by adding arch/riscv/include/asm/unwind_user.h
+and unwind_user_sigreturn():
 
- - Populate DWARF CFI register mappings for both 64-bit AArch64
-   (ws=8, sp=31, fp=29, lr=30) and 32-bit AArch32 compat tasks
-   (ws=4, sp=13, fp=11, lr=14).
- - Expose the user frame pointer (x29 / compat_fp) and link register
-   (x30 / compat_lr) via unwind_user_frame_pointer() and
-   unwind_user_link_register(), and override unwind_user_fp_sets_sp() to
-   return false because AArch64 frame records live at the bottom of the
-   callee's stack frame rather than at caller_sp - 16.
- - Implement unwind_user_sigreturn() in arch/arm64/kernel/signal.c to
-   recover pc, sp, x29, and x30 directly from rt_sigframe.uc.uc_mcontext
-   at __kernel_rt_sigreturn when state->sp_valid is true (falling back
-   to user->next_frame via FP otherwise), preserving interrupted leaf
-   functions and SA_ONSTACK alternate signal stacks.
- - Strip user-space pointer authentication codes via
-   ptrauth_strip_user_insn_pac() (and clear Thumb bit 0 for compat user
-   tasks) in unwind_user_strip_pac(), and define ARCH_INIT_USER_FP_FRAME
-   for both 64-bit AArch64 PCS frame records and 32-bit AArch32
-   compat_frame_tail layouts.
+ - Define DWARF CFI register mappings for RV64 and RV32/compat user
+   tasks (sp=2, fp/s0=8, ra=1).
+ - Provide unwind_user_link_register() reading regs->ra for leaf-frame
+   unwinding and ARCH_INIT_USER_FP_FRAME matching the RISC-V psABI
+   frame layout (CFA = s0, RA at s0 - ws, saved s0 at s0 - 2*ws).
+ - Implement unwind_user_sigreturn() (and compat_unwind_user_sigreturn())
+   to recover pc, ra, sp, and s0 from rt_sigframe.uc.uc_mcontext.sc_regs
+   across __vdso_rt_sigreturn (whose vDSO FDE omits register rules so
+   libgcc takes its instruction-matching sigcontext fallback), supporting
+   interrupted leaf functions, -fomit-frame-pointer frames, and
+   SA_ONSTACK alternate signal stacks.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- arch/arm64/Kconfig                   |   2 +
- arch/arm64/include/asm/unwind_user.h | 145 +++++++++++++++++++++++++++
- arch/arm64/kernel/signal.c           |  55 ++++++++++
- 3 files changed, 202 insertions(+)
- create mode 100644 arch/arm64/include/asm/unwind_user.h
+ arch/riscv/Kconfig                   |  2 +
+ arch/riscv/include/asm/signal32.h    |  9 +++
+ arch/riscv/include/asm/unwind_user.h | 82 ++++++++++++++++++++++++++++
+ arch/riscv/kernel/compat_signal.c    | 45 +++++++++++++++
+ arch/riscv/kernel/signal.c           | 57 +++++++++++++++++++
+ 5 files changed, 195 insertions(+)
+ create mode 100644 arch/riscv/include/asm/unwind_user.h
 
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index ee0f263f477d..918d7e278f7d 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -228,6 +228,8 @@ config ARM64
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index e7891a2a89da..84b61c755db3 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -202,6 +202,8 @@ config RISCV
+ 	select HAVE_SAMPLE_FTRACE_DIRECT_MULTI
  	select HAVE_STACKPROTECTOR
- 	select HAVE_STATIC_CALL if CFI
  	select HAVE_SYSCALL_TRACEPOINTS
-+	select HAVE_UNWIND_USER_CFI
-+	select HAVE_UNWIND_USER_FP
- 	select HAVE_KPROBES
- 	select HAVE_KRETPROBES
- 	select HOTPLUG_CORE_SYNC_DEAD if HOTPLUG_CPU
-diff --git a/arch/arm64/include/asm/unwind_user.h b/arch/arm64/include/asm/unwind_user.h
-new file mode 100644
-index 000000000000..919fbc406747
---- /dev/null
-+++ b/arch/arm64/include/asm/unwind_user.h
-@@ -0,0 +1,145 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+#ifndef __ASM_ARM64_UNWIND_USER_H
-+#define __ASM_ARM64_UNWIND_USER_H
++	select HAVE_UNWIND_USER_CFI if MMU
++	select HAVE_UNWIND_USER_FP if MMU
+ 	select HOTPLUG_PARALLEL if HOTPLUG_CPU
+ 	select IRQ_DOMAIN
+ 	select IRQ_FORCED_THREADING
+diff --git a/arch/riscv/include/asm/signal32.h b/arch/riscv/include/asm/signal32.h
+index 96dc56932e76..c1cbcb681aa7 100644
+--- a/arch/riscv/include/asm/signal32.h
++++ b/arch/riscv/include/asm/signal32.h
+@@ -3,9 +3,12 @@
+ #ifndef __ASM_SIGNAL32_H
+ #define __ASM_SIGNAL32_H
+ 
++struct unwind_user_state;
 +
-+#ifdef CONFIG_UNWIND_USER
+ #if IS_ENABLED(CONFIG_COMPAT)
+ int compat_setup_rt_frame(struct ksignal *ksig, sigset_t *set,
+ 			  struct pt_regs *regs);
++bool compat_unwind_user_sigreturn(struct unwind_user_state *state);
+ #else
+ static inline
+ int compat_setup_rt_frame(struct ksignal *ksig, sigset_t *set,
+@@ -13,6 +16,12 @@ int compat_setup_rt_frame(struct ksignal *ksig, sigset_t *set,
+ {
+ 	return -1;
+ }
 +
-+#include <linux/sched.h>
-+#include <linux/sched/task_stack.h>
-+#include <linux/unwind_dwarf_cfi.h>
-+#include <linux/unwind_user_types.h>
-+#include <asm/compiler.h>
-+#include <asm/ptrace.h>
-+
-+/**
-+ * unwind_user_word_size() - Return the user-space word size in bytes on arm64
-+ * @regs: User-mode register state.
-+ *
-+ * Return: 4 for AArch32 compat user mode, or 8 for AArch64 user mode.
-+ */
-+static inline int unwind_user_word_size(struct pt_regs *regs)
-+{
-+	return compat_user_mode(regs) ? 4 : 8;
-+}
-+
-+/**
-+ * unwind_user_frame_pointer() - Fetch the user frame pointer from @regs
-+ * @regs: User-mode register state.
-+ *
-+ * Return: r11 (compat_fp) for AArch32 compat tasks, or x29 for AArch64 tasks.
-+ */
-+static inline unsigned long unwind_user_frame_pointer(struct pt_regs *regs)
-+{
-+	return compat_user_mode(regs) ? regs->compat_fp : frame_pointer(regs);
-+}
-+
-+#define unwind_user_frame_pointer unwind_user_frame_pointer
-+
-+/**
-+ * unwind_user_fp_sets_sp() - Indicate ARM64 FP records do not recover caller SP
-+ *
-+ * AArch64 PCS places {x29, x30} at the bottom of the callee's frame rather than
-+ * adjacent to the caller's stack pointer, so FP unwinding only yields a lower
-+ * bound on the caller's SP.
-+ *
-+ * Return: Always false on arm64.
-+ */
-+static inline bool unwind_user_fp_sets_sp(void)
++static inline
++bool compat_unwind_user_sigreturn(struct unwind_user_state *state)
 +{
 +	return false;
 +}
+ #endif
+ 
+ #endif
+diff --git a/arch/riscv/include/asm/unwind_user.h b/arch/riscv/include/asm/unwind_user.h
+new file mode 100644
+index 000000000000..d3c12a183ac9
+--- /dev/null
++++ b/arch/riscv/include/asm/unwind_user.h
+@@ -0,0 +1,82 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++#ifndef _ASM_RISCV_UNWIND_USER_H
++#define _ASM_RISCV_UNWIND_USER_H
 +
-+#define unwind_user_fp_sets_sp unwind_user_fp_sets_sp
++#ifdef CONFIG_UNWIND_USER
++
++#include <linux/compat.h>
++#include <linux/unwind_dwarf_cfi.h>
++#include <linux/unwind_user_types.h>
++#include <asm/ptrace.h>
 +
 +/**
-+ * unwind_user_link_register() - Fetch the user link register from @regs
++ * unwind_user_word_size() - Return the user-space word size in bytes on RISC-V
 + * @regs: User-mode register state.
-+ * @ra: Output link register value (r14 for AArch32 compat, x30 for AArch64).
 + *
-+ * Return: Always true on arm64 because a link register is architecturally
-+ * present in both AArch64 and AArch32 execution states.
++ * Return: 4 for RV32 compat user tasks, or sizeof(unsigned long) otherwise.
++ */
++static inline int unwind_user_word_size(struct pt_regs *regs)
++{
++	if (IS_ENABLED(CONFIG_COMPAT) && is_compat_task())
++		return 4;
++	return sizeof(unsigned long);
++}
++
++/**
++ * unwind_user_link_register() - Fetch the user link register (ra/x1) from @regs
++ * @regs: User-mode register state.
++ * @ra: Output link register value.
++ *
++ * Return: Always true on RISC-V.
 + */
 +static inline bool unwind_user_link_register(struct pt_regs *regs,
 +					     unsigned long *ra)
 +{
-+	if (compat_user_mode(regs))
-+		*ra = regs->compat_lr;
-+	else
-+		*ra = procedure_link_pointer(regs);
++	*ra = regs->ra;
 +	return true;
 +}
 +
 +#define unwind_user_link_register unwind_user_link_register
 +
 +/**
-+ * unwind_user_strip_pac() - Normalize user return address on arm64
-+ * @ip: Recovered user return address.
-+ * @ra_signed: Whether CFI marked the return address as PAC-signed (unused;
-+ *             arm64 strips user instruction PAC bits unconditionally via the
-+ *             task's configured pointer authentication mask).
-+ *
-+ * Return: @ip with Thumb bit 0 cleared for AArch32 compat tasks, or @ip with
-+ * user instruction PAC bits stripped for AArch64 tasks.
-+ */
-+static inline unsigned long unwind_user_strip_pac(unsigned long ip,
-+						  bool ra_signed)
-+{
-+	if (IS_ENABLED(CONFIG_COMPAT) &&
-+	    compat_user_mode(task_pt_regs(current)))
-+		return ip & ~1UL;
-+	return ptrauth_strip_user_insn_pac(ip);
-+}
-+
-+#define unwind_user_strip_pac unwind_user_strip_pac
-+
-+/**
-+ * unwind_user_cfi_arch() - Populate AArch64/AArch32 DWARF register numbers
-+ * @ws: User word size in bytes (8 for AArch64, 4 for AArch32 compat).
++ * unwind_user_cfi_arch() - Populate RISC-V DWARF register numbers
++ * @ws: User word size in bytes (4 for RV32, 8 for RV64).
 + * @arch: Output DWARF CFI architecture descriptor.
 + *
 + * Return: true if @ws is 4 or 8, false otherwise.
@@ -257,21 +228,12 @@ index 000000000000..919fbc406747
 +static inline bool unwind_user_cfi_arch(unsigned int ws,
 +					struct dwarf_cfi_arch *arch)
 +{
-+	if (ws == 8) {
++	if (ws == 8 || ws == 4) {
 +		*arch = (struct dwarf_cfi_arch){
-+			.ws	= 8,
-+			.sp_reg	= 31,	/* sp */
-+			.fp_reg	= 29,	/* x29 */
-+			.ra_reg	= 30,	/* x30 (lr) */
-+		};
-+		return true;
-+	}
-+	if (ws == 4) {
-+		*arch = (struct dwarf_cfi_arch){
-+			.ws	= 4,
-+			.sp_reg	= 13,	/* r13 (sp) */
-+			.fp_reg	= 11,	/* r11 (fp) */
-+			.ra_reg	= 14,	/* r14 (lr) */
++			.ws	= (u8)ws,
++			.sp_reg	= 2,	/* sp (x2) */
++			.fp_reg	= 8,	/* s0/fp (x8) */
++			.ra_reg	= 1,	/* ra (x1) */
 +		};
 +		return true;
 +	}
@@ -286,80 +248,71 @@ index 000000000000..919fbc406747
 +#ifdef CONFIG_HAVE_UNWIND_USER_FP
 +
 +/*
-+ * AArch64 PCS stores {fp, lr} at [fp, fp + 16), while 32-bit AArch32 compat
-+ * APCS stores struct compat_frame_tail {fp, sp, lr} at [compat_fp - 12, compat_fp).
++ * Standard RISC-V psABI frame record stores {saved_s0, saved_ra} at
++ * [s0 - 2 * ws, s0), with s0 pointing to the caller's stack pointer (CFA).
 + */
 +#define ARCH_INIT_USER_FP_FRAME(ws)			\
-+	.cfa_off	= (ws) == 8 ? 2 * (ws) : 0,	\
++	.cfa_off	=  0,				\
 +	.ra_off		= -1 * (ws),			\
-+	.fp_off		= (ws) == 8 ? -2 * (ws) : -3 * (ws), \
++	.fp_off		= -2 * (ws),			\
 +	.use_fp		= true,
 +
 +#endif /* CONFIG_HAVE_UNWIND_USER_FP */
 +
-+#endif /* __ASM_ARM64_UNWIND_USER_H */
-diff --git a/arch/arm64/kernel/signal.c b/arch/arm64/kernel/signal.c
-index 80398ac83c3b..1cc4f3992e1a 100644
---- a/arch/arm64/kernel/signal.c
-+++ b/arch/arm64/kernel/signal.c
-@@ -21,6 +21,7 @@
- #include <linux/rseq.h>
++#endif /* _ASM_RISCV_UNWIND_USER_H */
+diff --git a/arch/riscv/kernel/compat_signal.c b/arch/riscv/kernel/compat_signal.c
+index cf3eb33a11e4..53b5be62e393 100644
+--- a/arch/riscv/kernel/compat_signal.c
++++ b/arch/riscv/kernel/compat_signal.c
+@@ -5,6 +5,7 @@
+ #include <linux/uaccess.h>
  #include <linux/syscalls.h>
- #include <linux/pkeys.h>
+ #include <linux/linkage.h>
 +#include <linux/unwind_user.h>
  
- #include <asm/daifflags.h>
- #include <asm/debug-monitors.h>
-@@ -1705,6 +1706,60 @@ void __init minsigstksz_setup(void)
- 		16; /* max alignment padding */
- }
+ #include <asm/csr.h>
+ #include <asm/signal32.h>
+@@ -243,3 +244,47 @@ int compat_setup_rt_frame(struct ksignal *ksig, sigset_t *set,
  
+ 	return 0;
+ }
++
 +#ifdef CONFIG_UNWIND_USER
 +/**
-+ * unwind_user_sigreturn() - Unwind an AArch64 vDSO rt_sigreturn signal frame
++ * compat_unwind_user_sigreturn() - Unwind an RV32 compat vDSO rt_sigreturn frame
 + * @state: Current user unwind state.
 + *
-+ * __kernel_rt_sigreturn intentionally omits .eh_frame directives in the arm64
-+ * vDSO so libgcc uses its sigcontext fallback path, and the synthetic
-+ * user->next_frame FP record skips the interrupted PC. Recover the interrupted
-+ * PC, SP, x29, and x30 directly from &rt_sigframe.uc.uc_mcontext so leaf
-+ * functions, -fomit-frame-pointer code, and alternate signal stacks unwind
-+ * accurately.
-+ *
-+ * Return: true if @state was at __kernel_rt_sigreturn and advanced to the
-+ * interrupted user context, false otherwise.
++ * Return: true if @state was at the compat vDSO __vdso_rt_sigreturn trampoline
++ * and advanced to the interrupted 32-bit user context, false otherwise.
 + */
-+bool unwind_user_sigreturn(struct unwind_user_state *state)
++bool compat_unwind_user_sigreturn(struct unwind_user_state *state)
 +{
 +	struct mm_struct *mm = current->mm;
-+	struct rt_sigframe __user *sf;
-+	unsigned long sigtramp;
-+	u64 fp_lr[2], sp_pc[2];
++	struct compat_rt_sigframe __user *frame;
++	struct compat_user_regs_struct cregs;
++	unsigned long sigret;
 +
-+	if (!mm || state->ws != 8 || !state->sp_valid || !mm->context.vdso)
++	if (!mm || !mm->context.vdso || (state->sp & 3UL))
 +		return false;
 +
-+	sigtramp = (unsigned long)VDSO_SYMBOL(mm->context.vdso, sigtramp);
-+	if (state->ip != sigtramp &&
-+	    !(state->topmost && state->ip == sigtramp + 4))
++	sigret = (unsigned long)COMPAT_VDSO_SYMBOL(mm->context.vdso,
++						   rt_sigreturn);
++	if (state->ip != sigret &&
++	    !(state->topmost && state->ip == sigret + 4))
 +		return false;
 +
-+	if (state->sp & 0xfUL)
++	frame = (struct compat_rt_sigframe __user *)state->sp;
++	if (copy_from_user(&cregs, &frame->uc.uc_mcontext.sc_regs,
++			   offsetofend(struct compat_user_regs_struct, s0)))
 +		return false;
 +
-+	sf = (struct rt_sigframe __user *)state->sp;
-+	if (copy_from_user(fp_lr, &sf->uc.uc_mcontext.regs[29], sizeof(fp_lr)) ||
-+	    copy_from_user(sp_pc, &sf->uc.uc_mcontext.sp, sizeof(sp_pc)))
++	if ((cregs.sp & 3U) || !cregs.pc)
 +		return false;
 +
-+	sp_pc[1] = ptrauth_strip_user_insn_pac(sp_pc[1]);
-+	if ((sp_pc[0] & 7ULL) || !sp_pc[1])
-+		return false;
-+
-+	state->fp = fp_lr[0];
-+	state->ra = ptrauth_strip_user_insn_pac(fp_lr[1]);
-+	state->sp = sp_pc[0];
-+	state->ip = sp_pc[1];
++	state->ip = cregs.pc;
++	state->ra = cregs.ra;
++	state->sp = cregs.sp;
++	state->fp = cregs.s0;
 +	state->ra_valid = true;
 +	state->sp_valid = true;
 +	state->signal = true;
@@ -367,10 +320,78 @@ index 80398ac83c3b..1cc4f3992e1a 100644
 +	return true;
 +}
 +#endif
+diff --git a/arch/riscv/kernel/signal.c b/arch/riscv/kernel/signal.c
+index 59784dc117e4..c0d70220e4a4 100644
+--- a/arch/riscv/kernel/signal.c
++++ b/arch/riscv/kernel/signal.c
+@@ -13,6 +13,7 @@
+ #include <linux/resume_user_mode.h>
+ #include <linux/linkage.h>
+ #include <linux/entry-common.h>
++#include <linux/unwind_user.h>
+ 
+ #include <asm/ucontext.h>
+ #include <asm/vdso.h>
+@@ -587,3 +588,59 @@ bool sigaltstack_size_valid(size_t ss_size)
+ 	return ss_size > get_rt_frame_size(false);
+ }
+ #endif /* CONFIG_DYNAMIC_SIGFRAME */
 +
- /*
-  * Compile-time assertions for siginfo_t offsets. Check NSIG* as well, as
-  * changes likely come with new fields that should be added below.
++#ifdef CONFIG_UNWIND_USER
++/**
++ * unwind_user_sigreturn() - Unwind a RISC-V rt_sigreturn user signal frame
++ * @state: Current user unwind state.
++ *
++ * __vdso_rt_sigreturn carries an empty .cfi_signal_frame FDE without register
++ * rules so user-space unwinders such as libgcc take their instruction-matching
++ * sigcontext fallback. Recover pc, ra, sp, and s0 directly from
++ * &rt_sigframe.uc.uc_mcontext.sc_regs so interrupted leaf functions,
++ * -fomit-frame-pointer code, and alternate signal stacks unwind cleanly.
++ *
++ * Return: true if @state was at the rt_sigreturn trampoline and advanced to
++ * the interrupted user context, false otherwise.
++ */
++bool unwind_user_sigreturn(struct unwind_user_state *state)
++{
++	struct mm_struct *mm = current->mm;
++	struct rt_sigframe __user *frame;
++	struct user_regs_struct sc_regs;
++	unsigned long sigret;
++
++	if (!mm)
++		return false;
++
++	if (IS_ENABLED(CONFIG_COMPAT) && state->ws == 4)
++		return compat_unwind_user_sigreturn(state);
++
++	if (state->ws != sizeof(unsigned long) || !mm->context.vdso ||
++	    (state->sp & (sizeof(unsigned long) - 1)))
++		return false;
++
++	frame = (struct rt_sigframe __user *)state->sp;
++	sigret = (unsigned long)VDSO_SYMBOL(mm->context.vdso, rt_sigreturn);
++	if (state->ip != sigret &&
++	    !(state->topmost && state->ip == sigret + 4))
++		return false;
++
++	if (copy_from_user(&sc_regs, &frame->uc.uc_mcontext.sc_regs,
++			   offsetofend(struct user_regs_struct, s0)))
++		return false;
++
++	if ((sc_regs.sp & (sizeof(unsigned long) - 1)) || !sc_regs.pc)
++		return false;
++
++	state->ip = sc_regs.pc;
++	state->ra = sc_regs.ra;
++	state->sp = sc_regs.sp;
++	state->fp = sc_regs.s0;
++	state->ra_valid = true;
++	state->sp_valid = true;
++	state->signal = true;
++	state->topmost = false;
++	return true;
++}
++#endif
 -- 
 2.56.1.831.g720f3f5937-goog
 
