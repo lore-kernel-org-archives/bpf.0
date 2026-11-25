@@ -1,64 +1,99 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795570690;
-	b=zayn+QhZBMBGxVqIrfmYRTwgyzI9qYfyCiWe6KwbLWKMqxYwZsqUHw05S9zHd//CPlq7
-	 m52Cfi6QnVCluu+oUqQI58x0SvEmplnU1b23vTrMmXLnXZTJYSVDHMvRIiz4LZTtwKu1S
-	 XTp0mPjRxjuLIHh+PHbU/4GIOUsVdrit4vPf0tPSerfX79Y0nRiHXa3YvdsJ0FyaEKAcj
-	 X0nQuq3TL+VouPKTlb3JfgA9n5iePF7m65N7zqNiMFcLuVqe+wdKQkm1SlT96cbo2WJ7L
-	 PXiCBxVeGYkAyvxCviqDexYr9375HbmS1zS8uTpwcMpn9EIFpfKHSS3ZjgO0WFtNhHA==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795570690;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=/i4jNdS1y5p3R3vSDLsBxb1ySs5NP+dCuDhMtJTNlqs=;
-	b=SgWR+gYtFRFuuxQj7RSryhRsNYOYrFM0bmpbX2msRqPQIqMxp6rekRK+COV16nrAcp+b
-	 eLyvrg/OqzwAeigij3w2wL+H9sTUZluFOOa26SdbfFlX8xOp5RdYUewgsoGCupBMzRT48
-	 kPGdCrdRQTtOmRtqqwxK+WJ/NfRr5sbgOMJ0xWZWPK4xJ8talbiTtcILeyisMxHiP4det
-	 jPUmw4E0dFHpsgJw4gtkrAJo8/gdnPk/vC2TkSWGEzorkpbQ/7GHQBnYyc4Cpaz/IIAae
-	 on3z3WNRCkxPNEqVKvn97wiwJjD+CPOofMLJ+SdemuRUXSI69IkQxOYImaXCT95rNig==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kUOKGAh8;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.228.71
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795571943;
+	b=GNapivwIaFwcgTgQ5m4ZuAbQQob4tnZ8aB48ZYVobUxQ7dDgk+kS/DVn/c5ppJKV17A6
+	 l8AlqRS6qClU6yL7Gkr/JTeajFeFdXIeuErMyBTmBwtQXCzE9+UZVZRkzVxPbrtFqDIWg
+	 OytcvJ7z8rfdnjzYnGdHniEE4nomf2HPV0gV7euk/s7XwCvdru+PFcIs4qCil+hvnTAIR
+	 QrEGGw8AMu9pCJFhhlwquzboSxOjyoKOrxrXCl6QwQIBkeMlGz7jZbPhbFKINumwQyZ4w
+	 YwDs1ZB5EWwpx51Nz2UeuCi/j55hFMlQ//DGu29AyDsmxwAK7yNXNOicTPuVvdZwn+w==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795571943;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:References:
+	 In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=WQW21BATbZ9l2kqtcswgu+W5tZ5971iz3LnWV9zl81Y=;
+	b=y9x6G3QuKSyuGmhJqbtfiYcGSqK27rrlneIFJcH8kfd/lEjfhn2DGyNhlrIRAzYcC9D6
+	 gIUUU519csUCGYVfL4gKQXDRTDzjQ2yalsthtAff4mo7J5+gMif8TzCEeESDH0iE56iE9
+	 FoS8fzKxMpihr7wbtbvRqyxkfhutHJibfU2f1S0uAUOI4eiYPmsyn+oWD2GRtVcIgPeFH
+	 7fZrcub0lWWjhI7WeG+TTksmgMuH4M2QqIYt1RaMchvNwC/XXQBtwiVQkiPzNutttxEB+
+	 g92qIN2biG+UpYxVEUUPihcvvX7gYYVswt7ZWdaph0yPwcNxXV/B4+24EGB/j6BX0CQ==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="L36/WytV";
+	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.228.71
+Received: from mail-ed2-f7.google.com (mail-ed2-f7.google.com [74.125.228.71])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F025606A31E;
-	Wed, 25 Nov 2026 01:38:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5B56606A31E
+	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 01:59:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C5B56606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kUOKGAh8
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88C621F000C6;
-	Wed, 25 Nov 2026 01:38:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795570689;
-	bh=/i4jNdS1y5p3R3vSDLsBxb1ySs5NP+dCuDhMtJTNlqs=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=kUOKGAh8l/KAFUNWyQrKSsmQsU5/wiBnVMWq7tCCQrQ1RNWNl3dsHK4WquJ/Rzg78
-	 iahk5s+iSvj1Q00iJtc9XsjwSv3gCyL0KR+70Dg7RrVuch4PiPR1mtIF1wdFhy8oy6
-	 8DzeiJXdQ8rJQRPnDb+VZla9K5yrA01RtP3o7ps1lIQUN1k1miZaw7khbV5eL06yHY
-	 sTeGkj7r2grUauDXeHHv3b+iQaGv9O6vSwZeAbK55pHIEtbNplousCGwVuBoQPnE21
-	 qEHVOQt33tc/2FzgOpYMMAucQ5YlINnfzvEy41YpXN3SjwmxlHzmqLK2gcvHzdop/4
-	 bAdX4j5k9jwlg==
-Subject: Re: [PATCH net] ice: do not report CHECKSUM_COMPLETE when an XDP
- program is attached
-From: netdev-bot+sashiko@kernel.org
-To: tianyi@cloudflare.com
-Cc: netdev@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
- anthony.l.nguyen@intel.com, przemyslaw.kitszel@intel.com,
- andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@kernel.org,
- kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, ast@kernel.org,
- daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
- sdf@fomichev.me, paul.greenwalt@intel.com, alice.michael@intel.com,
- eric.joyner@intel.com, jbrandeb@kernel.org, lorenzo@kernel.org,
- bpf@vger.kernel.org, kernel-team@cloudflare.com, tianyi.gao@linux.dev
-Date: Wed, 25 Nov 2026 01:38:08 +0000
-Message-ID: <179557068810.3135.17964087549504688357@kernel.org>
-In-Reply-To: <20261121012402.84848-1-tianyi@cloudflare.com>
-References: <20261121012402.84848-1-tianyi@cloudflare.com>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=L36/WytV
+Received: by mail-ed2-f7.google.com with SMTP id 4fb4d7f45d1cf-6b86bba7613so1745772a12.1
+        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 17:59:02 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795571941; cv=none;
+        d=google.com; s=arc-20260327;
+        b=R7WzlVsXDHfof623LERSaJLDLMV8pjoWr5swjFCBRksE4bSrymCKJBjQ2QzyXt2dW6
+         NJjym2s6G3tq2bslp/wRL2sk/iksJa/MtJ8d/Sp7Kt2/Hjm1yOBE6wWLZRJcSTIIjiYM
+         V5aN7dYDE5+GSl/66Zlbc5isCRfF1MUZznjZ1NoJSrW/ZYjSZ9J4WMO4cTKomM+NXbVJ
+         FhkjgeCgizr0l8mfFYRB1IrKTNcEEtBOmSpLp2T+VZjpN4LGZcfpSCZtVQ7SGyS1JVIL
+         /F5gAuRmJ8Z+jUZ2+sjFLtXPoof06uQIi02qbIb7TfXrhv6xTYXD6MMlG26iRy/ZoyOl
+         A5fQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=WQW21BATbZ9l2kqtcswgu+W5tZ5971iz3LnWV9zl81Y=;
+        fh=P8Gh5wLwg9GqibOZtXAGdbn6fbYEwtuBf1cfeweSKYI=;
+        b=FmLJVZ8bK1rYxF66UuRU8Oo4gJ9kLEif2swEGdJe4WcBDK2/PRiWP/gK1jcTXhUu/8
+         dGTxRkl+X3at20SlSAfkQBbVt9z2rjxHDs5Prkep38ZMreuYjD7hF1S+zsaTPsRZb0mM
+         Eks341CokYFd0jDHavo3v77irsjZsuTmZ9hrRsoLN+WeuZGpcm8zC/WzfS/hphvdYBs8
+         XMQYgGyX/onrVVKhrDehvChjpY57LYE0c0qyGHJxf6mKnQw+ZPkj3u4UnrUlpvuXT+CN
+         VtBuszfydny9y/oxW3NgBgMHzMGzbW8HNKVLVi9d926l8s2GwWGHhHOdhkW0Xh5drURI
+         F66Q==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795571941; x=1796176741; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=WQW21BATbZ9l2kqtcswgu+W5tZ5971iz3LnWV9zl81Y=;
+        b=L36/WytVvlC9Pn87+HM2NinzjlmizdMqXBUMl7IpcCAe6Q2q+7L2YxGWJkTpMhuduJ
+         31GWllf04SK7ZwYyaAF3TGiUnRjuLoeUwK/dus3Lrg6XSsbwpL5szUSuBps+4uxJRS2g
+         hof1kHF88bnvHESbLWkBQaoWpoKiUD2PyHyzU9V3WApg1JE/p1YxvqTZb207HPS1x9t4
+         n5eShDEZzpNp7u71Acy4g54QcN18UyJwcgqoeHM16I+YycxqJhEZeUx+nxWZtyrsuNAw
+         pqyN1BKYqHg0dqMlHdsqtjBay/aJIwlQylS6PlFoUpzSCpWZtaIqGhwWylw+ZtUKC0MO
+         ulwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795571941; x=1796176741;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=WQW21BATbZ9l2kqtcswgu+W5tZ5971iz3LnWV9zl81Y=;
+        b=Yt2NvUS8nIxO/rtThL9kFtGcPz+iHk+UfCCmiydbBujFB4ZYMhWZZ6Jxi32POSEkAW
+         Sr3lwMcDyGSM++rQzDNKIPtG+PmxzaO24M2ANfLydnrfZjeJPSKh3ynCjuWdTI557x2P
+         /e9cw4bS2PDHZKWjV8vTo6csj2fnlXSwLKorVwdpwogp6xuzGSy219EOgCls+KjvZ1Hi
+         DSee8b/9VoPSWwTqworuDTZHrwT9DH50OLKFZNGtfpfm9p8VkuhirpavJS0hJ1MzUTJQ
+         tEDP9/2qUdciUIItwTJzFZL/ZuTMAyLKssBYpXRpeK6JethtcaXMMTaM1xk5FVZhmxHe
+         c2Dg==
+X-Gm-Message-State: APuU4Z+jO8nmb3M76XtpA4iHuWR4nj5RH7ANQAH5tTQgMBbgz0oJgZdu
+	w+AX9RcWlEOaehJvNBzk8+RtxOkSUhgs8UPbyf1wPjsb9a/cq4OQw+FeVL+M4XuJI8VCpYhfmZy
+	GjddBTJHBkgcQOQkh7c2d6K7V80X2R7OfPgRcWGaSipHc
+X-Gm-Gg: AZFdTZcQkQqESOehBboI2mXC/QdCV56B4lar+MP4LpLl+JQi19Czg8qFbbRvWTSq7oY
+	auDHkR9pxJTElPpMWm65IRNHe2Ka5u8zItZLQY2boQmuu6xwHFoKjarKb1xuBMdAqesK6HlOE2E
+	SyPwYl4QpYl5hk7jZN7HCLxSW6DaDh/7uDYJ0HdNScKZNPM7zokVtHPdNMH56YglTCXeewaf7wN
+	BaTbg5ExXnDWQugwBTIxRAq51LAnkhrGAEPInj2EUGA8d2OmIScC4VZtlEwHSvFZWbC/vHHTdxB
+	3xhM30W+IggCFbgee3m3FxUcI5PblRS09Huj5VetVO6/6D1zzS9XHLw5YrOyRA5rYApiaDyUuTz
+	CiZsIzSd4qdRIrkFZUFZTzbdVbiMdauz2D6jh/Jy8vDfq0UrvGDDZJ+XcxNeRCzO8h6Taig==
+X-Received: by 2002:a05:6402:ea9:b0:6ba:eb4c:487a with SMTP id
+ 4fb4d7f45d1cf-6baeb4c48ccmr3353474a12.22.1795571940941; Tue, 24 Nov 2026
+ 17:59:00 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -68,129 +103,30 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+References: <CAPig4syGNH7_LGZrHyQismhLZ9zanbDAAkwjcWtiFcWfpB6v0g@mail.gmail.com>
+ <77c60169-13c4-40f9-9657-2f6ac67379ff@gmail.com>
+In-Reply-To: <77c60169-13c4-40f9-9657-2f6ac67379ff@gmail.com>
+From: =?UTF-8?B?5rSb?= <wanghai8081@gmail.com>
+Date: Wed, 25 Nov 2026 09:58:48 +0800
+X-Gm-Features: Aa3M54p4yZgaeY_DTatP0VruZQSz-3EYMSlcvnI26KkG_kMUm9Aju31KYclrOZY
+Message-ID: <CAPig4szH_utJ=+ZmqJoONtM9fQ_Ojm9BqSPmrz2R2oMs-oL97Q@mail.gmail.com>
+Subject: Re: [BUG] libbpf: bpf_program__clone() uses a stale module BTF fd
+ after object load
+To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+Cc: bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issue(s) to consider.
+Hi,
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 1
+Thanks for clarifying. I found this while testing. I don't have a
+production use case that requires cloning a program after
+bpf_object__load().
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+I tried adding an unrelated MANUAL program to see whether keeping the
+module BTF fd open affected the result. I haven't tried marking the
+fentry program itself as MANUAL and loading it with bpf_program__load().
 
-- [Medium] On E830 with an XDP program attached, ice_rx_csum()
-  (drivers/net/ethernet/intel/ice/ice_txrx_lib.c) now skips ice_rx_gcs()…
-- [Low] ice_rx_csum() decides whether to use GCS/CHECKSUM_COMPLETE by
-  reading ring->xdp_prog again with `!READ_ONCE(ring->xdp_prog)`…
+Thanks for pointing me to the veristat example.
 
---
-
-ice: do not report CHECKSUM_COMPLETE when an XDP program is attached
-
-This patch stops ice_rx_csum() from using the E830 generic checksum (GCS)
-to report CHECKSUM_COMPLETE when the rx ring has an XDP program attached,
-because an XDP_PASS program may have modified the frame. Such packets now
-take the L3L4P/XSUM_* descriptor status path, as on E810.
-
-Link: https://lore.kernel.org/all/20260715-bpf-xdp-meta-rxcksum-v5-0-623d5c0d0ab7@kernel.org/ [1]
-Link: https://lore.kernel.org/all/cover.1794281983.git.tianyi@cloudflare.com/ [2]
-
-> diff --git a/drivers/net/ethernet/intel/ice/ice_txrx_lib.c b/drivers/net/ethernet/intel/ice/ice_txrx_lib.c
-> index e695a664e53d1..ad22d855436eb 100644
-> --- a/drivers/net/ethernet/intel/ice/ice_txrx_lib.c
-> +++ b/drivers/net/ethernet/intel/ice/ice_txrx_lib.c
-> @@ -123,6 +123,7 @@ ice_rx_csum(struct ice_rx_ring *ring, struct sk_buff *skb,
->  	rx_status1 = le16_to_cpu(rx_desc->wb.status_error1);
->  
->  	if ((ring->flags & ICE_RX_FLAGS_RING_GCS) &&
-> +	    !READ_ONCE(ring->xdp_prog) &&
-
-[Severity: Medium]
-With an XDP program attached, E830 packets now go to the L3L4P/XSUM_*
-status path further down in ice_rx_csum(). Can that path mark a modified
-packet CHECKSUM_UNNECESSARY based on how the hardware parsed the original
-frame?
-
-ice_rx_csum() runs after XDP has already run:
-
-ice_clean_rx_irq()
-    ice_run_xdp()             /* returns XDP_PASS */
-    ice_process_skb_fields()
-        ice_rx_csum()
-
-The same thing happens in ice_clean_rx_irq_zc() via ice_run_xdp_zc().
-
-Take the load balancer case from the commit message. The program strips
-a UDP encapsulation with bpf_xdp_adjust_head() and returns XDP_PASS.
-
-If the outer UDP port is not a configured VXLAN/GENEVE port, the parser
-does not treat the frame as a tunnel. The L4 status bits then describe
-only the outer UDP checksum. A zero outer UDP checksum over IPv4 ends up
-here:
-
-	if (decoded.tunnel_type >= LIBETH_RX_PT_TUNNEL_IP_GRENAT)
-		skb->csum_level = 1;
-
-	skb->ip_summed = CHECKSUM_UNNECESSARY;
-
-After decapsulation, the outermost L4 header is the inner TCP/UDP header.
-The stack skips that checksum, and nothing has verified it. If the parser
-did recognise the tunnel, csum_level = 1 is applied to a packet that is
-no longer tunnelled.
-
-Before this patch, the stale CHECKSUM_COMPLETE value made the stack
-recompute the checksum in software. Good packets passed with a
-netdev_rx_csum_fault() warning, and corrupted ones were dropped.
-
-The commit message says:
-
-    E830 also sets the L3L4P and checksum error bits, so the packet gets
-    CHECKSUM_UNNECESSARY or CHECKSUM_NONE, as on E810.
-
-E810 already behaves this way, and so does mlx5, where
-MLX5E_RQ_STATE_NO_CSUM_COMPLETE leads to csum_unnecessary. On E830,
-though, corrupted packets on these rings used to be caught in software.
-
-Would CHECKSUM_NONE be a safer fallback here until the pending XDP
-checksum hint series land? If not, could the commit message describe
-this trade-off?
-
-[Severity: Low]
-Should this use the per-poll snapshot instead of reading ring->xdp_prog
-a second time? The program that actually ran comes from:
-
-ice_clean_rx_irq():
-	xdp_prog = READ_ONCE(rx_ring->xdp_prog);
-	...
-	xdp_verdict = ice_run_xdp(rx_ring, xdp, xdp_prog, xdp_ring, rx_desc);
-
-ice_clean_rx_irq_zc() takes the same kind of snapshot for
-ice_run_xdp_zc(). Neither function passes the snapshot to
-ice_process_skb_fields().
-
-The commit message already mentions the window this opens.
-ice_prepare_for_reset() sets ICE_VSI_REBUILD_PENDING before calling
-ice_pf_dis_all_vsi(). ice_dis_vsi() then has to take rtnl_lock before
-ice_vsi_close() can stop NAPI. An XDP detach that holds rtnl during that
-window gets here:
-
-ice_xdp_setup_prog():
-	if (ice_is_xdp_ena_vsi(vsi) == !!prog ||
-	    test_bit(ICE_VSI_REBUILD_PENDING, vsi->state)) {
-		ice_vsi_assign_bpf_prog(vsi, prog);
-		return 0;
-	}
-
-ice_vsi_assign_bpf_prog() writes NULL to rx_ring->xdp_prog while NAPI
-is still running. Suppose a poll runs the old program on a packet and
-gets XDP_PASS. ice_rx_csum() then reads NULL here and reports the stale
-GCS value as CHECKSUM_COMPLETE.
-
-Both callers of ice_process_skb_fields() already know whether a program
-ran. Would passing that down close this window and also save a
-per-packet load?
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261121012402.84848-1-tianyi%40cloudflare.com
+=E6=B4=9B
