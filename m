@@ -1,56 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795578931;
-	b=b22Wr8S6vpfJpHjKqM3iiiF0LCaxvnwh2hOwSdae85UUu1M0kbBuViR0bS6BbWCy91gX
-	 vEpVdRGnVlEl2lpnJ7wUM8SB/LwUdMvJXYAuOVBYlAv1fjTM5TCxV0P+E+SDL8+7dU6fV
-	 PtQ0J4TTCCR4/d2vjXKz7EkAzV//378o76FYaFIfvQSTJnMXAVXawMCQTIHpoYQc/66lq
-	 B4z/W3TT6OtKkG1yQP/w76HwOzoJ5yhybIfZVsWj/cMAmLqkqxdHHL2fqrt1SpgZaug3y
-	 t+783jql2sRHGzYe9EqSQktPlCMEFYn5+EwYiBJMCclcziapxib2EZLW6fVd50zG0kA==
+	t=1795579119;
+	b=kV+6JSDq5HwHWU3MGAFfdXzsD0TIjvhxIR0AAqb6qQy4sXPsvd4qLkK/jGmqI+xC1Hs0
+	 baGJtHx2AVvetF/Hy+6C+Z6/rSi3ZoaCp6mg/aQRFv/rLSLEDc5JSKMjKcQ63fc+DLm52
+	 tzfJxvHCH+dcPYEeYI3gMUzZwGVbQtqAJZ6DLpOSEDP7E5Zu/Dr3CmFm1MLjMkKS8I0oH
+	 Fw9GLnbKUBbolQRmXNHNlufknteTTC/HIOt6BfdXWRpKvf/iXAIGKKgTx2qntvg0tKyOi
+	 tLkAPRyoDX5GswE6WhvyVha7u17BGwZtGvzrAJDhrtPLALSw+k9PQgzjg30xcQg7g8A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795578931;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795579119;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=E8J6WM5dHn8vim5OCm7VfFDLxI7v7Vz4h27aGjhg+2Y=;
-	b=rBKCZaV4kB6OV56e7QIrDJuJirh0MsmyZLm4UfKgDMACPIVp9txhanHtQW0tRX1dvitB
-	 ieImBKRz7IrlXZ8/oca2NCTRGAulE2qdX6SHGJQ09s5g1rND5NpROdBq1L3nzBPbLf9Dk
-	 OOxf2YpaWMiy3ioy+WA8n1C+0vZ4PYjUtEB6HQJgX/FbKnMNcdGuL5xlb2UbpixlmqB65
-	 BSYAhUE38z2sjV5YemuFrr1HZFWTpd9l+FQQJEJfaBhq9F/va14M/hVgNxWQ9rsgWmtOl
-	 HTLqgL5Z+HnB++CeH+9+7t6XFq2wlSOSnNmmguCPA18T1ZEUsuGbLtsjfoYjL1gXEug==
+	bh=XmXRLQXvMdBgfCtRsm9MEi9YqjF67aBXCT2lVfjQBDM=;
+	b=gnzgGYtagMl12odSVVd68gP13jAWErW5O99ZO0VaiVxWnpDbsm4xqXUvVzU2+6LrOu1P
+	 4BOCegP+UCG1skgjsGjgt5QOidyh8ErlBqlPJmbMQWnGMNj1nOIc6fkEzNxVl1MLeH9gk
+	 bBsxhQIHZxmiihrB/LfGQlLNEkV7HlMcaQe5sS9JqQN2Bq4DJTamDJq3mow2Mpzf8l3TM
+	 MCUOnKr+PjJxvXvJ1fDabdURFy645pkrEKee653NmM4By3s068EH3QYF1lTGQJIPuUMtN
+	 1YU2aZ133WEHlEM6J/j/2VU6lCN9nKkyQlxpt5lDtGgxQ6+l3FfiPTVIBQv+A25+LiA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=m1p5kVeh;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZYtVEUC2;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7838B606A31E
-	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 03:55:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBA35606A31E
+	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 03:58:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=m1p5kVeh
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D865C1F000C0;
-	Wed, 25 Nov 2026 03:55:30 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZYtVEUC2
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05E771F000C0;
+	Wed, 25 Nov 2026 03:58:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795578931;
-	bh=E8J6WM5dHn8vim5OCm7VfFDLxI7v7Vz4h27aGjhg+2Y=;
+	s=k20260515; t=1795579119;
+	bh=XmXRLQXvMdBgfCtRsm9MEi9YqjF67aBXCT2lVfjQBDM=;
 	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=m1p5kVehe1YWzHmsT+QBPICg7fdSOx/E6yyicGwFsvAUH91OcUkXiCgr09i5YKk/B
-	 VqaSrJmCYAvTY+n2hTzOlyjL0pfKUD1ZtD7ZFAWh50n3tShw5UFAD5EeL7x7Yljogd
-	 i61JzjnzQcLKr4IQTTfQW2DdksPf1PP2y9MCYXhmAsRI7JubHeU0MxxTDfJ9a9P3gv
-	 6EaOnBWsX7yLKm7KcytDxWGL3N4P1mUyxVkbp/x6rUpjStwX0YltBZHrktaMNdQ2gj
-	 H1zEjy6iW9Bu5BjeRmtsRsArZ+0fvOw5nVLwzTxGVriDfI1c5yFvSMj8egL5TL50ln
-	 pv8/m6QnLEKIg==
-Message-ID: <sashiko-outbox-232533@kernel.org>
+	b=ZYtVEUC2djU53HhB223Mze9Kcl6g9taTtT2tzYwtFI4su1i11KAklUcacoecyo4bv
+	 CrvWh8cXDBjtHqqwJOIkX2uzbwvDelS3PZc27EZHfXYpi266AY/5JxwEnBFjTkDoHJ
+	 hR6ZNL7c2wWM4J4jwspPCXSpdlRhCU6PCBeb7ic+Zhfz9ybEJhPuaMxmixvfFfXdkq
+	 6JmYU5yAe4NE06WGiL8YKak674r+omkY69KIjEdJZfjVYEuLPjwsSWQoVugFSKijdL
+	 vKdsQJXHg2RyXBeG09wefFPbZ+y3b5yfHtLImDczPc09OEYieG4Zbpaq0fBd4NtA5f
+	 FmEB/YxoRCdiA==
+Message-ID: <sashiko-outbox-232540@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf 25/47] bpf: Give syscall programs without
- CAP_PERFMON the base helpers only
+Subject: Re: [PATCH bpf 07/47] bpf: Compare what a hook tells next to its
+ prototype at tail calls
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-In-Reply-To: <20261125032938.670542-26-alexei.starovoitov@gmail.com>
+In-Reply-To: <20261125032938.670542-8-alexei.starovoitov@gmail.com>
 References: <20261125032938.670542-1-alexei.starovoitov@gmail.com>
- <20261125032938.670542-26-alexei.starovoitov@gmail.com>
+ <20261125032938.670542-8-alexei.starovoitov@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 25 Nov 2026 03:55:30 +0000
+Date: Wed, 25 Nov 2026 03:58:38 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -62,76 +62,70 @@ Precedence: list
 
 Thank you for your contribution! Sashiko AI review found 1 potential
 issue to consider:
-- [Critical] bpf: syscall_prog_func_proto() still allows loader helpers
-  in async callbacks
+- [High] bpf: helper restrictions bypassed via bpf_prog_hook_key() on
+  tail calls
 --
 
-commit 0b17252c17a9909e5f5169c092eff3dd514adbd9
+commit 641147c8dfcc1727cd4d5af22656fb851b62f335
 Author: Alexei Starovoitov <ast@kernel.org>
 
-bpf: Give syscall programs without CAP_PERFMON the base helpers only
+bpf: Compare what a hook tells next to its prototype at tail calls
 
-This commit restricts BPF_PROG_TYPE_SYSCALL programs loaded without
-CAP_PERFMON to bpf_base_func_proto() helpers instead of allowing loader and
-tracing helpers.
+This commit compares hook-specific properties alongside function prototypes
+when checking program compatibility for tail call maps.
 
-> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> index 03cb9f769398b..e82ae48c0bc07 100644
-> --- a/kernel/bpf/syscall.c
-> +++ b/kernel/bpf/syscall.c
-> @@ -6747,10 +6747,12 @@ static const struct bpf_func_proto bpf_kallsyms_l=
-ookup_name_proto =3D {
->  static const struct bpf_func_proto *
->  syscall_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog =
-*prog)
->  {
-> +	if (!bpf_token_capable(prog->aux->token, CAP_PERFMON))
-> +		return bpf_base_func_proto(func_id, prog);
-> +
->  	switch (func_id) {
->  	case BPF_FUNC_sys_bpf:
-> -		return !bpf_token_capable(prog->aux->token, CAP_PERFMON)
-> -		       ? NULL : &bpf_sys_bpf_proto;
-> +		return &bpf_sys_bpf_proto;
->  	case BPF_FUNC_btf_find_by_name_kind:
->  		return &bpf_btf_find_by_name_kind_proto;
->  	case BPF_FUNC_sys_close:
+> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> index 14b8ee05e5063..06a0413da4897 100644
+> --- a/kernel/bpf/core.c
+> +++ b/kernel/bpf/core.c
+> @@ -2515,6 +2515,18 @@ static unsigned int __bpf_prog_ret0_warn(const voi=
+d *ctx,
+>  	return 0;
+>  }
+> =20
+> +/* What the verifier took from the hook, next to its prototype */
+> +static u64 bpf_prog_hook_key(const struct bpf_prog *fp)
+> +{
+> +	if (IS_ENABLED(CONFIG_BPF_SYSCALL) && fp->aux->attach_btf_trace)
+> +		return btf_raw_tp_null_mask(fp);
+> +	if (fp->type =3D=3D BPF_PROG_TYPE_TRACING && fp->expected_attach_type !=
+=3D BPF_TRACE_ITER)
+> +		return fp->aux->saved_dst_ctx_type;
 
-[Severity: Critical]
-Does this still allow bpf_sys_bpf(), bpf_sys_close(),
-bpf_btf_find_by_name_kind(), and bpf_kallsyms_lookup_name() to run inside
-bpf_wq and bpf_task_work callbacks when the program has CAP_PERFMON (includ=
-ing
-via a delegated bpf_token in a non-initial user namespace)?
+[Severity: High]
+Can a kernel-function tracing program bypass per-function helper restrictio=
+ns
+by tail-calling another tracing program that shares the same deduplicated
+attach_func_proto?
 
-As noted in the commit message, these loader helpers operate on current.  B=
-ecause
-is_async_cb_sleepable() marks bpf_wq and bpf_task_work callbacks as sleepab=
-le
-and neither syscall_prog_func_proto() nor check_helper_call() rejects these
-helpers in async callbacks, a program passing the CAP_PERFMON check can sti=
-ll
-invoke them from those callbacks:
+For kernel-function tracers, dst_prog is NULL, so saved_dst_ctx_type is 0 f=
+or
+all of them.  The verifier, however, grants or denies helpers per target
+function in bpf_d_path_allowed() (by attach_btf_id) and
+bpf_sk_storage_tracing_allowed() (by attach_func_name):
 
-- In a bpf_wq callback, current is a kworker running with init_cred in
-  init_user_ns and init_files, so bpf_sys_bpf() executes __sys_bpf() with f=
-ull
-  init_user_ns capabilities and no token restrictions, and
-  bpf_kallsyms_lookup_name() checks bpf_dump_raw_ok() against the kworker's
-  credentials.
-- In a bpf_task_work callback, current is the target task, allowing
-  bpf_sys_close() to close arbitrary file descriptors of another process.  =
-If
-  the callback runs from exit_task_work() during do_exit() after exit_files=
-()
-  has set current->files to NULL, calling bpf_sys_close(), bpf_sys_bpf(), or
-  bpf_btf_find_by_name_kind() (for a module BTF) causes a NULL pointer
-  dereference in file_close_fd() or alloc_fd().
+kernel/trace/bpf_trace.c:bpf_d_path_allowed() {
+	...
+	if (btf_id_set_contains(&btf_allowlist_d_path,
+				prog->aux->attach_btf_id))
+		return true;
 
-Should check_helper_call() reject these =E0=A4=9A=E0=A4=BE=E0=A4=B0 loader =
-helpers when
-env->subprog_info[env->cur_state->frame[0]->subprogno].is_async_cb is set?
+	if (btf_id_set_contains(&btf_allowlist_d_path_fentry,
+				prog->aux->attach_btf_id))
+		return prog->expected_attach_type =3D=3D BPF_TRACE_FENTRY;
+	...
+}
+
+For example, filp_close() (in btf_allowlist_d_path) and filp_close_sync()
+(in btf_allowlist_d_path_fentry) have identical signatures and parameter
+names in fs/open.c, so they share the same BTF_KIND_FUNC_PROTO in vmlinux
+BTF.  An fexit/filp_close_sync program can therefore tail-call an
+fexit/filp_close program and run bpf_d_path(&filp->f_path, ...) after
+fput_close_sync() has already freed filp and its dentry, causing a
+use-after-free.  Likewise, fentry/bpf_sk_storage_free shares its prototype
+with fentry/sk_free and can tail-call it to invoke bpf_sk_storage_get() or
+bpf_sk_storage_delete() while sk->sk_bpf_storage is being freed.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261125032938.6705=
-42-1-alexei.starovoitov@gmail.com?part=3D25
+42-1-alexei.starovoitov@gmail.com?part=3D7
