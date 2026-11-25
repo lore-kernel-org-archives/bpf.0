@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.182
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.175
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795577646;
-	b=L5bcak8pvTIFSJ1evE/AJR6A3cmWo4CGY37mdT80wIVwcNaLV6jx5o6kHmvq3/SEIcEp
-	 LpYHamaf0mAm4lxxZXt3i7ZyRoSutFqQPQqLPketMYBbPQ3iu9jZyU2FgYsvsO+5d6TjL
-	 co7FIZMtLTonkTMTIsVJYj6YP8E0+GyMc6xoRgY1cNAX43yPQZElBxpryq/qDCVnv8aDm
-	 +IapGJd92IicDueTIpIQy5Te2A9DNynC8UR8/Owt3eir8EUxbzlnZR5sUpvo81IDyx6IH
-	 m5pv90JRJdX4Pxkpf+MnD+DwKNbx6ckDGyRReG8Kxrln7tlrbJUBuDtAl5+2L6R/YyQ==
+	t=1795577652;
+	b=ku7O3nCDAWGGoLf3SeZuTlK3eGRyfcK4TaSArz2gS6YODz0sMvRJOaSGquCjnvN0uVvA
+	 ozoilvuKCVKMGv2bbI+myr1ZBmB7H4isqFQ+/7T3fhGqy4MaMik/IsQVqzKChuH3bttkS
+	 FsdUQP/6AKmsRAAcF4A4S5ZiOwgk680NewBuCYVPjEhvlQK2Z6Cd0kE9fB9lbjNEmXyUm
+	 mHGCorbyhWSOyRG7QqR0Ei6k4s95P+oar8LNAeNxsQXvc7fZpo6jyx979T9xbUC8ShLMv
+	 bIFMJSKWdPhQqNAqvPBC8t0UNYj2cW9XXnqCJVfaxyxPpGyqgkHj3+Se8dW/5NZdOhQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795577646;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795577652;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=1zcodIsOsWvRz0EdhH18XfWhfm5oRn7Zc1+7JApbH0I=;
-	b=vv5Sj5u6Jxrcu9S1l+OB6t6NwgWYaOgif7c6nFXId4zopQA3/LD+IqVG8kLy5/YxITOK
-	 RfXx/bcdK/u0seHyYiGLccvTaCqxrRF3WRRRbgmfRtIVpAmIphhrtpJHujHOYmSAsm0dr
-	 v8w1ZwkjUNagh3mBQLFq99EIjxT+wFHiIlE/U+/anpi8Q+IwQ4Gg4bQ5XXC+EhLlyke3L
-	 tUjKmXiBZEI6sLEMUUFEyxSUO48uySHCzjgW0JRqAgwdlQz60fGSu8MeKlGl2FtfL5QKc
-	 7o1nLsw0b83GBnscCeobinQlAMUEOBnJ01+rRo6WxjfSg5jCIJg4D0e0mBsOLxEZD2A==
+	bh=q/kEhJQzYdmzgSi2iTVgyzPl48puBIV8d2TdKpOuGa8=;
+	b=xf4hQunJgQoZMg7nIclY1T5eSYRfjOlzf+mKrxKg6nNhFn+G8QFSFX/pTjLIQu+pfcJ/
+	 INIinWtvSV721JhlzifvW6j+Xrc7upLhwktKx80YUUWBsJkbGzN0sLG5pO8DhtCGajKcH
+	 9fwjRbFwINk5yHIVfQraEqZP5BRYGbPtIt07TqU9R0d25qLawTgWLMp1mu6NKtyHosayL
+	 xI0Hl+BNdmsrc0l+AdrFDTer37GaEJKWWfOfSoCJCewF5h9SC91j0YhG3Mwj7tP/75iiu
+	 GECV+k+PJygEN3roNEmdwVwhx3Zj1JamlBMsyeHBnI9p83qiDe2dGbFAhHoXRAVFF2g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=tZQq2AgN;
-	arc=none smtp.remote-ip=209.85.210.182
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=u9vM4wy6;
+	arc=none smtp.remote-ip=209.85.214.175
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0E99606A31E
-	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 03:34:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E0E99606A31E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C45AE606A31E
+	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 03:34:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C45AE606A31E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=tZQq2AgN
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-8c6c06b3321so4123186b3a.3
-        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 19:34:05 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=u9vM4wy6
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2f046b0adc0so28951495ad.1
+        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 19:34:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795577645; x=1796182445; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1795577651; x=1796182451; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=1zcodIsOsWvRz0EdhH18XfWhfm5oRn7Zc1+7JApbH0I=;
-        b=tZQq2AgNFQ/RzJm4jUSO/3Uke5KP6v5Fc1bXnCVV0VpqV9EbcFatN8O+afykYfyX6V
-         b+Dq7rX/WdOX12E9RQd+GWgJvmR5EU9CBkmpVF0seQL3ANr07gkFt91aXNciILJ0cSz1
-         IX4y78XH3bK8gjDgqltG9oVSY2z1RYMEOFVeG02u7b0eflzYMTq0S3cUturYcdsfQPed
-         5qUmaIdI6MU544oOV8lIDi1yPTpL4VchkBHRMPTwcqA1lWzlNGEuR45qxJvyjn0+ZlSg
-         FgEPfLjB4GjwYX1/U8sVMpwGJIFs0f9XtvMQa7E4KiQzCOxzPiEuTzqBbGQrblH6CdzF
-         oESw==
+        bh=q/kEhJQzYdmzgSi2iTVgyzPl48puBIV8d2TdKpOuGa8=;
+        b=u9vM4wy6JIvD/feTR6IziQZZzDoVwIY+ncSAf4u55g2kU41KoxZub/g/QP1fnEWyCF
+         AABek/Ks39B4prQnZw9npne+0noJHCIqUqEH3cwYFskE5AfoLI5VVsR4AmwZ8gG0SscP
+         74nUQB8u60sPV8u8zvyfpRTChz3togTKjUDAumnVhtBcxUfiMONKeBRPBeUJ7H0wmIlD
+         ShX6lvhlHhxcprGNKdxorBVE9/W6/pcg5ZtL5ZNpBYHOJ46q5IyipCalpR9RRkb7Bnge
+         JFtwgKLxsJfJEQCUGwgH8S/qB4rkn6BoNKfJ0GAFLENSO/RfnnQv1W/Vzc0cCctU7hY8
+         vh9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795577645; x=1796182445;
+        d=1e100.net; s=20260707; t=1795577651; x=1796182451;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=1zcodIsOsWvRz0EdhH18XfWhfm5oRn7Zc1+7JApbH0I=;
-        b=RERZVXHNyvDuEz6OQIhMrzBlPKPL7/qA8/+EQfXxMQv2CePa+7BvBRuvIZdKRsA0px
-         +SLVcDJonHAb/xe0sbNQNmOfhCkXXwlkJEVeL3LKzVUbRNuae2dB4W9UHCZXaPKpk7VM
-         xkIrVK2lvcWpgJuApo770TM2GWPiW2Sg9BptQWzGGD1YpsRWA5c2xZtt6ikVo3nP1sLP
-         FAqRJQOM1I+F83jR8/r/JkKKipcRrG/MmLhOqnlHVmSWFFv7CZiR1zqsIJ0cdAwz3JhJ
-         tCs+76qnvA9q76d+818vKVh1iduEf+rNkPaiC0WxWXF2jqc8/OD2armg+99BBLj+12TV
-         DIbw==
-X-Gm-Message-State: APuU4Z/+s4yCfhZmhGMf/gWeajyc5jqJc3uaFf4QJSWEAep4n+1DYuvl
-	98XI631xfIpS/nVkZHkFHG0ogJOixvYGeSd5gUDZtVCCsu7hp2iQHU82YuEOyIuT
-X-Gm-Gg: AZFdTZd9CtbwVYdS05ePUXafW9+KKMizh1WuNiM2353hEkcOrnY08C9VIAo4GUgeuYx
-	8h6cXIvGK7YyctYV65a4jAXfiKGonrXtz+w3HRIBse/MG1wkt2oUEB7K+xpiCNmywNj0sSb5oj0
-	ywg7cMaHTYQxDLlzb8r7E1g+ALES62LPJuttzP3H3bYnsUbUX1y+YA67ZAe6t9lVe6VVkJ6YLf7
-	yI0G9LfchhU7Ng8ERcLjdIfK4KwDi5Wk0pisvKZD7KMYyOjUqMciMGD2jECgDeKzfAqHTYFNgEq
-	TA7+LaiBRb6t/g0/6VTALwFi0St4kcNBNsw9tp8KnJnHqDmS5Olmoh1bu3GILNKnfhRutrz7abZ
-	dARxjVbj0/+JTf4IQzPhmtUYrdMxmMQnBg2ndNNXFdx8yuEb3Kr2UEHOuKZJ57Nty2Cen2rtrmB
-	eyZUdoFDzZZxgQrNZ+HCxfl5JDZT1mdgWJDAVlojyBKNl3SdCODnUZ8LuO3+QllOKFq0svP1jZ4
-	by/WG6kXMZvySQBE1WSR6OZJbP2b0NZmT9Usw/UWdGoCp8EyqRTLxqasBqEgdX6fI3Jtbi5gSDf
-	RmV0GQvW0A2+GcHlT79S/YLnb5Xh+dTdepRDskBh3o8pS+uItJaN6IKtN99kfKtUswBlPbHdNjH
-	sgWhQLVwCRqkfSI2rDKUWa7RpskyqooB6pXVqOcv8y86DeIpm9mV84mcgWdAB3jCye+3tNUvJkQ
+        bh=q/kEhJQzYdmzgSi2iTVgyzPl48puBIV8d2TdKpOuGa8=;
+        b=MUt6CHnZ59sUDntKGw+3uTgVYtNgCZts3dDmeuX8NfbO6uKaGYT6BT5swqwD3ahHvY
+         5EeEn1bfZUbGysdEogWD6Q28dqUAH7XQGpZS+dESKaRtI9bZHILFOcvVp4/P8HNKFzI3
+         WZzRSLsBlLYqkTs1v9T5ByWlI+JYHlE+dArwdlXT1qe5FZBLfS3yMFjWjKjo2xEWDnLr
+         M3LrFE9phgRcDEHd8UfHOBOp6DWkSqgAHxwPRpm00JCYLdy+MW0TfDT5xuB8JzIv9T/a
+         NKBuViajuy3HSZ5EBFO4eGF0/yq5ZQITfbIjf9gGnyO9tTXCPgdtdsgftYARPX8TmEZE
+         Mr2g==
+X-Gm-Message-State: APuU4Z8Aq9Rsig8C59NNYqfv+sA2ETkH1scZwrhTyrSpMuCXlh2diSeD
+	JE+Pt0FGd8C6OhPja/ruKCXdNy73Fg1UYus5+gWGWRIGc/hjVywcGjzDLklVdyV5
+X-Gm-Gg: AZFdTZcGMyjH1bh6CHkluCtmFOHnhlgqbWSWSUUzf7FmsVPT8RUuSnLG4qqAz1rPBZ/
+	MrfQ7MmWtIEIfuxgV7PSGj3IFn2GnAWeygWxLdscGw6h3T/DPirUQTPL4awX4ZWWtR36WHVQFzY
+	kCyY3dY9mFRj4Tkt7rF5lXYLugkP4g2lidiCs7XOCEYi9V4D3j/4fa49G2gMCSAt6mX7hRDuSd7
+	B4Gg7BJNijowAEpjKWjhpC5XLb1RGMDccBl1Z8s6k4ty8PaGzPttNlaCnepXv8EiA6fniriz67J
+	4ME/ZaeCHF29IpzZVFLxLwpUubsdGJI+1JBRMVmZRzaSj/rFEJbWNmJqj6WN/3EG7zJJJ7X7FZo
+	BcNiwiGrAlNAYf7y3zM9R2Y/pWgWsUqBgjeUfiHbHCUr+E0o0AHfL3AGGHueGdkuV63G0/0wmnp
+	4jWjQqDKWTxrPnd2f5EXxkfVvt1I5PHGRisUNZf36ue10uo1ckmalZorDJ359BeRRPG5qkDr9P5
+	CFk2/VPRqEJdSqsL9lCBDVS7A7/3m5/bl2JM/fFBzeW5Az9GqcJSt+Vc5aEsPdEJjAWfN3HzB90
+	ENMAQDybheC8uVMWglqgNBv3kzbhpCzIUSwFMiJQuprb1Z5KyA1+pUm6RlmZbVpl6Nqw0sY8R7q
+	Tp4ouFXvOM3SYWma7bfnzYMhs+Fz/sxaQSy0A7e6kKvZOs9GapO3NenWm8PFv4OhPgbDK5YB4bQ
 	==
-X-Received: by 2002:a05:6a00:4f89:b0:89e:3ccd:b3c7 with SMTP id d2e1a72fcca58-8c87c8657cfmr13816717b3a.33.1795577645234;
-        Tue, 24 Nov 2026 19:34:05 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.253])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8c872e4c43bsm7938071b3a.26.2026.11.24.19.34.04
+X-Received: by 2002:a17:902:f603:b0:2ef:e9df:2432 with SMTP id d9443c01a7336-2f03f1b4279mr156425755ad.68.1795577650984;
+        Tue, 24 Nov 2026 19:34:10 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.243])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2f03f14fc8csm76223545ad.74.2026.11.24.19.34.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Nov 2026 19:34:04 -0800 (PST)
+        Tue, 24 Nov 2026 19:34:10 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf 45/47] bpf, sockmap: Hold the psock of the work in sk_psock_backlog()
-Date: Wed, 25 Nov 2026 03:29:36 +0000
-Message-ID: <20261125032938.670542-46-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf 46/47] libbpf: Fix struct_ops members 59-61 and optional struct_ops maps
+Date: Wed, 25 Nov 2026 03:29:37 +0000
+Message-ID: <20261125032938.670542-47-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261125032938.670542-1-alexei.starovoitov@gmail.com>
 References: <20261125032938.670542-1-alexei.starovoitov@gmail.com>
@@ -104,32 +104,75 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-The socket can leave its map and come back after the test of
-SK_PSOCK_TX_ENABLED. sk_psock_get() takes a reference to the new psock
-then, and the work puts the old one that has none left. The new one and
-its socket are never freed.
+expected_attach_type of a struct_ops program is the index of the member.
+For members 59, 60 and 61 it is equal to an attach type of tracing
+multi, and attach_btf_obj_fd is overwritten. The load fails when the
+struct is in a module. Look at the type of the program too.
 
-Take the reference that is put.
+Only the first map of SEC("?.struct_ops") or SEC("?.struct_ops.link") is
+not created by default. The '?' is skipped in the loop over the
+variables, so the next ones do not see it. They are created, and their
+programs are loaded. Look at it once.
 
-Fixes: 8259eb0e06d8 ("bpf, sockmap: Avoid using sk_socket after free when sending")
+Fixes: f2aa370dfe57 ("libbpf: Add support to create tracing multi link")
+Fixes: 5ad0ecbe056a ("libbpf: Struct_ops in SEC("?.struct_ops") / SEC("?.struct_ops.link")")
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- net/core/skmsg.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/lib/bpf/libbpf.c | 19 +++++++++++--------
+ 1 file changed, 11 insertions(+), 8 deletions(-)
 
-diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-index 1a0029f276e2..005e09121f00 100644
---- a/net/core/skmsg.c
-+++ b/net/core/skmsg.c
-@@ -694,7 +694,7 @@ static void sk_psock_backlog(struct work_struct *work)
- 	 * before sk_socket freed. If refcnt increment fails, it indicates
- 	 * sock_map_close() completed with sk_socket potentially already freed.
- 	 */
--	if (!sk_psock_get(psock->sk))
-+	if (!refcount_inc_not_zero(&psock->refcnt))
- 		return;
- 	mutex_lock(&psock->work_mutex);
- 	while ((skb = skb_peek(&psock->ingress_skb))) {
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index fb8a1f07c5b6..5f54a8e6f46f 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -1454,6 +1454,7 @@ static int init_struct_ops_maps(struct bpf_object *obj, const char *sec_name,
+ 	__s32 type_id, datasec_id;
+ 	const struct btf *btf;
+ 	struct bpf_map *map;
++	bool optional;
+ 	__u32 i;
+ 
+ 	if (shndx == -1)
+@@ -1468,6 +1469,14 @@ static int init_struct_ops_maps(struct bpf_object *obj, const char *sec_name,
+ 		return -EINVAL;
+ 	}
+ 
++	/*
++	 * Follow same convention as for programs autoload:
++	 * SEC("?.struct_ops") means map is not created by default.
++	 */
++	optional = sec_name[0] == '?';
++	/* from now on forget there was ? in section name */
++	sec_name += optional;
++
+ 	datasec = btf__type_by_id(btf, datasec_id);
+ 	vsi = btf_var_secinfos(datasec);
+ 	for (i = 0; i < btf_vlen(datasec); i++, vsi++) {
+@@ -1503,14 +1512,8 @@ static int init_struct_ops_maps(struct bpf_object *obj, const char *sec_name,
+ 			return -ENOMEM;
+ 		map->btf_value_type_id = type_id;
+ 
+-		/* Follow same convention as for programs autoload:
+-		 * SEC("?.struct_ops") means map is not created by default.
+-		 */
+-		if (sec_name[0] == '?') {
++		if (optional)
+ 			map->autocreate = false;
+-			/* from now on forget there was ? in section name */
+-			sec_name++;
+-		}
+ 
+ 		map->def.type = BPF_MAP_TYPE_STRUCT_OPS;
+ 		map->def.key_size = sizeof(int);
+@@ -8407,7 +8410,7 @@ static int libbpf_prepare_prog_load(struct bpf_program *prog,
+ 		opts->attach_btf_id = btf_type_id;
+ 	}
+ 
+-	if (is_tracing_multi(prog->expected_attach_type)) {
++	if (prog->type == BPF_PROG_TYPE_TRACING && is_tracing_multi(prog->expected_attach_type)) {
+ 		int err, btf_obj_fd = 0;
+ 
+ 		err = tracing_multi_mod_fd(prog, &btf_obj_fd);
 -- 
 2.55.0
 
