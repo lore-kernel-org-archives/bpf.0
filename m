@@ -1,113 +1,108 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.178
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.176
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795579291;
-	b=0NFky005wFNQwMAcVt38i9lVHKEvPdWGxHRCT6Weake5wqntHSELrGyI45EOdgobG31Y
-	 UUZQqy+qMZZ1FP/mgCPqCTSbwZ1Q3XocSK3n//CKnKVqm4jAdGoZmR30cDzfzlQVxKohX
-	 h3DKsDGVJ+O42ZyvWAuKfKQ6eNNSyBHRreRbdDb8JYjqFGlYmGn/ZXbbWOEJ0KL6SOWks
-	 vWw5anNS0YZChppoBAI7+H/2L18jtIarKpzG+dYY8ulF9qqScjrZ1n6MRv8eO6UqbTjGW
-	 71l33yUSEILARhvqEs3b9EYB7lSYWe0INQYX/PQWqRyfhAD4UavJdx5yBvuNjxDR64w==
+	t=1795579340;
+	b=DwoZ5cHRWv0QJ/kHEVTyV4iWmEvMRpjiefL8iwfVlL4Mr5dmz9ZSppNDkLq4Wz220E78
+	 DWD7PkXn8YdXSefQBPo7zGQzxbas487fQIkuHMgL/qD8D/MGk/ifj3sPMMErRHxgFf7jT
+	 EAO3F7eVX+mSGSG/9VdlB+iwaxbHhz9YIG3O5nTnj76xrm/0h20QYKFw9fk8CR+9ph+3z
+	 GxmJvMAkByVYrEaBdlz9WkQzvJmkhKwpBv+VQ/XebmYz8mTWnwl+YIlchp1NN3L9cFQl+
+	 czfe/LPFU3gw8wE90Q1zR1CnyHnynH0AYwjTpqWIis1hR9Enq+EAzkloNAgyLhAlvpA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795579291;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795579340;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=6REgkPS8nzDDPYO6M6ZYR52ogu8+a8y/VCwAF9sUv5o=;
-	b=UHnFkoZ8Y7jhhmfIKT6jXfEoaX7ux+7KxzkA5mzH0TAG5EYwKIe8+k4ZfkJ9OO0uZj5/
-	 P9a7PAiVcMnRR9nWfQAOvm1wNwOgjNEBLIYVYNzp9PRtOYsM6S/Ej5ZmBnE3FegfWGG3Z
-	 BTyxwGW/AaFBsRJ6vnEHAuSImOoiDb9i6VAsnWoA1qtSDBgqp0ec4hituDDlb0ZMxTsW8
-	 mVd1+ZvEPZvgkg+IQ36UEQsWyE70Jod/Ejh+e5qMp0lX3uIAoUK+rJEETtqbIv6ElvohH
-	 YZFH4DnLfQQt61bKkcffmqhThoTWNee4SFCxmDg9ChriB+vPIIh1u3iRUiARp+EdjrQ==
+	 Content-Type:Date:Message-Id:From:To:Cc:Subject:In-Reply-To:
+	 References:Content-Transfer-Encoding:MIME-Version;
+	bh=b5t7kT/F/kUHuHqqdf7OGhwe+jg/XQAt4FVRvgQFTFM=;
+	b=WeZKgbMOOCqL+I+lnUFuuk7UqjiWw1fFXlzY6YZGZh44A9qhTYfTaU/Yvl4RUwpSevS/
+	 WeDK1rxDzGQTp4aYItYA1qM4EH+QJqvkEIH+Ygx4kFWXyxlkqwWg7ZtaRnmyIXU/3LTqd
+	 oU1G6EK50VV4Bw0vF09RBXHp0hJdfTTOm4fWZgNdZpq542M1Vnjprvwqb/W7A/3HaiIDY
+	 asSUNYNPZfSOqLXJPFLuVVWpLjUgV8cOiJ6k/OQNOr+D0PCOzO7Zym199hKMxzmBL/qOq
+	 f2b4hmVooBWymLm22DJfHvdzuDL/XYH2lnEgrNZJLkPZbS2UWXh5ZxU9+ZBVH2xKkkg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ZT78E86w;
-	arc=none smtp.remote-ip=74.125.82.178
-Received: from mail-dy1-f178.google.com (mail-dy1-f178.google.com [74.125.82.178])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=qmUGcFTr;
+	arc=none smtp.remote-ip=209.85.215.176
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77BC1606A31E
-	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 04:01:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 77BC1606A31E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67BD6606A323
+	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 04:02:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 67BD6606A323
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ZT78E86w
-Received: by mail-dy1-f178.google.com with SMTP id 5a478bee46e88-385d8a00598so7781518eec.1
-        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 20:01:31 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=qmUGcFTr
+Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-cddc250d815so2074835a12.2
+        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 20:02:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795579291; x=1796184091; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=6REgkPS8nzDDPYO6M6ZYR52ogu8+a8y/VCwAF9sUv5o=;
-        b=ZT78E86wQe3bgt5nxImE5+aVBs7YtYvND66iVpyhs1/A9gNHPkXnPWIFJTwm6HEtmj
-         k22zmdcmU3/DR92JOkZ2XTpF3ZzjuPFZPvQXXi5LlK5ozQztsKXJhclNqRSxc7u1JBRR
-         hVstKwp7XzzEaBvmewUFjLvKvJuVPJu+blAcCzgfH6BFOH46y1K2IdTuqq5MlS/dXXKC
-         vrS9A5jrqkfSYpZnZWh/YTCJuv4YiBCuqCIaM9s1kiz/manx5VCl97QbOrOsuMUjp5eh
-         ZKEcl5P32ExOK/pMkfDMAXjTwxs2MMYhaYTIqZejtG9+YDkt8fJ12jYor+qYuawzHxcs
-         CG3Q==
+        d=gmail.com; s=20260707; t=1795579340; x=1796184140; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to
+         :subject:cc:to:from:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=b5t7kT/F/kUHuHqqdf7OGhwe+jg/XQAt4FVRvgQFTFM=;
+        b=qmUGcFTrSFIX5w53DMBY9t5NDLbT2ffVFUIqR9e8b+NYuBntScGuFsq6u03S0Cj9yL
+         zAoke3NBJsIg0FUTzu/6hCvixZqaN3uZarKeAPeG1hnMVEDQ2jQQ8pq9oI4AkjLBd2Xs
+         vwVj1E2c7rh89Qic3KEQk/m7YiDLYLk4tA6BGapSLVa9KhQ85oZVCQoxq9BCyHPHCS/q
+         oUYtbqGO4nT1PtgxTiec2U/CaZRTLhp9HAN7lYtDu7gm+YNqou7O+IICYK2Qu0jRbgLP
+         xCQtkWU8trttJFbcLUPjsWoelPhSR6imrKeqEYwDPLLFa9eiPnoPMBuDSA+wXdvnHi8T
+         lTbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795579291; x=1796184091;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=6REgkPS8nzDDPYO6M6ZYR52ogu8+a8y/VCwAF9sUv5o=;
-        b=vUbcNhnKz4Rg1uaFOrniab0cjM1/L4sqQm/6v18qY9n++LWiN9dpehj2QYIpYnoFd6
-         3tW8Oqiaa3KihH2Xbh41yFl2fKgsq3xn4Lj6BEwslYowG2D1uYp2B70jUoyFeV6ee9u8
-         EZC0s9HUUgnUN/4Uw9pH7u5H3buLNTRKWSHUG3FdEXgBwganLCD/s2/uZL0hPrifcVbg
-         W9DlDRBnYGJjlx3ojpZb4c38BnZnBs6SK4Y1RZ+ryCbxDV7PFE/dlPPuFMEc9QQN/eMv
-         rdwTAPuqNpANroltZj56TJAoeJ+NjwSR35ozYXoh4ZZ1vyu7kWSeoc1CiF2DIAaKiMeL
-         d1JQ==
-X-Forwarded-Encrypted: i=1; AL+hErGYiOYONJRIvnFYnwAWblSKxX/WZMINnViuTx9O8LJECEz2Lrohe/gaPwyzTxEHtNEqNYM=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+z7yITew9Gnl5RtdxPwC5M/iddWocFhvTh9Vb4esOZAAu1g19M
-	dmgXc9FRIlZB+5EQ8QCepuLaldMvjatvShFTHtzya+xOz0HtnhAl/kZF
-X-Gm-Gg: AZFdTZeXqADvUwb1rmQdtNf+eTIC5HlJ9a98r2/rgMVA6jQQvHjcYXKKEYygeLMEWtM
-	oVol8cJgxglna+RPgcyM4Ayfd0E6ACKD3OzyTzU7BIPBp7BwSv/DBudsY1ElhHxwT5jBMKoCHvv
-	vAVc99erOXZs4LQQspmmIwdnolaOImfLmswXNCnb90/IeKguVIoeD3rT9D5U0xgQX2AcFWjghH4
-	Itl1sG5D528WLtZJWK/VKOqz4emW9E9BXTO9niVdSq1awcBGXa4HyMNGc1bWtmBfEw0gZNLzWXG
-	TZ9ebFJXvNAYN9XhgoDIwA1vfaYjCVfha/pxSs7stlmJqV8EsvpCX5Xu8w8ON+L2Uk7Du9aO4ae
-	epn+14TopnqKJt8/PS+jSF0UZ5aSrS+imYJhgT0mKvpHylJUBUD+eEFinl6bqIR5/g4WCN2wccY
-	1u+BI/EPJzfcxh5i7zJKJiovtTqqdCRl3A6x8BnrFa2DJ4VJ1PE5PaLq5lxQ4+Ax1WCoV+WNzEG
-	Ot6PR4B3MXJ+nF72mQIhDyPJHsZ6M9KqnLVl0gTIvADMQjC9DBjPnCSdybGBcsbXfT0yWiMCPFC
-	vyCvX9bxS/kSZXjr3qUTjQy1s766d2B1XA/ZcqRqIJddWnBrMORan/zgALuFiL+tVw==
-X-Received: by 2002:a05:7301:2419:b0:367:185e:867a with SMTP id 5a478bee46e88-38571027a5dmr18690085eec.38.1795579290373;
-        Tue, 24 Nov 2026 20:01:30 -0800 (PST)
-Received: from cps-manycore-1 ([147.46.174.222])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-386b1965c02sm19892400eec.27.2026.11.24.20.01.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Nov 2026 20:01:29 -0800 (PST)
-From: Sechang Lim <rhkrqnwk98@gmail.com>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: John Fastabend <john.fastabend@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Bradley Morgan <bradley.morgan@linux.dev>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
-	Joel Fernandes <joelagnelf@nvidia.com>,
-	Josh Triplett <josh@joshtriplett.org>,
-	Boqun Feng <boqun@kernel.org>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Lai Jiangshan <jiangshanlai@gmail.com>,
-	Zqiang <qiang.zhang@linux.dev>,
-	rcu@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: [PATCH bpf-next v2] bpf: Add rcu_read_unlock_special() into btf id deny list
-Date: Wed, 25 Nov 2026 04:01:02 +0000
-Message-ID: <20261125040106.2200628-1-rhkrqnwk98@gmail.com>
-X-Mailer: git-send-email 2.56.1
+        d=1e100.net; s=20260707; t=1795579340; x=1796184140;
+        h=mime-version:content-transfer-encoding:references:in-reply-to
+         :subject:cc:to:from:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=b5t7kT/F/kUHuHqqdf7OGhwe+jg/XQAt4FVRvgQFTFM=;
+        b=CdQZYVFl+GLcC3B01OZBGk70TWRk0ziYKBnrhskHljyQ+fmrEEJMBDDxO+l1NchprS
+         VgASTLj/5zjGK7QiTNJW6Je+ZlZVh6gNuAleq4akOhd1nNgGUCf5sE3cv58T6XVmNAPx
+         gdCyixha/rVckmH17cD3lZrim0hnv3w5Q2VkvE+tHOcYHkM6EviFRUdY5Fxfn5GJo/+q
+         daFT/jCdd78RsMKwKTFG+NRWFWG+v15D2ULsVvhw7ee8sBkyV/aJ2iPdu7pYgZ1zuTW3
+         3FpdR4xm2tmvv3HPvORoKMFyjsdkLN+Din2Fwf8fn5p9a5VFbckEx+R4dldCRYeMkklC
+         oWTQ==
+X-Forwarded-Encrypted: i=1; AL+hErFbXXmv/Zr1DWBh/h3t1zd/6V3OfDNSf1WODO818+RG+gk3I5A1lAX90RhosYVH0txD6tc=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9tNGqCMy+bitRF+MRnmPC+i2SgBwSwTBgox54hbbqWVp+7Jokt
+	jwKn8mAvMyDN332jOIYmEoMN741SxH7bCAg+H4r77neIlHF6pYePhuh5
+X-Gm-Gg: AZFdTZcUM6t41yO2AXky+xN0IUBcZGdwa06fBFyFj825F06tC0UmcuITYMFkcfonOif
+	siEUaf7d0QaRbgZk0a0Qr3+wfgM2JDKv8BX71dO2Ucayp1O3UHyDUc2w9U5NgqYXyBFOg6ZrSji
+	Cyi2qMuk3czJ49I/dhUpmoILjKrUqQW5IxCVrUa1REj9DAeTK5diplSaxXRLyqXsV4iy74t2fJP
+	LZ3LaBS5kYTa7gV852yeulyR6noxNMrYZSbQWGfkgDidFF5068lN3ZnHGwkc33rwJeCufliTZhu
+	USmibdefnv0cgqt+R+YGEbRRGtEdDUp9dYJMDIY2PhKj+ZPMYkVameypWO726eZa4me9CvJkq/U
+	ypaf5mvUFGD4hZ/1C4TnY8K3040pYo4YA32hxC/xPi6tDqsA2aMM3GndW1ECEIpKtxOT50jUhjb
+	/ishJWeIfMsMxfiE4ZGssQqLuLpmC2RWY8wFqicDSA2hsKMBBiV+f9OwYXS7hbRUN3GO/QnMfvO
+	RWhbSsTIKtEaCDWtAyehDNJB9W4Az2weoQqSdBxVfwHOZHtrOnFySs8cveq1lISF6DVsYgHsOTw
+	hFqShFEk/NyWOa4X0EAoyTCP6bM52JOF2G4aQLAB49omenMkt14akOOUJD8mLAr/8VGFpKqf9pT
+	4TagJtv79Ya1NOoR46rknywVwoqX5ROnJG9w=
+X-Received: by 2002:a17:90b:288e:b0:3aa:f875:3385 with SMTP id 98e67ed59e1d1-3b41c907e21mr15006021a91.26.1795579339396;
+        Tue, 24 Nov 2026 20:02:19 -0800 (PST)
+Received: from localhost ([153.61.198.245])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b40578dca0sm28765330a91.2.2026.11.24.20.02.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 Nov 2026 20:02:19 -0800 (PST)
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 25 Nov 2026 04:02:18 +0000
+Message-Id: <DN3ZR4IBQUKK.2KZHQUDH3ZRAC@gmail.com>
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "JP Kobryn (CrowdStrike)" <jp.kobryn@linux.dev>,
+ <mikeba@sentinelone.com>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
+ Nakryiko" <andrii@kernel.org>
+Cc: "Martin KaFai Lau" <martin.lau@linux.dev>, "Eduard Zingerman"
+ <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Song
+ Liu" <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri
+ Olsa" <jolsa@kernel.org>, "John Fastabend" <john.fastabend@gmail.com>,
+ "Emil Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
+ <ihor.solodrai@linux.dev>, "Steven Rostedt" <rostedt@goodmis.org>, "Masami
+ Hiramatsu" <mhiramat@kernel.org>, "Mathieu Desnoyers"
+ <mathieu.desnoyers@efficios.com>, <linux-trace-kernel@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>, "Martin Kelly"
+ <martin.kelly@crowdstrike.com>, "Andrey Grodzovsky"
+ <andrey.grodzovsky@crowdstrike.com>, <tyler.wilson@crowdstrike.com>
+Subject: Re: [PATCH bpf-next v3 0/4] bpf: Check recursion per task for
+ preemptible programs
+In-Reply-To: <44034fa7-91ab-4777-ba72-0037a6932b56@linux.dev>
+References: <20261117-bpf-preempt-v2-r2-v3-0-586376ec3672@sentinelone.com> <44034fa7-91ab-4777-ba72-0037a6932b56@linux.dev>
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -117,57 +112,14 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-The BPF trampoline takes and drops the RCU read lock itself. When the
-outermost rcu_read_unlock() finds ->rcu_read_unlock_special.s set, it
-calls rcu_read_unlock_special(). If a fentry program is attached to
-rcu_read_unlock_special(), the unlock on the trampoline exit path still
-sees .s set and calls rcu_read_unlock_special() again, which recurses
-until the stack overflows:
+On Tue, Nov 24, 2026 at 06:06 PM JP Kobryn (CrowdStrike) <jp.kobryn@linux.dev> wrote:
+> The patch below is a proof of concept scoped only to x86_64 trampolines.
+> It was validated with the bpftrace prog that precedes the patch, along
+> with jited assembly dump to inspect the new private frame API calls.
+> Overhead measured was roughly 60ns, but this was just a first take and I
+> believe it can be optimized especially in the JIT area. If it makes
+> sense, this could be integrated into the series or sent as a follow-up.
 
-  BUG: TASK stack guard page was hit at ffffc90001657ff8
-  ...
-   bpf_trampoline_6442575622+0x5e/0xac
-   rcu_read_unlock_special+0x5/0x490
-   __rcu_read_unlock+0x9c/0x120
-   rcu_read_unlock_migrate+0x93/0x220
-   bpf_trampoline_6442575622+0x5e/0xac
-   rcu_read_unlock_special+0x5/0x490
-   ...
-
-With fexit it recurses even earlier, from percpu_ref_get() in
-__bpf_tramp_enter(), which takes and drops the RCU read lock before the
-program runs.
-
-__rcu_read_unlock() is in the deny list for the same reason. Add
-rcu_read_unlock_special() too.
-
-Suggested-by: Alexei Starovoitov <ast@kernel.org>
-Reviewed-by: Bradley Morgan <bradley.morgan@linux.dev>
-Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
----
-v2:
-- Deny the attach in btf_id_deny instead of marking the function
-  notrace (Alexei)
-
-v1: https://lore.kernel.org/rcu/20261124185659.1370644-1-rhkrqnwk98@gmail.com/
-
- kernel/bpf/verifier.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index e7013ed8cadd..0e8afc0250b5 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -24735,6 +24735,7 @@ BTF_ID(func, preempt_count_sub)
- #ifdef CONFIG_PREEMPT_RCU
- BTF_ID(func, __rcu_read_lock)
- BTF_ID(func, __rcu_read_unlock)
-+BTF_ID(func, rcu_read_unlock_special)
- #endif
- BTF_SET_END(btf_id_deny)
- 
--- 
-2.56.1
-
+If you want to redesign private stack please take inspiration
+from insert_arena_stack_get(). Much lower overhead and no artificial limits.
