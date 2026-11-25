@@ -1,45 +1,68 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=117.135.210.3
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795582822;
-	b=HdZOpZpEirVymstuN5eHyzKu1wTurU2ulhbeuzWqtenJh3lGFLUKLgL1gnOz5ReloGTj
-	 qw6ypk76MVWhdEXjUqtsMyNFUR3z7UfcFs8Qe9jWISmH4Wls8WNqsz7VuidAjzKI8NfDG
-	 0uSJYDwMV+coHHXO3G86RtzHYFafzPT0lF5SH7nexIqrd4l3vMygOv++iHUdc96UjMhN+
-	 TuYZ33JbgtoztrkNAuXWmHShN/oHq1nUhnwEeQLSHf1775YSquosiuboqxNCBFdo2eZ8g
-	 hff9LDI2FWSm9R6vkBmI9nFbmOCSLMJQ8gC3DOkDrMCYOCxuFMg5ypDWlprsYRMQwrw==
+	t=1795584763;
+	b=F2jjJSLeDyDJb/prws7jJN64OIZSe4W2qmUfCQkSQRk/o5/GB6jhrF6pYe55b3l/WmB/
+	 ftzfelIRHuslk5lZLPrUN6hwAWv3IASDmXad+moamaqlh4cJRqSBjNcHMcoM2eGy09qok
+	 qTtrXuCTkHHyhj8nrp5sxnWZZ/FmBmiel9WmHh+ERHqu7Ue1v8+AJfnXpSUoTzYA7K/d1
+	 U5pfsu3hhHrC9vzcIERwlZFAt/8OiDDAmaw5EsOn7K1VDh/UVazTjL1kZOVveJRWRuNvi
+	 nhT7CKldo/Rn0kQ/vKzBD+KNwHDlPJ7Db5/2+yycBlZj8vAUi/6sv2Z2HoZOqxGOwuw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795582822;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=X3L0VmDgmPRICk50lFiuNLDjaHmpK2yBrJ2BQaXUEw0=;
-	b=UIiHRIoBDt1yFhKQmZEqeqTpuBAQzbk3rA5PWcbpgf/G8cp6GgdVK5/favoOspeIh+XH
-	 Gt0JcEp0oeaCJxgRvsgAszDQ7nkVJ5+BOR5/ISZ1TvHgov0Gzp/8yhGev+1hRFTm+d69O
-	 hXk2mVXhjT6vVE3fM8EGFhTIe9KPqTVgI6khalT4CjVWK0s8lBKHssqGcgWJ0NcbkIp2q
-	 sVNjYB1zjw1DvnFhUktp1P8dL2dakg4cob6V6hWTNhCICPiLSUZ8ZA5BpUjWDKkMiyf+n
-	 nqfR13bfcuDyCDVS1txt9G3p1xaV5ZGOZyG3z/fa9lovKYPu3ewZAwfc2TljA3yeaiQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795584763;
+	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
+	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding:X-CM-TRANSID:X-Coremail-Antispam:
+	 X-CM-SenderInfo;
+	bh=PpZ9ZbkPNT2Bgz/pdhHSzwCmq4DzoUNbsfs0MraZjOg=;
+	b=1CurwzwEnT274MPPHeSBwu8ZaelEYVqhaq1VazizdF/td7xKucmDQdOz8E4Mnh6frf9t
+	 d6ahmMEJikUj2ZjsQgYdMZClGL9p4yXA5bykJjv+CLqw1A2yYez/vaFV77idWefn290+K
+	 t+cskwGgVSswy92gQ4zOUYoOutiyD46Ct6ODkqHWp/9UeQ/Royyw5fmcgFH0WXBVoCLVr
+	 3XCuBpAIDwAKR8PGA/HNq+yGkFMZSYm2epITvkMXjUoE5FDBUT4BTNQRkEW50xWtnJIDi
+	 pWhmns4ysFvuZTBUiwCxZRoUUBdX6R9W7hOJVuQjUN45eifcQdBK2InjQbl9p44ovQg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=l4TDM0JX;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=163.com;
+	spf=pass smtp.mailfrom=163.com;
+	dkim=pass header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=hYnOaNak;
+	arc=none smtp.remote-ip=117.135.210.3
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.3])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67E61606A31E
-	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 05:00:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED1C7606A31E
+	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 05:32:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org ED1C7606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=l4TDM0JX
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAE461F000C0;
-	Wed, 25 Nov 2026 05:00:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795582821;
-	bh=X3L0VmDgmPRICk50lFiuNLDjaHmpK2yBrJ2BQaXUEw0=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=l4TDM0JXUPaHV4Gl/7cugI5G+sh/Md/NXqqp9XGnXYL29EPPro8fKxaYi/B98M/hz
-	 wkrcnySosvHP4kIsLTnpiuCS+dwHFMcBzLU7qSI1YAdMTmqgELQQ0oVb9Zv8KP4DPL
-	 KWT87X2QW3mLgWJMZTIcKpM8FwE7cI/BKEA4P1Fxpi0TyxE1I8bgM1xY4Ude4ryaVg
-	 UidrrTqDZCVV0txx7LZFBo+vvG3qUugp09uoZkTaT83tIyWAA/HnMSHVtFXEI5U24d
-	 rxltZHG/3RT10rzHXY3Rh/PIbbLfmgQTWS6WIPjFkDbqbzc4omN4x6gIiO4tkHRfH3
-	 8vU1bEmvIAwVg==
-Content-Type: multipart/mixed; boundary="===============0218535690941067216=="
+	dkim=pass (1024-bit key, unprotected) header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=hYnOaNak
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=Pp
+	Z9ZbkPNT2Bgz/pdhHSzwCmq4DzoUNbsfs0MraZjOg=; b=hYnOaNak3EaaYJGUja
+	qTtBH984tL376NwNEuLziR8TUYMYZTSm5pCsoGIX0cvTOE5uy16u8V9YW4We+Ipb
+	jqu/zVg4AlvzqsprDsqVPAijGCUOVigl29MwHY28y1JUHMreMkDOSZNZIyLCkuji
+	FtEdU7wGgZ/SxROXoR58Ril2k=
+Received: from kylin-ERAZER-H610M.. (unknown [])
+	by gzga-smtp-mtada-g1-0 (Coremail) with SMTP id _____wDnL6jCcgZrriN8JQ--.11907S6;
+	Wed, 25 Nov 2026 13:31:52 +0800 (CST)
+From: Yun Lu <luyun_611@163.com>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	ihor.solodrai@linux.dev
+Cc: yatsenko@meta.com,
+	bpf@vger.kernel.org
+Subject: [PATCH bpf-next v5 4/6] bpf: Invalidate async callbacks before detaching them
+Date: Wed, 25 Nov 2026 13:31:30 +0800
+Message-ID: <20261125053132.444234-5-luyun_611@163.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20261125053132.444234-1-luyun_611@163.com>
+References: <20261125053132.444234-1-luyun_611@163.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,72 +72,78 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <6af2fcf30607f45a332ff4c7af2a0f9f51706f778f348e329d51420c2753e10b@mail.kernel.org>
-In-Reply-To: <20261125040820.947816-6-alexei.starovoitov@gmail.com>
-References: <20261125040820.947816-6-alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH bpf 5/5] bpf: Do not end a speculative path at a call
-From: bot+bpf-ci@kernel.org
-To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
-Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,luis.gerhorst@fau.de,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Wed, 25 Nov 2026 05:00:20 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wDnL6jCcgZrriN8JQ--.11907S6
+X-Coremail-Antispam: 1Uf129KBjvJXoWxZryDKr1xtF1rCryUWFyDZFb_yoW5GF48pr
+	WSqry0kr4qgFsavw4I9w48C3WrZws3ta13CF90gayFvr98Xr1vqry8KFy29F98Ars3AF4j
+	vayjqr4aqFWUuaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jnzVbUUUUU=
+X-CM-SenderInfo: pox130jbwriqqrwthudrp/xtbC7Agr+WsGcsikTwAA3K
 
---===============0218535690941067216==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+From: Yun Lu <luyun@kylinos.cn>
 
-> bpf: Do not end a speculative path at a call
+__bpf_async_init() publishes a callback object C before checking usercnt.
+On a non-preallocated HASH map, a syscall BPF program can pause after
+publication while another CPU configures and queues C on the live value.
+If usercnt then drops to zero, init's failure cleanup can race with uref
+cleanup and deletion. The old code permits this interleaving:
 
-TL;DR: Nit only, not a bug: the rewritten do_check() comment omits BPF_ATOMIC
-stack writes, which also set nospec_result, and doesn't say why calls are
-excluded.
+  1. Init's cleanup detaches C and pauses before clearing C->map.
+  2. Uref cleanup and deletion see an empty slot; deletion retires the
+     element for reclamation.
+  3. C's queued WQ callback enters outside the freeing GP's waiting set
+     and reads a valid map, program and callback function.
+  4. Init's cleanup resumes and invalidates C, but cancel_work() does not
+     wait for the running callback.
+  5. The element is freed while the callback can still access its value.
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
+Invalidate C before detaching it. Every canceller clears cb->map, then
+compare-exchanges the slot; the one that detaches C consumes the
+map-owned reference and performs the cancellation. A canceller that
+loses the compare-exchange returns. The compare-exchange detaches only
+the observed object; a replacement callback object manages its own
+reference.
 
-[ ... ]
+Protect the initial access to C with regular RCU. Order unlink before the
+slot load with the existing full barrier; the successful compare-exchange
+orders the invalidation before the empty slot.
 
-> @@ -20808,13 +20808,14 @@ static int do_check(struct bpf_verifier_env *env)
-> -		if (state->speculative && insn_aux->nospec_result) {
-> +		if (state->speculative && insn_aux->nospec_result &&
-> +		    (BPF_CLASS(insn->code) != BPF_JMP || BPF_OP(insn->code) != BPF_CALL)) {
->  			/* If we are on a path that performed a jump-op, this
->  			 * may skip a nospec patched-in after the jump. This can
->  			 * currently never happen because nospec_result is only
->  			 * used for the write-ops
-> -			 * `*(size*)(dst_reg+off)=src_reg|imm32` and helper
-> -			 * calls. These must never skip the following insn
-> +			 * `*(size*)(dst_reg+off)=src_reg|imm32` here.
-> +			 * These must never skip the following insn
-
-This isn't a bug, but is the rewritten comment's list of write-ops
-complete?
-
-BPF_ATOMIC insns that write to the stack also set nospec_result:
-
-do_check_insn()
-  check_atomic()
-    check_atomic_rmw()
-      check_mem_access(..., BPF_WRITE, ...)
-        check_stack_write()
-          check_stack_write_fixed_off()
-            env->insn_aux_data[insn_idx].nospec_result = true;
-
-so an insn such as `lock *(u64 *)(r10 - 8) += r1` on a speculative path
-reaches this block too.  The previous patch in the series, c53e99952fac
-("bpf: Emit nospec after BPF_ATOMIC stores to the stack"), makes
-bpf_convert_ctx_accesses() handle exactly these insns.
-
-The conclusion of the comment still holds, since atomics also have a single
-fall-through edge.  The comment also does not say why calls are excluded
-from the condition (bpf_convert_ctx_accesses() emits no nospec after a
-call); that reason currently appears only in the changelog.
-
-
+Fixes: 1bfbc267ec91 ("bpf: Enable bpf_timer and bpf_wq in any context")
+Suggested-by: Alexei Starovoitov <ast@kernel.org>
+Signed-off-by: Yun Lu <luyun@kylinos.cn>
 ---
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+ kernel/bpf/helpers.c | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/45547596641
---===============0218535690941067216==--
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index 74e0961..c665663 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -1752,15 +1752,20 @@ static void bpf_async_cancel_and_free(struct bpf_async_kern *async)
+ {
+ 	struct bpf_async_cb *cb;
+ 
+-	if (!READ_ONCE(async->cb))
+-		return;
+-
+-	cb = xchg(&async->cb, NULL);
++	/* Another canceller can release the map-owned cb reference. */
++	guard(rcu)();
++	/* Order unlink before reading async->cb, including an empty slot. */
++	smp_mb();
++	cb = READ_ONCE(async->cb);
+ 	if (!cb)
+ 		return;
+ 
+ 	/* Callbacks that run after this see NULL and return. */
+ 	WRITE_ONCE(cb->map, NULL);
++	/* The one who detaches cb drops the map's reference. */
++	if (cmpxchg(&async->cb, cb, NULL) != cb)
++		return;
++
+ 	bpf_async_update_prog_callback(cb, NULL, NULL);
+ 	/*
+ 	 * No refcount_inc_not_zero(&cb->refcnt) here. Dropping the last
+-- 
+2.43.0
+
