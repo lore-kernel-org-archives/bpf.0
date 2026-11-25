@@ -1,116 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.52
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795613982;
-	b=gPSswqrunJ+Bg6TcYrp6Zy5C9EDa1lvUt5hVpRElgHmvTPdZQ/wE2P5Ezv9rKsjx9SDW
-	 jMj80V1QJi7dvdTD2Nl/OSXx0On482Oh9rD4xJiB9eJtEtVhBn2At+YIA77l3J63xBbPe
-	 hnx3UTHj7PodfISeD8/XDlLIoW5dXO4CxptSsfcijV/vmW1OnhCR/2STMoa4z3g+m4PaG
-	 bYDzF2+wC/qfQDekWICOmnx4RAC3fQMb+pVoyQtaGd3psWBdrkI4iZ26sulfjRXaxXnWg
-	 W1vUsqnYyExLSvET3t7GtUZ1ro5G/OtnObw71bySK6sFsrJmaMbimoVo3JDuPISUodA==
+	t=1795614115;
+	b=tBw4iu+6tcdgJSdwOAGTw3XlMjEFbB0H72BwVDhUAezz6Ub/W5BZHph/60lXDxbU6TNG
+	 cmdYuMjq4iQ8cAIpT3Xei6kXIyMpEmCODeK2XBObpWKfrunwa8PjIiX3FRueDK8+HHeiZ
+	 5eAKxEdByBUCR2ViEU3JbAiHaBLh0Q4yIv/xHjK9A2rN/vQ3aNfhhRdPNeLMdt0CdMSJn
+	 W6NeO0NCM4Gl1KWCcTDacm7EHkk9XtWXhpEJK0xv1CFTyuzhONR5tGyieLMDOsE0h4XkG
+	 FM/aIELNXaDD1AwFq+RX8UEuK5SUqhECvrSgC+bQp6Mh7Mqx9RAtdWC1SRUiJ/uXxGg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795613982;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=k0XLbZ5M9INRCrfgtQEgGkLYc24AmJcFIXjSp0f6z04=;
-	b=2b12Sa2yjAXg6ixz0cMg4cLegvrBwEvyqP02ztE1ONaGYYjPM56Emq5/D0A/lkT4S2IF
-	 wR9gZDX41VULVvRtaNYTclLwMssbwkDGHotDX355JK7/LsoDsc+i+odMciWJTXybapLgy
-	 S8sIerh0+wcOYDO75CteDexAjyIhbWoFsXvWrWiwxBPSnZzm//ZUk6dm/YeJfNOOSnFzh
-	 6+Yiu0lGW10lMMK0DerMynzQX7rNAiPTQo3kyXJLyC6pa8ulZBBrmH9QkuFn1FQZnJTNi
-	 ZKyHTekMgdM3vrcpy01Znw/nznqayfAYl6JFezJdlASnLwdB4vmT4pg+cUTTkJzPmsQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795614115;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=KlLzNAVDXKHkT7t8/IGZPiFqPxiYiACpkcm3Z5phyN8=;
+	b=GoMv3ZIEYCt07pmV2iYcVq6IgQWVSjTKV3CTk1NCmLkojElNRuV2EdhZ6mkfqg87ZTUF
+	 zONhsgUSaHWwNbyb7LQR5GZ3qnzGHhlBaO27ydjl/u8Qc3h3MWfFDAfHt+e+iBtFbxG+3
+	 6SzJULgw7iGrMvBKQlSmxsmui4RoIKRX2av51nhIGTmLqtaE3DIUBAo2oBoAbUhssPcuA
+	 fVEVOGMKhDhnTjZ5kNQafggVj1oyqRBhJ6kGT/gW7l6YIyf8gsP9QniY4q9llal6SdWa7
+	 oEvZBp/+AXoUcqiKK8AFIet7Ua3isEnan9wMFzwhFlFKg6dS8IFi28uv1OKERrCcqyw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=cloudflare.com;
-	spf=pass smtp.mailfrom=cloudflare.com;
-	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=b8jVcM96;
-	arc=none smtp.remote-ip=209.85.218.52
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ENDJyjOr;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AE45606A321
-	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 13:39:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1AE45606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2C87606A332
+	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 13:41:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=b8jVcM96
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-c516a194350so55975166b.3
-        for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 05:39:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1795613980; x=1796218780; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=k0XLbZ5M9INRCrfgtQEgGkLYc24AmJcFIXjSp0f6z04=;
-        b=b8jVcM96WIRlFvvBHc3+t3GHIXAgTbrYHlwqEgANzhaRJM8KHUJQGkjKek2GweDfkK
-         fWV46dAdq6qkDaSKG3wQCsGoLgw3QsPLD624iaVSbQzlJeVXVxU+hR2CjAhXGCY9IZO4
-         YnOJID7TPw7IBqn0ckWnQzsQSW80ryS+x7JM6O2zCJ+1NlsxbhENIrSYBd+Lkoekexk4
-         GJZtkmyE61wklfzreOoyMUTIoq9C7cmJbH/JPb4ltHO0SgxUlaz+A7BixBhOD2SsI0pd
-         ti9mEfop5VOVc6MT3VnnGwZoJBzkfX8iAPcQwi0iu1oGEV+8dst2R3P+f73hPETqBqMl
-         i9KA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795613980; x=1796218780;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=k0XLbZ5M9INRCrfgtQEgGkLYc24AmJcFIXjSp0f6z04=;
-        b=ppO2dPO0b9h6ZDmlwvKa4BdHTw1JmtDr8JNgJnIHFeV1RXoF0Tp/fWOjXuLltuXi+H
-         UMggGZ1Hjnlk2CJpf4RzhvBZXmNo4CnuBSXtZYZUhVmdQGP3iuhLZMtz38MB0dnV6h4J
-         91BGjirBHLhfVzK1NBitF9r5zEM4KIndHILhS92UIwgYW/5mRZngwrIWtX8lwTjO8vtB
-         WihHxTzmJoFyrdh/BqmmXX+n6ejGhfvCYOUPlyaNlRhguclmyd0L5zOsTKr/KFbJ9Hmz
-         8c/y+ch2IDBvo/2UvLUfMovr9Bkc9kEpBfmhY8x4PycqQig+aQ1RuV9jIoiUcIds5/1/
-         N6HQ==
-X-Forwarded-Encrypted: i=1; AL+hErFaUgRLYncRnnPUZc5KQKZrRzKuEFq7C336YIu1XIs7QvHdW2V4IBcwUWgG4iZY3gVWhHI=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8Zb/bs+Br5LdL8K7WJLWJoIhZaJh/6xZNfrBhtZjkUzwyZ6gz5
-	A+K2/OORpBc+Ca8xwqSZXoth4zI2LLaQ4Sc/zB8JUvfagWyosR7ibdkltxTM+tThUv0=
-X-Gm-Gg: AZFdTZer/kemZPgoZzus+5q7ASvdYp+uX1t6WmwkWwaJ2cMQnZ3Jl7lnPVcGBKa9aPE
-	ehGaDiXJImLszamyAkh5hHLqIR2RPJK91zeuxmaQqYBQOK0Qy0qOUvpwZmY77+4UndCchRiqZG8
-	1Z0TEKnLlmlEH4iB/WJQ4LtZwNHzJL6NqUfMzCOBq+tPdRD2XHpWnqMp/aDpOPcbrn1TzJqHWUR
-	aApcGDcCasA4YdrdGpDLIgbq6xifdcKxG2mGUaCYe/bQammcN1k6o2YbR3txa/kLky2cgI8LUpe
-	Ixhtz6X101SyCFYg/RH9JNuEq94yU/6U1z56diS4Kep/quX3vIfXTY7IXy+aRVVaiZYPSFS0sEJ
-	OLq64fFZOseBgQv7tLSeYN5GiXhr1cL8vibTgIDBxZ6D2I7hQkMGKzN/w8/4EvOB+pbnsPF8q2F
-	us08LkhEHGNZO9syEXOcB3Dxdqaer7ymVAL58XdMY5R7NiPfewR6ddDXw29tfCbr2olmDIYE8hP
-	jri4/AJf3Lk4yJod95VhJS7ZOHhDjYffHsWW7FFb/iCb3Cv9TrHfA2Fo+ACif01/E13XKQRxQtg
-	I+ss2cmOUANidf7bIDgCxGhl+Ea4Wcq3/tO+/56vbWsCKzU=
-X-Received: by 2002:a17:907:6ea9:b0:c46:a5bb:5740 with SMTP id a640c23a62f3a-c513a3a656cmr1605152966b.5.1795613980473;
-        Wed, 25 Nov 2026 05:39:40 -0800 (PST)
-Received: from L9JK9NPFH9 ([2a09:bac6:37ad:1e5a::306:5])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c513ae679e3sm637401166b.22.2026.11.25.05.39.38
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Wed, 25 Nov 2026 05:39:40 -0800 (PST)
-From: Tianyi Gao <tianyi@cloudflare.com>
-To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc: netdev@vger.kernel.org,
-	intel-wired-lan@lists.osuosl.org,
-	Tony Nguyen <anthony.l.nguyen@intel.com>,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Paul Greenwalt <paul.greenwalt@intel.com>,
-	Alice Michael <alice.michael@intel.com>,
-	Eric Joyner <eric.joyner@intel.com>,
-	Jesse Brandeburg <jbrandeb@kernel.org>,
-	Lorenzo Bianconi <lorenzo@kernel.org>,
-	Alexander Duyck <alexander.duyck@gmail.com>,
-	bpf@vger.kernel.org,
-	kernel-team@cloudflare.com,
-	tianyi.gao@linux.dev
-Subject: Re: [PATCH net v2] ice: do not report CHECKSUM_COMPLETE when an XDP program is attached
-Date: Wed, 25 Nov 2026 13:39:35 +0000
-Message-ID: <20261125133935.36695-1-tianyi@cloudflare.com>
-X-Mailer: git-send-email 2.56.0
-In-Reply-To: <awbGK9v4k3Fh4U+H@boxer>
-References: <20261125095201.98279-1-tianyi@cloudflare.com> <awbGK9v4k3Fh4U+H@boxer>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ENDJyjOr
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5F991F000C4;
+	Wed, 25 Nov 2026 13:41:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795614115;
+	bh=KlLzNAVDXKHkT7t8/IGZPiFqPxiYiACpkcm3Z5phyN8=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=ENDJyjOr0Lk+ILBxJ/lnHg432yAYVR/C1upxipTX2CjO+hgvpmOcR5CfyZ4AJ6Qwc
+	 qjoYw3JZ4D7uyWGM2l1h0udXOGgwoFMpzMVHNti8dOeyZi9LEL16KlaTcRzVH0IYG5
+	 IRmh7VyK8QVofMBKVuBOdSziIDnMlOUJFE6CRa3y8GRkyFnDzz+Omsppdpk80domxl
+	 z6vP1o8YtUna8+AXTZR2iy+56gK+Qo8zcZ99P+Rb80cLurgXruA0dNwZ4BfgXvsN1Z
+	 ylr+QswFaSXD7Wpmxn3aPe0r+VSRifHj3KDkQj7jc3WE1iHINUAInWdpysNZNRAwIn
+	 pKV6lymUqXRpw==
+Message-ID: <sashiko-outbox-233496@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net-next] bonding: check XDP support before enslaving
+ changes state
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Hangbin Liu" <hangbin.liu@linux.dev>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20261124-bond_xdp_fix-v1-1-e67983924324@kylinos.cn>
+References: <20261124-bond_xdp_fix-v1-1-e67983924324@kylinos.cn>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 25 Nov 2026 13:41:54 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -119,27 +59,99 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 8bit
 
-On Wed, 2026-11-25 at 12:27 +0100, Maciej Fijalkowski wrote:
-> My ack was meant to say: let us get the behavior aligned to mlx5 and given
-> that there is pending work regarding checksum capabilities in XDP,
-> Alexander's concerns are meant to be addressed at -next kernel candidates.
+Thank you for your contribution! Sashiko AI review found 2 potential
+issues to consider:
+- [High] bonding: bond_xdp_xmit() checks ndo_xdp_xmit instead of
+  xdp_features
+- [Low] bonding: missing Fixes trailer for NULL ndo_xdp_xmit dereference
+  fix
+--
 
-Thanks for clarifying, and sorry for dropping it. I was not sure if the
-ack still applied after the change moved to the control path. The
-behavior in v2 is the same as in v1, aligned to mlx5. If you are fine
-with v2, could you send your Acked-by again, or could I just bring it
-back if there is a v3?
+commit 4e12b56c05de5cd18169514e7abb34d8e38f9fd6
+Author: Hangbin Liu <hangbin.liu@linux.dev>
 
-> If code has changed *so much* why have you kept the Suggested-by tag from
-> Jesse?
+> bonding: check XDP support before enslaving changes state
+>
+> The XDP capability checks in bond_enslave() - ndo_bpf/ndo_xdp_xmit
+> presence and the slave XDP program count - run only after the slave
+> has been opened, linked and published to the datapath. On failure the
+> slave may already be bond->curr_active_slave or reachable through
+> bond->slave_cnt and the upper device list, so a lot of state has to be
+> undone, and bond_xdp_xmit() can observe the slave before its
+> capability was ever verified.
+>
+> Move both checks to the validation section at the top of
+> bond_enslave(), before the first state change, so a rejected slave
+> returns directly with nothing mutated. The dev_xdp_propagate() setup
+> stays in place and still uses the err_dec_slave_cnt error path.
+>
+> Moving the checks alone is not enough. Without a bond xdp_prog they
+> are skipped, and a slave without ndo_xdp_xmit can be enslaved while
+> the bond still advertises NETDEV_XDP_ACT_NDO_XMIT built from the
+> other slaves. __xdp_enqueue() then accepts frames and the bulk-queue
+> flush hands them to bond_xdp_xmit(), which may pick the new slave and
+> call a NULL ndo_xdp_xmit in softirq context.
+>
+> Check the selected slave in bond_xdp_xmit() and fail the frame with
+> -ENXIO instead. The check happens at xmit time, so it also covers
+> frames enqueued before bond_xdp_set_features() clears the flag, and
+> the bulk-queue flush path that never rechecks xdp_features.
+>
+> Signed-off-by: Hangbin Liu <liuhangbin@kylinos.cn>
 
-The Suggested-by tag is mainly about what to fix rather than the code.
-But Jesse and I also discussed the code itself before I sent v1 and v2,
-so I kept it.
+[Severity: Low]
+Since this fixes a NULL ndo_xdp_xmit dereference and the enslavement check
+ordering from the original bonding XDP support, should it include a Fixes:
+tag?
 
-Thanks,
-Tianyi
+  Fixes: 9e2ee5c7e7c3 ("net, bonding: Add XDP support to the bonding driver=
+")
+
+> diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_m=
+ain.c
+> index 776afdb9df43e..0149bd7764e7c 100644
+> --- a/drivers/net/bonding/bond_main.c
+> +++ b/drivers/net/bonding/bond_main.c
+[ ... ]
+> @@ -5681,7 +5680,7 @@ static int bond_xdp_xmit(struct net_device *bond_de=
+v,
+>  		xdp_convert_frame_to_buff(frame, &xdp);
+> =20
+>  		slave_dev =3D bond_xdp_get_xmit_slave(bond_dev, &xdp);
+> -		if (!slave_dev) {
+> +		if (!slave_dev || unlikely(!slave_dev->netdev_ops->ndo_xdp_xmit)) {
+>  			err =3D -ENXIO;
+>  			break;
+>  		}
+
+[Severity: High]
+Should bond_xdp_xmit() check slave_dev->xdp_features for
+NETDEV_XDP_ACT_NDO_XMIT (and NETDEV_XDP_ACT_NDO_XMIT_SG when
+xdp_frame_has_frags(frame) is true), mirroring __xdp_enqueue(), instead of
+only checking whether ndo_xdp_xmit is non-NULL?
+
+Many drivers (such as gve and mvpp2) always set a non-NULL .ndo_xdp_xmit
+pointer in their static net_device_ops and only enable
+NETDEV_XDP_ACT_NDO_XMIT in dev->xdp_features when XDP TX queues are
+allocated.  Because bond_enslave() publishes new_slave to the TX selection
+paths before dev_xdp_propagate() and bond_xdp_set_features() run,
+bond_xdp_xmit() can pick a newly enslaved device whose ndo_xdp_xmit pointer
+is non-NULL while its XDP queues are uninitialized:
+
+drivers/net/ethernet/google/gve/gve_tx_dqo.c:gve_xdp_xmit_dqo() {
+	...
+	qid =3D gve_xdp_tx_queue_id(priv,
+				  smp_processor_id() % priv->tx_cfg.num_xdp_queues);
+	...
+}
+
+In gve, priv->tx_cfg.num_xdp_queues is 0 when NETDEV_XDP_ACT_NDO_XMIT is
+unset, causing a divide-by-zero panic in softirq context.  Similarly, a
+multi-buffer frame enqueued while existing slaves advertised
+NETDEV_XDP_ACT_NDO_XMIT_SG can be handed to a newly enslaved slave that only
+supports linear XDP xmit.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261124-bond_xdp_f=
+ix-v1-1-e67983924324@kylinos.cn?part=3D1
