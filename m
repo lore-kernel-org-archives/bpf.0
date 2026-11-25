@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795579683;
-	b=oMYSmzocoBI9g48n8M46mQS3d80OO8+X8uL4mFNWNDUnPXmWpdhyXC5+WrYniRQzClwE
-	 0fu1T3gLdHU02EBsF8qFbe7+eWONS+shbVVQKsGYazGqBq7IRt7nNBZK6Gs4bgYYdCRQI
-	 lNVmTtjCq+T/9q95fhsYSnFPojA2c/ygNGNVoTY/QxcUTXt+j8KVH3vcrhNBKLQXHE1Zh
-	 YFeyE5ZDFXR9Bf1WU8Z2bSgk0n8q8CMk9elqSF0PHx1aF4L7kPeqMUQe74gh5sm5wUIye
-	 nc+4dHbr+FYQATd04A1ozCcMrORROmYoltdoLM98IPVSm5gX0SUI6Bn4FOynwxadRsA==
+	t=1795579687;
+	b=EhJSsELmQdUSWn4XCZPDFCNE0UwsjGSdVNhep270D2iiEmoqLhy7Nuh5rccd/r3w5BpH
+	 BlXgYgY8QLPyjUgWpNhTloLap1vbBFKaxin7BsdNeesqnYi1Q9cBEmQIWeEV+CPRRUkvc
+	 5a8pUBIdXwWDSrdHe+rdXhcEsBIi7HP4DTDsrnb05JMNW25NOiBVV+7Q24WQQrnU1XwSn
+	 m42AuAY2lwkA5W8v9hkMWAL4Qr+Ohv30J962Qwiv9SljlEsMIcwissPQATdI5We20C0pn
+	 Wgp+HC1GVmSNugasJWRMl9CNccx4ruV9T+rSpqZBZXcLyHu1aaz8aIvWVaqJsIrrbOQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795579683;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795579687;
 	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
 	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=uGLy1/aQEi5z1IyTDHHxXa/AIlYBpD6FYJ1Jq8T5y+U=;
-	b=lEj/K/tW5kOjzOsWvVWhfIKdlVEFSwvLszYyylgviWG+BJxeI0UhkGyGrU+KuksDGV4z
-	 dtkdIxIZssPSEz20BqhBy43rHpNjeYVYuEtLih7gqw5WlcnJcG7y+DtWADrD2Wm/GHS1D
-	 Q36RGo3rr4vOJHcr6h7IuQ5EccDOauEEPcMv4qkthHmWEmeLKEzsrk+wQrrxODfbC95Rw
-	 5gCnQ/q2rdebwGLvuro2putayjcfQaQfE7EcWhtIvvkA9HXqPPvRqmgODNRTaPhuDgOvP
-	 N7B809gkT/8pcRXKdExycUTLzTDVZ4p7MoWRa/I8ZKzRVBG5qqEmfN99zmJHLefRXxQ==
+	bh=VSoN/6FWmXs2wegalsxskBd39dveSW4FGvwKyb22jXQ=;
+	b=30I2eKiCea60yTEBgKuDekg2yXmuL48xIGJyDMEND9Xjsp8/hPpVmBbiADsAPGo5VJDo
+	 yCOAHfeK05ik/S+Fl/p3wYnVY4B3xy7VmuhixKiVsoqlesTiX5zuSLVx7dSvcAvMNrUNp
+	 Jj3l5QVuf7C/q8aMpcosK6wsDkHRCSTXF7DxPOH3fjVcVRAlymeHLW+AD+HaEdKJQwXEc
+	 ePpdMuTIXwAH7VQFeV1VhH3v8dlLiiDGf7F1ffScjgDH/VqoiRb/EjStvIzaxYYAcV5wH
+	 RnwOeNKKj76W+VmjDcCXcN/SMLdh5zFS0cs7t7welUzvJNlhJZASfBu+vmmfO9nuHLw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=N+6zV6sq;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=OLCKBbGF;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8535F606A31E
-	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 04:08:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E42D7606A31E
+	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 04:08:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=N+6zV6sq
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CB351F000C0;
-	Wed, 25 Nov 2026 04:08:01 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=OLCKBbGF
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEF501F000C0;
+	Wed, 25 Nov 2026 04:08:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795579682;
-	bh=uGLy1/aQEi5z1IyTDHHxXa/AIlYBpD6FYJ1Jq8T5y+U=;
+	s=k20260515; t=1795579686;
+	bh=VSoN/6FWmXs2wegalsxskBd39dveSW4FGvwKyb22jXQ=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=N+6zV6sqryFrbtSQcYdOoHLw6zpqmEFmrZuKNPPBbTDEjVzBp30QXCagpIFwrmTK0
-	 F3Zr7SBYoMfrGKEC1HEEWCphdWk5GfgTTJwxk1iSisfIgqbvbqOPM1e6rc2m85xPXH
-	 ueMeXpHximEQ4CNXYqUBHLcX4jnAj9tKiE+n0V+zNPaP2PD1olrbscozkk4WbJcwrQ
-	 AP1/t7WhftkcTc3GdqtOMx3hbicu08Jbled3ecsFMksDFrsOOWnh3ewIz14mhnvACB
-	 NviJ5YC1DHBSBsFidZ8Ln315eg2X2EMkFPXfi/bMUixJUIPTGbTOc9Z1EZhk6yaC4N
-	 evCqQ+VWL8EcA==
-Content-Type: multipart/mixed; boundary="===============1620715916966486844=="
+	b=OLCKBbGF8/bprLaI3+FBbsXsatLq0TT/E6qj8k0nSnq3qxaYUcphweQkyypNiuZYZ
+	 4sYmHJaVjeUkGRX+0S4JRiJt8w1qJtyGZhKRmJmHGkRlorEvEyyIdaceJyhRKI/c3F
+	 68tZs+yU7BkYePnSaGUG7+h+pxezu/0XtnwnepZIggaOV22sho2nZQYUXrcasCMDIx
+	 9MKEw6LnqMz5LcjLbJobJb5/55Pvc5XzWsckxA6b0tevCFrBhaKQhb7eo614PlTa0I
+	 UBj5Vf1kFeYbGKNbD4QcnfwYKJ/H2iCvu0b+7uIz7XhCL2sRNNNf7oFrBubQKalUL9
+	 RHn7C+tYeGdoA==
+Content-Type: multipart/mixed; boundary="===============1085203253568791609=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,89 +49,71 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <bc7e0d9a3d4ffdba358268cd6908d970ddac4a8bb94fdfd50af294b40cce6cee@mail.kernel.org>
-In-Reply-To: <20261125032938.670542-48-alexei.starovoitov@gmail.com>
-References: <20261125032938.670542-48-alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH bpf 47/47] bpf: Check the type of R0 at the exit of a struct_ops program
+Message-Id: <5885837a30c297a0dcc866c86ab011b9d5d1efcbfce1e87f521aecaf158f7dab@mail.kernel.org>
+In-Reply-To: <20261125032938.670542-20-alexei.starovoitov@gmail.com>
+References: <20261125032938.670542-20-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH bpf 19/47] bpf: Take bpf_lock with interrupts disabled
 From: bot+bpf-ci@kernel.org
 To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Wed, 25 Nov 2026 04:08:01 +0000 (UTC)
+Date: Wed, 25 Nov 2026 04:08:04 +0000 (UTC)
 
---===============1620715916966486844==
+--===============1085203253568791609==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> bpf: Check the type of R0 at the exit of a struct_ops program
+> bpf: Take bpf_lock with interrupts disabled
 
-TL;DR: Patch looks correct, but a pre-existing gap may remain: a void or
-int-returning struct_ops program might exit with a referenced R0 and pass
-verification, leaking a cgroup or skb reference.
+TL;DR: Not a regression from this patch: on PREEMPT_RT, bpf_ksym_del() may
+still take a sleeping bpf_lock with interrupts disabled, via
+bpf_local_irq_save(). The fix works only on non-RT kernels.
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 554d99c1c943..d4b31990fcb9 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -19608,7 +19608,8 @@ static int check_return_code(struct bpf_verifier_env *env, int regno, const char
->  		 * matches the operator's return type and is in its unmodified
->  		 * form. A scalar zero (i.e., a null pointer) is also allowed.
->  		 */
-> -		reg_type = reg->btf ? btf_type_by_id(reg->btf, reg->btf_id) : NULL;
-> +		reg_type = base_type(reg->type) == PTR_TO_BTF_ID ?
-> +			   btf_type_by_id(reg->btf, reg->btf_id) : NULL;
->  		ret_type = btf_type_resolve_ptr(prog->aux->attach_btf,
->  						prog->aux->attach_func_proto->type,
->  						NULL);
+> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> --- a/kernel/bpf/core.c
+> +++ b/kernel/bpf/core.c
 
-This change itself looks correct.  The following problem predates this patch
-(it comes from 8d9f547f74c7), but it is in the same R0 check and this patch
-does not close it.
+[ ... ]
 
-check_reference_leak() lets a struct_ops program exit with a REF_TYPE_PTR
-reference whose id equals R0's id, without looking at the operator's return
-type:
+> @@ -666,9 +665,8 @@ static void __bpf_ksym_del(struct bpf_ksym *ksym)
+>
+>  void bpf_ksym_del(struct bpf_ksym *ksym)
+>  {
+> -	spin_lock_bh(&bpf_lock);
+> +	guard(spinlock_irqsave)(&bpf_lock);
+>  	__bpf_ksym_del(ksym);
+> -	spin_unlock_bh(&bpf_lock);
+>  }
 
-    if (type == BPF_PROG_TYPE_STRUCT_OPS && !exception_exit &&
-        reg->id == state->refs[i].id)
-            continue;
+This isn't a bug introduced here, but on PREEMPT_RT can this still take a
+sleeping lock with interrupts disabled?
 
-That exemption relies on check_return_code() verifying that R0 is a
-referenced kptr matching the operator's return type.  Two paths in
-check_return_code() return 0 without that check.
+bpf_lock is a spinlock_t, so on RT guard(spinlock_irqsave) becomes
+rt_spin_lock() and disables nothing.  The path from the commit message is:
 
-First, a void operator:
+bpf_local_irq_save()
+  local_irq_save()
+bpf_setsockopt(TCP_CONGESTION)
+  do_tcp_setsockopt()
+    tcp_set_congestion_control()
+      tcp_reinit_congestion_control()
+        tcp_cleanup_congestion_control()
+          bpf_module_put()
+            bpf_struct_ops_put()
+              bpf_map_put()
+                map->ops->map_free_pre_rcu()
+                  bpf_struct_ops_map_del_ksyms()
+                    bpf_image_ksym_del()
+                      bpf_ksym_del()
 
-    /* LSM and struct_ops func-ptr's return type could be "void" */
-    if (!frame->in_async_callback_fn && program_returns_void(env))
-            return 0;
+If another CPU holds bpf_lock, for example in bpf_prog_load() ->
+bpf_prog_kallsyms_add() -> bpf_ksym_add(), rtlock_slowlock_locked() calls
+schedule_rtlock() with interrupts disabled.
 
-Second, an operator returning a non-pointer such as int or u32, where
-ret_type is NULL.  is_pointer_value() returns false for every struct_ops
-program because is_perfmon_prog_type() includes BPF_PROG_TYPE_STRUCT_OPS, so
-the function reaches:
-
-    if (prog_type == BPF_PROG_TYPE_STRUCT_OPS && !ret_type)
-            return 0;
-
-Can a tcp_congestion_ops .init program (void) then do this and pass
-verification?
-
-    cg = bpf_cgroup_from_id(1);
-    if (!cg)
-            return;
-    r0 = cg;
-    exit
-
-bpf_cgroup_from_id() is KF_ACQUIRE|KF_RET_NULL in generic_kfunc_set, which is
-registered for BPF_PROG_TYPE_STRUCT_OPS, so a cgroup reference would be
-leaked on every call.  Similarly, an int-returning op with a __ref argument
-(such as the skb in Qdisc enqueue) that sets r0 = skb looks like it would be
-accepted, with the skb neither freed nor enqueued.
-
-Should check_reference_leak() exempt R0 only when the operator returns a
-struct pointer?  Alternatively, could check_return_code() reject a referenced
-R0 when ret_type is NULL or the operator returns void?
+The commit message acknowledges this ("PREEMPT_RT is as before, both locks
+sleep there"), and bpf_map_free_id() earlier in bpf_map_put() takes
+map_idr_lock, also a spinlock_t, in the same way, so this is not worse than
+before.  The change fixes the path on non-RT kernels only.
 
 
 ---
@@ -139,4 +121,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/45542192835
---===============1620715916966486844==--
+--===============1085203253568791609==--
