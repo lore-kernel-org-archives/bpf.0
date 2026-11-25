@@ -1,74 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.197
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.167.197
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795587403;
-	b=sywj+zyMBTZ+xzumNsbq1j8wbDA71YBzqmD9fikfxqAvwLYNyNpYfoRIshAQLvIM8rgG
-	 stM4XFs/mdM8RsZvJEDDwFDv8DeXZoEANnxhS9uUKJSfjQg6NiI3eP3PB0hLZUXg0sbPQ
-	 2Bly8vyUvV33zfh2y3tG3PowzNm4ioE9/U2kk/nNpOmhiEx3j+PnvsePq7YUzrbasUL0U
-	 hz41VjHy51QPsvYRJA0oF/Tmni68S9lNywISKxdXgbck+8PgwdN9XvERWWTfj+nKfYSLT
-	 lsu0CdV6XEmaxC7pMWDnRZDD+4fStXqamcAghYtySOov8aQf+sdSrVcfQVV66OliczQ==
+	t=1795587407;
+	b=RWaSUInQIo13yvw5P/DrhaaNqTR8kYB+kXfTHHCHC2GpeagUnk4A62hp5qHnwl1O0AOU
+	 DjTMDMW1ID1zpAR2mO7zJwDebk0Psi1D1s16fK24uUxjnajudj5ebSwXTjkOGr+NJND+Y
+	 i8YrZcu7hTI/+3DXKmOUj16PB963m+TN1eJ56ImYG4sTCoK4mZdFEbXI0vVRLkUl4s6i+
+	 rcd95ePhSCRo/7yzxd0TCgiDvG9eBAPRnACB4ikfd0QPnmHe3o96TzuOc8wpY9D7Fm5xs
+	 HDEtKngiiDYz1+q7q1Cd92GjtTLmQC5iWDX4GH/5MF6JkdOwzn6XirFguQdF1BTy2Kg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795587403;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795587407;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
 	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
 	 Content-Type;
-	bh=WUUeXjjWyK6qjX9x82xlteWuEad8XsxvDUnphU7EmH0=;
-	b=IlkGH+pMEyBzO6qenGYS9LKhc+qMpccqbIz9M08B0WIMSj0x0zLXT0YGl13j3t6jSUfB
-	 2R0qFaaMAerDOZ/zS0CIhE6v9WIlhXtv8646Qv6Twb4IKeJGyncrNLb2vWgTSN0EHSjFr
-	 F/6uRzAiWnGCzF7SDvJbLyGVovbwseGGjqwCgdAoXKWjNsbojks6MB1MyUE5et0ge06DR
-	 TPEW/rPBcSFv4TCRImXgqyxSBlIzLQteGdthNiKpGUMHIU3O0JvdHmMSks+Zu7D66cg7l
-	 24kVK/wZjmnNDB8t1gSSWD4g12zljBZxtk3thvQ++W3fkC4tdJy6uuuh78KxI4NSM9g==
+	bh=opbvbiqLtMKnZidmW1akDPMoAVRaFGJF5QXg9EIzgwM=;
+	b=Jm3sq3WuQy5vj+hHBZpDyMrLkNJYMafD7YOWoi51ddxdMI9AEaDiVk+89m0sMyqwQPxq
+	 HZji6Yq6LR8RLbeJkZ9YOZUMfWCORyUszCcUjfLdMwQtEddEsGK++G+fYfVxzXNjL0Tt0
+	 vpsD7mgx0v0XTmGj5T7ms6Ryo/Fp5huFTlHXDGDRczAdd0zSJCpBSLYi9pb6+ztyO4tzG
+	 QovJJQiM7Ieuh8dqONIrPVbRsKmC0zYKREOqE+AS4jLDg1EN2WMft1gDUVpZCndGuWOnd
+	 D/u5Z9J2vx8Xker9toU1jhcieArSUFuxfrzq7WwarG5D/grZ78cQIL60w/fjQJ2l0rA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--irogers.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b="P/6VrMLd";
-	arc=none smtp.remote-ip=74.125.82.197
-Received: from mail-dy1-f197.google.com (mail-dy1-f197.google.com [74.125.82.197])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=LWmlWqMW;
+	arc=none smtp.remote-ip=209.85.167.197
+Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com [209.85.167.197])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CD0A6077BD7
-	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 06:16:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1CD0A6077BD7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1EF5606C839
+	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 06:16:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A1EF5606C839
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=P/6VrMLd
-Received: by mail-dy1-f197.google.com with SMTP id 5a478bee46e88-383ec96a7deso6021728eec.1
-        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 22:16:42 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=LWmlWqMW
+Received: by mail-oi1-f197.google.com with SMTP id 5614622812f47-4cc89e86e4dso6518276b6e.2
+        for <bpf@vger.kernel.org>; Tue, 24 Nov 2026 22:16:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795587401; x=1796192201; darn=vger.kernel.org;
+        d=google.com; s=20260707; t=1795587406; x=1796192206; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=WUUeXjjWyK6qjX9x82xlteWuEad8XsxvDUnphU7EmH0=;
-        b=P/6VrMLdYfYArUFioPhit1ABBARFXOClMQPYcGsbvhHdv2QeNNh/sMQHXeRTMCNdcy
-         p+6CG2SwLhTyZzIOw0w2Svezd4KyjfG/3CDdRku/dPEl00xb92xvQcjsnMD4XgCMobmX
-         yO9Ev1AsIKKR6npY5APykjzGGkpe52YcZFScWTGzvU0h5DVmGweEIGwpR7vUxRXl8byL
-         UOycmUKuTyEBn10qn14UipKGoH7yQSpWgkcHrpabH9WbJVi3T0Vl+VHIfZkb/IrnXGIf
-         lZS1Yro7jVASiZRUc3aVH2w7DhgqKKDynxAUE6F2xsL7XSOSDEh0qcMfORhh4RcgzfLI
-         D/Hw==
+        bh=opbvbiqLtMKnZidmW1akDPMoAVRaFGJF5QXg9EIzgwM=;
+        b=LWmlWqMW+uxHY9+EczXzMUqXcrnugfr6VwrSzE8xI7UgzP8lFmyNrIeCdBYYcwnY9s
+         +ejldJJI3KEoVdKxHB+kl0NoLQz09cLdb9KE2Uz1HvLyBvAMMDPT/hmfAmSlm8F5JToh
+         dYCVG9+etwW7qMNA0tz58xWoKnA7IUGHdvkCM4jmpQ87HGk1W2Pf67yQpQ6oKX39ivN8
+         fDZhMdQ9ayVtZXLHiRlTFbAU/LId6gvSEwjUJBAlwgBWyetijA8avc7deHdOp1GoYF4J
+         pYIlNixQtVbQGyaLbbm7KDiYX8koJu276mSfrsqE49IAuso33nDyJLjmrnWKPef8nlf/
+         fnOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795587401; x=1796192201;
+        d=1e100.net; s=20260707; t=1795587406; x=1796192206;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=WUUeXjjWyK6qjX9x82xlteWuEad8XsxvDUnphU7EmH0=;
-        b=M4o7l35hX5N9IU03BfKH13ongatTqqNaof3dtE1FdcbsZ3gXsTFaQg0vtuzWisLvLl
-         iRa6NQHAaQqRX5Dzadk+5P9BZI4Uwt8QBNWxrOZT0Q+f/i+pQEQ8izIMsSPWBElbsIE8
-         i543OsAoy2jVE8hsKwq7/wqPOUEXDJ8EpDHBz23sV12Hrd100e5xlEGhUEeQ10OyjaVo
-         Zq0fAgW2UWNW1vbcGNqy66LUnfSNT7UOXTC/i7ZK+mKdvxmWX2U2B3BXg7/GEJK3Fy0j
-         beXGvxSWJcHbGw1PMgDwSLhCMoeBDxKwL5qbLpOcFnJjMBVBq/FvnGQ3L1eFJ0SSIuuk
-         hSwQ==
-X-Forwarded-Encrypted: i=1; AL+hErEbo6hfCJwgOcJ1FWe5wJb+c0QTuCNmnh5XAv6SXZMY80kIHcVOK09hV0fJ/wPD+W0l1ik=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/rFsMBZXEszaEgXZW59Jo3pJg7ZaNfTxus97nRBvBOHkEs+FQT
-	hJ1KKAl7uyzeDqBvwEV04slnqUkzKel3cb1mv478l+kTDa5ASPNw6G77qVROOgghr5bi/1QK6p8
-	vZyrlpKvFYg==
-X-Received: from dycnn7.prod.google.com ([2002:a05:7301:1407:b0:384:71f1:1227])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7301:5093:b0:36a:31b2:8643
- with SMTP id 5a478bee46e88-386992b3f3bmr14119799eec.38.1795587400863; Tue, 24
- Nov 2026 22:16:40 -0800 (PST)
-Date: Tue, 24 Nov 2026 22:15:15 -0800
+        bh=opbvbiqLtMKnZidmW1akDPMoAVRaFGJF5QXg9EIzgwM=;
+        b=PQvGDojt2VnL0s90ztJAtHNDXrXIetMgEj7eYRbFtsczokp4MVjqMz6mSSXrZ+6rdY
+         F6CTxpCi2+j9EUhjWCR4CiO1D4sI/0YhHnkSrygeXgEREzWPAB+mTFqqN/Dg+x7/YeuB
+         kKmtZnh6sR/NKQvHmzoM+fWE9Z9sAqy3ExhW4H/XPa0TkjOz7lbhRnA3PoUy67JueD/f
+         +kHhnr1hObMpI0xE41r5kV9RGx61jnOcElnugkp9m34Et/SWgarGsnUl6MW8tK8B5PiC
+         wD+coTwi3TsRXFLlqaTi3Iw1PjCzQPgrH49zP4e+kWRmjyKBQpWETRnvzjr4Xdj/3w/i
+         vw/Q==
+X-Forwarded-Encrypted: i=1; AL+hErEAJxS3rrafp6p8/NwBR6lyjNDE37qmtXK26Eo8b8a5s626sR54whx80v4APDpN7bjCVNk=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9ppZGij+pYR2Xnk+/uY+eaGCRA9d+R4sygwlJ7LynVyFPK67It
+	TUGO4OPV8Mfas1p9Pf5CWVe/0hObNKFECWvXskGxAL2+x+Wgtu4JSc3/jbglSO8630WUgefN6SS
+	6yrC6YH8/xA==
+X-Received: from oigu20-n1.prod.google.com ([2002:a05:6809:5d4:10b0:4f5:740:2bcf])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6808:319b:b0:4f5:eaac:5173
+ with SMTP id 5614622812f47-57a0b84fa3dmr15864618b6e.57.1795587405164; Tue, 24
+ Nov 2026 22:16:45 -0800 (PST)
+Date: Tue, 24 Nov 2026 22:15:17 -0800
 In-Reply-To: <20261125061523.1540234-1-irogers@google.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -81,8 +81,8 @@ Precedence: list
 Mime-Version: 1.0
 References: <20261125061523.1540234-1-irogers@google.com>
 X-Mailer: git-send-email 2.56.1.831.g720f3f5937-goog
-Message-ID: <20261125061523.1540234-23-irogers@google.com>
-Subject: [RFC PATCH v2 22/30] tools headers: Add linux/kmsan-checks.h copy
+Message-ID: <20261125061523.1540234-25-irogers@google.com>
+Subject: [RFC PATCH v2 24/30] tools headers: Add linux/unwind_dwarf_cfi.h copy
  from the kernel sources
 From: Ian Rogers <irogers@google.com>
 To: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
@@ -103,134 +103,216 @@ Cc: jpoimboe@kernel.org, rostedt@goodmis.org, peterz@infradead.org,
 	wnliu@google.com, dylanbhatch@google.com, Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Copy include/linux/kmsan-checks.h to tools/include/linux/kmsan-checks.h
-so host tools in tools/ can compile kernel sources using
-kmsan_unpoison_memory() without referencing ../../include/linux
-directly, and register it in tools/perf/check-headers.sh.
+Copy include/linux/unwind_dwarf_cfi.h to
+tools/include/linux/unwind_dwarf_cfi.h for host unwinding verification
+tools under tools/, and add it to tools/perf/check-headers.sh.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/include/linux/kmsan-checks.h | 98 ++++++++++++++++++++++++++++++
- tools/perf/check-headers.sh        |  1 +
- 2 files changed, 99 insertions(+)
- create mode 100644 tools/include/linux/kmsan-checks.h
+ tools/include/linux/unwind_dwarf_cfi.h | 181 +++++++++++++++++++++++++
+ tools/perf/check-headers.sh            |   1 +
+ 2 files changed, 182 insertions(+)
+ create mode 100644 tools/include/linux/unwind_dwarf_cfi.h
 
-diff --git a/tools/include/linux/kmsan-checks.h b/tools/include/linux/kmsan-checks.h
+diff --git a/tools/include/linux/unwind_dwarf_cfi.h b/tools/include/linux/unwind_dwarf_cfi.h
 new file mode 100644
-index 000000000000..e1082dc40abc
+index 000000000000..3530794c8543
 --- /dev/null
-+++ b/tools/include/linux/kmsan-checks.h
-@@ -0,0 +1,98 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * KMSAN checks to be used for one-off annotations in subsystems.
-+ *
-+ * Copyright (C) 2017-2022 Google LLC
-+ * Author: Alexander Potapenko <glider@google.com>
-+ *
-+ */
-+
-+#ifndef _LINUX_KMSAN_CHECKS_H
-+#define _LINUX_KMSAN_CHECKS_H
++++ b/tools/include/linux/unwind_dwarf_cfi.h
+@@ -0,0 +1,181 @@
++/* SPDX-License-Identifier: GPL-2.0-only OR MIT */
++#ifndef _LINUX_UNWIND_DWARF_CFI_H
++#define _LINUX_UNWIND_DWARF_CFI_H
 +
 +#include <linux/types.h>
 +
-+#ifdef CONFIG_KMSAN
++/*
++ * Minimal DWARF Call Frame Information (CFI) unwinder subset.
++ *
++ * Evaluates a strictly bounded, non-Turing-complete subset of .eh_frame and
++ * .eh_frame_hdr tables matching SFrame's stack-unwinding state model (plus
++ * fixed-pattern DRAP stack-realignment and signal-frame expressions):
++ *  - Advances PC monotonically through a single FDE (no backward jumps)
++ *  - Tracks CFA = (SP | FP | scratch) + cfa_off or *(FP/SP + cfa_off)
++ *  - Tracks stack save offsets for SP, FP, and RA (ignoring callee-saved GPR
++ *    spills)
++ *  - Rejects general DWARF expressions, register-to-register rules on SP/FP/RA,
++ *    and DW_EH_PE_indirect FDE/table pointer encodings (skipping CIE
++ *    personality and LSDA fields without dereferencing).
++ */
++
++/* Hard safety bounds enforced on CIE/FDE lengths, offsets, and state stack */
++#define DWARF_CFI_MAX_CIE_LEN		128U
++#define DWARF_CFI_MAX_FDE_LEN		4096U
++#define DWARF_CFI_MAX_CIE_DELTA		(64U * 1024U * 1024U)
++#define DWARF_CFI_MAX_FDE_COUNT		(4U * 1024U * 1024U)
++#define DWARF_CFI_MAX_STATE_STACK	4U
 +
 +/**
-+ * kmsan_poison_memory() - Mark the memory range as uninitialized.
-+ * @address: address to start with.
-+ * @size:    size of buffer to poison.
-+ * @flags:   GFP flags for allocations done by this function.
-+ *
-+ * Until other data is written to this range, KMSAN will treat it as
-+ * uninitialized. Error reports for this memory will reference the call site of
-+ * kmsan_poison_memory() as origin.
++ * enum dwarf_cfi_base - Base register or addressing mode for computing the CFA
++ * @DWARF_CFI_BASE_UNDEFINED: CFA rule has not been established yet.
++ * @DWARF_CFI_BASE_SP: CFA = stack pointer + cfa_off.
++ * @DWARF_CFI_BASE_FP: CFA = frame pointer + cfa_off.
++ * @DWARF_CFI_BASE_FP_INDIRECT: DRAP stack realignment: CFA = *(FP + cfa_off).
++ * @DWARF_CFI_BASE_SP_INDIRECT: Signal trampoline frame: CFA = *(SP + cfa_off).
++ * @DWARF_CFI_BASE_REG: Transient prologue/epilogue scratch register:
++ *                      CFA = reg(cfa_reg) + cfa_off.
 + */
-+void kmsan_poison_memory(const void *address, size_t size, gfp_t flags);
++enum dwarf_cfi_base {
++	DWARF_CFI_BASE_UNDEFINED = 0,
++	DWARF_CFI_BASE_SP,
++	DWARF_CFI_BASE_FP,
++	DWARF_CFI_BASE_FP_INDIRECT,
++	DWARF_CFI_BASE_SP_INDIRECT,
++	DWARF_CFI_BASE_REG,
++};
 +
 +/**
-+ * kmsan_unpoison_memory() -  Mark the memory range as initialized.
-+ * @address: address to start with.
-+ * @size:    size of buffer to unpoison.
-+ *
-+ * Until other data is written to this range, KMSAN will treat it as
-+ * initialized.
++ * enum dwarf_cfi_rule - Recovery rule for caller's SP, FP, or return address
++ * @DWARF_CFI_RULE_SAME: Register retains its value from the current frame
++ *                       (or defaults to CFA for SP).
++ * @DWARF_CFI_RULE_OFFSET: Saved on the stack at *(CFA + off).
++ * @DWARF_CFI_RULE_FP_OFFSET: Saved relative to FP at *(FP + off) (DRAP frame).
++ * @DWARF_CFI_RULE_SP_OFFSET: Saved relative to SP at *(SP + off) (sigframe).
++ * @DWARF_CFI_RULE_UNDEFINED: Explicitly undefined (DW_CFA_undefined); marks
++ *                            the bottom of a stack (e.g. _start or clone).
 + */
-+void kmsan_unpoison_memory(const void *address, size_t size);
++enum dwarf_cfi_rule {
++	DWARF_CFI_RULE_SAME = 0,
++	DWARF_CFI_RULE_OFFSET,
++	DWARF_CFI_RULE_FP_OFFSET,
++	DWARF_CFI_RULE_SP_OFFSET,
++	DWARF_CFI_RULE_UNDEFINED,
++};
 +
 +/**
-+ * kmsan_check_memory() - Check the memory range for being initialized.
-+ * @address: address to start with.
-+ * @size:    size of buffer to check.
-+ *
-+ * If any piece of the given range is marked as uninitialized, KMSAN will report
-+ * an error.
++ * struct dwarf_cfi_arch - Architecture DWARF register numbers and word size
++ * @ws: Target address/word size in bytes (4 or 8).
++ * @sp_reg: DWARF register number for the stack pointer.
++ * @fp_reg: DWARF register number for the frame pointer.
++ * @ra_reg: Default DWARF return-address column number.
 + */
-+void kmsan_check_memory(const void *address, size_t size);
++struct dwarf_cfi_arch {
++	u8 ws;
++	u8 sp_reg;
++	u8 fp_reg;
++	u8 ra_reg;
++};
 +
 +/**
-+ * kmsan_copy_to_user() - Notify KMSAN about a data transfer to userspace.
-+ * @to:      destination address in the userspace.
-+ * @from:    source address in the kernel.
-+ * @to_copy: number of bytes to copy.
-+ * @left:    number of bytes not copied.
-+ *
-+ * If this is a real userspace data transfer, KMSAN checks the bytes that were
-+ * actually copied to ensure there was no information leak. If @to belongs to
-+ * the kernel space (which is possible for compat syscalls), KMSAN just copies
-+ * the metadata.
++ * struct dwarf_cfi_row - Evaluated Minimal DWARF unwind state at a target PC
++ * @cfa_off: Byte offset added to the CFA base register before or as the CFA.
++ * @sp_off: Byte offset used to load the saved SP when @sp_rule is an offset.
++ * @fp_off: Byte offset used to load the saved FP when @fp_rule is an offset.
++ * @ra_off: Byte offset used to load the saved RA when @ra_rule is an offset.
++ * @cfa_base: CFA computation mode (&enum dwarf_cfi_base).
++ * @cfa_reg: DWARF register number when @cfa_base is %DWARF_CFI_BASE_REG.
++ * @sp_rule: Recovery rule for the stack pointer (&enum dwarf_cfi_rule;
++ *           %DWARF_CFI_RULE_SAME indicates caller SP equals CFA).
++ * @fp_rule: Recovery rule for the frame pointer (&enum dwarf_cfi_rule).
++ * @ra_rule: Recovery rule for the return address (&enum dwarf_cfi_rule).
++ * @signal: True if the CIE carries the 'S' signal/interrupt frame augmentation,
++ *          indicating that the saved PC points directly to the interrupted
++ *          instruction rather than after a call instruction.
++ * @ra_signed: True on AArch64 when DW_CFA_AARCH64_negate_ra_state indicates
++ *             that the saved return address carries a PAC signature.
 + */
-+void kmsan_copy_to_user(void __user *to, const void *from, size_t to_copy,
-+			size_t left);
++struct dwarf_cfi_row {
++	s32 cfa_off;
++	s32 sp_off;
++	s32 fp_off;
++	s32 ra_off;
++	u8 cfa_base;
++	u8 cfa_reg;
++	u8 sp_rule;
++	u8 fp_rule;
++	u8 ra_rule;
++	bool signal;
++	bool ra_signed;
++};
 +
 +/**
-+ * kmsan_memmove() - Notify KMSAN about a data copy within kernel.
-+ * @to:   destination address in the kernel.
-+ * @from: source address in the kernel.
-+ * @size: number of bytes to copy.
-+ *
-+ * Invoked after non-instrumented version (e.g. implemented using assembly
-+ * code) of memmove()/memcpy() is called, in order to copy KMSAN's metadata.
++ * struct eh_frame_hdr_entry - Binary-search index entry for an FDE
++ * @start_off: Signed 32-bit offset from the table base (or entry field) to the
++ *             FDE's initial PC location.
++ * @fde_off: Signed 32-bit offset from the table base (or entry field) to the
++ *           start of the FDE record in .eh_frame.
 + */
-+void kmsan_memmove(void *to, const void *from, size_t to_copy);
++struct eh_frame_hdr_entry {
++	s32 start_off;
++	s32 fde_off;
++};
 +
-+#else
++#ifdef CONFIG_UNWIND_DWARF_CFI
 +
-+static inline void kmsan_poison_memory(const void *address, size_t size,
-+				       gfp_t flags)
-+{
-+}
-+static inline void kmsan_unpoison_memory(const void *address, size_t size)
-+{
-+}
-+static inline void kmsan_check_memory(const void *address, size_t size)
-+{
-+}
-+static inline void kmsan_copy_to_user(void __user *to, const void *from,
-+				      size_t to_copy, size_t left)
-+{
-+}
++extern const u8 __start_eh_frame_hdr[];
++extern const u8 __stop_eh_frame_hdr[];
++extern const u8 __start_eh_frame[];
++extern const u8 __stop_eh_frame[];
 +
-+static inline void kmsan_memmove(void *to, const void *from, size_t to_copy)
-+{
-+}
++int dwarf_cfi_eval_fde_kmem(const u8 *fde, const u8 *eh_start,
++			    const u8 *eh_end, unsigned long pc,
++			    const struct dwarf_cfi_arch *arch,
++			    struct dwarf_cfi_row *out_row);
 +
++int dwarf_cfi_unwind_eh_frame_hdr(const u8 *hdr, size_t hdr_size,
++				  const u8 *eh_start, const u8 *eh_end,
++				  unsigned long pc,
++				  const struct dwarf_cfi_arch *arch,
++				  struct dwarf_cfi_row *out_row);
++
++int dwarf_cfi_scan_eh_frame_kmem(const u8 *eh_start, size_t eh_size,
++				 const struct dwarf_cfi_arch *arch,
++				 unsigned long base_addr,
++				 struct eh_frame_hdr_entry *entries,
++				 unsigned int max_entries,
++				 unsigned int *out_count);
++
++int dwarf_cfi_unwind_user_eh_frame_hdr(unsigned long hdr_uaddr,
++				       size_t hdr_size, unsigned long pc,
++				       const struct dwarf_cfi_arch *arch,
++				       struct dwarf_cfi_row *out_row);
++
++#if defined(CONFIG_UNWINDER_DWARF_CFI) && defined(CONFIG_MODULES)
++/**
++ * struct mod_dwarf_cfi_index - Sorted FDE lookup table for a loadable module
++ * @num_fdes: Number of sorted FDE index entries in @entries.
++ * @eh_frame: Pointer to the module's in-memory SHF_ALLOC .eh_frame section;
++ *            also serves as the base address for @entries offsets.
++ * @eh_frame_size: Size in bytes of the module's .eh_frame section.
++ * @entries: Sorted binary-search table mapping PCs to module FDEs.
++ */
++struct mod_dwarf_cfi_index {
++	unsigned int num_fdes;
++	const u8 *eh_frame;
++	size_t eh_frame_size;
++	struct eh_frame_hdr_entry entries[] __counted_by(num_fdes);
++};
++
++struct mod_dwarf_cfi_index *dwarf_cfi_mod_alloc(const void *eh_frame,
++						size_t eh_frame_size,
++						const struct dwarf_cfi_arch *arch);
++void dwarf_cfi_mod_free_rcu(struct mod_dwarf_cfi_index *idx);
++int dwarf_cfi_mod_eval(const struct mod_dwarf_cfi_index *idx, unsigned long ip,
++		       const struct dwarf_cfi_arch *arch,
++		       struct dwarf_cfi_row *out_row);
 +#endif
 +
-+#endif /* _LINUX_KMSAN_CHECKS_H */
++#endif /* CONFIG_UNWIND_DWARF_CFI */
++
++#endif /* _LINUX_UNWIND_DWARF_CFI_H */
 diff --git a/tools/perf/check-headers.sh b/tools/perf/check-headers.sh
-index 531c0e0e84df..76fc6e20096c 100755
+index 3e684c851a86..1b1bd04a6690 100755
 --- a/tools/perf/check-headers.sh
 +++ b/tools/perf/check-headers.sh
-@@ -28,6 +28,7 @@ declare -a FILES=(
-   "include/vdso/unaligned.h"
-   "include/linux/gfp_types.h"
+@@ -30,6 +30,7 @@ declare -a FILES=(
    "include/linux/hash.h"
-+  "include/linux/kmsan-checks.h"
+   "include/linux/kmsan-checks.h"
    "include/linux/list-sort.h"
++  "include/linux/unwind_dwarf_cfi.h"
    "include/uapi/linux/hw_breakpoint.h"
    "arch/x86/include/asm/cpufeatures.h"
+   "arch/x86/include/asm/inat_types.h"
 -- 
 2.56.1.831.g720f3f5937-goog
 
