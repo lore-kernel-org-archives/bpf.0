@@ -1,44 +1,44 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795625945;
-	b=hXPiTPeqo1l03cZlMkYAMdFEdP6gmmEXcrrGsxdA7SADFXYhrKFqcuTNZ2FOmfySu0k0
-	 wHTcDBos6I++xmV9WmcVyMS+dIya8WbAP2iQy86hZ8psJdX5PRmm4Lpz1XxyOoSDAwYd7
-	 tqgGBmGr1+NZOvhZmdLKpMoz/ieNX6eEc2QsexOaElavbefrlE8aB5V3PnhDZAs6vZ0x3
-	 Ca1q4FOM8dJ8O1xt2zDCJI/ArccaNvZV1PkZvYwMcjnoGCK+dnTf2Mw4rEvh4C415T/va
-	 Wm19VZoagggFS4JZgYay4HVjwxYbIwfPGDIbW9xwI9fuO1+IvnCDD7yCEJRCrYjFU0A==
+	t=1795625950;
+	b=RvltJnUQhjK/14tOCosBWMzEWD9k7lpFleq7RJzX1n9JXpJMQnu+07eHhqNG/WpJpyQR
+	 RGSiUkb5YE+se0yfgsXKW5wYOWzW6TElekJLLegf7YZ1OttbQpHDg9trekhwgyuf1O9pZ
+	 pemSB9BT48y+GTf2bdM+Pq47f0ixt4C8/TnMocTNBDl1I7rIFfLNHcN3eR4efhfsAu9fB
+	 /Oj7x1kYkw6EWZ1Wa0iTLWQk514luyzun62yGFpFcuJutNQQxIM9n5tuMH02gO8hDpBfU
+	 sH9PNDprEZU+HD5f/b1QOW4287alLNOvEBID9FirZh0wD5rJnV9eqG0OSfb69WqXOEw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795625945;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795625950;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
 	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=Ww1LBq3WB8AIlOqXrXpKcgmF5Om61CDj0D9IZb6ShCA=;
-	b=dXLNwk+vqtM4wkRPweNesQ+UlyPguC+x3nV7ygUnGgSnXa/L/IHPzIixLwUW12ohff/A
-	 he1ZEhyfC82HPaN2IAb9f+grNn9xhFoyv0ibEeoz7MC00mk+Vh9Cq2Lq6hYkw6WWMW/a7
-	 XzdulODWTlTKNvJT9ebQ1nZPuKz4eF8hb9M7PfKV//BVaLQo2BFQokvUpLQrB3KA0q6L8
-	 ZeHsHXPIRHSRcsO9T5cY6TDsSWF2wAb4sYTNn6smLEhV2rMlXIs0C52Nm7VBgil1gZzxh
-	 r7lKojEWdv4I2ixeCWEeNxlZzX13RiW5iGq5pVViaUvGB9fA5bRT6MvAAW8OjmLJQ4g==
+	bh=q1NiGzQ/XX2GvperFsG+EENkpGB4WXQw4U/XujQMt/0=;
+	b=j0OJAuUmRX2bz1tmXuBbNh1OJykdaBlS1wzzWv6+2PYp7CBU3nPwxxL+J0ZgbpNW3cOq
+	 os/T8pOsIF2ggwpbZtcpiQylGca5J5r9KYEP1AjzfPQsB1JkFUIx9HnOQVqnzj2uRXrXo
+	 SDKlupskrpmPx+iDprJ6LSmENPU5JfADHLrwgsza19idMaUKPA5/6rBbXBsMnh4QTNTf2
+	 9HyVUZZ7g1Eb07qUEuAGygiexnW0S6lIezbNJuaJ3ez8hj6InjTDsOwJLIImOVhOLfIEt
+	 1+XwBLKjXtMCsLwvy/3KdLI2C6poB2JCJUNIcOSb8SJ0qTfw4mRHt9o+FZvZcEumVbg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LNXb67zL;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="ZnD5/FrI";
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82C08606A31E
-	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 16:59:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2D73606A31E
+	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 16:59:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LNXb67zL
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D1F81F000D3;
-	Wed, 25 Nov 2026 16:59:01 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZnD5/FrI
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 320131F000D3;
+	Wed, 25 Nov 2026 16:59:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795625945;
-	bh=Ww1LBq3WB8AIlOqXrXpKcgmF5Om61CDj0D9IZb6ShCA=;
+	s=k20260515; t=1795625949;
+	bh=q1NiGzQ/XX2GvperFsG+EENkpGB4WXQw4U/XujQMt/0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=LNXb67zLbxpxsQ+8pmBip62CSBctf618CcqtYCqgPf76Od83pO4Yhsv3JdxH5bXC8
-	 eE+eyhta+a5hGRh2l0rPahT44UAEiPEet0nOozuvqLFmSw+xu7k3GD0IFxtstT5qwS
-	 Piou8doYg+T/Kza1yl+xOS/sH+341G5sO+bVs41548+3oJHESzR/8FT1XHBqiq5LZA
-	 Nef/bgPU/gqbRRlJ+zkOr5GiOnqoJB6P/1oL5Ja9bryOiWhx9A9/gwEHW4r2oKXR3Q
-	 7uD7f/UWvrxCjnfCkxh7c3HUJK5HqU30fjYokPqmWVNHlVqkzIzYa5inabbHdixRCF
-	 Fh4+Pw58iqypQ==
+	b=ZnD5/FrIX0yeFeRLQ6hwH6W0+wOwzGYule9WVx6Kazivez1i+tmAsvCMcE3E3uyaw
+	 yRY6wRhZo5rK9AKMRXD3UXVZ2Hx2qThBVPN3amojs53yljI+yj9IHwKCDhctSVpCd2
+	 wsAgybt1i42Ak/kLlV/8xOaCQvtDar8ZRoebBayamYJRjy/Uk7MyEVGTC8ebhqHaRo
+	 kQmOTPjm7h5xYk+MNgWLM3/ZiOQmxPJMfHU7V1QSiGxDPY1NNpPOtu9HoUH8evBugR
+	 Nfp7vZnMT2/5iwXgFd+6PxP3ehXwJbLj6r2rtHb6hSUccTFfnsCuoUkS6JfrI+zrjb
+	 jO5md0LPLlUpQ==
 From: Alan Maguire <almagui@kernel.org>
 To: ast@kernel.org,
 	daniel@iogearbox.net,
@@ -56,9 +56,9 @@ Cc: andrey.grodzovsky@crowdstrike.com,
 	mason@kernel.org,
 	bpf@vger.kernel.org,
 	Alan Maguire <almagui@kernel.org>
-Subject: [PATCH v2 bpf-next 3/5] bpf: Support CO-RE relocation of tracing program arguments
-Date: Wed, 25 Nov 2026 16:58:43 +0000
-Message-ID: <20261125165845.45806-4-almagui@kernel.org>
+Subject: [PATCH v2 bpf-next 4/5] selftests/bpf: Test CO-RE relocation of tracing program arguments
+Date: Wed, 25 Nov 2026 16:58:44 +0000
+Message-ID: <20261125165845.45806-5-almagui@kernel.org>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261125165845.45806-1-almagui@kernel.org>
 References: <20261125165845.45806-1-almagui@kernel.org>
@@ -73,344 +73,393 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-libbpf relocates accesses to struct bpf_func_args___<flavor> against a
-struct of the same name describing the context of tracing programs: one
-member per parameter of the attach target, named and typed after it, at
-its offset in the context, followed by __ret where the program can see
-the return value. Light skeletons leave CO-RE relocations to the kernel,
-so do the same here for them.
+Test struct bpf_func_args___<flavor> with both libbpf and light
+skeletons, i.e. with relocations applied by libbpf and by the kernel,
+across program types:
 
-For relocations against such a struct, bpf_core_apply() builds the
-struct in a minimal split BTF on top of the program's attach_btf, laid
-out as btf_ctx_arg_idx() expects, and uses it as the only candidate, so
-the relocations themselves are ordinary CO-RE and relo_core.c needs no
-changes. Member names refer to the strings of the attach target's BTF,
-so only the names of the struct and of __ret are added. The candidate
-depends on the program, so it bypasses the candidate cache; the program
-holds a reference to attach_btf, so cand_cache_mutex isn't needed
-either. bpf_core_ctx gains the program for this.
+- fentry: arguments of bpf_fentry_test3() in a different order, an
+  argument that doesn't exist, __ret, which isn't in the context of
+  fentry programs, a field variant, reading another argument of the
+  same size when one doesn't exist, and a u64 argument read as a __u32,
+  as loads of unsigned integers are resized;
+- fexit: an argument and __ret, through a typedef'd anonymous struct;
+- fmod_ret: arguments of bpf_modify_return_test2() in a different order,
+  __ret, and an int argument declared as a long, read with
+  BPF_CORE_READ_BITFIELD(), as plain loads of signed integers of another
+  size are poisoned;
+- tp_btf: an argument of sys_enter, at its offset without void *__data,
+  and bpf_core_type_matches() telling apart a matching and a mismatching
+  pointer argument type, with the matching struct's flavor starting with
+  and containing triple underscores, and a struct variant, reading an
+  argument through whichever of two structs matches;
+- LSM: dereferencing the struct file * argument of file_open, and __ret.
 
-As in libbpf, typedefs and modifiers are skipped to find the struct, an
-anonymous struct takes its name from its typedef, and the relocation is
-made against the struct itself unless it is anonymous. The flavor is
-everything after the first triple underscore, and the candidate is named
-after the program's struct, whose name is copied into the candidate's
-strings along with __ret.
+In the variants, the access that doesn't apply is poisoned, in a branch
+the verifier finds dead.
+For the field variant, clang turns the two loads into one, from the
+context plus an offset set in each branch.
 
-The rules match libbpf's: __ret is only present for fexit, fmod_ret,
-fsession and LSM programs, other attach types and BPF program targets
-are rejected, as is relocating the struct's type ID to a kernel type ID,
-and on big-endian, arguments smaller than 8 bytes are placed in the high
-addresses of their slot. For tp_btf programs, the parameters are those
-of __probestub_xxx(), without void *__data, as btf_trace_xxx has no
-parameter names; unlike libbpf, which supports older kernels, no
-fallback is needed here. As the kernel relocates each program with its
-subprograms already appended, accesses from subprograms are relocated
-against the program's attach target, where libbpf, which relocates
-shared subprogram code once, rejects them.
+As test_progs runs tests in parallel, the programs only record what
+they see in the test's process. fmod_ret uses bpf_modify_return_test2()
+rather than bpf_modify_return_test(), as another test's fmod_ret program
+returns non-zero for every process there, which skips the following
+fmod_ret programs.
 
-Suggested-by: Alexei Starovoitov <ast@kernel.org>
+Also check that an unguarded access to a missing argument fails to load
+(with libbpf only, as light skeletons can't enable a program that is not
+loaded by default).
+
+And check, with libbpf, that preparing an object with a manually loaded
+program whose attach target doesn't exist succeeds, while loading that
+program fails, and that the type, attach type and attach target of a
+program using the struct can't be changed once the object is prepared.
+
+bpf_core_type_matches() compares the names of integer types too, and
+clang's "long" is "long int" in kernel BTF, so the structs checked with
+it only have pointer members.
+
 Assisted-by: LLM
 Signed-off-by: Alan Maguire <almagui@kernel.org>
 ---
- include/linux/bpf.h    |   2 +
- kernel/bpf/btf.c       | 235 +++++++++++++++++++++++++++++++++++++++++
- kernel/bpf/check_btf.c |   1 +
- 3 files changed, 238 insertions(+)
+ tools/testing/selftests/bpf/Makefile.skel     |   2 +-
+ .../selftests/bpf/prog_tests/func_args_core.c | 129 +++++++++++++
+ .../selftests/bpf/progs/func_args_core.c      | 178 ++++++++++++++++++
+ 3 files changed, 308 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/func_args_core.c
+ create mode 100644 tools/testing/selftests/bpf/progs/func_args_core.c
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 4e9a4d15af0e..9bec0e6bcfd4 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -3446,6 +3446,8 @@ int bpf_get_kfunc_addr(const struct bpf_prog *prog, u32 func_id,
- struct bpf_core_ctx {
- 	struct bpf_verifier_log *log;
- 	const struct btf *btf;
-+	/* the prog being loaded, if any, for struct bpf_func_args */
-+	const struct bpf_prog *prog;
- };
+diff --git a/tools/testing/selftests/bpf/Makefile.skel b/tools/testing/selftests/bpf/Makefile.skel
+index 45e4ce5dca4d..69808d962fc7 100644
+--- a/tools/testing/selftests/bpf/Makefile.skel
++++ b/tools/testing/selftests/bpf/Makefile.skel
+@@ -40,7 +40,7 @@ LSKELS_SIGNED := fentry_test.c fexit_test.c atomics.c
  
- bool btf_nested_type_is_trusted(struct bpf_verifier_log *log,
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 04f12225ec08..8824da49a0c0 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -10721,14 +10721,223 @@ bpf_core_find_cands(struct bpf_core_ctx *ctx, u32 local_type_id)
- 	return populate_cand_cache(cands, module_cand_cache, MODULE_CAND_CACHE_SIZE);
- }
+ # Generate both light skeleton and libbpf skeleton for these
+ LSKELS_EXTRA := test_ksyms_module.c test_ksyms_weak.c kfunc_call_test.c \
+-	kfunc_call_test_subprog.c test_global_percpu_data.c
++	kfunc_call_test_subprog.c test_global_percpu_data.c func_args_core.c
+ SKEL_BLACKLIST += $(LSKELS) $(LSKELS_SIGNED)
  
-+#define BPF_FUNC_ARGS "bpf_func_args"
-+#define BTF_TRACE_PREFIX "btf_trace_"
+ test_static_linked.skel.h-deps := test_static_linked1.bpf.o test_static_linked2.bpf.o
+diff --git a/tools/testing/selftests/bpf/prog_tests/func_args_core.c b/tools/testing/selftests/bpf/prog_tests/func_args_core.c
+new file mode 100644
+index 000000000000..60caf2756a75
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/func_args_core.c
+@@ -0,0 +1,129 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <test_progs.h>
++#include "func_args_core.skel.h"
++#include "func_args_core.lskel.h"
 +
 +/*
-+ * The context of tp_btf, fentry, fexit, fmod_ret, fsession and LSM programs
-+ * is an array of u64 slots: the arguments of the attach target, then, where
-+ * the program can see it, its return value, see btf_ctx_arg_idx(). Describe
-+ * it as
-+ *
-+ *	struct bpf_func_args {
-+ *		<type of the parameter> <name of the parameter>;
-+ *		...
-+ *		<return type> __ret;
-+ *	};
-+ *
-+ * in a split BTF on top of the BTF of the attach target, named after the
-+ * prog's own 'struct bpf_func_args___xyz'. This struct is then the only CO-RE
-+ * candidate for it, and relocations against it are ordinary CO-RE. libbpf
-+ * does the same, see bpf_prog_func_args_btf() in tools/lib/bpf/libbpf.c.
++ * Run the programs of a func_args_core skeleton (libbpf or light) and check
++ * what they saw through struct bpf_func_args___xyz.
 + */
-+struct func_args_btf {
-+	struct btf btf;
-+	struct btf_type *types[1];
-+	struct bpf_core_cand cand;
-+	struct btf_type t;
-+	struct btf_member m[MAX_BPF_FUNC_ARGS + 1];
-+	/* the names of the struct and of __ret */
-+	char strs[];
-+};
-+
-+#define FUNC_ARGS_RET "__ret"
-+
-+/*
-+ * Is the root type of a relocation 'struct bpf_func_args___xyz'? Clang uses
-+ * the typedef as the root type of relocations against a struct accessed
-+ * through one, so skip typedefs and modifiers, and take the name of an
-+ * anonymous struct from its typedef. Returns the root type to relocate
-+ * against in *res_id: the struct, unless it is anonymous.
-+ *
-+ * Unlike for other types, the flavor is everything after the first triple
-+ * underscore, so that it can start with or contain underscores, e.g. when
-+ * generated from a prog's name.
-+ */
-+static bool bpf_core_is_func_args(const struct btf *btf, u32 id, u32 *res_id)
++static void check_func_args(struct func_args_core__bss *bss, int fentry_fd, int fmod_ret_fd)
 +{
-+	const struct btf_type *t;
-+	const char *name = NULL;
-+	int depth = MAX_RESOLVE_DEPTH;
-+	u32 root_id = id;
++	LIBBPF_OPTS(bpf_test_run_opts, topts);
++	int fd;
 +
-+	t = btf_type_by_id(btf, id);
-+	while (t && btf_type_is_modifier(t) && depth--) {
-+		if (btf_type_is_typedef(t))
-+			name = btf_name_by_offset(btf, t->name_off);
-+		id = t->type;
-+		t = btf_type_by_id(btf, id);
-+	}
-+	if (!t || !__btf_type_is_struct(t))
-+		return false;
-+	/* relocations can't have an anonymous root type, keep its typedef */
-+	if (t->name_off) {
-+		name = btf_name_by_offset(btf, t->name_off);
-+		*res_id = id;
-+	} else {
-+		*res_id = root_id;
-+	}
++	bss->pid = getpid();
++	bss->tp_nr = __NR_getppid;
++	/* calls bpf_fentry_test3(4, 5, 6) */
++	ASSERT_OK(bpf_prog_test_run_opts(fentry_fd, &topts), "fentry_run");
++	/* calls bpf_modify_return_test2(1, &b, 3, 4, 5, 6, 7) */
++	ASSERT_OK(bpf_prog_test_run_opts(fmod_ret_fd, &topts), "fmod_ret_run");
++	syscall(__NR_getppid);
++	fd = open("/dev/null", O_RDONLY);
++	if (fd >= 0)
++		close(fd);
 +
-+	return name && (!strcmp(name, BPF_FUNC_ARGS) ||
-+			str_has_prefix(name, BPF_FUNC_ARGS "___"));
++	ASSERT_EQ(bss->fentry_a, 4, "fentry_a");
++	ASSERT_EQ(bss->fentry_b, 5, "fentry_b");
++	ASSERT_EQ(bss->fentry_c, 6, "fentry_c");
++	ASSERT_EQ(bss->fentry_nope, 0, "fentry_nope_exists");
++	ASSERT_EQ(bss->fentry_ret, 0, "fentry_ret_exists");
++	ASSERT_EQ(bss->fentry_alt, 6, "fentry_field_variant");
++	ASSERT_EQ(bss->fentry_c32, 6, "fentry_unsigned_resized");
++	ASSERT_EQ(bss->fexit_c, 6, "fexit_c");
++	ASSERT_EQ(bss->fexit_ret, 15, "fexit_ret");
++	ASSERT_EQ(bss->fmod_ret_c, 3, "fmod_ret_c");
++	ASSERT_EQ(bss->fmod_ret_d, 4, "fmod_ret_signed_resized");
++	ASSERT_EQ(bss->fmod_ret_f, 6, "fmod_ret_f");
++	ASSERT_EQ(bss->fmod_ret_g, 7, "fmod_ret_g");
++	ASSERT_EQ(bss->fmod_ret_ret, 1, "fmod_ret_ret_exists");
++	ASSERT_GE(bss->tp_hits, 1, "tp_btf_id");
++	ASSERT_EQ(bss->tp_match, 1, "tp_btf_type_matches");
++	ASSERT_EQ(bss->tp_mismatch, 0, "tp_btf_type_mismatch");
++	ASSERT_EQ(bss->tp_variant, 1, "tp_btf_struct_variant");
++	ASSERT_EQ(bss->lsm_inode, 1, "lsm_file");
++	ASSERT_EQ(bss->lsm_ret, 1, "lsm_ret");
 +}
 +
-+static int func_args_add(struct func_args_btf *a, u32 name_off, u32 type_id)
++static void test_libbpf(void)
 +{
-+	const struct btf_type *t = btf_type_skip_modifiers(&a->btf, type_id, NULL);
-+	u32 n = btf_type_vlen(&a->t);
-+	u32 sz;
++	struct func_args_core *skel;
 +
-+	if (!t)
-+		return -EINVAL;
-+	sz = btf_type_is_ptr(t) ? 8 : t->size;
-+	if (!sz)
-+		return -EINVAL;
-+	if (n == ARRAY_SIZE(a->m))
-+		return -E2BIG;
++	skel = func_args_core__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "open_and_load"))
++		return;
++	if (ASSERT_OK(func_args_core__attach(skel), "attach"))
++		check_func_args(skel->bss, bpf_program__fd(skel->progs.fentry),
++				bpf_program__fd(skel->progs.fmod_ret));
++	func_args_core__destroy(skel);
++}
 +
-+	/* unnamed parameters still take up their slots */
-+	if (name_off) {
-+		a->m[n].name_off = name_off;
-+		a->m[n].type = type_id;
-+		a->m[n].offset = a->t.size * 8;
-+		/* a small argument is in the high addresses of its slot */
-+		if (IS_ENABLED(CONFIG_CPU_BIG_ENDIAN) && sz < 8)
-+			a->m[n].offset += (8 - sz) * 8;
-+		a->t.info = BTF_KIND_STRUCT << 24 | (n + 1);
-+	}
-+	a->t.size += roundup(sz, 8);
++static void test_lskel(void)
++{
++	struct func_args_core_lskel *skel;
++
++	skel = func_args_core_lskel__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "open_and_load"))
++		return;
++	/* not __attach(), which would also attach the unloaded "missing" prog */
++	if (!ASSERT_GT(func_args_core_lskel__fentry__attach(skel), 0, "attach_fentry") ||
++	    !ASSERT_GT(func_args_core_lskel__fexit__attach(skel), 0, "attach_fexit") ||
++	    !ASSERT_GT(func_args_core_lskel__fmod_ret__attach(skel), 0, "attach_fmod_ret") ||
++	    !ASSERT_GT(func_args_core_lskel__tp_btf__attach(skel), 0, "attach_tp_btf") ||
++	    !ASSERT_GT(func_args_core_lskel__lsm__attach(skel), 0, "attach_lsm"))
++		goto out;
++	/* the same .bss as for the libbpf skeleton, under another name */
++	check_func_args((struct func_args_core__bss *)skel->bss,
++			skel->progs.fentry.prog_fd, skel->progs.fmod_ret.prog_fd);
++out:
++	func_args_core_lskel__destroy(skel);
++}
++
++static void test_missing(void)
++{
++	struct func_args_core *skel;
++
++	skel = func_args_core__open();
++	if (!ASSERT_OK_PTR(skel, "open"))
++		return;
++	bpf_program__set_autoload(skel->progs.missing, true);
++	ASSERT_ERR(func_args_core__load(skel), "load");
++	func_args_core__destroy(skel);
++}
++
++static void test_prepare(void)
++{
++	struct bpf_program *fentry;
++	struct func_args_core *skel;
++
++	skel = func_args_core__open();
++	if (!ASSERT_OK_PTR(skel, "open"))
++		return;
++	fentry = skel->progs.fentry;
++	bpf_program__set_load_strategy(skel->progs.no_target, BPF_PROG_LOAD_STRATEGY_MANUAL);
++	if (!ASSERT_OK(bpf_object__prepare(skel->obj), "prepare"))
++		goto out;
++	ASSERT_ERR(bpf_program__load(skel->progs.no_target), "load_no_target");
++
++	/* the relocations depend on the attach target, which is now fixed */
++	ASSERT_EQ(bpf_program__set_attach_target(fentry, 0, "bpf_fentry_test2"), -EBUSY,
++		  "set_attach_target");
++	ASSERT_EQ(bpf_program__set_expected_attach_type(fentry, BPF_TRACE_FEXIT), -EBUSY,
++		  "set_expected_attach_type");
++	ASSERT_EQ(bpf_program__set_type(fentry, BPF_PROG_TYPE_LSM), -EBUSY, "set_type");
++	ASSERT_OK(func_args_core__load(skel), "load");
++out:
++	func_args_core__destroy(skel);
++}
++
++void test_func_args_core(void)
++{
++	if (test__start_subtest("libbpf"))
++		test_libbpf();
++	if (test__start_subtest("lskel"))
++		test_lskel();
++	if (test__start_subtest("missing"))
++		test_missing();
++	if (test__start_subtest("prepare"))
++		test_prepare();
++}
+diff --git a/tools/testing/selftests/bpf/progs/func_args_core.c b/tools/testing/selftests/bpf/progs/func_args_core.c
+new file mode 100644
+index 000000000000..1281d0f47103
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/func_args_core.c
+@@ -0,0 +1,178 @@
++// SPDX-License-Identifier: GPL-2.0
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_core_read.h>
++
++char _license[] SEC("license") = "GPL";
++
++int pid;
++__u64 fentry_a, fentry_b, fentry_c, fentry_nope, fentry_ret, fentry_alt, fentry_c32;
++__u64 fexit_c, fexit_ret;
++__u64 fmod_ret_c, fmod_ret_d, fmod_ret_f, fmod_ret_g, fmod_ret_ret;
++long tp_nr;
++__u64 tp_hits, tp_match, tp_mismatch, tp_variant;
++__u64 lsm_inode, lsm_ret;
++
++/* bpf_fentry_test3(char a, int b, u64 c): reordered, plus a missing one */
++struct bpf_func_args___test3 {
++	__u64 c;
++	int b;
++	char a;
++	long nope;
++	int __ret;
++} __attribute__((preserve_access_index));
++
++/* u64 c as a __u32: loads of unsigned integers are resized to the argument */
++struct bpf_func_args___test3_u32 {
++	__u32 c;
++} __attribute__((preserve_access_index));
++
++SEC("fentry/bpf_fentry_test3")
++int fentry(struct bpf_func_args___test3 *ctx)
++{
++	if ((bpf_get_current_pid_tgid() >> 32) != pid)
++		return 0;
++	fentry_a = ctx->a;
++	fentry_b = ctx->b;
++	fentry_c = ctx->c;
++	fentry_nope = bpf_core_field_exists(ctx->nope);
++	/* the return value is not in the context of fentry */
++	fentry_ret = bpf_core_field_exists(ctx->__ret);
++	/*
++	 * A field variant, as for an argument renamed on another kernel: the
++	 * access to the missing one is poisoned. Clang turns the two loads of
++	 * the same size into one, from ctx plus the offset each branch sets,
++	 * which the verifier allows from Linux 7.1.
++	 */
++	if (bpf_core_field_exists(ctx->nope))
++		fentry_alt = ctx->nope;
++	else
++		fentry_alt = ctx->c;
++	fentry_c32 = ((struct bpf_func_args___test3_u32 *)ctx)->c;
 +	return 0;
 +}
 +
-+static struct func_args_btf *bpf_core_func_args_btf(struct bpf_core_ctx *ctx, u32 struct_id)
++/* a typedef'd anonymous struct, named after its typedef */
++typedef struct {
++	__u64 c;
++	int __ret;
++} __attribute__((preserve_access_index)) bpf_func_args___test3_t;
++
++SEC("fexit/bpf_fentry_test3")
++int fexit(bpf_func_args___test3_t *ctx)
 +{
-+	const struct bpf_prog *prog = ctx->prog;
-+	struct btf *targ_btf;
-+	const struct btf_param *p;
-+	const struct btf_type *t;
-+	const char *struct_name;
-+	struct func_args_btf *a;
-+	int i, first = 0, err = 0;
-+	size_t name_len;
-+	bool has_ret = false;
-+	const char *tname;
-+	char name[128];
-+	s32 id;
-+
-+	/* the prog holds a reference to attach_btf */
-+	if (!prog || !prog->aux->attach_btf || prog->aux->dst_prog ||
-+	    (prog->type != BPF_PROG_TYPE_TRACING && prog->type != BPF_PROG_TYPE_LSM)) {
-+		bpf_log(ctx->log, "struct %s needs an attach target in kernel BTF\n",
-+			BPF_FUNC_ARGS);
-+		return ERR_PTR(-EOPNOTSUPP);
-+	}
-+
-+	switch (prog->expected_attach_type) {
-+	case BPF_TRACE_FEXIT:
-+	case BPF_MODIFY_RETURN:
-+	case BPF_TRACE_FSESSION:
-+	case BPF_LSM_MAC:
-+	case BPF_LSM_CGROUP:
-+		has_ret = true;
-+		break;
-+	case BPF_TRACE_FENTRY:
-+	case BPF_TRACE_RAW_TP:
-+		break;
-+	default:
-+		bpf_log(ctx->log, "struct %s is not supported for this attach type\n",
-+			BPF_FUNC_ARGS);
-+		return ERR_PTR(-EOPNOTSUPP);
-+	}
-+
-+	targ_btf = prog->aux->attach_btf;
-+	t = btf_type_by_id(targ_btf, prog->aux->attach_btf_id);
-+	if (t && btf_type_is_typedef(t)) {
-+		/*
-+		 * btf_trace_xyz has no names of parameters, __probestub_xyz()
-+		 * has. It takes void *__data first, which is not in the
-+		 * context.
-+		 */
-+		tname = btf_name_by_offset(targ_btf, t->name_off);
-+		if (!tname || !str_has_prefix(tname, BTF_TRACE_PREFIX))
-+			return ERR_PTR(-EINVAL);
-+		if (snprintf(name, sizeof(name), "__probestub_%s",
-+			     tname + sizeof(BTF_TRACE_PREFIX) - 1) >= sizeof(name))
-+			return ERR_PTR(-ENAMETOOLONG);
-+		id = btf_find_by_name_kind(targ_btf, name, BTF_KIND_FUNC);
-+		t = id > 0 ? btf_type_by_id(targ_btf, id) : NULL;
-+		first = 1;
-+	}
-+	if (!t || !btf_type_is_func(t)) {
-+		bpf_log(ctx->log, "can't find the parameters of the attach target for struct %s\n",
-+			BPF_FUNC_ARGS);
-+		return ERR_PTR(-EINVAL);
-+	}
-+	t = btf_type_by_id(targ_btf, t->type);
-+	if (!t || !btf_type_is_func_proto(t))
-+		return ERR_PTR(-EINVAL);
-+
-+	/*
-+	 * Name the candidate after the prog's struct, so that the names that
-+	 * type-based relocations compare match whatever its flavor is.
-+	 */
-+	struct_name = btf_name_by_offset(ctx->btf, btf_type_by_id(ctx->btf, struct_id)->name_off);
-+	name_len = strlen(struct_name) + 1;
-+	a = kzalloc_flex(*a, strs, name_len + sizeof(FUNC_ARGS_RET), GFP_KERNEL_ACCOUNT);
-+	if (!a)
-+		return ERR_PTR(-ENOMEM);
-+	memcpy(a->strs, struct_name, name_len);
-+	memcpy(a->strs + name_len, FUNC_ARGS_RET, sizeof(FUNC_ARGS_RET));
-+
-+	a->btf.base_btf = targ_btf;
-+	a->btf.start_id = btf_nr_types(targ_btf);
-+	a->btf.start_str_off = targ_btf->start_str_off + targ_btf->hdr.str_len;
-+	a->btf.strings = a->strs;
-+	a->btf.hdr.str_len = name_len + sizeof(FUNC_ARGS_RET);
-+	a->btf.types = a->types;
-+	a->btf.nr_types = 1;
-+	a->types[0] = &a->t;
-+	a->t.name_off = a->btf.start_str_off;
-+	a->t.info = BTF_KIND_STRUCT << 24;
-+	a->cand.btf = &a->btf;
-+	a->cand.id = a->btf.start_id;
-+
-+	p = btf_params(t);
-+	/* a trailing parameter of type void is '...' */
-+	for (i = first; !err && i < btf_type_vlen(t) && p[i].type; i++)
-+		err = func_args_add(a, p[i].name_off, p[i].type);
-+	if (!err && has_ret && t->type)
-+		err = func_args_add(a, a->t.name_off + name_len, t->type);
-+	if (err) {
-+		bpf_log(ctx->log, "failed to describe the arguments of the attach target: %d\n",
-+			err);
-+		kfree(a);
-+		return ERR_PTR(err);
-+	}
-+	return a;
++	if ((bpf_get_current_pid_tgid() >> 32) != pid)
++		return 0;
++	fexit_c = ctx->c;
++	fexit_ret = ctx->__ret;
++	return 0;
 +}
 +
- int bpf_core_apply(struct bpf_core_ctx *ctx, const struct bpf_core_relo *relo,
- 		   int relo_idx, void *insn)
- {
- 	bool need_cands = relo->kind != BPF_CORE_TYPE_ID_LOCAL;
- 	struct bpf_core_cand_list cands = {};
-+	struct func_args_btf *args = NULL;
-+	struct bpf_core_relo struct_relo;
- 	struct bpf_core_relo_res targ_res;
- 	struct bpf_core_spec *specs;
- 	const struct btf_type *type;
-+	u32 struct_id;
- 	int err;
- 
- 	/* ~4k of temp memory necessary to convert LLVM spec like "0:1:0:5"
-@@ -10746,6 +10955,31 @@ int bpf_core_apply(struct bpf_core_ctx *ctx, const struct bpf_core_relo *relo,
- 		return -EINVAL;
- 	}
- 
-+	if (need_cands && bpf_core_is_func_args(ctx->btf, relo->type_id, &struct_id)) {
-+		/* the type only exists here, not in the kernel's BTF */
-+		if (relo->kind == BPF_CORE_TYPE_ID_TARGET) {
-+			bpf_log(ctx->log, "relo #%u: no kernel type ID for struct %s\n",
-+				relo_idx, BPF_FUNC_ARGS);
-+			need_cands = false;
-+			err = -EOPNOTSUPP;
-+			goto out;
-+		}
-+		/* the candidate depends on the prog, keep it out of the cache */
-+		need_cands = false;
-+		args = bpf_core_func_args_btf(ctx, struct_id);
-+		if (IS_ERR(args)) {
-+			err = PTR_ERR(args);
-+			args = NULL;
-+			goto out;
-+		}
-+		cands.cands = &args->cand;
-+		cands.len = 1;
-+		/* type-based relocations need the root to be the struct, not a typedef */
-+		struct_relo = *relo;
-+		struct_relo.type_id = struct_id;
-+		relo = &struct_relo;
-+	}
++/*
++ * bpf_modify_return_test2(int a, int *b, short c, int d, void *e, char f,
++ * int g). Unlike for bpf_modify_return_test(), other tests' fmod_ret programs
++ * on it only return non-zero for their own process, which would skip this one.
++ */
++struct bpf_func_args___modify2 {
++	int __ret;
++	int g;
++	char f;
++	short c;
++	/* int, as long as on a kernel where it would be wider */
++	long d;
++} __attribute__((preserve_access_index));
 +
- 	if (need_cands) {
- 		struct bpf_cand_cache *cc;
- 		int i;
-@@ -10791,6 +11025,7 @@ int bpf_core_apply(struct bpf_core_ctx *ctx, const struct bpf_core_relo *relo,
- 
- out:
- 	kfree(specs);
-+	kfree(args);
- 	if (need_cands) {
- 		kfree(cands.cands);
- 		mutex_unlock(&cand_cache_mutex);
-diff --git a/kernel/bpf/check_btf.c b/kernel/bpf/check_btf.c
-index 79e079e907c9..e302feea9ca9 100644
---- a/kernel/bpf/check_btf.c
-+++ b/kernel/bpf/check_btf.c
-@@ -352,6 +352,7 @@ int bpf_check_core_relo(struct bpf_verifier_env *env,
- 	struct bpf_core_ctx ctx = {
- 		.log = &env->log,
- 		.btf = btf,
-+		.prog = prog,
- 	};
- 	bpfptr_t u_core_relo;
- 	int err;
++SEC("fmod_ret/bpf_modify_return_test2")
++int fmod_ret(struct bpf_func_args___modify2 *ctx)
++{
++	if ((bpf_get_current_pid_tgid() >> 32) != pid)
++		return 0;
++	fmod_ret_c = ctx->c;
++	/* a plain load of a signed integer of another size would be poisoned */
++	fmod_ret_d = BPF_CORE_READ_BITFIELD(ctx, d);
++	fmod_ret_f = ctx->f;
++	fmod_ret_g = ctx->g;
++	fmod_ret_ret = bpf_core_field_exists(ctx->__ret);
++	return 0;
++}
++
++/* sys_enter(struct pt_regs *regs, long id), without void *__data */
++struct bpf_func_args___sys_enter {
++	long id;
++	struct pt_regs *regs;
++} __attribute__((preserve_access_index));
++
++/*
++ * Flavors with just the argument whose type is checked, as for an argument
++ * pointing to another type on another kernel. bpf_core_type_matches() also
++ * compares the names of integer types, and clang's "long" is "long int" in
++ * kernel BTF, so only check pointers here.
++ * The flavor starts with and contains triple underscores, which only
++ * matches as the candidate is named after the struct.
++ */
++struct bpf_func_args____sys_enter___good {
++	struct pt_regs *regs;
++} __attribute__((preserve_access_index));
++
++struct bpf_func_args___sys_enter_bad {
++	struct file *regs;
++} __attribute__((preserve_access_index));
++
++/* a struct variant, as for another kernel where the argument is renamed */
++struct bpf_func_args___sys_enter_old {
++	struct pt_regs *uregs;
++} __attribute__((preserve_access_index));
++
++SEC("tp_btf/sys_enter")
++int tp_btf(struct bpf_func_args___sys_enter *ctx)
++{
++	struct pt_regs *regs;
++
++	if ((bpf_get_current_pid_tgid() >> 32) != pid)
++		return 0;
++	/* other syscalls of this process trigger it too */
++	if (ctx->id == tp_nr)
++		tp_hits++;
++	tp_match = bpf_core_type_matches(struct bpf_func_args____sys_enter___good);
++	tp_mismatch = bpf_core_type_matches(struct bpf_func_args___sys_enter_bad);
++	/* a struct variant: the access through the one not matching is poisoned */
++	if (bpf_core_type_matches(struct bpf_func_args____sys_enter___good))
++		regs = ((struct bpf_func_args____sys_enter___good *)ctx)->regs;
++	else
++		regs = ((struct bpf_func_args___sys_enter_old *)ctx)->uregs;
++	tp_variant = regs && regs == ctx->regs;
++	return 0;
++}
++
++/* file_open(struct file *file) */
++struct bpf_func_args___file_open {
++	struct file *file;
++	int __ret;
++} __attribute__((preserve_access_index));
++
++SEC("lsm/file_open")
++int lsm(struct bpf_func_args___file_open *ctx)
++{
++	if ((bpf_get_current_pid_tgid() >> 32) != pid)
++		return 0;
++	lsm_inode = !!ctx->file->f_inode;
++	lsm_ret = ctx->__ret + 1;
++	return 0;
++}
++
++/* an unguarded access to a missing argument fails to load */
++SEC("?fentry/bpf_fentry_test3")
++int missing(struct bpf_func_args___test3 *ctx)
++{
++	fentry_nope = ctx->nope;
++	return 0;
++}
++
++/* a missing attach target fails the load of the program, not the prepare */
++SEC("?fentry/bpf_fentry_test_nonexistent")
++int no_target(struct bpf_func_args___test3 *ctx)
++{
++	if (bpf_core_field_exists(ctx->a))
++		fentry_a = ctx->a;
++	return 0;
++}
 -- 
 2.56.0
 
