@@ -1,85 +1,45 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.76
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795590237;
-	b=RxtlvHJbwA6uNSBV0c3/DlRebKPsTmkriP5FTZZsarL/oHgFPQTQ2Pdkc3e4gKa0W4mJ
-	 vIFiplNqo9ahlK0yMDymmN7yMEx9MS5+y/n/hSOouDC/D0Zx8uSN0a4jgHdg1aeCwaDI2
-	 0dZJEypdNFT43Y5m4z+jhK04pixWnswSja6PXKV0IjAEftg6LdbV0cIL6Z+/hbcJbhKSB
-	 8PvGLNISg9FY44fChC5o1R1mo01tB/cPFl/is7ssK9sIbpgnH1jboum+hbX6rqTDkpYmH
-	 14ILIw15LTt5NeCTyQh/lE2yNXBlfArK65L5N5r6pjaD8CTBCWYF0Sgaa3hCtx+RijA==
+	t=1795590320;
+	b=hTtNI70VmhDDGrDsNvXNCG+FS47EiiR6d7QcrAKlcoUFwkqYhVRJ9viO9Y4Indzer+WB
+	 3Hu5z+SCt0oeqBEMNynP+Za6RPG8wrPGdfM+d1KcsRzSOzD/Z/NugMEHyREwmwp3q3yeO
+	 EU6hM4xFZ/h8OIz4Hs7aBNqIcvmdM9xU8hbbv/VBf0idnoSUNfilme9R9NPcfH0biQ6H6
+	 zweAQ86ZkF2XCHJfI9xLrY3kLb59DFxwkSRjqGhX7gyZeMxBygj3fwsevcMxkPaNLzuAn
+	 egVONft/K6rWuwtXOAjFVKoUuwAS4qrycZsdaARzTMFwE4BFiKgSYaak1VpBPsi4cgg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795590237;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=bJG1Ph17o2sFqd0hCacoT7m8G7WDzIuzW3UzXnp5Ges=;
-	b=cPCK/AjxIfRGM73Fdron4eLIp895uaOE4FzUkKRsL5yqi+yMoOCgtyfLaR/9k/jAy3mK
-	 LM0qXN/v29aP/9pxbboO89BRDkodhESzqzdXNMrwzK/0siWqHlh3kPwdg2ATtNWsAuxiQ
-	 NSyvTBI7UE34meo/RWwBYcsih+QxlZeeo6wpNEbvncAR7KKeKqDACfjDyOjKWQeKkK8lN
-	 cGvq6U/CGzgpIvcu44I1KiLdFkpnEffDNvsnPMyCvzyM90mkU84cG5XIv/SS9DDngsq6W
-	 0B3iSUoR18H+Jt6Y0lcPPHZGVZpk0kRM1poz+xyWb9np9QxMI8j3OcmCW104sxnOF0A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795590320;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=MgT1YyHFc5vAkk1nIM2L3NOs9FPcWgxQDn2k/WL0F3g=;
+	b=4veTPqdVKOUBs0b85KRPtdV35V1Ei78SLiWjURkYPeHq7PHoIrPp9JYBEb8huWHt6I3X
+	 wh6fdPj436CcMNZU20v6rPns6cJvAqV1qb++57Aq8VRTliPt1W+oqz0BCRpfR0xEUmyQ9
+	 AikOHTWpHJTEH4I0ySWkTwAobgnsMHZFCyllkpYiibuUk976vvN9SD8ZeujXgcn5XRDBr
+	 fmLlnRKcbmDi36uZnJAWP/qgm71MVgQWRPLDkibT2yR9IKrdaty3GWyh2FtjI9BRYXhKx
+	 6UfzepZvNHeDNyonxCyeOjM6+h8vdD1FlvuhN1dWkY+2qVhK9CWjTNl4/loBWsAa+pg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=BitONl+o;
-	arc=none smtp.remote-ip=95.215.58.76
-Received: from mta1.migadu.com (out-76.mta1.migadu.com [95.215.58.76])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=fail reason="signature verification failed" header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VF1k79s2;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60C0D606A321
-	for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 07:03:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 60C0D606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A61C606A321;
+	Wed, 25 Nov 2026 07:05:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=BitONl+o
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=SMHX9yHMBQBinyf989UO8I8j+ewwygMpJYQnpQd16VM=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1795590234; v=1; x=1796195034;
- b=BitONl+oNCjuV616C3aZHFMO2Y+x2Yo5QBwv+SX5B0N6MU5R5YqKjWvMEG75rvrlVjyRumR/
- DbUK/3kdv6/Y0U4VRfU4samkhZMI8a7OjJNOOKfGQOs3pvH1tboX9DpOypunQIXLYlri+Ut2FOV
- djqKZaixQEaF99Dp9YzYz4vg=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 0d366555245f6511;
-	Wed, 25 Nov 2026 07:03:54 +0000
-X-Mizu-Trace-ID: 0d366555245f6511
-X-Migadu-Flow: FLOW_OUT
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-To: bpf@vger.kernel.org,
-	kpsingh@kernel.org,
-	matt@bobrowski.net
-Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Xu Kuohai <xukuohai@huawei.com>,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf v2 2/2] selftests/bpf: test rejected bpf_setsockopt() in inet_csk_clone hook
-Date: Wed, 25 Nov 2026 15:03:22 +0800
-Message-ID: <20261125070330.16625-2-jiayuan.chen@linux.dev>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20261125070330.16625-1-jiayuan.chen@linux.dev>
-References: <20261125070330.16625-1-jiayuan.chen@linux.dev>
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VF1k79s2
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 219D11F000D4;
+	Wed, 25 Nov 2026 07:05:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795590319;
+	bh=MgT1YyHFc5vAkk1nIM2L3NOs9FPcWgxQDn2k/WL0F3g=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=VF1k79s2oMcJZqu3w4TXb/uZpIRltc5cnLADLHBenWr+OnopFLWbdN+8kjXweuQYz
+	 DWBKkg5nRx45BboGpgdEObUcidSHfiZ8sz1EJ1LSzy0jVCufvuOCcAJJ7n7IYVD1av
+	 +5Xr4jvCS8Bpq/raHsQXmjWQS6H66iGwYAulPoW+St3+8ny5XmHLeduziLVwu3itlK
+	 ZO8qGWXG5/T08anrWxZjnSyhfzu4u/fK8YD7N6CYgTarzd9BdnnXHBPjVvpLKHuymL
+	 y+Pne5ooVBEPIMOJSPWD46aAjgNJixJInOu6cVb6VwAqAbPKZsIYwMY9T3mldFKIRv
+	 97W/1WHzA6kOw==
+Content-Type: multipart/mixed; boundary="===============7632220386014004542=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -89,59 +49,61 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-Id: <88fec51b898796fa41775d55085d7fa38e2214a80c86b14e0fb90088e192ef83@mail.kernel.org>
+In-Reply-To: <20261125061523.1540234-3-irogers@google.com>
+References: <20261125061523.1540234-3-irogers@google.com>
+Subject: Re: [RFC PATCH v2 02/30] unwind: Add KUnit tests for Minimal DWARF CFI interpreter
+From: bot+bpf-ci@kernel.org
+To: irogers@google.com,linux-kernel@vger.kernel.org,linux-trace-kernel@vger.kernel.org,linux-arch@vger.kernel.org
+Cc: jpoimboe@kernel.org,rostedt@goodmis.org,peterz@infradead.org,mingo@redhat.com,tglx@kernel.org,bp@alien8.de,dave.hansen@linux.intel.com,x86@kernel.org,catalin.marinas@arm.com,will@kernel.org,mark.rutland@arm.com,linux-arm-kernel@lists.infradead.org,pjw@kernel.org,palmer@dabbelt.com,aou@eecs.berkeley.edu,alex@ghiti.fr,linux-riscv@lists.infradead.org,acme@kernel.org,namhyung@kernel.org,linux-perf-users@vger.kernel.org,mhiramat@kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,bpf@vger.kernel.org,nathan@kernel.org,llvm@lists.linux.dev,nsc@kernel.org,linux-kbuild@vger.kernel.org,ojeda@kernel.org,rust-for-linux@vger.kernel.org,ardb@kernel.org,linux-efi@vger.kernel.org,maz@kernel.org,oupton@kernel.org,kvmarm@lists.linux.dev,shuah@kernel.org,linux-kselftest@vger.kernel.org,indu.bhagat@oracle.com,jremus@linux.ibm.com,wnliu@google.com,dylanbhatch@google.com,irogers@google.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yongho
+ ng.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Wed, 25 Nov 2026 07:05:15 +0000 (UTC)
 
-Check in the lsm_cgroup/inet_csk_clone prog that SO_KEEPALIVE,
-TCP_CONGESTION and IPV6_TCLASS are rejected with -EOPNOTSUPP.
+--===============7632220386014004542==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+> unwind: Add KUnit tests for Minimal DWARF CFI interpreter
+
+TL;DR: Nit only, in the KUnit tests: the same blob-derived arguments are
+repeated in about 26 dwarf_cfi_eval_fde_kmem() calls; a small eval_blob()
+helper could make them easier to scan.
+
+> diff --git a/kernel/unwind/dwarf_cfi_kunit.c b/kernel/unwind/dwarf_cfi_kunit.c
+> new file mode 100644
+> --- /dev/null
+> +++ b/kernel/unwind/dwarf_cfi_kunit.c
+
+[ ... ]
+
+> +static void test_cfi_drap_realigned_frame(struct kunit *test)
+> +{
+
+[ ... ]
+
+> +	build_test_eh_blob(&blob, "zR", 0x04, 0x2800, 0x40, insns, sizeof(insns));
+> +
+> +	/* Transient prologue at 0x2806: DWARF_CFI_BASE_REG (r10) */
+> +	KUNIT_ASSERT_EQ(test, 0,
+> +			dwarf_cfi_eval_fde_kmem(blob.buf + blob.fde_off, blob.buf,
+> +						blob.buf + blob.total_len, 0x2806,
+> +						&test_x86_64_arch, &row));
+
+this isn't a bug, but would a small helper such as eval_blob(&blob, pc,
+arch, &row) make these tests easier to scan?
+
+The same three blob-derived arguments (blob.buf + blob.fde_off, blob.buf,
+blob.buf + blob.total_len) are spelled out in every
+dwarf_cfi_eval_fde_kmem() call, across test_cfi_drap_realigned_frame(),
+test_cfi_sigreturn_frame() and test_cfi_arm64_pac_and_riscv_leaf(), and
+about 26 times in the file.  Only the PC and the arch descriptor vary
+between the calls.
+
+
 ---
- tools/testing/selftests/bpf/progs/lsm_cgroup.c | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/tools/testing/selftests/bpf/progs/lsm_cgroup.c b/tools/testing/selftests/bpf/progs/lsm_cgroup.c
-index 3bfa479104be..f4e3278d46d1 100644
---- a/tools/testing/selftests/bpf/progs/lsm_cgroup.c
-+++ b/tools/testing/selftests/bpf/progs/lsm_cgroup.c
-@@ -23,6 +23,10 @@ extern bool CONFIG_SECURITY_APPARMOR __kconfig __weak;
- #define EPERM 1
- #endif
- 
-+#ifndef EOPNOTSUPP
-+#define EOPNOTSUPP 95
-+#endif
-+
- struct {
- 	__uint(type, BPF_MAP_TYPE_CGROUP_STORAGE);
- 	__type(key, __u64);
-@@ -168,7 +172,9 @@ int BPF_PROG(socket_alloc, struct sock *sk, int family, gfp_t priority)
- SEC("lsm_cgroup/inet_csk_clone")
- int BPF_PROG(socket_clone, struct sock *newsk, const struct request_sock *req)
- {
-+	char cc[] = "reno";
- 	int prio = 234;
-+	int one = 1;
- 
- 	if (!newsk)
- 		return 1;
-@@ -184,6 +190,17 @@ int BPF_PROG(socket_clone, struct sock *newsk, const struct request_sock *req)
- 	if (prio != 234)
- 		return 1;
- 
-+	/* The child is not set up yet, these are rejected. */
-+	if (bpf_setsockopt(newsk, SOL_SOCKET, SO_KEEPALIVE, &one,
-+			   sizeof(one)) != -EOPNOTSUPP)
-+		return 1;
-+	if (bpf_setsockopt(newsk, SOL_TCP, TCP_CONGESTION, cc,
-+			   sizeof(cc)) != -EOPNOTSUPP)
-+		return 1;
-+	if (bpf_setsockopt(newsk, SOL_IPV6, IPV6_TCLASS, &one,
-+			   sizeof(one)) != -EOPNOTSUPP)
-+		return 1;
-+
- 	/* Can access cgroup local storage. */
- 	if (!test_local_storage())
- 		return 1;
--- 
-2.43.0
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/45561209846
+--===============7632220386014004542==--
