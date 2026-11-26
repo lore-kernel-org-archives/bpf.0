@@ -1,56 +1,52 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=129.217.128.51
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795716179;
-	b=pcK43UW6zjBtT8cgqJnBKgTIGNn0m8bBMZdx1QfauAKRJ5sG1lLXJRpCkeac2l/DUNQS
-	 eYvC3NmTdbnh3mfIOwy1X5bYPBfJQ4VzLzAORylYfl82iT+RVQAsK3ASNowzz/Y9D8t4s
-	 ITU16LfPnjFrZA407fPqw9zjik6YPoDd2ljv5u1ApthtzK/46ZsGtBMBDf8HtEd+U/fVQ
-	 aX41DXcz2rS+q6xApzZPYFW5UudBlPSe2Gn12WakvDMSHbkkHK4UC6z+bwp9LVA6cEYu4
-	 2Lz3aiblT3hJCPbKu8VzpTPCvp/e7mZwhvzqcKyjlfGc3e4s8/gTjqwLSlfOhJlUF9Q==
+	t=1795716432;
+	b=pu+uv91yjTC3MX/eieOkKI70gmTQxDXG8peYkt39vcZojphtSuSvHZcEPtGGQmAE80a1
+	 rq1ROi18RA6QK/lkKWjqGjxRoI/siavcpTPxKim0YkyaDyuTXf6IR3raH//38QvwPOQtE
+	 /hX2+siz4nbG68h79sbBpxTfkGTGtz/XOTZfSwZI4Af/jWhH98IOjCZMoWt5aEwD5aIO6
+	 Nuz2rLGjqvnW/EsSzDkSwjPtfNTSmajbUeDRgCmgwnRxBVxsapfsMIqD4PhOmtNpFrlXv
+	 eP/dFcIBbUhRGQYMTe+A7MzYloKN1VC5wyOOi/FSehnvGzI9nzAEqJnmgA2z8VhEKkA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795716179;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=3R6S35HfxmEtmBWf4L9xz7ZEb0CLISkLf0fqyEA2tmU=;
-	b=NfbJzhT0q0EIp1QAWjw3XQWmTb6jqeKlXN+2P9yufVWVi/IuMAxxEBql0ubybTX6b/SM
-	 fmjsmIAIuAzVp5N7wi4o1OXk794LSgMCqja2HYMw6IdrA2zMrbxHNKAIaV/j1Diazhuyo
-	 p+5oY5fBgg+tS9n3jP5xkpFjLpPvkjFEsbHyxZnbhVr88gVcsw+ZJzDPL/lVR8OEQtkcX
-	 UwP+g9wOGOfGwpxVbAEtxtvRhV8Lff+fdvksZzKfVN2ZJNx++RcljWYd4pdpL5RXjtG+y
-	 ty2oiDVQI/2n6FtmAyOWSoYW8fjXAOj8Wk84Ov/0mxFyag/HllXm5IWawUotjjuLm3Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795716432;
+	h=DMARC-Filter:DKIM-Signature:Received:Message-ID:Date:MIME-Version:
+	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=6+hU3UA5s6I/NTpkLAZ+BjhMDXENiELATWgF9iF0YoM=;
+	b=FJ5h7D3wJmO/wDm7yAAZCXISybHjJwAQrmqyDVBbugYCip5jbeG8AMtXBnkJWYoKWptR
+	 fQ7lUZ+MeOdqyUw4TGUbQKKkEmsMC9u25ltxvx8xCIKp1W4syhZB58tAuKct9uXOGhF40
+	 x7Y9QK2X8Jj+FFlC2oT5mAkvobjKN82goNCXgTX0uAWT4hxvfg2KLUxvx39O90W2OCpJX
+	 8rH04NKd7kYGAEQHJcwr7ajcvtjTuu2LlpcKxLtlnqW1sf6HbgSypk8LVQm09oUHdko8E
+	 oQOiB2Q2YRFYFvz+93YJWVHAUHYSg1x1rt/h17qiM49Pr6eRg81D5K0JRXGbuoA48/A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Zj4bHqir;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=tu-dortmund.de;
+	spf=pass smtp.mailfrom=tu-dortmund.de;
+	dkim=pass header.d=tu-dortmund.de header.i=@tu-dortmund.de header.a=rsa-sha256 header.s=unimail header.b="l0/9dwIa";
+	arc=none smtp.remote-ip=129.217.128.51
+Received: from unimail.uni-dortmund.de (mx1.hrz.uni-dortmund.de [129.217.128.51])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A2FA606A31E
-	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 18:02:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0765A606A31C;
+	Thu, 26 Nov 2026 18:07:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0765A606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tu-dortmund.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tu-dortmund.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Zj4bHqir
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94A9D1F000C6;
-	Thu, 26 Nov 2026 18:02:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795716178;
-	bh=3R6S35HfxmEtmBWf4L9xz7ZEb0CLISkLf0fqyEA2tmU=;
-	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=Zj4bHqirN1CDn6geqQCur1FDlZ7U0T+VsME6oI2zdUYbpt+b5i1PsQ7EfHTvJD38G
-	 sYorTSaPwgd3n80GdkXf/L7iNHh6bqtyIkfyRrpjXwYfSQuUm84clCuaCmO93JwGWO
-	 JtX4xvmyv0PaPq6YRZa6P3Y5JgpsBRrFqQF2QcMOy7fNL0LMB0efak3KvJxx8rU3Ww
-	 GBjWCKNk8AGJ2rjCwyMPmTq8R4HfB4BQrFBdLLVAQijZRhJxS0dah0vxiQz++hoDjK
-	 JRMRwy2dVSi00xtDrG8ibb61DYZfErQGw5vxFWf5smvIXB/S4k8ovtKoS3af7I23Kl
-	 TD3ljUd47jPkw==
-Message-ID: <sashiko-outbox-235988@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 3/3] selftests/bpf: Test enum value relocations
- out of the local enumerator range
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Yonghong Song" <yonghong.song@linux.dev>, bpf@vger.kernel.org
-In-Reply-To: <20261126175618.1884490-1-yonghong.song@linux.dev>
-References: <20261126175602.1882988-1-yonghong.song@linux.dev>
- <20261126175618.1884490-1-yonghong.song@linux.dev>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 26 Nov 2026 18:02:58 +0000
+	dkim=pass (1024-bit key, unprotected) header.d=tu-dortmund.de header.i=@tu-dortmund.de header.a=rsa-sha256 header.s=unimail header.b=l0/9dwIa
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tu-dortmund.de;
+	s=unimail; t=1795716398;
+	bh=6+hU3UA5s6I/NTpkLAZ+BjhMDXENiELATWgF9iF0YoM=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=l0/9dwIaZpv+KDaKcRsCxtAWIRuftNDPPiORFqoPlZoL7yzV18Gps4cON6/XbGalv
+	 vyAgqxPfsb/Ti3JyD7/YQS1FVU7T0CMMz7blxT/0EkCi4Vvz6Xj5+WHzwtoS+lgRjz
+	 XPL5rSlTFdgjSRLunmb6mqGyOtOUbqB2ZgCZ/wcg=
+Received: from [129.217.186.54] ([129.217.186.54])
+	(authenticated bits=0)
+	by unimail.uni-dortmund.de (8.19.0.2/8.19.0.2) with ESMTPSA id 6AQI6avb020167
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Thu, 26 Nov 2026 19:06:36 +0100 (CET)
+Message-ID: <61e80a8e-320a-497d-a24d-708dd1acff10@tu-dortmund.de>
+Date: Thu, 26 Nov 2026 19:06:36 +0100
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -59,106 +55,40 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next 0/3] veth: earlier txq wake and stop under
+ backpressure
+To: netdev@vger.kernel.org
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
+        "David S. Miller"
+ <davem@davemloft.net>,
+        Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Tim Gebauer <tim.gebauer@tu-dortmund.de>,
+        =?UTF-8?Q?Jonas_K=C3=B6ppeler?= <j.koeppeler@tu-berlin.de>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowangio@gmail.com>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Stanislav Fomichev <sdf@fomichev.me>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20261125152311.805325-1-simon.schippers@tu-dortmund.de>
+Content-Language: en-US
+From: Simon Schippers <simon.schippers@tu-dortmund.de>
+In-Reply-To: <20261125152311.805325-1-simon.schippers@tu-dortmund.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue to consider:
-- [Low] selftests/bpf: non-standard multi-line comments in
-  core_reloc_types.h
---
+On 11/25/26 16:23, Simon Schippers wrote:
+> While working on the veth BQL series [1], I noticed that veth was
+> sometimes faster with BQL enabled than without it. Debugging this showed
+> two reasons, both in how veth handles a full ptr_ring since commit
+> dc82a33297fc ("veth: apply qdisc backpressure on full ptr_ring to reduce
+> TX drops"):
 
-commit b84e0514078e764d621bc1f043d99af2bc50dbfb
-Author: Yonghong Song <yonghong.song@linux.dev>
-
-selftests/bpf: Test enum value relocations out of the local enumerator range
-
-This commit adds CO-RE relocation selftests verifying that libbpf poisons
-enum and enum64 value relocations whose target values fall outside the
-range of the local enumerator type.
-
-> diff --git a/tools/testing/selftests/bpf/progs/core_reloc_types.h b/tools=
-/testing/selftests/bpf/progs/core_reloc_types.h
-> index 116a67fdd1b2e..01d67521efd12 100644
-> --- a/tools/testing/selftests/bpf/progs/core_reloc_types.h
-> +++ b/tools/testing/selftests/bpf/progs/core_reloc_types.h
-> @@ -1409,6 +1409,62 @@ struct core_reloc_enumval___byte_unpacked {
->  	enum named_byte_enum___byte_unpacked f3;
->  };
-> =20
-> +/* second enum value out of the range of the local int enumerator, as the
-> + * target enum is 8 bytes, should fail
-> + */
-> +enum named_enum___err_too_big {
-> +	NAMED_ENUM_VAL1___err_too_big =3D 1,
-> +	NAMED_ENUM_VAL2___err_too_big =3D 0x200000000ULL,
-> +	NAMED_ENUM_VAL3___err_too_big =3D 3,
-> +};
-> +
-> +struct core_reloc_enumval___err_too_big {
-> +	enum named_enum___err_too_big f1;
-> +	anon_enum f2;
-> +};
-> +
-> +/* second enum value out of the range of the local int enumerator, as the
-> + * target enum is signed and 8 bytes, should fail
-> + */
-> +enum named_enum___err_too_small {
-> +	NAMED_ENUM_VAL1___err_too_small =3D 1,
-> +	NAMED_ENUM_VAL2___err_too_small =3D -0x100000000LL,
-> +	NAMED_ENUM_VAL3___err_too_small =3D 3,
-> +};
-> +
-> +struct core_reloc_enumval___err_too_small {
-> +	enum named_enum___err_too_small f1;
-> +	anon_enum f2;
-> +};
-> +
-> +/* second enum value out of the range of the local int enumerator, as the
-> + * target enum is unsigned, should fail
-> + */
-> +enum named_enum___err_int {
-> +	NAMED_ENUM_VAL1___err_int =3D 1,
-> +	NAMED_ENUM_VAL2___err_int =3D 0x80000000,
-> +	NAMED_ENUM_VAL3___err_int =3D 3,
-> +};
-> +
-> +struct core_reloc_enumval___err_int {
-> +	enum named_enum___err_int f1;
-> +	anon_enum f2;
-> +};
-> +
-> +/* first unsigned enum value out of the range of the local unsigned int
-> + * enumerator, as the target enum is 8 bytes, should fail
-> + */
-> +enum named_uint_enum___err_uint {
-> +	UINT_ENUM_VAL1___err_uint =3D 0x100000000ULL,
-> +	UINT_ENUM_VAL2___err_uint =3D 0xffffffff,
-> +};
-> +
-> +struct core_reloc_enumval___err_uint {
-> +	enum named_enum f1;
-> +	anon_enum f2;
-> +	enum named_uint_enum___err_uint f3;
-> +};
-> +
->  enum named_unsigned_enum64___err_missing {
->  	UNSIGNED_ENUM64_VAL1___err_missing =3D 0x1ffffffffULL,
->  	UNSIGNED_ENUM64_VAL3___err_missing =3D 0x3ffffffffULL,
-> @@ -1423,3 +1479,17 @@ struct core_reloc_enum64val___err_missing {
->  	enum named_unsigned_enum64___err_missing f1;
->  	enum named_signed_enum64___err_missing f2;
->  };
-> +
-> +/* first signed enum value out of the range of the local long enumerator=
-, as
-> + * the target enum is unsigned, should fail
-> + */
-
-[Severity: Low]
-This isn't a bug, but the five new multi-line comments in
-core_reloc_types.h place text on the same line as the opening /*.  Per
-BPF coding style, the opening /* of a multi-line comment should be on its
-own line with the comment text starting on the next line.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261126175602.1882=
-988-1-yonghong.song@linux.dev?part=3D3
+I looked at the sashiko review. Both points are right, but they are
+low-severity comment nits with no effect on the code, and addressing
+them would only lengthen the comments. But I can change them in a v2 if
+preferred.
