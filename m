@@ -1,99 +1,107 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.173
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.51
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795654601;
-	b=lIvCNIUBCoc+XWm6ynV7hAx9A/nXvR0MAdb4Tqz33MkIu3yCALbhbtfaUQpviSXnFRFL
-	 Vq2WoeoUfpukzc8cjEDPrNTo4EPA9cKZYb3YMM3M6gn3wxkOZHpsfJbBQ8Xo+9J/ajMKo
-	 CAjg45vwdvYfAkZNd2Eo0fLp2Jacx/6PU+kA+I/L6JOIoGmY1hY6yszudNMNETt/i5iAT
-	 jttpPHcKKTnAd6bemeF68mqDYwQm00q97RsRBn/ORKFT7hIPKIiEsGqVAJkdexR8UKjbO
-	 CHkkBTIm8JUO0UgjNUoxOspGybBmNXruSckUoMrRzsBCdGhR+dqj6VxwbxHA23wnffQ==
+	t=1795655070;
+	b=dXgKFsE4glo3lwYIgEa0De7AzC+xkzCybZTRw5I4SDKDpclHmCuMb4efzQPY8Bdj8N1v
+	 mChxG/vMwHzSQHnEUTLg4cL/w3Q2MCQS6pP5tFEtrcPPGiQ5Yeb8cpNjJQZCVDYP5uFHi
+	 UAS8nx5ogaRNHC6l5IDeF/5zuMXOuuggObKDB5p10M0MVXSaWmGD+3YZfP75qmzDu1zpu
+	 E3FXD5NsvshBwU51bNVSQGHF0wNfqp+CnrE0etw9Xg/+FKK/JQyiN9F1C1BeIxGtYUjoP
+	 9b2ELLICnKAWSb+ixgsNfuWb1I2zXwI5rMhGOiaWLQOITXhK/c+Cs2hmhb8fsNZGs4w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795654601;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795655070;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:Subject:From:To:In-Reply-To:References:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=pULute/cSpO9w1jNy6a0ZqiMnyFQ7hsVd+2WyE3hZho=;
-	b=zqd63LV7CvDzx3B6Po9LlXwyY9ep6oj52zBVhOEdNSyUKuCiVwDytDVB4oJQK/vUFgyu
-	 7C4+Xrs2WKnw5rZ757YcJmaYNGnSSyHqxPgWO8RQ+F/4ke8A2O+53Iydj/vOGyn2fEKlg
-	 0vuU6HxQ9/z+RsdMmQG6d8jhrDmh6A45PwMUZs7IcgyBogko/rpQcEQDwvAzsBXD9EQyn
-	 kmYZ0xg/M3E3yRIkqmTC8I3ZsPTNEzazFkIsvSJHLovDEqat3pazG5iePXa581kbzpYFF
-	 abtBKO2O1tNPx9S/iZl2uoFOpvSKXIeutjbVru9Cug7s3gSjO3C4ReDKaUJUs+8I4Zg==
+	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
+	 References:Content-Transfer-Encoding:MIME-Version;
+	bh=KIktabnjHCDieeGWMO0z9Hmbrz6ngvKHiYWHyOgAZAA=;
+	b=NbRHS0djpw0NFGyyCNQ6TMY3U1b+XhK9MZkQyKfQtkdmU7mg2PmHgySWXzMyaPibdP4N
+	 C5oFQ9lV4RDor+dQYRFGODDn+JneZnnRc9jE9kwRG0aOEjP4dDAF8zD6rzN9CDwqyogO6
+	 6B6EH4kKas9dKZi+4b8Gnssf0ugBmGOEP1/4Tsk6CbbKv82t+NH0hj1U+VK24UJEb8LZZ
+	 cVNXd2OxOccwvq1ybHWnR7dcV0dyTPZW5nRQs9ZgObDahMJauWglzRTlg3ZzMjesrB7Ia
+	 tWnrQ6nlOV8iAb/1cOaX7ZovQT5+eYrTU/CkBYKsIgs2g96tG0rOMQbkfgvGrZABsGg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=LbZn5Fbq;
-	arc=none smtp.remote-ip=209.85.210.173
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=D+32su64;
+	arc=none smtp.remote-ip=209.85.216.51
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADE84606A323
-	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 00:56:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org ADE84606A323
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E32D8606A321
+	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 01:04:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E32D8606A321
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=LbZn5Fbq
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-8b612fd74e1so2261831b3a.0
-        for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 16:56:40 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=D+32su64
+Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-3b0e0e65adbso2973039a91.3
+        for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 17:04:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795654600; x=1796259400; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1795655069; x=1796259869; darn=vger.kernel.org;
         h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:message-id:date:content-type:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=pULute/cSpO9w1jNy6a0ZqiMnyFQ7hsVd+2WyE3hZho=;
-        b=LbZn5Fbq8Z0TvRTn/LboeEFGCooC47p2zcM/lJQxjQ8jzwyNeO6K16SIUDaRvJF/BH
-         X6Bq8Mh5/rs3Qr/PpaubW16pkBmzAbxGJhz0b+1CTNcZWJxW5YZ9yUrDhsJw61sv7CvN
-         OP51LGKlr/5l2BBvOoe7Ca0Q+d8k/7YIw3f/DtWrDKCjXX9BqQTafouA261vnRLmslxq
-         1Lz+qOaNdI/XXqMoZLUoLqdOh/QjvXuyKRFUD191SICcekSAjOuinoZSToNV3H8BJw9p
-         Fl6C9uXFAc5jymqgJlQ8QdYjb3TDQTzuWnAsRqVcNZo+7Yi5L6UGvfaCr721n9MuhHXk
-         WjBw==
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=KIktabnjHCDieeGWMO0z9Hmbrz6ngvKHiYWHyOgAZAA=;
+        b=D+32su64yEFSWiFy82d+DObqCez07ncCZym22RZ0XHEzbtrSdvgbcUX6G1iliu8nbw
+         9NEEBCAi8VkNV/bf8UUrOjFf7RWNb4XYVF7ruEihFZkAzGVF5wY3QD+F+56dyChU0lb7
+         aB7VPJVuqGe3sLH769vvgEfgmtX6k0hpB1rvJjk0Rl83rLpa759tLyNSnLZWzVR4czmc
+         HFRdp9BjEt6+Q89k8KH2sh78Ha7leOtjVVC6XAZpHzi+gFcu4dcS/MQN7EzK+4nLRCae
+         xh+GxmNy+EM1UvoWgVm/191Zfjr+KZVoYjz6iSiaSmsN3i3dcNxqFYCNevP6gXYKuptn
+         n/Bw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795654600; x=1796259400;
+        d=1e100.net; s=20260707; t=1795655069; x=1796259869;
         h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:message-id:date:content-type:x-gm-gg
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=pULute/cSpO9w1jNy6a0ZqiMnyFQ7hsVd+2WyE3hZho=;
-        b=CN4S5YZLkoLLLh87CCJZxyMpJf7qy8tIa0f1NNZXwSQMP3fGCKoPlpwb1cKmvxPmo1
-         WQPcCsyZ5ogDuHpqVMLB4Cu5CHbfKGR11LVsZ5Vc4cPWF52deCF7kewlyvsFBfH2cQ+c
-         BSns6IS0Q3JkGBsIqX8jM9ZXzVg6xMkXRSJL6P9/HXxGWIkkQjUOR/iyM2KU9oBzmKwG
-         z+30vu9YXvZwFkXa0kxi2wBAsyLcbZqH/S395fh7C2qxQJ2dUvLAgSxNArSgdavE0WUD
-         impQkp7MUC9CZ2u+Fs6Gg91iRaFaEhaxoAPzCVqdRQXDPe9DuBgaf0yi3an88ZXUNEvR
-         gv0A==
-X-Forwarded-Encrypted: i=1; AL+hErGDm6GPg3jhj6Eq1NqqnvW8fJPKDZqLmW6FF9XF89BJpvS+l0X6CyDB+F6eNq657KMPDBM=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+52OYO1RgSow+LthFEnelXnoXPcg0gymSkthcP2hOEvr2v9fVe
-	2pBrVhchYF1o12YjvedzZ9kAnPSgK2tPZruxwPQJoSp51h26USvppVDW
-X-Gm-Gg: AZFdTZcnuDLw24C2X43zjgj+4UEm0rG65byqrqkvOvQsNVnhOg53Y2d0zbXnI6TK8Dx
-	2zjF+6VBCAwU+RKrLFzHrqne/C8kL33ChZX3xrjOPukTLnjvmarhdBxcRqDPIwZRwgWl/xPpyPl
-	0bNIyFdr6pBjxj4eHtuT0YoABs2sITXCGhSTMtQLkwxrTxaXwC+tXKrGAhERbVIoSxxJPfNcMze
-	jdPE2dbPd8wa5l5GwR6T6Y1LSS9gTUVV/m9de3aMlhdzx+Qdb3pULGvCHDk2HwKS0/u0nkP97CY
-	Nh+FgrkMnLyH82JM7xbOKJRxByro31wO/cjRpCQBTSA/1IbAoTxcN0A1/9Jb8cHa2euyFA4oODp
-	sTU4m4qQi98TYCvgBiDCvlbjrru3oo1JaUqMS6h5zR2LqhUwkC7VBxM+BoKfJWTWb0c+fmt7WCg
-	OWfkvsmDUqWz9moNnkdZHIwEuyqYS4fN2Xxha3ResZknx2w+ih7OPGat/S5uTS2igLv7iBZL4+L
-	5Gy1p+Hsk3iDRx7KJLG5jCde/JMGlCX8v8aoJs73bSlHkzD5P3aKRQtEDuByAK7FJTkmlIJfuVx
-	YGrzSK098m9OhR+Bo+gONMVec0dC265aZ3ST1UOK/RmbE1udyI7C2ReH0ipmtXGwYQxHvJCfYkS
-	Sp119oyPP7ukE9HJqyOKk75El/u5UYb/U5A==
-X-Received: by 2002:a05:6a20:7489:b0:3eb:7d71:2696 with SMTP id adf61e73a8af0-4014d25bb7cmr18191862637.40.1795654599866;
-        Wed, 25 Nov 2026 16:56:39 -0800 (PST)
-Received: from localhost ([153.61.198.247])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8c872e4c43bsm9623445b3a.26.2026.11.25.16.56.39
+        bh=KIktabnjHCDieeGWMO0z9Hmbrz6ngvKHiYWHyOgAZAA=;
+        b=EqOvu2pO+47wGiZiVmPprd1h+mDKeOlLYyQxGj1mCLRcPRidWGy4KVp0q7zkq1xFlj
+         YjBDOqOwPZ6tQOGyCAWZcfRgNKeXCHlocOx5c/S73LJwf+WoxQlyPG4iNeCpu9JGD8oa
+         lZAZaRwI4BayeMepQT6KIbpc2a/uZMPkLqhHELXiip4+P2DsEpsMpdXAWR94u08F5QUO
+         nCK7Ll3Bh2auIoaJ3hV5jZAWL/yfVZRgwuNW9NTRzS+qIlRmhMatRDSg2BNBzMZq7uZn
+         wn0rzM9Y+C3JJ3N4PkPWDfSsCaU3aSKSBIAWjnKc7gemBza1Zo0+w5DwgC/P6xCXvIQN
+         kZ+A==
+X-Forwarded-Encrypted: i=1; AL+hErG0ybZyYV7Tcz6LeS+5t3cTrDvOfQsp345uTuQeOPNbBMQ2xzE2gVzOma76XvP7yMNyaKg=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8/kykrWlbbHF9STqXxxQCZ5DYiBQH0mtKc3w7OBscXnc1bBpqT
+	GFZLwowf3UIEjUpUh8huZJu+X6bIBzqJnqXp1YgSY7YpH5+Lw918/PCa
+X-Gm-Gg: AZFdTZcPtpCuQQfICIVoTvRJSA98EAj+vHgbw5vlctbjFhan8EFtbwvyXPzSTih1hZ1
+	9tT6uX4FXich61ZgAAR0uvWlnpWNPOMGAEteYl5qx7lOal9U0X2ih7C2X556ZRrYgEHLc2yEc5M
+	UKWMz8mWAq+ZBTvBeU8slzTGQu+3sFpkmz0ew2IUSEQueKN+DTEwZ9IVkIb+I84VWBqsEB/GUQT
+	mlwguonXoLG+GKdKp+IDHmRJLxlAmpE5lc9EFYe91J8wup/0TQz/cdad24r36KmVgDDP3wmbUFl
+	cWSr4se3Ekp7gAkBSrYbUiH92ONd/N9m1kcJ1xmv+vl3OLhlXnaOQrg+5Bpa/l794LNaTq3GrLT
+	s0iCv5EuiBoBB4ebMvVf+iX+EcCJrCaV3eN72v9jQstiMPpz1pVB85zRUVBj8jbmziRovm3LLD/
+	xNRaSeuIxRdv1qVGGYu/ENwYrSXgCbzwXlcbWBkhuzxUaQsl/uWH8oomp8bBSmqIHTNE88Vac/Q
+	ZIW9gzRJORiNgb5H6//FTtVbKN9OK4WeesqaEnaXrxCpocMZWOpVrUgwUgOZdgd1BjP3y5ZhANa
+	1U0H9ogajG3CyUWFdlbojZfFrQOaAAkiLgHPFTDaARiBEVfLj4lK5sxaLXPWXoazKQPLvN1hhjp
+	4KvXlh9qIgazSJeQtMRNUEB7D028VCmSncg==
+X-Received: by 2002:a17:90b:268f:b0:3b3:a421:7e00 with SMTP id 98e67ed59e1d1-3b41c8d4831mr17552841a91.16.1795655068912;
+        Wed, 25 Nov 2026 17:04:28 -0800 (PST)
+Received: from localhost ([153.61.198.249])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b41ad92c07sm30289984a91.13.2026.11.25.17.04.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 Nov 2026 16:56:39 -0800 (PST)
+        Wed, 25 Nov 2026 17:04:28 -0800 (PST)
 Content-Type: text/plain; charset=UTF-8
-Date: Thu, 26 Nov 2026 00:56:39 +0000
-Message-Id: <DN4QFIRN445M.9M05B3SZ7T44@gmail.com>
-Subject: Re: [PATCH v1 bpf-next 3/5] resolve_btfids: Exclude a set of
- functions by name
+Date: Thu, 26 Nov 2026 01:04:27 +0000
+Message-Id: <DN4QLI2XAGO1.2DDIFJ49PNRPS@gmail.com>
+Cc: "Emil Tsalapatis" <emil@etsalapatis.com>, <bpf@vger.kernel.org>,
+ <andrii@kernel.org>, <eddyz87@gmail.com>, <memxor@gmail.com>,
+ <daniel@iogearbox.net>, "Sebastian Andrzej Siewior"
+ <bigeasy@linutronix.de>, "Clark Williams" <clrkwllms@kernel.org>, "Steven
+ Rostedt" <rostedt@goodmis.org>, <linux-rt-devel@lists.linux.dev>,
+ "Vlastimil Babka" <vbabka@kernel.org>, "Hao Li" <hao.li@linux.dev>, "Andrew
+ Morton" <akpm@linux-foundation.org>, "Suren Baghdasaryan"
+ <surenb@google.com>, "Michal Hocko" <mhocko@suse.com>, "Brendan Jackman"
+ <brendan.jackman@linux.dev>, "Johannes Weiner" <hannes@cmpxchg.org>, "Zi
+ Yan" <ziy@nvidia.com>, <linux-mm@kvack.org>, "David Hildenbrand"
+ <david@kernel.org>, "Ingo Molnar" <mingo@redhat.com>, "Will Deacon"
+ <will@kernel.org>, "Boqun Feng" <boqun@kernel.org>, "Waiman Long"
+ <longman@redhat.com>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH bpf-next v1 1/4] bpf: Add call for selecting kmalloc or
+ kmalloc_nolock at call time
 From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Anton Protopopov" <a.s.protopopov@gmail.com>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
- Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>, "Jiri Olsa" <jolsa@kernel.org>, "Alan Maguire"
- <almagui@kernel.org>, "John Fastabend" <john.fastabend@gmail.com>,
- <bpf@vger.kernel.org>
-In-Reply-To: <20261125212849.868523-4-a.s.protopopov@gmail.com>
-References: <20261125212849.868523-1-a.s.protopopov@gmail.com> <20261125212849.868523-4-a.s.protopopov@gmail.com>
+To: "Peter Zijlstra" <peterz@infradead.org>, "Harry Yoo" <harry@kernel.org>
+In-Reply-To: <20261125140902.GE2668804@noisy.programming.kicks-ass.net>
+References: <20261124060357.11700-1-emil@etsalapatis.com> <20261124060357.11700-2-emil@etsalapatis.com> <DN38HGVL8JHQ.2ZVZQCKFXVA9T@gmail.com> <awWRZ9xCzWLnj_R6@thinkstation> <20261125140902.GE2668804@noisy.programming.kicks-ass.net>
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -105,62 +113,25 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-On Wed, Nov 25, 2026 at 01:28 PM Anton Protopopov <a.s.protopopov@gmail.com> wrote:
-> +		"bpf_remove_dentry_xattr_locked",
-> +		"bpf_set_dentry_xattr_locked",
+On Wed, Nov 25, 2026 at 06:09 AM Peter Zijlstra <peterz@infradead.org> wrote:
+> This is absolute atrocious shite. You cannot attempt a spin_trylock from
+> NMI context. That thing might be a mutex.
 
-The bug from the log of patch 2 stays one call below the helper.
-bpf_unlocked_sk_getsockopt() has no tag now.
-It passes optval, ARG_PTR_TO_UNINIT_MEM, to __bpf_getsockopt():
+cannot spin_trylock from NMI _on PREEMPT_RT_ ... correct.
+And the patch guard against that.
 
-	if (err)
-		optlen = 0;
-	if (optlen < saved_optlen)
-		memset(optval + optlen, 0, saved_optlen - optlen);
-	return err;
+On RT the nolock path doesn't reach zone->lock in NMI or hardirq:
 
-__bpf_getsockopt() is in net/core/filter.c and takes no bpf type.
-By the rules in fmodret.c it keeps the tag with -EINVAL.
-After a skip the memset() doesn't run and the prog reads its stack.
-__bpf_skb_load_bytes() has the same memset() in front of -EFAULT.
+  __alloc_frozen_pages_noprof()     alloc_flags has ALLOC_NOLOCK
+    alloc_nolock_allowed()
+      can_spin_trylock()
+        if (IS_ENABLED(CONFIG_PREEMPT_RT) && (in_nmi() || in_hardirq()))
+                return false;
 
-can we skip bpf_*() and __bpf_*() of vmlinux by prefix ?
-Both *_locked names go away.
-Modules stay as they are, bpf_testmod_retval_*() need their tags.
-A few lines in fmodret.c on top of patch 5
+fwiw kmalloc_nolock() has the same check.
 
-diff --git a/tools/bpf/resolve_btfids/fmodret.c b/tools/bpf/resolve_btfids/fmodret.c
-index 384efb5..18b3fbc 100644
---- a/tools/bpf/resolve_btfids/fmodret.c
-+++ b/tools/bpf/resolve_btfids/fmodret.c
-@@ -93,8 +93,6 @@ static bool excluded_by_name(const char *name)
- 	static const char *const names[] = {
- 		"copy_from_kernel_nofault",
- 		"aarch64_insn_patch_text_nosync",
--		"bpf_remove_dentry_xattr_locked",
--		"bpf_set_dentry_xattr_locked",
- 	};
- 	unsigned int i;
- 
-@@ -166,7 +164,8 @@ static int read_bpf_code(char ***names, size_t *nr)
- 
- static bool is_bpf_code(char **names, size_t nr, const char *name)
- {
--	return bsearch(&name, names, nr, sizeof(*names), cmp_name);
-+	return !strncmp(name + strspn(name, "_"), "bpf_", 4) ||
-+	       bsearch(&name, names, nr, sizeof(*names), cmp_name);
- }
- 
- /* Find kfuncs and helpers */
-@@ -380,8 +379,8 @@ int fmodret_tag(Elf *elf, struct btf *btf, int verbose)
- 			continue;
- 		if (excluded_by_name(name))
- 			continue;
--		/* Skip the code of kernel/bpf and of the JIT */
--		if (is_bpf_code(bpf_code, nr_bpf_code, name))
-+		/* Skip bpf_*(), __bpf_*() and the code of kernel/bpf and of the JIT */
-+		if (!base && is_bpf_code(bpf_code, nr_bpf_code, name))
- 			continue;
- 		nr_scanned++;
- 		err = scan_func(scan, func, &values);
+> This should not work; if it does, that is an accident we need to fix.
+
+It's not an accident.
+In NMI only !RT SMP kernels reach the trylock.
 
