@@ -1,105 +1,92 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.180
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.45
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795661305;
-	b=b0WyUUT5m8JwHzcLolsj0vA78Xc5Zge+ZLwsOpWp2mD+w7B3yj61jWkjK6iK/JdFf4Fu
-	 CrVHKKw5DXErI6kA7EUaZAq0Etu6CsNOEONIW82+7W7q4ACLPspvspdGjT+Q6/oBr4B3J
-	 SEGa3zMkFokzKi5CUBprs/GDcPDErIUdrH0Y0h8DoPjbekw6jKUrn30aB5fPTw8XfNDdm
-	 51ZXVj/qYYaErJpz4luZrGtCCEH49VTnkKXjmwLxOep5HoxldTQ0IlEgkqQDj6yFofATI
-	 +GaK8BOcRtEfSJikF9ganQaH5bXh1TfUQM7PsQ/NDcpSMj50z492EzyUPcHFaq3g0tg==
+	t=1795662227;
+	b=k9eRi6i2VeGPR7F4eIhYMFmxP0cdul4AL878HSIRffBLDBd1czMPLU3CBSpLvO90iei4
+	 3QU8cjWHQsHE8UgDr0Pi33qITgycbvIUXRGEVBwFBj3ZG2hpNDtSGuBh686pgKI2rQbLo
+	 lBat0oZVy78XtdYVvvYonIo7/D0PJj70ARetuT3BC3oMl7R7ak4wJavW2iJLbeS8tkqJB
+	 wiZHWqOvLbLN1B81WuNnsbIiYO2OcjYYTeeHo2eSXGf7xUfWoLnl6xirvlb0TflxNqlSn
+	 8Te5dghrefUvirvT9w8z8NbFKgDUEPwTe5XSBcQKWFhaxjo8zmONav6RCxORqTRkNcA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795661305;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795662227;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Content-Type:Date:
-	 Message-Id:Cc:Subject:From:To:In-Reply-To:References:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=uXsG/J8SjUA+u6xV5gQi3ekCpADG/Nmz2q3u5DO1GSw=;
-	b=ObHKdwavW8gOS/uqdi6Bt6i6TjX8Ufc7xtHRTO9kcXEUIXO4pZWvWYt1e66Sk14z8O8u
-	 NaBr/m0/KNhYkn6okAQHV/2GlIOjG8qvb5AzSTHW4+71ysXgHMwD2nlSMQR67gG3Ljhg/
-	 F6/O6eYsc9VVfrSsnUSTT4Z/retYhlbQn+z/7yLawef2SKBpxQXf8fqCsVsXt1ZFnH+yi
-	 pdMjD8ClXYlc6F17/AiK7f6UlWkppaHLsdRlqoyP7LpePB8Kjey4Op0PiRfPHfdbF8KSw
-	 o7BejIG9ckCZiSNHM06zW6eNVhJR3JXBG3Qwq9mGr2cXK/hVf1kjxkpXiJuTdcLlkGQ==
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=BypWm+ajXgg6TQzdUJ97ZZvPvWnvS+eQsbc0PMHjKdY=;
+	b=RisknC/C8RWsr59MRxnaJimyYq3CKvRIrKjQcOyPx5Rcoprqjqef81Ql5ZaSQbzvc0RA
+	 1tT+A7nvMsVeA/EBWATCYuo6J4qqXwiBYbcvyqiD28zrHqRMX/BfL65P6T82DGfVUVYpw
+	 1kWJvUKHjnJBQd/c82IqXljNW9UJcfeOZmKy2WR5qppaLFq4LXSY5rtqmeKAO8dCkVSU/
+	 q2n/FgYiO3daptxH4Spw87rIaNGrgnEQFsSR9CsT3yuFzTSmf91fQkByv4g1zHbhMlw1P
+	 6i5z6PZS5DInTdN+clIgOJ0P38eYY59KlbFhSI39WDrMpeGnZGpdvaM5Ay0Qzgd6A+Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=hWIL7Kkf;
-	arc=none smtp.remote-ip=209.85.215.180
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="kS/YoYo2";
+	arc=none smtp.remote-ip=209.85.216.45
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78B47606A323
-	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 02:48:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 78B47606A323
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 599A7606A31E
+	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 03:03:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 599A7606A31E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=hWIL7Kkf
-Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-ccca948203aso4848124a12.3
-        for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 18:48:25 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=kS/YoYo2
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-3b3e85baf7cso3941779a91.0
+        for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 19:03:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795661305; x=1796266105; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=uXsG/J8SjUA+u6xV5gQi3ekCpADG/Nmz2q3u5DO1GSw=;
-        b=hWIL7KkfCL3yaQsFQRKV2YraC7VVF3oAMqKIMdyD7qlk22rGclRIkoua5vlMpTMBr5
-         rxPT1fKoNqe54FlsoE7dBShxb0WCzgSMpiLoPk2N93Dc0zNZHGX9eD6E1Lex6wcECS0M
-         A+RRExWB5fzKTz1t8NJ4ieU3InEGHWU3TBv8jgNNXp/FGXAiOx0TZa2hoDqb6Pp9+lwI
-         gWFOiqYZURGXSvKxHqj2oDh1MmESQqc97X8TuspANrgz+xqlEgKbl2F1HN1RKUVSRIUv
-         2FuaOyz9D3e++Xel+ceknSPbtOhxPE5eaIFWuFUEiv80ZwxkNWwaKaEpJ4v5NJ3yN6rr
-         3Lzw==
+        d=gmail.com; s=20260707; t=1795662227; x=1796267027; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=BypWm+ajXgg6TQzdUJ97ZZvPvWnvS+eQsbc0PMHjKdY=;
+        b=kS/YoYo2wZAKkkC80J624Yht0r4DLKGN4VxpDlQXEmzs0R+6/dXOchIyMVZ+edoN4L
+         uVcUA9c4TCcIsOdmRE+tUozTMLlVLxXJ/6j58krdhlvLW+2HcQxK7KxLGlejSr3Nmqga
+         +zClon/y/XoKQvO7OPoarGoCu+geJU+1GyuhBj6zRPNlKFvZKrhyn0xePK6M9ki4gCU8
+         vTC/bjRODt6Kivv88nn1ZzG/Rx8iUGUB6jwLFOE1RrGWF9GbA+o8NFgnxjVe+sAYsBae
+         um/KsD7V8IK9Q37HloNv6ROL9bIkb9KD3uTi+vXDhjYY91bARDh6W8wQF5mQdssvT3Ee
+         mJlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795661305; x=1796266105;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=uXsG/J8SjUA+u6xV5gQi3ekCpADG/Nmz2q3u5DO1GSw=;
-        b=MMeaPS76matuO1+ZH/gj5JW73UuPjUFGHWoIOGmGbeGwiff8Qcsj8ZR7p88te5DQMI
-         RQDvMM2EGgmN8z5lgJVP1xp8YiOuYHwm4PPu3xqsHHTvQR2gQizVFOjUrvBsgbvnUxKY
-         GMrxfc/3X0VFWc5ECFK6V3vmsHj74dbNmyfu6DOU33b4YZtljNWawrOC1qi2l6fE5SKW
-         tj/DmOyaLr1F4+vtu0SzFrBtC/2+6Dpj7EapfVBZkxFcG9UN/EkPAFwkT5SjoNqo/yPK
-         usgL/yNl/7P2jJJ/cbBTzISMitGqeqsIMGR1qc27GAjzKZT4XvXdITfvbehcPqB4FYoE
-         x+zQ==
-X-Gm-Message-State: APuU4Z8Suil6VieAOJDsD10rYv3ZadTt8APnDIql4h5t/lwoD0HOxOXX
-	sda9B4OmiYFF1eTI+reqtGlqivrucp29SCOarXnkoQ4Qs9bFQHOgng53
-X-Gm-Gg: AZFdTZcJe6KiSe7T7+17rLW0PSMIQc7RdHTSs9/fGHNYxPZChxGIe5SkrhE8vEptcwz
-	QwCDl6EyhTIzddbTRtyBBRadDR/lwHsaaD5tKuLCKRQm2A+6BglbW2vTHjDNtH8FdsUsB6rMSxT
-	AvRvSDF327iap8fhVf7c28WF2T8l1CeKG5UnR/XEIfQl5lP1fexkI2zC6lEP4KKlZjQx2qFHtGW
-	P/63XEQTt7gJTBLhtN42ghpHW+dZ/IriC4H2sHTMPOjBCL/KPdSU8zH1LSYDvNBMuiNxdJMep07
-	s/3o8b1SdIthBCA4PUWNsC8Q1RpIAD8IFpPJAm0apYiBWZGBOrWXcBbT2wI5nq7kcV9nc+oaxMU
-	yhFRqimyyumdtA7T4rPPzmgJDmyHqj1ftXPVgBxL7LiIfaOJzQVVBQSgehpWxlAMIqgXJU2bEKb
-	C8I/cffzwxiJCUDQpOgwJHy6z42A0pRixYG7xmyX1MIFvfvX8ehUXFNbPxTyeo6CiGfFg4NyyTs
-	+qEyaO+frMz3BholgVW7LA9G5cNemczymQP7ep5wgpJi3/hHrpyM2oFrhRMt7CWa50I+zGrcKLQ
-	JaIMVSjNXaBhHYgoAboAih9A1Wdm+Rg3MqFpXJ5JLFTLnkiC10AQq51XLw7RDiOSXemkMRpgaqQ
-	2lnElttQmnR+0LZUxj60w7Qn7tYcpkt+4lw==
-X-Received: by 2002:a17:90b:4d86:b0:3ad:4a8b:c6fd with SMTP id 98e67ed59e1d1-3b41c93b159mr16040203a91.28.1795661304665;
-        Wed, 25 Nov 2026 18:48:24 -0800 (PST)
-Received: from localhost ([153.61.198.245])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b420e1307csm29193554a91.7.2026.11.25.18.48.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 Nov 2026 18:48:24 -0800 (PST)
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 26 Nov 2026 02:48:23 +0000
-Message-Id: <DN4ST2VP3GVF.GGKMH8CNILM2@gmail.com>
-Cc: <bpf@vger.kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
- Nakryiko" <andrii@kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>,
- "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong Song"
- <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "John Fastabend"
- <john.fastabend@gmail.com>, "Emil Tsalapatis" <emil@etsalapatis.com>, "Ihor
- Solodrai" <ihor.solodrai@linux.dev>, "Steven Rostedt"
- <rostedt@goodmis.org>, "Masami Hiramatsu" <mhiramat@kernel.org>, "Mathieu
- Desnoyers" <mathieu.desnoyers@efficios.com>, "JP Kobryn"
- <jp.kobryn@linux.dev>, <linux-trace-kernel@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v3 0/4] bpf: Check recursion per task for
- preemptible programs
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Mike Bazov" <mikeba@sentinelone.com>
-In-Reply-To: <CAPnbwjpLcyJF70D5j-q23L3TQSFXebB_RndQRmDe+_5h02YazA@mail.gmail.com>
-References: <20261117-bpf-preempt-v2-r2-v3-0-586376ec3672@sentinelone.com> <DN38312WXPDJ.2KLUTCWSDFL3P@gmail.com> <CAPnbwjpP9Fin=CyD0WiA2c4sxqbfyK7AziE64PCX4w9kbz55Kw@mail.gmail.com> <DN3Q2CZJSC2C.IM2EYLF1NR9X@gmail.com> <CAPnbwjpLcyJF70D5j-q23L3TQSFXebB_RndQRmDe+_5h02YazA@mail.gmail.com>
-Content-Transfer-Encoding: 8bit
+        d=1e100.net; s=20260707; t=1795662227; x=1796267027;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=BypWm+ajXgg6TQzdUJ97ZZvPvWnvS+eQsbc0PMHjKdY=;
+        b=cXIdigoRZ9cYLUqWY4Nd76E9G4Laeb/wMrWwpCgsJZrqlMwJWso4YkMb3yJuzPWeRG
+         8zFJC9Q+OGp5jWReKvYrYt/DK1/X88W+GXqwDOb7uFAvBV9bX1yja+K1NNjDb36D/qXA
+         7nfYdeDRxre/bV91umgyXmq88t4ECZiibInyARnaNKRLdZzc0diwLKIU7umzpA8k1ZYA
+         RmtKw/bbiKwfAaLZboL1EICNSxTaAgZkdq2JQG9vhyK/bwHU381MkrhZNAQ7JQ9N5Hgo
+         mUKBRh89b9LUjG3DNdvr4m2OIjsvO+o7mQZ1FcAf2JCzC4yFYfnnUm56SbIErDFmq8i5
+         G0HQ==
+X-Gm-Message-State: APuU4Z8ohq55wRYaLl0NQ82xI1nkU25N1O44iC9me/1w5undQ0Eiixwg
+	6/IX9v1DAPWn7nAJnuIpsBWhXu+YiGif2QvpitNdOcxuvHqDfWUSBtnH9HC3kA==
+X-Gm-Gg: AZFdTZf1Wx4Cr+xnw3fqJdzu94DBN1S0JgXyMQh2u11aSKQ7qWOd3Ri2HaDjR5J7F7B
+	jx2WQNtLVY3+va1GBjvW7uhY65Ga6sI5UgoJhy+hWdHXDbks29csxmHmRWtcgth5hThS2swu3We
+	a4cf3NFch/z5+yETiafURXUhnCd57xBxVCiVvoJzM+Bysle4Absbaj82nsRWLVBDFhv25ENbMTM
+	oG01/Qj1hNFyWBARfYIZ7R4aNy+f66ePHpLOrmDtuKEZhTsoEznsydm7MIf3kbvskVzr8Uys6OK
+	gDKgtSY8LowTRO5WRVGOo+iCM+YnRI2EaUvVZbJylXfUSA4/fi34orBHaR8uZaW9WV1XtwTPvhm
+	npQgxN11wwyfrHVuxiNK5c7ZWtwUN0UaUlQb0kn3KVMNw5c2UJsB+Stpj/sJa0C4XrFjhyniEwM
+	w/ZZYE4/oYQgP8rhwpKHE5WTYqa/MCpJsm8ZBr+G1dPOU1nP0eX+GPAANJTtQ1bDna/b7OtET1W
+	twi1m+SyjYRQDd2+NgC7digshzRJQNx1wQJ7of8xXBQfDK6UqIQZub/9RBGqugE8wJ27ELd4sPk
+	oP9/mivDo6IngAHk7bYNu6KJpYwv/JICcp8JUv3QgqhZ4om1GxIKBU0EnM2/kfcwq94y0nUrrmK
+	rvPPpQLDTfr7ihv4kR1yNBasVowF8YMIVKoolA/Kq0dLiRjZ5g77MlUiYxlrIEiagA9WxRnfdyS
+	+anxQD4KsL2fn3Sf2IWDY=
+X-Received: by 2002:a17:90b:2e49:b0:3b4:192c:a4d8 with SMTP id 98e67ed59e1d1-3b41c92d37amr16972119a91.32.1795662226400;
+        Wed, 25 Nov 2026 19:03:46 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.245])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b44b704cfesm11424775a91.1.2026.11.25.19.03.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Nov 2026 19:03:46 -0800 (PST)
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To: bpf@vger.kernel.org
+Cc: daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com
+Subject: [PATCH bpf-next 0/4] bpf: Fixes for calls, struct_ops and bpf_throw()
+Date: Thu, 26 Nov 2026 03:03:38 +0000
+Message-ID: <20261126030342.4013902-1-alexei.starovoitov@gmail.com>
+X-Mailer: git-send-email 2.55.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -109,19 +96,39 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Wed, Nov 25, 2026 at 04:03 AM Mike Bazov <mikeba@sentinelone.com> wrote:
-> i tried it, it works when the run that preempts finishes first, as
-> with bpf_timer_cb(). With preemption it can be preempted too, and the
-> preempted run can go on before it ends:
+From: Alexei Starovoitov <ast@kernel.org>
 
-ohh right. save/restore works only when the runs nest.
+These patches fix bugs in the verifier. Each refuses what was allowed:
 
-> A fix for all of them has to change how may_goto keeps its budget:
-> lsm, cgroup and sk_msg progs never go through bpf_prog_enter_run_ctx().
-> I'd rather split it out of this series: v4 takes may_goto out of the
-> mark, so tracing progs behave like lsm ones today, and a separate
-> series fixes the budget for all prog types. Does that work for you?
+  patch  refused now
+  -----  ------------------------------------------------------------------
+  1      a stack that is over the limit with outgoing stack arguments
+  2      recursion without CAP_PERFMON
+  3      a reference that the caller of a struct_ops prog does not take
+  4      fexit and fsession on a subprog that throws
 
-Makes sense. Let's split.
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+
+Alexei Starovoitov (4):
+  bpf: Count outgoing stack arguments in the combined stack size
+  bpf: Require CAP_PERFMON for recursion
+  bpf: Fix reference leaks in struct_ops programs
+  bpf: Allow only fentry on a subprog that can throw
+
+ Documentation/bpf/verifier.rst                |  2 +-
+ include/linux/bpf.h                           |  1 +
+ include/linux/bpf_verifier.h                  |  1 +
+ kernel/bpf/fixups.c                           |  8 ++++
+ kernel/bpf/verifier.c                         | 48 ++++++++++++++++---
+ .../selftests/bpf/prog_tests/exceptions.c     | 12 ++---
+ .../selftests/bpf/progs/verifier_barrier.c    | 11 ++---
+ .../bpf/progs/verifier_private_stack.c        |  2 +-
+ 8 files changed, 63 insertions(+), 22 deletions(-)
+
+
+base-commit: 486b5ce7184f7449ef2fe1e951455b0b8a114060
+-- 
+2.55.0
 
