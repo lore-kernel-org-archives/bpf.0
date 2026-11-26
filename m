@@ -1,49 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795656615;
-	b=ZDQXUBlbMG7g2dHKQpKqFtoJH0n2yXj6MVrNdvwYkrhbts80AJSNhp4D1/nyzGV9VSNa
-	 RnPi2IZ0dmUCjwQ8R/T+ciiAfRskUIlADIopxE08XTuphfEN56EhiZt+YQR4REVlqkNw+
-	 NtpFrEynf36csbMCh/rCarkLTv7Fmd9/5QpEuLCF+47euKDmKDxyDiqmKMMsw7MoGfP5Z
-	 o4622HTDmcvbdVJS0bMpN3j65Dtpp9Vx5Ke21vpHFaq5KhI3qmHwDRX4m/poxyMT7gTf5
-	 a7ry1eiAgQXjpezilQXxhYVrX8uwHvfEVWHaLPSu5g7c4p4RxMRMkqDrPt6nP9sKpRA==
+	t=1795657484;
+	b=d2bUkZBWyA2iQ0HBmjaK5LljUq5o8faOGOrHd6T6N4UATNTYeclErTn6VWbmcHW3ppcb
+	 OMqElMiO9AjM8Xk1ZtRM0pEBahNENMC+e+j5aFxPi+dlKmg7hfCWV+MQE075S/AMe0Oem
+	 Bzu1u9tavwPTTcsNAlNL+ShwxGQ1V/YwEUngY/Tw4QJGPA3HA8IEBk7k9BZpbkwIP/2tv
+	 9MzYWgt00SYRRYboryPDOrX5n1EglRbuVsZLULlAq2+nfmgJCaoeZtl7ZDxqt/q10572L
+	 oLJgZ4rWS1FQdF8R2k2l31WP1Pzop9yv9cT0CF2Ni/7I1ntvSCOi5u4s2pFkQTpwvYQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795656615;
-	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
-	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc;
-	bh=yAqf7lYAGziMschAeGErtYtYStKdMWrJr3pO79aVOCY=;
-	b=3ZvNALeulMKSf2R0EoBbb/gv36lGZY1xRC6WzmyCWpfRJ5AV0XXKejEYcQ8MHeqPHQnQ
-	 b1jvQz6nZEyQDOlqVJ1dAoNSYA29IKBrVhg468cKzFnH70DBn1Z+OX4S8QhjtNVj55Gx/
-	 QDI6IgLujL75mBn71n1L+ufZ2QWCT4MSfhB44J05ONQnsNPitRDwXXZ/M5Kbr7VewjD5/
-	 0dITZNY9tvXdSEqbKvO+uBDu+ZJ/K2apNv3jl/NWtNqTRtmGSGZWlFGAEiGE+1S97RSNO
-	 mmRdzgf/WCA9yF37Ixd7q2AFaqLiqRrwmPuzIlsFH0E27HRzeVJCVJ4Ri9jh+JT4ZBA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795657484;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=RXTTwRuZfj4iS0OA9NEWLOPlyuSgnregjQXzrq7V2OQ=;
+	b=M4W5YGgcj2ViMuLkTDVTSTYEDvE0OnjEBQbpQ/v5enSbyRAZsI0KZbHNe+lY80E9XjbG
+	 UauIoRXZkvGBaRTeQ7kuF8NTJicCVfhpfl514LNyrarwHVMgJgNIGmPAfIJMUH9EPl9Er
+	 9NUJ9xNJg2b05hWiBLrNpsmMBiszGB3WAJejuwNSUZz0SE1KXMwCk0mKgw0qLSxqHXpmS
+	 PNCNeYONQfGPVehM8w29r4zHPHpc1Uycwc1VuH84+lj6Mn6dAVTDWdBLvUNZf4MD85ylD
+	 jzSsFdeVcS9+U/JKO8mDfZXdzg++azHBM71KuvzzKNwQIyTINuaJ+ANnyMRv7CjEEeQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Qg3W4fp8;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="RB/hzgI4";
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40F8E606A31E
-	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 01:30:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65E59606A31E
+	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 01:44:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Qg3W4fp8
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07A2B1F000CA;
-	Thu, 26 Nov 2026 01:30:15 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RB/hzgI4
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF04C1F000D3;
+	Thu, 26 Nov 2026 01:44:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795656615;
-	bh=yAqf7lYAGziMschAeGErtYtYStKdMWrJr3pO79aVOCY=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=Qg3W4fp8VdZDHvNd7bhcR7g8JmX8OI8lL1ye6mEsBzAF0xDemzpEHygyEDWr4a0hH
-	 MI6MteTz8cVmizkkDNw0wt9eG+LyJEMza2OagW0ms78/JbdEovbMOUwxjz/dx99s9V
-	 SFnYbHUOzmv42bMozCymLkWsXNAFvzrFm6R2UJwhFTrS2OUkR7H1t7Gh82l5c5F7yn
-	 UScgKYJ0xrR4H9CMWEtiSy9FlO2r1Q1n4jboMkSocB10z8yr21oKEnza8DJnHNjg//
-	 P7HwzhWLxeJfiBOgX/8NvJ4H2bFh1LJIyTRRUdG/lTflmp5OZ7UwHl5AHJoujl/N03
-	 MiLwOE2wAN/qA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id F15623809A24;
-	Thu, 26 Nov 2026 01:30:14 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20260515; t=1795657484;
+	bh=RXTTwRuZfj4iS0OA9NEWLOPlyuSgnregjQXzrq7V2OQ=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=RB/hzgI4+oGhu7E0KI6aCiVuv/I8Nj4kYcdwOg575v7EsUgmfiOHUBNsNiy7zkvZs
+	 NTQzM9v0BJln0byiO+Y1e7sPWKjN0P5mg8UJS4pjiyGFUS3KJh25sajfa/izGWU1Kw
+	 OQozddQlZyIKJDb3I1cMn5AU54ZjQpwO3LO0mC7GBq7I6Q1WlCZ8YF0BGZNcXTR1qY
+	 GecNb0JcO1T/LXIIWRq06SDdd8wtTatIPdU76O6Hc8hm9NdaAFYJPNx0ytzdWMrLLo
+	 o/tYOv8DZHPXlvRWRPGbFYL12OGTUJLojhFFFRJFBgQzrHqjvA1Y8TUhymf+7cbP/H
+	 BNae50xziWkHA==
+Content-Type: multipart/mixed; boundary="===============8688468922052142856=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -53,150 +49,89 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf 00/47] bpf: Fixes for hooks, tail calls, CAP_BPF,
- JITs and sockmap
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <179565661377.1434942.15476923037679347488.git-patchwork-notify@kernel.org>
-Date: Thu, 26 Nov 2026 01:30:13 +0000
-References: <20261125032938.670542-1-alexei.starovoitov@gmail.com>
-In-Reply-To: <20261125032938.670542-1-alexei.starovoitov@gmail.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- eddyz87@gmail.com, memxor@gmail.com
+Message-Id: <41db8655d68e95b55ae7c237ddbabf808910aff7a467827a85edd8e31aa039d5@mail.kernel.org>
+In-Reply-To: <b887fe56f02f8578e41cf0009da7638fb6f8ec0c.1795627805.git.m202672221@hust.edu.cn>
+References: <b887fe56f02f8578e41cf0009da7638fb6f8ec0c.1795627805.git.m202672221@hust.edu.cn>
+Subject: Re: [PATCH] bpf: Require a bpf_spin_lock for bpf_list_head and rb_root
+From: bot+bpf-ci@kernel.org
+To: m202672221@hust.edu.cn,bpf@vger.kernel.org,ast@kernel.org,daniel@iogearbox.net
+Cc: andrii@kernel.org,eddyz87@gmail.com,emxor@gmail.com,m202672221@hust.edu.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Thu, 26 Nov 2026 01:44:42 +0000 (UTC)
 
-Hello:
+--===============8688468922052142856==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-This series was applied to bpf/bpf.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+> bpf: Require a bpf_spin_lock for bpf_list_head and rb_root
 
-On Wed, 25 Nov 2026 03:28:51 +0000 you wrote:
-> From: Alexei Starovoitov <ast@kernel.org>
-> 
-> These patches fix bugs in BPF:
-> 
->   patches  area
->   -------  ----------------------------------------------------------------
->   01-04    what the verifier trusts: pointers, attach types, ranges, ids
->   05-08    extensions and tail calls: they run in the hook of another prog
->   09       struct_ops: the struct of a prog
->   10       bpffs: delegate options
->   11-12    NULL in tracepoints and helpers
->   13-15    bpf_throw(): tracers, KASAN, symbols, line info
->   16       XDP redirect in async callbacks
->   17-18    checks at attach and load: cgroup links, signed programs
->   19-20    bpf_lock, dumps of the stack
->   21-22    arena: the length of mmap(), TLB
->   23-24    prints of BTF enums, the result of bpf_res_spin_lock()
->   25-33    kernel addresses and tasks: CAP_BPF is not enough
->   34-37    x86 and arm64 JIT
->   38-43    skb, XDP, sk_msg and sockaddr helpers
->   44-45    sockmap
->   46       libbpf
->   47       struct_ops: the type of r0 at exit
-> 
-> [...]
+TL;DR: Requiring bpf_spin_lock for list/rb roots may break existing programs
+that use bpf_res_spin_lock, which now fail BTF or program load; fixing the
+free path instead is suggested.
 
-Here is the summary with links:
-  - [bpf,01/47] bpf: Do not trust pointers in flexible arrays
-    https://git.kernel.org/bpf/bpf/c/2acad73b68ca
-  - [bpf,02/47] bpf: Look at the type of a program next to expected_attach_type
-    https://git.kernel.org/bpf/bpf/c/e74ff9b13b44
-  - [bpf,03/47] bpf: Do not take bpf_get_retval() of struct bpf_tcp_ops for an errno
-    https://git.kernel.org/bpf/bpf/c/7ee82af6e463
-  - [bpf,04/47] bpf: Do not allow bpf_d_path() by an id of another BTF
-    https://git.kernel.org/bpf/bpf/c/1139c7d8ffcd
-  - [bpf,05/47] bpf: Check that an extension fits the hook of its target
-    https://git.kernel.org/bpf/bpf/c/f44d0e6a1d68
-  - [bpf,06/47] bpf: Take the attach type of the target for tail calls of an extension
-    https://git.kernel.org/bpf/bpf/c/3d6d222bb979
-  - [bpf,07/47] bpf: Compare what a hook tells next to its prototype at tail calls
-    https://git.kernel.org/bpf/bpf/c/98ff9cff0b94
-  - [bpf,08/47] bpf: Reserve cookie and ip in the trampoline for tail calls
-    https://git.kernel.org/bpf/bpf/c/bf675c921655
-  - [bpf,09/47] bpf: Check that a program and a struct_ops map are for the same struct
-    https://git.kernel.org/bpf/bpf/c/80184a7381c1
-  - [bpf,10/47] bpf: Keep the names in front of a number in delegate options
-    https://git.kernel.org/bpf/bpf/c/4151f3558d6e
-  - [bpf,11/47] bpf: Do not trust the neighbour of tp_btf/neigh_create
-    https://git.kernel.org/bpf/bpf/c/2c517088d2ef
-  - [bpf,12/47] bpf: Check for NULL in helpers that take a kernel pointer
-    https://git.kernel.org/bpf/bpf/c/a6de3c4be04d
-  - [bpf,13/47] bpf: Leave nothing behind in the frame of bpf_throw()
-    https://git.kernel.org/bpf/bpf/c/86cedb416c46
-  - [bpf,14/47] bpf: Add the symbol of a prog before its id
-    https://git.kernel.org/bpf/bpf/c/f7a40c2de8d4
-  - [bpf,15/47] bpf: Do not fill jited line info for a hidden subprog
-    https://git.kernel.org/bpf/bpf/c/2f2b119ea30d
-  - [bpf,16/47] bpf: Fix NULL dereference in XDP redirect from async callbacks
-    https://git.kernel.org/bpf/bpf/c/f28ed533106b
-  - [bpf,17/47] bpf: Check the attach type when a cgroup link gets another program
-    https://git.kernel.org/bpf/bpf/c/a5e757f6cb34
-  - [bpf,18/47] bpf: Refuse metadata maps of signed programs that can be mapped writable
-    https://git.kernel.org/bpf/bpf/c/c66c8adf3226
-  - [bpf,19/47] bpf: Take bpf_lock with interrupts disabled
-    https://git.kernel.org/bpf/bpf/c/2c00b6b35af0
-  - [bpf,20/47] bpf: Bound the time that dumps of the stack take
-    https://git.kernel.org/bpf/bpf/c/a70da21f98e0
-  - [bpf,21/47] bpf: Refuse mmap() of a part of an arena
-    https://git.kernel.org/bpf/bpf/c/0cd1f2029b1b
-  - [bpf,22/47] bpf: Flush TLB when a page of arena replaces the scratch page
-    https://git.kernel.org/bpf/bpf/c/16829046f0a0
-  - [bpf,23/47] bpf: Fix reads past an enum in prints of BTF data
-    https://git.kernel.org/bpf/bpf/c/6c8d5a113c23
-  - [bpf,24/47] bpf: Give the error of bpf_res_spin_lock() a 32-bit range
-    https://git.kernel.org/bpf/bpf/c/703826e497ff
-  - [bpf,25/47] bpf: Give syscall programs without CAP_PERFMON the base helpers only
-    https://git.kernel.org/bpf/bpf/c/2ff55b023f63
-  - [bpf,26/47] bpf: Require CAP_PERFMON for kfuncs that leak pointers or touch tasks
-    https://git.kernel.org/bpf/bpf/c/3e03955a6518
-  - [bpf,27/47] bpf: Require CAP_PERFMON to read streams
-    https://git.kernel.org/bpf/bpf/c/54b59a467bc7
-  - [bpf,28/47] bpf: Limit reads of variables of the kernel
-    https://git.kernel.org/bpf/bpf/c/419c69483a62
-  - [bpf,29/47] bpf: Require CAP_PERFMON for dumps of xlated insns
-    https://git.kernel.org/bpf/bpf/c/b8aa487429d4
-  - [bpf,30/47] bpf: Zero bpf_list_head in copies of map values
-    https://git.kernel.org/bpf/bpf/c/8252c3517f95
-  - [bpf,31/47] bpf: Require CAP_PERFMON to read pinned maps with special fields
-    https://git.kernel.org/bpf/bpf/c/398557b30b9c
-  - [bpf,32/47] bpf: Require CAP_PERFMON to pass values of insn_array as memory
-    https://git.kernel.org/bpf/bpf/c/5fec973f49da
-  - [bpf,33/47] bpf: Require CAP_PERFMON for the dump of all storages of sockets
-    https://git.kernel.org/bpf/bpf/c/f9e4fda5eb35
-  - [bpf,34/47] bpf, x86: Do not use the paranoid ITS thunk
-    https://git.kernel.org/bpf/bpf/c/9bc9dab41113
-  - [bpf,35/47] bpf, x86: Enforce alignment of atomics in arenas
-    https://git.kernel.org/bpf/bpf/c/62a99ab25c91
-  - [bpf,36/47] bpf, x86: Fix the range of BPF code that has a frame pointer
-    https://git.kernel.org/bpf/bpf/c/1c34522e8b78
-  - [bpf,37/47] bpf, arm64: Restore the shadow call stack pointer after an exception
-    https://git.kernel.org/bpf/bpf/c/918bea2c6b68
-  - [bpf,38/47] bpf: Clear the data that bpf_msg_push_data() adds
-    https://git.kernel.org/bpf/bpf/c/401fce9f48b1
-  - [bpf,39/47] bpf: Fail loads from a network header that was not set
-    https://git.kernel.org/bpf/bpf/c/766907cdaeef
-  - [bpf,40/47] bpf: Fix slices behind the end of an XDP packet
-    https://git.kernel.org/bpf/bpf/c/2fc7a1733992
-  - [bpf,41/47] bpf: Clear family and port of a short address for cgroup sockaddr hooks
-    https://git.kernel.org/bpf/bpf/c/2abc088aae54
-  - [bpf,42/47] bpf: Take a neighbour of the L3 master in bpf_redirect_neigh()
-    https://git.kernel.org/bpf/bpf/c/c1b5decc7314
-  - [bpf,43/47] bpf: Keep the MAC header in bpf_skb_change_tail()
-    https://git.kernel.org/bpf/bpf/c/28ffeb9cb972
-  - [bpf,44/47] bpf, sockmap: Keep the parser and sk_data_ready in sync
-    https://git.kernel.org/bpf/bpf/c/b3a433f20f0a
-  - [bpf,45/47] bpf, sockmap: Hold the psock of the work in sk_psock_backlog()
-    https://git.kernel.org/bpf/bpf/c/9abfa0ad4f76
-  - [bpf,46/47] libbpf: Fix struct_ops members 59-61 and optional struct_ops maps
-    https://git.kernel.org/bpf/bpf/c/434ea9c5125a
-  - [bpf,47/47] bpf: Check the type of R0 at the exit of a struct_ops program
-    https://git.kernel.org/bpf/bpf/c/65e362827a6e
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+[ ... ]
+
+> @@ -4302,8 +4302,7 @@ struct btf_record *btf_parse_fields(const struct btf *btf, const struct btf_type
+>
+>  	/* bpf_{list_head, rb_node} require bpf_spin_lock */
+>  	if ((btf_record_has_field(rec, BPF_LIST_HEAD) ||
+> -	     btf_record_has_field(rec, BPF_RB_ROOT)) &&
+> -		 (rec->spin_lock_off < 0 && rec->res_spin_lock_off < 0)) {
+> +	     btf_record_has_field(rec, BPF_RB_ROOT)) && rec->spin_lock_off < 0) {
+>  		ret = -EINVAL;
+>  		goto end;
+
+Does this reject layouts that load and verify today?  The commit being
+fixed says:
+
+  The bpf_res_spin_lock can also be used to protect objects that require
+  lock protection for their kfuncs, like BPF rbtree and linked list.
+
+It also changed check_reg_allocation_locked() so the graph-root lock check
+accepts res locks:
+
+  -	s = find_lock_state(env->cur_state, REF_TYPE_LOCK, id, ptr);
+  +	s = find_lock_state(env->cur_state, REF_TYPE_LOCK | REF_TYPE_RES_LOCK | REF_TYPE_RES_LOCK_IRQ,
+  +			    id, ptr);
+
+That verifier code is still present (now REF_TYPE_LOCK_MASK) and this
+patch does not touch it.
+
+With this patch, a struct with a direct bpf_rb_root or bpf_list_head
+member plus a bpf_res_spin_lock makes btf_parse_fields() return -EINVAL,
+and btf_parse_struct_metas() treats that as fatal, so BPF_BTF_LOAD fails.
+
+For a global-data layout with both in the same .data.X section,
+map_check_btf() leaves map->record as ERR_PTR(-EINVAL), and verification
+then fails in process_spin_lock() ("has no valid bpf_res_spin_lock") or in
+__process_kf_arg_ptr_to_graph_root() ("not found at offset").
+
+Before this patch both layouts loaded and passed verification.  The only
+defect was at teardown, where bpf_obj_free_fields() hit
+WARN_ON_ONCE(rec->spin_lock_off < 0) and skipped the root.
+
+The commit message says "Nothing in the tree relies on the relaxed form
+yet".  That covers in-tree users only.  Out-of-tree programs, for example
+sched_ext schedulers written for v6.15 and later, could use the
+combination, although I have not confirmed any do.
+
+Would teaching the free path to use rec->res_spin_lock_off be an
+alternative?  That would address the release-time WARN without rejecting
+programs that load today.
+
+If the restriction is kept, the verifier's res-lock acceptance for graph
+roots becomes unreachable and could be cleaned up in the same series.  Should the
+commit message also say that a feature documented in 0de2046137f9 is being
+withdrawn?
 
 
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/45736338787
+--===============8688468922052142856==--
