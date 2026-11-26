@@ -1,84 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.52
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.47
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795722240;
-	b=QiMYE2rvNYFOgZBbzjb2ANVCSM40OROpD/j1Fp2Ql0s+PwnrLhW146Fkl3kHhQbnqsfC
-	 qlR62QyJeRLXsz6sXWsrixv7zQkTsQWsrcWMngng0S2m5MBm5cJiluZJCgCjpGIp5VGM9
-	 gbXJrCHPd8lC3Iq3RP9DMETB2k9pPFaqZwjqUV3z01MGuPrzQbaaqrLITP8+SfuE/3spj
-	 qLorgzgeDzfuOI9SfYfr1u4KBh3RI3snnitOfo/1W40mKYuC511uOz4Ry1G1InvfZlyjR
-	 oYjVvSkQ+0ReaFdn9rybaWBv+wChyWHsMaudyQkjbLA6MjHw8evzLn+Uvwz8N8Rcsng==
+	t=1795722241;
+	b=So5fG2pT2iI35zgN2aCBoEU81+gym4SCnrqIyGp5h9CrYv5RQEzphy2dPFOv1OpCKogo
+	 eh5PIWClM6Ddh5adaLdhd4eDXGh3Dv2QQAabolB9tRJzc7pbu6sVY+76XphRi2faDwE4C
+	 BNeG3P/6Ax0XPlijTkggdauiiisIX2AionMkX7evReHFo88vcogImf2roiX7uA/bOY/h5
+	 X9Ek6gp3xJbtaGR6JDax19foLT1MA2kxMrvontluVmUTP84TQrG1T8SWNIwXBNKZhtzn4
+	 wQBT5GImAvqApb+3fHrRdtweqF7FS/gdLUcK8WgKcYKQDxEPMYAIJm1d0TCSglXPAsA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795722240;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795722241;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=cTlGczEpqnTOct8RsrZ/gODErZ8owqpFldUbfmAHspI=;
-	b=N/MA8xqgm1Z3LMZt2waAHH9QW9HhE2/BMnFFzpDp9qkIR/VtMu2YZQVSbtPtspR/aik1
-	 MGe9ll3EfvgDctvu53BTWnWmRj/fGJlTV9gruorWLOc1rn832PhWCCXvglist6k2H6q7h
-	 n7qN93R3nakiU0f157rBOGOsniSjZWI/F+v+TSH8sbskZnyDsVCuIalRZHN+PTFmxx+5i
-	 pxaSHM++RnZ1u0VTxPSKJhP3xyXqCxHQ6h06xg0VArZrPG5Dv+qcG6TBn+bhnnXeauRZ/
-	 bGpWSFyyQtHUvR0P2I3zxAFuXvCVwx4jpsem8LnXN95Vhb7jR2LsZze/FQA8U3x2Wow==
+	bh=flVppx0kRFMYxE8MCABde0wS9Ry07/Asx+8ob69Cr3Q=;
+	b=RPYaCDKh8lmKWm+d38EiRfi2Pp48k0sKmIVKat1Q04T42C6b7Fh9lid/IrdXC5SzRmSy
+	 BTusY0DASwmk3v4jPIrz5UcUOcfRQFpQVHCGAc91O9yDh6cqdb+KfXwSBcAzVMbzwofM0
+	 ddxuCFrGsJFlZKUyxrHRiYhG8UwF8TOAVU0ENH73t+BJCaOg0b1D/3IMDHItM6/j65q4r
+	 ZqaOTZiywrWebEuuM+2bqP3lD/IP2Yvuna7qG9L68fSQKnQxhTKPlu+Hk1jTclM5T3fRt
+	 YpPXO2tAzP99JCF3XprBPjv2+XloCnemagW7wMdHmucSqDLbrUd3mgerkU8/atNsrLg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="D/RCqXQS";
-	arc=none smtp.remote-ip=209.85.221.52
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ve1amdfe;
+	arc=none smtp.remote-ip=209.85.221.47
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5E62606A334
-	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 19:43:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A5E62606A334
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56DA7606A6B9
+	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 19:44:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 56DA7606A6B9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=D/RCqXQS
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-4a3e706b5dfso4653527f8f.2
-        for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 11:43:59 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ve1amdfe
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-4a68190a2a7so6235564f8f.1
+        for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 11:44:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795722238; x=1796327038; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1795722240; x=1796327040; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=cTlGczEpqnTOct8RsrZ/gODErZ8owqpFldUbfmAHspI=;
-        b=D/RCqXQS4UeN6v20Z+VlBVJK/ZZX/cCGhIw/ilwIJBaJwk1qthCZOB7Hg/2I7i+4b3
-         gXFQ4bI37t5xPPDFsxIZCp3undzL8liJl1dhk9x26M+SkiFQiV+7Vrud1K9saTD8x0sH
-         UQMiTIPG1dCkfQb0PxR6z9D5p8o7O1YzP64p0tMKDD4z4PSjcjwQijNF5MccAC+MyA1q
-         gLfW5lTkUooix1E3K7bTU9lw8/aq1xp6zPR8L2TbturBUIa7a3UOJhiI/2hrCU8Srmvz
-         xoxkVJVoMSNteiXv1w98CN7QNYMr+TYloJe8vE9eCeJR5FzLV7xl1p9CdamhuhxKADyZ
-         bRpQ==
+        bh=flVppx0kRFMYxE8MCABde0wS9Ry07/Asx+8ob69Cr3Q=;
+        b=ve1amdfez05VbyrTbnbkfDlGB6eqbuV2YRVktN1E3nJFBTY+vWxzxHg/apgbJ2FVbV
+         IOsgA/iSbqD1jr4sRO6OwITDt5ebwxS7rAi1uWBXen35EmmjBK0lCoRsKM8OiUW9IDpC
+         4pcE1RXZ4AaOu1YjQlwGzk1gt1wIAE78qnuivN3hSJv5BH6mUpiCWaeWk8ulzTLGnZAm
+         kbJ2U/otb7Ys0kzn9ekVeCM2rcPw0iavB7Oj+9y10gFkh2xKI9deERr6Iz0+yb8RmfR1
+         OSxd4lRnjtW35GKR+Tn0taq4V8eMsTcf+Xb+1FA1FUtOek+qfTUWKBJr+bKobV8mczmI
+         RaWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795722238; x=1796327038;
+        d=1e100.net; s=20260707; t=1795722240; x=1796327040;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=cTlGczEpqnTOct8RsrZ/gODErZ8owqpFldUbfmAHspI=;
-        b=0XvF4Hfzss2/mqhOAlvAlC0HHJeMW5j8ZPfAqrCDo7hNhYcavc6eSL7hMCnmqCYyZ4
-         Q69kMmy7TzfZf61tsj2H7F5AcFs/rVoUYL2jyN7DkJBSD5MIQz3ZNLYjfHfoba3xgBt1
-         nDnLwOVVbVHLOZD1EQnAEdSKalVmhRIjaPol0WgXV4c5rBOW/6m0n2vwQz/Ktgsdr8Wc
-         YG7dqJ9DYID2Retwr+IzApY3enycVspqWl3vKa0rAKkHHg64Uk8KbMRl9ix4trpNRqYD
-         hAotgrTDHuQ+GOmKIshYmUcClIuR8Bilx7XA9ZHrneZtWaoGxPiYKKKXewHMMvgVzjLb
-         zRHw==
-X-Gm-Message-State: APuU4Z9MImXrf6KD6QXIZOT7KX70AGYgOWTGcroRDb5wo8GmZwRGSjeq
-	TuSc7gCPdaTL+HULz6dhTrfOQ6BEZmp2RimMJxCZtbargTlfxC8s40bM1Dvk0kQ=
-X-Gm-Gg: AZFdTZf2QCYvVZogET7cBcbKcsM31DlduO+In20bQDkbAcbKknXpEsPBbzn6eCHH0MC
-	oVQsYoVMivrRMNYxvn761pA1DxUIqpqHy6o1/SRIS1MYdDiC5BqBcRDPGoL4Ze/gEti6ljx4st4
-	dSCgmAccXpZLSYDCgxKvJ+528EE2ksvU3fkNaIalKfMIMZUBGqvnu/5VEoCyHxDgEAEtzKNH1wM
-	+aHKIcPnejcyzG0KWwKtYqW86QfhbOhvNIuI95oAOcYz19RvGoChvnnNFA41D3l0L7fJQf9sXcu
-	XzzOGBgOftUjfw30L9t7UkGsWl0vhyjHDtlM4bg27y+XIsSYE0XQzE08AK8OdQ78CRCH6SuhEVb
-	FFEBfVhUjmvnhSZ1ls1nNrLQpyHeRF87KLNO3hQpgPuac08objfQXYgj5z15kSOQYWcHREdy4SW
-	bBQI4O0QLZF9IRnbIrPxfXC+se3l1239sGz4IKX9UaxPt8uH8KxJjsnsu1jYm0aECI2iPIwZQ/C
-	XepKc4lS7UaIGy+4vmm00tNQNNgP9k6Yz30wDOs5ADNMJWG1aEjQQLrXDDEgzCcVWvaFMSwing1
-	ECyNUgSbZPInrNZ7kX05Wyf3nT4APNhI0gIDPbEjm5/Fk63U1tgGVsHlfHH8goqbSLWQrH+f72z
-	S4CrZZQ4o4/skqKXzOarEp161pTEfBNbDWksbOusUbojMYEZqBZh3fIDMMFCmHuS1tOL3Iaw7ds
-	TTHDH+OVY3eZMrmzj0pA9fAUUojs2/cije
-X-Received: by 2002:a05:6000:25c2:b0:4a6:7781:b064 with SMTP id ffacd0b85a97d-4abb51457e8mr54433934f8f.31.1795722237966;
-        Thu, 26 Nov 2026 11:43:57 -0800 (PST)
+        bh=flVppx0kRFMYxE8MCABde0wS9Ry07/Asx+8ob69Cr3Q=;
+        b=2biWXZPFauTmbltc4z3WVZkf26DySHV1SazsVVzxePL+UtimD60UtAMxC/4hHldxM0
+         oUE3epOFqU2y7zKU27aANyG5fxvw7Kdo/Popl2RTzwxRQYoiJ3sNAAWIjoiKfrNLe/+7
+         JG3K7D0UEkfDSdkud6bN8gFiesaXI6ab0xzr368g+HS14/6giv9jzhsKHcR7klMWnlyu
+         QEo3dUm3PtXkhkElaFP3B2YkB4YnoZ+LNQ90Ct9gwiNc0WsdMRVXlZyohGHJn43OfHA9
+         461X8lmJUQ2Ba2wkdtSRccjMtCiRnMcJTXXwX9mil5r9TZ1u6IN5vctJw32+M5LYqVx1
+         Qu9g==
+X-Gm-Message-State: APuU4Z/my+wO1aE8cIFQ7wEI5wUOQV+QxKeBNHImGzLRR8xvq2XW12B5
+	F4uNSHs8dT8/gneHRm7o+5piEZeX9wEUC+9f9i16hNaGjP9D1F5qgPp85j0ECXE=
+X-Gm-Gg: AZFdTZdq/NmPT9ng94Cvbt+k3tLxc3OcmBX4mRC9v2rkpCNM/rJZDH0e2Y/Y6PId4cj
+	55SnTr9H9hc2APZJwu7478ByDvleue7hXuWwpdI0VIY/JyQtBKRh3Sws+25rG7rqa8fZyBGKE5F
+	6S1VPegRucw3Xb9V4jQXA+mQbRuYnmbDLH43PS5uIdHHX44HpOK8t3jEga8r8VM/8pqS5armNzb
+	oZ5HM46VlM/LHMapjt1Z7Lqxr4qpWIs64wHpyictlK/E78G4DDOkN3Cyzjb7vMVTiDlHFa8q8nX
+	2v+wT0zQ+vSKy/a7BUqQM4iy6AkKa1TlNbErMi2La6+70ajkoov9uqIb39AK2HNf2Qs7gMyk7V7
+	gNEwwVWUAPosnxx9SecOMjGvQ0SzBSmhX6B1+0/m+ioVMPNJEMDyyeWtD/RoyyJHpqXadcut/w1
+	voQ8AYzeW/B2rbWDU1nOTgDCVjF1EvuS7PM4ONvOhEgY4nuez9WZbZhTqDFZj5w5+CjR4MAk7so
+	wAeCz/G/T5JmFkVXqKNxmT9WG8hS/dse4WjkNlIk4aePI1VB0qH10gt+GQz7JLinn4CgOb8pg84
+	SoU5zVR1K8kXPOjPlJNtDn/pdjk7TOiPGdBCGnk8bsRDVU/3mlEJcRRTs/jZYMvco+WJy0QLEK/
+	O/Fuc8dY3ErQjyxnv7ypP3qoQkRqsZmSlEsZve57rmhBWGO8VFFKXZH3i7sFwpTbDkxiVMUqDyh
+	CYW1bvzkdxLlOYzpCaUBd94B+JiRQJzS+6
+X-Received: by 2002:a05:6000:2f89:b0:485:8cc8:1f5f with SMTP id ffacd0b85a97d-4ae0a0b0809mr37498634f8f.42.1795722239670;
+        Thu, 26 Nov 2026 11:43:59 -0800 (PST)
 Received: from localhost.localdomain (dynamic-2a02-3100-2317-a900-4811-d431-309f-6626.310.pool.telefonica.de. [2a02:3100:2317:a900:4811:d431:309f:6626])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4ab658e2d60sm43663924f8f.3.2026.11.26.11.43.56
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4ab658e2d60sm43663924f8f.3.2026.11.26.11.43.58
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 26 Nov 2026 11:43:57 -0800 (PST)
+        Thu, 26 Nov 2026 11:43:59 -0800 (PST)
 From: Tobias Philipp <tphilipp@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Tobias Philipp <tphilipp@gmail.com>,
@@ -106,9 +106,9 @@ Cc: Tobias Philipp <tphilipp@gmail.com>,
 	netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v3 3/4] bpf: Align devmap values to 8 bytes
-Date: Thu, 26 Nov 2026 20:43:46 +0100
-Message-ID: <20261126194347.42466-4-tphilipp@gmail.com>
+Subject: [PATCH bpf-next v3 4/4] selftests/bpf: Check that map values are 8-byte aligned
+Date: Thu, 26 Nov 2026 20:43:47 +0100
+Message-ID: <20261126194347.42466-5-tphilipp@gmail.com>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20261126194347.42466-1-tphilipp@gmail.com>
 References: <20261126194347.42466-1-tphilipp@gmail.com>
@@ -123,47 +123,139 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-dev_map_lookup_elem() and dev_map_hash_lookup_elem() return &obj->val
-as the map value. In struct bpf_dtab_netdev, val follows
-"unsigned int idx" and is at offset 52 on 64-bit and 28 on 32-bit
-architectures, so it is only 4-byte aligned.
+The verifier assumes that map values are 8-byte aligned. Add a test
+that looks up an IPv4 lpm_trie value, a BPF_F_NO_PREALLOC hash value
+and a devmap value from an XDP program, stores the returned addresses
+in global variables and checks them in user space.
 
-devmap is read-only for BPF programs, but the verifier assumes that map
-values are 8-byte aligned and accepts a 64-bit load-acquire at offset 0
-of a struct bpf_devmap_val value on 64-bit architectures. The arm64 JIT
-emits LDAR for it, which raises an alignment fault on CPUs without
-FEAT_LSE2. The fault is not fixed up.
-
-Mark val as __aligned(8). On 64-bit it moves to offset 56 and the size
-of struct bpf_dtab_netdev stays 64 bytes. On 32-bit the verifier
-rejects 64-bit load-acquire, so the misaligned value is harmless there.
-Aligning it anyway keeps all map values 8-byte aligned and grows the
-struct from 36 to 40 bytes. Entries are allocated with kmalloc, which
-provides at least 8-byte alignment.
+The program does not execute any instruction that requires alignment,
+so on an affected kernel the test fails instead of crashing it.
+Without the previous patches the lpm_trie and devmap checks fail on
+64-bit architectures, and the hash and devmap checks fail on 32-bit
+architectures.
 
 This patch was written with the help of an AI coding assistant
 (Claude Opus 5.5).
 
-Fixes: 880442305a39 ("bpf: Introduce load-acquire and store-release instructions")
 Signed-off-by: Tobias Philipp <tphilipp@gmail.com>
 ---
- kernel/bpf/devmap.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ .../bpf/prog_tests/map_value_align.c          | 51 +++++++++++++++++++
+ .../selftests/bpf/progs/map_value_align.c     | 48 +++++++++++++++++
+ 2 files changed, 99 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/map_value_align.c
+ create mode 100644 tools/testing/selftests/bpf/progs/map_value_align.c
 
-diff --git a/kernel/bpf/devmap.c b/kernel/bpf/devmap.c
-index 1b8f0d7f8..c92aa81e4 100644
---- a/kernel/bpf/devmap.c
-+++ b/kernel/bpf/devmap.c
-@@ -70,7 +70,8 @@ struct bpf_dtab_netdev {
- 	struct bpf_prog *xdp_prog;
- 	struct rcu_head rcu;
- 	unsigned int idx;
--	struct bpf_devmap_val val;
-+	/* The verifier assumes that map values are 8-byte aligned */
-+	struct bpf_devmap_val val __aligned(8);
- };
- 
- struct bpf_dtab {
+diff --git a/tools/testing/selftests/bpf/prog_tests/map_value_align.c b/tools/testing/selftests/bpf/prog_tests/map_value_align.c
+new file mode 100644
+index 000000000..91898a052
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/map_value_align.c
+@@ -0,0 +1,51 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <test_progs.h>
++#include <network_helpers.h>
++#include "map_value_align.skel.h"
++
++#define IFINDEX_LO 1
++
++/* The verifier assumes that map values are 8-byte aligned */
++void test_map_value_align(void)
++{
++	LIBBPF_OPTS(bpf_test_run_opts, topts,
++		.data_in = &pkt_v4,
++		.data_size_in = sizeof(pkt_v4),
++	);
++	struct bpf_devmap_val dval = { .ifindex = IFINDEX_LO };
++	struct { __u32 prefixlen, data; } lkey = { .prefixlen = 32 };
++	struct map_value_align *skel;
++	__u64 val = 0;
++	__u32 key = 0;
++	int err;
++
++	skel = map_value_align__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "open_and_load"))
++		return;
++
++	err = bpf_map__update_elem(skel->maps.lpm, &lkey, sizeof(lkey),
++				   &val, sizeof(val), BPF_ANY);
++	if (!ASSERT_OK(err, "lpm_update"))
++		goto out;
++	err = bpf_map__update_elem(skel->maps.hash, &key, sizeof(key),
++				   &val, sizeof(val), BPF_ANY);
++	if (!ASSERT_OK(err, "hash_update"))
++		goto out;
++	err = bpf_map__update_elem(skel->maps.devmap, &key, sizeof(key),
++				   &dval, sizeof(dval), BPF_ANY);
++	if (!ASSERT_OK(err, "devmap_update"))
++		goto out;
++
++	err = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.lookup), &topts);
++	if (!ASSERT_OK(err, "test_run"))
++		goto out;
++
++	ASSERT_NEQ(skel->bss->lpm_addr, 0, "lpm_lookup");
++	ASSERT_EQ(skel->bss->lpm_addr & 7, 0, "lpm_value_align");
++	ASSERT_NEQ(skel->bss->hash_addr, 0, "hash_lookup");
++	ASSERT_EQ(skel->bss->hash_addr & 7, 0, "hash_value_align");
++	ASSERT_NEQ(skel->bss->devmap_addr, 0, "devmap_lookup");
++	ASSERT_EQ(skel->bss->devmap_addr & 7, 0, "devmap_value_align");
++out:
++	map_value_align__destroy(skel);
++}
+diff --git a/tools/testing/selftests/bpf/progs/map_value_align.c b/tools/testing/selftests/bpf/progs/map_value_align.c
+new file mode 100644
+index 000000000..bd0663a13
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/map_value_align.c
+@@ -0,0 +1,48 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++
++struct lpm_key {
++	__u32 prefixlen;
++	__u32 data;
++};
++
++struct {
++	__uint(type, BPF_MAP_TYPE_LPM_TRIE);
++	__uint(map_flags, BPF_F_NO_PREALLOC);
++	__uint(max_entries, 1);
++	__type(key, struct lpm_key);
++	__type(value, __u64);
++} lpm SEC(".maps");
++
++struct {
++	__uint(type, BPF_MAP_TYPE_HASH);
++	__uint(map_flags, BPF_F_NO_PREALLOC);
++	__uint(max_entries, 1);
++	__type(key, __u32);
++	__type(value, __u64);
++} hash SEC(".maps");
++
++struct {
++	__uint(type, BPF_MAP_TYPE_DEVMAP);
++	__uint(max_entries, 1);
++	__type(key, __u32);
++	__type(value, struct bpf_devmap_val);
++} devmap SEC(".maps");
++
++/* Addresses of the map values, checked by user space */
++__u64 lpm_addr, hash_addr, devmap_addr;
++
++SEC("xdp")
++int lookup(struct xdp_md *ctx)
++{
++	struct lpm_key lkey = { .prefixlen = 32 };
++	__u32 key = 0;
++
++	lpm_addr = (unsigned long)bpf_map_lookup_elem(&lpm, &lkey);
++	hash_addr = (unsigned long)bpf_map_lookup_elem(&hash, &key);
++	devmap_addr = (unsigned long)bpf_map_lookup_elem(&devmap, &key);
++	return XDP_PASS;
++}
++
++char _license[] SEC("license") = "GPL";
 -- 
 2.54.0 (Apple Git-157)
 
