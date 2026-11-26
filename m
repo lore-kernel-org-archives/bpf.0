@@ -1,83 +1,99 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.50
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795698121;
-	b=5jcuAOp0ZDa99OlahEEFLCA7jW+qyxJ17hBWfCbgnXmsClZS82X5FZ1GffCh/SKsYZ0z
-	 GmuksM1W3zgLWfn6Cb9/tGURilqYbxB1WH3Qn42j4NUmpwU7rC/yrSHcp5EmhiRFat6qh
-	 59RIvz7H44Nci9iWaCnft2JYeduUJ1aZV68rcuQl7Qwi9o8hJv+vYDz9HS1Bc1njUV6Xe
-	 gugW96RJe7H+b78FE6HlUQgvD4WbDyn2orMHlM5H9xsT8v/Dn6iYTlyehKYDefUp0dzO3
-	 dWRN1g6vlTsG8QjMk3APGHB4iYKHAXfVLhPEb3HaLPwyvSud60vQKr3yYIpZqFvjjiw==
+	t=1795698424;
+	b=asTHail1P96ElgHI6X9WFjxABYZJqkGHFVhp1eY7UOebnLwgktgV7yZnBWQWY+p/Lg+5
+	 6+ZBFq6hqDNtSr8vmexKLpyNBj+gORSpP8+db1gd7J1CQ7AaOIsIniI17pH+fqn8FyVV7
+	 0FVzSiPLBtZdWD8GUcnvJYd14YOXeSJ3VBvSbxMNusAsuQ6kbvOV5ftPMbZS72gxRFwKp
+	 MRAssNeJWSUSgltjXyPVFuSFBa4LZ0YHwmnTRW9/Fbt3Zx4kOyTEdaWiifXZKl5tVbK4X
+	 G1Yrha/dX8EnyyswDc+5Adf9xsPfqEEYg2pC6FiR+84pjXmuOj/lsHiy9fyHhg0wwDQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795698121;
-	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
-	 X-Mimecast-MFC-AGG-ID:Received:Received:From:To:Cc:Subject:Date:
-	 Message-ID:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding:X-Scanned-By;
-	bh=wq8zFgSAzHIJhaAsqFgvjlNg2khdNMSb+6FPwTy01kM=;
-	b=hYIIB16S2PM5Q0cH/+626OL54jb4Jh9jzdU2yYsPH8ueGQuv7ITbXD6AhF6MGK2hP6OB
-	 nQO1Qknnp9Cwki6wZgmsHCbTc0Zi7pWM3k06o6AV2Bnr1krnhfULxyKg08N//aWC/x95Q
-	 oiOpBMOOgkVF5fHjSj3uD9OurnoDhcNh4oiZZ/tDvBETZqtGnBm3b1qTfUa7N4p7fc6VR
-	 6FyHlwxcZM7lmDLhBE5FJNkIYdJ56cSnh/O1GuiGcme4cW1ZrvXNk8Rv+Lxw9wHAePHds
-	 Nf2Z8h6eEvkHd99lRVouzpcIj9BNT+Owg+00k0m88KjgPqyiLfsK21Fnnaz0GSjMycA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795698424;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To;
+	bh=ZpVCi9UdSntjHN/Hv88jzIgPEfa6hIem2Gl30Fy2TTM=;
+	b=cfhEFcCUdTbQOZXz9nC3eCwnBdRSgmaYlqS1pTBD7ZsVki6Lgm38bc8S46ZTvD9bmc3n
+	 khEbfHfWmaoySMMhyHk6+L/5z4dCah4SEeF8EBQNl9JmiUnyQ3gYI/ibKdR0AZc9QWepk
+	 +KKYbl1JVKSfCTrSOMs0W2B9scqHtp3o1AM9UjwzkgbvZGZM0IhvvAe9ktaEF1H+XIhKP
+	 5+3DeOwyT27EEIOdXpyJGDrwBtJyVlHihNQ3j00HIT9ENMnHeQkw4HWfEfQ3+4gYQSECH
+	 K4yljEaPPvNyTaK0VEna1hSgFlJ+fM2OTtXxVvXgyq0v6UHCCKJgAj6kgCew118nEOQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=redhat.com;
-	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=HxpBE6O7;
-	arc=none smtp.remote-ip=170.10.129.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Fzu9Dxkz;
+	arc=none smtp.remote-ip=209.85.221.50
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DFC5606A334
-	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 13:02:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2DFC5606A334
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68A7C606A31E
+	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 13:07:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 68A7C606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=HxpBE6O7
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1795698120;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=wq8zFgSAzHIJhaAsqFgvjlNg2khdNMSb+6FPwTy01kM=;
-	b=HxpBE6O7Ur2bHrm4rN9GMh0uN/AeUd9n6RgtOC8uRE+5YqqpsP/SOgXdxUzL7Af72RYEcq
-	H/S2bRUv0jMSRjyEjNOWe5++cw3wUcZoxdZKABBcxQqh2OCzGfZNn5QX9vECbakvwvdvEq
-	xBS6EVBZdvIZtQaxcMMijDPnE+zKXA0=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-573-YeXDpCPpPBG42x1AXuX8aw-1; Thu,
- 26 Nov 2026 13:01:55 +0000
-X-MC-Unique: YeXDpCPpPBG42x1AXuX8aw-1
-X-Mimecast-MFC-AGG-ID: YeXDpCPpPBG42x1AXuX8aw_1795698113
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 3CAA6180059B;
-	Thu, 26 Nov 2026 13:01:53 +0000 (UTC)
-Received: from gmonaco-thinkpadt14gen3.redhat.corp (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 1412E1800543;
-	Thu, 26 Nov 2026 13:01:49 +0000 (UTC)
-From: Gabriele Monaco <gmonaco@redhat.com>
-To: linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Gabriele Monaco <gmonaco@redhat.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	Nam Cao <namcao@linutronix.de>,
-	Wen Yang <wen.yang@linux.dev>,
-	Tobias Schaffner <tobias.schaffner@siemens.com>,
-	Viktor Malik <vmalik@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	John Ogness <john.ogness@linutronix.de>
-Subject: [PATCH v3 18/18] verification/rvgen: Add selftest for rvgen -b
-Date: Thu, 26 Nov 2026 14:00:04 +0100
-Message-ID: <20261126130004.127155-19-gmonaco@redhat.com>
-In-Reply-To: <20261126130004.127155-1-gmonaco@redhat.com>
-References: <20261126130004.127155-1-gmonaco@redhat.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Fzu9Dxkz
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-498f5fa4f70so5723832f8f.0
+        for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 05:07:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795698423; x=1796303223; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=ZpVCi9UdSntjHN/Hv88jzIgPEfa6hIem2Gl30Fy2TTM=;
+        b=Fzu9Dxkzyz5r92pTFn+6eNMVyNbK41/jl53o3FSDUQi4gQmyw575gS2F9rGuPRtKsc
+         NtJo+2C3bizt3CAr8v78BcCz4GWC/iUiV7dm5Wl0YVxj5RGJY3vN/CmYQFiuUfpFQohn
+         iwh5oz7YzQXqgJx+kE9UiXLdHmhz6Rt8UYzc36zO6QNvThd0lo83F9ZsUwcXWNp8bWrz
+         LeoVBlsvbIiNyf0YvTmSlf0tNI/WBYWIwlrMOj1JwgaJJfsSI+SM1HYkLqgem1Q81rjZ
+         ObtJme10MD/LurEPkiS7gi8KuDfsuCP64mO/EG5wLd0WfmDS94/22Qyrky9bD1ARrxvn
+         WxfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795698423; x=1796303223;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=ZpVCi9UdSntjHN/Hv88jzIgPEfa6hIem2Gl30Fy2TTM=;
+        b=OZnOgqie1RaiX2cMQBuFzBzx1bxTJWQ9FI/+awX3zgNtTMoUBksyznk/4oqfyP6D0q
+         otWBM2VnTU3cQC+XbYBen05oHJdPST8kZWbeVJB2I0te9zUIUCdjuDX8fZ8SzpmJ2KVK
+         b2/raAk5VUrZNknyGFMNUtR5CRqZPJUxzux/4LPizy/0wL1V9ZvdAIBdTOBoFaAiMJCd
+         JrBIrTpZgoHDB/3dWuvba/PH7ekA/TC/V6c2c0rPV+q9sBTqOv8DPwb/h1inAY7x7A7S
+         r8m1spGNBo8qZqQ7f/RUUAKj2tbRok/bZqvWVHe1OXbBTANH2FnyCnAxHbYHIDPo8tcr
+         dY/A==
+X-Forwarded-Encrypted: i=1; AL+hErF49itCYqgTvA8RMpLgYL5OL6yywjjgZHQbBOCaG8p4Pem6TGa0yUxdlGjuLlf6oQN3Lb4=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9mUV4/78IUUesLYDEem8683UscEqbsLUGfqpPiuAPmlCoZhajp
+	toh6Fi9f3XI+dtfQDDvhkGFip/TBxmN6VBPd8PnmPwsHZzQR3g446p0N
+X-Gm-Gg: AZFdTZePanesjScfHnXmhrO88ahBUdnmxKDeBZpGjP3A3WWBtCExAO806ra+eFlJTBL
+	j4vkQSS7Pe1l7GNEp87qCZ3Uvfu1eIzV3+3iRRBjovQeLggFr0HKWsGRfESodgflB6WrBTm4/PS
+	XFweKWKDlYG2z0Ibf0kTjzslyyoDzqFSjmENwRf9Nw39aZ+CUfLAuJSbNJqhrB8umOFDI+3NNFN
+	vOSGOXcX16q+dRsWIQvcNoFDkrljW29IbHAZa1LJe9rU38I19gPIndEvFmjkETUPa2PxxLZBvkZ
+	WMBdKFqBM+FCEwLQxw2crQI4xikq3pjiIXrWFCYUFuUAr6ecbFvL5ovRjsqWX9VvM/Lyd/AQ7Rr
+	QBQk5WQXJElUYda0ROxHEdGxp9DrE8dyv8/RKa6yjbBdzo/1jBcUEFwXqdNf0UlsXdx/7bFxC/r
+	1rPtlK8oqDNj2GzNyUkbqGKB3bNWJhZEqlqHkr+T+79mPW2BauSDuXGnEYc10oNmIVtc2YRSauL
+	Ac6vt4Uq+esLPFaMf2+A+rA7GyDdXIPb/WGt0cu79ojr/ZAGdMTXbw6IyamcdRHEEErb0WgyyyN
+	mXj5febtJSwp3gBZyi5nxtWq0fAi91bhJVP7Z+M=
+X-Received: by 2002:a05:600c:5303:b0:4a2:1655:87db with SMTP id 5b1f17b1804b1-4bb88785d2fmr417142905e9.0.1795698422632;
+        Thu, 26 Nov 2026 05:07:02 -0800 (PST)
+Received: from mail.gmail.com ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb884911e3sm732067565e9.6.2026.11.26.05.07.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Nov 2026 05:07:02 -0800 (PST)
+Date: Thu, 26 Nov 2026 13:18:39 +0000
+From: Anton Protopopov <a.s.protopopov@gmail.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Jiri Olsa <jolsa@kernel.org>, Alan Maguire <almagui@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>, bpf@vger.kernel.org
+Subject: Re: [PATCH v1 bpf-next 4/5] resolve_btfids: Exclude the code of
+ kernel/bpf and of the JIT
+Message-ID: <awgxr-8TOpGGVVra@mail.gmail.com>
+References: <20261125212849.868523-1-a.s.protopopov@gmail.com>
+ <20261125212849.868523-5-a.s.protopopov@gmail.com>
+ <DN4QDHMFA99A.27B7GAJLQQ7DK@gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -87,248 +103,30 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DN4QDHMFA99A.27B7GAJLQQ7DK@gmail.com>
 
-Add selftest cases for BPF monitors generation.
+On 26/11/26 12:53AM, Alexei Starovoitov wrote:
+> On Wed, Nov 25, 2026 at 01:28 PM Anton Protopopov <a.s.protopopov@gmail.com> wrote:
+> > bpf_tramp_ftrace_ops_func() and bpf_arch_text_invalidate(). Read the
+> > symbols of kernel/bpf/built-in.a and arch/<arch>/net/built-in.a with
+> > the llvm-nm of llvm-config, which reads ELF objects and LTO bitcode,
+> > and do not tag these functions.
+> 
+> bot is correct.
+> Let's run ${NM} in gen-btf.sh and give its output to resolve_btfids ?
+> kbuild knows the paths and the arch. The tool doesn't have to.
+> ${NM} reads what ${CC} writes. HAS_LTO_CLANG requires it to be llvm-nm.
+> link-vmlinux.sh runs it for kallsyms already.
+> llvm-config can be of another LLVM than the compiler. llvm-mc.sh says so.
+> image_func() finds a function by name. No need to copy and sort the names.
+> Then LLVM_NM, the nm mode of llvm-mc.sh, bpf_archives[], popen(), qsort()
+> and bsearch() go away.
+> 
+> It replaces patch 4.
 
-Signed-off-by: Gabriele Monaco <gmonaco@redhat.com>
----
- .../tests/golden/da_bpf_cpu/da_bpf_cpu.c      | 35 +++++++++++++
- .../tests/golden/da_bpf_cpu/da_bpf_cpu.h      | 47 ++++++++++++++++++
- .../tests/golden/da_bpf_obj/da_bpf_obj.c      | 49 +++++++++++++++++++
- .../tests/golden/da_bpf_obj/da_bpf_obj.h      | 47 ++++++++++++++++++
- .../verification/rvgen/tests/rvgen_monitor.t  | 11 +++++
- 5 files changed, 189 insertions(+)
- create mode 100644 tools/verification/rvgen/tests/golden/da_bpf_cpu/da_bpf_cpu.c
- create mode 100644 tools/verification/rvgen/tests/golden/da_bpf_cpu/da_bpf_cpu.h
- create mode 100644 tools/verification/rvgen/tests/golden/da_bpf_obj/da_bpf_obj.c
- create mode 100644 tools/verification/rvgen/tests/golden/da_bpf_obj/da_bpf_obj.h
+Thanks, I will adopt your variant (and add your "Co-developed-by"
+and "Signed-off-by").
 
-diff --git a/tools/verification/rvgen/tests/golden/da_bpf_cpu/da_bpf_cpu.c b/tools/verification/rvgen/tests/golden/da_bpf_cpu/da_bpf_cpu.c
-new file mode 100644
-index 000000000000..5a652ce9b461
---- /dev/null
-+++ b/tools/verification/rvgen/tests/golden/da_bpf_cpu/da_bpf_cpu.c
-@@ -0,0 +1,35 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include "vmlinux.h"
-+
-+#define RV_MON_TYPE RV_MON_PER_CPU
-+#include "da_bpf_cpu.h"
-+#include <rv/da_monitor.h>
-+
-+/*
-+ * This is the instrumentation part of the monitor.
-+ *
-+ * This is the section where manual work is required. Here the kernel events
-+ * are translated into model's event.
-+ */
-+SEC(/* XXX: tracepoint or other probe */)
-+int BPF_PROG(handle_event_1, /* XXX: fill header */)
-+{
-+	da_handle_event(event_1_da_bpf_cpu);
-+	return 0;
-+}
-+
-+SEC(/* XXX: tracepoint or other probe */)
-+int BPF_PROG(handle_event_2, /* XXX: fill header */)
-+{
-+	/* XXX: validate that this event always leads to the initial state */
-+	da_handle_start_event(event_2_da_bpf_cpu);
-+	return 0;
-+}
-+
-+static struct rv_monitor rv_this = {
-+	.enabled = 0,
-+};
-+
-+char LICENSE[] SEC("license") = "GPL";
-+char DESCRIPTION[] SEC(".rodata.description") = "auto-generated";
-diff --git a/tools/verification/rvgen/tests/golden/da_bpf_cpu/da_bpf_cpu.h b/tools/verification/rvgen/tests/golden/da_bpf_cpu/da_bpf_cpu.h
-new file mode 100644
-index 000000000000..715b34a099f6
---- /dev/null
-+++ b/tools/verification/rvgen/tests/golden/da_bpf_cpu/da_bpf_cpu.h
-@@ -0,0 +1,47 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Automatically generated C representation of da_bpf_cpu automaton
-+ * For further information about this format, see kernel documentation:
-+ *   Documentation/trace/rv/deterministic_automata.rst
-+ */
-+
-+#define MONITOR_NAME da_bpf_cpu
-+
-+enum states_da_bpf_cpu {
-+	state_a_da_bpf_cpu,
-+	state_b_da_bpf_cpu,
-+	state_max_da_bpf_cpu,
-+};
-+
-+#define INVALID_STATE state_max_da_bpf_cpu
-+
-+enum events_da_bpf_cpu {
-+	event_1_da_bpf_cpu,
-+	event_2_da_bpf_cpu,
-+	event_max_da_bpf_cpu,
-+};
-+
-+struct automaton_da_bpf_cpu {
-+	const char state_names[state_max_da_bpf_cpu][32];
-+	const char event_names[event_max_da_bpf_cpu][32];
-+	unsigned char function[state_max_da_bpf_cpu][event_max_da_bpf_cpu];
-+	unsigned char initial_state;
-+	bool final_states[state_max_da_bpf_cpu];
-+};
-+
-+static const struct automaton_da_bpf_cpu automaton_da_bpf_cpu = {
-+	.state_names = {
-+		"state_a",
-+		"state_b",
-+	},
-+	.event_names = {
-+		"event_1",
-+		"event_2",
-+	},
-+	.function = {
-+		{       state_b_da_bpf_cpu,       state_a_da_bpf_cpu },
-+		{            INVALID_STATE,       state_a_da_bpf_cpu },
-+	},
-+	.initial_state = state_a_da_bpf_cpu,
-+	.final_states = { 1, 0 },
-+};
-diff --git a/tools/verification/rvgen/tests/golden/da_bpf_obj/da_bpf_obj.c b/tools/verification/rvgen/tests/golden/da_bpf_obj/da_bpf_obj.c
-new file mode 100644
-index 000000000000..a7d465f84f05
---- /dev/null
-+++ b/tools/verification/rvgen/tests/golden/da_bpf_obj/da_bpf_obj.c
-@@ -0,0 +1,49 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include "vmlinux.h"
-+
-+#define RV_MON_TYPE RV_MON_PER_OBJ
-+typedef /* XXX: define the target type */ *monitor_target_bpf;
-+#include "da_bpf_obj.h"
-+#include <rv/da_monitor.h>
-+
-+/*
-+ * This is the instrumentation part of the monitor.
-+ *
-+ * This is the section where manual work is required. Here the kernel events
-+ * are translated into model's event.
-+ */
-+SEC(/* XXX: tracepoint or other probe */)
-+int BPF_PROG(handle_event_1, /* XXX: fill header */)
-+{
-+	int id = /* XXX: how do I get the id? */;
-+	monitor_target_bpf t = /* XXX: how do I get t? */;
-+	da_handle_event(id, t, event_1_da_bpf_obj);
-+	return 0;
-+}
-+
-+SEC(/* XXX: tracepoint or other probe */)
-+int BPF_PROG(handle_event_2, /* XXX: fill header */)
-+{
-+	/* XXX: validate that this event always leads to the initial state */
-+	int id = /* XXX: how do I get the id? */;
-+	monitor_target_bpf t = /* XXX: how do I get t? */;
-+	da_handle_start_event(id, t, event_2_da_bpf_obj);
-+	return 0;
-+}
-+
-+/* XXX: obj is being destroyed, remove if not required (e.g. obj is static) */
-+SEC(/* XXX: tracepoint or other probe */)
-+int BPF_PROG(handle_obj_cleanup, /* XXX: fill header */)
-+{
-+	int id = /* XXX: how do I get the id? */;
-+	da_destroy_storage(id);
-+	return 0;
-+}
-+
-+static struct rv_monitor rv_this = {
-+	.enabled = 0,
-+};
-+
-+char LICENSE[] SEC("license") = "GPL";
-+char DESCRIPTION[] SEC(".rodata.description") = "auto-generated";
-diff --git a/tools/verification/rvgen/tests/golden/da_bpf_obj/da_bpf_obj.h b/tools/verification/rvgen/tests/golden/da_bpf_obj/da_bpf_obj.h
-new file mode 100644
-index 000000000000..f42fa733abee
---- /dev/null
-+++ b/tools/verification/rvgen/tests/golden/da_bpf_obj/da_bpf_obj.h
-@@ -0,0 +1,47 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Automatically generated C representation of da_bpf_obj automaton
-+ * For further information about this format, see kernel documentation:
-+ *   Documentation/trace/rv/deterministic_automata.rst
-+ */
-+
-+#define MONITOR_NAME da_bpf_obj
-+
-+enum states_da_bpf_obj {
-+	state_a_da_bpf_obj,
-+	state_b_da_bpf_obj,
-+	state_max_da_bpf_obj,
-+};
-+
-+#define INVALID_STATE state_max_da_bpf_obj
-+
-+enum events_da_bpf_obj {
-+	event_1_da_bpf_obj,
-+	event_2_da_bpf_obj,
-+	event_max_da_bpf_obj,
-+};
-+
-+struct automaton_da_bpf_obj {
-+	const char state_names[state_max_da_bpf_obj][32];
-+	const char event_names[event_max_da_bpf_obj][32];
-+	unsigned char function[state_max_da_bpf_obj][event_max_da_bpf_obj];
-+	unsigned char initial_state;
-+	bool final_states[state_max_da_bpf_obj];
-+};
-+
-+static const struct automaton_da_bpf_obj automaton_da_bpf_obj = {
-+	.state_names = {
-+		"state_a",
-+		"state_b",
-+	},
-+	.event_names = {
-+		"event_1",
-+		"event_2",
-+	},
-+	.function = {
-+		{       state_b_da_bpf_obj,       state_a_da_bpf_obj },
-+		{            INVALID_STATE,       state_a_da_bpf_obj },
-+	},
-+	.initial_state = state_a_da_bpf_obj,
-+	.final_states = { 1, 0 },
-+};
-diff --git a/tools/verification/rvgen/tests/rvgen_monitor.t b/tools/verification/rvgen/tests/rvgen_monitor.t
-index 5f2562600bad..3d71685a7ad5 100644
---- a/tools/verification/rvgen/tests/rvgen_monitor.t
-+++ b/tools/verification/rvgen/tests/rvgen_monitor.t
-@@ -47,6 +47,17 @@ check_and_compare_folder "LTL per_task with parent and description (default name
- 	"$RVGEN monitor -c ltl -s tests/specs/test_ltl.ltl -t per_task -p ltl_parent -D 'Simple description'" \
- 	"test_ltl" "LTL_MON_EVENTS_ID"
- 
-+# BPF monitor test
-+check_and_compare_folder "DA BPF per_cpu" \
-+	"$RVGEN monitor -b -c da -s tests/specs/test_da.dot -t per_cpu -n da_bpf_cpu" \
-+	"da_bpf_cpu" "Edit the da_bpf_cpu/da_bpf_cpu.c to add the instrumentation" \
-+	"Edit kernel/trace/rv/Makefile"
-+
-+check_and_compare_folder "DA BPF per_obj" \
-+	"$RVGEN monitor -b -c da -s tests/specs/test_da.dot -t per_obj -n da_bpf_obj" \
-+	"da_bpf_obj" "Edit the da_bpf_obj/da_bpf_obj.c to add the instrumentation" \
-+	"Edit kernel/trace/rv/Kconfig"
-+
- # Error handling tests
- check "missing required spec argument" \
- 	"$RVGEN monitor -c da -t per_cpu" 2 \
--- 
-2.56.1
-
+> [...]
