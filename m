@@ -1,47 +1,99 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.170
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795711294;
-	b=NhNR4OTgeDn5s77EIr+tGRtuCpnI5jgMaufXPu1CAR4sfWcAH8o2wGU0IRBIHUAsLLdA
-	 AL41hiH4UTnlrmicRTEuZiBQYtfxvt/+dzY5zYcZ/8Xtm8logwLmJIEyJ2MiVywEKg9wX
-	 KjRtNNPXGGZoyXBZfqHQfYLoPZUWvlwJNgfaUXzTAUB1YXhBOfLPGJZCE13RjtASh0S3j
-	 HeqRDP0wSri5asy9qv/SlppJ7OPRPS8RX76ipXCBNQhnN4bemfpKdlZQt3r4jT1kJ/z8D
-	 Gi/Vtf/MLFZeEMGupqbw6pCde+xLFoARSoYSpMKDB5KiqW6zl79/ZUF6qzEVSFzbZaA==
+	t=1795711342;
+	b=UWjApRf9vuJKGJHF9e2VAkJ2baZoK8L2bzVHgG7RtQ/uWZTVn17yiA5dvjd6M9B7pd5k
+	 +HKVJm8Gakw+NlUQLU2Pngfre9cKUm1K0981YFMG/ubNueLfxdTHyzyFGXFXtcH7ocXoE
+	 +RbMnI6ObpljhPSANC9+y9Bw9I6wxPLjqPxnlukPOm4XTld8JzwFjoOwjihZXcBeLvmUJ
+	 fsZs3+iz4F87KBInCIo97GYipYLLjzRBt+Q0E/JQ4YjxhzMmkkmv2OfRo4utML6zMYXQ/
+	 y9xNn43tx0wb0ark0I893I19fFJF6LuIo6FVp893Q1k+0jq3sX2J2Jp8ilFGbw74QYg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795711294;
-	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=5cocrlgU4+eKCfP5xzQkf2cbcPa/EQBSFXcnsJzpir4=;
-	b=MOBOhgrYTPO6MwNLtigKaUKB7iCQtro59OwFYqOlZF03K08dsB1+4Z+Fd7F01l28e/ZU
-	 9GJeFhUmreKPIhY3hTVftNBxkx50zMd+B1c0bUN0G2648NM6Fzn99ODYu6uXSwgUadQdB
-	 FDHTEiQnqg+fxL5FDgBEuBccoc5iFkRYV8/cVlX1GbkifnKeqa2dVrqjwBt831CSRBMd5
-	 ddQIQuvwGdjKWwrjTYwn78aS5kUiqa4IPGEr153M31sZV3cIJP4cVmXW4nzSqPalPUv4H
-	 kj5eOKJyIXmlIB/+Hxb8SEMkSq/tbvka1d79scVia9ZAsb861jN8S2VqF24mytNhYGw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795711342;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=vYLe6Aye6cjPeLVGkLhVr6tiV642wkKY+G+lAL+UdWQ=;
+	b=efOQN9c9D3i1S4vhhdzoeHHOat9rq8ghsx4ZAD4pqiHvwasUicUVcbKj9goQMAzoBtpw
+	 YZntl99zFh90uRplhkKDThq2NbM/3mwhlPfMcl90SKaCQXh4i3PjYUIJhGW82igyTrCdX
+	 ehCNjiTVHlN1jyzssHQVfvSFo1XdO92GNRPOsIEc0XrtweWVzVr6Zoyhjx9R+9MQLd4jN
+	 Wi3j009E71Ud0gc0NQTrhn3xZ/KePFCZ6Ku+EIHpliHXZUwCZmYKH4pX9nUMWkT9sGsRW
+	 YeQV+QFS1j+TWsTPDjl/aB5TcGvmygyefgQ/h2b1zZky7wmklyuerEhSmNWMoLDsGbA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=c04eOExq;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ItlsisZg;
+	arc=none smtp.remote-ip=74.125.82.170
+Received: from mail-dy1-f170.google.com (mail-dy1-f170.google.com [74.125.82.170])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47B48606A326
-	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 16:41:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 870B760A3808
+	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 16:42:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 870B760A3808
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=c04eOExq
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD99C1F000C6;
-	Thu, 26 Nov 2026 16:41:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795711293;
-	bh=5cocrlgU4+eKCfP5xzQkf2cbcPa/EQBSFXcnsJzpir4=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=c04eOExqUwOGPwgjKIrMKM85mE9LfCEJ8EYmQ5iLQvt8lkP8z+CS6swv2KO5tgB3z
-	 KySjRtw5c6LyyjfNpSU+PTpghlDR4+ZLeYTcDNgehLstm3w3g32eCxdxZRDfIVWc1M
-	 SZOUn1/L2ewKeN03qwUGT1mAgxYCLX8+ccw/Q8AihwjUsfScx7LhDf/wUtquhe/TCq
-	 ig2UYZJrfvhVqcALN89cYGGhzOvAY3uJuhtqFSfcde+GLQZ1KawqYMjYnjL7iWdRwI
-	 nAQSiZgGZYfNx4UyGWRsl18VkVPZ5X3iAaky2nST1e7AZD2cI8R5dc7XrPv2aS0C4Z
-	 o7+MfbX7tSBzg==
-Message-ID: <21d38d84-0520-4fd2-ad98-04253d0405f2@kernel.org>
-Date: Thu, 26 Nov 2026 16:41:27 +0000
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ItlsisZg
+Received: by mail-dy1-f170.google.com with SMTP id 5a478bee46e88-33bf40b0c8bso15255320eec.0
+        for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 08:42:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795711342; x=1796316142; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=vYLe6Aye6cjPeLVGkLhVr6tiV642wkKY+G+lAL+UdWQ=;
+        b=ItlsisZgBsbLBK1VgS9ZB0PlWxT8mDUjm48+mrCX79lYJPOQ8c8rj5gbKOZZyF8KFM
+         jVOKBW8PN0sYgzM7Wi03VpnArAY4AZH2Xk9NawKQQH//EEk9tKpTuORygFksVccHbxci
+         MpeFeEYhAGypWCr/SmSEyOp+iyiJwNygswDunFOFPW/DSLJy1YzIqaNxtflbATlqzVK0
+         sLtqS6AM+InztaTEtkj2pUySpHkWJVyp6EcXfTLb6cYjzuY1qViGLXM1rT4LAdJpw3s6
+         5sxHptkWlX/8QJwLFOkHyesTb7NZ8DoceMB9axxcXNBHubMq129Y0H45vlCxabz05NI3
+         cUlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795711342; x=1796316142;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=vYLe6Aye6cjPeLVGkLhVr6tiV642wkKY+G+lAL+UdWQ=;
+        b=OrQzzbEm8iM1zN4nqdDK3w4nUu2PgCnbu01VeRvHUIyQZ0isxE7n0CwNucGpfxblaK
+         eJ0k0Ier78KVLUrgXzhxYG0lkrlZf/6P7WCpDNK+H31UKZtlxLZsYQcWiZ0JykKBG5yc
+         ZULWy9fQg4W8MtZaSmHGo9fXp0pSZ/H6NwGpZ9g6Fd7ASo1oDmL5srvKi9Iv5rxRcmDo
+         4t7QO+ZrJjUPbTThSaDvg/BCfVLXwDJ/Xo2augvokeu1j9DAGyC9PicaqPLVv4gR9zq7
+         CIk/Vbv1tT6Hu8UAT1NlvUYd9e2zMMAVAlvk3/5cKUPE2q2aZ+Ba+5qtOCHIVnwQl898
+         G08A==
+X-Forwarded-Encrypted: i=1; AL+hErHU2g6kaIIKKso8g7lw40KACd09RHE+vCQynWnBIqyoSGQ/X6UAbtJ8LQKLidaxnICK4Jk=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8xVOqICQOX2p/A3CaQhytwQoC+5Zb1EW+rfia54q6kfrB+/kP4
+	a+H94SFbwrLJo9MrBBIRXSQ9Lntod//V8zBIhdKoxlBBMEc7fexQVOZD
+X-Gm-Gg: AZFdTZeBM/OgtcYDWy8h5OhVlrfyLD+IP8dVvRovA5B5OtWDlVdWb4XhL190/cE0Pjk
+	bJ7UECvZdumkp0g5HEGL2H7ELiu3e7mZnhgiR4kBNNF+AbEyayRuodT7ZxZjlCfi27liXRv/QLK
+	J+Js2M7ECNFC5PKoW6AWh8B4Qjr0V0CpzY2pqGHwPa7l+XEt+PtKtkSNgXmGWkdrvIV6tEMWSuO
+	4FKyg2651vZYbAGNDnBKhHzMpKFZThJyx4SBSkC477rOszr1kNvzUJNOou7wflDZuSk24s24RzO
+	LgwftMk2bYRCTayGr+PdMxcptJQcon8iF42QFWIru6IpFnVVYyqsue9yjJ8gNv0ihoJ0PUdm66e
+	+qSu2HVZPNcCtSaDu/ayXw9/3TO8QCyz86WwnJzMMVJhsQKcRrEFSB2+lbJ7KAyjWvI+jkAq0yl
+	aroIH5UCtAyFIG68q1XQ+vxKC7tQCk8AAtZ9IR0OWR3V7qDPUi69LesA5o8YFYfGyfiN+Kzyn2Y
+	ep0HXU9D1sVqoQNzU1Z7AUG9Yf2ODcr0ZASFUzmIDuxYLJkC4aF6pgymB0NfSz0VRIDVw/a057x
+	RYv6tf2SS1NUFQRJX6/0RLjTEIYv
+X-Received: by 2002:a05:7300:c3aa:b0:385:c28b:a4d5 with SMTP id 5a478bee46e88-385c28baffbmr22699614eec.17.1795711341575;
+        Thu, 26 Nov 2026 08:42:21 -0800 (PST)
+Received: from ubuntu.. ([2405:201:8026:213e:d3fe:57ef:a814:ecbc])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-38567daaf70sm66709770eec.28.2026.11.26.08.42.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Nov 2026 08:42:21 -0800 (PST)
+From: mdshahid03@gmail.com
+To: netdev@vger.kernel.org
+Cc: edumazet@kernel.org,
+	ncardwell@google.com,
+	kuniyu@google.com,
+	davem@davemloft.net,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	willemb@google.com,
+	Mohammad Shahid <mdshahid03@gmail.com>
+Subject: [PATCH net v2] tcp: fix division by zero in tcp_cong_avoid_ai()
+Date: Thu, 26 Nov 2026 22:11:50 +0530
+Message-ID: <20261126164150.8838-1-mdshahid03@gmail.com>
+X-Mailer: git-send-email 2.43.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -51,140 +103,42 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 bpf-next 0/5] libbpf, bpf: Utilize CO-RE for BPF
- program parameter presence, ordering
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- andrey.grodzovsky@crowdstrike.com, eddyz87@gmail.com, memxor@gmail.com,
- martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
- jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
- john.fastabend@gmail.com, mason@kernel.org, bpf@vger.kernel.org
-References: <20261125165845.45806-1-almagui@kernel.org>
- <CAEf4BzbkrVyCSW1aRCo_s=2pxK7NRfUnznk21CY4-txqveRcnQ@mail.gmail.com>
-Content-Language: en-GB
-From: Alan Maguire <almagui@kernel.org>
-In-Reply-To: <CAEf4BzbkrVyCSW1aRCo_s=2pxK7NRfUnznk21CY4-txqveRcnQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 11/25/26 10:49 PM, Andrii Nakryiko wrote:
-> On Wed, Nov 25, 2026 at 8:58 AM Alan Maguire <almagui@kernel.org> wrote:
->>
->> Currently the BPF_PROG() family of macros greatly facilitates
->> BPF tracing/LSM program writing by allowing specification
->> of function, tracepoint or LSM hook arguments directly by
->> name and type.  These are then mapped to a context struct
->> consisting of a u64 array, with one value for each argument,
->> with by-value structs larger than 8 bytes taking more than
->> one slot.
->>
->> When an attach target gains, loses or reorders parameters
->> across kernels, programs silently read the wrong argument
->> or fail verification, and they have no way to check if an
->> argument actually exists.
->>
->> To bring a Compile Once - Run Everywhere (CO-RE) experience
->> to parameters for programs, this series lets programs describe
->> the parameters they need and any variants via a
->> struct bpf_func_args___<flavor> which can contain
->>
->> - parameters in any order, to support cases where a user might
->>   only use a subset of parameters in the associated program
->> - parameters that may exist for some kernels, where use is
->>   guarded by bpf_core_field_exists(ctx->field)
->> - renamed parameters, allowing the old and new names both to
->>   be present
->> - parameters whose type varies across kernels: a pointer can be read
->>   through the same struct either way, and bpf_core_type_matches() on
->>   a flavor with just that parameter tells which type it is
->> - __ret for the return value, for fexit, fmod_ret, fsession and
->>   LSM programs
->>
->> For example, a program tracing a function foo() can declare just the
->> parameters it needs, a, b and c, in any order, irrespective of their
->> position in foo()'s signature. It can also declare a parameter "notsure"
->> that only some kernels have, and check whether it exists, and both names
->> of a parameter renamed from "old" to "new". Parameter "d" is a struct
->> file * on some kernels and a void * on others: as any two pointers are
->> compatible, it can be read through the same struct either way, and a
->> flavor with just that parameter tells which it is. __ret is the return
->> value.
->>
->>         struct bpf_func_args___foo {
->>                 __u64 c;
->>                 int b;
->>                 char a;
->>                 long notsure;
->>                 int old;
->>                 int new;
->>                 void *d;
->>                 int __ret;
->>         } __attribute__((preserve_access_index));
->>
->>         struct bpf_func_args___foo_d_file {
->>                 struct file *d;
->>         } __attribute__((preserve_access_index));
->>
-> 
-> to make this work reliably and not get screwed over by compiler
-> generating context access like this:
-> 
-> r2 = <offset> ; CO-RE relocated
-> r1 += r2      ; verifier doesn't like this
-> r3 = *(u64 *)(r1 + 0); /* ctx access */
-> 
-> we need to make sure that we can use
-> __attribute__((preserve_static_offset)) together with
-> __attribute__((preserve_access_index))
-> 
-> This was pointed out in [0] (which, coincidentally perhaps, also
-> mentioned explicit bpf_func_args___xxx struct idea), we might not need
-> to block on that support given user defines this struct and bears
-> responsibility for this to work, but still, should be addressed
-> soon-ish in Clang/GCC.
-> 
->
+From: Mohammad Shahid <mdshahid03@gmail.com>
 
-Thanks for the pointer to the thread, I didn't see that message though
-Alexei mentioned it (and the name). Ihor, I'll add a Suggested-by 
-for you in the next round if that works?
+The tcp_cong_avoid_ai() function divides tp->snd_cwnd_cnt by
+the argument w without checking whether w is zero.
 
-I guess the challenge will be detecting cases where both
-preserve_static_offset and preserve_access_index _do_ work together
-(once they do)? If we had a __BPF_FEATURE as Alexei suggested I guess
-we could do something like this:
+Since w is an unsigned value, the condition tp->snd_cwnd_cnt
+>= w does not prevent division by zero when w is zero.
 
+The function is also exposed as BPF kfunc through the bpf-tcp-cc
+allowlist. The BPF verifier does not enforce a nonzero value for
+this argument.
 
-#if defined(__BPF_FEATURE_PSO_CORE)
-#define __bpf_func_args_attrs __attribute__((preserve_access_index, preserve_static_offset))
-#else
-#define __bpf_func_args_attrs __attribute__((preserve_access_index))
-#endif
+Return early when w is zero to prevent division by zero.
 
-?
+Fixes: e78aea8b2170 ("bpf: tcp: Put some tcp cong functions in allowlist for bpf-tcp-cc")
+Signed-off-by: Mohammad Shahid <mdshahid03@gmail.com>
+---
+ net/ipv4/tcp_cong.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-I couldn't find an LLVM issue for this problem specifically, but
-looks like [1] describes things from the gcc side.
-
-> And I'm actually wondering if the better name for this would be
-> "bpf_ctx___<flavor>" or "bpf_ctx_args___<flavor>", because it's not
-> always *function* arguments (tracepoint, BPF program, etc). Keeping it
-> more generic as "context arguments" or just "context" seems more
-> future-proof.
-> 
-> 
-> Also (I only skimmed patches, haven't gone through them completely,
-> will get back to this next week after holidays, sorry), I saw you
-> mentioned the limitation that this context access can be only done
-> from entry program code, right?  I think this can be lifted if we
-> apply these relocations after subprogs are appended to their
-> respective main programs. Not sure how ugly that will be, but you can
-> try that and see how it works (please do it as a separate patch to
-> distract less from the main logic change).
-> 
-
-Thanks for the suggestion, I'll see if I can get this working.
-
-[1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=117068
+diff --git a/net/ipv4/tcp_cong.c b/net/ipv4/tcp_cong.c
+index 8e83ef81fc18..f70f49b4b1e7 100644
+--- a/net/ipv4/tcp_cong.c
++++ b/net/ipv4/tcp_cong.c
+@@ -469,6 +469,9 @@ EXPORT_SYMBOL_GPL(tcp_slow_start);
+  */
+ __bpf_kfunc void tcp_cong_avoid_ai(struct tcp_sock *tp, u32 w, u32 acked)
+ {
++	if (unlikely(!w))
++		return;
++
+ 	/* If credits accumulated at a higher w, apply them gently now. */
+ 	if (tp->snd_cwnd_cnt >= w) {
+ 		tp->snd_cwnd_cnt = 0;
+-- 
+2.43.0
 
