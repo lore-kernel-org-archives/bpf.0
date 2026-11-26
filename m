@@ -1,84 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.44
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.171
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795664312;
-	b=qZPXnrxi3xIdf0ZoP3VQ9A10Zh3wU107/DJ+OBjjWelyJHzduLE126vuDnE882zUVstb
-	 VuOMTzYlDBspmELK2lPBCiwzp1gsJJyGUkhnewaL/xWxS9nG4EOZzzxpXg6SDAeAlm6mH
-	 vNsnrr06fRgS/2JAI32sw1lPXU8ZrY4BY3FkBoDmS8hgMao9eR3RnnmCfQS3EcdHTxlYt
-	 /6fpHww+QZQ1em7I25UErPxdcGAR4DanMJFcU9bku8ynFGFly0EFHiAoRUINGG0IYSzyL
-	 5Mrhj8pSsFHc3BOHSKoMI/rRmXJ72BIZFu9NzTuM3w1xYFkXMtjTQiXnkhCBh9wI3UQ==
+	t=1795664318;
+	b=nzyxijAMp88fCjzQv8OTHnINxyoJv6wB5lAYiFOem/2U19JsTYlVZEu06rmFzthdlV20
+	 PeEpUym0qIRLdMsu0TwmuMs/MmfR6fyKSWaC7kqtF5ckOqZ8ywuTGO/pCMQuwqDhpct2p
+	 iWNhJc0K3Sfo7mdHhUKUaSvbWR6d3TThNyDxLKzQsdZwLlTBG4yNRHDaj3hC/B3GxucbF
+	 javm6x1TiwPHMvlNnKD6uJ6f4ZcT/U38hO8H0uecNyHmXclL35OT857TsErlOVRH+1cVH
+	 uUBdgQ/5jMjWf2guGt8+Iqaz1yiagWf/FW19iWrQAOqFxZEk0SBV6SWSYc9daqwL10w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795664312;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795664318;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=Vz0bZtnMYlistXeve8bJV/h9wNRvP0lQWHmoiz3+37M=;
-	b=i08w3MPhddFro8b8Yv3y95Ms3e/npdx+oiBy+XGW5Dt1r9jCE0fZj/IdMZXv0iAIgf10
-	 7O/30lfyV5jAF0VGatb6hPJWu8UPhdcR56eQahR8ass5ycE+cYOrlBGe5sc+NvEola9cL
-	 FXwss1667/6kzrVqZUuIpzBn+V/8Xfr9gM/iLGKNe+HnODNyWsHohUhvWLaALB8stSDRn
-	 X09xcs9YDc1ntqOR9S6rTVJt3JHXiMNR7mnWsJVHL47iSKIwICede05CgJKWnNCWexGFg
-	 5S/xT8s11PVMfrdal132HqEG/VcIGifCkQCNFDoj/yleg7tV2vwu3vzaN8N9DIuB0JQ==
+	bh=qDM75YKTIdF0pi2YRQIzvneADCHCA5TZ2FNZ6kB6yiM=;
+	b=rA9YB7YsE2lOg0IAC0a/FNYiwG68ZBmZWcGtLjFmIliLGe+p+4D7Z5FT88cU3M9Gv+YA
+	 kbgCgcgpN2LzomvABb07/N+iezFc4CdKhnjlI9d0/2Xz3MeRwEUqhS8nDaKhL20Z1tCZt
+	 ePxbM1A5y78ap9K5Ji4vMwW4cQG0dMzMaGPf6bKwjkRKGNoZu3RTMlaijilcEbK83+BUr
+	 DuIfH1qFtrUcCuBHlpw5DOuAon4Oj1439IwsY+MP6w62J2IdZU/EThMnBs0vx5ZNlQBau
+	 HL30IGYElcYnRlW8U8stWKRApdHjgZURJTELPAtf/6P90q/WMl+EP93hJ+1TTtpzgSA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=iwEKgs12;
-	arc=none smtp.remote-ip=209.85.216.44
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="l/IeU2a/";
+	arc=none smtp.remote-ip=209.85.215.171
+Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A99F606A31E
-	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 03:38:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7A99F606A31E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B498606A31E
+	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 03:38:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2B498606A31E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=iwEKgs12
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-3b41e5a1719so2768058a91.3
-        for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 19:38:32 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=l/IeU2a/
+Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-cdac6d19ddaso2700457a12.2
+        for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 19:38:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795664312; x=1796269112; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1795664317; x=1796269117; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=Vz0bZtnMYlistXeve8bJV/h9wNRvP0lQWHmoiz3+37M=;
-        b=iwEKgs12bE7VNvIpHVMMGV3yWaZQ5qAfx/5QEgXOTw9ZS5vnSGHkN8N+LcSylYCO9y
-         soSuZpFhjoygGwi6y98eXE4+3R8GIJcX5KGVvMlZuhQ+m6/qkQxEKPXmXdWjHGmmXmm/
-         KdtLQnxRbM7bJsvozSbJ3euS48b9S/uzejo0WSdtn8WhiPtGDv5cCnF0Jo7XgXAs7Jlp
-         qTZ5RcnCWrIhnDSzC2tlwbQ9ZF0xgoS+2ueEF+9+xCNel6HqmA650HAnFQWikuhTJOxF
-         KBE/eB66VTPX0GyrV4e89aztc/EK1sNwjZ0uU2w3d84Tpx74WSvcNvPAJAUl98k3tfcw
-         15CQ==
+        bh=qDM75YKTIdF0pi2YRQIzvneADCHCA5TZ2FNZ6kB6yiM=;
+        b=l/IeU2a/m3hyyRdotnq+CJLcZJBMxpaFSeOXy/Uuv1AMRmDn+OTMYr63Id2gc1lqQy
+         ZQPW+Sor1cnduKoaLVK1ZLCBCkQGrcJU5mmplDzY4nj1wZnGZRvabwoZ0IjJsbkFZkOu
+         DLPJSivO2oUw+lcbJ3uD6GLaeJE4P3cxd/d8mmhmns37/W6A0RXl0B2L6p04WMqeQFXZ
+         mGIS5MigxgDJpENpgRfw/F4rASq6Zq3jRTqvYoEAUmdtUjBphlJIMi6Gu948MoW1Otwu
+         gqhgE7ehUYrkracEx1iv7V2a2cPS+8kE33hQGEKxZKBKqFXG/hTOfSUw8LaZLSEL0a7a
+         Tdlg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795664312; x=1796269112;
+        d=1e100.net; s=20260707; t=1795664317; x=1796269117;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Vz0bZtnMYlistXeve8bJV/h9wNRvP0lQWHmoiz3+37M=;
-        b=IBe8tehVS3OC1Kf79XZHDbnSghmpjX9/GgaVLlUBNwY70XF8HaQYNogrDFaTeQjb78
-         rLXcyueA/WfalBxoNwlnepm7oR3fMdGbnbfefarAgQ4+GT+XXs9Vt+OXFagLox2gjBgL
-         aIAlePewdgPQJbOyhTcBItfjCHtX3ZDdpH9CcKVVDGu3qiYKSqukUfo8iWqieQA219XI
-         xv5cig5WxbND4OAgJgw22GWRSfSqi0Y9HvR387oWadeFi+JkezCl6RRBz3c3yY6qbQQ2
-         PHnfb1Y3hXvmv6vRkFyQlbHUC2De9G2iqcm2NKhpzfV9AJRdGAMc4kbJqryON/GrzenZ
-         eJPQ==
-X-Gm-Message-State: APuU4Z/WQykCSiHGr1WRaB6WENflIhCk+jDnVD95WDX4frPHBelQlqtu
-	nLIg8bGFRFF5Vb8UCDp4WH5wzh2PiEPDXHEWz3CdWfn3UW/mFMqnw3D2XkqGZg==
-X-Gm-Gg: AZFdTZcoHOeKwPI/gGMlAocUqu6PwMLM0y+ivYSWLOkoJZBpUGc54CXXUC+Bpq/Zgca
-	4XCVM3ho4DzP399VPlBnsTHV8nTh0sBvZzcTw7un4QZGk1iYSWWXggHTfNvFxr0SMZf+a5Jr7qq
-	vpI0kmsEhu73LiMZ9VL2DIdxUTTBCj6JtPMekirzeyRYvsxhYtKDqPe5KKGr/XFbhwP5YC/meW3
-	k6RNu2TEL/iV5bnbamKFFB07luWvLoQpQRqwdktMDre/7ldS1wwAU9/WrPQKsrK7sGKSunQ7DvL
-	mq0pRUu/lvGrYAGKY+oX7r+vAU45OVx5s0aLmenxoaOrv2gOk+fPqezCV24asUn/wUBbc9/RDZf
-	lETt+jApH9zmQ8iN65tysTg7Q6n5NVYWWLfQw8re7s//AYC+Sqb4Kqbci9ERnHRvi95fiAiOnQj
-	eJVWyMS+sHVP7UyXUVcHIIt63DtFB4jtu8UpRNraaAcZwJOZDvZ29PHJZtCzRb4wLtLwBpTJfDf
-	+P4SC0HVv4AzhQdwJF2IxbPGj8BwvqQf3/pFcbgJ8g6DYnhCPizMJd4JZoYTn/UBRFpjajRWdI6
-	0q5a/QEHjTFcded4NWZfBPYwVWI5JDcpGp5cQEW6k21nr1f9Bmm/xsQrw2jXO05piayP+ykvHdi
-	oxlBGYwMR0xB87tEZR9dckzebuWBZXSkD823SzOn9quyW7fWnqoN95EGh8/PyPnDK50em7LKBKw
-	==
-X-Received: by 2002:a17:90b:164a:b0:3b5:a3:442f with SMTP id 98e67ed59e1d1-3b500a34654mr3027551a91.41.1795664311648;
-        Wed, 25 Nov 2026 19:38:31 -0800 (PST)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.246])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b405ec698dsm32917674a91.14.2026.11.25.19.38.31
+        bh=qDM75YKTIdF0pi2YRQIzvneADCHCA5TZ2FNZ6kB6yiM=;
+        b=Mo5RhJzh6oOo2dFp6PadtmwlYWRlcXFayUnFbCSINQ/ri/Klg60FI6IK/xUFrjW5zM
+         0d2KRHOHNZ8rvuNasptQ9zpHK10jtvdqVJtTI4oIwUbGvx/jipRFecschIuYVySilyGc
+         UT5hAZcEZwxOuocCMusD5EOZaSz1gKsqquHRojFCHvp2UEsIxxojZ97LuLQR0LIokcYl
+         AkvjoUmSuxldlJxfQNoVXN5ckXTEVsIVUk+k3G47yxRtC8v28qYkD2rpRbzPrBLRtYMR
+         OMMtSsxGh63SpbwdUs7A3cND7zbQsCZnGWfz8a9SfoylhX19koTwX0a2XxVlYzaeE0Cm
+         SNlA==
+X-Gm-Message-State: APuU4Z8/3vSwPz3xOYlyrClHX7yUdm7NsaE1YnSWgvBfooPgiatZgWma
+	FYS5xJKKC9hj+hU6uD3TAkiSnrkbvBmYv0oIfaYc27FgtikMA0ZOXwcK3CY1yg==
+X-Gm-Gg: AZFdTZcU8fnu4kJDeCXRnJYO0KvYYHdvw2jxWcengPPryNj7FrExDle2ESJuFcxuXT3
+	TiT0Fg4ZzXG2ANiC2eRSVWdiC7a48aLprM5nlsAMLWWZWRj3mh/oV6nvl503grn7PIAv9lDly1k
+	8++dSgPw2LrfC9PpRQJkhPWimerSenGjAajT0E9LOJEbPWcngdhnQpj/PsRpP606r/9CnN/XQ33
+	D8RR4h1+QmEupXDWnko5zydvUSvD2fhSi35XlWbrIFINwY8PPueydXbxg5ymFnDs+nBbsFna+vn
+	sDS7+5RCC2osLCC3cyQw5J3E/O/5b/F06OV3lmoA8aJLD58WnL3nJS2GvELvP/EPf1l6KMwvzrS
+	sDdBqPopCwS/IS9B953f2sRuD933jCIVcJ4MJr6f9QxWAdFHyA1rm0vH5KaHHZmVr1uwVHWNZ6b
+	3AwOrKQx+DYo57PCuQYUfD2NuIitsIj8mxaoW4b2xmHwKm3Ma0nH6Vzd7ZPVEkSWH+jAuqWpNv4
+	ZlsXuvLx3IqRBJBgF+Axx4bjUrLotAIr4t+qO6BBpBqFEDRBTLbwepzKeBrHWTag0nYGUh+j/z8
+	PpdrRoyo7e091uRLfYSrrNFnRRB9SrnMKuYEwrBwK9N/kgJx0tIM24U8p9yDRq4QQYvO9DXqQUP
+	h+al5a0fEXytaCiweLPK/b8YSfzxYhGagiCfupK5C31JViAaN8zacdVDHPFffHYZd5MEzKllRJ2
+	0=
+X-Received: by 2002:a17:90b:3d92:b0:3ac:83c1:2c0 with SMTP id 98e67ed59e1d1-3b41c9b2de6mr17153735a91.64.1795664317483;
+        Wed, 25 Nov 2026 19:38:37 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.254])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b41adcafe0sm32654989a91.16.2026.11.25.19.38.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Nov 2026 19:38:31 -0800 (PST)
+        Wed, 25 Nov 2026 19:38:37 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
@@ -86,9 +86,9 @@ Cc: daniel@iogearbox.net,
 	eddyz87@gmail.com,
 	memxor@gmail.com,
 	luis.gerhorst@fau.de
-Subject: [PATCH bpf v2 2/4] bpf: Treat NOT_INIT as a pointer in __is_pointer_value()
-Date: Thu, 26 Nov 2026 03:38:14 +0000
-Message-ID: <20261126033816.4124847-3-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf v2 3/4] bpf: Use get_unaligned() in bpf_map_direct_read()
+Date: Thu, 26 Nov 2026 03:38:15 +0000
+Message-ID: <20261126033816.4124847-4-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261126033816.4124847-1-alexei.starovoitov@gmail.com>
 References: <20261126033816.4124847-1-alexei.starovoitov@gmail.com>
@@ -105,32 +105,45 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-The blamed commit made __is_pointer_value() use is_pointer_regtype(),
-which is false for NOT_INIT. mark_reg_invalid() can set a spilled
-register to NOT_INIT, and check_stack_read_fixed_off() must not handle
-such a spill like a spilled scalar.
+const_reg_xfer() calls bpf_map_direct_read() before the main pass checks
+the alignment of the load. So the offset is not always a multiple of the
+size.
 
-Go back to the check for SCALAR_VALUE.
-
-Fixes: 1f737e46ca6a ("bpf: Remove artificial limitations on pointer types eligible for spilling")
+Fixes: f1606dd0ac49 ("bpf: Add bpf_compute_const_regs() and bpf_prune_dead_branches() passes")
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/verifier.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/bpf/verifier.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index c553e1533ace..5929478787d3 100644
+index 5929478787d3..36441ed9f0ea 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -3825,7 +3825,7 @@ static bool __is_pointer_value(bool allow_ptr_leaks,
- 	if (allow_ptr_leaks)
- 		return false;
- 
--	return is_pointer_regtype(reg->type);
-+	return reg->type != SCALAR_VALUE;
- }
- 
- static void assign_scalar_id_before_mov(struct bpf_verifier_env *env,
+@@ -32,6 +32,7 @@
+ #include <linux/cpumask.h>
+ #include <linux/cnum.h>
+ #include <linux/gcd.h>
++#include <linux/unaligned.h>
+ #include <linux/bpf_mem_alloc.h>
+ #include <net/xdp.h>
+ #include <linux/trace_events.h>
+@@ -6386,13 +6387,13 @@ int bpf_map_direct_read(struct bpf_map *map, int off, int size, u64 *val,
+ 		*val = is_ldsx ? (s64)*(s8 *)ptr : (u64)*(u8 *)ptr;
+ 		break;
+ 	case sizeof(u16):
+-		*val = is_ldsx ? (s64)*(s16 *)ptr : (u64)*(u16 *)ptr;
++		*val = is_ldsx ? (s64)get_unaligned((s16 *)ptr) : (u64)get_unaligned((u16 *)ptr);
+ 		break;
+ 	case sizeof(u32):
+-		*val = is_ldsx ? (s64)*(s32 *)ptr : (u64)*(u32 *)ptr;
++		*val = is_ldsx ? (s64)get_unaligned((s32 *)ptr) : (u64)get_unaligned((u32 *)ptr);
+ 		break;
+ 	case sizeof(u64):
+-		*val = *(u64 *)ptr;
++		*val = get_unaligned((u64 *)ptr);
+ 		break;
+ 	default:
+ 		return -EINVAL;
 -- 
 2.55.0
 
