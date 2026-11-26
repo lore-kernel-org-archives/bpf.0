@@ -1,112 +1,50 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.229.2
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=162.243.161.220
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795655555;
-	b=ahfLEONiMCiM/THSjCLsMV3DwK4iVfVk+8b9tMKsLKFjTwOp3IOOftl7IQ0D+SS+oRWC
-	 AG5XKPleWywLi9bbFXQUqZjJ0hJqtKEB7xA3EOFaQSocopLsdMa0D9FbhDQbYia6VcRXj
-	 U79XiPXOWmJt8n3AKG8H1JOagWegGr0wtBXClPefSMW9LaTelCgvACavlmHymbwAEJ4Uz
-	 1nticaOfrG3SssDt0nnK3sSiHWf2gw4PbTOu6Hvu9cVtovOngNbR3iMZqUfKI9SiaHTZA
-	 64Ml3DWT9Zsub3B4m7H46WxORpJsb8CpnLNHrESsaJYmklGSxHO1oKLaG3sh3FlKy7g==
+	t=1795655700;
+	b=aMNOqV+3aWXAuC5X2u+E+Z0r46S72CtbmFNg4iyj0lS8DdvZ6bNYn9fD+d8KhbsD9KEu
+	 n16sV4J3jqm3X+hT073UnXppkrmvw+QKwaJ/RyEraVBzLXes4rfQsqle10P9G8V0G0fDJ
+	 N3gEwizUP7UfflsWpkj6E0YUlRsigsob9dhlkUbJO39LsMgsWbrd/024hyjiqEqWUu48Q
+	 fx01b4KO9x6yqG/W1OrbNArc7bR2Fy63G2g52yn/Zu1lKU+1XMGpVbjdOul2g7Pe8a1yW
+	 tzJf/T5G/ki46sPUBR4IL4EPIlZ0ovs4qM6rhJL09MzhThf0RMi00Vx4sR8d/kAnfdg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795655555;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=wdN/GENABW5fwEr+WhhCPVo7gKVgeXJgjWEeJkwASG8=;
-	b=m5ynsgYh15+l1VtL3c4k9xo0AQvhtWuAuG3JQt4YLgFM752kGA2/CFKCMoKtpSGT/rYo
-	 KLIYcNPYHV8bZhbW9pQd/cLk2l0leof0ICyqATUNKPkcsGGBKdt1OkjnOzmDCcza75S4o
-	 u3P19XQo534YqcXTGmH8OqDxAOfduPhZDbJfD9WiYpj96E9TXKmCKLLCXFV5pvanQjqDw
-	 uJKJldGyvvnALNZyIe6zgtlvD4UEomvAjsj8di6y2lRTkmJwbEOY135wnXq1sBA9KPjYD
-	 InlfqrkO//i6TK1AdPYUDd1w90O5ZR0YfUUhhgKcMi4GcHuDI+kKhcnaA2gznouFDog==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795655700;
+	h=DMARC-Filter:Received:Received:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:MIME-Version:Content-Transfer-Encoding:X-CM-TRANSID:
+	 X-Coremail-Antispam:X-CM-SenderInfo;
+	bh=hoZxFtjWAwP2ShK8YBvvbvnMsPs7U30uesBNuuyMdNA=;
+	b=nQyqmfOhiI08vu0FWhlMeGoeB0FntiUJSDI4arCpW/B907kwlHGCZSGlbE8GLHfhFab7
+	 KbQWdJ42hj1RlahP+HSJf55YQviLk8xk1yJwGIhY8eF8m93msSGvKAlOjPYmx2cSdvPzC
+	 TN7TU1rA1tgS4BQENw4nsXpEgpEEXEg+7N/hKAnL7k5mYZO2WQX8SrmvRZFPSqV/4y/M9
+	 pWKJIgJSb83UQriU+fY3vnzOArk2bltpL4a1bEgtyRQMarhpRrzXCY5SRMVkPRPUJDITw
+	 RZieu1GUkNi+AV/IkClUehdvaQaSyzoLRmGnfL4thMuzhxZ/Ry7YmPPW6b6UXC39gXw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="N85n/KuQ";
-	arc=none smtp.remote-ip=74.125.229.2
-Received: from mail-dy2-f2.google.com (mail-dy2-f2.google.com [74.125.229.2])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A4D0606A6B4
-	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 01:12:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7A4D0606A6B4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=N85n/KuQ
-Received: by mail-dy2-f2.google.com with SMTP id 5a478bee46e88-327b1d5824fso5048904eec.1
-        for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 17:12:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795655555; x=1796260355; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=wdN/GENABW5fwEr+WhhCPVo7gKVgeXJgjWEeJkwASG8=;
-        b=N85n/KuQnifDRI2YkEYLejB87Z6k0qrWRhF4Qz7XgmIhZmvTmF807YZe1yov5bGwX6
-         oIuulHIcrWCbGQ6/eyb/Vzt/nwfyp3oUydZ7PicwMkebJ6fZ/NgjsT6o834ErBvgOLKw
-         c3uBQ5LXY6wCtzI7tt8holDAgEgJnb1Ym51nQJSjVvE6PLd05GkVF6HEANYtob3adR0y
-         j/pP3R2BXI3qaq20JTLFs/hnLz34BLgyS9FO+QrvK2HQxunyh2fL/lDkBfSjtXCCPfkf
-         PaIg5qX29ViD1s12M2im5pamIDXPqgfju4bagGTlb6ugkUUwojOOokOECcnxhnkOeN3h
-         4SZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795655555; x=1796260355;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=wdN/GENABW5fwEr+WhhCPVo7gKVgeXJgjWEeJkwASG8=;
-        b=P7Qbv0ThOCf1gj/ypOB3C1xOPrl/AX2Kvd6JC2Do95cvSgFxKmrfLDoYasQ4VUjjS6
-         B/ZGBOLhsZlk+DJWy+ELgG/IN8EMOKupH0niIP1SP1bJMWDgKxkFK9Te0KQeMmUDKu/S
-         pssAvR34GnQaBfpurP5HiYObREX4iDLG58qlb0QaPBxpmPlMGErsPsMycbufaoS9+0XX
-         TvZxNO/GKoBrZnSrIw7KaFa6zhqC+MSEH1Dwpi60ICqC8Ei+KR3WU4IMdffnejifSGy0
-         GzZYY4piP+f+2+cC92bWFMESHnhlyrE+j1CV+oVh2jONxFAkKffAXVa/qzh6QkNyZ1rJ
-         +1+Q==
-X-Forwarded-Encrypted: i=1; AL+hErEnTpYnOc+LxTzdnpIjvLzgQX5w8QeFTQkE0Qdv3QAcuk0W4IHsiIVxw/F9bUoOGGp30DY=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+7ocwLqv0berFk4L5yfnZdhCV1Bxkbq98OIRNRTJiiLtPPtt6D
-	CDniX5BU7z6jK2bOveZ7TnWiDyg/cXJj1Wzhus01CFve0wAwF/3tqtBgyx81vGuXUYCDyw==
-X-Gm-Gg: AZFdTZfR8LILA0/mCXcfAvpioxcAW+4xpS56FpYbsbsKR05Pd9iASbh2XvOTANcCeNv
-	otD4Qrf0ksFZ5zBPPcZNNXxWvxbeQskLhmDpFC61eq+8gHCv2dferBTOi4+NGLTRCDYHUWiFLSG
-	edCTQIBNdD6zyBMtKvC5no57qkjX3ga32o5+H+giJqCTfshGgT451+SP8tP/o105wAfHMWNTax+
-	mgvszgFblizwLYkyIIshG5pSBt9GbSooCiT2lMl0tToy6J5Q67FG5RJ5HwV7KIiGFjhoUGBY6VY
-	Y4v2BQ7IAqNRKnMlONz6arn48di4gUhhI+S57ogglrOfMv1uURPcbFtgaJaqPGh+XSei3VqsB+r
-	anKVmALBIzT38IWUlznxi9pT3l4zBXP7mJx2mGSrnyCHusGzBbxT0elUsKWGK3mBX51t0Q/ywxt
-	MlOCZCK/Pd2nvjKTvnDoNX4s0JgvQp55N084ixv8Ao76XYzJMQwqcY3tPHiwDZzWEJJUiK1p1j3
-	vM5NI94LeoHjoG2K7tIH+dnwTKFKRhHSqBnjfgqLWW11EW3vFzyeg5bVBGC0KUluYmnO8z8e1pn
-	toU7JLwnU6+WaT2aMv5ZBDi4fNP7+j9czESvoU3FRNtmy3BEzJY9VdFZ9yFAjJYT+aoulygV1RL
-	PnRsxJiAFv1TXvuS5tiACVXSxtq6nclNiUAodNvG2Tc+/vhyuirxT68k4S/3USw==
-X-Received: by 2002:a05:7300:fe4c:b0:386:9b1e:dcd2 with SMTP id 5a478bee46e88-3869b1edd57mr17277852eec.20.1795655554634;
-        Wed, 25 Nov 2026 17:12:34 -0800 (PST)
-Received: from localhost.localdomain ([76.33.234.50])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-385672c6f31sm55717751eec.15.2026.11.25.17.12.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Nov 2026 17:12:34 -0800 (PST)
-From: Hungyu Lin <dennylin0707@gmail.com>
-To: andrii@kernel.org,
-	bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
+	dmarc=none header.from=hust.edu.cn;
+	spf=pass smtp.mailfrom=hust.edu.cn;
+	arc=none smtp.remote-ip=162.243.161.220
+Received: from zg8tmtyylji0my4xnjeumjiw.icoremail.net (zg8tmtyylji0my4xnjeumjiw.icoremail.net [162.243.161.220])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22AC3606A31E
+	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 01:14:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 22AC3606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hust.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hust.edu.cn
+Received: from hust.edu.cn (unknown [172.16.0.52])
+	by app2 (Coremail) with UTF8SMTP id IQEQrMDmzRAPiAdreqIEAA--.11831S2;
+	Thu, 26 Nov 2026 09:14:55 +0800 (CST)
+Received: from pride-PowerEdge-R740.tailb307d0.ts.net (unknown [10.12.191.55])
+	by gateway (Coremail) with SMTP id _____wAXrRUKiAdrt3MhAA--.17286S2;
+	Thu, 26 Nov 2026 09:14:51 +0800 (CST)
+From: Quan Sun <m202672221@hust.edu.cn>
+To: bpf@vger.kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net
+Cc: andrii@kernel.org,
 	eddyz87@gmail.com,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	ihor.solodrai@linux.dev,
-	alan.maguire@oracle.com,
-	shuah@kernel.org,
-	alexis.lothore@bootlin.com,
-	luisflavieira@gmail.com,
-	ameryhung@gmail.com,
-	david.laight.linux@gmail.com,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	dennylin0707@gmail.com
-Subject: [PATCH bpf-next v4 3/3] selftests/bpf: Dump unaligned enums and a zeroed fs_context
-Date: Thu, 26 Nov 2026 01:12:22 +0000
-Message-ID: <20261126011222.92180-4-dennylin0707@gmail.com>
+	emxor@gmail.com,
+	Quan Sun <m202672221@hust.edu.cn>
+Subject: [PATCH] bpf: Require a bpf_spin_lock for bpf_list_head and rb_root
+Date: Thu, 26 Nov 2026 09:14:47 +0800
+Message-ID: <b887fe56f02f8578e41cf0009da7638fb6f8ec0c.1795627805.git.m202672221@hust.edu.cn>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20261126011222.92180-1-dennylin0707@gmail.com>
-References: <20261126011222.92180-1-dennylin0707@gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -117,53 +55,118 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:IQEQrMDmzRAPiAdreqIEAA--.11831S2
+Authentication-Results: app2; spf=neutral smtp.mail=m202672221@hust.ed
+	u.cn;
+X-Coremail-Antispam: 1UD129KBjvJXoWxZr47WF48WF4rXFWUury5CFg_yoWrJw1fpa
+	y5tr98Cr1kJrn3Zw4DWFnF9rWayws0g3W3GFWUW34YkF4Sgr9xXr1xGF45ZryYkrZ3trs7
+	AFn0ga9xAr1DAFDanT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUH0b7Iv0xC_Kw4lb4IE77IF4wAFc2x0x2IEx4CE42xK8VAvwI8I
+	cIk0rVWrJVCq3wA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjx
+	v20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK
+	6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1ln4kS14v26r
+	1Y6r17M2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI
+	12xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj64x0Y40En7xvr7AKxV
+	W8Jr0_Cr1UMcIj6x8ErcxFaVAv8VW8uFyUJr1UMcIj6xkF7I0En7xvr7AKxVW8Jr0_Cr1U
+	McvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY1x0262kKe7AKxVWUAVWUtw
+	CY02Avz4vE-syl42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VW8uFyUJr1UMxC2
+	0s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr
+	0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0E
+	wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
+	W8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAI
+	cVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IUYVMNUUUUUU==
+X-CM-SenderInfo: bpsqjlqxssjio6kx23oohg3hdfq/
 
-Dump the signed enum value from an unaligned address in the enum data
-test. Also dump a zeroed struct fs_context without emit_zeroes in the
-struct data test, which covers phase, an enum bitfield 3 bytes before
-the end of the struct.
+Commit 0de2046137f9 ("bpf: Implement verifier support for rqspinlock")
+relaxed the btf_parse_fields() check so that a bpf_list_head or
+bpf_rb_root is accepted with only a bpf_res_spin_lock in the containing
+type:
 
-Suggested-by: Alexei Starovoitov <ast@kernel.org>
-Signed-off-by: Hungyu Lin <dennylin0707@gmail.com>
+	if ((btf_record_has_field(rec, BPF_LIST_HEAD) ||
+-	     btf_record_has_field(rec, BPF_RB_ROOT)) && rec->spin_lock_off < 0) {
++	     btf_record_has_field(rec, BPF_RB_ROOT)) &&
++		 (rec->spin_lock_off < 0 && rec->res_spin_lock_off < 0)) {
+
+The release path was not updated to match.  bpf_obj_free_fields() still
+only knows struct bpf_spin_lock:
+
+	case BPF_RB_ROOT:
+		if (WARN_ON_ONCE(rec->spin_lock_off < 0))
+			continue;
+		bpf_rb_root_free(field, field_ptr, obj + rec->spin_lock_off);
+
+so the first map of this shape that is freed splats:
+
+  struct poc_graph {
+  	struct bpf_res_spin_lock lock;
+  	struct bpf_rb_root root __contains(poc_node, node);
+  };
+
+  WARNING: kernel/bpf/syscall.c:880 at bpf_obj_free_fields+0x321/0x350, CPU#3: kworker/u16:5/67
+  Workqueue: events_unbound bpf_map_free_deferred
+  RIP: 0010:bpf_obj_free_fields+0x321/0x350
+  RDX: ffffffffffffffea
+  Call stack:
+   array_map_free+0xa4/0x230
+   bpf_map_free_deferred+0x122/0x200
+   process_one_work+0x53e/0xdd0
+
+RDX is -22, i.e. rec->spin_lock_off == -EINVAL.  The WARN_ON_ONCE() is
+the only thing standing between the release path and
+
+	bpf_rb_root_free(field, field_ptr, obj + -22)
+
+which would run __bpf_spin_lock_irqsave() on a pointer before the start
+of the object and then treat whatever it finds there as a lock.  The
+guard holds today only because btf_parse_fields() stores a negative
+errno in spin_lock_off; it is a load-bearing coincidence, not an
+invariant the code states anywhere.
+
+Nothing in the tree relies on the relaxed form yet: no type in kernel/
+or tools/testing/selftests/bpf/ has both a bpf_res_spin_lock and a
+bpf_list_head/bpf_rb_root, and the commit being fixed came without a
+test for that combination.  Restore the original requirement and let a
+follow-up teach bpf_{list_head,rb_root}_free() about rqspinlock if
+res-only guarding is actually wanted.  The BPF_F_LOCK checks in
+syscall.c already use btf_record_has_field(rec, BPF_SPIN_LOCK) and are
+unaffected.
+
+With this patch the BTF of the map above is rejected, so a record with a
+res-only guarded container cannot be created at all:
+
+  libbpf: BTF loading error: -EINVAL
+
+This change was drafted with an AI coding assistant during a BPF
+subsystem audit. I reviewed the code, built the kernel and ran the
+reproducer before and after, and take responsibility for it.
+
+Fixes: 0de2046137f9 ("bpf: Implement verifier support for rqspinlock")
+Signed-off-by: Quan Sun <m202672221@hust.edu.cn>
 ---
- tools/testing/selftests/bpf/prog_tests/btf_dump.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/btf_dump.c b/tools/testing/selftests/bpf/prog_tests/btf_dump.c
-index b5c90f729339..d6fd9933ff25 100644
---- a/tools/testing/selftests/bpf/prog_tests/btf_dump.c
-+++ b/tools/testing/selftests/bpf/prog_tests/btf_dump.c
-@@ -945,7 +945,7 @@ static void test_btf_dump_enum_data(struct btf *btf, struct btf_dump *d,
- 				    char *str)
- {
- 	__u32 high = 0x80000000;
--	__s32 neg = -1;
-+	__s32 neg[2] = { -1, -1 };
+Reproduce: boot bpf-next master (8dfce13340ae, 7.4.0-rc3-g8dfce13340ae,
+CONFIG_KASAN=y) in qemu and only create then close an ARRAY map whose
+value type has a bpf_res_spin_lock and a bpf_rb_root with a
+__contains() tag.  No BPF program and no bpf_rbtree_add() is needed:
+bpf_map_free_deferred() hits the WARN on the plain free path.
+
+ kernel/bpf/btf.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index c4386a9a1ad..1008bc4c073 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -4302,8 +4302,7 @@ struct btf_record *btf_parse_fields(const struct btf *btf, const struct btf_type
  
- 	/* enum where enum value does (and does not) exist */
- 	TEST_BTF_DUMP_DATA_C(btf, d, "enum", str, enum bpf_cmd, BTF_F_COMPACT,
-@@ -994,6 +994,8 @@ static void test_btf_dump_enum_data(struct btf *btf, struct btf_dump *d,
- 				"(enum test_enum_u32)TEST_ENUM_HIGH"), "dump unsigned enum");
- 	ASSERT_OK(btf_dump_data(btf, d, "test_enum_s32", NULL, 0, &neg, 4, str,
- 				"(enum test_enum_s32)TEST_ENUM_NEG"), "dump signed enum");
-+	ASSERT_OK(btf_dump_data(btf, d, "test_enum_s32", NULL, 0, (void *)neg + 1, 4, str,
-+				"(enum test_enum_s32)TEST_ENUM_NEG"), "dump unaligned enum");
- 	btf_dump__free(d);
- }
- 
-@@ -1182,6 +1184,12 @@ static void test_btf_dump_struct_data(struct btf *btf, struct btf_dump *d,
- 		type_sz = btf__resolve_size(btf, type_id);
- 		str[0] = '\0';
- 
-+		/* 'phase' is an enum bitfield 3 bytes before the end */
-+		ret = btf_dump__dump_type_data(d, type_id, zero_data, type_sz, &opts);
-+		ASSERT_EQ(ret, type_sz,
-+			  "unexpected return value dumping zeroed fs_context");
-+
-+		str[0] = '\0';
- 		opts.emit_zeroes = true;
- 		ret = btf_dump__dump_type_data(d, type_id, zero_data, type_sz, &opts);
- 		ASSERT_EQ(ret, type_sz,
+ 	/* bpf_{list_head, rb_node} require bpf_spin_lock */
+ 	if ((btf_record_has_field(rec, BPF_LIST_HEAD) ||
+-	     btf_record_has_field(rec, BPF_RB_ROOT)) &&
+-		 (rec->spin_lock_off < 0 && rec->res_spin_lock_off < 0)) {
++	     btf_record_has_field(rec, BPF_RB_ROOT)) && rec->spin_lock_off < 0) {
+ 		ret = -EINVAL;
+ 		goto end;
+ 	}
 -- 
 2.43.0
 
