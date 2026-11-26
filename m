@@ -1,51 +1,51 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.114
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.50
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795708114;
-	b=RC23mv4Gvs3hifMtj7DErnb1ae+2UHXvvf7ItIr+ap+bObMQZG3878IALT0qc5timBJ6
-	 0TffEdsQIYaOFhuCka7OAFgZMpKyWfd1W2s/hW2D/8l3UWxbLAiFPgKtS5sipL5cYiMG7
-	 UrvRkfuRT6OuYhtjlebqsTj5qGubgvFs4rH5tw/rBehuXX1+Myt1RF1peRIicpXYK3RZr
-	 jd8Q9rhXlyf55IyWy1sfG4hxaIpeoVpfuQZyCgiqT8q1rVl7q9K3IAifgyBRdzC/IfsYc
-	 EwgoAoaY58F/i3nHVoskeSNDHE9ukpScE9sZaq4GnUIgUhIBYqF7RfoYgfGyuRD1yUg==
+	t=1795708118;
+	b=5ea/DeRxpCcRuyg6VxspdqiAgs3xJQJtYzhq4MMMqIO3EruUcE8yl4SsdZ7lGf2nVMwM
+	 oOCKkgmdwYQfhNcFBAwiH2UahXfRMKdXSe82+EdvVLqJ3rrUoBGaxXe6LS8e74d0sZwtD
+	 fV9Up7ItHokYzEWeSEmABAj24kpLZXDMlWO+EN0BSr2BEMCDmZ8M1wuGtEplKzLQl1fAZ
+	 xSxsPFwATyHNaDMqSkoBJOGh7Ks5vWGw84OjOn6d/LDzHiSvwClPDydMMv7JTyZ+Zw/9a
+	 C1MUdQwy7FykJBlCoCG375Ozc5T5RAdgL1vNdAlNxHIbz3kqAXv7gSqCurnjB0Ji2Rw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795708114;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795708118;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
 	 X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=ya6HJitKGWtXBRSHeBA7m0MB0rx0/E16IMlLvkO+2HA=;
-	b=I87F2tYgEgZTGvw5ODiCCQzWQoVz5vv45iP/PR+qK6MW80toWqkjKkkmV392676r78Nw
-	 DrrhZ/A95CUmgOLMNVru1HYE40e0Ma177OpdYOc1aiTWWgVmBVitAG50Kf1QcahtXyvHK
-	 3XI4vNXKdRaM3qZ8OchIKVKJfZeqlEw7Ddlj49exGTBxRKoGpavoTShVh3UD7Ynbol+XC
-	 aEnZwyKfmkbnOYCKqyYT6pn5AVh7LrK3dNCRy63qzftmgmhRFbKasVxX+QF/DJJWcXDpV
-	 mzJV+b6KRI3jz4g6RWmRbY6PIzvvqByJx8VfNDSfSaz8Mk3lKXwsK+uczsIbi+7J0GQ==
+	bh=C1dEdWeDxpgKQfDGosMbcKuIvKQ/TjH2X7ZuB6oiK2Y=;
+	b=pS2euk0WcsUEheq/AhMl27h197fEN4qP3CnvK9mnRd4cRwHHHoMmOPCNqcaaLkRZ29X0
+	 4C60gODBWJdto3NFai8TOGZ0meN+ic/qtKgQtDiL7GDJDorfZeLfuslREnBew9+wxcTVj
+	 VkSGGibx229O7zvxu1hZEILDEJmXSM3wjXCgsbxKyx9aHEVcMZHsOo+TpbY291jvP5Tqf
+	 aF+tuXbwZvpQq5r1m6+rNVgIWWVWcaoGYtdei0qertnZZz2So3pIr1twXjN+GYVN21kik
+	 nfSag2QBzpI+Tu5CQjJeXloNLkilAl/cSF2rFXLuwXdxTw8oA10Ch93zEG3kNYnfX2A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=FZ63DkyS;
-	arc=none smtp.remote-ip=95.215.58.114
-Received: from mta1.migadu.com (out-114.mta1.migadu.com [95.215.58.114])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=RQTFnD56;
+	arc=none smtp.remote-ip=91.218.175.50
+Received: from mta0.migadu.com (out-50.mta0.migadu.com [91.218.175.50])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05CD0606A31E
-	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 15:48:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 05CD0606A31E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8BBA606A323
+	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 15:48:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E8BBA606A323
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=FZ63DkyS
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=RQTFnD56
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=C9T2j2mlU2nW9y/Vvy31YfpIlidt9As5/mZQWXfV67Q=;
+DKIM-Signature: a=rsa-sha256; bh=+ugi0ffknDsDv/WElNjAOvTzE4ppDV9pVvzwvWa3Ih0=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1795708111; v=1; x=1796312911;
- b=FZ63DkySL86VxF2S/hyj8LC4RXg2BlV056FGHwH6lMfapR28WJZ5UA1YZ3RwGc6mAuEKa7hq
- 4730InlyJN85TDW5Y1RJSRjIfUrgGtJgb7ARpuCX+hUHvrrHeCrDa4uKwpCj+4fzZxGE9tHoIyU
- j0TKwMRMJlldwrWULRQR+Gc8=
+ t=1795708115; v=1; x=1796312915;
+ b=RQTFnD56vgKXG1lsOHneagPm+AI7VtL2fuA8SPXgSMXCsatoh9vX8hgD3qjVxqJLdOvEAweQ
+ xmUqCIaQj5q1FOujOhumDKghvGBcHvMCUnLdtyI6JucCNiImLXjmWQVflkpGbGi0KEcu3MQC9r8
+ xMS8a/VX9LsoGLV1x4fMQYTA=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 889de62353043a88;
-	Thu, 26 Nov 2026 15:48:30 +0000
-X-Mizu-Trace-ID: 889de62353043a88
+Received: by smtp.migadu.com with ESMTPS id c0b53319757a8e46;
+	Thu, 26 Nov 2026 15:48:35 +0000
+X-Mizu-Trace-ID: c0b53319757a8e46
 X-Migadu-Flow: FLOW_OUT
 From: Leon Hwang <leon.hwang@linux.dev>
 To: stable@vger.kernel.org,
@@ -57,13 +57,11 @@ Cc: Guillaume Laporte <glapt.pro@outlook.com>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Tiezhu Yang <yangtiezhu@loongson.cn>,
-	KaFai Wan <kafai.wan@linux.dev>,
 	Leon Hwang <leon.hwang@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH 6.18.y 2/4] bpf: Reject programs with inlined helpers if JIT is not available
-Date: Thu, 26 Nov 2026 15:47:11 +0000
-Message-ID: <20261126154714.169698-3-leon.hwang@linux.dev>
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Subject: [PATCH 6.18.y 3/4] bpf: Disallow interpreter fallback for arena-related insns
+Date: Thu, 26 Nov 2026 15:47:12 +0000
+Message-ID: <20261126154714.169698-4-leon.hwang@linux.dev>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261126154714.169698-1-leon.hwang@linux.dev>
 References: <20261126154714.169698-1-leon.hwang@linux.dev>
@@ -78,61 +76,44 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
+[ Upstream commit 34746b5a84ec37c0ea2bf6808c65c5ed8790eb51 ]
 
-[ Upstream commit f1c27922576edccb99d0257827d09bd05c0304a6 ]
+Since the interpreter does not support the arena-related insns,
+interpreter fallback should not be allowed for these insns in
+core.c::__bpf_prog_select_runtime().
 
-When an architecture (such as LoongArch, ARM64, and RISC-V) implements
-bpf_jit_inlines_helper_call(), the verifier skips rewriting the helper
-call offset (insn->imm) in bpf_do_misc_fixups(). This is because the
-helper is expected to be inlined by the JIT compiler later. Therefore,
-insn->imm remains as the raw helper enum ID.
+Currently, when the interpreter executes the arena ST/LDX/STX insns,
+it would hit the BUG_ON() in ___bpf_prog_run() at run time.
 
-However, if JIT is disabled at runtime (net.core.bpf_jit_enable=0) or
-if JIT compilation fails dynamically (e.g., due to OOM), the program
-falls back to the BPF interpreter.
+[    2.579196] BPF interpreter: unknown opcode a2 (imm: 0x0)
+[    2.579998] ------------[ cut here ]------------
+[    2.580652] kernel BUG at kernel/bpf/core.c:2349!
+[    2.581314] Oops: invalid opcode: 0000 [#1] SMP PTI
 
-When the interpreter executes (__bpf_call_base + insn->imm) with the
-unpatched raw ID, it jumps into an invalid address space, triggering
-an instruction alignment fault or a kernel panic.
+Set jit_required as true when arena map is used in the prog to disallow
+interpreter fallback for arena-related insns.
 
-Although these helpers have valid C implementations in the kernel, the
-omission of offset rewriting makes runtime interpreter fallback fatal.
-
-Fix this by setting 'prog->jit_required = 1' when helper call rewriting
-is skipped for JIT inlining. This ensures that such programs are safely
-rejected if JIT is not available, preventing the runtime kernel panic.
-
-Fixes: 2ddec2c80b44 ("riscv, bpf: inline bpf_get_smp_processor_id()")
-Suggested-by: Alexei Starovoitov <ast@kernel.org>
-Suggested-by: KaFai Wan <kafai.wan@linux.dev>
-Acked-by: Leon Hwang <leon.hwang@linux.dev>
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
-[edit]
-  Apply the bpf_do_misc_fixups() change from kernel/bpf/fixups.c to
-  do_misc_fixups() in kernel/bpf/verifier.c.
+Fixes: 6082b6c328b5 ("bpf: Recognize addr_space_cast instruction in the verifier.")
+Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+Link: https://lore.kernel.org/bpf/20260715141122.15783-2-leon.hwang@linux.dev
+Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
 ---
- kernel/bpf/verifier.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ kernel/bpf/verifier.c | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index e91ee66c8e31..2749dee1643d 100644
+index 2749dee1643d..0ed5d9e0db39 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -23022,8 +23022,10 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
+@@ -21106,6 +21106,7 @@ static int check_map_prog_compatibility(struct bpf_verifier_env *env,
+ 			return -EOPNOTSUPP;
  		}
- 
- 		/* Skip inlining the helper call if the JIT does it. */
--		if (bpf_jit_inlines_helper_call(insn->imm))
-+		if (bpf_jit_inlines_helper_call(insn->imm)) {
-+			prog->jit_required = 1;
- 			goto next_insn;
-+		}
- 
- 		if (insn->imm == BPF_FUNC_get_route_realm)
- 			prog->dst_needed = 1;
+ 		env->prog->aux->arena = (void *)map;
++		env->prog->jit_required = true;
+ 		if (!bpf_arena_get_user_vm_start(env->prog->aux->arena)) {
+ 			verbose(env, "arena's user address must be set via map_extra or mmap()\n");
+ 			return -EINVAL;
 -- 
 2.55.0
 
