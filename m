@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.49
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.169
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795662245;
-	b=DNhwSnJrEplMBkizEGwsBtRwAS334gw0sPFdydV/NY5pXBa6qsQju7Jfdn1F0tk3LmbJ
-	 m8MUa/gMcaNSIaAscqjumg0x2w+ysCFFPVv/Vk1J879WbZ97fZQjhKdHJQ/4HUD5PKqo/
-	 YFa28frc7i34reEUozr71yAGorOxg/Di0MUI9f0IZgz0687MZ6Rm/3xePrFXGmQ63O7/5
-	 cv8POtNDuiMj/53hB3IzkZ6mFaSkBx+CeYa/kroBCX6wsSwUOW3iwjhI2Q4vgthr0KktD
-	 vdAVC4CWN3sfsagTUvIqSpuQNSVJagwgmTIROeD7ncYAVidmpVKFFlosEsNwc9DJS4w==
+	t=1795662251;
+	b=4r6DsVC2rklf75jeAAqoHAW2I3lE1atAKWiu8DhjmXW0dwc9uooxE4zte2aLnuJ3phop
+	 bofo9U9Rd91ZcfMquhgS7yVMNJ9iY6wbiCJ2Z2JbRGLSm9JTZ9kYObgmkRfES614pdVo4
+	 Ep6Ww5L1nIf2AAmgjC9nXN3spkvFVvwrRxXESDhJRmmryDXdFuOuCD/ux72wScOdaLIHO
+	 ylAyYEWCCtmA7UlhhGBaFLxgzT0614Q5d0eX4v2jy0mOep51dKZV6iijGvHbm1BrF7Njx
+	 LlyWVerP1fnkMo7kTDu1oChyceLmqIS8k6Pc/7CR0SPzrgXdj36ImLvM/WC6G5lcgeg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795662245;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795662251;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=ddb0OSRQRnS1FFdnfeKAnfjkoKDhcY1dPdlnR5d0YrE=;
-	b=qUy5SCeu7gUDKpGUQ4irMiHJyfN6P8AaYt13zFOMzticDw0ZQ1lzuFbbJrm79kvMqu12
-	 1z5UXzlmSuZh//FejzmsiN79SVgWVEmvPAVUK/gD+4cKUOQeBy4TAe6Mq7JOL6z7beEZy
-	 uQPzqVUtLk2L/jJQ49aXjQWQhIhTzk3Fo4FLpgWPPRdfji0Si3MWb19yOGcC0Fnx4df0G
-	 iAVP1poJTZhacsbDldLAVe0sk6fhCRhSe1KmuiyP+i3RqhSvmdsa82smsMS+Etr+md3/Q
-	 7OCD2rRcmp4oRECDhBwnUg8wwZTKPklkZceV8x3vDNSMe4PbhBjYdEYzydEJqmFcJNg==
+	bh=eavhGyMs2OlRyaep6DoY3KL4/4c96J2IXqmi41o05Qg=;
+	b=gWH2kB8ISmQVVcB00QKbwLKS1FaDdvO0xmC8FzowQL0BlkIqS8xnTCJLsb4XTxoikpT9
+	 /yNADWah2oHmtaPzLQn+7KoRuUzyYBuz4zr+HZNzCDh8HokjXZisE6enJUVxRFnimJLFE
+	 kPbbLzs0hbq4K/6TQYB3d2Tmfrws0nzgUpmhlBnjMUB+i5gmI5hUDgGHbaNZ6d9Of5okK
+	 vR6+DlFjnzhNt+YF71XzsT5NRXOqBw23VwXyOhYL89dRIA9XOg0MEDMJ5OdX5NQvZKtJi
+	 wbXfML5goqDBzmwO6T+epJPhSRGORcTf9Ucg63zBS4FrF/BA1OjhlreRnqKZDzSoffA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="YCD/8fbl";
-	arc=none smtp.remote-ip=209.85.216.49
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="V4xUN9//";
+	arc=none smtp.remote-ip=209.85.210.169
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 025CE606A31E
-	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 03:04:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 025CE606A31E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0C57606A31E
+	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 03:04:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E0C57606A31E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=YCD/8fbl
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-3ac78f4c10bso3125403a91.1
-        for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 19:04:04 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=V4xUN9//
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-8b6a88e4341so2860226b3a.1
+        for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 19:04:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795662244; x=1796267044; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1795662250; x=1796267050; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=ddb0OSRQRnS1FFdnfeKAnfjkoKDhcY1dPdlnR5d0YrE=;
-        b=YCD/8fblarfEs9y/3p5Q6FX/a3VLRaQ1xcrboOC7/m84oPqsfjEfuytXnJwRfzH8Ga
-         4FHEtkOw07ij2NZXbRIkMQaP33jyIuLnnSGbCF0G5KJck5iRsO8qg4a4y0gX3j2t4+NM
-         yMDFI/hCOkO+PToW82t+NCSGHK1Ei6u7Pri3e9D0iQmlKl9BLHq4smNeTsFZR3oi5v33
-         Mi8vCcWLnxzdS8MVquR98LNBmOvJYVhWQ+wdWnqvnCw4HPaf6jn0pmO7s+hnVke72ApH
-         jytdH3kq5NTN9yARf8xzCSrmNHnBvXuNVbuIIz7bFT9zNk1j7b3r32uj3vbT4cGxXJ/1
-         qCeQ==
+        bh=eavhGyMs2OlRyaep6DoY3KL4/4c96J2IXqmi41o05Qg=;
+        b=V4xUN9//v/u37bYX9jaTKYHPR+gEDq/KaOIj2ScT1tlNjHY863kzdALUvg07Nq0Z40
+         T0tcq7d/YeTfztT96ipRHwm/OyZHYm/fXuSu0iDSLtOoGr6Eapn5kfX8bj5RVo50zpCG
+         32/zQi+eE8fU6MXamnmxC5naH6rDFPzikw0xb6SYQV3mkSLES/VcizpW/VcPiYxUWkMe
+         k57QzpgYzdaSLjcTsHSyZ2qQT5qyHVox4XJ0d3omUK04w/SCMEqv6XbgPBjt4yly+M2u
+         xGaFL80zunNeJuIcgw6SCevSUz/GiTKkED3/C4QxIuOuPwDDiTL8mI2VaB23/1no3C0F
+         YFGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795662244; x=1796267044;
+        d=1e100.net; s=20260707; t=1795662250; x=1796267050;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=ddb0OSRQRnS1FFdnfeKAnfjkoKDhcY1dPdlnR5d0YrE=;
-        b=plVZ04vhNynn1VsmZp9SKqOgf630lsyeU9e3ZEg6M1TMdWGGZJvu1/bfV5Q+MuBTF2
-         jAM7sZJqpFZCPQEx2B4ltwYkVLAdotG6EaKFKUsO3F//3bgvnRNAERS2feKzhkA1enJu
-         6EMZZxGp28cVzpKJ2doTlmlXhU9TW2C0Vq+Yv+l/Zl9b2R9XCpnmmU6A/2wZg4WgNy2U
-         mvpg7h2rPMxb9VFwRO9TMg9edeEuphkfrYISheWW1pKR3Y3eh5nGap0mH1a2yQawaNgf
-         c6oZ+PElufzKmXghA7jg0j6Z3GvobfKUrM/gNRtv0rRHXFYfDUHsi3kgD5DoFJyvtNTN
-         NreA==
-X-Gm-Message-State: APuU4Z94o5ebTCfrRtoxgH9xKBPh6ZTMODhTl+NDvZvZGrJg+Ek/pS1j
-	zTCRTUuv994qTHshwygiTv8lJhj82GXf5JXAmcvd+xqfF/dIBFXnbDbyLc1Qxg==
-X-Gm-Gg: AZFdTZd6iyj5BuuX2o7o/TuEcX2cyGUPjb+KsrMsy5txiHxJgwAgEHpeKfhIwq/QjO4
-	H91kBY2yLPCEqHtrZGAlHj6VjhhZp6jcoWU7jbKYujut66r4DY7JTJQKEuIgWcd1oyXpf3HHsHc
-	VLebgtnU5kHOvq4denSd94aZOzq73d6j3e9T/miI1K6ZCGL988FvoPYOr5n/ZALuWekRZpCh87t
-	B6J2dGQuMg0mrUCcqQ1qAVlHIaJ9ZABInEK3pRaONj+bUyZYCF1E+OE9HkY5ogdX4wH+CjOaGTx
-	JJy1Zn8UUGsJWFKWiGTZ59oxxV7LaoOGc+v7HAy5b5AzCoGwFj8qmvNk8JOy3n3AlXESkgEMjar
-	6H2MrmOYMACXky3EzUuUcXj/GY9CJOSGW59VnuYV+qpcJ4GzrBkNB1gN27fCuHfPUCQ5Vhf563B
-	fT4Nak6ukAcLxi/9NdIXVS5lCOPpr2Q5+ciY/tMrumGfczDRWzdHbi5WbRyTxVtZEJxlIwHoySs
-	PDiUnjsfZZb5z2B0yKikOM9GniRtPOPMq8m2v1QAIlxFswFkTpXi7vglEPbKnUZH+GX32bQO+rQ
-	/ZC0THbceZjcJ7Aj6a97jXQEzxJHl0YC4VUnr6rg0MqDbpvDJg5klaP5GJ+PKJKCBmnv/lzVg5F
-	sTo9+f9q5Bs8munMNdeRXzJhtR4PexlCZMmnUi84tk8H7hOnwT60IDbupQhzUl7skRQ1rNb//aQ
-	==
-X-Received: by 2002:a17:90b:4a4f:b0:3ac:8af9:4a6a with SMTP id 98e67ed59e1d1-3b41c93c3b7mr19771875a91.42.1795662244085;
-        Wed, 25 Nov 2026 19:04:04 -0800 (PST)
+        bh=eavhGyMs2OlRyaep6DoY3KL4/4c96J2IXqmi41o05Qg=;
+        b=jQ1MYyAMU9Yr7jCNL+EDa1//NapoAhAbqZzAQAqoBlT6SOG52vNfqnIxqPfuDsvN90
+         aNIJys0YYvxM/HmZIKen+B+hrIvB0Bhrk3ZAViYqqMzKdBige8nhPhT/BrzBK9ZMAPtz
+         jCMF/zo5nqcHl6P4Ygd4XJ4wZ6h5JFRisrIJM/J2ZxJPnzBNa6FQzqHGDf1Ao2H0KqQ1
+         HncywWCGv9Oqpseyc++T/VH/3kG5cqBsLs9Fgo61UVkkNxHz2PXjz5jZ3kVlfFJHHz45
+         JKq0TmX3hdvYouaB8jmWk+rX9zDXVxwZEj21NvqNsY5MtNAYwD56eAs6bv8yBa3nVk6s
+         wqtA==
+X-Gm-Message-State: APuU4Z85lPCWo+NHsSmpXpnVUe28eLLmEHjevTMQwWsRQzbDx+SCPWDH
+	0QwkxWE7VAPJUmgZAaZedQEhMecjcFnRq1qn2ZgYWMtKl18Wpo48ML7L4UOH9A==
+X-Gm-Gg: AZFdTZc1q6rFMuuToYIfz2LV+D92m641EaP9AlbxT79JFF/l25l9hRVoXC6Do/9vV5n
+	2SnPv89xmF14FHQB1+MR78b9PDEYSinTeRIPi4efTE+v9NddV8ddJUBjD6z1cuuZe3WRRTZbsFr
+	q3rpjeT5AaMVf589hPOvGjeN27k2ehAlyp1JTQggSN6IcTUtYKkVvo+OtB2OWaPlgtXHLadjN+G
+	jfYrmTt0/ubzcypeO6EfttGjK2eFKyL3c5S9DFxCfs+9w/Yepke2fh+T53h3omoN1evpKeq4IhV
+	Gz573XMzA2p7hVWhJmFt0uPa6zbuYns+p9zve2VGl2Q+6LqmfLVPAhEu8K6L2OjsmV9XWXzs1Iu
+	UjAqYJvNyN9UAF5AiBtyeC+Turb3Cp9uqc79wFcAQzhyl4XzRG7orJZTx6OD7jNAiIIx1agwb7y
+	vTa5Jd19Okj9lBME/N1FCT932wIVMnlqtIok/6v9pKJ7rtW7ALYh7MplEQV50/KdGvanXPca+OD
+	AUQHm60w2mXusQ+s4GUapsHxUa7Ofp2VfQGANBcqDe/9Xh6dYOZHiE3HIRHY3PEMJP+vF/n8jkQ
+	MkTKR8XHo6jDAid0dRn996bagVdqQpe/q+5IAPD6y9luCBNFRYyaqRkN4ypBWXTQm3GxVQxzmPp
+	kCWav67bCWG1XkXnW5RiRQ9yBCByugqhUmqPljgLcfBjsyFURyS6jinxptKbRlDFBqgguc/SIqt
+	s=
+X-Received: by 2002:a05:6a00:181d:b0:8a0:23d4:f4e7 with SMTP id d2e1a72fcca58-8c87ce33af7mr18255407b3a.38.1795662250037;
+        Wed, 25 Nov 2026 19:04:10 -0800 (PST)
 Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.244])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b41ad0b52dsm32680381a91.5.2026.11.25.19.04.03
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8c87077babfsm10153324b3a.5.2026.11.25.19.04.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Nov 2026 19:04:03 -0800 (PST)
+        Wed, 25 Nov 2026 19:04:09 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next 3/4] bpf: Fix reference leaks in struct_ops programs
-Date: Thu, 26 Nov 2026 03:03:41 +0000
-Message-ID: <20261126030342.4013902-4-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 4/4] bpf: Allow only fentry on a subprog that can throw
+Date: Thu, 26 Nov 2026 03:03:42 +0000
+Message-ID: <20261126030342.4013902-5-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261126030342.4013902-1-alexei.starovoitov@gmail.com>
 References: <20261126030342.4013902-1-alexei.starovoitov@gmail.com>
@@ -104,80 +104,145 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-check_reference_leak() lets a struct_ops program keep a reference in r0.
-It leaves the rest to check_return_code(), which looks at r0 only for an
-operator that returns a pointer. The reference is lost at the exit of
-other operators, of void global functions and of async callbacks, and at
-a tail call. The target of a tail call in a subprog returns its
-reference to the caller of the subprog, which takes r0 for a scalar.
+bpf_throw() does not return, and neither do the subprogs between it and
+the main program. With fexit or fsession on such a subprog the walk of
+the stack ends at the trampoline.
 
-Skip the reference only at an exit that returns to the caller of an
-operator that returns a pointer. Reject a tail call in a subprog of such
-an operator.
+Allow only fentry, as for subprogs that unwind. might_throw of the CFG
+does not see callx and counts dead code, take what the main pass found.
+Two selftests expect the refusal now.
 
-Fixes: 8d9f547f74c7 ("bpf: Allow struct_ops prog to return referenced kptr")
+Fixes: f18b03fabaa9 ("bpf: Implement BPF exceptions")
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/verifier.c | 29 ++++++++++++++++++++++++++---
- 1 file changed, 26 insertions(+), 3 deletions(-)
+ include/linux/bpf.h                                 |  1 +
+ include/linux/bpf_verifier.h                        |  1 +
+ kernel/bpf/fixups.c                                 |  1 +
+ kernel/bpf/verifier.c                               | 13 ++++++++++++-
+ tools/testing/selftests/bpf/prog_tests/exceptions.c | 12 ++++++------
+ 5 files changed, 21 insertions(+), 7 deletions(-)
 
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 4e9a4d15af0e..92c314065d58 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1937,6 +1937,7 @@ struct bpf_prog_aux {
+ 	bool changes_pkt_data;
+ 	bool has_prologue;
+ 	bool might_sleep;
++	bool might_throw;
+ 	bool can_unwind;
+ 	/* frames of recursive subprogs can be on the stack when it is called */
+ 	bool in_recursion;
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index 151b5781606d..dc8796ee8cd5 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -1181,6 +1181,7 @@ struct bpf_subprog_info {
+ 	s16 fastcall_stack_off;
+ 	bool has_tail_call: 1;
+ 	bool might_throw: 1;
++	bool throws: 1; /* as the main pass found it, callx included */
+ 	bool can_unwind: 1; /* has unwind_exit */
+ 	bool recursive: 1; /* on a cycle of the call graph */
+ 	bool in_recursion: 1; /* recursive, or a recursive subprog gets to it */
+diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+index aa590efc32d3..7af8cb886f7d 100644
+--- a/kernel/bpf/fixups.c
++++ b/kernel/bpf/fixups.c
+@@ -1772,6 +1772,7 @@ static int jit_subprogs(struct bpf_verifier_env *env)
+ 		func[i]->aux->num_exentries = num_exentries;
+ 		func[i]->aux->tail_call_reachable = env->subprog_info[i].tail_call_reachable;
+ 		func[i]->aux->exception_cb = env->subprog_info[i].is_exception_cb;
++		func[i]->aux->might_throw = env->subprog_info[i].throws;
+ 		func[i]->aux->changes_pkt_data = env->subprog_info[i].changes_pkt_data;
+ 		func[i]->aux->might_sleep = env->subprog_info[i].might_sleep;
+ 		func[i]->aux->can_unwind = env->subprog_info[i].can_unwind;
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index f41f0998f9cd..b5c812bea918 100644
+index b5c812bea918..967cedec6fad 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -12708,10 +12708,26 @@ record_func_key(struct bpf_verifier_env *env, struct bpf_call_arg_meta *meta,
+@@ -5477,6 +5477,7 @@ enum {
+ 	CG_ARENA_SP	= BIT(5), /* subprogs that get to r12 */
+ 	CG_CB		= BIT(6),
+ 	CG_GLOBAL	= BIT(7),
++	CG_THROW	= BIT(8), /* subprogs that get to bpf_throw() */
+ };
+ 
+ #define for_each_marked_subprog(cg, s, mark) \
+@@ -5520,10 +5521,13 @@ static int build_call_graph(struct bpf_verifier_env *env, struct bpf_call_graph
+ 				(si[s].is_async_cb ? CG_IN_ASYNC_CB : 0) |
+ 				(bpf_call_graph_recursive(cg, s) ? CG_IN_RECURSION : 0) |
+ 				(si[s].has_tail_call ? CG_TAIL_CALL : 0) |
++				(si[s].throws ? CG_THROW : 0) |
+ 				(si[s].uses_arena_sp ? CG_ARENA_SP : 0) |
+ 				(bpf_subprog_is_global(env, s) ? CG_GLOBAL : 0);
+ 	bpf_call_graph_mark_callees(cg, CG_IN_CB | CG_IN_ASYNC_CB | CG_IN_RECURSION);
+-	bpf_call_graph_mark_callers(cg, CG_TAIL_CALL, 0);
++	bpf_call_graph_mark_callers(cg, CG_TAIL_CALL | CG_THROW, 0);
++	for_each_marked_subprog(cg, s, CG_THROW)
++		si[s].throws = true;
  	return 0;
  }
  
-+static bool st_ops_returns_ptr(const struct bpf_prog *prog)
-+{
-+	const struct bpf_prog_aux *aux = prog->aux;
-+
-+	return prog->type == BPF_PROG_TYPE_STRUCT_OPS &&
-+	       btf_type_resolve_ptr(aux->attach_btf, aux->attach_func_proto->type, NULL);
-+}
-+
-+/* What leaves frame 0 gets to the caller of the program */
-+static bool returns_to_kernel(const struct bpf_verifier_state *state)
-+{
-+	const struct bpf_func_state *frame = state->frame[0];
-+
-+	return !frame->in_async_callback_fn &&
-+	       (!state->callers_unknown || frame->in_exception_callback_fn);
-+}
-+
- static int check_reference_leak(struct bpf_verifier_env *env, bool exception_exit)
- {
- 	struct bpf_verifier_state *state = env->cur_state;
--	enum bpf_prog_type type = resolve_prog_type(env->prog);
- 	struct bpf_reg_state *reg = reg_state(env, BPF_REG_0);
- 	bool refs_lingering = false;
- 	int i;
-@@ -12725,8 +12741,9 @@ static int check_reference_leak(struct bpf_verifier_env *env, bool exception_exi
- 		/* Allow struct_ops programs to return a referenced kptr back to
- 		 * kernel. Type checks are performed later in check_return_code.
- 		 */
--		if (type == BPF_PROG_TYPE_STRUCT_OPS && !exception_exit &&
--		    reg->id == state->refs[i].id)
-+		if (!exception_exit && reg->id == state->refs[i].id &&
-+		    env->prog->insnsi[env->insn_idx].code == (BPF_JMP | BPF_EXIT) &&
-+		    st_ops_returns_ptr(env->prog) && returns_to_kernel(state))
- 			continue;
- 		verbose(env, "Unreleased reference id=%d alloc_insn=%d\n",
- 			state->refs[i].id, state->refs[i].insn_idx);
-@@ -13465,6 +13482,12 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
- 			verbose(env, "tail calls are not allowed in fmod_ret programs with restricted return values\n");
+@@ -16068,6 +16072,7 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 			return -ENOTSUPP;
+ 		}
+ 		env->seen_exception = true;
++		env->subprog_info[cur_func(env)->subprogno].throws = true;
+ 
+ 		/* In the case of the default callback, the cookie value passed
+ 		 * to bpf_throw becomes the return value of the program.
+@@ -24410,6 +24415,12 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
+ 			bpf_log(log, "Only fentry can attach to %s, which can unwind\n", tname);
  			return -EINVAL;
  		}
-+		/* It can return a reference. The caller of a subprog takes r0 for a scalar. */
-+		if (st_ops_returns_ptr(env->prog) &&
-+		    (env->cur_state->curframe || !returns_to_kernel(env->cur_state))) {
-+			verbose(env, "tail_call in a subprog would lead to reference leak\n");
++		/* bpf_throw() would have to skip the trampoline that called the target */
++		if (subprog && aux->func && aux->func[subprog]->aux->might_throw &&
++		    !prog_extension && prog->expected_attach_type != BPF_TRACE_FENTRY) {
++			bpf_log(log, "Only fentry can attach to %s, which can throw\n", tname);
 +			return -EINVAL;
 +		}
- 		if (env->cur_state->curframe) {
- 			struct bpf_verifier_state *branch;
+ 		/* What it takes of the stack is not counted, see bpf_insert_recursion_checks() */
+ 		if (aux->func && aux->func[subprog]->aux->in_recursion) {
+ 			bpf_log(log, "Cannot attach to %s, which is called in a recursion\n", tname);
+diff --git a/tools/testing/selftests/bpf/prog_tests/exceptions.c b/tools/testing/selftests/bpf/prog_tests/exceptions.c
+index 1bd15c4c125b..fc36cd226fb1 100644
+--- a/tools/testing/selftests/bpf/prog_tests/exceptions.c
++++ b/tools/testing/selftests/bpf/prog_tests/exceptions.c
+@@ -266,26 +266,26 @@ static void test_exceptions_success(void)
+ 		}), "", 0);
  
+ 	if (test__start_subtest("non-throwing fexit -> throwing subprog"))
+-		/* non-throwing fexit -> throwing subprog : OK */
+-		RUN_EXT(0, false, ({
++		/* non-throwing fexit -> throwing subprog : BAD */
++		RUN_EXT(-EINVAL, true, ({
+ 			prog = eskel->progs.pfexit;
+ 			bpf_program__set_autoload(prog, true);
+ 			if (!ASSERT_OK(bpf_program__set_attach_target(prog,
+ 				       bpf_program__fd(skel->progs.exception_throw_subprog),
+ 				       "throwing_subprog"), "set_attach_target"))
+ 				goto done;
+-		}), "", 0);
++		}), "Only fentry can attach to throwing_subprog, which can throw", 0);
+ 
+ 	if (test__start_subtest("throwing fexit -> throwing subprog"))
+-		/* throwing fexit -> throwing subprog : OK */
+-		RUN_EXT(0, false, ({
++		/* throwing fexit -> throwing subprog : BAD */
++		RUN_EXT(-EINVAL, true, ({
+ 			prog = eskel->progs.throwing_fexit;
+ 			bpf_program__set_autoload(prog, true);
+ 			if (!ASSERT_OK(bpf_program__set_attach_target(prog,
+ 				       bpf_program__fd(skel->progs.exception_throw_subprog),
+ 				       "throwing_subprog"), "set_attach_target"))
+ 				goto done;
+-		}), "", 0);
++		}), "Only fentry can attach to throwing_subprog, which can throw", 0);
+ 
+ 	/* fmod_ret not allowed for subprog - Check so we remember to handle its
+ 	 * throwing specification compatibility with target when supported.
 -- 
 2.55.0
 
