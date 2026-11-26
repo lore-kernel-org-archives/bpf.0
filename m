@@ -1,73 +1,55 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795671518;
-	b=Q6+kFo+pSTlh+hSoPv8ofV6IxOVSWK83rwm0MS/syVzaCpncYyr8za4soQu2XXkx1wmm
-	 PNm2Jyea6pCjVFHEjuwoAplRuLE39VJEWe2TsyOsrZdQRzE38vH32T8kAOEoz5/FP4P2S
-	 kzOpPU2hrSjuNVxU7eD6KUXYKxTpI80fojFzRkFcLYmuptByw0D7l/V+N7MqhpolkrXIb
-	 8qRb3J7LU+I9lqxXwXOOb5AC5NRSRQ+GvsRjsMdk3Zii/msNC7qKEsCmFF7qf/xw7U4sZ
-	 MWCKqYlrjdrQZjaxWGgokv4uSx8YBcPZ4rVhAnGhO3MsSYzkZ4D4IWHFi1SUfKzWFSw==
+	t=1795671623;
+	b=OlARkLPZkP3NZktKuFTv9wzzjzJGGj1Vd3rcx1zvPoRJq+Bm35KwqrUIS3wwWiR4qCBf
+	 6OcgNdaqqyubAMzTSEiKO3HguJG47QZHNvtHKPVnGjHSEoXe4brPK2f9uAS507Q/GpK0b
+	 rP2o9i6Hnhx1XRoZDRrp++KHsPy+shU14M1mLhTV9sCP+iuwHB+lgO0pJcFTV8KQhKETw
+	 WOYYc055Y9p+nfh1kaNv7QkpKF7tn26fIDIUIpqFgJ7mFmGkVc0+5OSecKljZSuikmUZG
+	 6WCS4E7YN6RcCqTiWgdKCuPATkGoqWeucddKFaTqjK60BHJISXrviLbHtsOfl2vWORA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795671518;
-	h=Received:DKIM-Signature:Received:Received:X-ME-Sender:
-	 X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:X-Mailer:
-	 MIME-Version:X-ThreadId:Date:From:To:Cc:Message-Id:In-Reply-To:
-	 References:Subject:Content-Type:Content-Transfer-Encoding;
-	bh=fF6iLg7K5hOrnySQEXPXyu/mTZlnOMFRavzCIW+zF9A=;
-	b=DheCAEjLKGXVTzw7BHlBdO7Voucrpx32Jjm0u+4ek9ky9MhHmF4LzyijWGsT0Wb4X1lp
-	 8xTdicISoqq9QLiqnrwfF7Z2R0vm54Sp9gMvJR9bECzmYF2gE9ThTFRASziOhUk5/Sp2K
-	 qBmJakQIQ4nxafsD5dm0aFzQaarNQeQtp3aXw7MkCJFgBdfzsUZ909bNfVd7xmyGzW0Zg
-	 WOtD8HBbZL18nNRUI1RUPCm76GwfAgvdLNm0D/2tfIrkUQiis2cc9JnoXVS2IKyleeHaG
-	 S+coizLD3JmgHg6PbMs7JSIsMBBGjgIJvOFuxmXmxnqCFi1oAa9TEC1qKqFrytPKl8A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795671623;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=mC/fwoEV1c+9TiOg3u4cfPhuGpDGzfZ18g8zO+WtbZE=;
+	b=zExXWKgcd4vMTmoYzStQz/qCVckQjROzK7b2lmMRQ0awDI5fdkrmMGT7SGsZ4Ycz0WnL
+	 i/iYB7d37pSYGb+OGNSNbrt64arL7DKDPK5bcrQuxOhm7m4+MlocysNptNBF+NMUl9x8w
+	 fG14Xh7ewTgNhhsMDDQ8Wivo17ml70HLTurKr76NrfwiyIIWExnLXp2QBH2/XYmOq06AX
+	 7QmLwcVKAndMzqNWyxNfDLohfhKV6Qn+rVe3yeuyHllH+ejvM551cXwJDm/0WzEROuiBM
+	 N73WGU8RyusxgMn2dWZSiqwefmb6pMrInDT7h0tELyTC0m2L88PzO0mdV0De646KrIA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Axn59QpV;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Ldf1FwqI;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A37CF606A31C
-	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 05:38:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6905B606A327
+	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 05:40:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Axn59QpV
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA0951F000C0;
-	Thu, 26 Nov 2026 05:38:37 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Ldf1FwqI
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04F211F000C0;
+	Thu, 26 Nov 2026 05:40:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795671518;
-	bh=fF6iLg7K5hOrnySQEXPXyu/mTZlnOMFRavzCIW+zF9A=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject;
-	b=Axn59QpVakGgNyL3YGUW2y+MNysVDkwBJwXt2bwGyGWwJ6ppuSsBM4Zxfg4d3RUgm
-	 ZmzaFNR1jJs0kRTyIaq+asqXVGWJbqAFIUuAvgvdi+CxOJPSI+99urH075WOGpWR5n
-	 btoW38OJ90yh1Pq22faxdO2hg9i5LN5e9GVqN5mqfXCqTVsvWV9Y2E1MU/0UcE0zKK
-	 W47NgC+oNZtYAFJxl1K/BoKbNNjeV2gDoAXGLv0c/aR6HUSjKGzzf17uJA+85EgoSa
-	 OhdqMBwHBthbwBLQ809oKm3F5SETXI9ear00rgGHcxJyAEdOuSbwEwyyCpMIm3fBcX
-	 Hvj7PSW9DfsdA==
-Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
-	by mailfauth.phl.internal (Postfix) with ESMTP id BC164F40066;
-	Thu, 26 Nov 2026 00:38:36 -0500 (EST)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-01.internal (MEProxy); Thu, 26 Nov 2026 00:38:36 -0500
-X-ME-Sender: <xms:3MUHa7CbtHZzfdflziH6xls68Rrs3Ac3bam82QjuBPNiGD14dMPm_Q>
-    <xme:3MUHa8U9ldCHfoskHzX4Aypah4SgmbGNhcmzs6etnkA_98WpiiRWAM6kTwd8aW5o0
-    TmM0ysbx786avnAnM542Q_kGQw4KFoPVviyz27LXlgZSV-K7Nthfnsf>
-X-ME-Proxy-Cause: dmFkZTEusPZhsxb8yJH6h7uBLIaqXnUP8bHmTmhMylIFaKiuE+AYYytkULIsfUoy6qXeN8
-    b5i0khJN7OXjg9Y+Vdo6TGyEjxYxp3vthssDQSyfalzXvwM5CG810DESHYIdDhLfQX+nAp
-    ruBI6+93JhwIWUIR29iGTKRP1dnHJKBJUA8B4pPJ4AxAQKUtNwHtvIKhqnXmyZ0jKqMyaA
-    lomV5mfFKhNe0pGHdRKtq7fZJv72Z+/AP7zsXEdeWZ5JaiINZRy66AyzTAJYrD9vN0OIdO
-    jHxeqP7JNDRJ6EQtsfoKnnAkCrHl/ALsOpMS5TsQFoCMG3UDHkGIsMcBpEW/PReBlc7BhZ
-    1WZnufz006UaAyz07e8soRVwBaFQBd+Dx0Wz1CzjECXa/2SbG5k4dsw64OQiq407WfILXy
-    SHflvqaniiyRYV0ro7jYAGbfL6BGr1hBfEbLHELnIQ9IfsHNJLrCV+9oyIV2HMOm4cO6LR
-    z4KNn+mQDHhCesYPHISJCVXBo/BJQ3o7Dvum/KhxYs7lSGEccyIxW+4P80udGtkeu7rgFa
-    L1+kSA4jIJvq5faIO9MITpcIAaIChF8ykGcya5tDZUxioigMae5YmTFi0J5atqApDbkpkH
-    HByhlxFFUeEfuYDuXXDtEKaSec/O9mtwo6uUsLlfpvn5nIeFjP9OWuRdg/NA
-X-ME-Proxy: <xmx:3MUHa5kmJpfNEXhXclAicIQDtXsCiCEhXkOR_NpfsHytb_d8GDUMkQ>
-    <xmx:3MUHa6UEly84sxWDGeXBwqWF-eqxBK6T3r2vrNQXz6iRxlLT8pZFRg>
-    <xmx:3MUHa3_Pr7FJmQXGsh9-nIfZkqiyzcAcqPG7cyrnpJu4F6cwgk448g>
-    <xmx:3MUHa3oyEqPra-P40x4dkETp2mAwcfPXwiFzlnjIg4vqPpPnq2yKFw>
-    <xmx:3MUHa5nQhyAnrF4N44sdgnPk4dnAPvREV4ebdjQpXE91AfgHgDX-0ASW>
-Feedback-ID: ieff94742:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 979FA700065; Thu, 26 Nov 2026 00:38:36 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=k20260515; t=1795671623;
+	bh=mC/fwoEV1c+9TiOg3u4cfPhuGpDGzfZ18g8zO+WtbZE=;
+	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
+	b=Ldf1FwqI4uSH3ewzw6O/Mr+JdNDdlfLXtQ06EqE413Dk8yAR/t14RjmSkR/Nu+xdW
+	 ecO1H80L0j5tj4gs63KlKK1ZSa5Ca9nYN04o2HSsb3s4++uPHCJcMOY9PxurYTZslV
+	 K4krSqoIwMtaA3e1k8L+p5Qvhp0wZjpJZ4XlKKxQVK3nwqPTaF/wIr06p9yQ1nWcmm
+	 fLaH7qmMQCHUrcHVS9Ps4h9TwFWxb0c+biIyUozoSN5q3Xxnog14OItEuWN/5VkV30
+	 ZxTZMcnf8KzQetIxaMIPcrOzrOaa5iJVSirukcjJNBKGzVkoOzJpM5GTxU7D/qoUhX
+	 JEVIEnAemRQxw==
+Message-ID: <sashiko-outbox-234800@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf] bpf: Reject kernel threads in
+ bpf_task_work_schedule()
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Sechang Lim" <rhkrqnwk98@gmail.com>, bpf@vger.kernel.org
+In-Reply-To: <20261126053016.1145482-1-rhkrqnwk98@gmail.com>
+References: <20261126053016.1145482-1-rhkrqnwk98@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 26 Nov 2026 05:40:22 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -76,73 +58,84 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-X-ThreadId: AisSLPdYCdlo
-Date: Wed, 25 Nov 2026 21:38:16 -0800
-From: "Andy Lutomirski" <luto@kernel.org>
-To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>,
- "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, bpf@vger.kernel.org
-Cc: "Puranjay Mohan" <puranjay@kernel.org>,
- "Andrii Nakryiko" <andrii@kernel.org>,
- "Daniel Borkmann" <daniel@iogearbox.net>,
- "Eduard Zingerman" <eddyz87@gmail.com>,
- "Emil Tsalapatis" <emil@etsalapatis.com>,
- "Ihor Solodrai" <ihor.solodrai@linux.dev>,
- "Dave Hansen" <dave.hansen@linux.intel.com>,
- "Peter Zijlstra (Intel)" <peterz@infradead.org>,
- "Thomas Gleixner" <tglx@kernel.org>, "Ingo Molnar" <mingo@redhat.com>,
- "Borislav Petkov" <bp@alien8.de>, kkd@meta.com, kernel-team@meta.com,
- "the arch/x86 maintainers" <x86@kernel.org>,
- "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>
-Message-Id: <5f46d1c1-fdce-4f3b-9d56-675a822b2d65@app.fastmail.com>
-In-Reply-To: <DN437OYZ5FGP.20VLV7ZEXQ5YY@gmail.com>
-References: <20261009024925.3169077-1-memxor@gmail.com>
- <20261009024925.3169077-2-memxor@gmail.com>
- <df69ab5d-bc97-4651-8668-a2b3e4bb272a@app.fastmail.com>
- <DN437OYZ5FGP.20VLV7ZEXQ5YY@gmail.com>
-Subject: Re: [PATCH bpf-next v1 1/3] x86/mm: Resolve BPF exception fixups for user
- address faults under SMAP
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
 
+Thank you for your contribution! Sashiko AI review found no new issues
+in this patch, but noticed 1 related pre-existing issue it does not
+introduce:
+- [Critical] bpf: irq_work data race in bpf_task_work_cancel_and_free()
+  [1]
+--
 
-On Tue, Nov 24, 2026, at 10:45 PM, Alexei Starovoitov wrote:
+commit 582f8b25ac8ecb8f5cc73a481c3b1dcd182a967f
+Author: Sechang Lim <rhkrqnwk98@gmail.com>
 
->
-> The range check is not a heuristic for "safe to read". It's the user
-> address part of get_kernel_nofault(), inlined. You asked for that in 2021.
-> Its job is to keep user addresses away from the load. SMAP does the same
-> job. With patch 2 PROBE_MEM reads the same addresses as
-> copy_from_kernel_nofault().
+bpf: Reject kernel threads in bpf_task_work_schedule()
 
-With copy_from_kernel_nofault(), I can grep the kernel sources and attempt to determine whether it's being used in problematic ways.  With eBPF, this is not really possible.
+This commit rejects kernel threads (PF_KTHREAD) with -EPERM in
+bpf_task_work_schedule() so that TIF_NOTIFY_SIGNAL is not left set on
+threads that never return to user space.
 
->
-> In both threads you wanted probe_kernel_read() / get_kernel_nofault() to
-> tell MMIO from RAM. arch/x86/mm/maccess.c has no such check.
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index 1b95fe795b4d9..784674c5fddf9 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -4804,6 +4804,9 @@ static int bpf_task_work_schedule(struct task_struc=
+t *task, struct bpf_task_work
+> =20
+>  	BTF_TYPE_EMIT(struct bpf_task_work);
+> =20
+> +	if (task->flags & PF_KTHREAD)
+> +		return -EPERM;
+> +
+>  	prog =3D bpf_prog_inc_not_zero(aux->prog);
+>  	if (IS_ERR(prog))
+>  		return -EBADF;
 
-Okay.  I randomly sampled a few use cases.  I found some that are only run on paths where we're already crashing and lots that would require an entire separate major screwup to point to MMIO.  (The most common pattern appears to be reading regs->ip in a path where *usually* regs->ip points to kernel text and, if we have gotten so corrupt that it doesn't, then at least we want to crash cleanly instead of recursively.)
+[Severity: Critical]
+This problem wasn't introduced by this patch [1], but can
+bpf_task_work_cancel_and_free() race with irq_work_single() and corrupt
+ctx->irq_work?
 
-x86 does not have a special syscall to do copy_from_user_nofault().  If we did, it would be a pretty obviously terrible idea.  But eBPF has an actual API here.  I think it should make sense.
+When bpf_task_work_irq() finishes task_work_add(), it switches ctx->state
+from BPF_TW_SCHEDULING to BPF_TW_SCHEDULED before returning to
+irq_work_single().  If map deletion calls bpf_task_work_cancel_and_free()
+right after that cmpxchg(), it sees BPF_TW_SCHEDULED and calls
+init_irq_work() and irq_work_queue() on ctx->irq_work while
+irq_work_single() is still clearing IRQ_WORK_BUSY in work->node.a_flags:
 
-Off the top of my head, I see two possibly severe problems:
+CPU0                              CPU1
+irq_work_single()
+  bpf_task_work_irq()
+    cmpxchg(&ctx->state,
+            BPF_TW_SCHEDULING,
+            BPF_TW_SCHEDULED)
+                                  bpf_task_work_cancel_and_free()
+                                    state =3D xchg(&ctx->state, BPF_TW_FREE=
+D)
+                                    if (state =3D=3D BPF_TW_SCHEDULED)
+                                      init_irq_work(&ctx->irq_work, ...)
+                                      irq_work_queue(&ctx->irq_work)
+  atomic_cmpxchg(&work->node.a_flags, ...)  <-- data race / flag corruption
 
-1. MMIO and, more generally, addresses where reads may have side effects.
+kernel/bpf/helpers.c:bpf_task_work_cancel_and_free() {
+	...
+	state =3D xchg(&ctx->state, BPF_TW_FREED);
+	if (state =3D=3D BPF_TW_SCHEDULED) {
+		/* run in irq_work to avoid locks in NMI */
+		init_irq_work(&ctx->irq_work, bpf_task_work_cancel_scheduled);
+		irq_work_queue(&ctx->irq_work);
+		return;
+	}
+	...
+}
 
-2. Really nasty information leaks.
+Because init_irq_work() overwrites ctx->irq_work non-atomically and
+bpf_task_work_cancel_and_free() can run in NMI context where
+irq_work_sync() cannot be used, this corrupts the irq_work flags and can
+cause lost cancellation or warnings and panics in the irq_work subsystem.
 
-Let me elaborate on #2.  I'm informed by reliable sources (a chatbot) that a common use of PROBE_MEM is to read from pointers where the verifier can't verify the lifetime.  I bet it's not terribly uncommon to find progrrams in the while where it is genuinely possible for the program to follow a pointer in a data structure that has been freed.
+[1] https://sashiko.dev/#/bug/linux-a7b739e8-61a5-48f3-9ad1-75d3c31446fa
 
-This gives something to the effect of:
-
-u64 value = read_nofault(foo->p);
-
-where foo points to freed memory and value is either the actual bytes at whatever address is currently in foo->p or zero (or a MMIO screwup that will take down the whole system in creative ways).
-
-And the author of the program thinks "well, *usually* it's the right value and I'm just collecting statistics".
-
-These days it's easier than ever for a malicious user to write a cute little tool to put a value they control into foo->p.  And they can point it at *someone else's* memory.  And they can get that memory leaked into the statistics.  And probably find a clever way to extract the value.
-
-*If* it were somehow deemed that #1 was the *only* major problem with PROBE_MEM and the feature otherwise made sense and it could have well-defined semantics, I think that x86 could offer a reasonably performant way to do a read that's guaranteed to be side-effect-free.  I can think of at least two ways to do it, both nontrivial.  But there are a lot of ifs here.
-
---Andy
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261126053016.1145=
+482-1-rhkrqnwk98@gmail.com?part=3D1
