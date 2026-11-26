@@ -1,86 +1,66 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=113.46.200.220
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795696796;
-	b=Z8FAP0XRNtt1A0vpSdbncrCHfUJaECosqa74mJLy/3BUceE3OrgKdM0+pAG6GiJA6tX2
-	 d6gQSFLaeGrtsUPSf5N8XjJjOZKHRF+wl0foKHlH2sfZzwopYVd4PBo7M2hYzppB7vc4m
-	 cqmpErDHne8IEyhao9qADd9YaB8K3ipGF7Ta8QnjjMicweeZNWIN9uBaWsvo7ybEZnZTG
-	 0zcVOmI0gZyx25ZNO0BDGiYJb81UN1A6bPjKQGcwGBQg7N3c24+sJjJI6dkEutLHNUmtR
-	 XYrR61aoMrR/qaymmidpG3VwH+34eR4Mw9E09DR8efkOmLXftLcSoQcgODQpWXD7hdw==
+	t=1795697238;
+	b=pi0W5kSMG+ACpHUAbErrCz6ccGvyy55P+GlXtohii4/KmgvmEJNOBsx22pq526LYUKdo
+	 GCh1iET93f+0a+Fy228huTvbD9jP+fKEkom2Gaa2mX+8CMfBUNpeX0PJwuI4P6ab3Fo6v
+	 lMDQvqxdLsRTjLzP4GvDIEjrifMG4Ne8bclaGP5mtGvk8ZAjTMeFwt2wc87gAXJLviW0s
+	 6MScLCVkoyxiqUpRJiF7/Us20KQuWce7wAylLsdN1AhxFjxvnqsbUl7Fd9VMd58dKJJPX
+	 i1iLRtFG5fqjv2+vfdwg1WoJlFJQ0DdmsRRqRz8lX7Pl7uABezlCqKwqns9Tmy5p/Lw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795696796;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Message-ID:Date:
-	 MIME-Version:User-Agent:Subject:To:Cc:References:Content-Language:
-	 From:In-Reply-To:Content-Type:Content-Transfer-Encoding;
-	bh=+CjvtlLtZ8LD35jmsrC/DW5uvUUSL1yNq5kGmVgUFAw=;
-	b=QCdp0QgwlesouLxIL0FdbxMiHo3xWUe2XIVk0Mo/rcDxTGbHvkGc9pvaqFkvXXTo0rCG
-	 PIKhjSZbFXO/Oo/6JjVbxe+EqIFlp0sQ37RkARbZkhMxDmpog9BcxreF7rmRb7BFselJV
-	 f+5+au+nr2SsRM4V6uXF4+Gyq9o9zgMQ6aXJQFpH5YmdaqyGf3Cchf9msN0xeELss66zq
-	 qocA11cgDjoaeQaVdgYn9VyAnH32LKV/7pbgTteitT0yPCBxvzFRkMYlU9arhrif+80LS
-	 rkNNZ1CigFN6mejo6fMll3oZmklDHdsLEZqNhYIT70j7tt7EYy8XDHheMdxEW9URkHQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795697238;
+	h=DMARC-Filter:dkim-signature:Received:Received:Received:From:To:CC:
+	 Subject:Date:Message-ID:X-Mailer:MIME-Version:Content-Type:
+	 X-Originating-IP:X-ClientProxiedBy;
+	bh=cluy/CcFwS2tT3OPwmvOS7KZPjZ9l3T0QPb1BF/2Uw0=;
+	b=rXmgP+ky4sCaxiIqQxd0DqXkBdEZ88MCVmKhmo1Eoz47yIZdxOJjuVNd66l29FRsl6dl
+	 pn5IufQ8/7qYek6n0aVfPu3uY+YqFjkt54lz8LJmiDK2N/BvXYF185iAU5sDjSqpBvBWG
+	 TkpjJp+XYGa0ZEa0Pc0VMnoVZ8v26X8L9lUgEMC1OzgZ9Pd9QV6nLGntMTN7WI4a31qYl
+	 CacjCusF75ut1zgGqEosWNIoSNk2hiId3/EwkjuvVWVdvBY4N+ed/keGVgmVB5hiTVRoY
+	 3u0ccfAeEWSDuFlBwJ2d8W4VpZBWrgm8J0yUqy5ZL1qwYpk/bMobDWHdOwo1sMqdEVg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linaro.org;
-	spf=pass smtp.mailfrom=linaro.org;
-	dkim=pass header.d=linaro.org header.i=@linaro.org header.a=rsa-sha256 header.s=google header.b=zxL6kgvY;
-	arc=none smtp.remote-ip=209.85.128.50
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=huawei.com;
+	spf=pass smtp.mailfrom=huawei.com;
+	dkim=pass header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=DYKJ65qM;
+	arc=none smtp.remote-ip=113.46.200.220
+Received: from canpmsgout05.his.huawei.com (canpmsgout05.his.huawei.com [113.46.200.220])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05EE7606A321
-	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 12:39:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 05EE7606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5C67606A321;
+	Thu, 26 Nov 2026 12:47:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E5C67606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=linaro.org header.i=@linaro.org header.a=rsa-sha256 header.s=google header.b=zxL6kgvY
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4a35ac4475dso50573085e9.2
-        for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 04:39:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1795696794; x=1796301594; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=+CjvtlLtZ8LD35jmsrC/DW5uvUUSL1yNq5kGmVgUFAw=;
-        b=zxL6kgvYYeHE1uF2N0d3iaJwovorY8yEoPfTlFMvMzb/+qWZy1Kj60dXHat588BHnQ
-         I6qhP05EusskdgnFqAdp1pWWNsId7oYixOYmxXk7j9+q1Eafh5PhuF84ZReDiJFOQnFb
-         E007V47UW6KdCfk5h/ihUSmveqvCJiolu7ZsQnoM+R6m4KAa8oSeKXXqxLkaw2nc+YYU
-         st/sIDDeAz0CJa+Zw6WCLB/heYg8BO0pr6aFWmgjnITK+Zz+d14+kV0x2vMQeFj2pu1Y
-         9q4mr8+vrHI5S63mZqJhWwhKa712yVoexhtQP0Orvis3QMX2eDV9vKlFkQ0mV3cY7Rdx
-         IATw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795696794; x=1796301594;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=+CjvtlLtZ8LD35jmsrC/DW5uvUUSL1yNq5kGmVgUFAw=;
-        b=jNL5+9ODLw7MZoyoU/aVfXhK+w6ox8DS3+hhlQSAsgCH3C4BrBuo4yO1eeHW4ilSlu
-         OB5/cBBxudNmR4vqieUBDcCCo3Vlzh5Qzwymg6jizwGllZ9AUK5QhpjZN1qzUQ5kBh41
-         KvjiU2pqYA23d+WAa486i0O/cQFSopJwqfga+1TiMImf7EQtTkMtByFnm1u/y3Na8BQB
-         Qy3+NPu81zTyGSgDwair8IrJ9J+gxm3VVFdgLjI/eEDdorHdtnOLjR9VVcyc7Thz7OqV
-         W1hjQMsIkHT5rCnws15ONTprRGQTi/gRaRK5dCCJbxH2G1nGdWbPj/kSCsu+AgO4gsEN
-         UvMA==
-X-Gm-Message-State: APuU4Z/6eio3R9B+hnRPfXNKmaFI/ssrgT3dqPVDcQjK4L2x+Zg9YLTw
-	JlWr90xEh5mp7GSQWEAHUnyhMjTQ/O4frVFZ0ONjKxmA/L1RPXxB3d8IM5YgEnICUgY=
-X-Gm-Gg: AZFdTZeOrVJ13Wmr1czUnLkGAI4H2bWu37WEfum3euxiJzX0XhLLBfoKYlEn7Q/qgcL
-	CUdA8zvpAILHkqU8+zKAZL3a9MfkVuy/pD5WQT8MaJCyAXtW/k3jAkqwzzewNq9ZHigVrULEuqL
-	nzzGUf6depqEvsxYPVq7ygt90DZQeDrqEX7j7SQ8JD9Xr/omNj2Pz728UcYzqZq/vQqPnRFsTy9
-	mu4KOyp71lVcebIbeDs8j7UELATuCHX+7p49lHJgOOGjHK6sbTbQvxslMPcnVSIlWz8Wwy5orVR
-	gipzCMCtezxrrilPppXSDE8cmaNmSjjr5078H6fxjdQhrVLnVQTEzOe5qeOoMXr59eGXpAIKd9W
-	RWd3h8zrI1Q2C+XThGR083q34LPNkm4PB9UqC79IkU6FdSINLOtEfg6Zsc7DAj9ONTYN7aC2hQK
-	fJ/A345geotjx45D6rWNeS/ZGH9UlSfPLnVK2iI+xEsRcgJ3TVORxc5SyQmqdwzE2FrtjbvU6Zs
-	oaNcyhQ35yKfsyld0posFLNXCVOOlGqlumUfWKeHEYIxl1//X6fF5xEJy3VQeR7MqgzGoX/1Qq5
-	BDieDJGajIu3IKY8ZiTpnHvnIYQ9A74u5A==
-X-Received: by 2002:a05:600c:4515:b0:4bb:6f67:ca0b with SMTP id 5b1f17b1804b1-4bb888267f4mr432189715e9.29.1795696794423;
-        Thu, 26 Nov 2026 04:39:54 -0800 (PST)
-Received: from [192.168.1.3] ([37.18.141.193])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb906d6a13sm330174705e9.3.2026.11.26.04.39.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 Nov 2026 04:39:53 -0800 (PST)
-Message-ID: <5c7f4a5f-fe5e-4367-9c60-86f1818346e8@linaro.org>
-Date: Thu, 26 Nov 2026 12:39:52 +0000
+	dkim=pass (1024-bit key, unprotected) header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=DYKJ65qM
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=cluy/CcFwS2tT3OPwmvOS7KZPjZ9l3T0QPb1BF/2Uw0=;
+	b=DYKJ65qMjTL/UMkV1AJWhRBp0yEEqeoPOZefPQi+XMmHc2nqHAPsYd9p6q9TZPPALs60ZSAGj
+	e75cggWH7wYKUnZFhZNhdvOA/w13QzZ3+39tzu5lkF68fT/EBSD/Sl1c/z32Mp1MmyB09L7sah6
+	FUFigpUAfmM4TYXq1TgMwHo=
+Received: from mail.maildlp.com (unknown [172.19.162.140])
+	by canpmsgout05.his.huawei.com (SkyGuard) with ESMTPS id 4jZxB85cFDz12LDD;
+	Thu, 26 Nov 2026 20:46:24 +0800 (CST)
+Received: from whupemk100010.china.huawei.com (unknown [7.152.184.41])
+	by mail.maildlp.com (Postfix) with ESMTPS id 48A3D20333;
+	Thu, 26 Nov 2026 20:47:12 +0800 (CST)
+Received: from octopus.huawei.com (10.67.174.191) by
+ whupemk100010.china.huawei.com (7.152.184.41) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.56; Thu, 26 Nov 2026 20:47:10 +0800
+From: Cai Xinchen <caixinchen1@huawei.com>
+To: <nicolas.bouchinet@oss.cyber.gouv.fr>, <xiujianfeng@huawei.com>,
+	<paul@paul-moore.com>, <jmorris@namei.org>, <serge@hallyn.com>,
+	<shuah@kernel.org>, <kalevi@kolttonen.fi>, <caixinchen1@huawei.com>
+CC: <linux-security-module@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <bpf@vger.kernel.org>,
+	<lujialin4@huawei.com>
+Subject: [PATCH v3 0/8] lockdown: fix the securityfs interface and add tests
+Date: Thu, 26 Nov 2026 21:13:07 +0800
+Message-ID: <20261126131315.1256553-1-caixinchen1@huawei.com>
+X-Mailer: git-send-email 2.18.0.huawei.25
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -90,91 +70,93 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 0/3] arm64: Add BRBE support for
- bpf_get_branch_snapshot()
-To: vladimir.murzin@arm.com, Puranjay Mohan <puranjay12@gmail.com>,
- Mark Rutland <mark.rutland@arm.com>, Will Deacon <will@kernel.org>
-Cc: bpf@vger.kernel.org, Anshuman Khandual <anshuman.khandual@arm.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- Leo Yan <leo.yan@arm.com>, Rob Herring <robh@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>,
- Adrian Hunter <adrian.hunter@intel.com>, Shuah Khan <shuah@kernel.org>,
- Breno Leitao <leitao@debian.org>, Ravi Bangoria <ravi.bangoria@amd.com>,
- Stephane Eranian <eranian@google.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Usama Arif
- <usama.arif@linux.dev>, linux-arm-kernel@lists.infradead.org,
- linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, kernel-team@meta.com,
- Andrii Nakryiko <andrii.nakryiko@gmail.com>
-References: <20260810164622.1829843-1-puranjay@kernel.org>
- <CANk7y0ixo5a3Vfzj_HVhVHRNce2Rsit4pP27GCtXd4jHHzmiKg@mail.gmail.com>
- <CAEf4BzapC=7YM2QLMyKKfyOWGgBTfEJmPPN8e9Jf5xT9SutBTQ@mail.gmail.com>
- <dfa8362e-0dad-4f23-9d2e-dde03cb5facc@linaro.org>
- <CAEf4BzZ=ahQNtA-1KdZFRONXMOEkV9Nb1OUY==JRQCarkbMM0Q@mail.gmail.com>
-Content-Language: en-US
-From: James Clark <james.clark@linaro.org>
-In-Reply-To: <CAEf4BzZ=ahQNtA-1KdZFRONXMOEkV9Nb1OUY==JRQCarkbMM0Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: kwepems200001.china.huawei.com (7.221.188.67) To
+ whupemk100010.china.huawei.com (7.152.184.41)
 
+The lockdown LSM provides /sys/kernel/security/lockdown, but the file is
+neither documented nor covered by a selftest.  While reviewing the
+interface, we also found a Kconfig bug and a few accumulated cleanups.
 
+The series is organized as follows:
 
-On 23/09/2026 17:46, Andrii Nakryiko wrote:
-> On Wed, Sep 23, 2026 at 2:15 AM James Clark <james.clark@linaro.org> wrote:
->>
->>
->>
->> On 22/09/2026 21:40, Andrii Nakryiko wrote:
->>> On Tue, Sep 1, 2026 at 6:45 AM Puranjay Mohan <puranjay12@gmail.com> wrote:
->>>>
->>>> Hi James,
->>>>
->>>> Can you review this version of the patchset? It is implementing what
->>>> we discussed in the thread on the last version.
->>>>
->>>
->>> James, do you mind reviewing the patches again, seems like Puranjay
->>> went with the implementation you suggested, would be nice to review
->>> and ack, if it looks good to you.
->>>
->>> Mark, Will, you guys seems to be designated as maintainers for
->>> drivers/perf/arm_brbe.c, can you please take a look and give your
->>> feedback as well? This is important and useful feature for newer arm64
->>> CPUs, it would be great to get access to this functionality that we
->>> had on x86-64 side for a long while now. Please help get this upstream
->>> or, if it's not in the right shape, guide Puranjay towards a better
->>> implementation. Thank you!
->>>
->>
->> LGTM, and the Sashiko review is good too. It does conflict with the
->> FEAT_NMI patches on the list, and you'd have to disable NMIs but as it
->> stands right now it's ok.
->>
->> Reviewed-by: James Clark <james.clark@linaro.org>
->>
-> 
-> Thank you, James! Mark, Will, do you have any suggestions on correct
-> sequencing of things and how we should proceed? Thanks!
->>
->>
+  - patches 1-2 are small cleanups in lockdown_write(): stop scanning
+    after the matching level, and drop an update to a length variable
+    that is not used afterwards.
+  - patch 3 makes the LSM select SECURITYFS.  Without it, a kernel built
+    with CONFIG_SECURITYFS=n logs "failed LSM lockdown core initcall
+with
+    errno -19" and does not create the file that the
+    LOCK_DOWN_KERNEL_FORCE_NONE help text points users at.
+  - patch 4 removes LSM_AUDIT_DATA_LOCKDOWN and its formatting code,
+    which became dead when the SELinux lockdown implementation was
+    removed by commit f5d0e5e9d72d.
+  - patch 5 drops an unused include and moves lockdown_reasons[] next to
+    its only user.
+  - patch 6 replaces sprintf() with scnprintf() and sizes the status
+    buffer for the string it holds, whose length is the same whichever
+    level is active: all level labels with their trailing spaces, the
+    brackets around the active one, and the terminating NUL.
+  - patch 7 documents the ABI and adds the new file to the LOCKDOWN
+    SECURITY MODULE entry in MAINTAINERS.
+  - patch 8 adds a kselftest covering the read format, invalid levels,
+    the rejection of the current or a lower level, and an upgrade to the
+    next level.
 
-+ Vladimir
+The only functional change is patch 3; the rest are cleanups,
+documentation, or test coverage.
 
-Hi Mark, Will, Vladimir,
+Changes since v2:
 
-Any thoughts on this approach where NMIs need to be disabled? 
-Alternatively we could do something like track where the PMU interrupts 
-and BPF snapshots overlap and then discard the BRBE buffer and make sure 
-they don't trample on each other etc, but it looks like it would be 
-significantly more complicated.
+  - The scnprintf() patch sizes the status buffer from the label lengths
+    instead of keeping temp[80] with a BUILD_BUG_ON() (Serge E. Hallyn).
+  - The selftest read_file() helper reads up to size bytes again and
+    rejects a completely filled buffer, so read_sysfs_lsms() keeps
+    failing when its buffer is too small (Nicolas Bouchinet).
+  - The selftest read, root and writable checks moved into a
+    FIXTURE_SETUP, and the upgrade test now runs before the tests that
+    expect an already locked down kernel, so they never run at the none
+    level (Nicolas Bouchinet).
+  - The ABI documentation now mentions the legacy "security=" kernel
+    parameter as another way to order in the lockdown LSM, and now also
+    documents the 0644 file mode, so an unprivileged writer can tell
+    the EACCES at open() time apart from the EPERM and EINVAL that
+    lockdown_write() itself returns.
+  - Clarified the changelogs of patches 1-3: the break in
+    lockdown_write() is now described as leaving the loop instead of
+    returning early, the useless decrement patch gained a commit
+    description, and the SECURITYFS patch now points at the
+    LOCK_DOWN_KERNEL_FORCE_NONE help text that references the file.
 
-Thanks
-James
+Cai Xinchen (7):
+  lockdown: Add break in lockdown_write
+  lockdown: select SECURITYFS
+  lsm: remove unused lockdown audit data
+  lockdown: drop an unused include and move lockdown_reasons
+  lockdown: bound the status string with scnprintf
+  Documentation/ABI: document the lockdown securityfs file
+  selftests/lsm: add lockdown securityfs test
+
+Kalevi Kolttonen (1):
+  lockdown: remove useless decrement operation
+
+ Documentation/ABI/testing/securityfs-lockdown |  47 +++++
+ MAINTAINERS                                   |   1 +
+ include/linux/lsm_audit.h                     |   2 -
+ include/linux/security.h                      |   2 -
+ security/lockdown/Kconfig                     |   1 +
+ security/lockdown/lockdown.c                  |  73 ++++++-
+ security/lsm_audit.c                          |   4 -
+ security/security.c                           |  40 ----
+ tools/testing/selftests/lsm/Makefile          |   8 +
+ tools/testing/selftests/lsm/common.c          |  47 ++++-
+ tools/testing/selftests/lsm/common.h          |   2 +
+ tools/testing/selftests/lsm/config            |   1 +
+ tools/testing/selftests/lsm/lockdown_test.c   | 191 ++++++++++++++++++
+ 13 files changed, 354 insertions(+), 65 deletions(-)
+ create mode 100644 Documentation/ABI/testing/securityfs-lockdown
+ create mode 100644 tools/testing/selftests/lsm/lockdown_test.c
+
+-- 
+2.18.0.huawei.25
 
