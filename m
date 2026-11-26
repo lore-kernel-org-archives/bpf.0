@@ -1,100 +1,50 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.178
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795668789;
-	b=D2LGKITgH3kX91ZjmCRpV3AMcb6HdHavcRp1kJo+nxqhs82863fb1rEejrq2NQ3knDm1
-	 duHSFgw40+obtD0oqA74FE9ypIvo8gQiypxv0BGU4uwcBnR8KOssJV8KiJzvcyVWGb48O
-	 tVK4kldmJ1Yio+NvGQlbuR3yFNEocJw7BqfwhnzlXpvTO/ofIEjtkyF8vrlgcDyG03tjR
-	 y8j8O2rYwOpJ82NGJHvSFIZuAaVKpnJl+2Bk4ZGYSfmXzP5YE22neUsS+F8AYMlsBEbgO
-	 8K+d1xkdl0fP1nCh6xqjCTC+g0rj3Iy89L2DZhL+htPtiD1z9p03g9kXnFQ18sAiblg==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795668789;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=3Lt4WVagAGoPNQQ8sUuV+xbM6KmxoNVjHzW8jPpsfl4=;
-	b=BRQAy3r9+NLfrUHE6Jrfqwauu0ddVAZchVq2BeTNaqhXi8wsqqQAaIjOLEOuBHwzXw3x
-	 XkKxKRCsgS9vGutss20oVMPSR7+/u2N+64HPMfeP/nTRNMyFY8Ck6VqsMP0LrjXL7P9UQ
-	 VgIN78qshJxfMAkmiC2PmEn4Exo0gQo253/BoIx6u8oEnN/QXms7ZSPrtuLr/f58PXvKz
-	 BVEJ0tl+YczD+8yXoj7VbQXB/HxQB8chQ+UKhP4pojvNX+jhhoMqo3g41t4opi+aoMjBO
-	 y2Ytq4S/QLlUeUK884DNBG6f3uq2bxq0kUuOGC2kPFtsquyNyKQQylNTxdRUdABPfiw==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b="Wt/H8uEX";
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.178
-Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57AF1606A32A
-	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 04:53:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 57AF1606A32A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Wt/H8uEX
-Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-54492d8a988so1599641cf.0
-        for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 20:53:09 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795668788; cv=none;
-        d=google.com; s=arc-20260327;
-        b=KGllxg5pIy+dcWvrDlk65pAHwZLnTT17nDuNjy4ST+0az7IU0InKxhrPwWMS9ZhIcl
-         f8fsMzZLBs/qxJ0LuDkZ8qSJlANf/J2rpw3S3LsJ6o5CHdtI/V8IxVkwLTiBuHBixVJt
-         t/V9ggH0gxIJWlEQfgFZf/N+jgs0scOLydYnTpZ/asXlanY4ZadwhYBIDxfva8biFI3L
-         X81xDwRZIe2Lo+vGwbuPFRT4phEV97AwAx1XzY4nfMfgD+8ZUqqe6rPcJrRl3XDaTRqn
-         6PB27Jxew5kp2M8UlN4+lg8IdOHl+iq/EBrSB7EaJo01hMmm+a8otKG77HqmnpZMXkbo
-         riAQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=3Lt4WVagAGoPNQQ8sUuV+xbM6KmxoNVjHzW8jPpsfl4=;
-        fh=ACNQwf0Q59afQ67vcCVCOh6Pm87Xho2q43CybMBQiQs=;
-        b=QjBfTiooHr3+RH8SeB3F3uTqlDCxokVBbeT3EuB0pXmnmpgFAaJpIxueiBs/U/wWQa
-         mJnkEeTra1E84DoF2/6/LTPVUID9l9y3I4FrB/fVtsci1RAP+3e7kjxRQD4cPZucsD4c
-         FoT3f2QYDHBMGf4TsHNBTt+2lwo0MYpTNwKa/p+jM/ZtYoN/65B4TN0LDrSGdMe1WJmV
-         4ule6zfdZYn2SnUAd2EeENbvOnmQCoMPBsYMpFmvaJLqx0wXHHbSTxanYwCRerI6a3SR
-         PuQb8lmGAYLGZkDAKDS7eLDuuGwAro0e/9rDKwaXEXp8Ea2ty1V+A9+iHjhLO1wha/86
-         4c5Q==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795668788; x=1796273588; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=3Lt4WVagAGoPNQQ8sUuV+xbM6KmxoNVjHzW8jPpsfl4=;
-        b=Wt/H8uEXeygfnRJXsnha4ogYR4WFdKKtucv0h74Hl9SvZ7ZVOZ8pyveIu/m+bbBuqU
-         7pLEkyr5FS02oSIkkEdcPGP7aMYZHs2eR8ZbSslwbXiv4nig66Yw9zXIl5pT+EHlNoMU
-         cQHBNyntCt6+GiY4hESZ00/HEKXKxMOneQnWVqwJdquEVsZ01fF3oKFb+IYLDHDd97P1
-         5iwuBre8QUjJjwbIhiuIlmYLUamd902f2vsDR98ELoNLHrtAN91EmUr8k1YyhoPYh3J/
-         v+aNlL3NNgtJeSDZE4JVJM46ZiSMrhfEMHEAp3euRyiB3I6N1f0aZKatBbawmZwgSrYV
-         rmxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795668788; x=1796273588;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=3Lt4WVagAGoPNQQ8sUuV+xbM6KmxoNVjHzW8jPpsfl4=;
-        b=fFH5OioQw9mPAkrA92fiRsfaVVk8zHcZgtPJyU76p69R4/eHKzs23+XTm0q1APUIg6
-         3KDzlkMNN4j4OFdqBF0eR+GvBs5mQTYPT4RDN0KPvuLGL59XPuw21xpuPMxso8cY1jl0
-         3pUNPTE7lt4+qO25OrH+MFlDwpth9mAiEEStZjkGe2OfqdL2Pxo+2kZ63USaK9/ms3/4
-         OkAAnvUXuuUr2ldV9oCqD/uhScbJtKaxnkRcwudruOEuTA7CTUel9ZMjBn3bHyGlE9jr
-         dm4lh6+9s8cIJ87hPNoce1nMscViidLuR+8CvyB0ELMk3O8PDeb2/r6rlm6HC1bBGud+
-         luiA==
-X-Forwarded-Encrypted: i=1; AL+hErHa+p0RIfugopYfLKMPcRd40EnCLBRYn1O/ReqcR+nfHfhMHPPsmRQtgaDAt+soxpcUh5w=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+SGEA3fuJrWtNhkQewbZ2GQ/eioCANFYdVRZ+E2vZ9snOeIFpg
-	tNAuyboqHk8rdK2i08/yapXtdcV0vD28MoJFgeJgd4O589Z50uGhMTRfX6rGIc1uesQYE9FAqou
-	WWz6WaMPdtQg8FyxSmwygxn1iJhqxBM8qJUBUgopo
-X-Gm-Gg: AZFdTZeWF/cpLbPo1CgOdiLtwcRaQ9dwOl/t6Wa9MTyxTd0zHqUt01PUkVHrIxGphnA
-	1hpmcMIfXbt22WlY1Ed9MHwo2pgMlL5SAHgLyqAy8/JYAh9iUOPVysLKrqXppLVNMxsL5qCvGcQ
-	gU/XuoNdq7sOrSyluPaE1fCZv9cJ3mSzyUPMiInx0GBq2EGUPlclgHmSIU5iYifNNhfbLr46I88
-	QMBfjp5jxesCNYD0ddt7yc9l76kg6+8sJOZnW/O823zM9TfMQ0BoxgCVfGsjXn0vi5p1CVhqobe
-	tSGRPfvw8qwnMP86Lnsuu2ePX6pSrea46tbEFlE8dJDJcSoQT7cQOzK5ZgvdpdVJazvPBQKPkHO
-	tmiyz6WBuOcDgAdtMfXOzfffNgQA/eIcSnSgBW620luIw/1Qy/nGdqA0iGg==
-X-Received: by 2002:a05:622a:1e86:b0:536:3ee4:81cd with SMTP id
- d75a77b69052e-55d88127bafmr101738501cf.4.1795668787640; Wed, 25 Nov 2026
- 20:53:07 -0800 (PST)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=114.242.206.163
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795669997;
+	b=L91LuOicNZlar+fW4/wN5OT/O7VsD6cTcoxfREgLxinx4lcYv51eIKpMVdLxzq7ebjMG
+	 KCVEUpxGryjTPc6hDtyM+ssVOC9KJI7afQ/8EELTbxzAdnOgXoTjIrI0fLkXNY7FDzP2/
+	 j9FgTk5Z3YHVN4S3PkBfwM4v01qQIb5emc88pRIxcPSO2xsw/X4zmrTkx6ctxl9jYvgL5
+	 Uvi6JA8jOJL7upMNUawU0FTDcJEz0neus+Q7wwIClof6LeS3SFO7lJHHdp7erkZCUjzYh
+	 lBsDA7g8usuLviCbUNPFwCabrXIXccgP6MHAUPib+Rs0vBZGlC596LdecbKuuexcSyg==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795669997;
+	h=DMARC-Filter:Received:Received:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:MIME-Version:Content-Transfer-Encoding:X-CM-TRANSID:
+	 X-CM-SenderInfo:X-Coremail-Antispam;
+	bh=rs0cJn1ALORvMjFnjpUCyNknyfGFuon/QBPSnoM4eNU=;
+	b=JQ2UdBpTCzvDkR1G00YU8qxr5kj58RO9EAaHAMNHehd0RN8m5lRAZYHv+Wcdzks/gYRM
+	 wwl8QbuPesfassuxonAVNLn0z/7rhRv5Mjauy7Xc1GfnxrzRR0mgQKrrDaCnDcf+g8xB7
+	 xbfopEpBK8joOV8gVGvKEnU4ScXH5D/hDOHx0DFST/23FPUZWFpLcnaQDZoizVZw5L2K0
+	 pqpRAyEnxmDnolB5IrdaRQrePuJtPp66wqAIIKKyX5WRLXThHTGHD63ncta3+3F1kDJEq
+	 ltgn543aLzGsN6unDpzimIZGL4WI+KTPv5+M+gMFRS2uis1ktRUGOqnRkO0xCE0a76g==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=none header.from=loongson.cn;
+	spf=pass smtp.mailfrom=loongson.cn;
+	arc=none smtp.remote-ip=114.242.206.163
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 821ED606A31E;
+	Thu, 26 Nov 2026 05:13:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 821ED606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [123.138.236.242])
+	by gateway (Coremail) with SMTP id _____8DxztDnvwdrNyUjAA--.9570S3;
+	Thu, 26 Nov 2026 13:13:12 +0800 (CST)
+Received: from linux.localdomain (unknown [123.138.236.242])
+	by front1 (Coremail) with SMTP id qMiowJAxFs3jvwdr63k3AA--.52601S2;
+	Thu, 26 Nov 2026 13:13:08 +0800 (CST)
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v1 0/2] selftests/bpf: Fix uprobe_autoattach test
+Date: Thu, 26 Nov 2026 13:13:05 +0800
+Message-ID: <20261126051307.13170-1-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.42.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -104,56 +54,33 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261125061523.1540234-1-irogers@google.com> <DN4FM3TBOJ9T.2QOOL77P5HETO@garyguo.net>
- <20261125132225.00254c37@gandalf.local.home>
-In-Reply-To: <20261125132225.00254c37@gandalf.local.home>
-From: Ian Rogers <irogers@google.com>
-Date: Wed, 25 Nov 2026 20:52:56 -0800
-X-Gm-Features: Aa3M54pMQmXw5Cgtc0EakW9NOiIZs8STgUuBigJfJMSZlzejGTE6XZMetCnzc-8
-Message-ID: <CAP-5=fWkUW787c4dGx9rccucqD67dfRgwBB_SoCxFnfZXtXP-w@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 00/30] unwind: Minimal DWARF CFI unwinding for user
- and kernel space
-To: Steven Rostedt <rostedt@goodmis.org>, Gary Guo <gary@garyguo.net>
-Cc: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, jpoimboe@kernel.org, peterz@infradead.org, 
-	mingo@redhat.com, tglx@kernel.org, bp@alien8.de, dave.hansen@linux.intel.com, 
-	x86@kernel.org, catalin.marinas@arm.com, will@kernel.org, 
-	mark.rutland@arm.com, linux-arm-kernel@lists.infradead.org, pjw@kernel.org, 
-	palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr, 
-	linux-riscv@lists.infradead.org, acme@kernel.org, namhyung@kernel.org, 
-	linux-perf-users@vger.kernel.org, mhiramat@kernel.org, ast@kernel.org, 
-	daniel@iogearbox.net, andrii@kernel.org, bpf@vger.kernel.org, 
-	nathan@kernel.org, llvm@lists.linux.dev, nsc@kernel.org, 
-	linux-kbuild@vger.kernel.org, ojeda@kernel.org, 
-	rust-for-linux@vger.kernel.org, ardb@kernel.org, linux-efi@vger.kernel.org, 
-	maz@kernel.org, oupton@kernel.org, kvmarm@lists.linux.dev, shuah@kernel.org, 
-	linux-kselftest@vger.kernel.org, indu.bhagat@oracle.com, jremus@linux.ibm.com, 
-	wnliu@google.com, dylanbhatch@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowJAxFs3jvwdr63k3AA--.52601S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
+	ZEXasCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29K
+	BjDU0xBIdaVrnRJUUUPjb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26c
+	xKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vE
+	j48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxV
+	AFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E
+	14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44
+	I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2
+	jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04k20x
+	vY0x0EwIxGrwCF54CYxVAaw2AFwI0_Jrv_JF1l4c8EcI0Ec7CjxVAaw2AFwI0_JF0_Jw1l
+	4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67AKxV
+	WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI
+	7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
+	1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI
+	42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUwmhFDUUUU
 
-On Wed, Nov 25, 2026 at 10:22=E2=80=AFAM Steven Rostedt <rostedt@goodmis.or=
-g> wrote:
->
-> On Wed, 25 Nov 2026 16:28:02 +0000
-> "Gary Guo" <gary@garyguo.net> wrote:
->
-> > A quick question: how do you plan to get this working on 32-bit ARM whi=
-ch has
-> > its own EHABI?
->
-> Do we care? Isn't ARM 32 mostly deprecated at this moment? Or at least no=
-t
-> adding new features.
+Tiezhu Yang (2):
+  selftests/bpf: Include bpf_misc.h in uprobe_autoattach.c
+  selftests/bpf: Define FUNC_REG_ARG_CNT for LoongArch
 
-There has been recent work on both MIPS and Alpha for perf events, so
-supporting ARM32 EHABI doesn't seem unreasonable. Devices like the
-Raspberry Pi Zero W/WH, which use a 32-bit CPU are end-of-life in 2030
-(according to https://endoflife.date/raspberry-pi ). It is
-out-of-scope here, but extending the kernel and verification
-infrastructure shouldn't be hard.
+ tools/testing/selftests/bpf/prog_tests/uprobe_autoattach.c | 1 +
+ tools/testing/selftests/bpf/progs/bpf_misc.h               | 6 ++++++
+ 2 files changed, 7 insertions(+)
 
-Thanks,
-Ian
+-- 
+2.42.0
 
-> -- Steve
