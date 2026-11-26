@@ -1,51 +1,51 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=45.145.95.4
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
 	t=1795699271;
-	b=O9coV870/Ma0FK4pWQdyh0vMMeqgnAGXOxDWwE/6hGu6y6FVOdI4vmNTjukdBom6001B
-	 mZcIgOC6RedeMtzKi5/lF3aCqXBuT7apiWsOYeCbUVig+VGo8+bOU6HvQVMiPVRwVrr/f
-	 Xvf6dqkw476BpreK3Gl8gNmbhOjE5ga5kqAqpZSfzDGjZIItjQ24DKWO6euroLluRSDr8
-	 oxLlxo03Z1PNVh9ZFCzbyS9CDAEFG91pCZVk2Q2Dr5UoFHmba+Vwb9zSZTmGRUWCwow/I
-	 5rQ7cHbvAT4SeMrz8g0FjIfpW1mYCJZ0fCTj/8CNmTzic8t7mfCms9tVt3zbPw3bNAQ==
+	b=At0+ftdw5p6uVCqYgDibaXbFIT3FrJWhJa270jA6mTzxxMadLKbS7znQnccSD+odq+yr
+	 J+f2ASbz6+HQC22OZAYE7WkFgkWH7HU/UxMxdVQfztBrLMebTomGZLKec5jjop0haBxpz
+	 zQTpKdyXvKCyz+l8EzTdqJckpnSxhKQ8Mdzv3WxJsx3tVD13y2aJbeFE2xcRT3BLMH0xW
+	 yfwKsJhAUOcmELfE9vNMtK+aCAE58TQFbJus30Cuj6Hta6wU+c4/zlU1D7wfQt1WY+rzy
+	 xAfYpRjraOvgl4HyLaSGXUrCTdGbKA/PhPGD6kL+pMtBZLQ8eMdHbLzin5vFb+Q28FQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1795699271;
 	h=DMARC-Filter:DKIM-Signature:From:Date:Subject:MIME-Version:
 	 Content-Type:Content-Transfer-Encoding:Message-Id:References:
 	 In-Reply-To:To:Cc;
-	bh=fUmke9tSlFCwV23Ujt9zCCmlnmXUs/kvogA2VypNRzw=;
-	b=VIlgJ8nYeGTHBddY02SMojgFLF91dFw/HMOa/Ed1Ph5IkKCzI0tercy3RPVs3c/lJ1bZ
-	 UsHfBRWPyCRaEmheOnwREM579xWvqMZ8gV8F9vljhd7bTFBS9IG+F2vK8L98squJdYihx
-	 Csl1ePjIwRovSq6xZ25oiivvRJQZPqURYbwbK0OwfeU0vKQIRyDrlj+ssv4smAn4H91ZF
-	 sqm7l6qfzOe515KZTwrPANaBUofviihh4v8j8SLG+AI+hrFSTiutrkCRYSIx3qiq50qF+
-	 yuY8g4wMJ/WliZTRAQy2jD7rMk6xwMXxfFJ7RSFe7IIfrzKGmNl2JSS1xuEwfRpyDXQ==
+	bh=Jw0Zc1KniHa5V/wsDV8IErYtkkiDqvdTbI8JpEzye8M=;
+	b=Woau4cYWp5k1M/1tBu2evXEXDAa9AxpcBY1Vupi609hvbLkcHRbCSfPJ4fQ5GdqxuRV+
+	 ctSSUD9debnAsGcSOftUTg8v7sVV3RcgKw0Y/YJWFGSpwvbJMYYjhX9sCVcudFNM5uM/2
+	 TVphCxjpzHiZMdBaJgYddSUDabuHw7JfNeM+nbvPnxY7EdabhOGeLhOgMzDidNX/y1Rft
+	 baWuVk79ZXz2mMyMAvcnVPAZAxmslB0PAIqGDXzNiUIn1UbzNrZ34w1eUeinTFeOFPeOP
+	 zliHWr5sjL8I9g/rYJvYqWo5Ase5sonjinEGO7AbN6IsQsg4a5P9tmm1H9TJ6IVSvgw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=toke.dk;
 	spf=pass smtp.mailfrom=toke.dk;
-	dkim=pass header.d=toke.dk header.i=@toke.dk header.a=rsa-sha256 header.s=20161023 header.b=QrzVFjIr;
+	dkim=pass header.d=toke.dk header.i=@toke.dk header.a=rsa-sha256 header.s=20161023 header.b="c/5MnqIL";
 	arc=none smtp.remote-ip=45.145.95.4
 Received: from mail.toke.dk (mail.toke.dk [45.145.95.4])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28D16606A681
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D8DB606A682
 	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 13:21:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 28D16606A681
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2D8DB606A682
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=toke.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=toke.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=toke.dk header.i=@toke.dk header.a=rsa-sha256 header.s=20161023 header.b=QrzVFjIr
+	dkim=pass (2048-bit key) header.d=toke.dk header.i=@toke.dk header.a=rsa-sha256 header.s=20161023 header.b=c/5MnqIL
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=toke.dk; s=20161023;
-	t=1795699267; bh=VViIhXw1gUemGgNjnQ1n8IGX3dEFthuqDaojbu7tzqw=;
+	t=1795699267; bh=TT/FqEfb3cOl2EftQEceU2ScT8twZOYPX+pkyx9OgRU=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=QrzVFjIrZxqWJ3DygsAED2BRiqFKJgyZecBI04pmfq+q51MBuByShxK6LswTPte3Q
-	 pgQh+OpI1q/T21e4TiOCDArefrkSjxThdZvqF2pQUUMgwiFITlMJodWkPI9qbNjIqg
-	 thDsk4IjFNYkWO1KCYGYHOLOkPIdShRewcKUjl7dvqHWdPaWUnVB1Or1iUqejpHQl/
-	 JIVN/FBIyZAYd3vEXfx5VpMuLH0W/zGPCR7aLQNicGBjsZh1XjBb9GE9eglXAKsn+w
-	 FM3iqF9kfs6X9rHJaT60HHnHY9MLErSvp5bTaQ/JG7y/2Ce296/cgW6e/09yfdSs21
-	 SPGOhSaMhNVOg==
+	b=c/5MnqIL40hWZ6ammeCtyn3BU5T6if0NPln5KXccERCGUVfxIMMgJYD/oNmojg9Qw
+	 wWrqWieOM69y8BDFOQV8c8XmaJ3zPE7Pevc8N1+FSdil+BBiuK3be9+w3ytKrmj2qw
+	 e25Em74bSmIVLBpbqgqweDVWX6ByHTF6R0O4aeaBJdlF7m6Jy+O6iM5Lfznin0tHlu
+	 4fz6ycjWuc2VjBNAgteNfsK0/CfOCd+t6v4JARn2vLJP5xbdBCM2bfLR6rPVio++gd
+	 lqyXLG9mR6Nr2tYL6qUsj871DOCfNTlgh+vyniJ3mGYmKPmA/SrRqgYGElPY036GoL
+	 0B9rYrz7EMdQg==
 From: =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>
-Date: Thu, 26 Nov 2026 14:21:03 +0100
-Subject: [PATCH bpf-next v2 5/7] libbpf: Pass in token_fd when iterating
- kernel BTF objects
+Date: Thu, 26 Nov 2026 14:20:59 +0100
+Subject: [PATCH bpf-next v2 1/7] bpf: Relax BPF_*_GET_NEXT_ID permission
+ checks to CAP_BPF and bpf_token
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -57,7 +57,7 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20261126-bpf-relax-get-next-id-v2-5-039e92757f9c@toke.dk>
+Message-Id: <20261126-bpf-relax-get-next-id-v2-1-039e92757f9c@toke.dk>
 References: <20261126-bpf-relax-get-next-id-v2-0-039e92757f9c@toke.dk>
 In-Reply-To: <20261126-bpf-relax-get-next-id-v2-0-039e92757f9c@toke.dk>
 To: Alexei Starovoitov <ast@kernel.org>, 
@@ -72,66 +72,134 @@ To: Alexei Starovoitov <ast@kernel.org>,
 Cc: bpf@vger.kernel.org, 
  =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>
 
-When loading module BTF, libbpf will iterate through the available BTF
-IDs in the kernel and try to load them. This fails inside a user
-namespace because of missing permissions. The kernel now supports
-passing in a bpf_token to BPF_BTF_GET_NEXT_ID, so amend the iteration to
-pass in a token if it exists.
+The BPF_*_GET_NEXT_ID commands are currently restricted to system-wide
+CAP_SYS_ADMIN, but iterating the objects themselves is not actually an
+administrator-only operation, so this seems overly restrictive.
 
-Passing in the token doesn't work on older kernels, so if we get an
-EINVAL back when trying to iterate, we reset any tokens and try again.
+In particular, being able to walk the BTF IDs is necessary for libbpf to
+attach to functions in modules. So the CAP_SYS_ADMIN restriction
+prevents some BPF applications from working with permissions delegated
+by a bpf_token.
+
+Relax the permission check in bpf_obj_get_next_id() to
+token_capable(CAP_BPF). There is no change to the operations that turn
+the IDs into file descriptors (BPF_*_GET_FD_BY_ID commands).
 
 Signed-off-by: Toke Høiland-Jørgensen <toke@toke.dk>
 ---
- tools/lib/bpf/libbpf.c | 18 ++++++++++++++++--
- 1 file changed, 16 insertions(+), 2 deletions(-)
+ include/uapi/linux/bpf.h       |  5 ++++-
+ kernel/bpf/syscall.c           | 33 ++++++++++++++++++++++++++-------
+ tools/include/uapi/linux/bpf.h |  5 ++++-
+ 3 files changed, 34 insertions(+), 9 deletions(-)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 6d0e71aff3e1..6bfa5a9eb8ba 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -6017,6 +6017,10 @@ static bool is_btf_mod_allowed(const struct bpf_object *obj, const char *name)
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 62de0919db72..cdc313f9ab14 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -1786,7 +1786,10 @@ union bpf_attr {
+ 		};
+ 		__u32		next_id;
+ 		__u32		open_flags;
+-		__s32		fd_by_id_token_fd;
++		union {
++			__s32		fd_by_id_token_fd;
++			__s32		get_next_id_token_fd;
++		};
+ 	};
  
- static int load_module_btfs(struct bpf_object *obj)
+ 	struct { /* anonymous struct used by BPF_OBJ_GET_INFO_BY_FD */
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index ec8e78792911..1440c10ea0cc 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -4872,21 +4872,40 @@ static int bpf_prog_test_run(const union bpf_attr *attr,
+ 	return ret;
+ }
+ 
+-#define BPF_OBJ_GET_NEXT_ID_LAST_FIELD next_id
++#define BPF_OBJ_GET_NEXT_ID_LAST_FIELD get_next_id_token_fd
+ 
+-static int bpf_obj_get_next_id(const union bpf_attr *attr,
++static int bpf_obj_get_next_id(enum bpf_cmd cmd,
++			       const union bpf_attr *attr,
+ 			       union bpf_attr __user *uattr,
+ 			       struct idr *idr,
+ 			       spinlock_t *lock)
  {
-+	DECLARE_LIBBPF_OPTS(bpf_get_next_id_opts, next_opts,
-+			    .token_fd = obj->token_fd);
-+	DECLARE_LIBBPF_OPTS(bpf_get_fd_by_id_opts, fd_opts,
-+			    .token_fd = obj->token_fd);
- 	struct bpf_btf_info info;
- 	struct module_btf *mod_btf;
- 	struct btf *btf;
-@@ -6041,7 +6045,13 @@ static int load_module_btfs(struct bpf_object *obj)
- 		return 0;
++	struct bpf_token *token = NULL;
+ 	u32 next_id = attr->start_id;
+ 	int err = 0;
  
- 	while (true) {
--		err = bpf_btf_get_next_id(id, &id);
-+		err = bpf_btf_get_next_id_opts(id, &id, &next_opts);
-+		if (err && errno == EINVAL && next_opts.token_fd) {
-+			pr_debug("retrying module BTF load without token fd\n");
-+			next_opts.token_fd = 0;
-+			fd_opts.token_fd = 0;
-+			err = bpf_btf_get_next_id_opts(id, &id, &next_opts);
+ 	if (CHECK_ATTR(BPF_OBJ_GET_NEXT_ID) || next_id >= INT_MAX)
+ 		return -EINVAL;
+ 
+-	if (!capable(CAP_SYS_ADMIN))
++	if (attr->open_flags & ~BPF_F_TOKEN_FD)
++		return -EINVAL;
++
++	if (attr->open_flags & BPF_F_TOKEN_FD) {
++		token = bpf_token_get_from_fd(attr->fd_by_id_token_fd);
++		if (IS_ERR(token))
++			return PTR_ERR(token);
++		if (!bpf_token_allow_cmd(token, cmd)) {
++			bpf_token_put(token);
++			token = NULL;
 +		}
- 		if (err && errno == ENOENT)
- 			return 0;
- 		if (err && errno == EPERM) {
-@@ -6054,10 +6064,14 @@ static int load_module_btfs(struct bpf_object *obj)
- 			return err;
- 		}
++	}
++
++	if (!bpf_token_capable(token, CAP_BPF)) {
++		bpf_token_put(token);
+ 		return -EPERM;
++	}
++
++	bpf_token_put(token);
  
--		fd = bpf_btf_get_fd_by_id(id);
-+		fd = bpf_btf_get_fd_by_id_opts(id, &fd_opts);
- 		if (fd < 0) {
- 			if (errno == ENOENT)
- 				continue; /* expected race: BTF was unloaded */
-+			if (errno == EPERM) {
-+				pr_debug("skipping module BTFs loading, missing privileges\n");
-+				return 0;
-+			}
- 			err = -errno;
- 			pr_warn("failed to get BTF object #%u FD: %s\n", id, errstr(err));
- 			return err;
+ 	next_id++;
+ 	spin_lock_bh(lock);
+@@ -6523,15 +6542,15 @@ static int __sys_bpf(enum bpf_cmd cmd, bpfptr_t uattr, unsigned int size,
+ 		err = bpf_prog_test_run(&attr, uattr.user);
+ 		break;
+ 	case BPF_PROG_GET_NEXT_ID:
+-		err = bpf_obj_get_next_id(&attr, uattr.user,
++		err = bpf_obj_get_next_id(cmd, &attr, uattr.user,
+ 					  &prog_idr, &prog_idr_lock);
+ 		break;
+ 	case BPF_MAP_GET_NEXT_ID:
+-		err = bpf_obj_get_next_id(&attr, uattr.user,
++		err = bpf_obj_get_next_id(cmd, &attr, uattr.user,
+ 					  &map_idr, &map_idr_lock);
+ 		break;
+ 	case BPF_BTF_GET_NEXT_ID:
+-		err = bpf_obj_get_next_id(&attr, uattr.user,
++		err = bpf_obj_get_next_id(cmd, &attr, uattr.user,
+ 					  &btf_idr, &btf_idr_lock);
+ 		break;
+ 	case BPF_PROG_GET_FD_BY_ID:
+@@ -6586,7 +6605,7 @@ static int __sys_bpf(enum bpf_cmd cmd, bpfptr_t uattr, unsigned int size,
+ 		err = bpf_link_get_fd_by_id(&attr);
+ 		break;
+ 	case BPF_LINK_GET_NEXT_ID:
+-		err = bpf_obj_get_next_id(&attr, uattr.user,
++		err = bpf_obj_get_next_id(cmd, &attr, uattr.user,
+ 					  &link_idr, &link_idr_lock);
+ 		break;
+ 	case BPF_ENABLE_STATS:
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 62de0919db72..cdc313f9ab14 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -1786,7 +1786,10 @@ union bpf_attr {
+ 		};
+ 		__u32		next_id;
+ 		__u32		open_flags;
+-		__s32		fd_by_id_token_fd;
++		union {
++			__s32		fd_by_id_token_fd;
++			__s32		get_next_id_token_fd;
++		};
+ 	};
+ 
+ 	struct { /* anonymous struct used by BPF_OBJ_GET_INFO_BY_FD */
 
 -- 
 2.56.1
