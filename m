@@ -1,84 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.172
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.44
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795664307;
-	b=gl2LrSEbh+SP6DLd52jucOBeC4OtxY0IvXC7SFL+iXJnBDAX7NVK15ri4KwSbTJIt5mB
-	 JUa0qfhQW3VgSn+rUPghYqVhH2yHUkDcZxl3dm0Ghto9r8LxXCXLLlC35a0m0QlsUe+A9
-	 uuJdkDr1+fK5lad5hqk7cimFRxleEAsquOjXnjuHkROdFxDxmjRm9LAX9ejxx230Qar3B
-	 yn4dE1QI7zJibwRQYC07+pnqniK2UDd/oM9LM2zpzlWTsW1ccaKBxvzODE5pfbSzIhdlK
-	 ZG4vLmW0QXNvavMqiEzV7xE+bTMvXi6G11QUcWZ8IogzMFrS4vfO1wCnWDyU+1+iCmA==
+	t=1795664312;
+	b=qZPXnrxi3xIdf0ZoP3VQ9A10Zh3wU107/DJ+OBjjWelyJHzduLE126vuDnE882zUVstb
+	 VuOMTzYlDBspmELK2lPBCiwzp1gsJJyGUkhnewaL/xWxS9nG4EOZzzxpXg6SDAeAlm6mH
+	 vNsnrr06fRgS/2JAI32sw1lPXU8ZrY4BY3FkBoDmS8hgMao9eR3RnnmCfQS3EcdHTxlYt
+	 /6fpHww+QZQ1em7I25UErPxdcGAR4DanMJFcU9bku8ynFGFly0EFHiAoRUINGG0IYSzyL
+	 5Mrhj8pSsFHc3BOHSKoMI/rRmXJ72BIZFu9NzTuM3w1xYFkXMtjTQiXnkhCBh9wI3UQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795664307;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795664312;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=qJGqwSNNDW6zIg+emgHruInwvIE1Q0xMjdAk0bvJaJ8=;
-	b=Iismu3SuTIcnI1UD4DdFYrt4gE3NUjMz5vvjnOvOe5A4t2S0sj7qym9dYWHDxFr0sYmy
-	 V8yBcpYcZhXqiqNX2w0h7bhGqMnPY3NPN5Bc/uTv7YrHS3wQcH5//PUKuTei0vLEUynIN
-	 ZefUUxmDeAbLsrFbbULUbiWdfA4xxxhZ9BhX1lShgTjKXXPkw/K+4mrZAWrFvcRWH+3dc
-	 Bf9E8qpjyTjwpL/HbigiTKyIJXKlEQm2WxzBjfakuKHuRDJyVQgu74avc4ZyCW+vXywSk
-	 YKVFWrZ7CoFLut4yupYmo7OwTOXL5Utgqn0G+gcJoI/YN3+H23SFWJuTaX4snZ6GMZA==
+	bh=Vz0bZtnMYlistXeve8bJV/h9wNRvP0lQWHmoiz3+37M=;
+	b=i08w3MPhddFro8b8Yv3y95Ms3e/npdx+oiBy+XGW5Dt1r9jCE0fZj/IdMZXv0iAIgf10
+	 7O/30lfyV5jAF0VGatb6hPJWu8UPhdcR56eQahR8ass5ycE+cYOrlBGe5sc+NvEola9cL
+	 FXwss1667/6kzrVqZUuIpzBn+V/8Xfr9gM/iLGKNe+HnODNyWsHohUhvWLaALB8stSDRn
+	 X09xcs9YDc1ntqOR9S6rTVJt3JHXiMNR7mnWsJVHL47iSKIwICede05CgJKWnNCWexGFg
+	 5S/xT8s11PVMfrdal132HqEG/VcIGifCkQCNFDoj/yleg7tV2vwu3vzaN8N9DIuB0JQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=AL+0tYeq;
-	arc=none smtp.remote-ip=209.85.215.172
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=iwEKgs12;
+	arc=none smtp.remote-ip=209.85.216.44
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF7D4606A321
-	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 03:38:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BF7D4606A321
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A99F606A31E
+	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 03:38:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7A99F606A31E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=AL+0tYeq
-Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-cdab8873d9dso3141644a12.1
-        for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 19:38:26 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=iwEKgs12
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-3b41e5a1719so2768058a91.3
+        for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 19:38:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795664306; x=1796269106; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1795664312; x=1796269112; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=qJGqwSNNDW6zIg+emgHruInwvIE1Q0xMjdAk0bvJaJ8=;
-        b=AL+0tYeqEOP2ok+7Zrfje52ofjD+bensjN3210JuY64xNvEKsp2W0D/61yL3/VBk5E
-         kh6gnbqjIbPGkaJ1OHlQ1+YfMNmkGlG5bvy260eq4LREZlQp/P/nDCLdpkILkQ26nH09
-         L8GNRjNTPabTc8nVS7yAUfhtfguEjgpRIui9FOL/itvgX9JIdhm9LlENuTdzXUqk1K1I
-         GivYtBonVIvP2jx1b/ISwygn8ti2OsBfTsN3sbcPOApBd+tsMd7KFPBMe0kDLBnaxAnO
-         f9ysj5pv5ap0D3fUwnZVPPRTQ8ZEfLD6oXtrCo59EzVciRBVPbHgU0vLF/KDhWQoHNHG
-         QpfQ==
+        bh=Vz0bZtnMYlistXeve8bJV/h9wNRvP0lQWHmoiz3+37M=;
+        b=iwEKgs12bE7VNvIpHVMMGV3yWaZQ5qAfx/5QEgXOTw9ZS5vnSGHkN8N+LcSylYCO9y
+         soSuZpFhjoygGwi6y98eXE4+3R8GIJcX5KGVvMlZuhQ+m6/qkQxEKPXmXdWjHGmmXmm/
+         KdtLQnxRbM7bJsvozSbJ3euS48b9S/uzejo0WSdtn8WhiPtGDv5cCnF0Jo7XgXAs7Jlp
+         qTZ5RcnCWrIhnDSzC2tlwbQ9ZF0xgoS+2ueEF+9+xCNel6HqmA650HAnFQWikuhTJOxF
+         KBE/eB66VTPX0GyrV4e89aztc/EK1sNwjZ0uU2w3d84Tpx74WSvcNvPAJAUl98k3tfcw
+         15CQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795664306; x=1796269106;
+        d=1e100.net; s=20260707; t=1795664312; x=1796269112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=qJGqwSNNDW6zIg+emgHruInwvIE1Q0xMjdAk0bvJaJ8=;
-        b=g4DMbP94D3C+WLlXXKoNTwG+bu2jf8TbAnccj+upvlnCN5+200IN72eJU4nx2CZY0k
-         W/koGyHK4QP6Py/5WuW/8YxgL17geR54DbiEIO1okgpQ/HJ2ThezM/b5yVGZ6Ime+Gr5
-         9l4cXRJjTUk0KUqdr+82FW4x7r3DmuqRTFcGwySV96ZUiSGeb/ZL5Dg+JnuDR4T++nCB
-         K1GVd42Sk6jL40WO5tUDxawsgjLmkTQhQvwQMOF2kMqv1m/Vqw82BPEq66pEI3YXTft4
-         MCc6MFz1W/mCAV53P1atBe6LdPRSDsS1Ih54iFSemW9sSxZzVtnBdSqURS984g49uPbz
-         7ovQ==
-X-Gm-Message-State: APuU4Z9udbmYg4OY95HL0r2cVxaqEYDaYEtvBx5YvraFu1o+9QRkgCqK
-	y8CYrG7QGNdcgzvSC6Rc5fmBg5e1a0jU78/yCM/o/izFx766yNhgWuaK/9TNMw==
-X-Gm-Gg: AZFdTZebtQq7JyWVCfefSNQo7uCwloftPh/9BM7MSZcXamTuWh5L3MhZ/1fcYIKza7V
-	Rqw0wEIbUa+SZqfQgbyHLsiliLK8Xlk51IfUoOLU5tkuOL9d9nxSE6nxN1/2QjTos9z6fc1tA2c
-	gifkthk0cORPXzoxux/sId8SEM5J6sHYTXpLtTv6O7OVC3et/PmlVDOlsmg/X7Vde8JOUO3IE2D
-	T82NnNqLSr0vJZt/EfHiOILioM+FJN2EqtjTeqsdvgHyR23DNu5COjem0QiiaEBbmcardvb6NSf
-	j1LHKskWxiCImbmoXd436qEIk86hjl1RtCojuExKowSH+YcUl7oP8Xn9KZeoWvvjYY/CEAaQpRK
-	j8V5UpKdvFhP3eLM/XZtQGARR0AXUErKQv6btJhsTkwnjsdogqCk1EZmuaUDTLZ3QEGjS2nq8xm
-	pdlhSWAtcoW++xVlAFzvlQUh7w3KStsO6VErc7lsLnHbCNDcgIHGLehdaNc+Ej3IOTynRTnj1ml
-	rQcHwT7wWkwSqyGi67OCQ6HF4NfqFJTtCXuZjfde3YzGGTFQuqjVHP24Cle2MNltQHVJ1+9e5Uo
-	C6Ms0yyH6FPonAc/eBkstdxPl97bXkh03TNczqzkHakyQc+Wf8KmW2mL8SmpEZ1zlVF/NkYaVz4
-	P7Er20s78TczXoA5dSUuAG/JXhW6VC6HMC6xvcb+ITnMbDtykit8xyOOzJSfZnKopbWfEEOkIOQ
+        bh=Vz0bZtnMYlistXeve8bJV/h9wNRvP0lQWHmoiz3+37M=;
+        b=IBe8tehVS3OC1Kf79XZHDbnSghmpjX9/GgaVLlUBNwY70XF8HaQYNogrDFaTeQjb78
+         rLXcyueA/WfalBxoNwlnepm7oR3fMdGbnbfefarAgQ4+GT+XXs9Vt+OXFagLox2gjBgL
+         aIAlePewdgPQJbOyhTcBItfjCHtX3ZDdpH9CcKVVDGu3qiYKSqukUfo8iWqieQA219XI
+         xv5cig5WxbND4OAgJgw22GWRSfSqi0Y9HvR387oWadeFi+JkezCl6RRBz3c3yY6qbQQ2
+         PHnfb1Y3hXvmv6vRkFyQlbHUC2De9G2iqcm2NKhpzfV9AJRdGAMc4kbJqryON/GrzenZ
+         eJPQ==
+X-Gm-Message-State: APuU4Z/WQykCSiHGr1WRaB6WENflIhCk+jDnVD95WDX4frPHBelQlqtu
+	nLIg8bGFRFF5Vb8UCDp4WH5wzh2PiEPDXHEWz3CdWfn3UW/mFMqnw3D2XkqGZg==
+X-Gm-Gg: AZFdTZcoHOeKwPI/gGMlAocUqu6PwMLM0y+ivYSWLOkoJZBpUGc54CXXUC+Bpq/Zgca
+	4XCVM3ho4DzP399VPlBnsTHV8nTh0sBvZzcTw7un4QZGk1iYSWWXggHTfNvFxr0SMZf+a5Jr7qq
+	vpI0kmsEhu73LiMZ9VL2DIdxUTTBCj6JtPMekirzeyRYvsxhYtKDqPe5KKGr/XFbhwP5YC/meW3
+	k6RNu2TEL/iV5bnbamKFFB07luWvLoQpQRqwdktMDre/7ldS1wwAU9/WrPQKsrK7sGKSunQ7DvL
+	mq0pRUu/lvGrYAGKY+oX7r+vAU45OVx5s0aLmenxoaOrv2gOk+fPqezCV24asUn/wUBbc9/RDZf
+	lETt+jApH9zmQ8iN65tysTg7Q6n5NVYWWLfQw8re7s//AYC+Sqb4Kqbci9ERnHRvi95fiAiOnQj
+	eJVWyMS+sHVP7UyXUVcHIIt63DtFB4jtu8UpRNraaAcZwJOZDvZ29PHJZtCzRb4wLtLwBpTJfDf
+	+P4SC0HVv4AzhQdwJF2IxbPGj8BwvqQf3/pFcbgJ8g6DYnhCPizMJd4JZoYTn/UBRFpjajRWdI6
+	0q5a/QEHjTFcded4NWZfBPYwVWI5JDcpGp5cQEW6k21nr1f9Bmm/xsQrw2jXO05piayP+ykvHdi
+	oxlBGYwMR0xB87tEZR9dckzebuWBZXSkD823SzOn9quyW7fWnqoN95EGh8/PyPnDK50em7LKBKw
 	==
-X-Received: by 2002:a17:90b:4f8f:b0:3b4:f260:72de with SMTP id 98e67ed59e1d1-3b4f2607685mr4268237a91.64.1795664305881;
-        Wed, 25 Nov 2026 19:38:25 -0800 (PST)
+X-Received: by 2002:a17:90b:164a:b0:3b5:a3:442f with SMTP id 98e67ed59e1d1-3b500a34654mr3027551a91.41.1795664311648;
+        Wed, 25 Nov 2026 19:38:31 -0800 (PST)
 Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.246])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b405ecb486sm32960069a91.16.2026.11.25.19.38.25
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b405ec698dsm32917674a91.14.2026.11.25.19.38.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Nov 2026 19:38:25 -0800 (PST)
+        Wed, 25 Nov 2026 19:38:31 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
@@ -86,9 +86,9 @@ Cc: daniel@iogearbox.net,
 	eddyz87@gmail.com,
 	memxor@gmail.com,
 	luis.gerhorst@fau.de
-Subject: [PATCH bpf v2 1/4] bpf: Undo insn aux changes of a failed speculative path
-Date: Thu, 26 Nov 2026 03:38:13 +0000
-Message-ID: <20261126033816.4124847-2-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf v2 2/4] bpf: Treat NOT_INIT as a pointer in __is_pointer_value()
+Date: Thu, 26 Nov 2026 03:38:14 +0000
+Message-ID: <20261126033816.4124847-3-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261126033816.4124847-1-alexei.starovoitov@gmail.com>
 References: <20261126033816.4124847-1-alexei.starovoitov@gmail.com>
@@ -105,51 +105,32 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-If a check fails on a speculative path, do_check() adds a nospec before
-the insn and ends the path. The check can have written nospec_result
-and ctx_field_size of the insn already. The other paths can use the
-insn with another type of pointer, so these values do not apply to them.
+The blamed commit made __is_pointer_value() use is_pointer_regtype(),
+which is false for NOT_INIT. mark_reg_invalid() can set a spilled
+register to NOT_INIT, and check_stack_read_fixed_off() must not handle
+such a spill like a spilled scalar.
 
-Save both fields before the check and restore them.
+Go back to the check for SCALAR_VALUE.
 
-Fixes: d6f1c85f2253 ("bpf: Fall back to nospec for Spectre v1")
+Fixes: 1f737e46ca6a ("bpf: Remove artificial limitations on pointer types eligible for spilling")
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/verifier.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ kernel/bpf/verifier.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index d4b31990fcb9..c553e1533ace 100644
+index c553e1533ace..5929478787d3 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -20649,7 +20649,8 @@ static int do_check(struct bpf_verifier_env *env)
- 	for (;;) {
- 		struct bpf_insn *insn;
- 		struct bpf_insn_aux_data *insn_aux;
--		int err;
-+		int err, ctx_field_size;
-+		bool nospec_result;
+@@ -3825,7 +3825,7 @@ static bool __is_pointer_value(bool allow_ptr_leaks,
+ 	if (allow_ptr_leaks)
+ 		return false;
  
- 		if (signal_pending(current))
- 			return -EAGAIN;
-@@ -20802,6 +20803,8 @@ static int do_check(struct bpf_verifier_env *env)
- 		if (state->speculative && insn_aux->nospec)
- 			goto process_bpf_exit;
+-	return is_pointer_regtype(reg->type);
++	return reg->type != SCALAR_VALUE;
+ }
  
-+		nospec_result = insn_aux->nospec_result;
-+		ctx_field_size = insn_aux->ctx_field_size;
- 		err = do_check_insn(env, &do_print_state);
- 		if (error_recoverable_with_nospec(err) && state->speculative) {
- 			/* Prevent this speculative path from ever reaching the
-@@ -20812,6 +20815,8 @@ static int do_check(struct bpf_verifier_env *env)
- 			 * markings for alu sanitization.
- 			 */
- 			insn_aux->alu_state = 0;
-+			insn_aux->nospec_result = nospec_result;
-+			insn_aux->ctx_field_size = ctx_field_size;
- 			goto process_bpf_exit;
- 		} else if (err < 0) {
- 			return err;
+ static void assign_scalar_id_before_mov(struct bpf_verifier_env *env,
 -- 
 2.55.0
 
