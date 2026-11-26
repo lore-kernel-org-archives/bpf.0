@@ -1,78 +1,78 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795695344;
-	b=unyrjYCbo/1lJ4yNDWDas9GdKZTIVUZ22+5dyO0rmC8n7onHhWyI3JWAEf2a2ogmR8DV
-	 oWCjVu0UYeBa4i/hnLdk7bXVyhsNVIEQIrdylqPVwiBdqggWM5Fmjd5IQ3CyJ9ccK15zU
-	 fPsS3nym22H+jOD8Nrw5pONhKzpodDoJseOCD/sa0hrcFunmurhIBBdqAGbqvdOCPwk0g
-	 DZFGWzpktb6tTIHUw5Ob7cYbJycd87QddQRUj9w+wki0s4Py3uIO/43NQD9gar2ImxQuM
-	 49e6wxr6PXqbc3lz/cz5xEF5OTaymKdmTsgQ0cdtnHjCfHbKFBgKM4g2jxDusBmRHyw==
+	t=1795695575;
+	b=4MKal5UTl63qzRlSldopm4UN2jMpyzmoTdikA1/yxZH3G1YkHn648f5rLo9vsR0e2dxC
+	 ipLyEq24jRxja3ovWFRGy2QCrKKfyoNzxoYh/cjH42JYnAtmlLDt88SoNw8sgoeyw0+d1
+	 RKMFstWadW7Ch2/VruusnplHCQS7Nr3MK1MFSQPmjIqfgw4KBbrjFqNjtgbcE2+FAt6P1
+	 BxN9h+dJcrx4XUKWh3KzMvza+XhLW9jp27HkFysTAaPkKL9K2sKdvHV/Hn0dYNpENqlxo
+	 a+31EZ3o160Up20mQbjBiyH2UTlzWXbP9ATNWOxCtkSLuYtjv6eNMZas8+GoaIFKcSw==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795695344;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795695575;
 	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
 	 Content-Type:Content-Transfer-Encoding:Message-Id:X-B4-Tracking:
 	 X-Change-ID:To:Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:
 	 X-Endpoint-Received:X-Original-From:Reply-To;
-	bh=N5xNpk5x4M7yDPJWJWGiZgxrBA/l4h+Uz4GRvv4ty4s=;
-	b=CC0FNUPhRg/zo411FalDo8G3YLoSiKMntB53z3AKpUyF2tW7Ihcl7EY3Ya8erw3jujSR
-	 TGkaXd/XfSXwUIvqEcSop8Sx9G5Y118kRK9TCDqNn2WRJviBpkkHL7BDAtgE6vZcLO86B
-	 vC0+DsJczLu3IzFHA8d8I5fTlD9FZSFA8BGUVWmeUVYeWqwxMR3o/L6mnsr6LzvhEsnQ6
-	 3VSSXQFd9Yqx95AkU9Ui0mSUWigKRBV7LijuRhRMKG+yD38BS6ZBag3Qkk69MSe+CsVm7
-	 B27G5XGAwwZCb+QQyKVHD+zDIeu+sh5M3Neqm7xvGM8lqKWL30Q33iBs2rMu962q3QA==
+	bh=JlssY66KgAX3fjWD235Kej1M2yTYA5eP8egsUM38Stc=;
+	b=3LSF2E032nFizapMYk6q5XsMzQVzIwJhQX37zb9bssquFkwmEzGiSlDH+ReU+zuu5XCy
+	 R4aZUClf6BaqimbeJgLHsiBHw++Rka1u2jnf1dLDAoUlQiEo3rV3cK/ZOo6rsSsX0MB6q
+	 jy3/gM6cWE1J5VDpiJS2VQU7SUcn+GVKZZXmYBWZ1ECcgrhizN28TThkbyOZCnXO1FERf
+	 qjZMTX7SE1Yt9TL3ZvAsDKWbNa0VtAx8fb6v145P22QCIZaPNyXptNtMgtALUOFh58Z4T
+	 6dbFARBZBeozr5umz7WhGeIL4p7tP1YIRqYZ0NExNKiZrWgeLGagC6hXm/Rvmlm0LkA==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EDcoIN7I;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=KP0iQ5is;
 	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79C3B606A31E;
-	Thu, 26 Nov 2026 12:15:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68D83606A31C;
+	Thu, 26 Nov 2026 12:19:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EDcoIN7I
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=KP0iQ5is
 Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
 ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1795695343;
-	b=Q2xP9dizc7eSTZKIjhn5TYBcqD2FT3N763EDFnJYrHCE4PPK3jz5e5hTnZDwJdtrtPHP
-	 OrunJdOb4juhcfxgaNdMgZvUZ0Pj7Zf4kaY9goJ3T57D+g2wR/2h1pmSOMrt0Tln+2AVz
-	 ++vUjbwYTcvMRr2urCNUSOz40NFosOV5QYrnc8F822SD+VZEvcmtHtCLf+5pfhWrUMFbx
-	 ArgyRSb1MOmVPTlmHv7czRjUArdOOeHRlbf9OLfob6JGrN+NBit+KL/ykiBRuyHBp99Au
-	 HcE/JY0mjHvOJ+Sgl/wKqfXMmvRRmOo9576fFDjGzB33OZvBTcQeO1T7NnxXrrGEDSQ==
+	t=1795695575;
+	b=Qs1IYFWz0T3T00x0x5FVN3wuKeCfMtpdyezdsfVSaT1IofD+BDU2Zg2Ist6b9qI6y8gV
+	 HJRZhsACGh5k2aCC+xpEcP452D0XRnkeh8RAaTHS3F82C1bpDXeE+omYfznSu8mPFkpuh
+	 x+a3fVZkX86+WQAjxgYMefW0rxeRbDiLb7GhURri5XRn40pEvSxh1Dfo/qPBvCDhKy+Zz
+	 qbtHg+b3xDj5X47pGhUTooy0VsAxArtl/qumwtEvsVpmwa+OVZ6g5rvI06G+Bev13hXLw
+	 bbnfSr+Y05FiPccugFYZ7BlF2UayPBZHZ/mOq5ju4yP19iK9uYmSs1GrmGbakCxmzkg==
 ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1795695343;
+	c=relaxed/relaxed; t=1795695575;
 	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:
 	 X-Mailer:X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To;
-	bh=N5xNpk5x4M7yDPJWJWGiZgxrBA/l4h+Uz4GRvv4ty4s=;
-	b=vLKHZIBUrUYYaKRxZasTdas57qPOj+fTNBhswAUwwL4HSR55ZTX4wFg5BMXlgL21FwWn
-	 QJG8/pHcz9pPTeIgHwwJWaqc0EEeLir09VPoboj7cHJmqQanYoNtVVNxot1O6B161vn4z
-	 2CdO8LEmj9HxRoJleb80RgHkbwHGYcyRQi3k90nktbmarForG0AbLhbN49bgIO1bWLFEW
-	 1SgQesYnScBKDU2/TLMgQZ1KKTk5oQagZOBv6mwF6DvU4rwpWhJiUmqAuGyifYp7eFN+e
-	 mngJvH/xPAZFXeaBxvO/LP+ImBTB3ovaPnrdtzpzu6QsQ9FmiDLnsCFdKMvhsrJ00eg==
+	bh=JlssY66KgAX3fjWD235Kej1M2yTYA5eP8egsUM38Stc=;
+	b=EZiPDPR6KUFS7wvAgP6eY3VUdJgO5jmuSpoiW7mHnh4SW0vAQGgG12jt92UBZDFEMrxM
+	 UiXczNCKkZZeUHwi2TYBoVYe8TotG+p510o/vt/YiZ64Q6rYRKeJuUf8KVF+rw1LaKEfq
+	 4TwvFNeHLpdk1qY6bgek5QUzfVOav5PXzUrgYxc5KCfPo8nq7IvXXLxEuXXqsqXLofRge
+	 g3mojai3f0WOfz4c0NOSo/mzkuw5Qpib67siUPQb+XD1FEJfdy2uQ0bYMWI5vcxk+usur
+	 2pPcVHHTqwVE9n6v42jAyDJtiwWQYau5qI2wvb4+GDOdsmcg9vt30RjghmUO0sp04Rg==
 ARC-Authentication-Results: i=1; smtp.kernel.org; 
 	arc=none smtp.remote-ip=100.80.115.77
 Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 17D3E1F000C4;
-	Thu, 26 Nov 2026 12:15:35 +0000 (UTC)
+	by smtp.kernel.org (Postfix) with ESMTPS id D08001F000C6;
+	Thu, 26 Nov 2026 12:19:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795695343;
-	bh=N5xNpk5x4M7yDPJWJWGiZgxrBA/l4h+Uz4GRvv4ty4s=;
+	s=k20260515; t=1795695575;
+	bh=JlssY66KgAX3fjWD235Kej1M2yTYA5eP8egsUM38Stc=;
 	h=From:Date:Subject:To:Cc:Reply-To;
-	b=EDcoIN7Iyd68mt93QEvRV/4GjbgTGkFHwAStqDnw3rPmVntifoW60A11l+UB5N5wr
-	 Y7k19ErariH13fFQox2z7mF5sl6WTosPdf4scVnc2ak1lkJ7JYctBMi9dfwx+V0BmI
-	 Je0AwBvYBUcE24vOtyAlWuqm32d/+YNCMBYYq0IZQ5ClNZx7FbNbXVuVARcodHOKeG
-	 KYP7yf1UI8mdgs9oq2iu2pok/nG3PWSqWJUlDYRlwnsFkT334hHc29qKutHbbsEU+a
-	 +pyyt3mR9BCu0EZ1cwsdiy+pUhHI2fCi6d33dh6qLz8f9vKau+CHEiYFIjaKF11ci8
-	 ORmLL1LDxKSxw==
+	b=KP0iQ5is++oaum7MEeVy5VRwFwbHj0tBqIZUqVnjsvGqdcSrDfwM+0qQ/2TvdvBJo
+	 LVXwofYDmE7voIGRXEYB2QFLJCT5F5dHSKB5Vn+eQJNN2/+S1nMS9kfO0M6Pftec98
+	 7ubc73dm3NxMdMxOtcFzMaOUbKJjILpKrI9Goza2Wh5huFf7KT1wu20m6JjsHhSXDl
+	 zsIkzjAsmi8Jamd5AEOyefOv+14tZetKr+UhNSrHVrNRZKbinWrkUSmUxblPJk4SLf
+	 TLNLq06eshhoeRQqpgty7RL4ikWO2qT71MVsHmLy9Z9eu2OBqWemx+sG794zwhPIw3
+	 qWwL77V0yduXg==
 Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id 9C35F4D491;
-	Thu, 26 Nov 2026 12:15:34 +0000 (UTC)
+	by lkml.kernel.org (Postfix) with ESMTP id 60E0C4D491;
+	Thu, 26 Nov 2026 12:19:34 +0000 (UTC)
 From: Dickson Wu via B4 Relay <devnull+dickson.wu.certik.com@kernel.org>
-Date: Thu, 26 Nov 2026 11:45:01 +0000
-Subject: [PATCH 5.10.y] bpf: Clear buf on error in __bpf_get_task_stack
+Date: Thu, 26 Nov 2026 12:14:15 +0000
+Subject: [PATCH 5.15.y] bpf: Clear buf on error in __bpf_get_task_stack
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -84,21 +84,21 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261126-so1b-bpf-510-v1-1-24bed4a57fa0@certik.com>
-X-B4-Tracking: v=1; b=H4sIALwbCGsC/02NzQ6CMBCEX4Xs2cX+pAR8FeOhLYvUmJZ00WgI7
- 26rF4/zZeabDZhyIIZTs0GmZ+CQYgny0ICfbbwShrFkUEJ1UqoOOUmHbpnQSIGD1ZoM9UYPPZT
- JkmkKr6/uDKaVon3D5cf54W7k1+qqTWeZ0GUb/VwRUxzXlO5Y+fH/A/b9A+rlmNulAAAA
-X-Change-ID: 20261126-so1b-bpf-510-9a33e5e85398
+Message-Id: <20261126-so1b-bpf-515-v1-1-03acb4631a9c@certik.com>
+X-B4-Tracking: v=1; b=H4sIAJYiCGsC/02NzQrCMBCEX6Xs2a3dYCL4KuIhP1sbkaRkqyil7
+ 26iF4/zMfPNCsIlssCpW6HwM0rMqQbadeAnm66MMdQMalCGSBmUTA7dPKImjcRWG6fDcDBHqJO
+ 58BhfX90ZdE+6f8Plx+XhbuyX5mpNZ4XRFZv81JBwCkvOd2x8//8B2/YBv3Z7dqUAAAA=
+X-Change-ID: 20261126-so1b-bpf-515-1ea56b5d0467
 To: stable@vger.kernel.org
 Cc: Jiri Olsa <jolsa@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
  Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
  bpf@vger.kernel.org
 X-Mailer: b4 0.16.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1795693500; l=2361;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1795695254; l=2361;
  i=dickson.wu@certik.com; s=dickson-b4; h=from:subject:message-id;
- bh=hk81rXf0b1uO73SLKT7st7p0Z3no78nTgTSXqVZ7P4c=;
- b=/NzVrZ8AD7J2/dfD/q/IdzP5o6jbwiocZ4hZI5XE0uA8mo6JD697/nCYEbkVq/6dSUQg4vGzr
- 0kxx+wVy2V2Dtaulo5Xuw/ITq6qyJCtOzu/EhvYsKsYhUHmcIT2gKNs
+ bh=BMDL3A0/tlxrmRgMDwvaLHJhFSpu3XBsNg3zFHP17+0=;
+ b=3R3df+Bn1R7wlrDwKrYQSJttf6fYzizf/dcs5kvvNK63mwzoA0ekqGyvSSPO9WfjqbqtuNx7E
+ i/fpGuNQpdXDhsKSwBUniKdHR3MfZRPROVB6te5LSmHAAnoIFq5hFX3
 X-Developer-Key: i=dickson.wu@certik.com; a=ed25519;
  pk=fxH7FS4FdojeJSGLJzgKdfO51Rvr4EW30yinj2mc1vg=
 X-Endpoint-Received: by B4 Relay for dickson.wu@certik.com/dickson-b4 with
@@ -124,14 +124,14 @@ Reported-by: Sashiko <sashiko-bot@kernel.org>
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 Link: https://lore.kernel.org/bpf/20260803210149.296496-10-jolsa@kernel.org
-[ adapted to 5.10.y: use bpf_get_task_stack() ]
+[ adapted to 5.15.y: use bpf_get_task_stack() ]
 Signed-off-by: Dickson Wu <dickson.wu@certik.com>
 ---
 6.1.y and newer already have this fix. This branch has no
 __bpf_get_task_stack(); the same code sits directly in
 bpf_get_task_stack(), so the two memsets go there.
 
-Tested on v5.10.275:
+Tested on v5.15.226:
 - x86_64 allmodconfig W=1 build of kernel/bpf/stackmap.o, base vs
   patched, no new warnings
 - booted the patched kernel under QEMU/KVM. I didn't run a BPF test
@@ -145,10 +145,10 @@ before signing off.
  1 file changed, 5 insertions(+), 2 deletions(-)
 
 diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
-index 3ec76cb5f240..c9a9cfbca4ae 100644
+index e04571c1833f..ca1a15c94724 100644
 --- a/kernel/bpf/stackmap.c
 +++ b/kernel/bpf/stackmap.c
-@@ -670,14 +670,17 @@ BPF_CALL_4(bpf_get_task_stack, struct task_struct *, task, void *, buf,
+@@ -530,14 +530,17 @@ BPF_CALL_4(bpf_get_task_stack, struct task_struct *, task, void *, buf,
  	struct pt_regs *regs;
  	long res = -EINVAL;
  
@@ -170,8 +170,8 @@ index 3ec76cb5f240..c9a9cfbca4ae 100644
  
 
 ---
-base-commit: 99112ea818e35b606397c84fbc05e6fadb6ea162
-change-id: 20261126-so1b-bpf-510-9a33e5e85398
+base-commit: 4f2df9a01754521fbba3493e8ad91ef65515e68c
+change-id: 20261126-so1b-bpf-515-1ea56b5d0467
 
 Best regards,
 --  
