@@ -1,53 +1,98 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.175
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795669997;
-	b=ES+GbErxWV+RKVLN/MUPapLwVjoNOYWSwSbKXS+rJeJdFwcKKxDqdeT9jC64y2jdhdjq
-	 ym6f9tGqDwELF9xwx6plHeswNiX66KT8kF5jkHTSxJpQ9VJaeTV0X0WGRdHpPLA54r5tU
-	 7qouyjFzy/LO3DtBefO7zH3D2wCm/K06PbdOiF6kx38Jy14xu9Eeeupi0hG1nzWkFAK+V
-	 oHDDZoaXlen633qZ4IfigChp1ftxZkaLDUMS1/2jBsHwXGWi7mvbNArGmZeR88wggZizj
-	 msHZZbNFzQa5Vb5tx3G6KnoNLKEyYlLjvjJBsqd4hEvE0p92RZ1uxYuOQo37ldxr5tw==
+	t=1795671035;
+	b=JzhiISWZaO7GJTZO2G7S3gTb6hNn+Jx+9c4ippOBtPF3e90LlhtduXekOEJjM5ayhQr/
+	 JwxKATJRD0mwS4ZLYP+HTpsZb5YJnYjFGfMjP2xYrdkmxdD7sdts+DdDoA6zGRXHJ6G7s
+	 g5id1qWmfDOhHkpQ2WRkTe+NLCAbPA6JV1kTDj++bNl69idCl4HReuRd+n5pZDYfMHdiF
+	 y1IWt+QcCrYrBkyFv8URUiEEYQu53eY6SwxnwVoRMDUBhmkQ/FfDdLKxCKy/EJCG+LQWe
+	 z6h0Tbq4/isV3BQ7DosV8N52qTgugsnXmfoMR7KZ6StUJa3G556PFFjw5MmVZ9L/n3w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795669997;
-	h=DMARC-Filter:Received:Received:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding:X-CM-TRANSID:X-CM-SenderInfo:
-	 X-Coremail-Antispam;
-	bh=1+rdBCo8pQymdZ09uE1sFtVuaCKUGgMaXoyurLdm0AI=;
-	b=az9JFTxgdaQZnorCUvLOWXnlTaT9yplGq0ofVzNJKjNquNShLAwBsAtLKOw8zX1OzZf9
-	 +BXpVY7Dd/I12svqFMN4Mph1HiglOMEeOs5JMsVXKtMJrpHnbji2BmhqmID1H0OWHWfh0
-	 xs4BaLAVsLKzFlU+CJpmgGAJVuelO0F/RB5GILS5MIGnl4WDO4L9x8dCZWObseFE/lNQ1
-	 pTHZ9LTN5OZLb7GY7Z96CqFk6abwm717ECD2JwsZetYuG11asG7LMVWFACsATSljjvXYh
-	 uLnbiIFM5WiXBYLEH1sHzeR5hWbmPJMa9fSvHQ9NjXK1AkFKcJDVS/ZjRRrVsGllkJQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795671035;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=u3D6JB/pv0rrXcWwuSv+aY8D7iPNeAwX6178znatTYk=;
+	b=UMngWPpDe7Mj/B1pc3VXc5ChIhnQdx1rIF09h3bsS1C0VMiGz0TY5GN7Fdb5I+OBblG7
+	 +aN2RHDfrpwaTTp8bk6Q9JlqnrdmUEYA66CubENcfX2sdpvq3Td6pBqCO0SgWZHYKAinu
+	 Cz2xA4RKb2x0577bWTCVejGkF6/vin9oX1OoYWWn65LdHirSbfKOz6UI+gXagaJnT4tKw
+	 HiZCp5lpVc49ytPmVa0lJbzu2Rp31hpsaCzYUtwcBGrlFmRPcaHEUYkep7tEF8e0LB/Kl
+	 6o6usB6qdgruUt4hJpWjlyCy/AkPVCF+UwXF0qOZyA7mj6oYoJsDQEuuG1gzPAl3nPw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=loongson.cn;
-	spf=pass smtp.mailfrom=loongson.cn;
-	arc=none smtp.remote-ip=114.242.206.163
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5F43606A31C;
-	Thu, 26 Nov 2026 05:13:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B5F43606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [123.138.236.242])
-	by gateway (Coremail) with SMTP id _____8AxS_DpvwdrPCUjAA--.34294S3;
-	Thu, 26 Nov 2026 13:13:13 +0800 (CST)
-Received: from linux.localdomain (unknown [123.138.236.242])
-	by front1 (Coremail) with SMTP id qMiowJAxFs3jvwdr63k3AA--.52601S3;
-	Thu, 26 Nov 2026 13:13:11 +0800 (CST)
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v1 1/2] selftests/bpf: Include bpf_misc.h in uprobe_autoattach.c
-Date: Thu, 26 Nov 2026 13:13:06 +0800
-Message-ID: <20261126051307.13170-2-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20261126051307.13170-1-yangtiezhu@loongson.cn>
-References: <20261126051307.13170-1-yangtiezhu@loongson.cn>
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=cA4curFt;
+	arc=none smtp.remote-ip=209.85.210.175
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6322606A31C
+	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 05:30:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D6322606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=cA4curFt
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-8b9c51097e2so2674348b3a.1
+        for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 21:30:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795671034; x=1796275834; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=u3D6JB/pv0rrXcWwuSv+aY8D7iPNeAwX6178znatTYk=;
+        b=cA4curFtIR7VjacFiL2BZHMdzikp3eT89x0fZJmHnvbPZm1cxyN6R8/32JFr/cK8p2
+         bW5D4oPVvxtTC6dZ2Szz/qWDyL6RyMPXF4/pknYrQGcTePSFb+RF2vJklgG1tf/cs0YD
+         e3SHKsYU2tVCjzIWs2hjksKWhyit+VnOSPNO8aup8bGJxXE5BeFwlgpqM04VD3RuMjgq
+         QpwiUprzSwIypwWNnCDJnYOC0vvTKq8eZeWDd1LsSfk8gBIiJg5b1u6QT08T18ujSi34
+         ihR8sUCpOsjXnU3x9a9baGXLLOtEZ++lC3XE2aGcuBa3o91yPHOJgCvHN4UQxqkIdL0n
+         LD5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795671034; x=1796275834;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=u3D6JB/pv0rrXcWwuSv+aY8D7iPNeAwX6178znatTYk=;
+        b=cxfUn4HaxJOyIEyTIzXniBmnmQI9FxS7VrAwBnZpOdKIUk0C9wlZC4S5jD6NiTSTGf
+         3qkJJQ6FHywWr4Q2qcrhPqLPbv67eh0r1xGgnE8OKSw5Sc3ygb3aqOhLdtzD6OitgpqW
+         +ML3SJi9Cx3AjTeqymnS4JjiqjmMvmg5+jrgd36XP2Dj9tMFs51iM1J6I2kOmi2EkG56
+         wq7Elv3o4d+y/h6BVPGATYtokfyL3FG8Uh89IB4A+9R9o4GTNzpDYSQObQNHgYLarzlm
+         AGT1edocS5jaBLSi4rVHLNEMjUCDt0z1xlzYA830qlSkgGohopjNUkB0w+c/gXr2JIsQ
+         Lx3g==
+X-Gm-Message-State: APuU4Z8SVRb1tC7Vj7HKP/iI68OhGmIrAUuYrIVlPeFuBuph4SaaKsOH
+	2eW0pxg8YTh5cTLOW3enj8fi88uOzhM9HnpGG47nMWa3gvtpuUA77a6OG2bGqg==
+X-Gm-Gg: AZFdTZdFy0sePiM37OxcOjAJ41pyJ3NZXWwZAJKYgOTMKNAppHDWIiyaMr7VYBrN01i
+	aVGU5xTkYNLg/OgHwd//sVBk1RHnjehkuT/JSWUzvomSTp/17lpk17MjHlga5GjsJXSULrsvc9R
+	b3Ejsp9ahqhKoi83M9tSGZHw0CJxik3nxbfEe/JNrAI2RYhoiVfmNUib3ghc9XXkympwPfVV0ZN
+	BeyNQyrliNGJGBO3ohAxXFaECif2R4HRjvnazL52oevknyl3xPoPWALPYGGFKobbdjHojqJbztR
+	RColg5h4a8D7ykzN4ZROwpSrrqvU1ZO6GUcY1teo0x+rIkTAgBsj3+BGhfnca0aPdAKKi3w1j+K
+	LkXmLsJqXBGPd8CisCvjl2MT+1eqqthQ0nWoiyX4eB1ZJm/LURTSXgkGal+B9+WazbnvBuM+hyR
+	D/vY6oT7i5qtkLwfOgUgOeZUr05a0Mw7BQAyx/4PRw227NoUhjpcI+LzXYODm2B5SUUp/iGvptR
+	8zMTDWzF4TsQVeWXK0nQ+TUefk8O54RqmlLytCZhT/hfAa9+yigEyLW2+HaQjSGujOImc36/Eq3
+	icmjkT4SycJQRMCz+PbZBqVie9I1Q9cvu4RXpq0oXj7JRJMPqrA3SEkLl6rES1s/
+X-Received: by 2002:a05:6a21:7d0b:b0:40a:4e89:ede3 with SMTP id adf61e73a8af0-40a4e99315fmr706550637.79.1795671034056;
+        Wed, 25 Nov 2026 21:30:34 -0800 (PST)
+Received: from cps-manycore-1 ([147.46.174.222])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cde6cea7c29sm9961429a12.1.2026.11.25.21.30.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Nov 2026 21:30:33 -0800 (PST)
+From: Sechang Lim <rhkrqnwk98@gmail.com>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	ihor.solodrai@linux.dev,
+	yatsenko@meta.com
+Subject: [PATCH bpf] bpf: Reject kernel threads in bpf_task_work_schedule()
+Date: Thu, 26 Nov 2026 05:30:06 +0000
+Message-ID: <20261126053016.1145482-1-rhkrqnwk98@gmail.com>
+X-Mailer: git-send-email 2.56.1
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -58,109 +103,46 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJAxFs3jvwdr63k3AA--.52601S3
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoWxAFyxAr4UGFWkCrWrCFykJFc_yoW5tr13pa
-	ykuFyakF1Sq3W3Xa47GayDWr1rWF1vqr1UAFWqq34fZF1DW3ykJr1Iqr45Jrn8WrZYvw4r
-	Z3ZrKr1fXFW8ZFgCm3ZEXasCq-sJn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUkFb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27w
-	Aqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_Jw1lYx0Ex4A2jsIE
-	14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04k20xvY0x
-	0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E
-	7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcV
-	C0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF
-	04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7
-	CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jOb18UUUUU=
 
-Commit bc72742bebec ("selftests/bpf: Validate arch-specific argument
-registers limits") originally included the header "progs/bpf_misc.h"
-in prog_tests/uprobe_autoattach.c so that FUNC_REG_ARG_CNT is defined
-when checking argument assertions (arg4 through arg8).
+bpf_task_work_schedule_signal() on a kernel thread sets
+TIF_NOTIFY_SIGNAL, but the thread never returns to user space, so
+nothing clears it and signal_pending() stays true. Interruptible sleeps
+in the thread return immediately.
 
-Commit 8c2b5e90505e ("selftests/bpf: add bpf_for_each(), bpf_for(),
-and bpf_repeat() macros") accidentally removed this include, causing
-FUNC_REG_ARG_CNT to evaluate to 0 in the preprocessor and silently
-skipping all assertions beyond arg3 on every architecture.
+For kthreadd this means spinning at 100% CPU. io_ring_exit_work() waits
+on ctx->ref_comp interruptibly, assuming a kworker gets no signals. If a
+prog running in that kworker schedules task work on current, the wait
+returns -ERESTARTSYS and the ctx is freed while ctx->refs is still
+switching to atomic:
 
-Restore #include "progs/bpf_misc.h" in prog_tests/uprobe_autoattach.c,
-while guarding __naked and SYS_PREFIX in progs/bpf_misc.h with #ifndef
-to avoid redefinition conflicts with user-space headers.
-
-Here are the test results on LoongArch, where default FUNC_REG_ARG_CNT
-is 5.
-
-Before:
-  $ sudo ./test_progs -v -t uprobe_autoattach
+  WARNING: lib/percpu-refcount.c:114 at __percpu_ref_exit+0x77/0x110
+  Workqueue: iou_exit io_ring_exit_work
   ...
-  test_uprobe_autoattach:PASS:arg1 0 nsec
-  test_uprobe_autoattach:PASS:arg2 0 nsec
-  test_uprobe_autoattach:PASS:arg3 0 nsec
-  #656     uprobe_autoattach:OK
+  BUG: KASAN: slab-use-after-free in rcu_cblist_dequeue+0xd3/0x120
 
-After:
-  $ sudo ./test_progs -v -t uprobe_autoattach
-  ...
-  test_uprobe_autoattach:PASS:arg1 0 nsec
-  test_uprobe_autoattach:PASS:arg2 0 nsec
-  test_uprobe_autoattach:PASS:arg3 0 nsec
-  test_uprobe_autoattach:PASS:arg4 0 nsec
-  test_uprobe_autoattach:PASS:arg5 0 nsec
-  #656     uprobe_autoattach:OK
+The callback can't run before the thread exits anyway. Reject kernel
+threads with -EPERM, as bpf_send_signal() does.
 
-Fixes: 8c2b5e90505e ("selftests/bpf: add bpf_for_each(), bpf_for(), and bpf_repeat() macros")
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+Fixes: 38aa7003e369 ("bpf: task work scheduling kfuncs")
+Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
 ---
- tools/testing/selftests/bpf/prog_tests/uprobe_autoattach.c | 1 +
- tools/testing/selftests/bpf/progs/bpf_misc.h               | 4 ++++
- 2 files changed, 5 insertions(+)
+ kernel/bpf/helpers.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/uprobe_autoattach.c b/tools/testing/selftests/bpf/prog_tests/uprobe_autoattach.c
-index d5b3377aa33c..6558c857e620 100644
---- a/tools/testing/selftests/bpf/prog_tests/uprobe_autoattach.c
-+++ b/tools/testing/selftests/bpf/prog_tests/uprobe_autoattach.c
-@@ -3,6 +3,7 @@
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index bc0dd36a2799..42f3f7599567 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -4806,6 +4806,9 @@ static int bpf_task_work_schedule(struct task_struct *task, struct bpf_task_work
  
- #include <test_progs.h>
- #include "test_uprobe_autoattach.skel.h"
-+#include "progs/bpf_misc.h"
+ 	BTF_TYPE_EMIT(struct bpf_task_work);
  
- /* uprobe attach point */
- static noinline int autoattach_trigger_func(int arg1, int arg2, int arg3,
-diff --git a/tools/testing/selftests/bpf/progs/bpf_misc.h b/tools/testing/selftests/bpf/progs/bpf_misc.h
-index 6b930cb48f8d..589e68e4fa5c 100644
---- a/tools/testing/selftests/bpf/progs/bpf_misc.h
-+++ b/tools/testing/selftests/bpf/progs/bpf_misc.h
-@@ -206,7 +206,9 @@
- #define CAP_BPF			39
- 
- /* Convenience macro for use with 'asm volatile' blocks */
-+#ifndef __naked
- #define __naked __attribute__((naked))
-+#endif
- #define __clobber_all "r0", "r1", "r2", "r3", "r4", "r5", "r6", "r7", "r8", "r9", "memory"
- #define __clobber_common "r0", "r1", "r2", "r3", "r4", "r5", "memory"
- #define __imm(name) [name]"i"(name)
-@@ -231,6 +233,7 @@
- #define __used __attribute__((used))
- #endif
- 
-+#ifndef SYS_PREFIX
- #if defined(__TARGET_ARCH_x86)
- #define SYSCALL_WRAPPER 1
- #define SYS_PREFIX "__x64_"
-@@ -250,6 +253,7 @@
- #define SYSCALL_WRAPPER 0
- #define SYS_PREFIX "__se_"
- #endif
-+#endif /* SYS_PREFIX */
- 
- /* How many arguments are passed to function in register */
- #if defined(__TARGET_ARCH_x86) || defined(__x86_64__)
++	if (task->flags & PF_KTHREAD)
++		return -EPERM;
++
+ 	prog = bpf_prog_inc_not_zero(aux->prog);
+ 	if (IS_ERR(prog))
+ 		return -EBADF;
 -- 
-2.42.0
+2.56.1
 
