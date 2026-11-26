@@ -1,103 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.99
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795658868;
-	b=0Frri2/P4CXM6+7lHG2n7znUNK56VQ/1SOqz7NyEVrZR105ye/yQe9UeQHFjPCctAZYS
-	 hgP/tfymtebgg8k1VvBqwShHwek5ow6KR8AaFU1UMXpO6rhDTE3JMxwM62LonaD5T1jTF
-	 uyuO/K/LDdKKKc0oyh88GBr4t+ZbB7BFWmU8CcoO0c8ri99YheT6cxsk0TCNaioFjrfoj
-	 tjN3Y1mdV4ouXVIonzR5SeraVmu2aYE+bVsgPDei2rVKmfxyi3X5n3nLWC+iCoghfzYXL
-	 sMZQZzvQHEbi+UmLVt9w3dh92h0QeRv8OwA+2RGf1enk+VPkv2YoiFuod4b0FzIWC9Q==
+	t=1795659428;
+	b=DImOPYcKzKxGvkc213psDTZwvKQpNvm4UEsoBsqbtEN0H3blQ6MLOszXvjs6i23SLU75
+	 /SniKIXqlsDsKikLdiq1G2Y/+pn5l2T0R81UvTdfMmE7Kg6Zz4jeaIpOq3dW4bnLptkBf
+	 waXyhhqYEFYSiJqQhp6tIZlsgFBe0/mjin2VJ9ZKsL8brgu761maRY/WjdNeQKQXF2CJF
+	 imjwQh83LsejuLy3y8ZvjGuO8YvanpntxhkqEKeMFYlQh3GB57qWQ3MHDEBXKFsiBA0R2
+	 2pVUsU7NI+VAUrz2P1jubw12tJkzL7M9l1WWEzANQFO8rfiTzyqs953mvwTPAruGDfQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795658868;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:MIME-Version:
+	a=rsa-sha256; c=relaxed/relaxed; t=1795659428;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:From:In-Reply-To:Content-Type:
 	 Content-Transfer-Encoding;
-	bh=WkAms7KA42Baas5n6wZEyMjVEZ8N2pj3aqq6PvvQjdE=;
-	b=kkjDyLXsdwiV0j1TVODrVKPpRg54ebft/+PgGQMiZWvG5i0i+xOjoqoNJvicO5F4u8BN
-	 /par/7E8DHBOy5+jsH8frPzuSiv0yqTI+Efdk3Yhjh0+8faIt21Wyg3qnlkEEF0h51J6f
-	 PhWqpM0Gfh4bZDCUxsJCvZxJXKJVAtOb4824GMDJ/eu5KWs6MA+sHemw9wjwP9roFXyje
-	 GffDw6NT93ZSuBuP7r5CIo2HZ2Z8aAwVMPNSxoI3CZiIqLBN9jN6WhbgUCAgVTWE+F6Jk
-	 CDhHoHEtQpXRNd93fOgPf+NDhUp3rGmhP82s46BFD6abQpoOmVx4rUmavKgxZxD/OHA==
+	bh=fXzIvj+Miyv8ZDxvJY4Vt+UHPfI7SJW5A3pgxQ1P/8s=;
+	b=biK2+pDmTmRodWayCA9H0abAoZM34fANtu2o4l91JDkXewI/cjoe0VbRvlJhsAxW64Sl
+	 uE54a+YXLx3xvnmktCD7rElKzyzaw7poUJQu/M+MbhLGnm3n24z5tLs2xrSNMqq5GA3IL
+	 9XNIyuIi4i5Xg6cGqbljvYsF80vB7F92/RfaxJA2mrqr2OWEtdYnv2U4ANqkXyUqakZnw
+	 qRS7cKwy8lmXM1JIO9XdGKx6vq0xom/B4hqt029XrByElqk85F7e/+oSi3bQtTphh+93z
+	 fgxhVX1W3SJ6jFzX2wP3IGua6MQA+71SBIui83CN836lBtowq15HZgfKpRZU4mmgNMA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=povKuKh2;
-	arc=none smtp.remote-ip=209.85.214.182
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=hnjv2FFX;
+	arc=none smtp.remote-ip=95.215.58.99
+Received: from mta1.migadu.com (out-99.mta1.migadu.com [95.215.58.99])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C2C9606A321
-	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 02:07:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0C2C9606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80D7F606A330
+	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 02:17:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 80D7F606A330
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=povKuKh2
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2f0464dd6b6so40285405ad.1
-        for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 18:07:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795658867; x=1796263667; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=WkAms7KA42Baas5n6wZEyMjVEZ8N2pj3aqq6PvvQjdE=;
-        b=povKuKh2H6D2wLFvEqnB2T8NXUi566C8IhNc2LNF7XF5xNAcQPsYSsSfd0VkOp7Jxs
-         WROFL3uX6OL9vmEUoSUtnvvhcQDFI4rQqOAnY0/ecwRlpYKolkNepVHQuINeEoi9jUHJ
-         a6X64fiydSLPsroytYNKtNYqrQZ5fa6vCUDHo6M3UiRC3lCWWPfZlMXgnQ+UJmIJHE20
-         DaZPYoZvUQZSKaaguAWJwabMv5QSumxhDxkkK7aYxS7nO6K9RXKulGx6a03mb4lfzHMQ
-         RFmV5ddqWtI0V/zGXPwRxcLpILZHiimz0E1WBC5f8IbWWJXiVn+MG4rkAUc0jWr3qrHw
-         tQOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795658867; x=1796263667;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=WkAms7KA42Baas5n6wZEyMjVEZ8N2pj3aqq6PvvQjdE=;
-        b=n9ORMfPvZp9PsQi+etzio7SwGWiiY2gj08H7JvcyxCLngAXfmYyuZo9uKMQKtSFgXX
-         9rp37hINH7Bb/oTHhjqh7Y4NsbmeoeXqUZhtXGgEWQ167ndCffrHZtAZv7pAojnmz3Z/
-         NtWxUpMn+3lJU8rWAIixV2dwflVj9I1SEENrUk2/Hg6JgPIkin7cuCUV478mUnAwrg4Y
-         CtXO+pNbicfE+ez4ObXAXCrPvIz2ioZflI8PJUICez/bIBszyx+BdcCDBvIJQnaGUKqF
-         VUjq7ShYgKRahTTatS6iU9qm0eBA4nCzhn7uzLbc78bZsCgK9EgfK/uG5MdKbxsbkoYm
-         jLOA==
-X-Forwarded-Encrypted: i=1; AL+hErFtnussWMKrjvKBiloYYfjzzOu59j6z5Bz9yKlGyvrN43g1WTQT13haW29DcHspuQoRK3c=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+4lJusTuiQ0IhWBDJujJjf9jDUWJBmaAET0TquMMPfwUK5i4SU
-	+6UKy2RWhVrnBFApEnuCEUwDC/gSeJS8QlAQwBU3WCkn7sufgncTjDkh
-X-Gm-Gg: AZFdTZdP25DE+fPyj6PM1QxbN+6+HqtMFAGJ+oP3x2rsjR68cAoVgmZAR8W8Ls9d46D
-	5sx+2m1lTpxZoDVhT7QGGgv9GYfa1G7zHzawZaXpb1X+CQRpbyt32d2DTizpYxrx2wsXIdAQU9o
-	Zj18QT4EoQHYA4QWB4pFyOrUkxHhgxXjr46Ng1gbAO/TdtMg4Ra70/3/4UX2V0odL9EdyQFdoE/
-	9iED2NtfwpIR8UuIHJ0gE/+VU50d46sNU4o5l89DV1SLsBn7sJIkPk3hUXulvwkuCeT1XLKvBTD
-	mJxWNL69QzhQteV12FRWG3eLO3m6P1oToh5OPjeAIDotospCFSB4rpk9bYsG+CtCh7n6gyNEoWW
-	7hU9uFvoN2atqfpcnzFJ67iKIh+NWB/oyEPxRBq2vajnNRu60FmIOeO3Iub0jI6TMHuwH2nNAMR
-	jjDvf+mtAigHvbsinzjqpUvovjUKEJ/AYFcWO9zgR++UPkJTJtZGpzjPXfX5nxugHh3gicLMW7+
-	RNG10sxcpf4wYNpEJYZXZEOROKzB3PGX4v7Id/YttSjiNTAKKO44W1CdjkN0IiIUd7T/CgpJ7eu
-	eUC72z24ixvHKfqgGIS3y8xG0I9AZojVHtr/PnOarReO/+0fz2UCWbkGb4MU+PQLuCw6Zs9WUB5
-	dz2SGBfxxSnHd
-X-Received: by 2002:a17:903:2f87:b0:2ef:e285:7085 with SMTP id d9443c01a7336-2f03f1b1946mr192913505ad.44.1795658867206;
-        Wed, 25 Nov 2026 18:07:47 -0800 (PST)
-Received: from d20be28ee783.tail196be.ts.net (vldb.skku.ac.kr. [115.145.173.180])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2f03f0c6e50sm95550735ad.13.2026.11.25.18.07.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Nov 2026 18:07:46 -0800 (PST)
-From: Kyuwon Cho <kyuwoncho18@gmail.com>
-To: Magnus Karlsson <magnus.karlsson@intel.com>,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc: Stanislav Fomichev <sdf@fomichev.me>,
-	=?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Willem de Bruijn <willemb@google.com>,
-	Simon Horman <horms@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	netdev@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: [PATCH net v3] xsk: keep the charged page count when pinning a umem fails
-Date: Thu, 26 Nov 2026 11:07:42 +0900
-Message-ID: <179562059260.3381969.13546710565371160648@gmail.com>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=hnjv2FFX
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=h5tYjmYXwN37vDwarjJmMf6ijB9noyW46ya0yJ1tctQ=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1795659425; v=1; x=1796264225;
+ b=hnjv2FFXsGH45uJ3QPsl772Qo8BjtlWhTpdo3f12viqCW7k2cFg7DJ2KP/b4EGhjSbS9KAh2
+ /sduLUxJc5Gs8Zc1JPVkyglDgwYqmRj5K50FgMKs1UgsWXnOdZHWxjxLuQwwnXRpkvR+A8x2sdp
+ PUMIDaeLSwGyNcO3n4z66hs8=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 68a03a1d74c74de9;
+	Thu, 26 Nov 2026 02:17:05 +0000
+X-Mizu-Trace-ID: 68a03a1d74c74de9
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <675a13e9-ed23-4a73-8d09-28517c377353@linux.dev>
+Date: Thu, 26 Nov 2026 10:16:56 +0800
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -107,137 +58,209 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net v3] net: xdp: fix generic XDP on skbs without an
+ Ethernet header
+To: netdev-bot+sashiko@kernel.org
+Cc: netdev@vger.kernel.org, kennethbwlee@snu.ac.kr, davem@davemloft.net,
+ edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
+ ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+ john.fastabend@gmail.com, sdf@fomichev.me, kuniyu@google.com,
+ wang.zhan@smartx.com, mkarsten@uwaterloo.ca, bpf@vger.kernel.org
+References: <20261124142545.221584-1-jiayuan.chen@linux.dev>
+ <179561685970.3135.9452194614168004635@kernel.org>
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <179561685970.3135.9452194614168004635@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-xdp_umem_reg() charges umem->npgs pages to the user's locked_vm before
-it pins the umem. When pin_user_pages() pins fewer pages than asked,
-xdp_umem_pin_pages() overwrites umem->npgs with the pinned count so that
-xdp_umem_unpin_pages() releases only those, and xdp_umem_unaccount_pages()
-then gives back only that many. The rest of the charge is never returned.
 
-A short pin happens when the tail of the umem area is not mapped. With
-RLIMIT_MEMLOCK at 16 pages, three registrations of an 8-page area whose
-last 4 pages are unmapped leave the user able to register only 4 pages,
-for as long as the user has a process running.
 
-Unpin the pinned pages directly and leave umem->npgs as charged.
+On 11/25/26 10:27 PM, netdev-bot+sashiko@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 3 potential
+> issue(s) to consider.
+> 
+> Critical: 0 · High: 0 · Medium: 2 · Low: 1
+> 
+> If you believe none of the issues are legitimate, please reply to each
+> issue of Medium severity or higher and explain why the AI is wrong.
+> If any of them are legitimate and you plan to respin, please let patchwork
+> know by including "pw-bot: cr" as a separate line at the end of your reply
+> (one such reply per series is enough).
+> 
+> - [Medium] dev_xdp_attach() (net/core/dev.c) now rejects every
+>   XDP_MODE_SKB attach with -EOPNOTSUPP when dev->type is neither…
+> - [Medium] The new early return in netif_receive_generic_xdp() (`if
+>   (skb->data - skb_mac_header(skb) != ETH_HLEN) return XDP_PASS;`) skips…
+> - [Low] Documentation/networking/af_xdp.rst (around line 86) says XDP_SKB
+>   mode, which is used when the driver has no XDP support or XDP_SKB is…
+> 
+> --
+> 
+> net: xdp: fix generic XDP on skbs without an Ethernet header
+> 
+> The patch refuses to attach a generic XDP program to a device that is
+> neither ARPHRD_ETHER nor ARPHRD_LOOPBACK. It also skips the generic XDP
+> program at runtime for any skb whose mac header is not exactly ETH_HLEN
+> bytes. The goal is to fix a WARN in skb_vlan_push() that comes from the
+> Ethernet header fixup in bpf_prog_run_generic_xdp() on L3 devices such as
+> sit0.
+> 
+> Closes: https://lore.kernel.org/bpf/20260812043643.808295-1-kennethbwlee@snu.ac.kr/
+> 
+>> diff --git a/net/core/dev.c b/net/core/dev.c
+>> index cd0796a1dbfdf..a9ef193967bab 100644
+>> --- a/net/core/dev.c
+>> +++ b/net/core/dev.c
+>> @@ -5825,6 +5825,10 @@ static u32 netif_receive_generic_xdp(struct sk_buff **pskb,
+>>  	if (skb_is_redirected(skb))
+>>  		return XDP_PASS;
+>>  
+>> +	/* XDP is Ethernet only, skip skbs without an Ethernet header. */
+>> +	if (skb->data - skb_mac_header(skb) != ETH_HLEN)
+>> +		return XDP_PASS;
+> 
+> [Severity: Medium]
+> Can this silently skip a program that was attached successfully to an
+> ARPHRD_ETHER device?
+> 
+> Take a VLAN device with reorder_hdr off. Its type is ARPHRD_ETHER and it
+> has no ndo_bpf, so dev_xdp_attach() defaults to XDP_MODE_SKB and accepts
+> the program. On receive, vlan_do_receive() does this:
+> 
+> net/8021q/vlan_core.c:vlan_do_receive() {
+>     ...
+> 	if (!(READ_ONCE(vlan_dev_priv(vlan_dev)->flags) & VLAN_FLAG_REORDER_HDR) &&
+> 	    ...
+> 		skb_push(skb, offset);
+> 		skb = *skbp = vlan_insert_inner_tag(skb, skb->vlan_proto,
+> 						    skb->vlan_tci, skb->mac_len);
+> 		...
+> 		skb_pull(skb, offset + VLAN_HLEN);
+> 		skb_reset_mac_len(skb);
+> 	}
+>     ...
+> }
+> 
+> That leaves skb->data - skb_mac_header(skb) == 18. Then
+> __netif_receive_skb_core() jumps to another_round and calls
+> do_xdp_generic() with the VLAN device's program. The new check returns
+> XDP_PASS for every packet.
+> 
+> Before this patch the program ran on the full Ethernet+VLAN frame, so
+> read-only filters and XDP_DROP filters worked. reorder_hdr can be toggled
+> at runtime, so a filter that is already attached could stop being
+> enforced. Nothing reports this: no warning, no extack and no tracepoint.
+> 
+> The commit message justifies the runtime check only by dev->type changing
+> after attach. The VLAN effect appears only in the v2->v3 note below the
+> --- line, and that note won't be kept when the patch is applied.
+> 
+> Would it make sense to warn once here, or to reject the attach, and to
+> describe this in the commit message?
+> 
 
-Fixes: c0c77d8fb787 ("xsk: add user memory registration support sockopt")
-Reported-by: Sashiko <sashiko-bot@kernel.org>
-Closes: https://lore.kernel.org/all/20260421172951.A7052C2BCB5@smtp.kernel.org/
-Signed-off-by: Kyuwon Cho <kyuwoncho18@gmail.com>
----
-v3: simpler error path without @err, as Maciej suggested; Bjorn's
-    Reviewed-by is not carried over, as the code changed
-v2: https://lore.kernel.org/all/179556786851.2007362.7849536379916971930@gmail.com/
-    target net instead of bpf (Alexei)
-v1: https://lore.kernel.org/all/179552079829.1290967.12345053263834529704@gmail.com/
 
-The issue was found by an LLM-guided test generator that we are
-developing as a research prototype; Sashiko had flagged the same leak
-in its review of an AUTOSEL backport. A reproducer, which runs as any
-user:
 
-#define _GNU_SOURCE
-#include <errno.h>
-#include <linux/if_xdp.h>
-#include <sched.h>
-#include <stdio.h>
-#include <string.h>
-#include <sys/mman.h>
-#include <sys/resource.h>
-#include <sys/socket.h>
-#include <unistd.h>
+This is on purpose. The direction from the maintainers on v1 was that
+XDP is Ethernet only, so generic XDP only handles skbs with an ETH_HLEN
+mac header. v2 tried to let this VLAN case through, and the review on
+v2 asked to skip it too, because the fixup after the program is wrong
+for it.
 
-static int reg(char *addr, long len)
-{
-	struct xdp_umem_reg mr = {
-		.addr = (unsigned long)addr, .len = len, .chunk_size = 2048,
-	};
-	int fd = socket(AF_XDP, SOCK_RAW, 0);
-	int ret = setsockopt(fd, SOL_XDP, XDP_UMEM_REG, &mr, sizeof(mr)) ? -errno : 0;
+v1: https://lore.kernel.org/netdev/20260813113229.381136-1-jiayuan.chen@linux.dev/
 
-	close(fd);
-	return ret;
-}
+> A separate point: bpf_xdp_link_update() calls dev_xdp_install() directly:
+> 
+> net/core/dev.c:bpf_xdp_link_update() {
+>     ...
+> 	mode = dev_xdp_mode(xdp_link->dev, xdp_link->flags);
+> 	bpf_op = dev_xdp_bpf_op(xdp_link->dev, mode);
+> 	err = dev_xdp_install(xdp_link->dev, mode, bpf_op, NULL,
+> 			      xdp_link->flags, new_prog);
+>     ...
+> }
+> 
+> This path never reaches the new dev->type check in dev_xdp_attach(). The
+> device type can change after the link is created, for example through
+> bond/team port enslavement or TUNSETLINK. In that case the link update
+> still succeeds, and the new program never runs either.
+> 
+> Is this inconsistency intended?
 
-int main(void)
-{
-	long pg = sysconf(_SC_PAGESIZE);
-	struct rlimit rl = { 16 * pg, 16 * pg };
-	char *a;
 
-	/* no CAP_IPC_LOCK, CAP_NET_RAW for AF_XDP */
-	if (unshare(CLONE_NEWUSER | CLONE_NEWNET) || setrlimit(RLIMIT_MEMLOCK, &rl))
-		return perror("setup"), 1;
+Yes. dev->type can change after attach anyway, the run time check is
+what covers it.
 
-	for (int i = 0; i < 3; i++) {
-		/* 8 pages, the last 4 unmapped: pin_user_pages() pins 4 */
-		a = mmap(NULL, 8 * pg, PROT_READ | PROT_WRITE,
-			 MAP_PRIVATE | MAP_ANONYMOUS | MAP_POPULATE, -1, 0);
-		munmap(a + 4 * pg, 4 * pg);
-		printf("short umem: %s\n", strerror(-reg(a, 8 * pg)));
-		munmap(a, 4 * pg);
-	}
+> 
+> [ ... ]
+> 
+>> @@ -10775,6 +10779,12 @@ static int dev_xdp_attach(struct net_device *dev, struct netlink_ext_ack *extack
+>>  			NL_SET_ERR_MSG(extack, "XDP program already attached");
+>>  			return -EBUSY;
+>>  		}
+>> +		/* lo is ARPHRD_LOOPBACK but uses Ethernet framing. */
+>> +		if (mode == XDP_MODE_SKB && dev->type != ARPHRD_ETHER &&
+>> +		    dev->type != ARPHRD_LOOPBACK) {
+>> +			NL_SET_ERR_MSG(extack, "Generic XDP only supports Ethernet devices");
+>> +			return -EOPNOTSUPP;
+>> +		}
+> 
+> [Severity: Medium]
+> Does this break existing generic XDP users on L3 devices?
 
-	a = mmap(NULL, 16 * pg, PROT_READ | PROT_WRITE,
-		 MAP_PRIVATE | MAP_ANONYMOUS | MAP_POPULATE, -1, 0);
-	printf("16-page umem: %s\n", strerror(-reg(a, 16 * pg)));
-	return 0;
-}
 
-Without the patch, the 16-page registration fails with ENOBUFS: the
-three short ones leave 12 of the 16 pages charged. With it, it
-succeeds.
 
-The patch was written with LLM assistance; we reviewed and tested it.
+Yes, that is the direction from the maintainers on v1: XDP is Ethernet
+only, and BPF on L3 devices should be attached at TC instead.
 
- net/xdp/xdp_umem.c | 22 +++++++---------------
- 1 file changed, 7 insertions(+), 15 deletions(-)
-
-diff --git a/net/xdp/xdp_umem.c b/net/xdp/xdp_umem.c
-index cd8643360eb3..ad72bd96905c 100644
---- a/net/xdp/xdp_umem.c
-+++ b/net/xdp/xdp_umem.c
-@@ -95,7 +95,6 @@ static int xdp_umem_pin_pages(struct xdp_umem *umem, unsigned long address)
- {
- 	unsigned int gup_flags = FOLL_WRITE;
- 	long npgs;
--	int err;
- 
- 	umem->pgs = kvzalloc_objs(*umem->pgs, umem->npgs,
- 				  GFP_KERNEL | __GFP_NOWARN);
-@@ -107,23 +106,16 @@ static int xdp_umem_pin_pages(struct xdp_umem *umem, unsigned long address)
- 			      gup_flags | FOLL_LONGTERM, &umem->pgs[0]);
- 	mmap_read_unlock(current->mm);
- 
--	if (npgs != umem->npgs) {
--		if (npgs >= 0) {
--			umem->npgs = npgs;
--			err = -ENOMEM;
--			goto out_pin;
--		}
--		err = npgs;
--		goto out_pgs;
--	}
--	return 0;
-+	if (npgs == umem->npgs)
-+		return 0;
-+
-+	if (npgs > 0)
-+		unpin_user_pages(umem->pgs, npgs);
- 
--out_pin:
--	xdp_umem_unpin_pages(umem);
--out_pgs:
- 	kvfree(umem->pgs);
- 	umem->pgs = NULL;
--	return err;
-+
-+	return npgs < 0 ? npgs : -ENOMEM;
- }
- 
- static int xdp_umem_account_pages(struct xdp_umem *umem)
--- 
-2.43.0
+> 
+> Today an XDP_MODE_SKB attach succeeds on tun in IFF_TUN mode, wireguard
+> (ARPHRD_NONE), sit/ipip/gre/ip6tnl, PPP, RAWIP WWAN and IPoIB.
+> 
+> Some programs never modify the first 14 bytes, for example read-only
+> filters or programs that return XDP_DROP or XDP_PASS. These programs run
+> correctly, because the fixup in bpf_prog_run_generic_xdp() only fires
+> when those bytes change:
+> 
+> 	if ((orig_eth_type != eth->h_proto) ||
+> 	    (orig_host != ether_addr_equal_64bits(eth->h_dest,
+> 						  skb->dev->dev_addr)) ||
+> 	    (orig_bcast != is_multicast_ether_addr_64bits(eth->h_dest))) {
+> 		__skb_push(skb, ETH_HLEN);
+> 
+> A plain "ip link set dev X xdp obj ..." with no mode flag is affected as
+> well. dev_xdp_mode() falls back to XDP_MODE_SKB when ndo_bpf is missing:
+> 
+> 	return dev->netdev_ops->ndo_bpf ? XDP_MODE_DRV : XDP_MODE_SKB;
+> 
+> tun_netdev_ops (TUN mode) has no ndo_bpf, so XDP on an IFF_TUN device
+> always uses generic mode and is now always rejected.
+> 
+> The commit message says these attaches will be refused, but it describes
+> generic XDP on L3 devices only as comparing garbage.
+> 
+> Could it say that generic XDP setups that work today on these devices will
+> now get -EOPNOTSUPP? The Fixes: tag points at a 2017 commit, so this uAPI
+> restriction would also reach every stable tree.
+> 
+> [Severity: Low]
+> Should Documentation/networking/af_xdp.rst be updated in the same patch?
+> It describes XDP_SKB mode as:
+> 
+>   A fallback mode that works for any network device.
+> 
+> After this patch, dev_xdp_attach() returns -EOPNOTSUPP for XDP_MODE_SKB on
+> any device that is neither ARPHRD_ETHER nor ARPHRD_LOOPBACK. That covers
+> both cases the document describes: an explicit XDP_SKB request, and the
+> fallback for drivers without XDP support.
+> 
+> netif_receive_generic_xdp() also skips skbs whose mac header is not
+> ETH_HLEN bytes, so generic XDP runs in fewer cases than the document
+> describes.
+> 
+>>  	}
+>>  
+>>  	/* don't call drivers if the effective program didn't change */
+> 
 
