@@ -1,56 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.140.110.172
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795716032;
-	b=UYZbpdS82u7FELvadmL4irWzwymt6w9FgIcKXmWofrEu1zIFNtZ+fteM7f2xWPIumHQT
-	 bH2rld73bF4m8bNW6CiO2Xq81AWuM+k8Pqr1BWwxtYT679bwsQjqXce6/VSYfS2t1ZFW8
-	 6SwgG4xI2dMHA3ZxO/VYrdsvlnWzVK/PuXObeClVHOGgKMmaJCgwMEVsE0G/JkmKlQVU8
-	 C2WWJhX0f+Vf9mXBBv8Ie3LkouMcrSttVnQiedvReUaNLjcYRSZpV4sBpO1OIdz0jHZH+
-	 Qj409LTxeq0JUb5jLZozr1YfHD6bN5mRWhqikdAbC/zT2cfmmEs4br0Bp1BLLkbuStA==
+	t=1795716137;
+	b=LhplA5lXvBappZIUy0i9D3bgf4bDmRh9dhrdZvfSjaM3X/I5OaDJJ/j/K0vgGYwlNxdL
+	 jtr6qy9UTgNyvaPAN4omWy+X0EpXtB6EsQP95DPYP/dBasoLdGOmG3hKqpr0tIAy4wTov
+	 UrUpB6wUz0WmJoExUzzgf+hiW1GvRRDN4tkVF8H8le3uhvZy2v7bETns13pYOXVQ9v3CA
+	 TnMXk4anFfqY96i/WZG2NrkLqdSnjAlVZ7N/z6186vJ+yxRkXRyuWEO9lFaKoOOJ0ODGU
+	 JUCuMUelwsW9H0YjEEKGEAg0+PJ7a617zD/HCyMU53LNWFGoSCYNLHbgmF7k9nvj4aQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795716032;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=lRvYYmDZfWxGSUqDOxvo3toDW0SAzA59L8JKjdJoavI=;
-	b=BOTgbEUxa9OeLWCN8tCsKrAznaO7K0RxDxZ4LlXn8AzT+UxxJzsctpcDPSFmNmw5z6Ns
-	 RWUY9rlvVg0XlFeLYze8D41BpAMsnTCp05QD9h5qkci/g0I2wbneglOdMW2s1h8OwwlMj
-	 qK/Eo1/vmef5l8293iYOPC5jnv1MhfhHMNKEVxRUSdKYdjJKtC+IKIcXwKbtcdyBGmWmO
-	 jpsb/riMMQJonizcHcatvZa/JERhQA89Uz4Fj0LEGUwuEN41tq9z+mGBnevUtWlTu7dHL
-	 JHz7Ydj4/dt8vseRCiPBiqMXifSLefwcAwatp6g+PhY6GcB88SKHEgZAgN1Ukgz02OQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795716137;
+	h=DMARC-Filter:Received:Received:DKIM-Signature:Date:From:To:Cc:
+	 Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=EIBFveu7yYmEbvuiFTdZCk87YQ1EZPQ1DqdLI+hGjog=;
+	b=UItHoj153Bvi5/OGHCiMUDzBVrGjzVm10W4cNQhXksp7wcU3ybUvflUXxD/QoeZhl5Ge
+	 Djm5Z1w03jdza24yV0RxpgkxqAYoArNZQa3l29dkHKnH/1CIQM1U9FlgyCUCkAt+Je3/A
+	 zB9THnPp0DvgCVDjh9oP8smMDu+ROjqsphhDAnzxG/uxzdn3vUNA/3/z9bI939SnOtl+4
+	 M6La37/2W8qW26h9a1R/AD2VfHj8II0JqjnZM5ZKD6QeKyxgc4dyAIHM0PcEGiEVF6p6V
+	 aJedrc18X5GAMDvsEUylEW/W73I39V4WrxSu6h07/f+pIQZoKgm2ze6OIo78R+t/FGg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=F7W20Pct;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FE25606A31E
-	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 18:00:32 +0000 (UTC)
+	dmarc=pass header.from=arm.com;
+	spf=pass smtp.mailfrom=arm.com;
+	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=kEnZJDat;
+	arc=none smtp.remote-ip=217.140.110.172
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B0F3606A31E;
+	Thu, 26 Nov 2026 18:02:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2B0F3606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=F7W20Pct
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2674E1F000C0;
-	Thu, 26 Nov 2026 18:00:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795716032;
-	bh=lRvYYmDZfWxGSUqDOxvo3toDW0SAzA59L8JKjdJoavI=;
-	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=F7W20Pctv2tcwkkYuDxJY5MGqhscvVTs2BN5N8guQtgUekPiim+E9BDb40FUpXRud
-	 RXHPB98JfTAcpy6k1nkApRPg2X0HIbF5eAEuJZprKQnM7Hhe0eEeKZTBsjvtMQ3pkw
-	 QwhQ5wWZSZVfEevQ8l3pYE8mZmjnXJj86bLX/5g+snl+oAC72t3hAdq+A/GWmAfz79
-	 H1XEtB1MITkKGvucqdmdkRUFf1rvHHopeXHJapxsjfXQIl37RvTk7dTVZe9ranG8J/
-	 xtW/D7PK7mSnhqVXqTel0CwJLksMtiXLK5EluG/X0dCD+r22dPe3sz8huI7PxJRIts
-	 G3cNm9w0UcP3A==
-Message-ID: <sashiko-outbox-235985@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 2/3] selftests/bpf: Test enum value relocations
- within the local enumerator range
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Yonghong Song" <yonghong.song@linux.dev>, bpf@vger.kernel.org
-In-Reply-To: <20261126175613.1883881-1-yonghong.song@linux.dev>
-References: <20261126175602.1882988-1-yonghong.song@linux.dev>
- <20261126175613.1883881-1-yonghong.song@linux.dev>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 26 Nov 2026 18:00:31 +0000
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=kEnZJDat
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6BE7E1BA8;
+	Thu, 26 Nov 2026 10:02:13 -0800 (PST)
+Received: from localhost (unknown [10.2.196.114])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E78513F632;
+	Thu, 26 Nov 2026 10:02:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1795716136; bh=ek6pWiEzSoxsFDDVTU1wdcAfubRIURJGSjuHrb5FqjU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=kEnZJDatTGHmsf3CzvHuDgAQ56PvD0PVRCks3UzHlNqJLRKPG9QI4ikwsTOvjY//O
+	 yr0hUZn90UwjrAXiehDySwVhfIJ/hZ1omwRPqZ1vbSgtVWzuHv2lbBvnf6QOG9LcM8
+	 kP0UZVtEqNMWMRBL5mMS+/Xf075VH9+Y4x0QyI3Y=
+Date: Thu, 26 Nov 2026 18:02:14 +0000
+From: Leo Yan <leo.yan@arm.com>
+To: James Clark <james.clark@linaro.org>
+Cc: vladimir.murzin@arm.com, Puranjay Mohan <puranjay12@gmail.com>,
+	Mark Rutland <mark.rutland@arm.com>, Will Deacon <will@kernel.org>,
+	bpf@vger.kernel.org, Anshuman Khandual <anshuman.khandual@arm.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Rob Herring <robh@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Shuah Khan <shuah@kernel.org>, Breno Leitao <leitao@debian.org>,
+	Ravi Bangoria <ravi.bangoria@amd.com>,
+	Stephane Eranian <eranian@google.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Usama Arif <usama.arif@linux.dev>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, kernel-team@meta.com,
+	Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Subject: Re: [PATCH v6 0/3] arm64: Add BRBE support for
+ bpf_get_branch_snapshot()
+Message-ID: <20261126180214.GB809232@e132581.arm.com>
+References: <20260810164622.1829843-1-puranjay@kernel.org>
+ <CANk7y0ixo5a3Vfzj_HVhVHRNce2Rsit4pP27GCtXd4jHHzmiKg@mail.gmail.com>
+ <CAEf4BzapC=7YM2QLMyKKfyOWGgBTfEJmPPN8e9Jf5xT9SutBTQ@mail.gmail.com>
+ <dfa8362e-0dad-4f23-9d2e-dde03cb5facc@linaro.org>
+ <CAEf4BzZ=ahQNtA-1KdZFRONXMOEkV9Nb1OUY==JRQCarkbMM0Q@mail.gmail.com>
+ <5c7f4a5f-fe5e-4367-9c60-86f1818346e8@linaro.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -59,76 +87,48 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5c7f4a5f-fe5e-4367-9c60-86f1818346e8@linaro.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue to consider:
-- [Low] selftests/bpf: non-standard multi-line comment style in
-  core_reloc_types.h
---
+On Thu, Nov 26, 2026 at 12:39:52PM +0000, James Clark wrote:
 
-commit 7b2de00cc3d3bd98446d7a82129006ec470a720b
-Author: Yonghong Song <yonghong.song@linux.dev>
+[...]
 
-selftests/bpf: Test enum value relocations within the local enumerator range
+> > > > Mark, Will, you guys seems to be designated as maintainers for
+> > > > drivers/perf/arm_brbe.c, can you please take a look and give your
+> > > > feedback as well? This is important and useful feature for newer arm64
+> > > > CPUs, it would be great to get access to this functionality that we
+> > > > had on x86-64 side for a long while now. Please help get this upstream
+> > > > or, if it's not in the right shape, guide Puranjay towards a better
+> > > > implementation. Thank you!
 
-This commit adds CO-RE enum value relocation tests for target enum values
-that fit within the range of the local enumerator type across 8-byte,
-negative, and unpacked 1-byte target enums.
+...
 
-> diff --git a/tools/testing/selftests/bpf/progs/core_reloc_types.h b/tools=
-/testing/selftests/bpf/progs/core_reloc_types.h
-> index 6d758e74bd586..116a67fdd1b2e 100644
-> --- a/tools/testing/selftests/bpf/progs/core_reloc_types.h
-> +++ b/tools/testing/selftests/bpf/progs/core_reloc_types.h
+> + Vladimir
+> 
+> Hi Mark, Will, Vladimir,
+> 
+> Any thoughts on this approach where NMIs need to be disabled? Alternatively
+> we could do something like track where the PMU interrupts and BPF snapshots
+> overlap and then discard the BRBE buffer and make sure they don't trample on
+> each other etc, but it looks like it would be significantly more
+> complicated.
 
-[ ... ]
+Could we restrict bpf_get_branch_snapshot() on arm64 to a free-running
+BRBE mode? On a given CPU, at least one active event would have to
+request a branch stack, and every such event would have to be a
+counting event.
 
-> @@ -1355,6 +1363,52 @@ struct core_reloc_enumval___err_missing {
->  	anon_enum___err_missing f2;
->  };
-> =20
-> +/* 8-byte target enums, whose relocated values fit in the int enumerator=
-s of
-> + * the local enums
-> + */
-> +enum named_enum___enum64 {
-> +	NAMED_ENUM_VAL1___enum64 =3D 1001,
-> +	NAMED_ENUM_VAL2___enum64 =3D 2002,
-> +	NAMED_ENUM_VAL3___enum64 =3D 0x300000000ULL,
-> +};
-> +
-> +typedef enum {
-> +	ANON_ENUM_VAL1___enum64 =3D 0x11,
-> +	ANON_ENUM_VAL2___enum64 =3D 0x22,
-> +	ANON_ENUM_VAL3___enum64 =3D 0x300000000ULL,
-> +} anon_enum___enum64;
-> +
-> +struct core_reloc_enumval___enum64 {
-> +	enum named_enum___enum64 f1;
-> +	anon_enum___enum64 f2;
-> +};
-> +
-> +/* negative value for an int enumerator */
-> +typedef enum {
-> +	ANON_ENUM_VAL1___negative =3D -0x10,
-> +	ANON_ENUM_VAL2___negative =3D 0x20,
-> +	ANON_ENUM_VAL3___negative =3D 0x30,
-> +} anon_enum___negative;
-> +
-> +struct core_reloc_enumval___negative {
-> +	enum named_enum f1;
-> +	anon_enum___negative f2;
-> +};
-> +
-> +/* 4-byte target enum with a value out of a byte, for the int enumerator=
-s of
-> + * the local 1-byte enum
-> + */
+This seems to fit in this series. The selftest opens a CPU-cycles event
+with PERF_SAMPLE_BRANCH_STACK and sample_period = 0, then takes the
+snapshot from an fexit program.
 
-[Severity: Low]
-This isn't a bug, but BPF coding style places the opening /* of multi-line
-comments on its own line in these two comments.
+Counting events can still generate overflow interrupts for bookkeeping.
+It requires to refactor the PMU driver to leave BRBCR_ELx.FZP clear so
+an overflow doesn't freeze BRBE. The interrupt handler could service the
+counters without touching BRBE and losing the branch records.
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261126175602.1882=
-988-1-yonghong.song@linux.dev?part=3D2
+Thanks,
+Leo
