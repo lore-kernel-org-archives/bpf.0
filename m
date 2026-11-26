@@ -1,56 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795703255;
-	b=AZk85ujJqSzopmWFKFuTq0k76kZWEzlct8i1Yp3mpv4TjhwcSonJNqGtnNSTF7XDN+bw
-	 fXeuJKVqewzGtziIDoFctIgaKJDVtlVNjToYYlC096fIxcbp2IM1vzFiXbh5MZmkm/T0e
-	 BgjMDGzzrcpB/Ve7m1fyw/t0zTz6CpDtGyPuoLNI8j68a2LS+XoO6xd32Ll2Da9z0s35z
-	 nU1s09SDM8ZOYBTmLtvWEF6iaBwB0zo+mnutu93Aj300Q/M9qQnFf1eD0QdIPGmGA3p0L
-	 B1NMAV8UBHvAU27N0h3Xe6IEYa7jUsoqSSgb1oVZkg43Nn8M0BHkZgbwB7UzBCwA7/Q==
+	t=1795703256;
+	b=uBEZTyT0yBo4qmnLC0kK8eZZcFh/85sNFgbqEnVsHnJJUHCuEdwrwYsKstlkxWq1N/p3
+	 iojuCLDs7WhxNsmU8ZuY/COE2FwkCwfO4t49BlsB/QrRY0GtN6I6S2wDg1tVlGt5Q2iBJ
+	 HAzM01M0nqe6wyVuQYSW2r5EzKV+2A3k8fsRku8pkL/+wqFmuPitG3MhcrWnW+XP81MME
+	 lvswzBF4f1AJb9G9mNe6fxFHSJ7nWmDSrkiWlV6QWrajDBsvon73Nv7S4VkW3WKwgELfr
+	 LDpimBqvSLSw9+i4/BaySw2cO0tdrW1LVXqNk/tptLXAs67eHtr8pWwFJb6PrdMBh5g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795703255;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795703256;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=IzU9OGONA8Kfie9ObCLUApPnMIlV90vU57cP5+15laM=;
-	b=aAQfYEdEU7sJP4v0tNnm0J5AJK4U7406O5uwsBpoSLfw9lnsCCnn9cbympybyAaOkj+d
-	 lBi9RK7LvQ5HEd+dPBHJCkfEP5AXgThObPbEkLw/7PwW4hZnAsbPY9vyKdO9pPTwxr/U+
-	 nK2d1ECQqJscFfdpcFXwpITAnK2ZenelUysAVmC7cbhwsU6kgJ0f0GqXAehe4eVQE+8fD
-	 p02dNYBCQuzHxDqPB1HcO8Pvu5cVv1QonlFmaeLxj7Do+X107O3JDdENUXk1rXxv3EKgo
-	 2quSX2w+iJQYQfffqeWPklMcd98biwhMQE1emlACEFK1P+SJ+QfxxQizdVNccLYIFOA==
+	bh=s/UB48bTQ9wKBvZS6OaHhTA0Ln+kkVY6fbGQj24jh14=;
+	b=VeoSRMwTFtBa2IHuUr2nLW6BEcwJ0po/1qws/KFIb/LkygduKQhmOTv7nRdnqmV5t9sD
+	 YyEgPAiocUTfgn3y9OFfJWOfq4ZE/ucgxNrrHOVOKjd2Sf6fdxqkEVjlGDRWpQEK8evOz
+	 RNEBpKS3Tp2p559q3ia9Cz59PBOEqCcSUcV2v3oYXS0I/YAvedXTLya6VO6ufxHQJwSWM
+	 M8yiTHjKOc4kR7ZzfvCUjYeJmpW7yogYVqW+5W6SqyzeJWm+DcPYLJdf3rkntgq3dKHOT
+	 kouzaEOXUbKkrfyVpTP4UYUahPdgCXYV8U5KjgWAiZT0DwT2Hv6RJIgsQRxwJrKl+jg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Tg8suqzm;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hTODQqUM;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5410606A31E
-	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 14:27:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 796F7606A32D
+	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 14:27:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Tg8suqzm
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33B991F000C0;
-	Thu, 26 Nov 2026 14:27:35 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hTODQqUM
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32F4B1F000C0;
+	Thu, 26 Nov 2026 14:27:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795703255;
-	bh=IzU9OGONA8Kfie9ObCLUApPnMIlV90vU57cP5+15laM=;
+	s=k20260515; t=1795703256;
+	bh=s/UB48bTQ9wKBvZS6OaHhTA0Ln+kkVY6fbGQj24jh14=;
 	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=Tg8suqzmqylKaH1SN4DlyINQ74N6K0tvZeSp4CCv0XSkbYwfzmnbg7AJFEupMMyXH
-	 JgMnNVPX2Ysd4/doE9s6gMyyCWKqJDgmpNY2BVo1nChH+ECDrVoUXMjCQXvnpb/yCu
-	 azAJOSCX/TR0Ej3dunDsKx2HcLgbU0Ay/THJp4qgurzqrxg8kckRZBHq/H4LZfjM/z
-	 8YfeY0E7NpENrWyv/wpsCicPwT3b7SCPGUHGSmJa/nKM0wfpJh/TEDux4go15i6StJ
-	 DGUpaKMj6odn+1scF/JBTPKcaXQwMOCUcsa7T5+WXU6/8qa49gr2LyoBmPkYSvjdBQ
-	 HROr7rw+0SaPA==
-Message-ID: <sashiko-outbox-235702@kernel.org>
+	b=hTODQqUMNeztUg7DJ7eTXnXtlTh4A73LCXiaoajyMeqWAEip1+miUd1vU6+oZEekH
+	 NVykjMaugkHNcu0yq9RquSSLYg3JYjchNnF54tJKgPTJpUZ1lna369Z3vdfeq+lQiU
+	 /Py1oI//tGt4KM5i0pe9dAwV73zLkJoWw6eADvVN8z5RCETG45Hrb26PdMHmgO0EA0
+	 GWJmoifNrATZAwLr/s6fAOt2BHeJw+HRTD8RcspYli+xjrn1SdSGN+AQA4yJAI55fZ
+	 40mIccy8JX0qb4w9d+y+axy5iHizQmxsZvsQP8pJgacqeTyzQE/qmWuApNvlMa0b1T
+	 JyhPGQJ/dMdeg==
+Message-ID: <sashiko-outbox-235703@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 bpf-next 7/7] selftests/bpf: Test functions which
- must have no fmod_ret tag
+Subject: Re: [PATCH v2 bpf-next 2/7] resolve_btfids: Do not tag functions
+ which work on BPF objects
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Anton Protopopov" <a.s.protopopov@gmail.com>, bpf@vger.kernel.org
-In-Reply-To: <20261126142915.1106330-8-a.s.protopopov@gmail.com>
+In-Reply-To: <20261126142915.1106330-3-a.s.protopopov@gmail.com>
 References: <20261126142915.1106330-1-a.s.protopopov@gmail.com>
- <20261126142915.1106330-8-a.s.protopopov@gmail.com>
+ <20261126142915.1106330-3-a.s.protopopov@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 26 Nov 2026 14:27:34 +0000
+Date: Thu, 26 Nov 2026 14:27:35 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -62,88 +62,33 @@ Precedence: list
 
 Thank you for your contribution! Sashiko AI review found 1 potential
 issue to consider:
-- [Low] selftests/bpf: fmodret_untagged.c duplicates fmodret_retval.c
-  BTF tag test
+- [Low] resolve_btfids: missing Fixes trailer for fmodret_tag() BPF type
+  exclusion
 --
 
-commit 6b9f59cbaa78b14e32ed408a9747440fae862df8
+commit 22ec6a5284d69e95482c5c70ca4fae778848a0da
 Author: Anton Protopopov <a.s.protopopov@gmail.com>
 
-selftests/bpf: Test functions which must have no fmod_ret tag
-
-This commit adds a BPF selftest that loads vmlinux BTF and verifies that
-specific kernel functions are not tagged with bpf_fmodret_retval:.
-
-> diff --git a/tools/testing/selftests/bpf/prog_tests/fmodret_untagged.c b/=
-tools/testing/selftests/bpf/prog_tests/fmodret_untagged.c
-> new file mode 100644
-> index 0000000000000..9f4b0586fe8f0
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/fmodret_untagged.c
-> @@ -0,0 +1,58 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Functions which return errors, but which the build must not tag as fm=
-od_ret targets */
-> +#include <test_progs.h>
-> +#include <bpf/btf.h>
-> +
-> +#define TAG "bpf_fmodret_retval:"
-
-[ ... ]
-
-> +/* Has the build tagged the function FUNC_ID, or any function if FUNC_ID=
- is 0? */
-> +static bool tagged(const struct btf *btf, int func_id)
-> +{
-> +	int id;
-> +
-> +	for (id =3D 1; id < btf__type_cnt(btf); id++) {
-> +		const struct btf_type *t =3D btf__type_by_id(btf, id);
-> +		const char *name =3D btf__name_by_offset(btf, t->name_off);
-> +
-> +		if (btf_is_decl_tag(t) && (!func_id || t->type =3D=3D func_id) &&
-> +		    !strncmp(name, TAG, strlen(TAG)))
-> +			return true;
-> +	}
-> +	return false;
-> +}
-> +
-> +void test_fmodret_untagged(void)
-> +{
-> +	struct btf *btf;
-> +	int i, id;
-> +
-> +	btf =3D btf__load_vmlinux_btf();
-> +	if (!ASSERT_OK_PTR(btf, "btf__load_vmlinux_btf"))
-> +		return;
-> +	if (!tagged(btf, 0)) {
-> +		printf("%s:SKIP:no CONFIG_BPF_FMODRET_SCAN\n", __func__);
-> +		test__skip();
-> +		goto out;
-> +	}
-> +	for (i =3D 0; i < ARRAY_SIZE(funcs); i++) {
-> +		id =3D btf__find_by_name_kind(btf, funcs[i], BTF_KIND_FUNC);
-> +		if (ASSERT_GT(id, 0, funcs[i]))
-> +			ASSERT_FALSE(tagged(btf, id), funcs[i]);
-> +	}
-> +out:
-> +	btf__free(btf);
-> +}
+> resolve_btfids: Do not tag functions which work on BPF objects
+>
+> A program on tracing_iter_filter() which returns -EACCES makes the
+> verifier miss that a global subprog throws. A function which takes or
+> returns a bpf_* or btf_* type, or struct btf, works for BPF itself:
+> for the verifier, a link or a map. Do not tag it.
+>
+> __sys_bpf() loses its tag. A program can still deny a bpf command on
+> the syscall, which is on the error injection list, or on a
+> security_bpf*() hook.
+>
+> Signed-off-by: Anton Protopopov <a.s.protopopov@gmail.com>
 
 [Severity: Low]
-This isn't a bug, but could these untagged vmlinux function checks be folded
-into tools/testing/selftests/bpf/prog_tests/fmodret_retval.c instead of add=
-ing
-a separate standalone test file?
+This fixes the tagging of internal BPF functions in fmodret_tag().  Should
+the commit message include a Fixes tag:
 
-test_fmodret_retval() in that file already loads vmlinux_btf, checks for
-CONFIG_BPF_FMODRET_SCAN, and scans BTF_KIND_DECL_TAG entries for
-bpf_fmodret_retval: via tagged_errors().  Adjusting tagged_errors() to star=
-t at
-id =3D btf__base_btf(btf) ? btf__type_cnt(btf__base_btf(btf)) : 1 would let
-test_fmodret_retval() check these vmlinux functions directly without
-duplicating the BTF load, tag lookup, and skip handling.
+  Fixes: 4dd950adacad ("resolve_btfids: Tag the functions that return error=
+s")
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261126142915.1106=
-330-1-a.s.protopopov@gmail.com?part=3D7
+330-1-a.s.protopopov@gmail.com?part=3D2
