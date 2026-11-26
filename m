@@ -1,68 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.61
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.94
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795707032;
-	b=l5qzvp389TaRq6Z3KNlyFv7z3uPJIWgZah4Jk7Yj2jLbka8foKrIK+DScq79CsZOMC2u
-	 spFwrIgidbsYiC+xbuXhCrt8FVz5tQmcmU6jRsWBoQvdaR5xcrvOFkAvWS7kYS9uPbVO0
-	 aceIEcTQM0Oj3G4qrh9q+juWzAYR2N19suETtaLzLG+0c0SUAklYAgLx9ifkr0Ehv6Z2w
-	 TuZZbFbcYyCUljErIMYnKUq+CtHgqiwDQAiejVB2lWV0hfpXodmhEQxnuBMyEUhLpR7iT
-	 Duxt/XljVgbLMgChaqFtSIXyi9PHb6nIv8qoYJ14h1Z5iw/VP+dmtfvrnX+jwqm4qpQ==
+	t=1795707201;
+	b=mfMlsVIJbzQyEyfIpXKqV5+N8OClQ5B0b0rWIJknsgIjsvYSI2/MwicB1xQYA9QmlV6l
+	 stkBhot+ujTO1eO3RVhGnPxz1F+/e0IG+f6/k+hmspXxtYATlQA1Df8UEI9OtK04OW3GK
+	 /7v/05qRhjT20GDkvmsXkHV4GzZd5VZG/syT349xDH/lHKidjwSIRh80RcWwSBdXwhang
+	 0k0rklKneI85B/TMKdCIBb/zXUfcuOK1y5nAx5+WS6a04fa+MBdgzqb8TkPQ6KOekJjhY
+	 SIyjB4mWlQtu0I3YuiQRhscODsNDMBtYHZ9jYsWWW1zVhuo/kWWxf0JVmkntRfp2Lnw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795707032;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795707201;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=IOrQAYiFZGkfHaVcGtU2ILDIBM1AgyST3Ynrv8o1atw=;
-	b=Ps41YhsYb34EEDZt8dWSr+RBp1v3t64YK+rwRLiwHCIPh9TIWcvB/FWjp8ZlS+xfW8FL
-	 Yr8Nmg2bKYvWyGfON7JeFURwcesVsmpWE9M2hZOVgDdPS4PQuyv2XUieocX8pHHtjZdHA
-	 xJuQ/KbAcRYIxfEMEAD9BDl1s110Vjn6r5sIUsBUZTMB9siDY0zlBksgBVPuXKex/41Ua
-	 BISVZU1XReHqdg2FiESPaQzTEUepV9B6F3kMPIwjNWGQUNFa0xmHhf2Rug3E+KehnUGv/
-	 NCF8+FkMfZPeUeFN9CQC7YTdKdqfSTuozkaRRIHugH7UIAw0oQin1KEpkUdvgZI0u5Q==
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=kRp4wRTGUX5Nc07ITKcIm26w+g1oTAepPRAIzZzp2p0=;
+	b=MGVR8GIM4pH1Ah1oBe0yO6zu7mK9tDRh1kIdEVahpEAncdOOAiuvjg6sOT4vwgjCiq4u
+	 3T2pxkClD2/k1HprcftGXJA3y0FZPZd0KB5aunRUnlNT9+9nh3YhztuQ1GdJTzctD6RHB
+	 M7i80SJ6N4SdSD2Bym0T1vggG+7uidVjLVYxkmalZzpMD69HFMeYJtVwhgL4DBx18th28
+	 +3DC6OwMbXvYrrmcQ4PiHLrDPJ94j+vJUHfkkiEJ+8ZHe1x1dl1NXrDhdBVv2X39GTsw2
+	 XRlBs88I8w32UUzAWQ1+xzAjrnLg8xt8/pyfn9veYYZeDNEdUa9ZSg6rifSu2B6o1OQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=JPYqKJmO;
-	arc=none smtp.remote-ip=91.218.175.61
-Received: from mta0.migadu.com (out-61.mta0.migadu.com [91.218.175.61])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=E5m87UiI;
+	arc=none smtp.remote-ip=91.218.175.94
+Received: from mta0.migadu.com (out-94.mta0.migadu.com [91.218.175.94])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43FC8606A32A
-	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 15:30:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 43FC8606A32A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0010E606A31E
+	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 15:33:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0010E606A31E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=JPYqKJmO
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=E5m87UiI
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=ZBB7CMWco3C2UZrjURWiKqdxZ+YQ7M6cwRgIBlKdNCQ=;
+DKIM-Signature: a=rsa-sha256; bh=mwJLewJ9zSnI5WWBwaIqRXXu8I3527mjgT72PP6DPTc=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1795707030; v=1; x=1796311830;
- b=JPYqKJmO/QqsRV0quh+vT6sSdKurSWhxpdry5ZaGNulRA/XNc+FY/z/bqY0tdfJiksAgmWKz
- MvofBvZ+XMq2IhaZvt80d9lBCbboYUvrxrichvZ9mIhLRE+0qJqgkdzTsxVEl4ddRZNhBWh4wXk
- L2E/upmHF6lu17lX9nLiW2Gk=
+ t=1795707198; v=1; x=1796311998;
+ b=E5m87UiIVTh5aopPtUryf6t8fVBmYN+bUlyQ4rnpUAZHpP9mjtBCzfgg1/lhENZlPf25of+g
+ 88MVClLSBrsuTUFIQhV5sF0ncqYPl7qw4rJd2umGGbPK74hH4rPDkUjp0aWQivEJV4YYMDehdI6
+ UZ1g0FLlfvuO+4sOCo50a8tw=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 268944202c3aa925;
-	Thu, 26 Nov 2026 15:30:29 +0000
-X-Mizu-Trace-ID: 268944202c3aa925
+Received: by smtp.migadu.com with ESMTPS id fa146ce35f58f9d5;
+	Thu, 26 Nov 2026 15:33:17 +0000
+X-Mizu-Trace-ID: fa146ce35f58f9d5
 X-Migadu-Flow: FLOW_OUT
-From: Leon Hwang <leon.hwang@linux.dev>
-To: stable@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Leon Hwang <leon.hwang@linux.dev>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Subject: [PATCH linux-6.12.y 4/4] bpf: Disallow interpreter fallback for BPF_ADDR_PERCPU insn
-Date: Thu, 26 Nov 2026 15:30:02 +0000
-Message-ID: <20261126153002.162337-5-leon.hwang@linux.dev>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20261126153002.162337-1-leon.hwang@linux.dev>
-References: <20261126153002.162337-1-leon.hwang@linux.dev>
+Message-ID: <a3f3f62b-7642-423f-ab86-9faf6bbc0ffd@linux.dev>
+Date: Thu, 26 Nov 2026 23:33:13 +0800
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -72,95 +58,62 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH linux-6.12.y 0/4] bpf: Fix interpreter-unsupported insns
+To: Guillaume Laporte <glapt.pro@outlook.com>,
+ Vincent Thiberville <vincent@harfanglab.fr>, stable@vger.kernel.org,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20261126153002.162337-1-leon.hwang@linux.dev>
+Content-Language: en-US
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <20261126153002.162337-1-leon.hwang@linux.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-[ Upstream commit 7a0855e73757ee9cf25ba635a1c735018ecba742 ]
+cc Guillaume and Vincent.
 
-The BPF_MOV64_PERCPU_REG insn requires JIT to emit native code to for
-'dst_reg = src_reg + <percpu_base_off>'.
+Guillaume, please test them.
 
-However, the interpreter ignores the 'off' at its ALU64_MOV_X label.
-The 'off' indicates the insn is BPF_MOV64_PERCPU_REG insn. Then, when
-the interpreter loads memory from the register, it will hit a page
-fault.
+Thanks,
+Leon
 
-[    2.545572] BUG: unable to handle page fault for address: ffffffffacaaf034
-[    2.546485] #PF: supervisor read access in kernel mode
-[    2.547167] #PF: error_code(0x0000) - not-present page
-[    2.547850] PGD 134e63067 P4D 134e63067 PUD 134e64063 PMD 10021c063 PTE 800ffffeca550062
-[    2.548912] Oops: Oops: 0000 [#1] SMP PTI
-
-Set jit_required as true in order to disallow interpreter fallback in
-core.c::__bpf_prog_select_runtime(), if any BPF_ADDR_PERCPU insn is
-patched to the prog.
-
-BTW, rename the helper bpf_map_supports_cpu_flags() to
-bpf_map_is_percpu_map().
-
-Fixes: 7bdbf7446305 ("bpf: add special internal-only MOV instruction to resolve per-CPU addrs")
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
-Link: https://lore.kernel.org/bpf/20260715141122.15783-4-leon.hwang@linux.dev
-Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-[edit]
-  Add bpf_map_is_percpu_map() directly because 6.12.y lacks
-  bpf_map_supports_cpu_flags().
-
-  Apply the map lookup and bpf_get_smp_processor_id() changes to
-  do_misc_fixups() in kernel/bpf/verifier.c.
-
-  Omit the current-task helper hunk because 6.12.y lacks the verifier
-  inlining introduced by commit
-  eaedea154eb9 ("bpf, x86: inline bpf_get_current_task() for x86_64").
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
----
- include/linux/bpf.h   | 13 +++++++++++++
- kernel/bpf/verifier.c |  4 ++++
- 2 files changed, 17 insertions(+)
-
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index d4a9108594bf..ed879905579d 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -3504,4 +3504,17 @@ static inline bool bpf_is_subprog(const struct bpf_prog *prog)
- 	return prog->aux->func_idx != 0;
- }
- 
-+static inline bool bpf_map_is_percpu_map(enum bpf_map_type map_type)
-+{
-+	switch (map_type) {
-+	case BPF_MAP_TYPE_PERCPU_ARRAY:
-+	case BPF_MAP_TYPE_PERCPU_HASH:
-+	case BPF_MAP_TYPE_LRU_PERCPU_HASH:
-+	case BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE:
-+		return true;
-+	default:
-+		return false;
-+	}
-+}
-+
- #endif /* _LINUX_BPF_H */
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index ab6263a769d2..d34a602b1e76 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -21602,6 +21602,9 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
- 					return -EINVAL;
- 				}
- 
-+				if (bpf_map_is_percpu_map(map_ptr->map_type))
-+					prog->jit_required = true;
-+
- 				new_prog = bpf_patch_insn_data(env, i + delta,
- 							       insn_buf, cnt);
- 				if (!new_prog)
-@@ -21706,6 +21709,7 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
- 			 * way, it's fine to back out this inlining logic
- 			 */
- #ifdef CONFIG_SMP
-+			prog->jit_required = true;
- 			insn_buf[0] = BPF_MOV32_IMM(BPF_REG_0, (u32)(unsigned long)&pcpu_hot.cpu_number);
- 			insn_buf[1] = BPF_MOV64_PERCPU_REG(BPF_REG_0, BPF_REG_0);
- 			insn_buf[2] = BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_0, 0);
--- 
-2.55.0
+On 2026/11/26 23:29, Leon Hwang wrote:
+> Request from Guillaume and Vincent [1][2], backport the following commits to
+> linux-6.12.y with editing the commits manually.
+> 
+> 9a6df65d5c6a ("bpf: Introduce jit_required flag and remove bpf_prog_has_kfunc_call()")
+> f1c27922576e ("bpf: Reject programs with inlined helpers if JIT is not available")
+> 34746b5a84ec ("bpf: Disallow interpreter fallback for arena-related insns")
+> 7a0855e73757 ("bpf: Disallow interpreter fallback for BPF_ADDR_PERCPU insn")
+> 
+> As there was a big code refactoring in linux 7.1, the changes in the new
+> file kernel/bpf/fixups.c will be backported to the positions in
+> kernel/bpf/verifier.c.
+> 
+> Patch 1 introduces a new bit 'jit_required' in struct bpf_prog. The
+> other patches set 'jit_required' to fix the issues.
+> 
+> Links:
+> [1] https://lore.kernel.org/bpf/BESPR02MB12296D62B1B3F33BA21C4F24AF1432@BESPR02MB12296.eurprd02.prod.outlook.com/
+> [2] https://lore.kernel.org/bpf/MR1P264MB331494502C9D13D8A9EAFB99B7E82@MR1P264MB3314.FRAP264.PROD.OUTLOOK.COM/
+> 
+> Leon Hwang (2):
+>   bpf: Disallow interpreter fallback for arena-related insns
+>   bpf: Disallow interpreter fallback for BPF_ADDR_PERCPU insn
+> 
+> Tiezhu Yang (2):
+>   bpf: Introduce jit_required flag and remove bpf_prog_has_kfunc_call()
+>   bpf: Reject programs with inlined helpers if JIT is not available
+> 
+>  include/linux/bpf.h   | 22 +++++++++++++++-------
+>  kernel/bpf/core.c     |  7 ++-----
+>  kernel/bpf/verifier.c | 21 ++++++++++++---------
+>  3 files changed, 29 insertions(+), 21 deletions(-)
+> 
+> --
+> 2.55.0
+> 
 
