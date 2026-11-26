@@ -1,84 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795716137;
-	b=LhplA5lXvBappZIUy0i9D3bgf4bDmRh9dhrdZvfSjaM3X/I5OaDJJ/j/K0vgGYwlNxdL
-	 jtr6qy9UTgNyvaPAN4omWy+X0EpXtB6EsQP95DPYP/dBasoLdGOmG3hKqpr0tIAy4wTov
-	 UrUpB6wUz0WmJoExUzzgf+hiW1GvRRDN4tkVF8H8le3uhvZy2v7bETns13pYOXVQ9v3CA
-	 TnMXk4anFfqY96i/WZG2NrkLqdSnjAlVZ7N/z6186vJ+yxRkXRyuWEO9lFaKoOOJ0ODGU
-	 JUCuMUelwsW9H0YjEEKGEAg0+PJ7a617zD/HCyMU53LNWFGoSCYNLHbgmF7k9nvj4aQ==
+	t=1795716179;
+	b=pcK43UW6zjBtT8cgqJnBKgTIGNn0m8bBMZdx1QfauAKRJ5sG1lLXJRpCkeac2l/DUNQS
+	 eYvC3NmTdbnh3mfIOwy1X5bYPBfJQ4VzLzAORylYfl82iT+RVQAsK3ASNowzz/Y9D8t4s
+	 ITU16LfPnjFrZA407fPqw9zjik6YPoDd2ljv5u1ApthtzK/46ZsGtBMBDf8HtEd+U/fVQ
+	 aX41DXcz2rS+q6xApzZPYFW5UudBlPSe2Gn12WakvDMSHbkkHK4UC6z+bwp9LVA6cEYu4
+	 2Lz3aiblT3hJCPbKu8VzpTPCvp/e7mZwhvzqcKyjlfGc3e4s8/gTjqwLSlfOhJlUF9Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795716137;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=EIBFveu7yYmEbvuiFTdZCk87YQ1EZPQ1DqdLI+hGjog=;
-	b=UItHoj153Bvi5/OGHCiMUDzBVrGjzVm10W4cNQhXksp7wcU3ybUvflUXxD/QoeZhl5Ge
-	 Djm5Z1w03jdza24yV0RxpgkxqAYoArNZQa3l29dkHKnH/1CIQM1U9FlgyCUCkAt+Je3/A
-	 zB9THnPp0DvgCVDjh9oP8smMDu+ROjqsphhDAnzxG/uxzdn3vUNA/3/z9bI939SnOtl+4
-	 M6La37/2W8qW26h9a1R/AD2VfHj8II0JqjnZM5ZKD6QeKyxgc4dyAIHM0PcEGiEVF6p6V
-	 aJedrc18X5GAMDvsEUylEW/W73I39V4WrxSu6h07/f+pIQZoKgm2ze6OIo78R+t/FGg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795716179;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=3R6S35HfxmEtmBWf4L9xz7ZEb0CLISkLf0fqyEA2tmU=;
+	b=NfbJzhT0q0EIp1QAWjw3XQWmTb6jqeKlXN+2P9yufVWVi/IuMAxxEBql0ubybTX6b/SM
+	 fmjsmIAIuAzVp5N7wi4o1OXk794LSgMCqja2HYMw6IdrA2zMrbxHNKAIaV/j1Diazhuyo
+	 p+5oY5fBgg+tS9n3jP5xkpFjLpPvkjFEsbHyxZnbhVr88gVcsw+ZJzDPL/lVR8OEQtkcX
+	 UwP+g9wOGOfGwpxVbAEtxtvRhV8Lff+fdvksZzKfVN2ZJNx++RcljWYd4pdpL5RXjtG+y
+	 ty2oiDVQI/2n6FtmAyOWSoYW8fjXAOj8Wk84Ov/0mxFyag/HllXm5IWawUotjjuLm3Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=arm.com;
-	spf=pass smtp.mailfrom=arm.com;
-	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=kEnZJDat;
-	arc=none smtp.remote-ip=217.140.110.172
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B0F3606A31E;
-	Thu, 26 Nov 2026 18:02:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2B0F3606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Zj4bHqir;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A2FA606A31E
+	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 18:02:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=kEnZJDat
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6BE7E1BA8;
-	Thu, 26 Nov 2026 10:02:13 -0800 (PST)
-Received: from localhost (unknown [10.2.196.114])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E78513F632;
-	Thu, 26 Nov 2026 10:02:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1795716136; bh=ek6pWiEzSoxsFDDVTU1wdcAfubRIURJGSjuHrb5FqjU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kEnZJDatTGHmsf3CzvHuDgAQ56PvD0PVRCks3UzHlNqJLRKPG9QI4ikwsTOvjY//O
-	 yr0hUZn90UwjrAXiehDySwVhfIJ/hZ1omwRPqZ1vbSgtVWzuHv2lbBvnf6QOG9LcM8
-	 kP0UZVtEqNMWMRBL5mMS+/Xf075VH9+Y4x0QyI3Y=
-Date: Thu, 26 Nov 2026 18:02:14 +0000
-From: Leo Yan <leo.yan@arm.com>
-To: James Clark <james.clark@linaro.org>
-Cc: vladimir.murzin@arm.com, Puranjay Mohan <puranjay12@gmail.com>,
-	Mark Rutland <mark.rutland@arm.com>, Will Deacon <will@kernel.org>,
-	bpf@vger.kernel.org, Anshuman Khandual <anshuman.khandual@arm.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Rob Herring <robh@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Shuah Khan <shuah@kernel.org>, Breno Leitao <leitao@debian.org>,
-	Ravi Bangoria <ravi.bangoria@amd.com>,
-	Stephane Eranian <eranian@google.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Usama Arif <usama.arif@linux.dev>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org, kernel-team@meta.com,
-	Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Subject: Re: [PATCH v6 0/3] arm64: Add BRBE support for
- bpf_get_branch_snapshot()
-Message-ID: <20261126180214.GB809232@e132581.arm.com>
-References: <20260810164622.1829843-1-puranjay@kernel.org>
- <CANk7y0ixo5a3Vfzj_HVhVHRNce2Rsit4pP27GCtXd4jHHzmiKg@mail.gmail.com>
- <CAEf4BzapC=7YM2QLMyKKfyOWGgBTfEJmPPN8e9Jf5xT9SutBTQ@mail.gmail.com>
- <dfa8362e-0dad-4f23-9d2e-dde03cb5facc@linaro.org>
- <CAEf4BzZ=ahQNtA-1KdZFRONXMOEkV9Nb1OUY==JRQCarkbMM0Q@mail.gmail.com>
- <5c7f4a5f-fe5e-4367-9c60-86f1818346e8@linaro.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Zj4bHqir
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94A9D1F000C6;
+	Thu, 26 Nov 2026 18:02:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795716178;
+	bh=3R6S35HfxmEtmBWf4L9xz7ZEb0CLISkLf0fqyEA2tmU=;
+	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
+	b=Zj4bHqirN1CDn6geqQCur1FDlZ7U0T+VsME6oI2zdUYbpt+b5i1PsQ7EfHTvJD38G
+	 sYorTSaPwgd3n80GdkXf/L7iNHh6bqtyIkfyRrpjXwYfSQuUm84clCuaCmO93JwGWO
+	 JtX4xvmyv0PaPq6YRZa6P3Y5JgpsBRrFqQF2QcMOy7fNL0LMB0efak3KvJxx8rU3Ww
+	 GBjWCKNk8AGJ2rjCwyMPmTq8R4HfB4BQrFBdLLVAQijZRhJxS0dah0vxiQz++hoDjK
+	 JRMRwy2dVSi00xtDrG8ibb61DYZfErQGw5vxFWf5smvIXB/S4k8ovtKoS3af7I23Kl
+	 TD3ljUd47jPkw==
+Message-ID: <sashiko-outbox-235988@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next 3/3] selftests/bpf: Test enum value relocations
+ out of the local enumerator range
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Yonghong Song" <yonghong.song@linux.dev>, bpf@vger.kernel.org
+In-Reply-To: <20261126175618.1884490-1-yonghong.song@linux.dev>
+References: <20261126175602.1882988-1-yonghong.song@linux.dev>
+ <20261126175618.1884490-1-yonghong.song@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 26 Nov 2026 18:02:58 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -87,48 +59,106 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5c7f4a5f-fe5e-4367-9c60-86f1818346e8@linaro.org>
 
-On Thu, Nov 26, 2026 at 12:39:52PM +0000, James Clark wrote:
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue to consider:
+- [Low] selftests/bpf: non-standard multi-line comments in
+  core_reloc_types.h
+--
 
-[...]
+commit b84e0514078e764d621bc1f043d99af2bc50dbfb
+Author: Yonghong Song <yonghong.song@linux.dev>
 
-> > > > Mark, Will, you guys seems to be designated as maintainers for
-> > > > drivers/perf/arm_brbe.c, can you please take a look and give your
-> > > > feedback as well? This is important and useful feature for newer arm64
-> > > > CPUs, it would be great to get access to this functionality that we
-> > > > had on x86-64 side for a long while now. Please help get this upstream
-> > > > or, if it's not in the right shape, guide Puranjay towards a better
-> > > > implementation. Thank you!
+selftests/bpf: Test enum value relocations out of the local enumerator range
 
-...
+This commit adds CO-RE relocation selftests verifying that libbpf poisons
+enum and enum64 value relocations whose target values fall outside the
+range of the local enumerator type.
 
-> + Vladimir
-> 
-> Hi Mark, Will, Vladimir,
-> 
-> Any thoughts on this approach where NMIs need to be disabled? Alternatively
-> we could do something like track where the PMU interrupts and BPF snapshots
-> overlap and then discard the BRBE buffer and make sure they don't trample on
-> each other etc, but it looks like it would be significantly more
-> complicated.
+> diff --git a/tools/testing/selftests/bpf/progs/core_reloc_types.h b/tools=
+/testing/selftests/bpf/progs/core_reloc_types.h
+> index 116a67fdd1b2e..01d67521efd12 100644
+> --- a/tools/testing/selftests/bpf/progs/core_reloc_types.h
+> +++ b/tools/testing/selftests/bpf/progs/core_reloc_types.h
+> @@ -1409,6 +1409,62 @@ struct core_reloc_enumval___byte_unpacked {
+>  	enum named_byte_enum___byte_unpacked f3;
+>  };
+> =20
+> +/* second enum value out of the range of the local int enumerator, as the
+> + * target enum is 8 bytes, should fail
+> + */
+> +enum named_enum___err_too_big {
+> +	NAMED_ENUM_VAL1___err_too_big =3D 1,
+> +	NAMED_ENUM_VAL2___err_too_big =3D 0x200000000ULL,
+> +	NAMED_ENUM_VAL3___err_too_big =3D 3,
+> +};
+> +
+> +struct core_reloc_enumval___err_too_big {
+> +	enum named_enum___err_too_big f1;
+> +	anon_enum f2;
+> +};
+> +
+> +/* second enum value out of the range of the local int enumerator, as the
+> + * target enum is signed and 8 bytes, should fail
+> + */
+> +enum named_enum___err_too_small {
+> +	NAMED_ENUM_VAL1___err_too_small =3D 1,
+> +	NAMED_ENUM_VAL2___err_too_small =3D -0x100000000LL,
+> +	NAMED_ENUM_VAL3___err_too_small =3D 3,
+> +};
+> +
+> +struct core_reloc_enumval___err_too_small {
+> +	enum named_enum___err_too_small f1;
+> +	anon_enum f2;
+> +};
+> +
+> +/* second enum value out of the range of the local int enumerator, as the
+> + * target enum is unsigned, should fail
+> + */
+> +enum named_enum___err_int {
+> +	NAMED_ENUM_VAL1___err_int =3D 1,
+> +	NAMED_ENUM_VAL2___err_int =3D 0x80000000,
+> +	NAMED_ENUM_VAL3___err_int =3D 3,
+> +};
+> +
+> +struct core_reloc_enumval___err_int {
+> +	enum named_enum___err_int f1;
+> +	anon_enum f2;
+> +};
+> +
+> +/* first unsigned enum value out of the range of the local unsigned int
+> + * enumerator, as the target enum is 8 bytes, should fail
+> + */
+> +enum named_uint_enum___err_uint {
+> +	UINT_ENUM_VAL1___err_uint =3D 0x100000000ULL,
+> +	UINT_ENUM_VAL2___err_uint =3D 0xffffffff,
+> +};
+> +
+> +struct core_reloc_enumval___err_uint {
+> +	enum named_enum f1;
+> +	anon_enum f2;
+> +	enum named_uint_enum___err_uint f3;
+> +};
+> +
+>  enum named_unsigned_enum64___err_missing {
+>  	UNSIGNED_ENUM64_VAL1___err_missing =3D 0x1ffffffffULL,
+>  	UNSIGNED_ENUM64_VAL3___err_missing =3D 0x3ffffffffULL,
+> @@ -1423,3 +1479,17 @@ struct core_reloc_enum64val___err_missing {
+>  	enum named_unsigned_enum64___err_missing f1;
+>  	enum named_signed_enum64___err_missing f2;
+>  };
+> +
+> +/* first signed enum value out of the range of the local long enumerator=
+, as
+> + * the target enum is unsigned, should fail
+> + */
 
-Could we restrict bpf_get_branch_snapshot() on arm64 to a free-running
-BRBE mode? On a given CPU, at least one active event would have to
-request a branch stack, and every such event would have to be a
-counting event.
+[Severity: Low]
+This isn't a bug, but the five new multi-line comments in
+core_reloc_types.h place text on the same line as the opening /*.  Per
+BPF coding style, the opening /* of a multi-line comment should be on its
+own line with the comment text starting on the next line.
 
-This seems to fit in this series. The selftest opens a CPU-cycles event
-with PERF_SAMPLE_BRANCH_STACK and sample_period = 0, then takes the
-snapshot from an fexit program.
-
-Counting events can still generate overflow interrupts for bookkeeping.
-It requires to refactor the PMU driver to leave BRBCR_ELx.FZP clear so
-an overflow doesn't freeze BRBE. The interrupt handler could service the
-counters without touching BRBE and losing the branch records.
-
-Thanks,
-Leo
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261126175602.1882=
+988-1-yonghong.song@linux.dev?part=3D3
