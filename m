@@ -1,45 +1,57 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795666310;
-	b=n+raWWunH1MqPyhB9SIrF+qiU+Wp3/r+n+jtl0Yzph9cYu0EwHQePOd+CGD8d5yyxikV
-	 z0Z/4znYYhM3ib8VSsOLlGdN9Whgg5mn6h40DRpQraFt2dYm5ecNHllCfS1yqvr/3u0Fy
-	 2l2a0tccOhht1UvuqumG/yqRDOki2f1YSXAqy/p+1Dfx/EnPOESQJ/giQ5EjU6HLT2/6u
-	 PPImyNs74GKFQ5G7ceSV3MjBhScpsoOpj87oIrgxPRIu5CdYDxDNrAany3Dqq+EL/eW9M
-	 Ju+Egcuj1d8TcDsoz0BdpcsRR1Zsc3OZBcg2dZt2I8yuUsSIoNHIpdRuT0uRkTq4QJA==
+	t=1795666967;
+	b=kZHetb44wVrJAZzyifhblPdTUR/0TRYGO0HmNQ4W57EZ1AmMbkp6/uNJ9F9beSJ6nPSS
+	 /RYXibtNCDPpjOXji9Am0FK5eH3BuxILiIA09TdrF+PTeJDz+PWmQLQHsqQR80fyYASMA
+	 8J+2OXqaATNWWzfzDdkgTwacD++YbRmpLWjKn8MuvvQacsYARz5wOPOGsQW9kvUWjUX43
+	 to4TmDNuL78VhP34mWBoCI3sB7clxb0E6aZ/vUlU5oTlWBNLWwBmonFqBNk+4PgFeurRC
+	 +XmGCW6oGYVGsNPXGqCcVppsRisk7CQ7fbnWFeYgRgugSku2Ik7uzrf6D6HGBsgtCtg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795666310;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=mqaXVF806bEBFiclKihsKv3GDGzjnKBVxKwRoY3HDMo=;
-	b=272ExEoqMI716juscj//n32fhzvGwBf8zBGMqQu2Z5u4FGlTz5DC2yoR2QoZgQdZp6Zh
-	 ilb2nTEd+4e0Fu+911wa80+kGft7m2OlK0KCQX44DSt/L9xJvMtcoRBOnVVEiHxiBNHpB
-	 7nzAWag5ST9NQcgp86O+wuf98D0RVQOJPvQrFA0TjZnSt5Qz+zuXEWt599P7FsRpJN7YV
-	 CCazh6CoVdOKSyMLSXplb/vrjq5f/EmbCWsaPzxzryITscrpuMZKHeIw48KbhStDF2tCM
-	 1MwV5Hq8Z4Q7Db5kqglJT0ub2hbuCDwSCIhjBz3v8pIBXo/mX5g90Pk9zSVG7663WBg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795666967;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=6IX/rxcLNwGhwnLZ277mL3p0ntb17YKkScH+lESAbgg=;
+	b=XIjY7Gd/ov4kLI/4/kS7NFkYk98FkauD0jOUsIZQclrP62uKZYv1U/HtgQlchlzPVek7
+	 g3MGJcoGyUrL2Ax2Gj5upU9OgVQ+Q9X0Jnl8WeVR4ZLCOtgI1iVBWDncNjvpdRwa38cxW
+	 ai0bQFz6sNGNNXUv+7XoOhJ+oXZ5MiQ+mtJqM/Kd7V3iRVRi1XrApnWNVoNEb8BXGonnT
+	 9PLDDDWL1GK51AiH7mVtCfaTfrJtTM27gYxxtd48uOVx2yDTsSA5Kbdfsv/IufXsPttLL
+	 /1z/1x6luxJxB1K6IPVG8EkUiBGIqfm6Jb5b5qU+09N5hXVhMrxFiGG8iJIaqb6+VlA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JZZ1+Eag;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fgdp0qZC;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E65BB606A31C
-	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 04:11:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C0E2606A31C;
+	Thu, 26 Nov 2026 04:22:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JZZ1+Eag
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A6C41F000C4;
-	Thu, 26 Nov 2026 04:11:48 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fgdp0qZC
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA93E1F000C4;
+	Thu, 26 Nov 2026 04:22:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795666309;
-	bh=mqaXVF806bEBFiclKihsKv3GDGzjnKBVxKwRoY3HDMo=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=JZZ1+EagPEPaKRyIErv5N9b131ft/UTaSNNGgHrNHMtr6B1oluneb5D2a9gUjz96g
-	 qcbCNHB9ms3bWAAHRL9k/mRDOsxjKL0QiTMM2J5PhW2H4Vawmr/nZ+9bvQvg+D0Jyb
-	 uwPy+9T+WMP7zfrX5eiKzeBvAX75sL3CTZlJxfwT/g/fl7HcALyBHxxcY/8LU7KxVM
-	 OQQD8dzWAj11wJWzBNhlQ/wG6ZN5PJvTn+H85CFJwsP1379FiiOwc2yNUSDogzZgTH
-	 Bvqj3yL+0YzfWpNr7XXrmgJMDkYIbFS757v6mkfSHodILxhXDsf2Qkn+JAIvsWg8Fq
-	 K8rFdcNAvW1tg==
-Content-Type: multipart/mixed; boundary="===============0234463303323365805=="
+	s=k20260515; t=1795666966;
+	bh=6IX/rxcLNwGhwnLZ277mL3p0ntb17YKkScH+lESAbgg=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=fgdp0qZCEPnStMbKpkYGr7ZA1fngeOlDmigN03hYtqBWXrfCNtI/Gz4wNfj15gMqV
+	 kdWO79sZKwKFRmty0cWeK4oWuxWL9mNSlTAjqzlYiwl9j2CmjsXONT1k1EPm3hXj1w
+	 HFQbiuoyo3HdeHN3icFc1JHAHnol8qtFqAeLOQrarZg3SroxXjJ2WIdtY6f010kod9
+	 6z46a2X1dbKIoeBfeOUSJw9dnp3wGMzwcWvMSEe89TwwJUVIf+9JvkOeUy2eI7mgS4
+	 VsXk3jh+vs6TK0iwowiklkUuOMtjCbc9uM1xkfaUiceLvzAZ5CiVkWvkTJL2SXAGyp
+	 aQCuHrTYGOfuA==
+Message-ID: <sashiko-outbox-234729@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH stable/linux-6.6.y 4/9] perf/bpf: Call BPF handler
+ directly, not through overflow machinery
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Luo Gengkun" <luogengkun@huaweicloud.com>
+Cc: linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
+In-Reply-To: <20261126043458.2394658-5-luogengkun@huaweicloud.com>
+References: <20261126043458.2394658-1-luogengkun@huaweicloud.com>
+ <20261126043458.2394658-5-luogengkun@huaweicloud.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 26 Nov 2026 04:22:46 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -48,62 +60,63 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Message-Id: <ed60f423a7c104167720813c852cc837c289cf555e0abe8a5ec512cf0e3dfee8@mail.kernel.org>
-In-Reply-To: <20261126033114.4111944-1-alexei.starovoitov@gmail.com>
-References: <20261126033114.4111944-1-alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH bpf] bpf: Set the run context for async callbacks
-From: bot+bpf-ci@kernel.org
-To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
-Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Thu, 26 Nov 2026 04:11:48 +0000 (UTC)
 
---===============0234463303323365805==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thank you for your contribution! Sashiko AI review found no new issues
+in this patch, but noticed 1 related pre-existing issue it does not
+introduce:
+- [High] perf: missing SLAB_ACCOUNT in perf_event_init() [1]
+--
 
-> bpf: Set the run context for async callbacks
+commit 4af8ba4aec15ed1b6050b9027e93e306d86849aa
+Author: Kyle Huey <me@kylehuey.com>
 
-TL;DR: Nit only: the new comment on bpf_async_run_ctx says current is not the
-arming task, but task_work or a short timer can run in the arming task.
-Suggests rewording.
+perf/bpf: Call BPF handler directly, not through overflow machinery
 
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
+This commit refactors BPF perf event overflow handling to invoke
+bpf_overflow_handler() directly from __perf_event_overflow() instead of
+replacing event->overflow_handler, and removes orig_overflow_handler from
+struct perf_event.
+
+Link: https://lore.kernel.org/r/20240412015019.7060-5-khuey@kylehuey.com
+
+> diff --git a/kernel/events/core.c b/kernel/events/core.c
+> index 523d9bbc305bd..ba9cbf50773e8 100644
+> --- a/kernel/events/core.c
+> +++ b/kernel/events/core.c
 
 [ ... ]
 
-> @@ -3440,6 +3440,14 @@ static inline bool has_current_bpf_ctx(void)
->  	return !!current->bpf_ctx;
->  }
->  
-> +/* An async callback runs in no hook, and current is not the task that has armed it */
-> +extern struct bpf_run_ctx bpf_async_run_ctx;
+> @@ -12121,13 +12118,11 @@ perf_event_alloc(struct perf_event_attr *attr, =
+int cpu,
+>  		overflow_handler =3D parent_event->overflow_handler;
+>  		context =3D parent_event->overflow_handler_context;
+>  #if defined(CONFIG_BPF_SYSCALL) && defined(CONFIG_EVENT_TRACING)
+> -		if (overflow_handler =3D=3D bpf_overflow_handler) {
+> +		if (parent_event->prog) {
+>  			struct bpf_prog *prog =3D parent_event->prog;
+> =20
+>  			bpf_prog_inc(prog);
+>  			event->prog =3D prog;
+> -			event->orig_overflow_handler =3D
+> -				parent_event->orig_overflow_handler;
+>  		}
+>  #endif
+>  	}
 
-This isn't a bug, but is this comment accurate?
+[Severity: High]
+This problem wasn't introduced by this patch, but should perf_event_cache
+use SLAB_ACCOUNT (or GFP_KERNEL_ACCOUNT in perf_event_alloc()) so that
+struct perf_event allocations are charged to the calling process's memory
+cgroup [1]?
 
-bpf_task_work_schedule_signal() and bpf_task_work_schedule_resume() accept
-any trusted task, including the one returned by bpf_get_current_task_btf(),
-and the task_work selftests do exactly that:
+perf_event_init() creates perf_event_cache with KMEM_CACHE(perf_event,
+SLAB_PANIC), and perf_event_alloc() allocates from it with GFP_KERNEL |
+__GFP_ZERO.  A containerized task can repeatedly call perf_event_open() to
+allocate unaccounted perf_event objects, bypassing its memcg limits and
+exhausting host kernel memory.
 
-    task = bpf_get_current_task_btf();
-    bpf_task_work_schedule_resume(task, ...);
+[1] https://sashiko.dev/#/bug/linux-83d96148-5109-41b8-9975-d17680148a68
 
-In that case bpf_task_work_callback() runs the callback through
-bpf_run_async_cb() in the same task that armed it.  A bpf_timer with a
-short expiry can also have its softirq run on irq exit while the arming
-task is current.
-
-The commit message says the callback runs "in a task that the program has
-picked", which matches this.  Would "current need not be the task that has
-armed it" be a more accurate wording for the comment?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/45750674148
---===============0234463303323365805==--
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261126043458.2394=
+658-1-luogengkun@huaweicloud.com?part=3D4
