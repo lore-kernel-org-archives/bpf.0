@@ -1,85 +1,92 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.169
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.179
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795663797;
-	b=YBmLnUAhaw7+0ZvEg4/6EsZ8LBRnpghms93XEJuZUZGbKpcRuMMeREX+NBlO+QmWMJvV
-	 MT0c4BWagHlV8rQIgXOB5nmXaB+dw+ToxnXFzVjeq986zzez7H4GLt7pvuTULsAh7CSla
-	 61ePaZR2TvhXK5mdXOHw5zqbA0cl5HFmyTGYvqsNqd5szox+upETLtL5Um8joGTBv9jtv
-	 YTk7Lw9w9QlOoH8Q1AkEao8KGUpFFLVkk+2zY31K1czrjlnJdal9E7VCX2O6WVXcCUM56
-	 /HANCcsicjkrbhlw/zxgpc1v+2ekI7lH7dfm77FeWKcb/lB8EPe8VdzQOs9oTMPo7xQ==
+	t=1795663878;
+	b=MtVeAM7tzj7gt8FNrPt3PdF4t1Tq0pfUF/cucN1gdATuucHCramaXdvf8QnO6YB8RNr4
+	 PzG/Oa2c/X7r3usxl7bkw9sLuhgLTgWeOBjM22jNDDTx34/45B3T6Cmh3chGpVft2H1FX
+	 qe4586OyiH44MAmWk2iZfQhp+ZVqqdA0UkA4siQZNIdub2WFU1OJsEm7mPHrOb3W/Smj1
+	 HLiXS85ERmUcgJgEleUEykS/GIJ6YC+uJ3WDWUKN9Efgq1ZkfM9UOzNAuIFJUaxkn9YN/
+	 MfgQ1EFDbvxLonjqJidnYePpUnRy5rkRh9+v3EO4eXbmxR+k1FOLqNUUZMmXmV1Oovw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795663797;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795663878;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Message-Id:
-	 Cc:Subject:From:To:X-Mailer:References:In-Reply-To;
-	bh=IpBPoqnT7XRaUUtao4GwnTNrNP2Jb9pC0p7vG2cG0EM=;
-	b=LOeHHyeueXkrzebEwcU36tj3TkvbFcg2Rm1fmHWU7MiD8lf2kJUXJjyGlwcM6hOHemIV
-	 bVwIOE8cu0z7GZifoV4HMJz5p1D+iw1FtvcQNB5kPiccQmRO1bGtJZxZaUpC9rXhNN0I4
-	 nzucwhHqDbshbp783Y5GkWxWnYYjsBYAvi15/3ZAl9EMrysXQUe1F2Wq62WSDMIuOr5cq
-	 k+KzyMXXSnX92gdr3dBB0/+etOKfrWxoLjjdhNMON5QwXcwwUaqQri3QmO6RxDxPY4fpr
-	 X4sYjPQ4iMv/+Ae/KBNlDQvuXiI9cE+dTsWNBYV9DjRQ+nELcz1iRD1gCUUSfrtmqdg==
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=vQDjKL7nrjcU97QTUg+Sc6BRlUr7oS58yqxm5kVaxaM=;
+	b=R524/gK6yb12t7hAD5SuRNo7/ClVqwtsyPrhEHZNUs1BCvI0m7LYHCkTywYYM3VKD+6t
+	 ng7vjnbtg1u2AJDWt8Y3Qk2laUDAyZ7YMAWiBAyiS/Uc0JyEmrkmZRui81ilBgrxUXm59
+	 Nnt4y4tHt0UNyAmoQVOMNHZDCg/bRWd/PNIZUYJyrWgK7F3ppPR9peZY+76Ea3Vo1MyMo
+	 QWqA39VaxK4oENNggrcAwoVt2oCRF9yL8yj7gZAe22QiEXa3YrywG72mUgz3WGSoQgmDI
+	 2w+iKGx86dbt3CfXUdKf6jVfo9EMrafb0YpDv+VRcT1ybuu/KsDGkCnEiG8IFfyrPyA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Ge74aeZ9;
-	arc=none smtp.remote-ip=209.85.215.169
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=muV9PHi3;
+	arc=none smtp.remote-ip=209.85.215.179
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41155606A691
-	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 03:29:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 41155606A691
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A482606A323
+	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 03:31:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7A482606A323
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Ge74aeZ9
-Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-cddac941ed1so2935755a12.2
-        for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 19:29:57 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=muV9PHi3
+Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-cdadf7e248aso2694923a12.3
+        for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 19:31:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795663796; x=1796268596; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=IpBPoqnT7XRaUUtao4GwnTNrNP2Jb9pC0p7vG2cG0EM=;
-        b=Ge74aeZ9dydOcRkiioTsqEpJtsFEIaP6vYCZeCjABFSs7FcbSagrDKjdNDqExJ2OHc
-         lMlLqUIv0U6OJHLrfjihR7nT2vs1FRTjZjYNJK7cwbsmjp3WyTU5M/P1hfAwjqbb/1Bf
-         uAKeS+uvL/l+4lOvI4wqObv935uvCp8kcqszPQQvA/m3bGbb4e109JkdYuIr4oOHdb3y
-         y67zBtmUukRrJ64tGN6gG93dMJvuE7KnrGAgl4yzXfXGKgPRCVLffLCNkDP1yahMniA8
-         41HMs4QhGiHaW2V9kzfQekghes5I7HYCD8pHKPRNQusAh0c7QmzvFP3Vgtx0HKo3nJAs
-         DMDw==
+        d=gmail.com; s=20260707; t=1795663877; x=1796268677; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=vQDjKL7nrjcU97QTUg+Sc6BRlUr7oS58yqxm5kVaxaM=;
+        b=muV9PHi3I9vz81jfhPOQ+vJIxyNR2jjcf5eDk6FgQJ/dRSydCPKaERLns+cs+Kfj4V
+         dfKbzhIQvRuBwAYEnzMVbh/EGCDVWFjbolke8QgIPS3hma74Rq90/Wh9pmoreTYtiDdz
+         4judnpjS6Thv4BBwXx2meFHicx2I+3XJSM48jxiOC7hDQWzXOZzn71f8vsapy6uu0MpQ
+         zBWUWUFpfVnvqdUz/elJx+XP9KVjwbyjVc7EHP2n9Qx2mjpRsbV62Qc/qh4vKZYx63Xn
+         bMnD4+ZshasXEZd5YtfSDD4tMTlgWyCveqhQ0PMTqAf3p9GxwuEzRJGRskp12exTl7rd
+         GvPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795663796; x=1796268596;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=IpBPoqnT7XRaUUtao4GwnTNrNP2Jb9pC0p7vG2cG0EM=;
-        b=aSlzAYbrSBCbwTVbxPKXf/D4ec23siMqD714gtdR6oIfzwj423h66M6DTQRsg/sKAq
-         nt6chheb2vdoKckZjkE0uPSXsyb3buOmen/aIEixvpsR2KM8hLptAl7+LmZ7G3rf6/Pk
-         cesHY8R/zWG6qKitd5nvCNoDLRTIdLYWVCWiorUvbfe+EAzUBjfg4GNjMApW7PkEwH+o
-         I+LTC7aWBhgzd8AbkIzLSy7N/lw9TAzuJG4ZDrcY0BxUL2//f7Yz6V6dtu2Bn4HXzzCp
-         BK3ZUBIqkkvLCKY4rmXjHky2Nb+cbeyyS1YgS+L6qKLaoWw9/eZI3RQ5fhDFcAZKl6MA
-         1S1w==
-X-Forwarded-Encrypted: i=1; AL+hErFbTQPXfvu5qZ1TKmoV/KbjBGnT8C7Y87zpulH6j4ZqDYoKDgKvJ7YhDJT6WLZmFmK1NNA=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/z5NlKgATlmprz7DRo1M81HVrVgIslgKum+bnTcfhQ0qlXwFCx
-	qiXKgKrIJwvezNKgAgulzKvI/0vF9qh/Rn6H04dhVBnoy3B9VkX1YspL
-X-Gm-Gg: AZFdTZcS3BDHgOwpOCQRDyQquSE4dzvAESVg/3fz9TX0DxbKIYGRsoYtK1DYqWxJKQ/
-	5LMQ+mF35duN5UR4saFGHeCPUSUYXGxiPtV+YIgYppNB0THF59T4yKpS9390Q9VHE1+AwFQix0e
-	JAWEvov0EaDJ5ZwzAQO+CbY39hqc2kgbKp0h7E6lJyznYBV0jZ1Ll4NlpXPYZKb3mRrxTzntwXR
-	uWKsgfumOY2OBZrceHIZdJovdZx7gICv9PFu30RQnLyEmWp0dvLOOGW2S8Sh6VHlOUv18iOSYHz
-	QOtIyylqEvgEB5xEYh+IP/D25t8l9PfX/2yDdwHzIDZrf0q95FC1Vo63PyxhtSeB5t4gJUpNKaO
-	0sgoutookBCTp94nFfUarX5KVU/YOvUWHRsQtuqBKa/tVcnTBLexalGUJflW1Ii0lnaILn4R7Op
-	BBuRlXfYPrq4nBkJQqP0iTqxToHRPh2pBH6iB1tesZMYeZBoFYQfJPXM+Uffwrf8TEjzghTJycw
-	+YFSbMv66ebE9p54r4Ssb4684NjEi5zzGfL4T6lpUKDr0JhSM8mXqPuAKAUVmdYjTHB1RdnaecG
-	KnOpCl6+lX2pxQwF+fd1zyfmC+LD+SCNDO6sumcyPEBrxZAnenHkepsl7T4oTDsHLmO0J/3ekcz
-	3/pE4R5TlzWxiBrGY4zPpFxd4NGPEiDUUvg==
-X-Received: by 2002:a17:90b:35c2:b0:3a8:c0cd:57f3 with SMTP id 98e67ed59e1d1-3b41c8e0c7emr16856091a91.18.1795663796337;
-        Wed, 25 Nov 2026 19:29:56 -0800 (PST)
-Received: from localhost ([153.61.198.254])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b40578d771sm32691589a91.1.2026.11.25.19.29.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 Nov 2026 19:29:55 -0800 (PST)
+        d=1e100.net; s=20260707; t=1795663877; x=1796268677;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=vQDjKL7nrjcU97QTUg+Sc6BRlUr7oS58yqxm5kVaxaM=;
+        b=Tasl2PT0RZUCSX1tstXWTawMSXXo64hnywkjifUIFkm6kcuDGlHp/vY4TiwhhuxPEj
+         9XNhy22lf+SC1lus/GRghVkQd1dcbE8q6TIx6gB8NHQPQcjzZpo5JHvtj1bjA9XbgVG4
+         npUgTFh/HqPf0ZdCDCCZyXuAc44ThLInu1/rtnGsmWC7umu/q0qK1mt6fObC6u6flxH3
+         KK4O/7prDzRqd6QJErl0bI2/AhV4Q9Cb+2oif3HiIEAz1JuAlj6210Y+3SVs1g21n0uJ
+         s0rmAKCs3vXoHWgsDRtgtvCc+mf/MEWg39Ql803v5cRh+HDko0dmN1oWk0vK5RLB/28t
+         tFrQ==
+X-Gm-Message-State: APuU4Z9+C1VZ5JSqqBJVpHpxeHl6w5qD+afO/ykpXK7jblI9bvOCl4qH
+	1nc/TZhyaOyfv/l3IQU77IbeK7uLpogCHQV5Hv8dU44vlKo4C+jd0dTxTL9Xrw==
+X-Gm-Gg: AZFdTZdcwhs04Dfv4eTLPjUHITcKwXZexZdiQPoIvCM6FlfGV8przbNw3egjvHa16/j
+	/cGGkKRWD+NZ/rTK3a/ENwnCsJ/PxSqHSlawR+Qh9MS+m4Yb4+wqdurTPE4PPhT9dU+fOlX7qv+
+	N9nkrWbc671K46c0/M2TjRe7LInbb3Pygo5DnE5CuC0YmDz9P/UrQqgXwf520gCgCtIKTGdiZrZ
+	cZ1xbH5gxrIhM8Bsr7x3zc+/BqIE+VVKazAtwqb3l1I6H6af4IAr3uEPQCny/RoR5L/Xt07BgH2
+	fwk/2Qixbna77vpzgCFyPTWxr+icmDvwbgVOYMhMraniHpqlUxwEiqSu/FuSg7KeWR+ogyNz8Uw
+	b7JQstTdih0ZN4qvi8haOe3KsZudaZf1y1eyvzaCvwMr/t2h2zIZe+2AN5gZpr3mBxajYI4WVc7
+	IbZ/BoP4FAPXwcrK58Q7ivdmVB4wW51a2BBGMBezmcc3xkVxhN8AjBqzSSBWfVdEQans+7OIe6Z
+	EatUlW4O5IiTsTwh1kW4XmIpvGzbSq/xmGJLlN2iaqANXA1N/M4ORQnyLo3jJS0aAJ4QDzwSLuw
+	Huc6Yh4hBGHANHivwf59QrIaI3UbgLV4WzPrW2LGM4iVyllIK8ucq00Uj8Xt8Nzpbptd2UiKFau
+	aJdRDoUinHXok3cTgFXW8vGDYjuEtdsj27EAAeFf9LX/6wkMPVpUa2ewWuYOGKPGFDTHDBMpHky
+	M=
+X-Received: by 2002:a17:90b:3890:b0:3aa:548f:eb77 with SMTP id 98e67ed59e1d1-3b41c97deecmr19798775a91.56.1795663876615;
+        Wed, 25 Nov 2026 19:31:16 -0800 (PST)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.247])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b44b7a8c64sm13568405a91.3.2026.11.25.19.31.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Nov 2026 19:31:16 -0800 (PST)
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To: bpf@vger.kernel.org
+Cc: daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com
+Subject: [PATCH bpf] bpf: Set the run context for async callbacks
+Date: Thu, 26 Nov 2026 03:31:14 +0000
+Message-ID: <20261126033114.4111944-1-alexei.starovoitov@gmail.com>
+X-Mailer: git-send-email 2.55.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -88,103 +95,317 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 26 Nov 2026 03:29:55 +0000
-Message-Id: <DN4TOVIA1HK7.HEPNDE8WF6HZ@gmail.com>
-Cc: <mikeba@sentinelone.com>, <bpf@vger.kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Martin
- KaFai Lau" <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>,
- "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Song Liu" <song@kernel.org>,
- "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>,
- "John Fastabend" <john.fastabend@gmail.com>, "Emil Tsalapatis"
- <emil@etsalapatis.com>, "Ihor Solodrai" <ihor.solodrai@linux.dev>, "Steven
- Rostedt" <rostedt@goodmis.org>, "Masami Hiramatsu" <mhiramat@kernel.org>,
- "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>, "JP Kobryn"
- <jp.kobryn@linux.dev>, <linux-trace-kernel@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v3 0/4] bpf: Check recursion per task for
- preemptible programs
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Andrii Nakryiko" <andrii.nakryiko@gmail.com>
-X-Mailer: aerc 0.20.1-355-gf870624f6c37
-References: <20261117-bpf-preempt-v2-r2-v3-0-586376ec3672@sentinelone.com>
- <DN38312WXPDJ.2KLUTCWSDFL3P@gmail.com>
- <CAEf4BzavErcSOZhGobqEo68d+2bCnJ8vFxxT_vqb+oQw1j1d7g@mail.gmail.com>
- <DN3X5OIRXSWR.2Y70DWFMPDXQF@gmail.com>
- <CAEf4BzYxBM3R1s6XDSpN5htzMho4Jp2uBsx9ZBKTPNBvmEffxw@mail.gmail.com>
-In-Reply-To: <CAEf4BzYxBM3R1s6XDSpN5htzMho4Jp2uBsx9ZBKTPNBvmEffxw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Wed Nov 25, 2026 at 5:35 AM UTC, Andrii Nakryiko wrote:
-> On Tue, Nov 24, 2026 at 6:00=E2=80=AFPM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
->>
->> On Tue, Nov 24, 2026 at 01:47 PM Andrii Nakryiko <andrii.nakryiko@gmail.=
-com> wrote:
->> >> +       for (ctx =3D old_ctx; ctx; ctx =3D ctx->saved_run_ctx) {
->> >
->> > do you mind checking if unlikely() around ctx improves performance?
->>
->> Mike,
->> pls try it on respin.
->>
->> > So basically to opt out from this behavior BPF program would need to
->> > stop using any per-CPU maps and just implement its own poor man's
->> > per-CPU storage?
->>
->> poor mans's per-cpu with bpf_get_smp_processor_id() shouldn't work
->> as an opt-out. See section 6.
->
-> it's hard to weed through that verbiage in section 6, are you
-> proposing to mark "needs per-cpu protection" if BPF program is calling
-> bpf_get_smp_processor_id()?
+From: Alexei Starovoitov <ast@kernel.org>
 
-yes, because it fixes real prog (falco).
+bpf_get_retval(), bpf_set_retval() and bpf_get_local_storage() use
+current->bpf_ctx, which the hook sets. bpf_getsockopt() and
+bpf_setsockopt() count on the hook to hold the socket lock.
+bpf_sys_bpf(), bpf_sys_close(), bpf_btf_find_by_name_kind() and
+bpf_kallsyms_lookup_name() use the credentials and the files of
+current. An async callback runs in a timer, in a kworker, in an RCU
+callback or in a task that the program has picked.
 
->>
->> > And even using SEC(".percpu") would still be detected
->> > as per-CPU usage, right?
->>
->> This one is pretty much brand new, so there is no data to make
->> a decision. I can see arguments both ways.
->
-> .percpu is backed by PERCPU_ARRAY, so we don't need any data to say
-> that it will trigger the protection, do we?
+Give async callbacks a run context of their own, and make these helpers
+fail in it. bpf_get_retval() returns 0. bpf_get_local_storage() cannot
+fail. Refuse async callbacks in a program with cgroup storage.
 
-I think it's slightly different vs normal percpu-array.
-.percpu is pseudo_map_value
-map is pseudo_map_fd.
-So we can distinguish if we want to.
-What I was trying to say is that .percpu is likely only in Leon's tool.
-So this one is easy to fix is we do _not_ want 'needs_percpu_prot' on it.
-I'm fine whichever way.
+Fixes: b00628b1c7d5 ("bpf: Introduce bpf timers.")
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+---
+ include/linux/bpf.h    | 13 +++++++++++++
+ kernel/bpf/btf.c       |  3 +++
+ kernel/bpf/cgroup.c    |  4 +++-
+ kernel/bpf/helpers.c   | 35 ++++++++++++++++++-----------------
+ kernel/bpf/syscall.c   |  7 +++++--
+ kernel/bpf/verifier.c  |  6 ++++++
+ net/core/filter.c      | 14 ++++++++++----
+ net/ipv4/bpf_tcp_ops.c |  2 +-
+ 8 files changed, 59 insertions(+), 25 deletions(-)
 
-> Still, choosing between handling all events and having bugs (fixable)
-> of handling per-CPU data in my BPF program, I'll choose the former.
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 3a5a0380304d..a6976776e90b 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -3440,6 +3440,14 @@ static inline bool has_current_bpf_ctx(void)
+ 	return !!current->bpf_ctx;
+ }
+ 
++/* An async callback runs in no hook, and current is not the task that has armed it */
++extern struct bpf_run_ctx bpf_async_run_ctx;
++
++static inline bool bpf_in_async_cb(void)
++{
++	return current->bpf_ctx == &bpf_async_run_ctx;
++}
++
+ void notrace bpf_prog_inc_misses_counter(struct bpf_prog *prog);
+ 
+ void bpf_dynptr_init(struct bpf_dynptr_kern *ptr, void *data,
+@@ -3765,6 +3773,11 @@ static inline bool has_current_bpf_ctx(void)
+ 	return false;
+ }
+ 
++static inline bool bpf_in_async_cb(void)
++{
++	return false;
++}
++
+ static inline void bpf_prog_inc_misses_counter(struct bpf_prog *prog)
+ {
+ }
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 7b3291556e6e..23e8977164e7 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -9703,6 +9703,9 @@ BPF_CALL_4(bpf_btf_find_by_name_kind, char *, name, int, name_sz, u32, kind, int
+ 	if (name_sz <= 1 || name[name_sz - 1])
+ 		return -EINVAL;
+ 
++	if (bpf_in_async_cb())
++		return -EPERM;
++
+ 	ret = bpf_find_btf_id(name, kind, &btf);
+ 	if (ret > 0 && btf_is_module(btf)) {
+ 		btf_obj_fd = __btf_new_fd(btf);
+diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+index 1ff030f4314f..3bf3081bfa27 100644
+--- a/kernel/bpf/cgroup.c
++++ b/kernel/bpf/cgroup.c
+@@ -2110,7 +2110,7 @@ BPF_CALL_0(bpf_get_retval)
+ 	struct bpf_cg_run_ctx *ctx =
+ 		container_of(current->bpf_ctx, struct bpf_cg_run_ctx, run_ctx);
+ 
+-	return ctx->retval;
++	return bpf_in_async_cb() ? 0 : ctx->retval;
+ }
+ 
+ const struct bpf_func_proto bpf_get_retval_proto = {
+@@ -2124,6 +2124,8 @@ BPF_CALL_1(bpf_set_retval, int, retval)
+ 	struct bpf_cg_run_ctx *ctx =
+ 		container_of(current->bpf_ctx, struct bpf_cg_run_ctx, run_ctx);
+ 
++	if (bpf_in_async_cb())
++		return -EOPNOTSUPP;
+ 	ctx->retval = retval;
+ 	return 0;
+ }
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index 1b95fe795b4d..490dd14b6a70 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -1219,12 +1219,25 @@ static DEFINE_PER_CPU(struct bpf_hrtimer *, hrtimer_running);
+ 
+ static void bpf_async_refcount_put(struct bpf_async_cb *cb);
+ 
++struct bpf_run_ctx bpf_async_run_ctx;
++
++static void bpf_run_async_cb(struct bpf_prog *prog, bpf_callback_t callback_fn,
++			     struct bpf_map *map, void *key, void *value)
++{
++	struct bpf_run_ctx *old_ctx = bpf_set_run_ctx(&bpf_async_run_ctx);
++	struct bpf_timed_may_goto saved;
++
++	bpf_timed_may_goto_save(prog, &saved);
++	callback_fn((u64)(long)map, (u64)(long)key, (u64)(long)value, 0, 0);
++	bpf_timed_may_goto_restore(prog, &saved);
++	bpf_reset_run_ctx(old_ctx);
++}
++
+ static enum hrtimer_restart bpf_timer_cb(struct hrtimer *hrtimer)
+ {
+ 	struct bpf_hrtimer *t = container_of(hrtimer, struct bpf_hrtimer, timer);
+ 	struct bpf_map *map = READ_ONCE(t->cb.map);
+ 	struct bpf_prog *prog = READ_ONCE(t->cb.prog);
+-	struct bpf_timed_may_goto saved;
+ 	void *value = t->cb.value;
+ 	bpf_callback_t callback_fn;
+ 	void *key;
+@@ -1245,10 +1258,8 @@ static enum hrtimer_restart bpf_timer_cb(struct hrtimer *hrtimer)
+ 
+ 	key = map_key_from_value(map, value, &idx);
+ 
+-	bpf_timed_may_goto_save(prog, &saved);
+-	callback_fn((u64)(long)map, (u64)(long)key, (u64)(long)value, 0, 0);
+ 	/* The verifier checked that return value is zero. */
+-	bpf_timed_may_goto_restore(prog, &saved);
++	bpf_run_async_cb(prog, callback_fn, map, key, value);
+ 
+ 	this_cpu_write(hrtimer_running, NULL);
+ out:
+@@ -1259,7 +1270,6 @@ static void bpf_wq_work(struct work_struct *work)
+ {
+ 	struct bpf_work *w = container_of(work, struct bpf_work, work);
+ 	struct bpf_async_cb *cb = &w->cb;
+-	struct bpf_timed_may_goto saved;
+ 	struct bpf_prog *prog;
+ 	struct bpf_map *map;
+ 	bpf_callback_t callback_fn;
+@@ -1282,9 +1292,7 @@ static void bpf_wq_work(struct work_struct *work)
+ 
+ 	migrate_disable();
+ 
+-	bpf_timed_may_goto_save(prog, &saved);
+-	callback_fn((u64)(long)map, (u64)(long)key, (u64)(long)value, 0, 0);
+-	bpf_timed_may_goto_restore(prog, &saved);
++	bpf_run_async_cb(prog, callback_fn, map, key, value);
+ 
+ 	migrate_enable();
+ out:
+@@ -4624,7 +4632,6 @@ static void bpf_task_work_cancel(struct bpf_task_work_ctx *ctx,
+ static void bpf_task_work_callback(struct callback_head *cb)
+ {
+ 	struct bpf_task_work_ctx *ctx = container_of(cb, struct bpf_task_work_ctx, work);
+-	struct bpf_timed_may_goto saved;
+ 	enum bpf_task_work_state state;
+ 	u32 idx;
+ 	void *key;
+@@ -4646,10 +4653,7 @@ static void bpf_task_work_callback(struct callback_head *cb)
+ 	key = (void *)map_key_from_value(ctx->map, ctx->map_val, &idx);
+ 
+ 	migrate_disable();
+-	bpf_timed_may_goto_save(ctx->prog, &saved);
+-	ctx->callback_fn((u64)(long)ctx->map, (u64)(long)key,
+-			 (u64)(long)ctx->map_val, 0, 0);
+-	bpf_timed_may_goto_restore(ctx->prog, &saved);
++	bpf_run_async_cb(ctx->prog, ctx->callback_fn, ctx->map, key, ctx->map_val);
+ 	migrate_enable();
+ 
+ 	bpf_task_work_ctx_reset(ctx);
+@@ -4889,7 +4893,6 @@ static void bpf_rcu_run_callback(struct rcu_head *rcu)
+ 	struct bpf_rcu_head_kern *rh = container_of(rcu, struct bpf_rcu_head_kern, rcu);
+ 	bpf_callback_t callback_fn = rh->callback_fn;
+ 	struct bpf_prog *prog = rh->prog;
+-	struct bpf_timed_may_goto saved;
+ 	struct bpf_map *map = rh->map;
+ 	void *value, *key;
+ 	u32 idx;
+@@ -4901,9 +4904,7 @@ static void bpf_rcu_run_callback(struct rcu_head *rcu)
+ 	smp_store_release(&rh->armed, 0);
+ 
+ 	rcu_read_lock_dont_migrate();
+-	bpf_timed_may_goto_save(prog, &saved);
+-	callback_fn((u64)(long)map, (u64)(long)key, (u64)(long)value, 0, 0);
+-	bpf_timed_may_goto_restore(prog, &saved);
++	bpf_run_async_cb(prog, callback_fn, map, key, value);
+ 	rcu_read_unlock_migrate();
+ 
+ 	bpf_prog_put(prog);
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 7e1085d6a67e..91d078bb13d2 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -6618,6 +6618,9 @@ static bool syscall_prog_is_valid_access(int off, int size,
+ 
+ BPF_CALL_3(bpf_sys_bpf, int, cmd, union bpf_attr *, attr, u32, attr_size)
+ {
++	if (bpf_in_async_cb())
++		return -EPERM;
++
+ 	switch (cmd) {
+ 	case BPF_MAP_CREATE:
+ 	case BPF_MAP_DELETE_ELEM:
+@@ -6707,7 +6710,7 @@ BPF_CALL_1(bpf_sys_close, u32, fd)
+ 	 * This helper is allowed in the following callchain only:
+ 	 * sys_bpf->prog_test_run->bpf_prog->bpf_sys_close
+ 	 */
+-	return close_fd(fd);
++	return bpf_in_async_cb() ? -EPERM : close_fd(fd);
+ }
+ 
+ static const struct bpf_func_proto bpf_sys_close_proto = {
+@@ -6727,7 +6730,7 @@ BPF_CALL_4(bpf_kallsyms_lookup_name, const char *, name, int, name_sz, int, flag
+ 	if (name_sz <= 1 || name[name_sz - 1])
+ 		return -EINVAL;
+ 
+-	if (!bpf_dump_raw_ok(current_cred()))
++	if (bpf_in_async_cb() || !bpf_dump_raw_ok(current_cred()))
+ 		return -EPERM;
+ 
+ 	*res = kallsyms_lookup_name(name);
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index d4b31990fcb9..57fed2517e8e 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -11493,6 +11493,12 @@ static int push_callback_call(struct bpf_verifier_env *env, struct bpf_insn *ins
+ 		struct bpf_verifier_state *async_cb;
+ 
+ 		/* there is no real recursion here. timer and workqueue callbacks are async */
++		/* there is no cgroup to take the storage from */
++		if (env->prog->aux->cgroup_storage[BPF_CGROUP_STORAGE_SHARED] ||
++		    env->prog->aux->cgroup_storage[BPF_CGROUP_STORAGE_PERCPU]) {
++			verbose(env, "async callback in a program with cgroup storage\n");
++			return -EINVAL;
++		}
+ 		env->subprog_info[subprog].is_async_cb = true;
+ 		async_cb = push_async_cb(env, env->subprog_info[subprog].start,
+ 					 insn_idx, subprog,
+diff --git a/net/core/filter.c b/net/core/filter.c
+index fb403e18a5d7..ea20fd2be65c 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -5866,10 +5866,16 @@ static int sol_ipv6_sockopt(struct sock *sk, int optname,
+ 				  KERNEL_SOCKPTR(optval), *optlen);
+ }
+ 
++/* No hook has locked the socket for an async callback */
++static bool bpf_sockopt_allowed(const struct sock *sk)
++{
++	return sk && sk_fullsock(sk) && !bpf_in_async_cb();
++}
++
+ static int __bpf_setsockopt(struct sock *sk, int level, int optname,
+ 			    char *optval, int optlen)
+ {
+-	if (!sk || !sk_fullsock(sk))
++	if (!bpf_sockopt_allowed(sk))
+ 		return -EINVAL;
+ 
+ 	if (level == SOL_SOCKET)
+@@ -5892,7 +5898,7 @@ static bool is_locked_tcp_sock_ops(struct bpf_sock_ops_kern *bpf_sock)
+ static int _bpf_setsockopt(struct sock *sk, int level, int optname,
+ 			   char *optval, int optlen)
+ {
+-	if (sk && sk_fullsock(sk))
++	if (bpf_sockopt_allowed(sk))
+ 		sock_owned_by_me(sk);
+ 	return __bpf_setsockopt(sk, level, optname, optval, optlen);
+ }
+@@ -5902,7 +5908,7 @@ static int __bpf_getsockopt(struct sock *sk, int level, int optname,
+ {
+ 	int err, saved_optlen = optlen;
+ 
+-	if (!sk || !sk_fullsock(sk)) {
++	if (!bpf_sockopt_allowed(sk)) {
+ 		err = -EINVAL;
+ 		goto done;
+ 	}
+@@ -5929,7 +5935,7 @@ static int __bpf_getsockopt(struct sock *sk, int level, int optname,
+ static int _bpf_getsockopt(struct sock *sk, int level, int optname,
+ 			   char *optval, int optlen)
+ {
+-	if (sk && sk_fullsock(sk))
++	if (bpf_sockopt_allowed(sk))
+ 		sock_owned_by_me(sk);
+ 	return __bpf_getsockopt(sk, level, optname, optval, optlen);
+ }
+diff --git a/net/ipv4/bpf_tcp_ops.c b/net/ipv4/bpf_tcp_ops.c
+index 2ba73dd6c52c..432ca0783771 100644
+--- a/net/ipv4/bpf_tcp_ops.c
++++ b/net/ipv4/bpf_tcp_ops.c
+@@ -207,7 +207,7 @@ BPF_CALL_0(bpf_tcp_ops_get_retval)
+ 	 * return value chained across the bpf_tcp_ops attached to the cgroup
+ 	 * and is this program's saved_run_ctx.
+ 	 */
+-	if (WARN_ON_ONCE(!ctx->saved_run_ctx))
++	if (bpf_in_async_cb() || WARN_ON_ONCE(!ctx->saved_run_ctx))
+ 		return 0;
+ 
+ 	return container_of(ctx->saved_run_ctx, struct bpf_tramp_run_ctx,
 
-but with the diff I proposed you get both:
-per-cpu maps work and there are no missed events.
-
-> Even if we don't want to make that a default, that's fine, but please
-> at least give me a way to opt out from the kernel's
-> over-protectiveness :) and not using per-cpu maps is not a way to opt
-
-I don't follow what opt-out you're asking about.
-Out of implicit preempt disable when you're using per-cpu array?
-Why? How does it hurt your prog?
-
-> out, it has its valid uses even with preemption. Think about simple
-> per-CPU stats/counters updated with atomic operations and aggregated
-
-wait what? per-cpu _with_ atomic? who does that?
-bpf gained _local_ atomic just weeks ago.
-per-cpu with full strong atomic is odd. Why would anyone use that?
-The only case I can think of is nmi-safe-counters.
-When we introduced per-cpu maps 10+ years ago the use case was
-packet bytes and count, so that bpf prog can do
-map_val->pkt_cnt++; map_val->pkt_bytes++;
-and that's what everyone was doing since then.
-combination of migrate_disable and preempt=3Dlazy broke that accounting
-pattern, so implicit preempt_disable unbreaks them.
+base-commit: 3db9d99ba7b8d5a4a520f5abf785e17406f518a5
+-- 
+2.55.0
 
