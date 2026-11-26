@@ -1,51 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=45.145.95.4
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795699271;
-	b=At0+ftdw5p6uVCqYgDibaXbFIT3FrJWhJa270jA6mTzxxMadLKbS7znQnccSD+odq+yr
-	 J+f2ASbz6+HQC22OZAYE7WkFgkWH7HU/UxMxdVQfztBrLMebTomGZLKec5jjop0haBxpz
-	 zQTpKdyXvKCyz+l8EzTdqJckpnSxhKQ8Mdzv3WxJsx3tVD13y2aJbeFE2xcRT3BLMH0xW
-	 yfwKsJhAUOcmELfE9vNMtK+aCAE58TQFbJus30Cuj6Hta6wU+c4/zlU1D7wfQt1WY+rzy
-	 xAfYpRjraOvgl4HyLaSGXUrCTdGbKA/PhPGD6kL+pMtBZLQ8eMdHbLzin5vFb+Q28FQ==
+	t=1795699468;
+	b=psfzQHy7uwgIjM1v9olAoUJ7chvJMeNppQCMJBJDAb1KMSkltLm/LSOMw+Zoc9+BeWZe
+	 AGlqu0GQ7KvSg/kG563APJOVFuxTIU+1hNlRPj4C/YRqWzErOXFEyPNi489z4ytB9wYqD
+	 dxubU8iQoEB6lBa1VvgJV7QHkXSxpHRkPuNgwLakY8khwmpW1plxKFRzjXCgxqXIUyypr
+	 JcqOdysFKV9zVBFasQJOFx4QSwIoNzanlHaqD2OqhqNhNwi1IupKoC2k+b73Rq2mnsx+6
+	 ek4ELN2BRDcA4mR7dNtlrigRv1ujsQSRg2a2iF/Pt+tg+d8div+gh98qvmPuc5uCNIg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795699271;
-	h=DMARC-Filter:DKIM-Signature:From:Date:Subject:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding:Message-Id:References:
-	 In-Reply-To:To:Cc;
-	bh=Jw0Zc1KniHa5V/wsDV8IErYtkkiDqvdTbI8JpEzye8M=;
-	b=Woau4cYWp5k1M/1tBu2evXEXDAa9AxpcBY1Vupi609hvbLkcHRbCSfPJ4fQ5GdqxuRV+
-	 ctSSUD9debnAsGcSOftUTg8v7sVV3RcgKw0Y/YJWFGSpwvbJMYYjhX9sCVcudFNM5uM/2
-	 TVphCxjpzHiZMdBaJgYddSUDabuHw7JfNeM+nbvPnxY7EdabhOGeLhOgMzDidNX/y1Rft
-	 baWuVk79ZXz2mMyMAvcnVPAZAxmslB0PAIqGDXzNiUIn1UbzNrZ34w1eUeinTFeOFPeOP
-	 zliHWr5sjL8I9g/rYJvYqWo5Ase5sonjinEGO7AbN6IsQsg4a5P9tmm1H9TJ6IVSvgw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795699468;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=RhEbnMmGrCqnijsiYl47iarvijqRcqNzfttKNpI1cSI=;
+	b=gMJyH4DlpkZN2FX4+RKhP4zO43jy4+tc5R1+v1kGvcai6GZB1Mozbo5y1RRw1ABEUVjU
+	 mHwUqQvJwhZ/feXy4E2hnAd5ExWYj4rN0lD1PbIbRoya3XUw6mqiuCJKrlHGW/nlCabYU
+	 EdvwxYBrjhE35iOoZah0eTsp5ghFQV7BB3sVhTmJcGKov51nUa5NzHgHDzvzekxq6deX/
+	 pEhsraQR1HLStr62HXvrX74er2Smm3iXeaEAvrkxG6TTy7Phj3fk9JQsFV3Ba8QL5Mihn
+	 Vu6LiVpRisQ6V8FA7fWEEmtoQqfsEc7ANF/OVUCXF7GrVgqAjT8n2d4eYhk7uBHairA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=toke.dk;
-	spf=pass smtp.mailfrom=toke.dk;
-	dkim=pass header.d=toke.dk header.i=@toke.dk header.a=rsa-sha256 header.s=20161023 header.b="c/5MnqIL";
-	arc=none smtp.remote-ip=45.145.95.4
-Received: from mail.toke.dk (mail.toke.dk [45.145.95.4])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YQ7zk4mk;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D8DB606A682
-	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 13:21:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2D8DB606A682
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=toke.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=toke.dk
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DF96606A31C;
+	Thu, 26 Nov 2026 13:24:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=toke.dk header.i=@toke.dk header.a=rsa-sha256 header.s=20161023 header.b=c/5MnqIL
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=toke.dk; s=20161023;
-	t=1795699267; bh=TT/FqEfb3cOl2EftQEceU2ScT8twZOYPX+pkyx9OgRU=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=c/5MnqIL40hWZ6ammeCtyn3BU5T6if0NPln5KXccERCGUVfxIMMgJYD/oNmojg9Qw
-	 wWrqWieOM69y8BDFOQV8c8XmaJ3zPE7Pevc8N1+FSdil+BBiuK3be9+w3ytKrmj2qw
-	 e25Em74bSmIVLBpbqgqweDVWX6ByHTF6R0O4aeaBJdlF7m6Jy+O6iM5Lfznin0tHlu
-	 4fz6ycjWuc2VjBNAgteNfsK0/CfOCd+t6v4JARn2vLJP5xbdBCM2bfLR6rPVio++gd
-	 lqyXLG9mR6Nr2tYL6qUsj871DOCfNTlgh+vyniJ3mGYmKPmA/SrRqgYGElPY036GoL
-	 0B9rYrz7EMdQg==
-From: =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>
-Date: Thu, 26 Nov 2026 14:20:59 +0100
-Subject: [PATCH bpf-next v2 1/7] bpf: Relax BPF_*_GET_NEXT_ID permission
- checks to CAP_BPF and bpf_token
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YQ7zk4mk
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0851C1F00A03;
+	Thu, 26 Nov 2026 13:24:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795699468;
+	bh=RhEbnMmGrCqnijsiYl47iarvijqRcqNzfttKNpI1cSI=;
+	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
+	b=YQ7zk4mkbGtDJgk5xQydLvJJ5d9RThI9GjbXJuoJi8/T2bwEsBnLDP/Wt3PLrhxAS
+	 TaAY7Gk1RPJ8tOevqNoeZhALIyQDlbO5TdoyepzVs3FMLpP/9+9Np/JegT/c5Fb1qF
+	 OMr5EsSLWyhNEGdS6J9/Hlz8ARY4ttNtla6zAqSQdqNATXqjZZkYf3TzVV6yV7doj5
+	 XJlgEvhHhqfrrJA2bNhzBy7rJ2mJOM8oc9LXsQNSyl/7IjMTDTJoqExmznWwIUG/Xp
+	 WNpBGPt6RPD/zQr3o4HVHJXhIDzhusAQ22kvo2lzEgfszEV8Zll5aJkQ7s2VDST6ab
+	 18K8AwNHYSquQ==
+Message-ID: <sashiko-outbox-235594@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v3 05/18] rv: Add generic monitor event tracepoints and
+ BPF kfuncs
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Gabriele Monaco" <gmonaco@redhat.com>, linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
+In-Reply-To: <20261126130004.127155-6-gmonaco@redhat.com>
+References: <20261126130004.127155-1-gmonaco@redhat.com>
+ <20261126130004.127155-6-gmonaco@redhat.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 26 Nov 2026 13:24:27 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -54,153 +59,149 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20261126-bpf-relax-get-next-id-v2-1-039e92757f9c@toke.dk>
-References: <20261126-bpf-relax-get-next-id-v2-0-039e92757f9c@toke.dk>
-In-Reply-To: <20261126-bpf-relax-get-next-id-v2-0-039e92757f9c@toke.dk>
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Emil Tsalapatis <emil@etsalapatis.com>, 
- Ihor Solodrai <ihor.solodrai@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>
-Cc: bpf@vger.kernel.org, 
- =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>
 
-The BPF_*_GET_NEXT_ID commands are currently restricted to system-wide
-CAP_SYS_ADMIN, but iterating the objects themselves is not actually an
-administrator-only operation, so this seems overly restrictive.
+Thank you for your contribution! Sashiko AI review found 3 potential
+issues to consider:
+- [Medium] rv: undefined tracepoint symbols when CONFIG_RV_MON_EVENTS is
+  unset
+- [Medium] rv: TOCTOU unbounded strlen() after strnlen() in
+  bpf_rv_*_monitor()
+- [Low] rv: missing @id__nullable kernel-doc description in rv_bpf.c
+--
 
-In particular, being able to walk the BTF IDs is necessary for libbpf to
-attach to functions in modules. So the CAP_SYS_ADMIN restriction
-prevents some BPF applications from working with permissions delegated
-by a bpf_token.
+commit 12ad0d7960250beaac1afe9380fabf830419122f
+Author: Gabriele Monaco <gmonaco@redhat.com>
 
-Relax the permission check in bpf_obj_get_next_id() to
-token_capable(CAP_BPF). There is no change to the operations that turn
-the IDs into file descriptors (BPF_*_GET_FD_BY_ID commands).
+rv: Add generic monitor event tracepoints and BPF kfuncs
 
-Signed-off-by: Toke Høiland-Jørgensen <toke@toke.dk>
----
- include/uapi/linux/bpf.h       |  5 ++++-
- kernel/bpf/syscall.c           | 33 ++++++++++++++++++++++++++-------
- tools/include/uapi/linux/bpf.h |  5 ++++-
- 3 files changed, 34 insertions(+), 9 deletions(-)
+This commit adds generic event_monitor and error_monitor tracepoints along
+with bpf_rv_event_monitor() and bpf_rv_error_monitor() BPF kfuncs so BPF
+monitors can emit RV events and errors.
 
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 62de0919db72..cdc313f9ab14 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -1786,7 +1786,10 @@ union bpf_attr {
- 		};
- 		__u32		next_id;
- 		__u32		open_flags;
--		__s32		fd_by_id_token_fd;
-+		union {
-+			__s32		fd_by_id_token_fd;
-+			__s32		get_next_id_token_fd;
-+		};
- 	};
- 
- 	struct { /* anonymous struct used by BPF_OBJ_GET_INFO_BY_FD */
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index ec8e78792911..1440c10ea0cc 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -4872,21 +4872,40 @@ static int bpf_prog_test_run(const union bpf_attr *attr,
- 	return ret;
- }
- 
--#define BPF_OBJ_GET_NEXT_ID_LAST_FIELD next_id
-+#define BPF_OBJ_GET_NEXT_ID_LAST_FIELD get_next_id_token_fd
- 
--static int bpf_obj_get_next_id(const union bpf_attr *attr,
-+static int bpf_obj_get_next_id(enum bpf_cmd cmd,
-+			       const union bpf_attr *attr,
- 			       union bpf_attr __user *uattr,
- 			       struct idr *idr,
- 			       spinlock_t *lock)
- {
-+	struct bpf_token *token = NULL;
- 	u32 next_id = attr->start_id;
- 	int err = 0;
- 
- 	if (CHECK_ATTR(BPF_OBJ_GET_NEXT_ID) || next_id >= INT_MAX)
- 		return -EINVAL;
- 
--	if (!capable(CAP_SYS_ADMIN))
-+	if (attr->open_flags & ~BPF_F_TOKEN_FD)
-+		return -EINVAL;
-+
-+	if (attr->open_flags & BPF_F_TOKEN_FD) {
-+		token = bpf_token_get_from_fd(attr->fd_by_id_token_fd);
-+		if (IS_ERR(token))
-+			return PTR_ERR(token);
-+		if (!bpf_token_allow_cmd(token, cmd)) {
-+			bpf_token_put(token);
-+			token = NULL;
-+		}
-+	}
-+
-+	if (!bpf_token_capable(token, CAP_BPF)) {
-+		bpf_token_put(token);
- 		return -EPERM;
-+	}
-+
-+	bpf_token_put(token);
- 
- 	next_id++;
- 	spin_lock_bh(lock);
-@@ -6523,15 +6542,15 @@ static int __sys_bpf(enum bpf_cmd cmd, bpfptr_t uattr, unsigned int size,
- 		err = bpf_prog_test_run(&attr, uattr.user);
- 		break;
- 	case BPF_PROG_GET_NEXT_ID:
--		err = bpf_obj_get_next_id(&attr, uattr.user,
-+		err = bpf_obj_get_next_id(cmd, &attr, uattr.user,
- 					  &prog_idr, &prog_idr_lock);
- 		break;
- 	case BPF_MAP_GET_NEXT_ID:
--		err = bpf_obj_get_next_id(&attr, uattr.user,
-+		err = bpf_obj_get_next_id(cmd, &attr, uattr.user,
- 					  &map_idr, &map_idr_lock);
- 		break;
- 	case BPF_BTF_GET_NEXT_ID:
--		err = bpf_obj_get_next_id(&attr, uattr.user,
-+		err = bpf_obj_get_next_id(cmd, &attr, uattr.user,
- 					  &btf_idr, &btf_idr_lock);
- 		break;
- 	case BPF_PROG_GET_FD_BY_ID:
-@@ -6586,7 +6605,7 @@ static int __sys_bpf(enum bpf_cmd cmd, bpfptr_t uattr, unsigned int size,
- 		err = bpf_link_get_fd_by_id(&attr);
- 		break;
- 	case BPF_LINK_GET_NEXT_ID:
--		err = bpf_obj_get_next_id(&attr, uattr.user,
-+		err = bpf_obj_get_next_id(cmd, &attr, uattr.user,
- 					  &link_idr, &link_idr_lock);
- 		break;
- 	case BPF_ENABLE_STATS:
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 62de0919db72..cdc313f9ab14 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -1786,7 +1786,10 @@ union bpf_attr {
- 		};
- 		__u32		next_id;
- 		__u32		open_flags;
--		__s32		fd_by_id_token_fd;
-+		union {
-+			__s32		fd_by_id_token_fd;
-+			__s32		get_next_id_token_fd;
-+		};
- 	};
- 
- 	struct { /* anonymous struct used by BPF_OBJ_GET_INFO_BY_FD */
+> diff --git a/kernel/trace/rv/Makefile b/kernel/trace/rv/Makefile
+> index c895d81dfdad9..588250ce3fa93 100644
+> --- a/kernel/trace/rv/Makefile
+> +++ b/kernel/trace/rv/Makefile
+> @@ -3,6 +3,7 @@
+>  ccflags-y +=3D -I $(src)		# needed for trace events
+> =20
+>  obj-$(CONFIG_RV) +=3D rv.o
+> +obj-$(CONFIG_RV) +=3D rv_bpf.o
+>  obj-$(CONFIG_RV_MON_WIP) +=3D monitors/wip/wip.o
+>  obj-$(CONFIG_RV_MON_WWNR) +=3D monitors/wwnr/wwnr.o
+>  obj-$(CONFIG_RV_MON_SCHED) +=3D monitors/sched/sched.o
 
--- 
-2.56.1
+[Severity: Medium]
+Does this fail to link when CONFIG_RV=3Dy is enabled without any in-kernel C
+monitor?
 
+rv_bpf.o is built whenever CONFIG_RV is set and calls trace_event_monitor()
+and trace_error_monitor(), but CREATE_TRACE_POINTS in kernel/trace/rv/rv.c
+is only defined under CONFIG_RV_MON_EVENTS:
+
+kernel/trace/rv/rv.c:
+    #ifdef CONFIG_RV_MON_EVENTS
+    #define CREATE_TRACE_POINTS
+    #include <rv_trace.h>
+    #endif
+
+CONFIG_RV_MON_EVENTS is only selected by the in-kernel C monitor options
+(all of which default to n), so a BPF-only RV build leaves
+__tracepoint_event_monitor, __tracepoint_error_monitor, and their static
+call symbols undefined at link time.
+
+> diff --git a/kernel/trace/rv/rv_bpf.c b/kernel/trace/rv/rv_bpf.c
+> new file mode 100644
+> index 0000000000000..f39f33335c71b
+> --- /dev/null
+> +++ b/kernel/trace/rv/rv_bpf.c
+> @@ -0,0 +1,76 @@
+[ ... ]
+> +/**
+> + * bpf_rv_event_monitor - emit an RV monitor event tracepoint
+> + *
+> + * @msg must be NULL-terminated, drop the event if it isn't. This happen=
+s by
+> + * construction if using snprintf-like functions and passing the right @=
+msg__sz
+> + * to both.
+> + *
+> + * @mon__str: name of the monitor
+> + * @msg: message string
+> + * @msg__sz: message string size
+> + *
+> + * Return -EINVAL if @msg is not NULL-terminated, 0 otherwise.
+> + */
+> +__bpf_kfunc int bpf_rv_event_monitor(const char *mon__str, const int *id=
+__nullable,
+> +				     const char *msg, u32 msg__sz)
+
+[Severity: Low]
+Both bpf_rv_event_monitor() and bpf_rv_error_monitor() use kernel-doc
+comments but omit @id__nullable, which triggers kernel-doc warnings under
+W=3D1 builds.
+
+> +{
+> +	if (strnlen(msg, msg__sz) =3D=3D msg__sz)
+> +		return -EINVAL;
+> +
+> +	trace_event_monitor(mon__str, id__nullable, msg);
+> +	return 0;
+> +}
+> +
+> +/**
+> + * bpf_rv_error_monitor - emit an RV monitor error tracepoint
+> + *
+> + * @msg must be NULL-terminated, drop the event if it isn't. This happen=
+s by
+> + * construction if using snprintf-like functions and passing the right @=
+msg__sz
+> + * to both.
+> + *
+> + * @mon__str: name of the monitor
+> + * @msg: message string
+> + * @msg__sz: message string size
+> + *
+> + * Return -EINVAL if @msg is not NULL-terminated, 0 otherwise.
+> + */
+> +__bpf_kfunc int bpf_rv_error_monitor(const char *mon__str, const int *id=
+__nullable,
+> +				     const char *msg, u32 msg__sz)
+> +{
+> +	if (strnlen(msg, msg__sz) =3D=3D msg__sz)
+> +		return -EINVAL;
+> +
+> +	trace_error_monitor(mon__str, id__nullable, msg);
+> +	return 0;
+> +}
+
+[Severity: Medium]
+Can a concurrent update to msg after strnlen() cause trace_event_monitor()
+or trace_error_monitor() to read past msg + msg__sz?
+
+For the (const char *msg, u32 msg__sz) kfunc argument pair, the BPF
+verifier accepts any writable BPF memory region of size msg__sz, including
+shared BPF map values.  event_template_monitor uses __string(msg, msg),
+which runs an unbounded strlen(msg) and memcpy() after strnlen() has
+already returned:
+
+CPU0                                  CPU1
+bpf_rv_event_monitor(mon, id,
+                     msg, msg__sz)
+  strnlen(msg, msg__sz) < msg__sz
+                                      /* overwrites NUL byte in shared
+                                       * BPF map value backing msg
+                                       */
+  trace_event_monitor(mon, id, msg)
+    strlen(msg)
+    memcpy(..., msg, ...)             <-- out-of-bounds read past msg__sz
+
+Reading past the end of a BPF map allocation can fault on an unmapped
+vmalloc guard page or copy adjacent kernel memory into the trace ring
+buffer.  Passing the length returned by strnlen() into the tracepoint and
+using __string_len() in event_template_monitor would bound the copy without
+re-scanning msg.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261126130004.1271=
+55-1-gmonaco@redhat.com?part=3D5
