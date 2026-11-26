@@ -1,62 +1,76 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=195.10.208.52
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.219.70
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795652222;
-	b=kMSo3XGKMlPyzo/AUVty0Tw4a3oGoOCsSoFB1l5e9bHn0nLTjM00yrFmP9KDGwW5Xabi
-	 D525FP6sjeJsro2eVpTse983B81J5yCZXjNpfIHMq4wAUkuoaanxU9039Oro1Dm/3Gvoh
-	 DRNtjtntEwCnHQhRpHcnjb5UOch6giXjLoEWdzfGNnMMeA8zwz9ARZMEEeFMPsLYFHMu+
-	 rWG5flcrvk32CD8K3r8SKEFsDyywHaAUJRsTs3y2Gd4Z+c+hZPZ1fJMYRM3y3uewFix9F
-	 FVTsZpZzBKxIWEHYQWspglu97YxwNdDXaEjWspeHlyTTfGW34qf6W50inlJwdlVhDpw==
+	t=1795653386;
+	b=WnfYrCOgGg052WQWVFzFoWcS6LWiEyhxjJa9s9jG+1M+DtEnh+Fvr3JL6QcS10Xgwevh
+	 w6bnUpEo5sU5fs2iAlgWAZiNd+lRxgNU7TC9awiiiGdrTn8a6biIWhE7vKSoSbtUa2YeS
+	 PWajNS04w+ZOxkzQIFc1ZfMsZhigpJxqiC4e9/ArpNSxXTEM+mSIRGFdaXJtHv+YAUJi3
+	 6gUPIpvQTje1LIcuTC9u2h9agrIt1dNe7FlVHP7MDV4amH5SMjtd9q+gmKRPuzOhv4ipZ
+	 zdy/6mKFOAMx20OD7UXhUosqQmNQnKzJuLi37U6Dybg1N0ZlKsoFewWmgz9jSamfMDQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795652222;
-	h=DMARC-Filter:Received:DKIM-Signature:Message-ID:Date:MIME-Version:
-	 User-Agent:Subject:To:Cc:References:Content-Language:From:
-	 Organization:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-	 X-Rspamd-Queue-Id;
-	bh=NJjDKjcR3y2MEVYEI6NpdcGn2af2AgvOjoZTpqMcRfE=;
-	b=G8UXPvk4jdfkfl9Bahramsurzu9CxYRR/IHVuRkK1eemEbxOPi5VIFhFYQX9xuKaLrSm
-	 xFWDAfX1vhdfcGUSQwRGY/bWzIYYl4oiKdYTE1A3YRXlb1w1kE7SI/pyWRkfRfDxLVgoc
-	 swSbbmiMPENGw8l8T9lLhvFYXK8xCWCnDNdiNkoFYA0ap2a2ptNIENfeDqodPrrVQ7u3v
-	 XIVntgbrzkZCR+gcVRc8q9xYfqn8GEoAokDcGMlL4g7GYVekM86Tt6B47NKFAH04cyWJT
-	 SZAGZ7pPenBNM+/7W118jF5dvGZcd5uBjX66UCn2t/jk9UvkQ1nCjirmLFJTZi+O9eg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795653386;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
+	 Mime-Version:References:Message-ID:Subject:From:To:Cc:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=leTH11cRkWlEx3eKCDzdDOiVWds2rTNM3oIqU+/F4m4=;
+	b=UdrXesXS6ASjUGV1bb7+lUUrXDGsAFcTPIl6APrJGeVSkT3vrquiewIQPYTeN/xIoJlt
+	 QhVUgTaERw3szB9iw4BeNxzudB4X3UMcSxW0vAb5EMFK86EutIMc2E+KypcFQ+R/DLEKB
+	 cMoKzLw0jGtus+KU/WbF5MSrcBPS5IM+uT4n+YhX/Wp/F6YbiSBc5FzPzjwyrlPyvTwS5
+	 rzXmis3034H5oL+aOxFzIdcL0dfUoW4WiZxJF0Ha3y9HEylvLJdjiqeKeRjMjtE/pca3z
+	 mv2QIiTTTeZpPY5pd7p44JCA8hQJaPNZBPr2+HlUjwzwEsDjRR2r4BFb7Zym2ePvFuw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=mandelbit.com;
-	spf=pass smtp.mailfrom=mandelbit.com;
-	dkim=pass header.d=mandelbit.com header.i=@mandelbit.com header.a=rsa-sha256 header.s=MBO0001 header.b=cukjlgCE;
-	arc=none smtp.remote-ip=195.10.208.52
-Received: from mout-b-203.mailbox.org (mout-b-203.mailbox.org [195.10.208.52])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--willemb.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=epAdVCH5;
+	arc=none smtp.remote-ip=209.85.219.70
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com [209.85.219.70])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C31CC606A321;
-	Thu, 26 Nov 2026 00:17:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C31CC606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mandelbit.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mandelbit.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A304D606A321
+	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 00:36:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A304D606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--willemb.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=mandelbit.com header.i=@mandelbit.com header.a=rsa-sha256 header.s=MBO0001 header.b=cukjlgCE
-Received: from smtp102.mailbox.org (smtp102.mailbox.org [IPv6:2001:67c:2050:b231:465::102])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519MLKEM768 server-signature RSA-PSS (4096 bits) server-digest SHA512)
-	(No client certificate requested)
-	by mout-b-203.mailbox.org (Postfix) with ESMTPS id 4jZcYH6PZxzLm0Y;
-	Thu, 26 Nov 2026 01:16:51 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mandelbit.com;
-	s=MBO0001; t=1795652211;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=NJjDKjcR3y2MEVYEI6NpdcGn2af2AgvOjoZTpqMcRfE=;
-	b=cukjlgCEF4cFyHFiW/XrSM87E4gFrCzAmsD+kxAyEUW+URhHfvkgrahTGy7nX6HbQDYE3q
-	Tdb6Ytlr8pSCVl23gvxfYS1MMYNGz9DPnpK916sNG/D+zpae3EXKipIRbyd5rANaXsYaIt
-	KNGjJAYvxoG2o5Xd5TXaRd0fv1fQAmwUVLECI1yujL7sUf2hpshJSQbAidTib3+zM9xUSd
-	S6kjIWJgnR0gq4MsKhGB9Os0o36NlG5MnDUEVaXU4MLaUA+BhudTKp1E0fzPHe6h3qu7v8
-	w4ZGxVjedMAsZkqoxio7/j1OZNA9TeD0GpHWo4rIDQ1G/LrYc/+G7lxL2vLhGg==
-Authentication-Results: outgoing_mbo_mout;
-	dkim=none;
-	spf=pass (outgoing_mbo_mout: domain of antonio@mandelbit.com designates 2001:67c:2050:b231:465::102 as permitted sender) smtp.mailfrom=antonio@mandelbit.com
-Message-ID: <b201287c-002e-421b-880e-be1da8419e37@mandelbit.com>
-Date: Thu, 26 Nov 2026 01:16:49 +0100
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=epAdVCH5
+Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-9210bbc04abso120897506d6.2
+        for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 16:36:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20260707; t=1795653384; x=1796258184; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:from:subject
+         :message-id:references:mime-version:in-reply-to:date:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=leTH11cRkWlEx3eKCDzdDOiVWds2rTNM3oIqU+/F4m4=;
+        b=epAdVCH53RPND2blMzJMcbLhmSP+saCirEdjwWhkSIeID6PVTlkh6trdG2AQMjr+4R
+         rYukNu22VsMhPYEkWoh95MaNJs1Pr1J12xFqY0fjBCLeuKtROeh5+2oKeyAscuRJGJ7h
+         t5r6cPFOIGkzuD68JCbNIW1Z2W7fn7N+dd0LGO0MeIRZiA+iDuSTYfyEb0RCLD7KhLJi
+         BpbFg6o3z3vp82nMqEEAbvfrz1ZV9k/I0KDAPBwk7wcGNErQfye3C9vrOVKDbdtoX1si
+         oOS/bJBFhzrBVHNQ6UiAClZFQoOOGAMS0sFWN1ITh2ihvCVw56Wna/9Hh3/m81inTW7W
+         IgyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795653384; x=1796258184;
+        h=content-transfer-encoding:content-type:cc:to:from:subject
+         :message-id:references:mime-version:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=leTH11cRkWlEx3eKCDzdDOiVWds2rTNM3oIqU+/F4m4=;
+        b=ofwGC6UkX3nPcf2Q637UUdt6h5DFLYAeYnowhykerc684T7T65ctJKB5Dp2CR8L5Cw
+         2LkjSOR40SROvDbtc4DivP/D6k46OHdkuw6T2m0hAt9Ok5SolY7tBjPYlL8UU+YZj6Gb
+         eTnghGaj+oj0Z/2Fkfff/otHWlnbXXRdqYSOo6Fzneku+gHKGaIf6iAONcfixmMytAHP
+         QaYukkEa5dm0BpcZE0FTtmIDOnBxDgB204y+Tt+lNOBgBx1KBqZMy/UGcl6e51ak+xuk
+         hmKMoBesJRZAtftObZqrp9u6Lz67fCAvDVwVISTWHyOZyGPp/g64/yl2zu8WDU2+9G8Q
+         LrvQ==
+X-Forwarded-Encrypted: i=1; AL+hErH334t+HCHi5R3d0H6uw5+2zMwdbrnvbHL7cas4/dsVtsNPkaztaSWCNMWy+V27ptseECY=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/Wbq0gfSMWHYLjxODSbnzbVdDB2Zu6QcTRprpJVSvqoWQCjhoO
+	y+C9NdipU/CIDsI625N5elUjuOg8AhwaH26u978xV4LV1OxGeTB8+VcMx4TKuSw+6Kfj2NPt+HP
+	Au6Tlbd+hKA==
+X-Received: from qvbgg3.prod.google.com ([2002:a05:6214:2523:b0:920:ffaf:d964])
+ (user=willemb job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6214:8018:b0:91f:2222:b498
+ with SMTP id 6a1803df08f44-92134b20d5amr285057826d6.27.1795653384183; Wed, 25
+ Nov 2026 16:36:24 -0800 (PST)
+Date: Wed, 25 Nov 2026 19:36:23 -0500
+In-Reply-To: <38460544-04f5-41e0-b267-39c155bb08bb@blackwall.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -65,89 +79,68 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v2] net/mlx5e: Prefetch the packet a few strides
- ahead in the linear MPWQE path
-To: Dragos Tatulea <dtatulea@nvidia.com>
-Cc: netdev@vger.kernel.org, saeedm@nvidia.com, tariqt@nvidia.com,
- mbloch@nvidia.com, leon@kernel.org, cratiu@nvidia.com,
- andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@kernel.org,
- kuba@kernel.org, pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net,
- hawk@kernel.org, john.fastabend@gmail.com, sdf@fomichev.me,
- linux-rdma@vger.kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20261104195241.1883539-1-antonio@mandelbit.com>
- <a31e1e60-7e31-4a14-a087-428d1e3627f2@nvidia.com>
- <674eb8ef-c93f-4926-a760-62df154ed3eb@mandelbit.com>
- <20261125215233.3422038-1-dtatulea@nvidia.com>
-Content-Language: en-US
-From: Antonio Quartulli <antonio@mandelbit.com>
-Organization: Mandelbit SRL
-In-Reply-To: <20261125215233.3422038-1-dtatulea@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 4jZcYH6PZxzLm0Y
+Mime-Version: 1.0
+References: <20261121160204.4024204-1-razor@blackwall.org> <179548941922.3135.9577858774980848901@kernel.org>
+ <38460544-04f5-41e0-b267-39c155bb08bb@blackwall.org>
+Message-ID: <willemb.1b39ecea58ba6@google.com>
+Subject: Re: [PATCH net] net: keep skbs with a prefetched socket out of
+ gro_cells gro
+From: willemb@google.com
+To: Nikolay Aleksandrov <razor@blackwall.org>, netdev-bot+sashiko@kernel.org
+Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@kernel.org, 
+	kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, ast@kernel.org, 
+	kafai@fb.com, joe@wand.net.nz, daniel@iogearbox.net, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+Content-Transfer-Encoding: base64
 
-Hi Dragos,
-
-On 25/11/2026 22:52, Dragos Tatulea wrote:
-> Overall I think these results are quite good. I was expecting to
-> see some issues at scale but nothing really stands out to be
-> honest.
-
-Well, thank you for running all of this on hardware I can't get my hands
-on!
-
-> 
-> I wondered how much each prefetch bings and gathered some data
-> about that as well on the AMD system:
-> 
->                            v2    without   without   without
->                                  page      headers   shinfo
->    UDP 64B flood          +7%     +7%       +3%       +7%
->    UDP 512B flood         +8%     +8%        0%       +8%
->    TCP 1 stream          +18%    +17%        0%      +18%
->    XDP_DROP read         +81%    +81%       -2%      +82%
->    XDP_DROP no-touch      -6%     -6%       -4%       -5%
->    XDP_TX               +106%   +106%       -1%      +108%
-> 
-> It does look like the big bulk of the advantage comes from
-> the header fetch.
-
-Agreed, for these tests.
-
-The skb_shared_info prefetch pays off when the stack keeps each packet
-in its own skb: with TCP through an ovpn UDP tunnel on my setup it
-carries most of the gain (+34% with it, +4-5% without), while plain TCP
-and pktgen were within 2% either way, which matches what you see.
-
-> 
->> I'm also testing a small follow-up: v2 doesn't prefetch when the stride
->> 4 ahead is in the next WQE, so the first strides of every WQE are never
->> prefetched. Following the WQ list to the next WQE (only when
->> cur_sz >= 2, so it is posted and its pages are allocated) removes 26-32%
->> of the remaining DRAM demand fills on the RX CPU and adds 1.8-3.3%
->> throughput, measured with TCP inside an ovpn UDP tunnel (where the RX
->> CPU is the bottleneck); its latency is the "+next" column above.
->>
->> I had planned to send it as a follow-up patch, but I can also fold it in
->> a v3, whatever you prefer once you have your results.
->>
-> Do you have some results for this?
-
-Well... after running more extensive tests I came to the conclusion that 
-my follow-up is not bringing any gain, despite what I anticipated.
-
-Therefore I'd just keep v2 as is.
-
-Thanks!
-
-Regards,
-
--- 
-Antonio Quartulli
-
-CEO and Co-Founder
-Mandelbit Srl
-https://www.mandelbit.com
-
+Tmlrb2xheSBBbGVrc2FuZHJvdiB3cm90ZToNCj4gT24gMjQvMTEvMjAyNiAwNTowMywgbmV0ZGV2
+LWJvdCtzYXNoaWtvQGtlcm5lbC5vcmcgd3JvdGU6DQo+ID4gVGhhbmsgeW91IGZvciB5b3VyIGNv
+bnRyaWJ1dGlvbiEgU2FzaGlrbyBBSSByZXZpZXcgZm91bmQgMSBwb3RlbnRpYWwNCj4gPiBpc3N1
+ZShzKSB0byBjb25zaWRlci4NCj4gPg0KPiA+IENyaXRpY2FsOiAwIMK3IEhpZ2g6IDEgwrcgTWVk
+aXVtOiAwIMK3IExvdzogMA0KPiA+DQo+ID4gSWYgeW91IGJlbGlldmUgbm9uZSBvZiB0aGUgaXNz
+dWVzIGFyZSBsZWdpdGltYXRlLCBwbGVhc2UgcmVwbHkgdG8gZWFjaA0KPiA+IGlzc3VlIG9mIE1l
+ZGl1bSBzZXZlcml0eSBvciBoaWdoZXIgYW5kIGV4cGxhaW4gd2h5IHRoZSBBSSBpcyB3cm9uZy4N
+Cj4gPiBJZiBhbnkgb2YgdGhlbSBhcmUgbGVnaXRpbWF0ZSBhbmQgeW91IHBsYW4gdG8gcmVzcGlu
+LCBwbGVhc2UgbGV0ICANCj4gcGF0Y2h3b3JrDQo+ID4ga25vdyBieSBpbmNsdWRpbmcgInB3LWJv
+dDogY3IiIGFzIGEgc2VwYXJhdGUgbGluZSBhdCB0aGUgZW5kIG9mIHlvdXIgIA0KPiByZXBseQ0K
+PiA+IChvbmUgc3VjaCByZXBseSBwZXIgc2VyaWVzIGlzIGVub3VnaCkuDQo+ID4NCj4gPiAtIFtI
+aWdoXSBUaGUgZml4IGlzIGluY29tcGxldGUuDQo+ID4NCj4gPiAtLQ0KPiA+DQo+ID4gbmV0OiBr
+ZWVwIHNrYnMgd2l0aCBhIHByZWZldGNoZWQgc29ja2V0IG91dCBvZiBncm9fY2VsbHMgZ3JvDQo+
+ID4NCj4gPiBUaGlzIHBhdGNoIG1ha2VzIGdyb19jZWxsc19yZWNlaXZlKCkgc2VuZCBza2JzIHRo
+YXQgY2FycnkgYSBwcmVmZXRjaGVkDQo+ID4gc29ja2V0IGZyb20gYnBmX3NrX2Fzc2lnbigpIHRv
+IG5ldGlmX3J4KCkgaW5zdGVhZCBvZiB0aGUgR1JPIGNlbGwuIFRoZQ0KPiA+IGdvYWwgaXMgdG8g
+c3RvcCBHUk8gZnJvbSBjbGVhcmluZyBza2ItPnNrIGFuZCBza2ItPmRlc3RydWN0b3Igb24gbWVy
+Z2VkDQo+ID4gc2ticywgd2hpY2ggbGVha3Mgb25lIHNvY2tldCByZWZlcmVuY2UgcGVyIG1lcmdl
+ZCBza2IuDQo+ID4NCj4gPj4gZGlmZiAtLWdpdCBhL25ldC9jb3JlL2dyb19jZWxscy5jIGIvbmV0
+L2NvcmUvZ3JvX2NlbGxzLmMNCj4gPj4gaW5kZXggMzEzNTJjYWMzNTVjZS4uNGU4YjljM2NkN2Rh
+MCAxMDA2NDQNCj4gPj4gLS0tIGEvbmV0L2NvcmUvZ3JvX2NlbGxzLmMNCj4gPj4gKysrIGIvbmV0
+L2NvcmUvZ3JvX2NlbGxzLmMNCj4gPg0KPiA+IFsgLi4uIF0NCj4gPg0KPiA+PiBAQCAtMjYsNyAr
+MjcsOCBAQCBpbnQgZ3JvX2NlbGxzX3JlY2VpdmUoc3RydWN0IGdyb19jZWxscyAqZ2NlbGxzLCAg
+DQo+IHN0cnVjdCBza19idWZmICpza2IpDQo+ID4+DQo+ID4+ICAgCXNrYl91bnNldF90cmFuc3Bv
+cnRfaGVhZGVyKHNrYik7DQo+ID4+DQo+ID4+IC0JaWYgKCFnY2VsbHMtPmNlbGxzIHx8IHNrYl9j
+bG9uZWQoc2tiKSB8fCBuZXRpZl9lbGlkZV9ncm8oZGV2KSkgew0KPiA+PiArCWlmICghZ2NlbGxz
+LT5jZWxscyB8fCBza2JfY2xvbmVkKHNrYikgfHwgbmV0aWZfZWxpZGVfZ3JvKGRldikgfHwNCj4g
+Pj4gKwkgICAgdW5saWtlbHkoc2tiX3NrX2lzX3ByZWZldGNoZWQoc2tiKSkpIHsNCj4gPg0KPiA+
+IFtTZXZlcml0eTogSGlnaF0NCj4gPiBJcyBtYXRjaGluZyBvbmx5IHNrYi0+ZGVzdHJ1Y3RvciA9
+PSBzb2NrX3BmcmVlIGVub3VnaCBoZXJlPyBBbiBza2IgdGhhdA0KPiA+IGdvdCBpdHMgc29ja2V0
+IGZyb20gYnBmX3NrX2Fzc2lnbigpIGNhbiBzdGlsbCByZWFjaCBncm9fY2VsbHNfcmVjZWl2ZSgp
+DQo+ID4gd2l0aCBhIGRpZmZlcmVudCBkZXN0cnVjdG9yIHRoYXQgb3ducyBvbmUgc2tfcmVmY250
+IHJlZmVyZW5jZSBwZXIgc2tiLg0KPiA+DQo+ID4gT25lIHBhdGg6IGJwZl9za19hc3NpZ24oKSBh
+dCB0YyBpbmdyZXNzIGF0dGFjaGVzIGEgbm9uLXJlZmNvdW50ZWQgIA0KPiBzb2NrZXQsDQo+ID4g
+c3VjaCBhcyBhIFRDUCBsaXN0ZW5lciBvciBhIFVEUCBzb2NrZXQuIEl0IHNldHMgc29ja19wZnJl
+ZSBhbmQgdGFrZXMgbm8NCj4gPiByZWZlcmVuY2UuIGlwX3Jjdl9jb3JlKCkga2VlcHMgaXQuIFRo
+ZW4gYW4gTkZRVUVVRSBydWxlIG1hdGNoZXMgdGhlICANCj4gb3V0ZXINCj4gPiBpcGlwL2dyZS9l
+c3AgcGFja2V0LCBhbmQgX19uZl9xdWV1ZSgpIGNvbnZlcnRzIGl0Og0KPiA+DQoNCj4gT2ggd2Vs
+bCB0aGUgYm90IHNlZW1zIHJpZ2h0IGV2ZW4gdGhvdWdoIGl0J3MgYSB3ZWlyZCBjYXNlLCBJJ2Qg
+c3VnZ2VzdCB0byAgDQo+IGNoYW5nZQ0KPiB0aGUgY2hlY2sgYW5kIG9ycGhhbiBvbiBhbnkgc2ti
+LT5zayBzZXQsIGkuZS46IHx8IHVubGlrZWx5KHNrYi0+c2spDQo+IGluc3RlYWQgb2YgdW5saWtl
+bHkoc2tiX3NrX2lzX3ByZWZldGNoZWQoc2tiKSksIHRoYXQgaXMgY2FjaGUgaG90IHRvbyBhcw0K
+PiBza2ItPmRldiBpcyByZWFkIGJlZm9yZSBhbmQgd2lsbCBjYXRjaA0KDQo+IEFsc28gdHJpZWQg
+YXNraW5nIGFuIExMTSBpZiBJJ20gbWlzc2luZyBzb21ldGhpbmcgYW5kIHRoZSBvbmx5IGNhc2Ug
+aXQgIA0KPiBjb3VsZCBjb21lIHVwDQo+IHRoYXQgd2lsbCBub3QgYmUgYWdncmVnYXRlZCBpczoN
+Cj4gInRoZSBvbmx5IGNvcnJlY3QgYWdncmVnYXRpb24gdGhhdCdzIGxvc3QgaXMgc29mdHdhcmUg
+RVNQIG92ZXIgdmV0aCBvciAgDQo+IG5ldGRldnNpbSBpbiB0dW5uZWwgbW9kZSINCj4gSU1PIHRo
+YXQgaXMgb2suDQoNCj4gV2hhdCBkbyB5b3UgdGhpbms/DQoNClRoaXMgYWxzbyBhZmZlY3RzIEVT
+UCBvdmVyIHR1bnRhcCB3aXRoIElGRl9OQVBJLiBCdXQgdGhhdCBpcyBub3QgYSBjb21tb24NCnBy
+b2R1Y3Rpb24gY29uZmlndXJhdGlvbi4NCg0KU28gTEdUTS4NCg0KSnVzdCBhIHNtYWxsIG5vdGUg
+dGhhdCByZWRpcmVjdCB0byBuZXRpZl9yeCAhPSBvcnBoYW4uIE5vIG5lZWQgdG8gb3JwaGFuLg0K
