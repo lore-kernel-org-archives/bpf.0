@@ -1,56 +1,54 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795665593;
-	b=0H68U/WtJJSwK4cMpKmcfLFPKclsCuB8xX170M4MhEZCIchNznF6SQYHCEfehBeQ7hOX
-	 TsLU5dY/WTXIQCkPXLgGW1897AtVK/Xjp1iVzqlddR8bV29xFly7whhCG73iwg/x+FP9a
-	 fHqYN6IfAgY5l9tzBxsbsFVOXQOS1IwFq2Iw7UkET4NESxF8kDWC7D25qfh8Y+NFOYFB1
-	 Ay3UtM0Kq29kYA+BW2d1Ot/hDqEoZoP7QJz8q9rJwwOqGNlW05qzbEJEq1H4j/KmN3nPL
-	 93rKrxwPfe5Vs6Tn8LFTPB8ABylHsm4jIYp7pDVTS3BBbqx3BIYoHG0QI/KLwQtwxig==
+	t=1795665634;
+	b=zgTKl8H+3XozUWz0Sib86ly3v6IY2M8XA4AfvN9TI3PwBmgxplurO4u6MjrBceZ9Gpo7
+	 +a0ITequTTZxwyAq29oKI5g69ArPgI8E08wM6sN6br4UIYex/VSbEMSpXHHX7BKzbipdy
+	 FAS4ycgf4ThqVhXWQnkepMSP7jNGNiLUxDLz1NU7+LqsyJfac40ZISXOBAQFvo0CCIxL2
+	 VQF0UOIfK7ciXwULVS1NlI1cJNHiM0sDL+pmfrnXJExscJKlzV8vDXHO0MvxY+zxSMYXr
+	 aNSjlVFevvZYqZrX07iIwanwc3ONlaDWwDb7rza5iUXAhR/C84LfnGd0TtwiA4eWk1g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795665593;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	a=rsa-sha256; c=relaxed/relaxed; t=1795665634;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=Dq9r5zjnwfyjhLD5jAAfeM3BPq0EkqFCr6nxUg4GyYI=;
-	b=FqeKOj5Ls7ScxBzNAtxdOnGP1Jq3skFfs6obsNVg2ifEnyhcahrfjgi1fD0gz/sxufzK
-	 axbyxyrrKhuITuBj+vnc5DERv+1gmcjUWK5dgOtgWedPvrwN/zlsyqAScabKcvRQ8gm8W
-	 qCgoEDogePip9Aixu0NyfSenwCNT13XgoslWBENMGLugvVvOm5LsWbwDLODs/DE0U2DXA
-	 e9pcolXC2a3ynDkMWMiQu050Pscb6WBlRnrTdRRc2/rlN4SH5B17biHva7dpdASYPMPgh
-	 2RjBHvJbxCPypZXRqdX7J2h/hMdwyVI96XULatOXRzk+LHj8VqXmy3joAPykw6M/Ypg==
+	bh=/HPS6EkeQA9RkkLl3eNW2WJ9QbHQGpKEWqfpK4/AxEs=;
+	b=en0oeQQKGi/GVhQjTvlGUmeTXnuHUYSldrLKOaKq0YpZCIgC58VXowWZ4PV0WZF3OXnh
+	 uj07lWOFrJjzcCbAPNmLLNI5gHwBsC47UkEZcXiY8sRqlNfemGhMrB6L6VU0WK8J6OpMK
+	 1/JMtIugwpdHMwGowUMERRXn30a1jX9NcepzOGHzuJpJ+LBER1LZgnYEBxubGJrJj1vx0
+	 ZvOxnyOKzUOTvYtmD4yR0VpOdbVmDB+v4nZqGbLYbl/lG74RtDTSwpeLbSVo4ZSUNIeVN
+	 f0xu7/TL07Q/Af4pJdsBYpLgq8J1mP3sEbI4sFC63A6wE8cQvYZf4pQseA1YUY8Ji4w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iwh6bZ7+;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=exiuZSLD;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83F0D606A31E
-	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 03:59:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD880606A321
+	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 04:00:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iwh6bZ7+
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C2061F000C4;
-	Thu, 26 Nov 2026 03:59:53 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=exiuZSLD
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E61251F000C4;
+	Thu, 26 Nov 2026 04:00:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795665593;
-	bh=Dq9r5zjnwfyjhLD5jAAfeM3BPq0EkqFCr6nxUg4GyYI=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=iwh6bZ7+5czkxPg4uQFrndbehXyt22+6WJXhqR1DEIC2LTuGlbkYGT34uVfh/ZEe9
-	 AzrY5PiwvPNjCjDDsxVhKbwnCTsrRt3QbncnZLEYhkKot4+fDwLdy1aUWJak/H7gRg
-	 e50R/REA8NeXaP1q0g+2CPyaDSbQzeaErOmkVNI0AC/II7URLhYlcnFS3dBkS2AwYN
-	 iHYDBmJmZ59Xu80gshLgvXZEKUjoPHwbDOqvpzMGpC6vrGR6g7rvmoUcakT3WLjB7o
-	 /jVtNABmjSVgg6dZmyCcOQR6C3EZL98y1hmx0ZaNiPgiHqol5LatuizFiDc2PBsncE
-	 TUmahg+3MLTNA==
-Message-ID: <sashiko-outbox-234712@kernel.org>
+	s=k20260515; t=1795665634;
+	bh=/HPS6EkeQA9RkkLl3eNW2WJ9QbHQGpKEWqfpK4/AxEs=;
+	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
+	b=exiuZSLDeG3IwJSaVhPqJ4yAdC5w/76WotaDoBA32SOH+duAlYidAReR28bV+6Nzh
+	 Ep/S3cyTGZxwtRSPuMEULlIwRMvpNPe0xUCthMiM88F8XVfiZ8S12SxV6fK8ST0s0w
+	 u9rpNbOXZaUBeE0djrsyeSzRhhsuaoJlqv8LDhDVg9tF2ndSAhfsD53u0wLVNKAtGV
+	 ow0GzKpFsG5vk0NrR/AzfGXjmPKI8Ao9dmtHuYTtdExRaLtxT2LRv4QvMdsgC3cqqS
+	 uQDPG63TKDVFIe8oemjDfseoSbO02qsSXrwQ+vbBtaKs7TSL9H/zhOJIckzK71uouL
+	 u7xLPr14Qdc4g==
+Message-ID: <sashiko-outbox-234714@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 2/5] LoongArch: BPF: Add support for exceptions
+Subject: Re: [PATCH bpf] bpf: Set the run context for async callbacks
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "George Guo" <dongtai.guo@linux.dev>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20261126034048.7370-3-dongtai.guo@linux.dev>
-References: <20261126034048.7370-1-dongtai.guo@linux.dev>
- <20261126034048.7370-3-dongtai.guo@linux.dev>
+To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
+In-Reply-To: <20261126033114.4111944-1-alexei.starovoitov@gmail.com>
+References: <20261126033114.4111944-1-alexei.starovoitov@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 26 Nov 2026 03:59:52 +0000
+Date: Thu, 26 Nov 2026 04:00:33 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -60,99 +58,94 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue to consider:
-- [High] LoongArch: BPF: missing save/restore of s7 and s8 for exception
-  progs
+Thank you for your contribution! Sashiko AI review found no new issues
+in this patch, but noticed 1 related pre-existing issue it does not
+introduce:
+- [Critical] bpf: use-after-free in bpf_timer_cb() [1]
 --
 
-commit 64e60e0cab39cdd5da1ae8974c3aaebabf22619c
-Author: George Guo <guodongtai@kylinos.cn>
+commit dec841fde8b353a2dff54ed68ef5d92e5156f040
+Author: Alexei Starovoitov <ast@kernel.org>
 
-LoongArch: BPF: Add support for exceptions
+bpf: Set the run context for async callbacks
 
-This commit adds BPF exception handling support to the LoongArch JIT compil=
-er
-when CONFIG_UNWINDER_ORC is enabled, updating build_prologue() and
-__build_epilogue() so exception callbacks reuse the boundary program's stack
-frame.
+This commit sets a dedicated run context (bpf_async_run_ctx) for BPF
+asynchronous callbacks and rejects helpers that rely on the arming hook's
+task or socket context.
 
-> diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
-> index 3ff15b64925f1..19907612a51c5 100644
-> --- a/arch/loongarch/net/bpf_jit.c
-> +++ b/arch/loongarch/net/bpf_jit.c
-> @@ -120,8 +120,8 @@ static void prepare_bpf_tail_call_cnt(struct jit_ctx =
-*ctx, int *store_offset)
->   *                            +-------------------------+
->   *                            |           tcc_ptr       |
->   *                            +-------------------------+
-> - *                            |           arena         |
-> - *                            |         (optional)      |
-> + *                            |   $s6 (arena/exception) |
-> + *                            |        (optional)       |
->   *                            +-------------------------+ <--BPF_REG_FP
->   *                            |  prog->aux->stack_depth |
->   *                            |        (optional)       |
-> @@ -133,6 +133,13 @@ static void build_prologue(struct jit_ctx *ctx)
->  	int i, stack_adjust =3D 0, store_offset, bpf_stack_adjust;
->  	const struct bpf_prog *prog =3D ctx->prog;
->  	const bool is_main_prog =3D !bpf_is_subprog(prog);
-> +	/*
-> +	 * Exception boundary and callback programs must agree on the frame
-> +	 * layout: the callback reuses the boundary's frame to restore its
-> +	 * callee-saved registers, so the s6 slot is always reserved for them.
-> +	 */
-> +	const bool is_exception_prog =3D prog->aux->exception_boundary ||
-> +				       prog->aux->exception_cb;
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index 1b95fe795b4d9..490dd14b6a70c 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -1219,12 +1219,25 @@ static DEFINE_PER_CPU(struct bpf_hrtimer *, hrtim=
+er_running);
 > =20
->  	bpf_stack_adjust =3D round_up(ctx->prog->aux->stack_depth, 16);
+>  static void bpf_async_refcount_put(struct bpf_async_cb *cb);
 > =20
-> @@ -142,7 +149,7 @@ static void build_prologue(struct jit_ctx *ctx)
->  	/* To store tcc and tcc_ptr */
->  	stack_adjust +=3D sizeof(long) * 2;
+> +struct bpf_run_ctx bpf_async_run_ctx;
+> +
+> +static void bpf_run_async_cb(struct bpf_prog *prog, bpf_callback_t callb=
+ack_fn,
+> +			     struct bpf_map *map, void *key, void *value)
+> +{
+> +	struct bpf_run_ctx *old_ctx =3D bpf_set_run_ctx(&bpf_async_run_ctx);
+> +	struct bpf_timed_may_goto saved;
+> +
+> +	bpf_timed_may_goto_save(prog, &saved);
+> +	callback_fn((u64)(long)map, (u64)(long)key, (u64)(long)value, 0, 0);
+> +	bpf_timed_may_goto_restore(prog, &saved);
+> +	bpf_reset_run_ctx(old_ctx);
+> +}
+> +
+>  static enum hrtimer_restart bpf_timer_cb(struct hrtimer *hrtimer)
+>  {
+>  	struct bpf_hrtimer *t =3D container_of(hrtimer, struct bpf_hrtimer, tim=
+er);
+>  	struct bpf_map *map =3D READ_ONCE(t->cb.map);
+>  	struct bpf_prog *prog =3D READ_ONCE(t->cb.prog);
+> -	struct bpf_timed_may_goto saved;
+>  	void *value =3D t->cb.value;
+>  	bpf_callback_t callback_fn;
+>  	void *key;
+> @@ -1245,10 +1258,8 @@ static enum hrtimer_restart bpf_timer_cb(struct hr=
+timer *hrtimer)
 > =20
-> -	if (ctx->arena_vm_start)
-> +	if (ctx->arena_vm_start || is_exception_prog)
->  		stack_adjust +=3D sizeof(long);
-
-[ ... ]
-
-> @@ -201,13 +221,14 @@ static void build_prologue(struct jit_ctx *ctx)
+>  	key =3D map_key_from_value(map, value, &idx);
 > =20
->  	prepare_bpf_tail_call_cnt(ctx, &store_offset);
-> =20
-> -	if (ctx->arena_vm_start) {
-> +	if (ctx->arena_vm_start || is_exception_prog) {
->  		store_offset -=3D sizeof(long);
->  		emit_insn(ctx, std, REG_ARENA, LOONGARCH_GPR_SP, store_offset);
->  	}
+> -	bpf_timed_may_goto_save(prog, &saved);
+> -	callback_fn((u64)(long)map, (u64)(long)key, (u64)(long)value, 0, 0);
+>  	/* The verifier checked that return value is zero. */
+> -	bpf_timed_may_goto_restore(prog, &saved);
+> +	bpf_run_async_cb(prog, callback_fn, map, key, value);
 
-[ ... ]
+[Severity: Critical]
+This problem wasn't introduced by this patch, but can bpf_timer_cb() pass a
+freed map element value to callback_fn() [1]?
 
-> @@ -261,7 +285,7 @@ static void __build_epilogue(struct jit_ctx *ctx, boo=
-l is_tail_call)
->  	/* Skip the unused local 'tcc_ptr' slot to align with arena */
->  	load_offset -=3D sizeof(long);
-> =20
-> -	if (ctx->arena_vm_start) {
-> +	if (ctx->arena_vm_start || is_exception_prog) {
->  		load_offset -=3D sizeof(long);
->  		emit_insn(ctx, ldd, REG_ARENA, LOONGARCH_GPR_SP, load_offset);
->  	}
+htab_map_delete_elem() unlinks the element and cancels any existing async
+callbacks in free_htab_elem(), but another CPU that looked up the element
+under RCU before it was unlinked can still call __bpf_async_init() and arm
+a new timer on it:
 
-[Severity: High]
-Do build_prologue() and __build_epilogue() also need to save and restore
-LOONGARCH_GPR_S7 and LOONGARCH_GPR_S8 when is_exception_prog is true?
+CPU0                                CPU1
+htab_map_delete_elem()
+  hlist_nulls_del_rcu(&l->hash_node)
+  free_htab_elem()
+    ...                             __bpf_async_init()
+                                      hrtimer_setup(&t->timer, ...)
+                                      cmpxchg(&async->cb, NULL, cb)
+                                    ...
+  /* RCU grace period expires, l is freed */
+                                    bpf_timer_cb()
+                                      bpf_run_async_cb(..., value)
+                                        <-- use-after-free
 
-In the LoongArch C ABI, s0 through s8 are callee-saved registers.  JITed BPF
-programs normally leave s7 and s8 untouched, and any called C function saves
-and restores them in its own frame.  When bpf_throw() unwinds the stack,
-however, bpf_throw() and its callees never run their epilogues; the excepti=
-on
-callback restores only the boundary frame and returns directly to the
-boundary program's caller, leaving s7 and s8 clobbered if any unwound C
-function used them.
+Because the element has already passed free_htab_elem(), nothing cancels
+the newly initialized timer before the element is freed after the RCU grace
+period, leaving bpf_timer_cb() to pass reclaimed memory to the BPF program.
+
+[1] https://sashiko.dev/#/bug/linux-25136054-3592-42c2-bca7-ba4763a56761
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261126034048.7370=
--1-dongtai.guo@linux.dev?part=3D2
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261126033114.4111=
+944-1-alexei.starovoitov@gmail.com?part=3D1
