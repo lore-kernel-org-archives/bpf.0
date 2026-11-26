@@ -1,65 +1,65 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795698073;
-	b=rka0PTSKyH/ZMZ+vpB7jkkK47B4+QQGW7xuF7jGNKn7sKvDSJMLVsMP84dlDJtdaKSUD
-	 EBL5EOQmZ6vN7ZV+qLkughY9eDACz90IT7AhDC8M2jPrE0p5wUjOqZv2ae/lbY6pDdcxO
-	 9ZVr6GH6pu7TpH04BhbORyJaJOWoXLvK1Ec+x1arcHrgQ6r32DdwqohO7AYR6GXBwGpeV
-	 /rE79HGSlLoGYwVpO27faINRX+/VpfmGnXoKtV4swSesmhU6dxChbiajmVczb9JbooF8L
-	 VN/Dpu+CrroDkX3ez4h7vyds7Hm6K8LWshxqkZyUb4yxXSGngx+9wP0VoIbO1jY/XQg==
+	t=1795698078;
+	b=1IFNs8BtqHbDerwVszvi0tNpZxWbw1CepXWtoxg0zz39AqxR3Id0RBgUbtx7ZbLZahHl
+	 D/SrLQOBi749cXLTXcKQsYOyoBY0PRhtPIoEtPgpneOORqXqvT6Dcum4/D42Q3vozJqu9
+	 QaUV7cxx6Wv6oUzHRp3N9EyeNj5ODKj8bzMYjKRt5bQZcVgZoqquUl00J0xyae9x00fOI
+	 XV+v9vyzlBDIvVklozwse5qQR8sO4GkaENsXix4lqkBYuTG7OyIjwFWxsHbho+RfU1bKl
+	 ypCQ+iTKXpOmBG4cRSfZhFumgEyDRzsRxBOnms+kUXXagESwtOVLkSOITmRlVUQnhgg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795698073;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795698078;
 	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
 	 X-Mimecast-MFC-AGG-ID:Received:Received:From:To:Cc:Subject:Date:
 	 Message-ID:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding:X-Scanned-By;
-	bh=2QqdsVVnxP1jujQrs2DS5xI77bSGTC/XR9+5id+paCM=;
-	b=w+YT+VkVou5qvM/7mjWkkkq3zsDvuBypgnZ0McUeW76Sbc2xqDuGQjgFVqn2gLiK0n3Q
-	 qNSuTCwIAa3DcT5OJ9rQLoUBLY0Oh5T5nZzIct2dE1VGeydfs8HcsfswXcx317RKlNeXW
-	 lGMs8Y0rVVYvtavqAWW3vnH+bFKd7j1fFevQ+CS/f+9JSPGpTIBZGEzJK2oIwN7jtwESp
-	 OKUmCq6IMXTDroAfnbnsi4hmBwSmOCtnb+hV+qAoH782kfm4c1oMPa4AuwKHQ2uR6QmKy
-	 K9zlN3BPS1HWscNDT5jGYqqQv+x6NHgayvCJbm16PPOX494lN33Zey5b5+F4ptQgEfw==
+	bh=zC8dAuQq149MZ5BsQEvyCxHSGduIDqnB2gj0ZZzxdpM=;
+	b=XrooX89pEZpl/ON7Th/crBLGtvX/2tGkRYO4pu6fB0LBpjZkgUIy0NFY374BZnENq7ik
+	 0ENvQM9yL4B0VKzc0f6/4+NFtBPVYxxuWF1nUcnUDf8fBHK4scbSlOERmPy9g/UjWwRPU
+	 sVsiNnTqJhWprxjRH1vbR3xCJSg+LdcBamjl+DAVfEmPw2vebJttnoPpqfgta+ValQOXZ
+	 07rDJqUS9x3p68J1TGRJblT1rPRyuRMZwjYf53Xzf0yn+7DgneZ8J1dLKmt9a/FgFZ3Xy
+	 QRdgAITQ2lgFvMVjbBgs2Fs3cmYh1+VA1lLSlghtwZAZui5Q5PPDfBKo4LV5DuVZ07w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=redhat.com;
 	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=Tv7qDRW6;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=M8Zgmwxj;
 	arc=none smtp.remote-ip=170.10.129.124
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1DC1606A321
-	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 13:01:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B1DC1606A321
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 150AC606A33B
+	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 13:01:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 150AC606A33B
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=Tv7qDRW6
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=M8Zgmwxj
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1795698071;
+	s=mimecast20190719; t=1795698077;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=2QqdsVVnxP1jujQrs2DS5xI77bSGTC/XR9+5id+paCM=;
-	b=Tv7qDRW6MCoUGX2KWF9Prh1PenxD1fNNSJf+prXqV5JBYxy2DWN8mpSAuKTsPTLJh3XXXN
-	2QfJ5o+RHBNFd6bryhpUR+JfsmW/WXP4p0xhz+5jFo7mwBZ6QarLMfGgTNktGXRu+lzrfi
-	3sqWtZkNVoIsB2yuZHkGAXdYdzeXLCI=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+	bh=zC8dAuQq149MZ5BsQEvyCxHSGduIDqnB2gj0ZZzxdpM=;
+	b=M8ZgmwxjWth1nMENMkzIzrNCfndXn4lWGipXAz5Ctcl0s7nLk0YPYXXb7cVqt3BrmRN7yK
+	cRgKpYqTCy+LAJnmtqN8qES2inVEpbndA2jCmNdERIbMPV7WE/SuW4VAEFj/Ckrm18Ss7Z
+	lAolpHxWiXdJRelF/N5I0o0N5lwTc1o=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-279-bx0tWmUlPmqzR7QYt8x05Q-1; Thu,
- 26 Nov 2026 13:01:06 +0000
-X-MC-Unique: bx0tWmUlPmqzR7QYt8x05Q-1
-X-Mimecast-MFC-AGG-ID: bx0tWmUlPmqzR7QYt8x05Q_1795698064
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-331-S3kHA3hUOKu_Uyhd_Sj9WA-1; Thu,
+ 26 Nov 2026 13:01:11 +0000
+X-MC-Unique: S3kHA3hUOKu_Uyhd_Sj9WA-1
+X-Mimecast-MFC-AGG-ID: S3kHA3hUOKu_Uyhd_Sj9WA_1795698069
 Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 899EB1800743;
-	Thu, 26 Nov 2026 13:01:04 +0000 (UTC)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8AA411955F74;
+	Thu, 26 Nov 2026 13:01:09 +0000 (UTC)
 Received: from gmonaco-thinkpadt14gen3.redhat.corp (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 004D31801977;
-	Thu, 26 Nov 2026 13:01:00 +0000 (UTC)
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 586EB1800543;
+	Thu, 26 Nov 2026 13:01:06 +0000 (UTC)
 From: Gabriele Monaco <gmonaco@redhat.com>
 To: linux-kernel@vger.kernel.org,
 	linux-trace-kernel@vger.kernel.org,
@@ -73,9 +73,9 @@ Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
 	Viktor Malik <vmalik@redhat.com>,
 	Peter Zijlstra <peterz@infradead.org>,
 	John Ogness <john.ogness@linutronix.de>
-Subject: [PATCH v3 08/18] tools/rv: Move monitor trace handling to trace.c
-Date: Thu, 26 Nov 2026 13:59:54 +0100
-Message-ID: <20261126130004.127155-9-gmonaco@redhat.com>
+Subject: [PATCH v3 09/18] tools/rv: Implement BPF monitor discovery and listing
+Date: Thu, 26 Nov 2026 13:59:55 +0100
+Message-ID: <20261126130004.127155-10-gmonaco@redhat.com>
 In-Reply-To: <20261126130004.127155-1-gmonaco@redhat.com>
 References: <20261126130004.127155-1-gmonaco@redhat.com>
 X-Mailing-List: bpf@vger.kernel.org
@@ -90,728 +90,383 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-Move the rv monitor tracing functions from in_kernel.c to trace.c so
-it can be shared with other monitor backends, e.g. BPF monitors that
-emit tracepoints.
+Implement the BPF monitor listing functionality that scans for compiled
+BPF monitor object files and displays them in the monitor list.
 
-No functional changes but minor simplifications:
-- simplify ambiguous destruction path and use trace inst on stack
-- more consistent argument order
-- fix minor style issues
+If enabled, running rv list shows in-kernel and BPF monitors found in
+/usr/share/rv/bpf_monitors/ or in ./bpf_monitors/ relative to the RV
+binary's location (used during development).
 
 Signed-off-by: Gabriele Monaco <gmonaco@redhat.com>
 ---
- tools/verification/rv/include/trace.h |   4 +-
- tools/verification/rv/src/in_kernel.c | 295 +-------------------------
- tools/verification/rv/src/trace.c     | 290 +++++++++++++++++++++++--
- 3 files changed, 280 insertions(+), 309 deletions(-)
+ tools/verification/rv/Makefile              |   4 +-
+ tools/verification/rv/Makefile.config       |  23 ++
+ tools/verification/rv/include/bpf_monitor.h |  14 ++
+ tools/verification/rv/src/Build             |   5 +
+ tools/verification/rv/src/bpf_monitor.c     | 240 ++++++++++++++++++++
+ tools/verification/rv/src/rv.c              |   2 +
+ 6 files changed, 287 insertions(+), 1 deletion(-)
+ create mode 100644 tools/verification/rv/include/bpf_monitor.h
+ create mode 100644 tools/verification/rv/src/bpf_monitor.c
 
-diff --git a/tools/verification/rv/include/trace.h b/tools/verification/rv/include/trace.h
-index 8d89e8c303fa..e3d65ff3d544 100644
---- a/tools/verification/rv/include/trace.h
-+++ b/tools/verification/rv/include/trace.h
-@@ -9,8 +9,10 @@ struct trace_instance {
- };
+diff --git a/tools/verification/rv/Makefile b/tools/verification/rv/Makefile
+index 8ae5fc0d1d17..0a8c7a656f7f 100644
+--- a/tools/verification/rv/Makefile
++++ b/tools/verification/rv/Makefile
+@@ -32,8 +32,10 @@ DOCSRC		:= ../../../Documentation/tools/rv/
  
- int trace_instance_init(struct trace_instance *trace, char *name);
--int trace_instance_start(struct trace_instance *trace);
- void trace_instance_destroy(struct trace_instance *trace);
+ FEATURE_TESTS	:= libtraceevent
+ FEATURE_TESTS	+= libtracefs
++FEATURE_TESTS	+= libbpf
+ FEATURE_DISPLAY	:= libtraceevent
+ FEATURE_DISPLAY	+= libtracefs
++FEATURE_DISPLAY	+= libbpf
  
- int collect_registered_events(struct tep_event *event, struct tep_record *record,
- 			      int cpu, void *context);
+ all: $(RV)
+ 
+@@ -57,7 +59,7 @@ endif
+ 
+ CFLAGS		+= $(INCLUDES) $(LIB_INCLUDES)
+ 
+-export CFLAGS OUTPUT srctree
++export CFLAGS OUTPUT srctree BUILD_BPF
+ 
+ $(RV): $(RV_IN)
+ 	$(QUIET_LINK)$(CC) $(LDFLAGS) -o $(RV) $(RV_IN) $(EXTLIBS)
+diff --git a/tools/verification/rv/Makefile.config b/tools/verification/rv/Makefile.config
+index 066302230eb2..0600170ac217 100644
+--- a/tools/verification/rv/Makefile.config
++++ b/tools/verification/rv/Makefile.config
+@@ -43,6 +43,29 @@ else
+   $(info libtracefs is missing. Please install libtracefs-dev/libtracefs-devel)
+ endif
+ 
++ifndef BUILD_BPF
++  # BPF monitors are optional but enabled by default
++  BUILD_BPF := 1
++endif
 +
-+void trace_print_header(struct trace_seq *s);
-+int trace_instance_setup(struct trace_instance *inst, char *name);
-diff --git a/tools/verification/rv/src/in_kernel.c b/tools/verification/rv/src/in_kernel.c
-index 90c340a73c76..79f2d308e14d 100644
---- a/tools/verification/rv/src/in_kernel.c
-+++ b/tools/verification/rv/src/in_kernel.c
-@@ -9,7 +9,6 @@
- #include <string.h>
- #include <errno.h>
- #include <unistd.h>
--#include <dirent.h>
- 
- #include <trace.h>
- #include <utils.h>
-@@ -304,29 +303,6 @@ static char *ikm_get_current_reactor(char *monitor_name)
- 	return curr_reactor;
- }
- 
--static int ikm_has_id(char *monitor_name)
--{
--	char path[MAX_PATH];
--	char *format;
--	int has_id;
--
--	snprintf(path, MAX_PATH, "events/rv/event_%s/format", monitor_name);
--	format = tracefs_instance_file_read(NULL, path, NULL);
--	if (!format) {
--		err_msg("ikm: fail reading monitor's %s format event file\n", monitor_name);
--		return -1;
--	}
--
--	/* print fmt: "%d: %s x %s -> %s %s", REC->id, ... */
--	has_id = !!strstr(format, "REC->id");
--
--	debug_msg("ikm: monitor %s has id: %s\n", monitor_name, has_id ? "yes" : "no");
--
--	free(format);
--
--	return has_id;
--}
--
- /**
-  * ikm_list_monitors - list all available monitors
-  *
-@@ -379,260 +355,6 @@ int ikm_list_monitors(char *container)
- 	return 0;
- }
- 
--static void ikm_print_header(struct trace_seq *s)
--{
--	trace_seq_printf(s, "%16s-%-8s %5s %5s ", "<TASK>", "PID", "[CPU]", "TYPE");
--	if (config.has_id)
--		trace_seq_printf(s, "%8s ", "ID");
--
--	trace_seq_printf(s, "%24s x %-24s -> %-24s %s\n",
--			 "STATE",
--			 "EVENT",
--			 "NEXT_STATE",
--			 "FINAL");
--
--	trace_seq_printf(s, "%16s %-8s %5s %5s ", " | ", " | ", " | ", " | ");
--
--	if (config.has_id)
--		trace_seq_printf(s, "%8s ", " | ");
--
--	trace_seq_printf(s, "%24s   %-24s    %-24s %s\n",
--			 " | ",
--			 " | ",
--			 " | ",
--			 "|");
--
--}
--
--/*
-- * ikm_event_handler - callback to handle event events
-- *
-- * Called any time a rv:"monitor"_event events is generated.
-- * It parses and prints event.
-- */
--static int
--ikm_event_handler(struct trace_seq *s, struct tep_record *record,
--		  struct tep_event *trace_event, void *context)
--{
--	/* if needed: struct trace_instance *inst = context; */
--	char *state, *event, *next_state;
--	unsigned long long final_state;
--	unsigned long long pid;
--	unsigned long long id;
--	int val;
--	bool missing_id;
--
--	if (config.has_id)
--		missing_id = tep_get_field_val(s, trace_event, "id", record, &id, 1);
--
--	tep_get_common_field_val(s, trace_event, "common_pid", record, &pid, 1);
--
--	if (config.has_id && (config.my_pid == id))
--		return 0;
--	else if (config.my_pid == pid)
--		return 0;
--
--	tep_print_event(trace_event->tep, s, record, "%16s-%-8d [%.3d] ",
--			TEP_PRINT_COMM, TEP_PRINT_PID, TEP_PRINT_CPU);
--
--	if (config.is_container)
--		tep_print_event(trace_event->tep, s, record, "%s ", TEP_PRINT_NAME);
--	else
--		trace_seq_printf(s, "event ");
--
--	if (config.has_id) {
--		if (missing_id)
--			/* placeholder if we are dealing with a mixed-type container*/
--			trace_seq_printf(s, "        ");
--		else
--			trace_seq_printf(s, "%8llu ", id);
--	}
--
--	state = tep_get_field_raw(s, trace_event, "state", record, &val, 0);
--	event = tep_get_field_raw(s, trace_event, "event", record, &val, 0);
--	next_state = tep_get_field_raw(s, trace_event, "next_state", record, &val, 0);
--	tep_get_field_val(s, trace_event, "final_state", record, &final_state, 1);
--
--	trace_seq_printf(s, "%24s x %-24s -> %-24s %s\n",
--			 state,
--			 event,
--			 next_state,
--			 final_state ? "Y" : "N");
--
--	trace_seq_do_printf(s);
--	trace_seq_reset(s);
--
--	return 0;
--}
--
--/*
-- * ikm_error_handler - callback to handle error events
-- *
-- * Called any time a rv:"monitor"_errors events is generated.
-- * It parses and prints event.
-- */
--static int
--ikm_error_handler(struct trace_seq *s, struct tep_record *record,
--		  struct tep_event *trace_event, void *context)
--{
--	unsigned long long pid, id;
--	int cpu = record->cpu;
--	char *state, *event;
--	int val;
--	bool missing_id;
--
--	if (config.has_id)
--		missing_id = tep_get_field_val(s, trace_event, "id", record, &id, 1);
--
--	tep_get_common_field_val(s, trace_event, "common_pid", record, &pid, 1);
--
--	if (config.has_id && config.my_pid == id)
--		return 0;
--	else if (config.my_pid == pid)
--		return 0;
--
--	trace_seq_printf(s, "%8lld [%03d] ", pid, cpu);
--
--	if (config.is_container)
--		tep_print_event(trace_event->tep, s, record, "%s ", TEP_PRINT_NAME);
--	else
--		trace_seq_printf(s, "error ");
--
--	if (config.has_id) {
--		if (missing_id)
--			/* placeholder if we are dealing with a mixed-type container*/
--			trace_seq_printf(s, "        ");
--		else
--			trace_seq_printf(s, "%8llu ", id);
--	}
--
--	state = tep_get_field_raw(s, trace_event, "state", record, &val, 0);
--	event = tep_get_field_raw(s, trace_event, "event", record, &val, 0);
--
--	trace_seq_printf(s, "%24s x %s\n", state, event);
--
--	trace_seq_do_printf(s);
--	trace_seq_reset(s);
--
--	return 0;
--}
--
--static int ikm_enable_trace_events(char *monitor_name, struct trace_instance *inst)
--{
--	char event[MAX_DA_NAME_LEN + 7]; /* max(error_,event_) + '0' = 7 */
--	int retval;
--
--	snprintf(event, sizeof(event), "event_%s", monitor_name);
--	retval = tracefs_event_enable(inst->inst, "rv",  event);
--	if (retval)
--		return -1;
--
--	tep_register_event_handler(inst->tep, -1, "rv", event,
--				   ikm_event_handler, NULL);
--
--	snprintf(event, sizeof(event), "error_%s", monitor_name);
--	retval = tracefs_event_enable(inst->inst, "rv", event);
--	if (retval)
--		return -1;
--
--	tep_register_event_handler(inst->tep, -1, "rv", event,
--				   ikm_error_handler, NULL);
--
--	/* set if at least 1 monitor has id in case of a container */
--	config.has_id = ikm_has_id(monitor_name);
--	if (config.has_id < 0)
--		return -1;
--
--
--	return 0;
--}
--
--static int ikm_enable_trace_container(char *monitor_name,
--				      struct trace_instance *inst)
--{
--	DIR *dp;
--	char *abs_path, rv_path[MAX_PATH];
--	struct dirent *ep;
--	int retval = 0;
--
--	snprintf(rv_path, MAX_PATH, "rv/monitors/%s", monitor_name);
--	abs_path = tracefs_instance_get_file(NULL, rv_path);
--	if (!abs_path)
--		return -1;
--	dp = opendir(abs_path);
--	if (!dp)
--		goto out_free;
--
--	while (!retval && (ep = readdir(dp))) {
--		if (ep->d_type != DT_DIR || ep->d_name[0] == '.')
--			continue;
--		retval = ikm_enable_trace_events(ep->d_name, inst);
--	}
--
--	closedir(dp);
--out_free:
--	free(abs_path);
--	return retval;
--}
--
--/*
-- * ikm_setup_trace_instance - set up a tracing instance to collect data
-- *
-- * Create a trace instance, enable rv: events and enable the trace.
-- *
-- * Returns the trace_instance * with all set, NULL otherwise.
-- */
--static struct trace_instance *ikm_setup_trace_instance(char *monitor_name)
--{
--	struct trace_instance *inst;
--	int retval;
--
--	if (!config.trace)
--		return NULL;
--
--	/* alloc data */
--	inst = calloc(1, sizeof(*inst));
--	if (!inst) {
--		err_msg("ikm: failed to allocate trace instance");
--		goto out_err;
--	}
--
--	retval = trace_instance_init(inst, monitor_name);
--	if (retval)
--		goto out_free;
--
--	if (config.is_container)
--		retval = ikm_enable_trace_container(monitor_name, inst);
--	else
--		retval = ikm_enable_trace_events(monitor_name, inst);
--	if (retval)
--		goto out_inst;
--
--	/* ready to enable */
--	tracefs_trace_on(inst->inst);
--
--	return inst;
--
--out_inst:
--	trace_instance_destroy(inst);
--out_free:
--	free(inst);
--out_err:
--	return NULL;
--}
--
--/**
-- * ikm_destroy_trace_instance - destroy a previously created instance
-- */
--static void ikm_destroy_trace_instance(struct trace_instance *inst)
--{
--	if (!inst)
--		return;
--
--	trace_instance_destroy(inst);
--	free(inst);
--}
--
- /*
-  * ikm_usage_print_reactors - print all available reactors, one per line.
-  */
-@@ -669,7 +391,7 @@ void ikm_usage_print_reactors(void)
-  */
- int ikm_run_monitor(char *monitor_name, int argc, char **argv)
- {
--	struct trace_instance *inst = NULL;
-+	struct trace_instance inst = {0};
- 	char *nested_name, full_name[2*MAX_DA_NAME_LEN];
- 	int retval;
- 
-@@ -712,8 +434,7 @@ int ikm_run_monitor(char *monitor_name, int argc, char **argv)
- 	}
- 
- 	if (config.trace) {
--		inst = ikm_setup_trace_instance(nested_name);
--		if (!inst)
-+		if (trace_instance_setup(&inst, nested_name))
- 			goto out_free_instance;
- 	}
- 
-@@ -722,16 +443,16 @@ int ikm_run_monitor(char *monitor_name, int argc, char **argv)
- 		goto out_free_instance;
- 
- 	if (config.trace)
--		ikm_print_header(inst->seq);
-+		trace_print_header(inst.seq);
- 
- 	while (!should_stop()) {
- 		if (config.trace) {
--			retval = tracefs_iterate_raw_events(inst->tep,
--							    inst->inst,
-+			retval = tracefs_iterate_raw_events(inst.tep,
-+							    inst.inst,
- 							    NULL,
- 							    0,
- 							    collect_registered_events,
--							    inst);
-+							    &inst);
- 			if (retval) {
- 				err_msg("ikm: error reading trace buffer\n");
- 				break;
-@@ -742,7 +463,7 @@ int ikm_run_monitor(char *monitor_name, int argc, char **argv)
- 	}
- 
- 	ikm_disable(full_name);
--	ikm_destroy_trace_instance(inst);
-+	trace_instance_destroy(&inst);
- 
- 	if (config.reactor && config.initial_reactor)
- 		ikm_write_reactor(full_name, config.initial_reactor);
-@@ -750,7 +471,7 @@ int ikm_run_monitor(char *monitor_name, int argc, char **argv)
- 	return 1;
- 
- out_free_instance:
--	ikm_destroy_trace_instance(inst);
-+	trace_instance_destroy(&inst);
- 	if (config.reactor && config.initial_reactor)
- 		ikm_write_reactor(full_name, config.initial_reactor);
- 	return -1;
-diff --git a/tools/verification/rv/src/trace.c b/tools/verification/rv/src/trace.c
-index 1b9f9bfa1893..aa4bb73624ec 100644
---- a/tools/verification/rv/src/trace.c
-+++ b/tools/verification/rv/src/trace.c
-@@ -5,34 +5,16 @@
-  * Copyright (C) 2022 Red Hat Inc, Daniel Bristot de Oliveira <bristot@kernel.org>
-  */
- 
--#include <sys/sendfile.h>
- #include <tracefs.h>
--#include <signal.h>
- #include <stdlib.h>
- #include <unistd.h>
++ifeq ($(BUILD_BPF),0)
++  $(info BPF monitor support disabled, building without BPF monitor support.)
++endif
++
++$(call feature_check,libbpf)
++ifeq ($(feature-libbpf), 1)
++  $(call detected,CONFIG_LIBBPF)
++else
++  $(info libbpf is missing, building without BPF monitor support.)
++  $(info Please install libbpf-dev/libbpf-devel)
++  BUILD_BPF := 0
++endif
++
++ifeq ($(BUILD_BPF),1)
++  CFLAGS += -DHAVE_LIBBPF
++  $(call lib_setup,bpf)
++endif
++
+ ifeq ($(STOP_ERROR),1)
+   $(error Please, check the errors above.)
+ endif
+diff --git a/tools/verification/rv/include/bpf_monitor.h b/tools/verification/rv/include/bpf_monitor.h
+new file mode 100644
+index 000000000000..e58bc45c5f75
+--- /dev/null
++++ b/tools/verification/rv/include/bpf_monitor.h
+@@ -0,0 +1,14 @@
++// SPDX-License-Identifier: GPL-2.0
++#ifndef _BPF_MONITOR_H
++#define _BPF_MONITOR_H
++
++#ifdef HAVE_LIBBPF
++int bpf_list_monitors(char *container);
++#else
++static inline int bpf_list_monitors(char *container)
++{
++	return 0;
++}
++#endif /* HAVE_LIBBPF */
++
++#endif
+diff --git a/tools/verification/rv/src/Build b/tools/verification/rv/src/Build
+index d781983c1a79..326503c22915 100644
+--- a/tools/verification/rv/src/Build
++++ b/tools/verification/rv/src/Build
+@@ -1,4 +1,9 @@
+ rv-y += trace.o
+ rv-y += utils.o
+ rv-y += in_kernel.o
++
++ifeq ($(BUILD_BPF),1)
++  rv-y += bpf_monitor.o
++endif
++
+ rv-y += rv.o
+diff --git a/tools/verification/rv/src/bpf_monitor.c b/tools/verification/rv/src/bpf_monitor.c
+new file mode 100644
+index 000000000000..a5767617c720
+--- /dev/null
++++ b/tools/verification/rv/src/bpf_monitor.c
+@@ -0,0 +1,240 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * BPF monitor support: allows rv to control BPF monitors.
++ *
++ * Copyright (C) 2026 Red Hat Inc, Gabriele Monaco <gmonaco@redhat.com>
++ */
++
++#define _GNU_SOURCE
++
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <fcntl.h>
++#include <sys/stat.h>
++#include <unistd.h>
 +#include <dirent.h>
- #include <errno.h>
- 
- #include <rv.h>
- #include <trace.h>
- #include <utils.h>
- 
--/*
-- * create_instance - create a trace instance with *instance_name
-- */
--static struct tracefs_instance *create_instance(char *instance_name)
--{
--	return tracefs_instance_create(instance_name);
--}
--
--/*
-- * destroy_instance - remove a trace instance and free the data
-- */
--static void destroy_instance(struct tracefs_instance *inst)
--{
--	tracefs_instance_destroy(inst);
--	tracefs_instance_free(inst);
--}
--
- /**
-  * collect_registered_events - call the existing callback function for the event
-  *
-@@ -64,8 +46,12 @@ collect_registered_events(struct tep_event *event, struct tep_record *record,
-  */
- void trace_instance_destroy(struct trace_instance *trace)
- {
-+	if (!trace)
-+		return;
++#include <libgen.h>
++#include <errno.h>
++#include <bpf/libbpf.h>
++#include <bpf/bpf.h>
++#include <bpf/btf.h>
 +
- 	if (trace->inst) {
--		destroy_instance(trace->inst);
-+		tracefs_instance_destroy(trace->inst);
-+		tracefs_instance_free(trace->inst);
- 		trace->inst = NULL;
- 	}
- 
-@@ -101,7 +87,7 @@ int trace_instance_init(struct trace_instance *trace, char *name)
- 
- 	trace_seq_init(trace->seq);
- 
--	trace->inst = create_instance(name);
-+	trace->inst = tracefs_instance_create(name);
- 	if (!trace->inst)
- 		goto out_err;
- 
-@@ -131,3 +117,265 @@ int trace_instance_start(struct trace_instance *trace)
- {
- 	return tracefs_trace_on(trace->inst);
- }
++#include <bpf_monitor.h>
++#include <utils.h>
++#include <rv.h>
 +
-+static int monitor_has_id(char *name)
++static char bpf_base_paths[][MAX_PATH] = {
++	".",
++	"/etc/rv",
++	"/usr/local/share/rv",
++	"/usr/share/rv",
++	"", /* Marker */
++};
++
++/* Path used for development, searched first */
++#define DEVEL_PATH 0
++
++#define RV_LOCK_DIR "/run/rv"
++
++/*
++ * bpf_lock_acquire - take the ownership lock for a monitor
++ *
++ * The lock is held for the whole monitor lifetime and released by the kernel
++ * when the process exits, including on crashes. The lock file is never
++ * removed: unlinking it would allow two processes to lock different inodes.
++ *
++ * Returns the fd if the lock was acquired, -errno on error, -EAGAIN means busy.
++ */
++static int bpf_lock_acquire(const char *monitor_name)
++{
++	struct flock fl = { .l_type = F_WRLCK, .l_whence = SEEK_SET };
++	char path[MAX_PATH];
++	int fd, ret;
++
++	snprintf(path, MAX_PATH, "%s/%s.lock", RV_LOCK_DIR, monitor_name);
++
++	if (mkdir(RV_LOCK_DIR, 0700) && errno != EEXIST)
++		return -errno;
++
++	fd = open(path, O_RDWR | O_CREAT | O_CLOEXEC | O_NOFOLLOW, 0600);
++	if (fd < 0)
++		return -errno;
++
++	if (fcntl(fd, F_OFD_SETLK, &fl)) {
++		ret = errno;
++		close(fd);
++		return -ret;
++	}
++
++	return fd;
++}
++
++/*
++ * bpf_lock_is_held - check if a monitor is owned by a running process
++ *
++ * Use F_OFD_GETLK to query the lock without disturbing the owner.
++ *
++ * Returns 1 if the monitor is locked, 0 otherwise.
++ */
++static int bpf_lock_is_held(const char *monitor_name)
++{
++	struct flock fl = { .l_type = F_WRLCK, .l_whence = SEEK_SET };
++	char path[MAX_PATH];
++	int fd, ret;
++
++	snprintf(path, MAX_PATH, "%s/%s.lock", RV_LOCK_DIR, monitor_name);
++
++	fd = open(path, O_RDONLY | O_CLOEXEC | O_NOFOLLOW);
++	if (fd < 0)
++		return 0;
++
++	ret = fcntl(fd, F_OFD_GETLK, &fl);
++	close(fd);
++
++	return ret ? 0 : fl.l_type != F_UNLCK;
++}
++
++/*
++ * bpf_read_desc - read monitors' description
++ *
++ * Return the provided string containing the monitor's description, NULL
++ * otherwise.
++ */
++static char *bpf_read_desc(char *desc, struct bpf_object *obj, const char *monitor_name)
++{
++	struct bpf_map *map = bpf_object__find_map_by_name(obj, ".rodata.description");
++	const char *desc_data;
++	size_t desc_size;
++
++	if (!map) {
++		debug_msg("bpf: cannot find description for %s\n",
++			  monitor_name);
++		return NULL;
++	}
++	desc_data = bpf_map__initial_value(map, &desc_size);
++	if (!desc_data || desc_size == 0) {
++		debug_msg("bpf: empty description for %s\n", monitor_name);
++		*desc = 0;
++		return desc;
++	}
++
++	if (desc_size >= MAX_DESCRIPTION)
++		desc_size = MAX_DESCRIPTION - 1;
++	strncpy(desc, desc_data, desc_size);
++	desc[desc_size] = '\0';
++
++	return desc;
++}
++
++/*
++ * bpf_fill_base_paths - fill the path for development builds
++ *
++ * RV searches for BPF monitors on absolute paths on the system as well
++ * as in the same directory of the rv binary. This is useful when running
++ * rv from the kernel tree. This function resolves the right location.
++ */
++static void bpf_fill_base_paths(void)
++{
++	char tmp_path[MAX_PATH], *dir;
++	ssize_t len;
++
++	len = readlink("/proc/self/exe", tmp_path, MAX_PATH);
++	if (len > 0 && len != MAX_PATH) {
++		tmp_path[len] = '\0';
++		dir = dirname(tmp_path);
++		snprintf(bpf_base_paths[DEVEL_PATH], MAX_PATH, "%s", dir);
++	}
++}
++
++static void bpf_object_iterate_path(const char *base_path, const char *subdir,
++				    void (*action)(const char *name, struct bpf_object *obj))
 +{
 +	char path[MAX_PATH];
-+	char *format;
-+	int has_id;
++	struct dirent *entry;
++	DIR *dir;
++	char *ext;
 +
-+	snprintf(path, MAX_PATH, "events/rv/event_%s/format", name);
-+	format = tracefs_instance_file_read(NULL, path, NULL);
-+	if (!format) {
-+		err_msg("rv: fail reading monitor's %s format event file\n", name);
-+		return -1;
++	snprintf(path, sizeof(path), "%s/%s", base_path, subdir);
++	dir = opendir(path);
++	if (!dir) {
++		debug_msg("bpf: error opening directory: %s\n", path);
++		return;
 +	}
 +
-+	/* print fmt: "%d: %s x %s -> %s %s", REC->id, ... */
-+	has_id = !!strstr(format, "REC->id");
++	while ((entry = readdir(dir)) != NULL) {
++		size_t size;
++		struct bpf_object *obj;
++		char name[MAX_DA_NAME_LEN], obj_path[MAX_PATH];
 +
-+	debug_msg("rv: monitor %s has id: %s\n", name, has_id ? "yes" : "no");
-+
-+	free(format);
-+
-+	return has_id;
-+}
-+
-+/**
-+ * trace_print_header - print the header of the monitor events output
-+ *
-+ * Print the column header of the rv monitor events output: task, pid,
-+ * cpu and event type, followed by the state machine transition
-+ * (state x event -> next state and final). The ID column is printed
-+ * only if the monitor's events have an id field.
-+ */
-+void trace_print_header(struct trace_seq *s)
-+{
-+	trace_seq_printf(s, "%16s-%-8s %5s %5s ", "<TASK>", "PID", "[CPU]", "TYPE");
-+	if (config.has_id)
-+		trace_seq_printf(s, "%8s ", "ID");
-+
-+	trace_seq_printf(s, "%24s x %-24s -> %-24s %s\n",
-+			 "STATE",
-+			 "EVENT",
-+			 "NEXT_STATE",
-+			 "FINAL");
-+
-+	trace_seq_printf(s, "%16s %-8s %5s %5s ", " | ", " | ", " | ", " | ");
-+
-+	if (config.has_id)
-+		trace_seq_printf(s, "%8s ", " | ");
-+
-+	trace_seq_printf(s, "%24s   %-24s    %-24s %s\n",
-+			 " | ",
-+			 " | ",
-+			 " | ",
-+			 "|");
-+}
-+
-+/*
-+ * da_event_handler - callback to handle event events
-+ *
-+ * Called any time a rv:"monitor"_event events is generated.
-+ * It parses and prints event.
-+ */
-+static int da_event_handler(struct trace_seq *s, struct tep_record *record,
-+			    struct tep_event *trace_event, void *context)
-+{
-+	char *state, *event, *next_state;
-+	unsigned long long final_state;
-+	unsigned long long pid;
-+	unsigned long long id;
-+	int val;
-+	bool missing_id;
-+
-+	if (config.has_id)
-+		missing_id = tep_get_field_val(s, trace_event, "id", record, &id, 1);
-+
-+	tep_get_common_field_val(s, trace_event, "common_pid", record, &pid, 1);
-+
-+	if (config.has_id && (config.my_pid == id))
-+		return 0;
-+	else if (config.my_pid == pid)
-+		return 0;
-+
-+	tep_print_event(trace_event->tep, s, record, "%16s-%-8d [%.3d] ",
-+			TEP_PRINT_COMM, TEP_PRINT_PID, TEP_PRINT_CPU);
-+
-+	if (config.is_container)
-+		tep_print_event(trace_event->tep, s, record, "%s ", TEP_PRINT_NAME);
-+	else
-+		trace_seq_printf(s, "event ");
-+
-+	if (config.has_id) {
-+		if (missing_id)
-+			/* placeholder if we are dealing with a mixed-type container*/
-+			trace_seq_printf(s, "        ");
-+		else
-+			trace_seq_printf(s, "%8llu ", id);
-+	}
-+
-+	state = tep_get_field_raw(s, trace_event, "state", record, &val, 0);
-+	event = tep_get_field_raw(s, trace_event, "event", record, &val, 0);
-+	next_state = tep_get_field_raw(s, trace_event, "next_state", record, &val, 0);
-+	tep_get_field_val(s, trace_event, "final_state", record, &final_state, 1);
-+
-+	trace_seq_printf(s, "%24s x %-24s -> %-24s %s\n",
-+			 state,
-+			 event,
-+			 next_state,
-+			 final_state ? "Y" : "N");
-+
-+	trace_seq_do_printf(s);
-+	trace_seq_reset(s);
-+
-+	return 0;
-+}
-+
-+/*
-+ * da_error_handler - callback to handle error events
-+ *
-+ * Called any time a rv:"monitor"_errors events is generated.
-+ * It parses and prints event.
-+ */
-+static int da_error_handler(struct trace_seq *s, struct tep_record *record,
-+			    struct tep_event *trace_event, void *context)
-+{
-+	unsigned long long pid, id;
-+	int cpu = record->cpu;
-+	char *state, *event;
-+	int val;
-+	bool missing_id;
-+
-+	if (config.has_id)
-+		missing_id = tep_get_field_val(s, trace_event, "id", record, &id, 1);
-+
-+	tep_get_common_field_val(s, trace_event, "common_pid", record, &pid, 1);
-+
-+	if (config.has_id && config.my_pid == id)
-+		return 0;
-+	else if (config.my_pid == pid)
-+		return 0;
-+
-+	trace_seq_printf(s, "%8lld [%03d] ", pid, cpu);
-+
-+	if (config.is_container)
-+		tep_print_event(trace_event->tep, s, record, "%s ", TEP_PRINT_NAME);
-+	else
-+		trace_seq_printf(s, "error ");
-+
-+	if (config.has_id) {
-+		if (missing_id)
-+			/* placeholder if we are dealing with a mixed-type container*/
-+			trace_seq_printf(s, "        ");
-+		else
-+			trace_seq_printf(s, "%8llu ", id);
-+	}
-+
-+	state = tep_get_field_raw(s, trace_event, "state", record, &val, 0);
-+	event = tep_get_field_raw(s, trace_event, "event", record, &val, 0);
-+
-+	trace_seq_printf(s, "%24s x %s\n", state, event);
-+
-+	trace_seq_do_printf(s);
-+	trace_seq_reset(s);
-+
-+	return 0;
-+}
-+
-+/**
-+ * trace_enable_monitor_events - enable a monitor's events in a trace instance
-+ *
-+ * Enable the rv:event_"monitor" and rv:error_"monitor" events in the
-+ * given trace instance, and register the callbacks that parse and
-+ * print these events.
-+ *
-+ * Returns 0 on success, -1 otherwise.
-+ */
-+static int trace_enable_monitor_events(struct trace_instance *inst, char *name)
-+{
-+	char event[MAX_DA_NAME_LEN + 7]; /* max(error_,event_) + '0' = 7 */
-+	int retval;
-+
-+	snprintf(event, sizeof(event), "event_%s", name);
-+	retval = tracefs_event_enable(inst->inst, "rv",  event);
-+	if (retval)
-+		return -1;
-+
-+	tep_register_event_handler(inst->tep, -1, "rv", event,
-+				   da_event_handler, NULL);
-+
-+	snprintf(event, sizeof(event), "error_%s", name);
-+	retval = tracefs_event_enable(inst->inst, "rv", event);
-+	if (retval)
-+		return -1;
-+
-+	tep_register_event_handler(inst->tep, -1, "rv", event,
-+				   da_error_handler, NULL);
-+
-+	/* set if at least 1 monitor has id in case of a container */
-+	config.has_id = monitor_has_id(name);
-+	if (config.has_id < 0)
-+		return -1;
-+
-+	return 0;
-+}
-+
-+static int trace_enable_container_events(struct trace_instance *inst, char *name)
-+{
-+	DIR *dp;
-+	char *abs_path, rv_path[MAX_PATH];
-+	struct dirent *ep;
-+	int retval = 0;
-+
-+	snprintf(rv_path, MAX_PATH, "rv/monitors/%s", name);
-+	abs_path = tracefs_instance_get_file(NULL, rv_path);
-+	if (!abs_path)
-+		return -1;
-+	dp = opendir(abs_path);
-+	free(abs_path);
-+	if (!dp)
-+		return -1;
-+
-+	while (!retval && (ep = readdir(dp))) {
-+		if (ep->d_type != DT_DIR || ep->d_name[0] == '.')
++		if (entry->d_name[0] == '.')
 +			continue;
-+		retval = trace_enable_monitor_events(inst, ep->d_name);
++
++		ext = strrchr(entry->d_name, '.');
++		if (!ext || strcmp(ext, ".o") != 0)
++			continue;
++
++		size = (size_t)(ext - entry->d_name);
++		if (size >= MAX_DA_NAME_LEN) {
++			err_msg("bpf: name too long, skipping %s/%s\n", path,
++				entry->d_name);
++			continue;
++		}
++		memcpy(name, entry->d_name, size);
++		name[size] = '\0';
++
++		size = snprintf(obj_path, sizeof(obj_path), "%s/%s", path,
++				entry->d_name);
++		obj = bpf_object__open_file(obj_path, NULL);
++		if (!obj || size >= MAX_PATH) {
++			err_msg("bpf: error opening object file %s: %s\n",
++				obj_path, strerror(errno));
++			continue;
++		}
++
++		action(name, obj);
++
++		bpf_object__close(obj);
 +	}
 +
-+	closedir(dp);
-+	return retval;
++	closedir(dir);
++}
++
++static void list_monitor_action(const char *name, struct bpf_object *obj)
++{
++	char desc[MAX_DESCRIPTION];
++
++	if (!bpf_read_desc(desc, obj, name)) {
++		err_msg("bpf: monitor %s does not have desc map, bug?\n", name);
++		return;
++	}
++
++	printf("%-*s %s %s\n", MAX_DA_NAME_LEN, name,
++	       desc, bpf_lock_is_held(name) ? "[ON]" : "[OFF]");
 +}
 +
 +/*
-+ * trace_instance_setup - set up a tracing instance to collect data
-+ *
-+ * Create a trace instance, enable rv: events and enable the trace.
-+ *
-+ * Returns 0 on success, -1 otherwise.
++ * list_monitors_from_path - list monitors from a specific base path
 + */
-+int trace_instance_setup(struct trace_instance *inst, char *name)
++static void list_monitors_from_path(const char *base_path)
 +{
-+	int retval;
++	bpf_object_iterate_path(base_path, "bpf_monitors", list_monitor_action);
++}
 +
-+	if (!config.trace)
-+		return -1;
-+
-+	retval = trace_instance_init(inst, name);
-+	if (retval)
-+		return -1;
-+
-+	if (config.is_container)
-+		retval = trace_enable_container_events(inst, name);
-+	else
-+		retval = trace_enable_monitor_events(inst, name);
-+	if (retval) {
-+		trace_instance_destroy(inst);
-+		return -1;
-+	}
-+
-+	/* ready to enable */
-+	tracefs_trace_on(inst->inst);
++/*
++ * bpf_list_monitors - list available BPF monitors from all sources
++ *
++ * @container: BPF monitors are not nested, skip listing.
++ *
++ * Returns 0 on success
++ */
++int bpf_list_monitors(char *container)
++{
++	if (container)
++		return 0;
++	bpf_fill_base_paths();
++	for (int i = 0; bpf_base_paths[i][0]; i++)
++		list_monitors_from_path(bpf_base_paths[i]);
 +
 +	return 0;
 +}
+diff --git a/tools/verification/rv/src/rv.c b/tools/verification/rv/src/rv.c
+index 09e0d8598619..7c4a2e49ff9d 100644
+--- a/tools/verification/rv/src/rv.c
++++ b/tools/verification/rv/src/rv.c
+@@ -13,6 +13,7 @@
+ #include <trace.h>
+ #include <utils.h>
+ #include <in_kernel.h>
++#include <bpf_monitor.h>
+ 
+ static int stop_session;
+ 
+@@ -76,6 +77,7 @@ static void rv_list(int argc, char **argv)
+ 	}
+ 
+ 	ikm_list_monitors(container);
++	bpf_list_monitors(container);
+ 
+ 	exit(EXIT_SUCCESS);
+ }
 -- 
 2.56.1
 
