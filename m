@@ -1,56 +1,51 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=45.145.95.4
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795699080;
-	b=EqJ3gRrqgctn+IfB8JpwAjRekWJ591xHeO1xYUmtJJA07CmRh0o0Da4uqa6T9RaTm6B2
-	 F9yvIS+j2Ct9gDWgh8CHrRc5p/MBrFMjRumdbsA/k/JDLvmVDWuAuybPujkb9Dx0dUmOq
-	 Z18XSGY4ZxcPS0pjyd4ZJqrlSnxVm5iKDAP8NQB+6v/gSs3r/G6bpU5AUu4IRRtEEp4aS
-	 pSBQmCfEzRnPnXIBA3aCTgVXC6nkmIh9dQBtjRsk36NZVYI0oFGETakY+gcWg78BSMDZO
-	 udAEb0VDc4H/XL6AJ8S7Ivlkq3ZIQc2XrGCK4ybM9pMQgr8/xL9dMo9WkJsZ6VcsE3A==
+	t=1795699269;
+	b=ovXt2t02XtY8xTEZm2kTit3pcUcZPCynSxKnphPxYAg2Y0lWivn9PzvW0G6icNCIjnk6
+	 vw4mZ7RqgwWTdjCcfB9DJQAgseeZ4nPqTBojrgVgReFgISl8EqChfOmjT8ZswXISPTXY7
+	 qI2hdacExmWlZEitKJfbbeXmKeTGV2R5LSD1kO9GN08RD+7//exme3E9BWueHvJ7Rw1p+
+	 nkvOxduN2QxlxV4hF9yF5o1yfRNmGb4t5oFA4AvOQT393FuClX7e00YPCXhn0HKsTw0mo
+	 IiABGhBI2RtDFxMfeLcDfyevK1pG9klP8nRxrJEu+e7XacpmRBUQG0om5V0/T0QV78w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795699080;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=tJIT2YygOW/UrqJ3/nF/k6iSZa8thmnGzz59Z0urV10=;
-	b=XNU9bwR9asy8ngHqJwRk2SDhD1Htt7dmRX8Ip7/CQRoKDvhGpKMOOq5wtL1SthXvE60J
-	 FngR9JJd3eSQO7E26iRjK4uadLObsvhRqBzombWby3DIugwwFWhDBN319hmHv2AcT2z4m
-	 ADF87pgsRdsrUvyaQxM9e8zxm3E5bjlOKe/HRl1xspAjft8PsCerxZ3zoSko1msPQ9XBu
-	 Nh63BPM1I5TnGHgOVoVCrklyBPRzvmyVqnDIzBmVD3qeluomvnIjsugnpo3bkLq+nmLgh
-	 hUuCNmz+r0qOHv1x3ZHcU9Sysc6I7FuVL2pbxYE6WyMVsUPklYuBUsY+RtT2KA0J0RQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795699269;
+	h=DMARC-Filter:DKIM-Signature:From:Date:Subject:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:Message-Id:References:
+	 In-Reply-To:To:Cc;
+	bh=nlkDmI8ZiL6GFJsi2qhFf/ia4WBgHudWp4E5MNym6QA=;
+	b=mGbQFNK2nIE2Qi+qcZmdZO6xZe/+Z2i515cS89O2MyZkD2qr7PUFR9gJJaNMdkNKIUwR
+	 RqHBnMxPL9Y6Sg/XrPy1xyiKSlBpvkhkXuzShgvZq2WXFGCeMB3TWesNz0HzVSCNPuygF
+	 jrZdZUOc3lOkn9vvdw90m62MtONU3vTWUyu2ekfmr2/MIEFscYaDVdYEj7hYHxXGNddzR
+	 7OScK0Q8KKoQZ+gAYpda6VHlkfZ/+wJql6J1VBovmhoRliuIZ7r5G449fljCUdoVqsBjh
+	 1oogonAJVfJ44/B7iuwKNMKk3aklZM8GcZWrFMLw879Dn0GjNqGlOD/mGiZ82mP3D7g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LUNtvDgI;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=toke.dk;
+	spf=pass smtp.mailfrom=toke.dk;
+	dkim=pass header.d=toke.dk header.i=@toke.dk header.a=rsa-sha256 header.s=20161023 header.b=g0vAmY8N;
+	arc=none smtp.remote-ip=45.145.95.4
+Received: from mail.toke.dk (mail.toke.dk [45.145.95.4])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF05D606A329;
-	Thu, 26 Nov 2026 13:18:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 739E1606A321
+	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 13:21:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 739E1606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=toke.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=toke.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LUNtvDgI
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5351C1F000D3;
-	Thu, 26 Nov 2026 13:18:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795699080;
-	bh=tJIT2YygOW/UrqJ3/nF/k6iSZa8thmnGzz59Z0urV10=;
-	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=LUNtvDgI2C50yOedZgTVzMs+GardN1SOnO/6BHYW1ih4zwMpPrhm405xjNhfPJC9W
-	 B0+b+oYu+z3pjCmTJMxDAQx/2k/yxRYIz5+QQvtlF16Z8uSUlx6P+qA9MDJuxjEvOF
-	 AJj/zAyQQH2J5uZYpJe4CPU66O0aMwo0fQ/lEDg2uaHn2K8n/zbx5dtLjpTx11s3r3
-	 By3D9v5biILDWif80oHgXWhBuBGqUOKPpWZ/iTYfPV/Eqfjjbglh7+YqukBGktUOms
-	 gQRDSO8x0xfaVKrkpgtDuccQB0W6tWS19PKxy5a7wkUvYlYmR5gfDZCKVY4Zg57I6h
-	 G028jbOSfGRTQ==
-Message-ID: <sashiko-outbox-235588@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 09/18] tools/rv: Implement BPF monitor discovery and
- listing
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Gabriele Monaco" <gmonaco@redhat.com>, linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
-In-Reply-To: <20261126130004.127155-10-gmonaco@redhat.com>
-References: <20261126130004.127155-1-gmonaco@redhat.com>
- <20261126130004.127155-10-gmonaco@redhat.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 26 Nov 2026 13:17:59 +0000
+	dkim=pass (2048-bit key) header.d=toke.dk header.i=@toke.dk header.a=rsa-sha256 header.s=20161023 header.b=g0vAmY8N
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=toke.dk; s=20161023;
+	t=1795699266; bh=xzpbabfX6GyrnKO1C1rGheeEZh7BgRyCWMi+Nt6V1hM=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=g0vAmY8NTgt+pzkj6UgNU+Y8eywdjxeOFMez/iSGVEIiIbbGgT0Kmhj2bYIAl4rgo
+	 od9A8kHfiICUHGiOoq6vDmDuevBF8WCKxZZy4Sj4nymxE7As0iTWHbJBi11GQ0UAUb
+	 Vq48pASDTXjzkkOzZYmFzrG/x1FWauclBfvQdqR/6PEaCu7XSil/dJIISpacmcaoQ5
+	 ENSy3EjesrYIqRX1xKcBv8864d8XZcK1onbd7SIuRruHZDe0lA9TqcMXEw/dF0Ke5j
+	 Orq956ZUp8qDjL1NPyDNLfljXMf0zUtLrvxb2KHd8hDGICTq2qhnu8beBb7C5QL/uo
+	 kRgYLngP+F1Cw==
+From: =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>
+Date: Thu, 26 Nov 2026 14:21:00 +0100
+Subject: [PATCH bpf-next v2 2/7] libbpf: Add bpf_*_get_next_id_opts()
+ functions
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -59,156 +54,156 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20261126-bpf-relax-get-next-id-v2-2-039e92757f9c@toke.dk>
+References: <20261126-bpf-relax-get-next-id-v2-0-039e92757f9c@toke.dk>
+In-Reply-To: <20261126-bpf-relax-get-next-id-v2-0-039e92757f9c@toke.dk>
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>
+Cc: bpf@vger.kernel.org, 
+ =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issues to consider:
-- [Low] tools/rv: path truncation checked after open in
-  bpf_object_iterate_path()
-- [Low] tools/rv: uncoordinated monitor listing in rv_list() and
-  ikm_list_monitors()
---
+Add opts-based variants of the bpf_*_get_next_id() functions which allow
+passing in a token fd to add to the bpf() syscall.
 
-commit 4abb124d92aede7d5ee4cdd253273b42ad6b0fdc
-Author: Gabriele Monaco <gmonaco@redhat.com>
+Signed-off-by: Toke Høiland-Jørgensen <toke@toke.dk>
+---
+ tools/lib/bpf/bpf.c      | 43 +++++++++++++++++++++++++++++++++++++------
+ tools/lib/bpf/bpf.h      | 16 ++++++++++++++++
+ tools/lib/bpf/libbpf.map |  4 ++++
+ 3 files changed, 57 insertions(+), 6 deletions(-)
 
-tools/rv: Implement BPF monitor discovery and listing
+diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+index 38dcb31e8c0e..773efb585bca 100644
+--- a/tools/lib/bpf/bpf.c
++++ b/tools/lib/bpf/bpf.c
+@@ -1149,14 +1149,21 @@ int bpf_prog_test_run_opts(int prog_fd, struct bpf_test_run_opts *opts)
+ 	return libbpf_err_errno(ret);
+ }
+ 
+-static int bpf_obj_get_next_id(__u32 start_id, __u32 *next_id, int cmd)
++static int bpf_obj_get_next_id(__u32 start_id, __u32 *next_id, int cmd,
++			       const struct bpf_get_next_id_opts *opts)
+ {
+-	const size_t attr_sz = offsetofend(union bpf_attr, open_flags);
++	const size_t attr_sz = offsetofend(union bpf_attr, get_next_id_token_fd);
+ 	union bpf_attr attr;
+ 	int err;
+ 
++	if (!OPTS_VALID(opts, bpf_get_next_id_opts))
++		return libbpf_err(-EINVAL);
++
+ 	memset(&attr, 0, attr_sz);
+ 	attr.start_id = start_id;
++	attr.get_next_id_token_fd = OPTS_GET(opts, token_fd, 0);
++	if (attr.get_next_id_token_fd)
++		attr.open_flags = BPF_F_TOKEN_FD;
+ 
+ 	err = sys_bpf(cmd, &attr, attr_sz);
+ 	if (!err)
+@@ -1167,22 +1174,46 @@ static int bpf_obj_get_next_id(__u32 start_id, __u32 *next_id, int cmd)
+ 
+ int bpf_prog_get_next_id(__u32 start_id, __u32 *next_id)
+ {
+-	return bpf_obj_get_next_id(start_id, next_id, BPF_PROG_GET_NEXT_ID);
++	return bpf_obj_get_next_id(start_id, next_id, BPF_PROG_GET_NEXT_ID, NULL);
++}
++
++int bpf_prog_get_next_id_opts(__u32 start_id, __u32 *next_id,
++			      const struct bpf_get_next_id_opts *opts)
++{
++	return bpf_obj_get_next_id(start_id, next_id, BPF_PROG_GET_NEXT_ID, opts);
+ }
+ 
+ int bpf_map_get_next_id(__u32 start_id, __u32 *next_id)
+ {
+-	return bpf_obj_get_next_id(start_id, next_id, BPF_MAP_GET_NEXT_ID);
++	return bpf_obj_get_next_id(start_id, next_id, BPF_MAP_GET_NEXT_ID, NULL);
++}
++
++int bpf_map_get_next_id_opts(__u32 start_id, __u32 *next_id,
++			     const struct bpf_get_next_id_opts *opts)
++{
++	return bpf_obj_get_next_id(start_id, next_id, BPF_MAP_GET_NEXT_ID, opts);
+ }
+ 
+ int bpf_btf_get_next_id(__u32 start_id, __u32 *next_id)
+ {
+-	return bpf_obj_get_next_id(start_id, next_id, BPF_BTF_GET_NEXT_ID);
++	return bpf_obj_get_next_id(start_id, next_id, BPF_BTF_GET_NEXT_ID, NULL);
++}
++
++int bpf_btf_get_next_id_opts(__u32 start_id, __u32 *next_id,
++			      const struct bpf_get_next_id_opts *opts)
++{
++	return bpf_obj_get_next_id(start_id, next_id, BPF_BTF_GET_NEXT_ID, opts);
+ }
+ 
+ int bpf_link_get_next_id(__u32 start_id, __u32 *next_id)
+ {
+-	return bpf_obj_get_next_id(start_id, next_id, BPF_LINK_GET_NEXT_ID);
++	return bpf_obj_get_next_id(start_id, next_id, BPF_LINK_GET_NEXT_ID, NULL);
++}
++
++int bpf_link_get_next_id_opts(__u32 start_id, __u32 *next_id,
++			      const struct bpf_get_next_id_opts *opts)
++{
++	return bpf_obj_get_next_id(start_id, next_id, BPF_LINK_GET_NEXT_ID, opts);
+ }
+ 
+ int bpf_prog_get_fd_by_id_opts(__u32 id,
+diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
+index fe3b7fd8512b..cb5104734710 100644
+--- a/tools/lib/bpf/bpf.h
++++ b/tools/lib/bpf/bpf.h
+@@ -524,6 +524,22 @@ LIBBPF_API int bpf_map_get_next_id(__u32 start_id, __u32 *next_id);
+ LIBBPF_API int bpf_btf_get_next_id(__u32 start_id, __u32 *next_id);
+ LIBBPF_API int bpf_link_get_next_id(__u32 start_id, __u32 *next_id);
+ 
++struct bpf_get_next_id_opts {
++	size_t sz; /* size of this struct for forward/backward compatibility */
++	__u32 token_fd;
++	size_t :0;
++};
++#define bpf_get_next_id_opts__last_field token_fd
++
++LIBBPF_API int bpf_prog_get_next_id_opts(__u32 start_id, __u32 *next_id,
++					 const struct bpf_get_next_id_opts *opts);
++LIBBPF_API int bpf_map_get_next_id_opts(__u32 start_id, __u32 *next_id,
++					 const struct bpf_get_next_id_opts *opts);
++LIBBPF_API int bpf_btf_get_next_id_opts(__u32 start_id, __u32 *next_id,
++					 const struct bpf_get_next_id_opts *opts);
++LIBBPF_API int bpf_link_get_next_id_opts(__u32 start_id, __u32 *next_id,
++					 const struct bpf_get_next_id_opts *opts);
++
+ struct bpf_get_fd_by_id_opts {
+ 	size_t sz; /* size of this struct for forward/backward compatibility */
+ 	__u32 open_flags; /* permissions requested for the operation on fd */
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index a45666f546fa..4a87b3500741 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -476,6 +476,10 @@ LIBBPF_1.8.0 {
+ 
+ LIBBPF_1.9.0 {
+ 	global:
++		bpf_btf_get_next_id_opts;
++		bpf_link_get_next_id_opts;
++		bpf_map_get_next_id_opts;
++		bpf_prog_get_next_id_opts;
+ 		bpf_program__load;
+ 		bpf_program__load_strategy;
+ 		bpf_program__set_load_strategy;
 
-This commit adds libbpf detection to the rv build configuration and
-implements discovery and listing of compiled BPF monitor object files
-for rv list.
+-- 
+2.56.1
 
-> diff --git a/tools/verification/rv/src/bpf_monitor.c b/tools/verification=
-/rv/src/bpf_monitor.c
-> new file mode 100644
-> index 0000000000000..a5767617c7200
-> --- /dev/null
-> +++ b/tools/verification/rv/src/bpf_monitor.c
-
-[ ... ]
-
-> +static void bpf_object_iterate_path(const char *base_path, const char *s=
-ubdir,
-> +				    void (*action)(const char *name, struct bpf_object *obj))
-> +{
-> +	char path[MAX_PATH];
-> +	struct dirent *entry;
-> +	DIR *dir;
-> +	char *ext;
-> +
-> +	snprintf(path, sizeof(path), "%s/%s", base_path, subdir);
-> +	dir =3D opendir(path);
-> +	if (!dir) {
-> +		debug_msg("bpf: error opening directory: %s\n", path);
-> +		return;
-> +	}
-> +
-> +	while ((entry =3D readdir(dir)) !=3D NULL) {
-> +		size_t size;
-> +		struct bpf_object *obj;
-> +		char name[MAX_DA_NAME_LEN], obj_path[MAX_PATH];
-> +
-> +		if (entry->d_name[0] =3D=3D '.')
-> +			continue;
-> +
-> +		ext =3D strrchr(entry->d_name, '.');
-> +		if (!ext || strcmp(ext, ".o") !=3D 0)
-> +			continue;
-> +
-> +		size =3D (size_t)(ext - entry->d_name);
-> +		if (size >=3D MAX_DA_NAME_LEN) {
-> +			err_msg("bpf: name too long, skipping %s/%s\n", path,
-> +				entry->d_name);
-> +			continue;
-> +		}
-> +		memcpy(name, entry->d_name, size);
-> +		name[size] =3D '\0';
-> +
-> +		size =3D snprintf(obj_path, sizeof(obj_path), "%s/%s", path,
-> +				entry->d_name);
-> +		obj =3D bpf_object__open_file(obj_path, NULL);
-> +		if (!obj || size >=3D MAX_PATH) {
-> +			err_msg("bpf: error opening object file %s: %s\n",
-> +				obj_path, strerror(errno));
-> +			continue;
-> +		}
-
-[Severity: Low]
-Should size >=3D MAX_PATH be checked before calling bpf_object__open_file()?
-
-When the formatted path reaches MAX_PATH, bpf_object__open_file() is
-invoked on a truncated obj_path.  If opening the truncated path succeeds,
-the size >=3D MAX_PATH branch logs a stale errno and continues without
-calling bpf_object__close(obj), leaking obj.  Also, the earlier
-snprintf(path, sizeof(path), "%s/%s", base_path, subdir) does not check
-for truncation when formatting base_path (which is itself sized MAX_PATH).
-
-[ ... ]
-
-> diff --git a/tools/verification/rv/src/rv.c b/tools/verification/rv/src/r=
-v.c
-> index 09e0d85986196..7c4a2e49ff9d1 100644
-> --- a/tools/verification/rv/src/rv.c
-> +++ b/tools/verification/rv/src/rv.c
-> @@ -13,6 +13,7 @@
->  #include <trace.h>
->  #include <utils.h>
->  #include <in_kernel.h>
-> +#include <bpf_monitor.h>
-> =20
->  static int stop_session;
-> =20
-> @@ -76,6 +77,7 @@ static void rv_list(int argc, char **argv)
->  	}
-> =20
->  	ikm_list_monitors(container);
-> +	bpf_list_monitors(container);
-> =20
->  	exit(EXIT_SUCCESS);
->  }
-
-[Severity: Low]
-Does calling ikm_list_monitors() and bpf_list_monitors() independently
-produce broken output when no in-kernel monitors are registered or listed?
-
-tools/verification/rv/src/in_kernel.c:ikm_list_monitors() {
-	available_monitors =3D tracefs_instance_file_read(NULL, "rv/available_moni=
-tors", NULL);
-
-	if (!available_monitors) {
-		err_msg("ikm: available monitors is not available, is CONFIG_RV enabled?\=
-n");
-		return -1;
-	}
-
-	curr =3D available_monitors;
-	do {
-		next =3D strstr(curr, "\n");
-		*next =3D '\0';
-
-		retval =3D ikm_fill_monitor_definition(curr, &ikm, container);
-		if (retval < 0)
-			err_msg("ikm: error reading %d in kernel monitor, skipping\n", curr);
-    ...
-	if (!list_monitor) {
-		if (container)
-			printf("-- No monitor found in container %s --\n", container);
-		else
-			printf("-- No monitor found --\n");
-	}
-}
-
-When CONFIG_RV is enabled without any in-kernel CONFIG_RV_MON_* monitors,
-rv/available_monitors is 0 bytes and tracefs_instance_file_read() returns
-NULL, so ikm_list_monitors() prints the error asking if CONFIG_RV is
-enabled before bpf_list_monitors() lists the BPF monitors (and if an empty
-string were returned, strstr(curr, "\n") would return NULL and *next =3D '\=
-0'
-would dereference NULL).  Even when in-kernel monitors exist, if none are
-printed, ikm_list_monitors() prints "-- No monitor found --" right before
-bpf_list_monitors() prints the available BPF monitors.  In addition, the
-error message in ikm_list_monitors() formats curr (char *) with %d instead
-of %s.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261126130004.1271=
-55-1-gmonaco@redhat.com?part=3D9
