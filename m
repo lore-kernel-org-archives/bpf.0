@@ -1,96 +1,63 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.215
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795664419;
-	b=XttlZmTxJJ+Sa3Kkd7VoGYvdJ0Noq4vdMOZn8ibZxvcAAp8OKPfrCJLg2IdaDw149d08
-	 1QF+XPTI82gnrHNS59RhoKAvEICBsz5s/VKum3HKxWgtjiYlpPdMGvZ/wpHyihtBFghUi
-	 5emUXRByLsL9RQFGyazQSVUCcyseLecBaCcqOqSP9nBC3WL0F7v7xWUbza/FzuwpuezSf
-	 iq7l+FLqQE4DsrZniI2C2Mfa3/k6lBPKkkBz12TDj1qkZeK7bW4xJ6y+cyS6RKfTnIbPL
-	 zJoNiyhH0AbglknXtly32Y+HTepaBSE/6o3Em1p/884zDuQauvjTY+85OSmXa+SpR9Q==
+	t=1795664455;
+	b=HmgtYC6mO+yNqqJtiHOAqAUjMP5eDXu+s2RryuRGlkAtPcbmRW2qj5DEfOeH+i9W/jbl
+	 q4DM7PdN62KpKTAUmFytadCGHwkkv7WoWM9GujAhRPuFR9FJU29S7JNnKV8QBhWGybeIG
+	 ObKUGpNtlW4JZRr0yVgIm0PVextwwHsaJLmUgZiqWeN8RxSPfSy5oeglvJyNq/qR1Li7K
+	 8dygA+ILs6JNziymgZ5ahgvZbbIVPQHMx/V9obtMFA6p08LBG1YKd7lDv0ijN2M5Hozdr
+	 QLhXvMUs3R1VB5CkAe3K0Q764cX0nS0khjXXWWfXRkWHAAWnkUbQ7BasMhT539gholA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795664419;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Content-Type:Date:
-	 Message-Id:Subject:From:To:Cc:In-Reply-To:References:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=EpSXrCFrU3s6PfZNUctQj8nq8UzW3mkfk3pre2dSBf8=;
-	b=WhfqVrHUxXOfFgSYIaVlrcv2jphMZUfcX6TTX6nyZ9H5zTwruVBBLo0rwxvNtArOlu/f
-	 BKjiv2PKx9p6uz2FNHme3B1lx164feOrZC/XJUtqzRaZA7xb6rkLrktD4RtEo59Lt3uZp
-	 GJVUMcL+4FUB11Vqr2Sr4RQhlRQfMXReFmIyEyUlxc8oEXjnHTKNQH2IzjwC8kcrQmJI6
-	 y2HiSfEocb6gfVL3bOToVfZRcuez7DgeuYswTQy66g36fu3U0PYUmfWJ5R8m+6AhGpKp/
-	 akK4PJ8Spa8WgQfBVMHZcVdHpA2TFzVaasBgind0wMkoOgcQa/Q0j0C2cIBUg+QuylQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795664455;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=gArFDwX8F1ZKFuEtJo/mKeuuQAwTF3/hfhRHsBkxe14=;
+	b=IwYmTw0lhlLtndgeWd4FUg1o0bMJr+JC269gxIbtdv2btM4x73N30FeVNjpH/hWBH27W
+	 X2xeXXwOC9iGivw+ICZi/JwDYyU3dnpTnTTA1jT8qe09WYQ/ztNlEtTfeyrr2lOG1+IG5
+	 kfIK4G826jlpoqV3sjVcM4etWSz+T/PBml05wQEU9AwgCs4gV4cfDCYHXsJXK2mze1r2c
+	 zDqQbCNUfoXRCjzhkL93JIL2fIphvc0H1Bb0Vo/a6ln0iiLIxpqV/7a9wmDHdLd9BNGxe
+	 xESNPRVdMGQDWnhb9RqulanRL3WR2yKnSE9BUg6fSK4ZVbGFYLn4Pces5VGF8a+pJog==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=KAINYuZj;
-	arc=none smtp.remote-ip=209.85.214.173
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="cA45a/GP";
+	arc=none smtp.remote-ip=95.215.58.215
+Received: from mta1.migadu.com (out-215.mta1.migadu.com [95.215.58.215])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0C4D606A326
-	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 03:40:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C0C4D606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D270606A32A
+	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 03:40:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1D270606A32A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=KAINYuZj
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2f052ae3c86so36101965ad.1
-        for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 19:40:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795664418; x=1796269218; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
-         :from:subject:message-id:date:content-type:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=EpSXrCFrU3s6PfZNUctQj8nq8UzW3mkfk3pre2dSBf8=;
-        b=KAINYuZjzFzTcSB1W19MD7vR4KrjDmbv8GsH6sDtVjmIMhjr0wX/rkP0bq2kMmSDgY
-         U+ie2Iv8tweqxtVI0igg7OivL7GDSeJQqQgvrvWmpkwr3GOypkJMAkPTpUXJwFKEhF1e
-         cEfWw8A5ju2ndrUsicE2nAcV+QVr1nuf1P9rar74VCd9sIeHmf3XsvH3YCq1TvgpDIvy
-         MEg7+ah7yjsU0QpY2bsD0/0I6r6eEO6uX2ve5AgrPnOsVWrDBbeSLDbaRvvbhz1poVrJ
-         P941dttU6g0/HebTzwxYUvVHjm2oh/O8cy61vVJtqpAmVojYrkwI/HeEYvYB55o5gthT
-         Uqqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795664418; x=1796269218;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
-         :from:subject:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=EpSXrCFrU3s6PfZNUctQj8nq8UzW3mkfk3pre2dSBf8=;
-        b=YyxzSf3JVNORrflW2T8jkb1qdl0kGobAviGZ8Ybbb2HE50j819576NhOh7XYOMJ9Dr
-         gOw57Hk/gAejH+GoEcNXUZ1Y/TSTqMkj93DjnI+j4d9lPagq/EYgjATSeuXyYALInbBE
-         6pctoQvn2Ni190svuSDiO3uL342T88FAeREULq7BHC8eQcv0ct/+QTio7sU+wnBRauHP
-         FJNuuRXlcIA3X64+i1S71L4ZvKYIKRtFmte/bDtzk4Qxu7d2hoE/IUdQRnJ/cjP6lbnJ
-         Nmhay6g+T/Zua4ROCWlO5qyxNaRThcOXKFOd5JpcAU7Pw+xq1XjzN026r4WwxMMIo2Oa
-         gRGQ==
-X-Gm-Message-State: APuU4Z9MvNJgkCshZzbRa+iTvT5JJgLWI/ug9/rG4FyOs2XDVwnP1uBo
-	UuEKvE2hNcVHhWoAj2L1km5jZKUXXZjPcMry50iUrLHqiCJL3x2Kg6/J
-X-Gm-Gg: AZFdTZeVmVrLZvZrbVUzwbyvPr0iNbO1fTCxHJCSgPuddiFNTpbLK1l8UArm5Wrjjum
-	hpGJ2iK+SOQdCS1kS4drFNP/WeBICXZgUH8N64nhiMRaGzF4y5S39eHDTdnHli+ArV72l4qn719
-	s1TvZ/UJoAyPnrkYrM/Vlx1YDIbm+cnlr7OKtQybJZ0Q5hluCedOQ2cTuOFhmZQukoa0Ormo8Ch
-	qlQUY9RyfKMrKb3mPule9vVEmNvoYBV986lrcS9fbZFyulLlZpNH0CvnG+z8yJkeeovJ6heV5RW
-	2Ra6Sa50WiI71apklqsr3cz3CY9kj9G9bhWMWBrzRFV7/gIh/E92PDwfkzy/G3EsOqgF2a14Lhn
-	/cefNxQh+O8Vc2x/DrLQnRix7KTkq6PQLjVF1oboFyj7+1kv2h+val2DQiHNIPqTBMMB41Q7u1m
-	jSTu1DdT++0xw/C4s82ZnuKCcFIkZ873npMgA4j2hv5Y6jpwlQT6tfA9tNF30a/ucyXTYMNoSIz
-	pF4h4c+DRRwvNbsO7rBgOrfljVw6FyvqKehmLnsKRf9Xc/6MFUp3VcfR0B1WDnx9ROgEFQfYx9a
-	aSf/CPtkRMWqhvsZs2H2tZOVEhlRYmhdwzxBhW5lRDJSBfNvydDixW0oXs/iNBnrzY1xL9Pf9yR
-	bCAiW73rwRYmEqMPgV2hWfFP/5C7m16loXA==
-X-Received: by 2002:a17:903:4b04:b0:2e8:4040:792b with SMTP id d9443c01a7336-2f03f18dcbbmr192643845ad.22.1795664418052;
-        Wed, 25 Nov 2026 19:40:18 -0800 (PST)
-Received: from localhost ([153.61.198.241])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2f03f0dc0f8sm95681235ad.27.2026.11.25.19.40.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 Nov 2026 19:40:17 -0800 (PST)
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 26 Nov 2026 03:40:17 +0000
-Message-Id: <DN4TWT5BB3DK.2AHODHZP7ADY6@gmail.com>
-Subject: Re: [PATCH bpf 4/5] bpf: Emit nospec after BPF_ATOMIC stores to the
- stack
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Luis Gerhorst" <luis.gerhorst@fau.de>
-Cc: <bpf@vger.kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
- <eddyz87@gmail.com>, <memxor@gmail.com>
-In-Reply-To: <20261125-nospec-result-reply-d60fdc6da8ef@fau.de>
-References: <20261125040820.947816-1-alexei.starovoitov@gmail.com> <20261125040820.947816-5-alexei.starovoitov@gmail.com> <20261125-nospec-result-reply-d60fdc6da8ef@fau.de>
-Content-Transfer-Encoding: 8bit
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=cA45a/GP
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=2mQrwVec4mBUIh1UvZd6SVhlMXO5Z7932el8cKLMyWc=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1795664453; v=1; x=1796269253;
+ b=cA45a/GPeNtob3E1DZ6v6zvPtaHSJ2zV+2ZGwxFdPDVWjGvlYKDXFJN2KenV5/QxMFKJpqHK
+ PLHDhQ0jZvG918CwdwUXX8EeenfnumAXg8SdcF4on30zVflgfGG2xAKLFrYyzbqlRQlXQMXAHKY
+ ZXgZZE7EGTIKIuiPd5qGEOTk=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id eca903fa5c9c47af;
+	Thu, 26 Nov 2026 03:40:53 +0000
+X-Mizu-Trace-ID: eca903fa5c9c47af
+X-Migadu-Flow: FLOW_OUT
+From: George Guo <dongtai.guo@linux.dev>
+To: chenhuacai@kernel.org,
+	yangtiezhu@loongson.cn
+Cc: hengqi.chen@gmail.com,
+	guodongtai@kylinos.cn,
+	bpf@vger.kernel.org,
+	loongarch@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/5] LoongArch: BPF: Add private stack, exceptions, large stack and arena support
+Date: Thu, 26 Nov 2026 12:40:42 +0900
+Message-ID: <20261126034048.7370-1-dongtai.guo@linux.dev>
+X-Mailer: git-send-email 2.53.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -100,56 +67,122 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Wed, Nov 25, 2026 at 09:12 AM Luis Gerhorst <luis.gerhorst@fau.de> wrote:
-> Would it not be possible to avoid the atomic/call-specific handling of
-> nospec_result? We can patch in the nospec after the call (next
-> patch) and avoid the speculative path analysis there. Then the design
-> would treat all instructions that do safety-critical stores the same.
+From: George Guo <guodongtai@kylinos.cn>
 
-Yes. That is better. Patch 5 also rejects a bounded loop with such
-a call when there is no CAP_PERFMON.
+This series adds the following features to the LoongArch BPF JIT:
 
-> In response to this you find a series that implements this idea. Main
-> downside is that this requires a new instruction buffer in the
-> environment, not sure if this is desired.
+  - private stack
+  - exceptions (bpf_throw)
+  - 2 KiB of stack for programs, the same as on x86-64 and arm64
+  - sign-extending loads from arena (BPF_PROBE_MEM32SX)
+  - atomics on arena pointers (BPF_PROBE_ATOMIC)
 
-bpf_insert_insns() and the new buffer are not needed.
-Here is what I did in new patch 4:
+The series is based on 7.4-rc4 with the following patches applied:
 
-diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-index 9d5f2774bf8f..8c3a17a05a4e 100644
---- a/kernel/bpf/fixups.c
-+++ b/kernel/bpf/fixups.c
-@@ -911,6 +911,7 @@ int bpf_convert_ctx_accesses(struct bpf_verifier_env *env)
- 	const int insn_cnt = env->prog->len;
- 	struct bpf_insn *epilogue_buf = env->epilogue_buf;
- 	struct bpf_insn *insn_buf = env->insn_buf;
-+	bool nospec, nospec_next = false;
- 	struct bpf_insn *insn;
- 	u32 target_size, size_default, off;
- 	struct bpf_prog *new_prog;
-@@ -994,8 +995,13 @@ int bpf_convert_ctx_accesses(struct bpf_verifier_env *env)
- 		enum bpf_reg_type ptr_type;
- 		u8 mode;
- 
--		if (env->insn_aux_data[i + delta].nospec) {
--			WARN_ON_ONCE(env->insn_aux_data[i + delta].alu_state);
-+		/* A call or an atomic gets its nospec in front of the next insn */
-+		nospec = env->insn_aux_data[i + delta].nospec;
-+		WARN_ON_ONCE(nospec && env->insn_aux_data[i + delta].alu_state);
-+		nospec |= nospec_next;
-+		nospec_next = env->insn_aux_data[i + delta].nospec_result;
-+
-+		if (nospec) {
- 			struct bpf_insn *patch = insn_buf;
- 
- 			*patch++ = BPF_ST_NOSPEC();
-@@ -1102,6 +1108,7 @@ int bpf_convert_ctx_accesses(struct bpf_verifier_env *env)
- 			delta    += cnt - 1;
- 			env->prog = new_prog;
- 			insn      = new_prog->insnsi + i + delta;
-+			nospec_next = false;
- 			continue;
- 		}
- 
+  1. My 1 fix patch:
+     LoongArch: BPF: Fix the offset of stptr.w and stptr.d stores
+     https://lore.kernel.org/loongarch/20261118071444.10258-1-dongtai.guo@linux.dev/
+
+  2. Tiezhu's 1 optimization patch:
+     LoongArch: BPF: Optimize doubleword loads with ld.d and ldptr.d
+     https://lore.kernel.org/loongarch/20261118081201.10498-1-yangtiezhu@loongson.cn/
+
+  3. Tiezhu's 4 feature patches:
+     LoongArch: BPF: Support instructions array, indirect jumps and calls
+     https://lore.kernel.org/loongarch/20261123043907.20225-1-yangtiezhu@loongson.cn/
+
+"LoongArch: BPF: Allow programs 2 KiB of stack" needs the stptr fix:
+stack stores beyond the signed 12-bit offset range use stptr.{w/d}.
+
+With this series, the following tests passed on a LoongArch VM (Fedora
+43, clang 22.1.8):
+
+  $ sudo ./test_progs -t exceptions
+  Summary: 1/119 PASSED, 0 SKIPPED, 0/0 FAILED
+
+  $ sudo ./test_progs -a verifier_large_stack
+  Summary: 1/17 PASSED, 1 SKIPPED, 0/0 FAILED
+
+  $ sudo ./test_progs -t tailcalls
+  Summary: 1/43 PASSED, 0 SKIPPED, 0/0 FAILED
+
+  $ sudo ./test_progs -t struct_ops_private_stack
+  Summary: 1/4 PASSED, 0 SKIPPED, 0/0 FAILED
+
+The skipped verifier_large_stack test only runs without large stack
+support.
+
+  $ sudo ./test_progs -t verifier_ldsx | tail -1
+  Summary: 1/24 PASSED, 0 SKIPPED, 0/0 FAILED
+
+  $ sudo ./test_progs -t arena_atomics | tail -1
+  Summary: 1/11 PASSED, 0 SKIPPED, 0/0 FAILED
+
+  $ sudo ./test_progs -t libarena | tail -1
+  Summary: 2/43 PASSED, 0 SKIPPED, 0/0 FAILED
+
+libarena also needs commit 27f2cf406a35 ("selftests/bpf: libarena: Raise
+arena spinlock CPU limits") from bpf-next, since CONFIG_NR_CPUS is 2048
+by default on LoongArch.
+
+The struct_ops_private_stack, arena_atomics load-acquire/store-release
+and libarena parallel tests, the arena tests in verifier_ldsx and the
+"private stack: two frames of 2048 bytes" test in verifier_large_stack
+are enabled for LoongArch by a separate selftests series for bpf-next,
+which was applied for these runs.
+
+Changes since v2:
+  - Drop v2 patches 1-3: "Support internal-only MOV to resolve per-CPU
+    addrs" and "Add timed may_goto support" are in mainline, and "Fix
+    tail call count pointer offset for arena programs" is superseded by
+    commit cd7e356b07a2 ("LoongArch: BPF: Move arena register slot below
+    TCC context").
+  - Patch 2: arch_bpf_stack_walk() went into mainline on its own as
+    commit e7103e5e3bde ("LoongArch: BPF: Add arch_bpf_stack_walk()
+    implementation"), so this patch only changes bpf_jit.c now.
+  - New patch 3: allow programs 2 KiB of stack.
+  - Patch 4: add bpf_jit_supports_insn() without the atomics rejection
+    that patch 5 used to remove (Tiezhu).
+  - Patch 5: on a fault, clear the register that the instruction loads
+    into instead of leaving it stale (Sashiko).
+  - Patch 5: emit cmpxchg on arena as a single amcas_db.{w/d}, only when
+    the CPU has LAMCAS, since the sc of an ll/sc loop can fault too
+    (Sashiko). Pass the new value in a temporary register, since rd of
+    amcas_db must differ from rk.
+  - Patch 5: drop the __add_exception_handler() split, which only the
+    ll/sc entry needed.
+  - Drop "selftests/bpf: Add LoongArch deny list" (Tiezhu).
+  - Move the selftests patches to a separate series for bpf-next,
+    "selftests/bpf: Enable private stack, large stack and arena tests
+    for LoongArch".
+  - Reword the subjects and commit messages following Tiezhu's style.
+  - Rebase onto 7.4-rc4 and the patches listed above.
+
+v2: https://lore.kernel.org/loongarch/20260702022322.51033-1-dongtai.guo@linux.dev/
+
+George Guo (5):
+  LoongArch: BPF: Add support for private stack
+  LoongArch: BPF: Add support for exceptions
+  LoongArch: BPF: Allow programs 2 KiB of stack
+  LoongArch: BPF: Add support for signed arena loads
+  LoongArch: BPF: Add support for arena atomics
+
+ Documentation/bpf/bpf_design_QA.rst |  13 +-
+ arch/loongarch/include/asm/inst.h   |   4 +
+ arch/loongarch/net/bpf_jit.c        | 391 ++++++++++++++++++++++++----
+ arch/loongarch/net/bpf_jit.h        |   1 +
+ 4 files changed, 355 insertions(+), 54 deletions(-)
+
+
+base-commit: b6a9fa34ce4187cb69d3c588a4bbffc31ce5db8f
+prerequisite-patch-id: ee451ad20d651112f42e66d7ba6fa4242b124fb4
+prerequisite-patch-id: 403cb992a7f660379bedce79e3068f1bc6facf05
+prerequisite-patch-id: 221fa3fc56a55b9a7462ae7b21330a660240c8d2
+prerequisite-patch-id: 08e033b51cefbf1d41f2e5325d591ff900ab81ef
+prerequisite-patch-id: ffd6050832069f626c1f55492f0a1898137f6aa4
+prerequisite-patch-id: 25f0b3ea5219dfd0676bdf22466453f2bf5dd5ea
+-- 
+2.53.0
+
