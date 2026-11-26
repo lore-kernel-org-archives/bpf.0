@@ -1,48 +1,48 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795726811;
-	b=IippqUbKy0K3+cyACZjPr4sicBE2PeD9wiP5NrbgvZuAJ8XM8Bg+vKwJbSOiK1ItjnNf
-	 bw3FooxsCfX3+4l3lOAH9fPbx2ByPPg6jIQXdRa6zZ5EgBlP/lukAduVTwgPL6h9ZVGpp
-	 tkoxbbllm2E7K1++P4KdQicZJe5HBN6SU5tCKkE+3FfLN6KnqHCEiSRZvSLD28700t93E
-	 AGSnH1YJ8YCjdLxkWM8/NuGhvZnHLSCi/H3goWE0n6/ORtmjbr/8ONXXGDA0Y/avnEkyH
-	 J80qt7aGIUg/yTaFkxAtidk8GQkva6Ew6m2wmaBw9BdXGo7mZi985Io3yxVGFSRIUcA==
+	t=1795726813;
+	b=4PonOJBgPo1F2UOdagq0IwzhFq15h8gLg+/BdoFUOYvorxoeMhpfMxTuFw/617PIMhEd
+	 I+L/mLRL+a98dacRuxc7DQnHAmyxt12bbrNKnOtL7yut/CP+rsoCYV4chwRXi3I2jlGgT
+	 7DWy2v8tr9aw7/ZgOex8GeoeUENTx+fceCIkZuP/n9623H3xqq2ilEs+paWoOT8HGSS9W
+	 pwQfKFVN54RuRVE6v6yzMpnzxf4cf8Zc47dyzUjPEKSOc6kCqKX2/KEN+KZwxs8TT1aUN
+	 D4wTfsGWPXJ1QsWpNHu9VDp80yfLaIRRCBJ/jevt+kFpyEvEZczsV3sjFp04+pDyiOw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795726811;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795726813;
 	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
 	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
 	 In-Reply-To:To:Cc;
-	bh=NoDfeyGoIklTM5RSCeaDwUrWwnDmdTAsi1A/C5VilLQ=;
-	b=0Q5PwxxZbaEHBMcPblB5wYI2EDfbxzo8sELq89nMzauhiJ2mC7k06pqvzkued6xqo2iX
-	 ttX1H628pVhWmzsBErKT6JtuC2yeustfmJHriWLT7QNwe+h4P95tKeB0Fbdf4/xZYmXgo
-	 pmX9wCOQowVtkxKX3ijrpt3lheO+o5ltOJ9wYtoe03uRXz+b5AIP6Qj7gZ2/y6lRbQRTy
-	 IW8FiEVL8nHXAy0mu+tBsImM1Z4bXptgEqr4xZxyejYJ7zrK9M1Vgw1/zKCLjiNMh/ucb
-	 nn0rVfOAGmxSITR7eRDO+GUnltlgc5P8MME2oqRen/EG5Z6lb8scagvSnyGv/yB7OJg==
+	bh=PLT/2lDKmHbd4JDe5EJl4vYRRb/4MLtJHPKtDIyvg7k=;
+	b=3rldY9rTZeH2rGXbL5ae8mVRtnLBtsM9IJJufva0LgiCXWmYUf5Z6jafSWCz4oJJxFhG
+	 gsaB8lpR9nMMNxflKEYOeWu7D0T6R6M84FqdDoINSwGEWIl0VvanjZqpkGTe0dWMUC/np
+	 tG0+hdlnffkzVJbhaI0Ey+Ge3NC3qLt+hasCoQdVb/8G7NkYUEP1Trhzdctvg6n8/2e+F
+	 AEKofMZyGwAxxOST+jKaTIqZb9b+AoeQ4tOdK4Tj17iYsV8dRkuVFs6dPbfRWHeDrNMib
+	 JL9hvRAASAyc6+Y60cM0qNvaydh/mWqk5Aaizz33EdbqsvYNy0UZ+9rPfe6WqBdj8xw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=f4uaAQBg;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JIkjM2EL;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5FDC606A685;
-	Thu, 26 Nov 2026 21:00:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08E46606A690;
+	Thu, 26 Nov 2026 21:00:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=f4uaAQBg
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DE5F1F0089C;
-	Thu, 26 Nov 2026 21:00:11 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JIkjM2EL
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDC421F0089C;
+	Thu, 26 Nov 2026 21:00:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795726811;
-	bh=NoDfeyGoIklTM5RSCeaDwUrWwnDmdTAsi1A/C5VilLQ=;
+	s=k20260515; t=1795726812;
+	bh=PLT/2lDKmHbd4JDe5EJl4vYRRb/4MLtJHPKtDIyvg7k=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=f4uaAQBgTi3dI3blYNcGL7fXhmNA9jU1odNDZ/we7aKrNBDO/wDhfhJFClrNN3YWz
-	 psxQaGZweHSPC4q5rfRgMQH4yoCn+yzrZ/krKZ+/irz2PTjyYY0qG/l1nm4SuPkKdF
-	 OnS6otpA2EYyf1Oy3oD4SMyWGIzAqfiVrFoaW9MQaiUk8NOdjeJC2WCo8FAWNxT5jt
-	 nhb6d+X5Q/g4zIfppODf276LobVmCpiH1VcSdufEupaNe2b0ZH/1UOEfBdEDfATaLP
-	 +o5OGnn2TQWKfsAlJ3iRVLfX3XCKdmTGITZfd0fzzb1D/FWbG5MEqyxxOZegO5xGPo
-	 daH+/64lIF6gw==
+	b=JIkjM2EL/0IAgJ0PWvYlEqPvY8zaXXWIw4TN6n05PSWSsDd7ABpfKWC+/OCwA3V3h
+	 j0hAJMDFpE2GiHAejtvcOJU272TEXjiLO3uYGtVlIy0blgY4jS9/vwSBVT2Wi1zAs5
+	 PAJVqcZdaURFcdfIpg0nYSng5FTWlrYhv0yM8O0W+CSxflixNzdbBi5r2oi49pkz2w
+	 1kmcF+58IdSDczMuEXdTbiWM0oXyepnLZdKEagiz2P37rvG3qcRLMuWcgewD2lLUII
+	 D7Y0wFdvKmbsttu0TBrJqK8GlYFNqdkj1YXn9vI5nGcwsc9J3Na7COKHTscfAkF044
+	 XETPVNqZRQ4sw==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 34C0A3803326;
-	Thu, 26 Nov 2026 21:00:11 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id AE7923803329;
+	Thu, 26 Nov 2026 21:00:12 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -54,46 +54,44 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2] selftests/bpf: Fix kallsyms parsing with long Rust
- symbols
+Subject: Re: [PATCH bpf-next v4 0/3] Fix unaligned enum values in btf_dump
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <179572680975.617567.11224872814677124875.git-patchwork-notify@kernel.org>
-Date: Thu, 26 Nov 2026 21:00:09 +0000
-References: <20261125-selftests-bpf-rust_sym-v2-1-6cf5cff663e6@marliere.net>
-In-Reply-To: <20261125-selftests-bpf-rust_sym-v2-1-6cf5cff663e6@marliere.net>
-To: =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re_=28SUSE=29_=3Cricardo=40marliere=2Enet?=@aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org,
-	=?utf-8?q?=3E?=@aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org
-Cc: andrii@kernel.org, eddyz87@gmail.com, ihor.solodrai@linux.dev,
- ast@kernel.org, daniel@iogearbox.net, memxor@gmail.com, martin.lau@linux.dev,
- song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
- emil@etsalapatis.com, shuah@kernel.org, ojeda@kernel.org, boqun@kernel.org,
- gary@garyguo.net, bjorn3_gh@protonmail.com, lossin@kernel.org,
- a.hindborg@kernel.org, aliceryhl@google.com, tmgross@umich.edu,
- dakr@kernel.org, daniel.almeida@collabora.com, tamird@kernel.org,
- acourbot@nvidia.com, work@onurozkan.dev, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- rust-for-linux@vger.kernel.org
+ <179572681124.617567.14070682184136195830.git-patchwork-notify@kernel.org>
+Date: Thu, 26 Nov 2026 21:00:11 +0000
+References: <20261126011222.92180-1-dennylin0707@gmail.com>
+In-Reply-To: <20261126011222.92180-1-dennylin0707@gmail.com>
+To: Hungyu Lin <dennylin0707@gmail.com>
+Cc: andrii@kernel.org, bpf@vger.kernel.org, ast@kernel.org,
+ daniel@iogearbox.net, eddyz87@gmail.com, memxor@gmail.com,
+ martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+ jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
+ alan.maguire@oracle.com, shuah@kernel.org, alexis.lothore@bootlin.com,
+ luisflavieira@gmail.com, ameryhung@gmail.com, david.laight.linux@gmail.com,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 
 Hello:
 
-This patch was applied to bpf/bpf-next.git (master)
+This series was applied to bpf/bpf-next.git (master)
 by Alexei Starovoitov <ast@kernel.org>:
 
-On Wed, 25 Nov 2026 08:03:18 -0300 you wrote:
-> load_kallsyms_local_common() reads /proc/kallsyms with a 256-byte line
-> buffer and stops parsing at the first line sscanf() cannot handle. Since
-> commit b8a94bfb3395 ("kallsyms: increase maximum kernel symbol length to
-> 512"), symbols may be up to 511 characters, and on CONFIG_RUST=y kernels
-> some mangled Rust symbols (e.g. drm_panic_qr helpers) overflow the buffer.
-> fgets() splits such a line, the remainder fails to parse and every symbol
-> after it is silently dropped.
+On Thu, 26 Nov 2026 01:12:19 +0000 you wrote:
+> btf_dump_get_enum_value() reads unaligned enum values through
+> btf_dump_get_bitfield_value() with a zero bit size, which shifts a
+> __u64 by 64. Patch 1 copies unaligned enum data into an aligned buffer
+> instead, as btf_dump_int_data() does. Patch 2 makes the zero check of
+> enum bitfields read only the bytes of the bitfield, as Alexei suggested
+> in the v3 review. Patch 3 adds the tests Alexei posted in the v1 review.
 > 
 > [...]
 
 Here is the summary with links:
-  - [v2] selftests/bpf: Fix kallsyms parsing with long Rust symbols
-    https://git.kernel.org/bpf/bpf-next/c/dc0049f3860a
+  - [bpf-next,v4,1/3] libbpf: Fix sign extension of unaligned enums in btf_dump_get_enum_value()
+    https://git.kernel.org/bpf/bpf-next/c/74ff49675ee3
+  - [bpf-next,v4,2/3] libbpf: Fix zero detection of enum bitfields in BTF dumper
+    https://git.kernel.org/bpf/bpf-next/c/3a3224cd0866
+  - [bpf-next,v4,3/3] selftests/bpf: Dump unaligned enums and a zeroed fs_context
+    https://git.kernel.org/bpf/bpf-next/c/dda6568362cf
 
 You are awesome, thank you!
 -- 
