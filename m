@@ -1,45 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=114.242.206.163
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795657484;
-	b=d2bUkZBWyA2iQ0HBmjaK5LljUq5o8faOGOrHd6T6N4UATNTYeclErTn6VWbmcHW3ppcb
-	 OMqElMiO9AjM8Xk1ZtRM0pEBahNENMC+e+j5aFxPi+dlKmg7hfCWV+MQE075S/AMe0Oem
-	 Bzu1u9tavwPTTcsNAlNL+ShwxGQ1V/YwEUngY/Tw4QJGPA3HA8IEBk7k9BZpbkwIP/2tv
-	 9MzYWgt00SYRRYboryPDOrX5n1EglRbuVsZLULlAq2+nfmgJCaoeZtl7ZDxqt/q10572L
-	 oLJgZ4rWS1FQdF8R2k2l31WP1Pzop9yv9cT0CF2Ni/7I1ntvSCOi5u4s2pFkQTpwvYQ==
+	t=1795658531;
+	b=S6GIEsbQpaw8Pssa9uK8e8MIJ7njmYqXop3XS+YySSshmYZ6cThOoB94tHl6+7CfD5Ri
+	 ka1RCgUUEAUARWTSuvocLmWYntplmhAwc0zAhOMIeg8NWSQfPI/YIkNrB666OWLqY7cBp
+	 bC36VYPlShD85JS+IFvwnKNUJbbB4wlab4oiYgcFD7c64aIhecm6jQLDwNfoTdmLN3RFZ
+	 PCmAS79O8JOxklMrxZXqNLJnddQcp5Jq7oN95ZtGa5FtfAvxnowFeyNad8tauvEzH0Qlo
+	 RZsu+NDCoHwcSxPFtLr7i0FF4CQ3LeIeywXzVWEp9nnfNiiEDXJu8OXyRsZqLvdOrvA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795657484;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=RXTTwRuZfj4iS0OA9NEWLOPlyuSgnregjQXzrq7V2OQ=;
-	b=M4W5YGgcj2ViMuLkTDVTSTYEDvE0OnjEBQbpQ/v5enSbyRAZsI0KZbHNe+lY80E9XjbG
-	 UauIoRXZkvGBaRTeQ7kuF8NTJicCVfhpfl514LNyrarwHVMgJgNIGmPAfIJMUH9EPl9Er
-	 9NUJ9xNJg2b05hWiBLrNpsmMBiszGB3WAJejuwNSUZz0SE1KXMwCk0mKgw0qLSxqHXpmS
-	 PNCNeYONQfGPVehM8w29r4zHPHpc1Uycwc1VuH84+lj6Mn6dAVTDWdBLvUNZf4MD85ylD
-	 jzSsFdeVcS9+U/JKO8mDfZXdzg++azHBM71KuvzzKNwQIyTINuaJ+ANnyMRv7CjEEeQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795658531;
+	h=DMARC-Filter:Received:Received:Subject:To:Cc:References:From:
+	 Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:Content-Type:
+	 Content-Language:Content-Transfer-Encoding:X-CM-TRANSID:
+	 X-CM-SenderInfo:X-Coremail-Antispam;
+	bh=F89I1g6d8xmtBB7mY85xmIJWfFhPXLIxLjU4qL0HIPs=;
+	b=pP/CJNBP5QP6v/CLN+LQZtd8IFxWOpF0yRbvFGZb2VQzMdEcMB864yk4TryQbdtaeyW1
+	 VDkIpfgrymJFHd/6UxNElV8bTn9NgjFNhoHEPz4YfSoIQbMkCjLW/pUo9l4+pJ+4p/3tW
+	 7LOsgNYFg6QQ/e9Hji3nW9RwfhmqqLZzrkgPDtkC762bD7mhh5E5WnaW1Ae0b0Ck7YrN7
+	 gTI1RsRQoSxpNAF7/pxoKXreSTPqHZZYZedGT3P0XCQH/2fY6vxvtAOOrVN9AQ3X9xZ4V
+	 RV6HtIjO0NppwCn+vsF7wKZ+6Rhu1yEkIZ5KtRDXupaDCTRSpXEZO4G+wNdcbXuqduQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="RB/hzgI4";
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65E59606A31E
-	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 01:44:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RB/hzgI4
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF04C1F000D3;
-	Thu, 26 Nov 2026 01:44:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795657484;
-	bh=RXTTwRuZfj4iS0OA9NEWLOPlyuSgnregjQXzrq7V2OQ=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=RB/hzgI4+oGhu7E0KI6aCiVuv/I8Nj4kYcdwOg575v7EsUgmfiOHUBNsNiy7zkvZs
-	 NTQzM9v0BJln0byiO+Y1e7sPWKjN0P5mg8UJS4pjiyGFUS3KJh25sajfa/izGWU1Kw
-	 OQozddQlZyIKJDb3I1cMn5AU54ZjQpwO3LO0mC7GBq7I6Q1WlCZ8YF0BGZNcXTR1qY
-	 GecNb0JcO1T/LXIIWRq06SDdd8wtTatIPdU76O6Hc8hm9NdaAFYJPNx0ytzdWMrLLo
-	 o/tYOv8DZHPXlvRWRPGbFYL12OGTUJLojhFFFRJFBgQzrHqjvA1Y8TUhymf+7cbP/H
-	 BNae50xziWkHA==
-Content-Type: multipart/mixed; boundary="===============8688468922052142856=="
+	dmarc=none header.from=loongson.cn;
+	spf=pass smtp.mailfrom=loongson.cn;
+	arc=none smtp.remote-ip=114.242.206.163
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21F79606A321;
+	Thu, 26 Nov 2026 02:02:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 21F79606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [123.138.236.242])
+	by gateway (Coremail) with SMTP id _____8DxpvAfkwdr1RsjAA--.34150S3;
+	Thu, 26 Nov 2026 10:02:07 +0800 (CST)
+Received: from [127.0.0.1] (unknown [123.138.236.242])
+	by front1 (Coremail) with SMTP id qMiowJAxFs0ckwdrMGk3AA--.52566S2;
+	Thu, 26 Nov 2026 10:02:05 +0800 (CST)
+Subject: Re: [PATCH bpf-next v1] selftests/bpf: Restrict JIT tests to 64-bit
+ LoongArch
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: bpf@vger.kernel.org, loongarch@lists.linux.dev,
+ linux-kernel@vger.kernel.org
+References: <20261125103208.15242-1-yangtiezhu@loongson.cn>
+ <DN4QVSWEI27E.32PRRHCUBAZFK@gmail.com>
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <d308dec5-a310-344b-7ff5-0e67e118d9b8@loongson.cn>
+Date: Thu, 26 Nov 2026 10:02:04 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,89 +58,54 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <41db8655d68e95b55ae7c237ddbabf808910aff7a467827a85edd8e31aa039d5@mail.kernel.org>
-In-Reply-To: <b887fe56f02f8578e41cf0009da7638fb6f8ec0c.1795627805.git.m202672221@hust.edu.cn>
-References: <b887fe56f02f8578e41cf0009da7638fb6f8ec0c.1795627805.git.m202672221@hust.edu.cn>
-Subject: Re: [PATCH] bpf: Require a bpf_spin_lock for bpf_list_head and rb_root
-From: bot+bpf-ci@kernel.org
-To: m202672221@hust.edu.cn,bpf@vger.kernel.org,ast@kernel.org,daniel@iogearbox.net
-Cc: andrii@kernel.org,eddyz87@gmail.com,emxor@gmail.com,m202672221@hust.edu.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Thu, 26 Nov 2026 01:44:42 +0000 (UTC)
-
---===============8688468922052142856==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+In-Reply-To: <DN4QVSWEI27E.32PRRHCUBAZFK@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:qMiowJAxFs0ckwdrMGk3AA--.52566S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj9xXoWrKw1kGr1ftF4fGFykJFyUtwc_yoWkJrg_uw
+	4xGryrCr1UAryqy3WFgF1FyrZrJFWDJ3y8XrWfXrZ7uas3Ja1rJFs5Gr1fXFy7JrW0kFn8
+	Gan0vr47XF1UXosvyTuYvTs0mTUanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvT
+	s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
+	cSsGvfJTRUUUb3AYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
+	vaj40_Wr0E3s1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	w2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+	WUJVW8JwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267AKxVW8
+	JVW8Jr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4
+	xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v2
+	6r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67
+	vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v2
+	6r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17
+	CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF
+	0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIx
+	AIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIev
+	Ja73UjIFyTuYvjxU7XTmDUUUU
 
-> bpf: Require a bpf_spin_lock for bpf_list_head and rb_root
+On 11/26/26 9:17 AM, Alexei Starovoitov wrote:
+> On Wed, Nov 25, 2026 at 02:32 AM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
+>> Now that 32-bit LoongArch support has been added to the kernel while the
+>> eBPF JIT remains 64-bit only (HAVE_EBPF_JIT depends on 64BIT), limit the
+>> BPF JIT-specific test cases and architecture macros to 64-bit LoongArch.
+> 
+> Most of them are not JIT-specific.
+> The interpreter runs sdiv, bswap, movsx and gotol.
+> The default build of test_progs fails against such a kernel anyway.
+> dummy_st_ops_success.c takes struct bpf_dummy_ops from vmlinux.h,
+> and that struct is under CONFIG_BPF_JIT.
+> raw_tp and kprobe progs can't load there either:
+> 
+>    select HAVE_PERF_EVENTS if 64BIT
+> 
+>> This is a cleanup patch, inspired by Sashiko AI review:
+>> https://lore.kernel.org/bpf/sashiko-outbox-228693@kernel.org/
+> 
+> That comment is about the new guard in bpf_insn_array.c.
+> Nothing is broken. I don't think we need this patch.
+> Pls don't change 16 files because a bot said so.
 
-TL;DR: Requiring bpf_spin_lock for list/rb roots may break existing programs
-that use bpf_res_spin_lock, which now fail BTF or program load; fixing the
-free path instead is suggested.
+OK, understood, please drop this patch.
 
-> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> --- a/kernel/bpf/btf.c
-> +++ b/kernel/bpf/btf.c
+Thanks,
+Tiezhu
 
-[ ... ]
-
-> @@ -4302,8 +4302,7 @@ struct btf_record *btf_parse_fields(const struct btf *btf, const struct btf_type
->
->  	/* bpf_{list_head, rb_node} require bpf_spin_lock */
->  	if ((btf_record_has_field(rec, BPF_LIST_HEAD) ||
-> -	     btf_record_has_field(rec, BPF_RB_ROOT)) &&
-> -		 (rec->spin_lock_off < 0 && rec->res_spin_lock_off < 0)) {
-> +	     btf_record_has_field(rec, BPF_RB_ROOT)) && rec->spin_lock_off < 0) {
->  		ret = -EINVAL;
->  		goto end;
-
-Does this reject layouts that load and verify today?  The commit being
-fixed says:
-
-  The bpf_res_spin_lock can also be used to protect objects that require
-  lock protection for their kfuncs, like BPF rbtree and linked list.
-
-It also changed check_reg_allocation_locked() so the graph-root lock check
-accepts res locks:
-
-  -	s = find_lock_state(env->cur_state, REF_TYPE_LOCK, id, ptr);
-  +	s = find_lock_state(env->cur_state, REF_TYPE_LOCK | REF_TYPE_RES_LOCK | REF_TYPE_RES_LOCK_IRQ,
-  +			    id, ptr);
-
-That verifier code is still present (now REF_TYPE_LOCK_MASK) and this
-patch does not touch it.
-
-With this patch, a struct with a direct bpf_rb_root or bpf_list_head
-member plus a bpf_res_spin_lock makes btf_parse_fields() return -EINVAL,
-and btf_parse_struct_metas() treats that as fatal, so BPF_BTF_LOAD fails.
-
-For a global-data layout with both in the same .data.X section,
-map_check_btf() leaves map->record as ERR_PTR(-EINVAL), and verification
-then fails in process_spin_lock() ("has no valid bpf_res_spin_lock") or in
-__process_kf_arg_ptr_to_graph_root() ("not found at offset").
-
-Before this patch both layouts loaded and passed verification.  The only
-defect was at teardown, where bpf_obj_free_fields() hit
-WARN_ON_ONCE(rec->spin_lock_off < 0) and skipped the root.
-
-The commit message says "Nothing in the tree relies on the relaxed form
-yet".  That covers in-tree users only.  Out-of-tree programs, for example
-sched_ext schedulers written for v6.15 and later, could use the
-combination, although I have not confirmed any do.
-
-Would teaching the free path to use rec->res_spin_lock_off be an
-alternative?  That would address the release-time WARN without rejecting
-programs that load today.
-
-If the restriction is kept, the verifier's res-lock acceptance for graph
-roots becomes unreachable and could be cleaned up in the same series.  Should the
-commit message also say that a feature documented in 0de2046137f9 is being
-withdrawn?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/45736338787
---===============8688468922052142856==--
