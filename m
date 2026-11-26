@@ -1,45 +1,66 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.35
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795708053;
-	b=sOfm30U7Com+bVcylUC1y9Y7HWG3/WcBI7rwQKrdWupKj5MQp+BdTuGqAqB5PrDAzg/O
-	 VbBR3llaVOlsSHof174BmvS8pg/iZq0rFRNlTBwgeBIRBWioZAROCtXsrIeiBW6lLPOqc
-	 5JOBzbTiESobKuvlhtJucBct3h18Wq+lxxSvttTiXmSkSP+ZUXbA1zzXFeasGqFdapArk
-	 /ruk+hUuKZkA2uMDmOim3J6nWIu6NNGev+96nHMVeuzFhJsZupi/7ZAqK3YCOei47YMUF
-	 WYDZSaeaTZItxewdyBeWjnBq+g4efXJ12+XxY3feFpKthcyendLcVCOagd+pmdIEiIA==
+	t=1795708096;
+	b=2U7reRr9uZ6CZKia+iix3T0Vv7vyK7/0o+pdOoYgmPqHQiHfMk1ltaJ3JbEBDRSUTD1C
+	 0MayR4kuZBPOGtzNAy5FRisyt3ByftRtxEWMuD2mh6UDv5IXkJ2DKOW13RxxlzQCKfI18
+	 W02bN1C9aG1IM2v2JSxrlttQc93vQm1jxyoYdaNUo6Y6ZvEvBSSTmCjpXwt4/ZQgJMlGT
+	 WTmYCoUQmA/d5cF7DXzoQJXPzaOcuedgaxYToyMhIetECGgUkCeQn7UcsxQyHgEA0CNkP
+	 fQLg1NwY/UyZQC1F9hVAOCf0k4YMQGaD40XRsSz87iieC9Eul4Zv72ijbsa54ZSXygQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795708053;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=A8XfQkt93awT1q8iV7D8gI7ZDfBSM+KMHfE7UUFp8JY=;
-	b=XLqo0q1oAxTC8/1bHKzcKmmzY0oJPurh149msf6CIdU/z/F84LVm5kEMHhVrQL9+dbfo
-	 DOQK7BW/uthGENWSHvSv39BK0HgDdlJa+kESoIjB4jKHueWlCrUjgf6yd7Igk6TiKKey8
-	 YYzwefwNUtAiSNI/QUKZCi1eEKhM+qMxA/F4h81YonS71Z5358SrLuTU2mJ+4MZ1D6d7U
-	 heDSxmj60K8EDGYgsDx2bSaBr3XI+Qj8Is1JXL7ChVhzP9GrQxrEYyDK1WntXbMNrdIPL
-	 tIEu6r2XRKOw6fNwXek4d426YB3scSFlmn3lbdyPfu/3dnlEsIidvJ1Lu4rS0M0Iv0Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795708096;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=iqhBRS59PTgKeV6kXKxuNnAYvtcJ2dXB934gAWnaYIg=;
+	b=Wfj1gzyO3WjcV5hiL9uf4EECU7Vu3sHUAOh1X1uc9sYqXS/Chmt0A3ND2vOKKbNSNQYL
+	 LxuISxywW4uGv+gi/Yhi67KzXVlsH+E0tzJr2vQVkH0gxXOrzEcFAJuM3YHnCiR9ude3Y
+	 HnDwxo2p1S6cR51HHtCeg5dzuAUaJTlQCnTYlazT44WycptnXUdlplMX3TTWtitVt8NwD
+	 0m0dXOM1J9E1S1W4RdU5PPihO70pO4ASyUrrqM2+NDV2yEOS4Uog6mfcOf4uc1KYnFEtT
+	 wqTB74ONPgn27pMVNsN4hg7nCT3QPf+2X6cdj2UWo6YGtbSALOvPwtErGvGUcf8QkAg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=a9x0LxIz;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=kyELCG8s;
+	arc=none smtp.remote-ip=91.218.175.35
+Received: from mta0.migadu.com (out-35.mta0.migadu.com [91.218.175.35])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E3AF606A330
-	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 15:47:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC125606A32C
+	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 15:48:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EC125606A32C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=a9x0LxIz
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D6EC1F000C6;
-	Thu, 26 Nov 2026 15:47:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795708053;
-	bh=A8XfQkt93awT1q8iV7D8gI7ZDfBSM+KMHfE7UUFp8JY=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=a9x0LxIzVVJ4emUpzVn2ra80qRZsFo3q0Y0PPGBGwoQVofJZJSRYPwF3Rn0lGCIS5
-	 d6Rf71ue8ve7TB/skUSTzM8cf54G46M0P0jESeymghRYJing3TP+vEJaURPZ+j5bPL
-	 wz4UYU9AScbXg44lNRmWbWQd1/re9Fi7NZXgEQT4f9Rn3L1ijxtWnHCqmBpaASJ28c
-	 fYFQiMptRTHFx/inNPaB+0fdFImgDbZSJuzAGh4I1c1l785c061abwWj4E81S+kZ6K
-	 X4r5GFRD4hkmAZ5QcoRC3zYnbQ09obry1AKGsbvySfoQobXZDfeAmbMjHYO+yMdIH6
-	 rrE2uV2jioxyQ==
-Content-Type: multipart/mixed; boundary="===============4603946495888804730=="
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=kyELCG8s
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=+LBJkLt2mDpgOjIwkdoz+vWwwjI9J6p/J12jl6W3mmo=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1795708093; v=1; x=1796312893;
+ b=kyELCG8sa16zhs1LFw6wXdoFH1oygP4o7X6g58cs0VFfcPizCvYFzXOxvabHz6WC8a2240LK
+ CHnByD7bOiXFitP/sM/dLoJ0zdJMDcZ+bnx0WaNRhnhQ+a9QXOkRd55IJ2UXvWncPxjrsjZKvgH
+ s1HNco/jzcQVdhuPhrUR65EY=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 5a70713291a611fb;
+	Thu, 26 Nov 2026 15:48:12 +0000
+X-Mizu-Trace-ID: 5a70713291a611fb
+X-Migadu-Flow: FLOW_OUT
+From: Leon Hwang <leon.hwang@linux.dev>
+To: stable@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Guillaume Laporte <glapt.pro@outlook.com>,
+	Vincent Thiberville <vincent@harfanglab.fr>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Leon Hwang <leon.hwang@linux.dev>
+Subject: [PATCH 6.18.y 0/4] bpf: Fix interpreter-unsupported insns
+Date: Thu, 26 Nov 2026 15:47:09 +0000
+Message-ID: <20261126154714.169698-1-leon.hwang@linux.dev>
+X-Mailer: git-send-email 2.55.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,71 +70,42 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <468774737b63c8aa4d8cd6b2d7de16ac60d3c29add13446eb9960a8be1ef1ff8@mail.kernel.org>
-In-Reply-To: <20261126-bpf-relax-get-next-id-v3-4-338e1d3077e7@toke.dk>
-References: <20261126-bpf-relax-get-next-id-v3-4-338e1d3077e7@toke.dk>
-Subject: Re: [PATCH bpf-next v3 4/7] libbpf: Move bpf_object_prepare_token() to object creation
-From: bot+bpf-ci@kernel.org
-To: toke@toke.dk,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,john.fastabend@gmail.com
-Cc: bpf@vger.kernel.org,toke@toke.dk,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Thu, 26 Nov 2026 15:47:31 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
 
---===============4603946495888804730==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Request from Guillaume and Vincent [1][2], backport the following commits to
+linux-6.18.y with editing the commits manually, excluding patch 3.
 
-> libbpf: Move bpf_object_prepare_token() to object creation
+9a6df65d5c6a ("bpf: Introduce jit_required flag and remove bpf_prog_has_kfunc_call()")
+f1c27922576e ("bpf: Reject programs with inlined helpers if JIT is not available")
+34746b5a84ec ("bpf: Disallow interpreter fallback for arena-related insns")
+7a0855e73757 ("bpf: Disallow interpreter fallback for BPF_ADDR_PERCPU insn")
 
-TL;DR: Creating the token at open time likely breaks selftest
-token/obj_priv_freplace_prog_fail at this commit; the fix is in a later patch.
-Could it be folded in or moved earlier to keep the series bisectable?
+As there was a big code refactoring in linux 7.1, the changes in the new
+file kernel/bpf/fixups.c will be backported to the positions in
+kernel/bpf/verifier.c.
 
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
+Patch 1 introduces a new bit 'jit_required' in struct bpf_prog. The
+other patches set 'jit_required' to fix the issues.
 
-[ ... ]
+Unlike the backporting to 6.12.y, no manual editing in patch 3.
 
-> @@ -9281,6 +9281,7 @@ static struct bpf_object *bpf_object_open(const char *path, const void *obj_buf,
->  	err = err ? : bpf_object__init_maps(obj, opts);
->  	err = err ? : bpf_object_init_progs(obj, opts);
->  	err = err ? : bpf_object__collect_relos(obj);
-> +	err = err ? : bpf_object_prepare_token(obj);
->  	if (err)
->  		goto out;
->
+Links:
+[1] https://lore.kernel.org/bpf/BESPR02MB12296D62B1B3F33BA21C4F24AF1432@BESPR02MB12296.eurprd02.prod.outlook.com/
+[2] https://lore.kernel.org/bpf/MR1P264MB331494502C9D13D8A9EAFB99B7E82@MR1P264MB3314.FRAP264.PROD.OUTLOOK.COM/
 
-With this change, the token is created at open time.  Does the selftest
-token/obj_priv_freplace_prog_fail still pass at this commit?
+Leon Hwang (2):
+  bpf: Disallow interpreter fallback for arena-related insns
+  bpf: Disallow interpreter fallback for BPF_ADDR_PERCPU insn
 
-userns_obj_priv_freplace_prog_fail() opens priv_freplace_prog with
-opts.bpf_token_path set, does not call bpf_object__prepare(), and expects
-this call to fail inside the user namespace:
+Tiezhu Yang (2):
+  bpf: Introduce jit_required flag and remove bpf_prog_has_kfunc_call()
+  bpf: Reject programs with inlined helpers if JIT is not available
 
-	err = bpf_program__set_attach_target(fr_skel->progs.new_xdp_prog2,
-					     tgt_fd, "xdp_prog1");
-	if (ASSERT_ERR(err, "attach fails"))
+ include/linux/bpf.h   | 22 +++++++++++++++-------
+ kernel/bpf/core.c     |  7 ++-----
+ kernel/bpf/verifier.c | 21 ++++++++++++---------
+ 3 files changed, 29 insertions(+), 21 deletions(-)
 
-Now bpf_program__set_attach_target() ->
-libbpf_find_prog_btf_id(attach_func_name, attach_prog_fd,
-prog->obj->token_fd) -> btf_load_from_kernel(..., token_fd) issues
-BPF_BTF_GET_FD_BY_ID with BPF_F_TOKEN_FD.  The bpffs in that subtest
-delegates bit(BPF_BTF_GET_FD_BY_ID), so the call succeeds, ASSERT_ERR
-fails and the subtest returns -EINVAL.
+-- 
+2.55.0
 
-A later patch in the series, fd2e3e09e169 ("selftests/bpf: Explicitly
-disable token in token/obj_priv_freplace_prog_fail test"), sets
-bpf_token_path to "" for that subtest, and its commit message says the
-test broke because of this libbpf change.
-
-Could that test update be folded into this commit or placed before it, so
-that the series stays bisectable for test_progs?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/45845510673
---===============4603946495888804730==--
