@@ -1,54 +1,97 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.99
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.174
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795659428;
-	b=DImOPYcKzKxGvkc213psDTZwvKQpNvm4UEsoBsqbtEN0H3blQ6MLOszXvjs6i23SLU75
-	 /SniKIXqlsDsKikLdiq1G2Y/+pn5l2T0R81UvTdfMmE7Kg6Zz4jeaIpOq3dW4bnLptkBf
-	 waXyhhqYEFYSiJqQhp6tIZlsgFBe0/mjin2VJ9ZKsL8brgu761maRY/WjdNeQKQXF2CJF
-	 imjwQh83LsejuLy3y8ZvjGuO8YvanpntxhkqEKeMFYlQh3GB57qWQ3MHDEBXKFsiBA0R2
-	 2pVUsU7NI+VAUrz2P1jubw12tJkzL7M9l1WWEzANQFO8rfiTzyqs953mvwTPAruGDfQ==
+	t=1795660868;
+	b=g3RGVgDG9Lm37Z/Z75HLcl1TxdJb8zzBan+ruxDwimtN5nQMeA1NdiJMYWp6WfTsq2En
+	 Al5Fwp/WBSStUnwp+Mss9T7hVJ+HsKQizw4LWcK3SFBe7HPfoxewp6c3Zws+Sp7VuXkn9
+	 ibY3BqJDZyIUb06YaWxwopwlnBYbQDZKk/zhDHZALOwXDPBmXJ4A9kq/2wo+EJEOtYX9O
+	 lwTam0bujnANZfgjKU1XbJX5Xv10omSndv/6kQy8DjYI8zIWfsVf2KOqZFpKwwgCmvVI8
+	 w2sq9942qB4BHufLeBPI9F30Vmf3IqeKz/Q3z59OtE9cyQFDmEePYBbEsk7OB9IooLQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795659428;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=fXzIvj+Miyv8ZDxvJY4Vt+UHPfI7SJW5A3pgxQ1P/8s=;
-	b=biK2+pDmTmRodWayCA9H0abAoZM34fANtu2o4l91JDkXewI/cjoe0VbRvlJhsAxW64Sl
-	 uE54a+YXLx3xvnmktCD7rElKzyzaw7poUJQu/M+MbhLGnm3n24z5tLs2xrSNMqq5GA3IL
-	 9XNIyuIi4i5Xg6cGqbljvYsF80vB7F92/RfaxJA2mrqr2OWEtdYnv2U4ANqkXyUqakZnw
-	 qRS7cKwy8lmXM1JIO9XdGKx6vq0xom/B4hqt029XrByElqk85F7e/+oSi3bQtTphh+93z
-	 fgxhVX1W3SJ6jFzX2wP3IGua6MQA+71SBIui83CN836lBtowq15HZgfKpRZU4mmgNMA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795660868;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
+	 References:Content-Transfer-Encoding:MIME-Version;
+	bh=43+GgBIPNbN+EhlpfOo+kGIizseAq6F9VnzQ7NhmYAA=;
+	b=hVJph/oqmphidohcD1Q741U42myfOVIr2/9fjbRNe1z58pzwq0ATOLv73qFSJAM9FbwF
+	 OJtnYTbQK/ScKZTJMIKZg9GRH9CKGoRkz3R/ppN5Tht0qArPcjuex4hgo+5XKHfCuamng
+	 e4xDrcqB3kl/mFkF4EvcyxlbbSz0bzfNKsEMPMksGNWI+XZQfpRQcg4/7kGrrgP+vw8gZ
+	 J+OcPuhoAlZXNR1/0CJay14AEqooU2ADtEws/hiWBhlJpzRWD/KQQkvEGRSgpJXYoQPvV
+	 Rf69oWzrCvfNDGslyVxZbRHK6HEqCDGNoA7W7C6Yy/+UA1gseLnQWeGWmaAaQ1hpZmg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=hnjv2FFX;
-	arc=none smtp.remote-ip=95.215.58.99
-Received: from mta1.migadu.com (out-99.mta1.migadu.com [95.215.58.99])
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=EQCE+SAl;
+	arc=none smtp.remote-ip=209.85.215.174
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80D7F606A330
-	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 02:17:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 80D7F606A330
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B83C6606A31E
+	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 02:41:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B83C6606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=hnjv2FFX
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=h5tYjmYXwN37vDwarjJmMf6ijB9noyW46ya0yJ1tctQ=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1795659425; v=1; x=1796264225;
- b=hnjv2FFXsGH45uJ3QPsl772Qo8BjtlWhTpdo3f12viqCW7k2cFg7DJ2KP/b4EGhjSbS9KAh2
- /sduLUxJc5Gs8Zc1JPVkyglDgwYqmRj5K50FgMKs1UgsWXnOdZHWxjxLuQwwnXRpkvR+A8x2sdp
- PUMIDaeLSwGyNcO3n4z66hs8=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 68a03a1d74c74de9;
-	Thu, 26 Nov 2026 02:17:05 +0000
-X-Mizu-Trace-ID: 68a03a1d74c74de9
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <675a13e9-ed23-4a73-8d09-28517c377353@linux.dev>
-Date: Thu, 26 Nov 2026 10:16:56 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=EQCE+SAl
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-cde5a7d7849so2882162a12.0
+        for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 18:41:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795660867; x=1796265667; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=43+GgBIPNbN+EhlpfOo+kGIizseAq6F9VnzQ7NhmYAA=;
+        b=EQCE+SAlEDsUEOQxrk2kQZAlepJI3cKTspMi1jIddcQanOqRVSDnl0uNzdvFM1hwiO
+         cac2KvvMrmjmGy2P93tDQCpPBeOCp7U9DWD7pSlCL5Q8HeZtu63FHcdQPcUpq7Fvir+i
+         5mclwRZ20i9MT31RBxWDO2Q2qGv+0ivIpwEDrPb6uv3cb5Z1CT9AkcOBJM9hfTF//BgJ
+         Qq78swU7KiKaxrYEEsNTiOiR72GZg1/2gH2b4NKoSKBx8Jkg52R7u9JJynw2aSVK2CjH
+         cHhOUVNv/FbVZ+cL9TWqRMWr6Up/Ljhr7N/i8Ar/TMgRGQal+j9OfwohX3czOnkdgvPl
+         2lkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795660867; x=1796265667;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=43+GgBIPNbN+EhlpfOo+kGIizseAq6F9VnzQ7NhmYAA=;
+        b=0wrBBAhnHJSH9mSUEYZ9C20/DHS1vc/ay497PExrRh7UO52zo+9beP4Ut6na9v3xC2
+         nzU4gy8rsgM5Cz5iistH1tiz5hD31nkpnRPCtpNJzXgy9JVyfBQ5Yq8uJ+rvQyKb/WQO
+         QKRhp+hxtjTuNn76sbAAjY27vum576QvNwnPaYLHisOVBhoZVmEAV/dlTzsGJ9osvoc6
+         ALe3XIgNIZtJxey+wo2Q/osHwvwD6iMgcRX3sWJvHc//n00oFvtRspfQRiTCrkw50yjY
+         59CdhtXme37Q2LKB2gBnqCo564ckeRxaG8zxOfFSVuXIRpGWiJqvoR4UGmy0ZtVrQhR2
+         M2mQ==
+X-Forwarded-Encrypted: i=1; AL+hErE2lexjH1e+amssmoSr54c+W3S79BjFPXLSP3TtQId4LIPVmIXy2x+c0pO9hSPxlY7WyTM=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+htj6f4/HbCfaa+kUKpDXCp4ljwHPHKDE8Qr/Kp3em24mIab2n
+	KquVuyvGI/t5onIADm2IFfxfmVZzRioqbwDunRFpKGhPNOgEsB1PuKTQ
+X-Gm-Gg: AZFdTZdeyex9+1Ut1odBUSAiIpkmXYBU8sTrTGSD/qwmkEJZqk/uOgcdBYIy48mNulL
+	1EdSakcQSSbGTUdxUWfuvlZNjkmxtmRTHs293ehUJPVAO0s0pK17Xl6qhfqpbGT+K6GT6NTSB2N
+	I4hdAij/2FYbRyfbsjOMDc4lDjYk8sxlkcN/bVXa/R1s/fhVnXLcenIKYfoFGbo2G8sS6ZYi00t
+	iRV0M46YQ9F2+O4kLk/WsdXFJ/bwgJHOuPfWTQL9zJ3zSjE7HGS1qXRHo1f1LhdFuuKIVXcsn1s
+	PfnKJVQ85nFRhDT6IRbpiNRa3iyA9n63NjEGmvlLFAprSqNkIWk1FfMl0YMglrt4WMHQcTrNwep
+	i4Nb6WegaRTzx3tRMPE0p+ll+idRLavwc3eRdDYPM+pkFkQ3kCPayeXV/NTiG+wbmNGzvKFY5dG
+	HPneeMGI/SMhYfoHt0/EWLV1YY4DP1+/BHXAnww41VrrKoROZar+Fp6MuNMu2bm/TcS03GMi9uN
+	HWBwjTfQDW/HNaOa6K68sMzBrNSmoijtV8IUV5R8bd8dkqsdixvb4yBhsVRu2arJNHng8W3SWqt
+	Qt+DHBR9trqMhLQMB61phcN6fDnviWDBYjjYiiCeXQAuHyvwpSqtzwLx8fu7wF4q+c/LL9buS+e
+	2zZv0JFceOlICYBlUjrL+OgL/i8CCAsMerA==
+X-Received: by 2002:a17:90a:e7d0:b0:3ab:2737:3392 with SMTP id 98e67ed59e1d1-3b41c95fa25mr18864177a91.53.1795660866806;
+        Wed, 25 Nov 2026 18:41:06 -0800 (PST)
+Received: from localhost ([153.61.198.244])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b405d1361fsm32703404a91.6.2026.11.25.18.41.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 Nov 2026 18:41:06 -0800 (PST)
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 26 Nov 2026 02:41:06 +0000
+Message-Id: <DN4SNHSNQ7E8.1Q1SW1CKDHLZS@gmail.com>
+Cc: <andrii@kernel.org>, <eddyz87@gmail.com>, <memxor@gmail.com>
+Subject: Re: [PATCH] bpf: Require a bpf_spin_lock for bpf_list_head and
+ rb_root
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Quan Sun" <m202672221@hust.edu.cn>, <bpf@vger.kernel.org>,
+ <daniel@iogearbox.net>
+In-Reply-To: <b887fe56f02f8578e41cf0009da7638fb6f8ec0c.1795627805.git.m202672221@hust.edu.cn>
+References: <b887fe56f02f8578e41cf0009da7638fb6f8ec0c.1795627805.git.m202672221@hust.edu.cn>
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -58,209 +101,223 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net v3] net: xdp: fix generic XDP on skbs without an
- Ethernet header
-To: netdev-bot+sashiko@kernel.org
-Cc: netdev@vger.kernel.org, kennethbwlee@snu.ac.kr, davem@davemloft.net,
- edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
- ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
- john.fastabend@gmail.com, sdf@fomichev.me, kuniyu@google.com,
- wang.zhan@smartx.com, mkarsten@uwaterloo.ca, bpf@vger.kernel.org
-References: <20261124142545.221584-1-jiayuan.chen@linux.dev>
- <179561685970.3135.9452194614168004635@kernel.org>
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <179561685970.3135.9452194614168004635@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 
+On Wed, Nov 25, 2026 at 05:14 PM Quan Sun <m202672221@hust.edu.cn> wrote:
+> of the object and then treat whatever it finds there as a lock.  The
+> guard holds today only because btf_parse_fields() stores a negative
+> errno in spin_lock_off; it is a load-bearing coincidence, not an
+> invariant the code states anywhere.
 
+It's not a coincidence. btf_parse_fields() has
 
-On 11/25/26 10:27 PM, netdev-bot+sashiko@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 3 potential
-> issue(s) to consider.
-> 
-> Critical: 0 · High: 0 · Medium: 2 · Low: 1
-> 
-> If you believe none of the issues are legitimate, please reply to each
-> issue of Medium severity or higher and explain why the AI is wrong.
-> If any of them are legitimate and you plan to respin, please let patchwork
-> know by including "pw-bot: cr" as a separate line at the end of your reply
-> (one such reply per series is enough).
-> 
-> - [Medium] dev_xdp_attach() (net/core/dev.c) now rejects every
->   XDP_MODE_SKB attach with -EOPNOTSUPP when dev->type is neither…
-> - [Medium] The new early return in netif_receive_generic_xdp() (`if
->   (skb->data - skb_mac_header(skb) != ETH_HLEN) return XDP_PASS;`) skips…
-> - [Low] Documentation/networking/af_xdp.rst (around line 86) says XDP_SKB
->   mode, which is used when the driver has no XDP support or XDP_SKB is…
-> 
-> --
-> 
-> net: xdp: fix generic XDP on skbs without an Ethernet header
-> 
-> The patch refuses to attach a generic XDP program to a device that is
-> neither ARPHRD_ETHER nor ARPHRD_LOOPBACK. It also skips the generic XDP
-> program at runtime for any skb whose mac header is not exactly ETH_HLEN
-> bytes. The goal is to fix a WARN in skb_vlan_push() that comes from the
-> Ethernet header fixup in bpf_prog_run_generic_xdp() on L3 devices such as
-> sit0.
-> 
-> Closes: https://lore.kernel.org/bpf/20260812043643.808295-1-kennethbwlee@snu.ac.kr/
-> 
->> diff --git a/net/core/dev.c b/net/core/dev.c
->> index cd0796a1dbfdf..a9ef193967bab 100644
->> --- a/net/core/dev.c
->> +++ b/net/core/dev.c
->> @@ -5825,6 +5825,10 @@ static u32 netif_receive_generic_xdp(struct sk_buff **pskb,
->>  	if (skb_is_redirected(skb))
->>  		return XDP_PASS;
->>  
->> +	/* XDP is Ethernet only, skip skbs without an Ethernet header. */
->> +	if (skb->data - skb_mac_header(skb) != ETH_HLEN)
->> +		return XDP_PASS;
-> 
-> [Severity: Medium]
-> Can this silently skip a program that was attached successfully to an
-> ARPHRD_ETHER device?
-> 
-> Take a VLAN device with reorder_hdr off. Its type is ARPHRD_ETHER and it
-> has no ndo_bpf, so dev_xdp_attach() defaults to XDP_MODE_SKB and accepts
-> the program. On receive, vlan_do_receive() does this:
-> 
-> net/8021q/vlan_core.c:vlan_do_receive() {
->     ...
-> 	if (!(READ_ONCE(vlan_dev_priv(vlan_dev)->flags) & VLAN_FLAG_REORDER_HDR) &&
-> 	    ...
-> 		skb_push(skb, offset);
-> 		skb = *skbp = vlan_insert_inner_tag(skb, skb->vlan_proto,
-> 						    skb->vlan_tci, skb->mac_len);
-> 		...
-> 		skb_pull(skb, offset + VLAN_HLEN);
-> 		skb_reset_mac_len(skb);
-> 	}
->     ...
-> }
-> 
-> That leaves skb->data - skb_mac_header(skb) == 18. Then
-> __netif_receive_skb_core() jumps to another_round and calls
-> do_xdp_generic() with the VLAN device's program. The new check returns
-> XDP_PASS for every packet.
-> 
-> Before this patch the program ran on the full Ethernet+VLAN frame, so
-> read-only filters and XDP_DROP filters worked. reorder_hdr can be toggled
-> at runtime, so a filter that is already attached could stop being
-> enforced. Nothing reports this: no warning, no extack and no tracepoint.
-> 
-> The commit message justifies the runtime check only by dev->type changing
-> after attach. The VLAN effect appears only in the v2->v3 note below the
-> --- line, and that note won't be kept when the patch is applied.
-> 
-> Would it make sense to warn once here, or to reject the attach, and to
-> describe this in the commit message?
-> 
+  rec->spin_lock_off = -EINVAL;
 
+and "< 0" is the test for a missing field. Your hunk uses the same test.
+The damage is different. "continue" skips the root, so all nodes leak.
+A refcounted node keeps a stale node->owner, like before 4a7910ee060d.
 
+> test for that combination.  Restore the original requirement and let a
+> follow-up teach bpf_{list_head,rb_root}_free() about rqspinlock if
+> res-only guarding is actually wanted.  The BPF_F_LOCK checks in
 
-This is on purpose. The direction from the maintainers on v1 was that
-XDP is Ethernet only, so generic XDP only handles skbs with an ETH_HLEN
-mac header. v2 tried to let this VLAN case through, and the review on
-v2 asked to skip it too, because the fixup after the program is wrong
-for it.
+It's wanted. The log of 0de2046137f9 says so. So does the log of
+commit 7b7b8b596010 ("bpf: Reject resilient lock operations in rbtree
+callbacks").
+check_reg_allocation_locked() accepts res locks since v6.15.
+Such progs load and run today. With this patch they stop loading.
 
-v1: https://lore.kernel.org/netdev/20260813113229.381136-1-jiayuan.chen@linux.dev/
+The bug is in the free path. Fix it there.
+It doesn't need the lock. Update and delete don't free the roots since
+commit a3a81d247651 ("bpf: Cancel special fields on map value recycle").
+Only these callers of bpf_obj_free_fields() can see a root:
 
-> A separate point: bpf_xdp_link_update() calls dev_xdp_install() directly:
-> 
-> net/core/dev.c:bpf_xdp_link_update() {
->     ...
-> 	mode = dev_xdp_mode(xdp_link->dev, xdp_link->flags);
-> 	bpf_op = dev_xdp_bpf_op(xdp_link->dev, mode);
-> 	err = dev_xdp_install(xdp_link->dev, mode, bpf_op, NULL,
-> 			      xdp_link->flags, new_prog);
->     ...
-> }
-> 
-> This path never reaches the new dev->type check in dev_xdp_attach(). The
-> device type can change after the link is created, for example through
-> bond/team port enslavement or TUNSETLINK. In that case the link update
-> still succeeds, and the new program never runs either.
-> 
-> Is this inconsistency intended?
+  caller                         why no prog holds the lock
+  -----------------------------  ----------------------------------
+  array_map_free()               the map is freed next
+  htab_free_prealloced_fields()  the map is freed next
+  htab_mem_dtor()                kfree() of the element is next
+  __bpf_obj_drop_impl()          the last owning reference is gone
 
+The verifier takes a lock or a root from a map value or an owning
+reference only. a3a81d247651 is in v7.2. Older trees need it first.
 
-Yes. dev->type can change after attach anyway, the run time check is
-what covers it.
+res_lock_roots_drop() should return -EINVAL today due to the stale owner.
+With your patch the BTF of refcounted_kptr.c doesn't load.
+The diff goes in place of your patch.
 
-> 
-> [ ... ]
-> 
->> @@ -10775,6 +10779,12 @@ static int dev_xdp_attach(struct net_device *dev, struct netlink_ext_ack *extack
->>  			NL_SET_ERR_MSG(extack, "XDP program already attached");
->>  			return -EBUSY;
->>  		}
->> +		/* lo is ARPHRD_LOOPBACK but uses Ethernet framing. */
->> +		if (mode == XDP_MODE_SKB && dev->type != ARPHRD_ETHER &&
->> +		    dev->type != ARPHRD_LOOPBACK) {
->> +			NL_SET_ERR_MSG(extack, "Generic XDP only supports Ethernet devices");
->> +			return -EOPNOTSUPP;
->> +		}
-> 
-> [Severity: Medium]
-> Does this break existing generic XDP users on L3 devices?
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 4e9a4d1..d6b170f 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -664,10 +664,8 @@ void copy_map_value_locked(struct bpf_map *map, void *dst, void *src,
+ void bpf_timer_cancel_and_free(void *timer);
+ void bpf_wq_cancel_and_free(void *timer);
+ void bpf_task_work_cancel_and_free(void *timer);
+-void bpf_list_head_free(const struct btf_field *field, void *list_head,
+-			struct bpf_spin_lock *spin_lock);
+-void bpf_rb_root_free(const struct btf_field *field, void *rb_root,
+-		      struct bpf_spin_lock *spin_lock);
++void bpf_list_head_free(const struct btf_field *field, void *list_head);
++void bpf_rb_root_free(const struct btf_field *field, void *rb_root);
+ u64 bpf_arena_get_kern_vm_start(struct bpf_arena *arena);
+ u64 bpf_arena_get_user_vm_start(struct bpf_arena *arena);
+ /*
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index 937a0d7..2dd0164 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -2301,39 +2301,22 @@ bpf_base_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ }
+ EXPORT_SYMBOL_GPL(bpf_base_func_proto);
+ 
+-void bpf_list_head_free(const struct btf_field *field, void *list_head,
+-			struct bpf_spin_lock *spin_lock)
++/*
++ * bpf_list_head_free() and bpf_rb_root_free() run when the object with the
++ * root is freed. No prog can lock it or reach the root, so they take no lock.
++ */
++void bpf_list_head_free(const struct btf_field *field, void *list_head)
+ {
+-	struct list_head *head = list_head, drain, *pos, *n;
++	struct list_head *head = list_head, *pos, *n;
+ 
+ 	BUILD_BUG_ON(sizeof(struct list_head) > sizeof(struct bpf_list_head));
+ 	BUILD_BUG_ON(__alignof__(struct list_head) > __alignof__(struct bpf_list_head));
+-	INIT_LIST_HEAD(&drain);
+ 
+-	/* Do the actual list draining outside the lock to not hold the lock for
+-	 * too long, and also prevent deadlocks if tracing programs end up
+-	 * executing on entry/exit of functions called inside the critical
+-	 * section, and end up doing map ops that call bpf_list_head_free for
+-	 * the same map value again.
+-	 */
+-	__bpf_spin_lock_irqsave(spin_lock);
+-	if (!head->next || list_empty(head))
+-		goto unlock;
++	if (!head->next)
++		return;
+ 	list_for_each_safe(pos, n, head) {
+ 		struct bpf_list_node_kern *node;
+ 
+-		node = container_of(pos, struct bpf_list_node_kern, list_head);
+-		WRITE_ONCE(node->owner, BPF_PTR_POISON);
+-		list_move_tail(pos, &drain);
+-	}
+-unlock:
+-	INIT_LIST_HEAD(head);
+-	__bpf_spin_unlock_irqrestore(spin_lock);
+-
+-	while (!list_empty(&drain)) {
+-		struct bpf_list_node_kern *node;
+-
+-		pos = drain.next;
+ 		node = container_of(pos, struct bpf_list_node_kern, list_head);
+ 		list_del_init(pos);
+ 		/* Ensure __bpf_list_add() sees the node as unlinked. */
+@@ -2359,8 +2342,7 @@ unlock:
+ 	    pos && ({ n = rb_next_postorder(pos); 1; }); \
+ 	    pos = n)
+ 
+-void bpf_rb_root_free(const struct btf_field *field, void *rb_root,
+-		      struct bpf_spin_lock *spin_lock)
++void bpf_rb_root_free(const struct btf_field *field, void *rb_root)
+ {
+ 	struct rb_root_cached orig_root, *root = rb_root;
+ 	struct bpf_rb_node_kern *node;
+@@ -2370,14 +2352,8 @@ void bpf_rb_root_free(const struct btf_field *field, void *rb_root,
+ 	BUILD_BUG_ON(sizeof(struct rb_root_cached) > sizeof(struct bpf_rb_root));
+ 	BUILD_BUG_ON(__alignof__(struct rb_root_cached) > __alignof__(struct bpf_rb_root));
+ 
+-	__bpf_spin_lock_irqsave(spin_lock);
+ 	orig_root = *root;
+-	bpf_rbtree_postorder_for_each_entry_safe(pos, n, &orig_root.rb_root) {
+-		node = rb_entry(pos, struct bpf_rb_node_kern, rb_node);
+-		WRITE_ONCE(node->owner, BPF_PTR_POISON);
+-	}
+ 	*root = RB_ROOT_CACHED;
+-	__bpf_spin_unlock_irqrestore(spin_lock);
+ 
+ 	bpf_rbtree_postorder_for_each_entry_safe(pos, n, &orig_root.rb_root) {
+ 		obj = pos;
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index ec8e787..b105328 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -872,14 +872,10 @@ void bpf_obj_free_fields(const struct btf_record *rec, void *obj)
+ 			unpin_uptr_kaddr(*(void **)field_ptr);
+ 			break;
+ 		case BPF_LIST_HEAD:
+-			if (WARN_ON_ONCE(rec->spin_lock_off < 0))
+-				continue;
+-			bpf_list_head_free(field, field_ptr, obj + rec->spin_lock_off);
++			bpf_list_head_free(field, field_ptr);
+ 			break;
+ 		case BPF_RB_ROOT:
+-			if (WARN_ON_ONCE(rec->spin_lock_off < 0))
+-				continue;
+-			bpf_rb_root_free(field, field_ptr, obj + rec->spin_lock_off);
++			bpf_rb_root_free(field, field_ptr);
+ 			break;
+ 		case BPF_LIST_NODE:
+ 		case BPF_RB_NODE:
+diff --git a/tools/testing/selftests/bpf/progs/refcounted_kptr.c b/tools/testing/selftests/bpf/progs/refcounted_kptr.c
+index cae00f7..24551dd 100644
+--- a/tools/testing/selftests/bpf/progs/refcounted_kptr.c
++++ b/tools/testing/selftests/bpf/progs/refcounted_kptr.c
+@@ -757,6 +757,50 @@ int list_push_back_uninit_head(void *ctx)
+ 	return ret;
+ }
+ 
++struct res_roots {
++	struct bpf_res_spin_lock lock;
++	struct bpf_rb_root root __contains(node_data, r);
++	struct bpf_list_head head __contains(node_data, l);
++};
++
++SEC("tc")
++__description("res_lock_roots_drop: drop of the roots unlinks the node")
++__success __retval(0)
++int res_lock_roots_drop(void *ctx)
++{
++	struct node_data *n, *m;
++	struct res_roots *o;
++	int err;
++
++	o = bpf_obj_new(typeof(*o));
++	if (!o)
++		return -1;
++	n = bpf_obj_new(typeof(*n));
++	if (!n) {
++		bpf_obj_drop(o);
++		return -2;
++	}
++
++	err = bpf_res_spin_lock(&o->lock);
++	if (!err) {
++		m = bpf_refcount_acquire(n);
++		err |= bpf_rbtree_add(&o->root, &m->r, less);
++		m = bpf_refcount_acquire(n);
++		err |= bpf_list_push_front(&o->head, &m->l);
++		bpf_res_spin_unlock(&o->lock);
++	}
++	bpf_obj_drop(o);
++
++	/* Both fail when the node is still owned by the roots in 'o' */
++	m = bpf_refcount_acquire(n);
++	bpf_spin_lock(&lock);
++	err |= bpf_rbtree_add(&root, &m->r, less);
++	err |= bpf_list_push_front(&head, &n->l);
++	bpf_spin_unlock(&lock);
++
++	return err;
++}
++
+ SEC("?tc")
+ __failure __msg("bpf_spin_lock at off=32 must be held for bpf_list_head")
+ long list_del_without_lock_fail(void *ctx)
 
+Kumar's address had typo in Cc...
 
+Taget bpf-next.
 
-Yes, that is the direction from the maintainers on v1: XDP is Ethernet
-only, and BPF on L3 devices should be attached at TC instead.
-
-> 
-> Today an XDP_MODE_SKB attach succeeds on tun in IFF_TUN mode, wireguard
-> (ARPHRD_NONE), sit/ipip/gre/ip6tnl, PPP, RAWIP WWAN and IPoIB.
-> 
-> Some programs never modify the first 14 bytes, for example read-only
-> filters or programs that return XDP_DROP or XDP_PASS. These programs run
-> correctly, because the fixup in bpf_prog_run_generic_xdp() only fires
-> when those bytes change:
-> 
-> 	if ((orig_eth_type != eth->h_proto) ||
-> 	    (orig_host != ether_addr_equal_64bits(eth->h_dest,
-> 						  skb->dev->dev_addr)) ||
-> 	    (orig_bcast != is_multicast_ether_addr_64bits(eth->h_dest))) {
-> 		__skb_push(skb, ETH_HLEN);
-> 
-> A plain "ip link set dev X xdp obj ..." with no mode flag is affected as
-> well. dev_xdp_mode() falls back to XDP_MODE_SKB when ndo_bpf is missing:
-> 
-> 	return dev->netdev_ops->ndo_bpf ? XDP_MODE_DRV : XDP_MODE_SKB;
-> 
-> tun_netdev_ops (TUN mode) has no ndo_bpf, so XDP on an IFF_TUN device
-> always uses generic mode and is now always rejected.
-> 
-> The commit message says these attaches will be refused, but it describes
-> generic XDP on L3 devices only as comparing garbage.
-> 
-> Could it say that generic XDP setups that work today on these devices will
-> now get -EOPNOTSUPP? The Fixes: tag points at a 2017 commit, so this uAPI
-> restriction would also reach every stable tree.
-> 
-> [Severity: Low]
-> Should Documentation/networking/af_xdp.rst be updated in the same patch?
-> It describes XDP_SKB mode as:
-> 
->   A fallback mode that works for any network device.
-> 
-> After this patch, dev_xdp_attach() returns -EOPNOTSUPP for XDP_MODE_SKB on
-> any device that is neither ARPHRD_ETHER nor ARPHRD_LOOPBACK. That covers
-> both cases the document describes: an explicit XDP_SKB request, and the
-> fallback for drivers without XDP support.
-> 
-> netif_receive_generic_xdp() also skips skbs whose mac header is not
-> ETH_HLEN bytes, so generic XDP runs in fewer cases than the document
-> describes.
-> 
->>  	}
->>  
->>  	/* don't call drivers if the effective program didn't change */
-> 
-
+pw-bot: cr
