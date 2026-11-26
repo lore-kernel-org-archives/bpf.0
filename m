@@ -1,98 +1,73 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.175
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795671035;
-	b=JzhiISWZaO7GJTZO2G7S3gTb6hNn+Jx+9c4ippOBtPF3e90LlhtduXekOEJjM5ayhQr/
-	 JwxKATJRD0mwS4ZLYP+HTpsZb5YJnYjFGfMjP2xYrdkmxdD7sdts+DdDoA6zGRXHJ6G7s
-	 g5id1qWmfDOhHkpQ2WRkTe+NLCAbPA6JV1kTDj++bNl69idCl4HReuRd+n5pZDYfMHdiF
-	 y1IWt+QcCrYrBkyFv8URUiEEYQu53eY6SwxnwVoRMDUBhmkQ/FfDdLKxCKy/EJCG+LQWe
-	 z6h0Tbq4/isV3BQ7DosV8N52qTgugsnXmfoMR7KZ6StUJa3G556PFFjw5MmVZ9L/n3w==
+	t=1795671518;
+	b=Q6+kFo+pSTlh+hSoPv8ofV6IxOVSWK83rwm0MS/syVzaCpncYyr8za4soQu2XXkx1wmm
+	 PNm2Jyea6pCjVFHEjuwoAplRuLE39VJEWe2TsyOsrZdQRzE38vH32T8kAOEoz5/FP4P2S
+	 kzOpPU2hrSjuNVxU7eD6KUXYKxTpI80fojFzRkFcLYmuptByw0D7l/V+N7MqhpolkrXIb
+	 8qRb3J7LU+I9lqxXwXOOb5AC5NRSRQ+GvsRjsMdk3Zii/msNC7qKEsCmFF7qf/xw7U4sZ
+	 MWCKqYlrjdrQZjaxWGgokv4uSx8YBcPZ4rVhAnGhO3MsSYzkZ4D4IWHFi1SUfKzWFSw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795671035;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=u3D6JB/pv0rrXcWwuSv+aY8D7iPNeAwX6178znatTYk=;
-	b=UMngWPpDe7Mj/B1pc3VXc5ChIhnQdx1rIF09h3bsS1C0VMiGz0TY5GN7Fdb5I+OBblG7
-	 +aN2RHDfrpwaTTp8bk6Q9JlqnrdmUEYA66CubENcfX2sdpvq3Td6pBqCO0SgWZHYKAinu
-	 Cz2xA4RKb2x0577bWTCVejGkF6/vin9oX1OoYWWn65LdHirSbfKOz6UI+gXagaJnT4tKw
-	 HiZCp5lpVc49ytPmVa0lJbzu2Rp31hpsaCzYUtwcBGrlFmRPcaHEUYkep7tEF8e0LB/Kl
-	 6o6usB6qdgruUt4hJpWjlyCy/AkPVCF+UwXF0qOZyA7mj6oYoJsDQEuuG1gzPAl3nPw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795671518;
+	h=Received:DKIM-Signature:Received:Received:X-ME-Sender:
+	 X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:X-Mailer:
+	 MIME-Version:X-ThreadId:Date:From:To:Cc:Message-Id:In-Reply-To:
+	 References:Subject:Content-Type:Content-Transfer-Encoding;
+	bh=fF6iLg7K5hOrnySQEXPXyu/mTZlnOMFRavzCIW+zF9A=;
+	b=DheCAEjLKGXVTzw7BHlBdO7Voucrpx32Jjm0u+4ek9ky9MhHmF4LzyijWGsT0Wb4X1lp
+	 8xTdicISoqq9QLiqnrwfF7Z2R0vm54Sp9gMvJR9bECzmYF2gE9ThTFRASziOhUk5/Sp2K
+	 qBmJakQIQ4nxafsD5dm0aFzQaarNQeQtp3aXw7MkCJFgBdfzsUZ909bNfVd7xmyGzW0Zg
+	 WOtD8HBbZL18nNRUI1RUPCm76GwfAgvdLNm0D/2tfIrkUQiis2cc9JnoXVS2IKyleeHaG
+	 S+coizLD3JmgHg6PbMs7JSIsMBBGjgIJvOFuxmXmxnqCFi1oAa9TEC1qKqFrytPKl8A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=cA4curFt;
-	arc=none smtp.remote-ip=209.85.210.175
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Axn59QpV;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6322606A31C
-	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 05:30:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D6322606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A37CF606A31C
+	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 05:38:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=cA4curFt
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-8b9c51097e2so2674348b3a.1
-        for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 21:30:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795671034; x=1796275834; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=u3D6JB/pv0rrXcWwuSv+aY8D7iPNeAwX6178znatTYk=;
-        b=cA4curFtIR7VjacFiL2BZHMdzikp3eT89x0fZJmHnvbPZm1cxyN6R8/32JFr/cK8p2
-         bW5D4oPVvxtTC6dZ2Szz/qWDyL6RyMPXF4/pknYrQGcTePSFb+RF2vJklgG1tf/cs0YD
-         e3SHKsYU2tVCjzIWs2hjksKWhyit+VnOSPNO8aup8bGJxXE5BeFwlgpqM04VD3RuMjgq
-         QpwiUprzSwIypwWNnCDJnYOC0vvTKq8eZeWDd1LsSfk8gBIiJg5b1u6QT08T18ujSi34
-         ihR8sUCpOsjXnU3x9a9baGXLLOtEZ++lC3XE2aGcuBa3o91yPHOJgCvHN4UQxqkIdL0n
-         LD5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795671034; x=1796275834;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=u3D6JB/pv0rrXcWwuSv+aY8D7iPNeAwX6178znatTYk=;
-        b=cxfUn4HaxJOyIEyTIzXniBmnmQI9FxS7VrAwBnZpOdKIUk0C9wlZC4S5jD6NiTSTGf
-         3qkJJQ6FHywWr4Q2qcrhPqLPbv67eh0r1xGgnE8OKSw5Sc3ygb3aqOhLdtzD6OitgpqW
-         +ML3SJi9Cx3AjTeqymnS4JjiqjmMvmg5+jrgd36XP2Dj9tMFs51iM1J6I2kOmi2EkG56
-         wq7Elv3o4d+y/h6BVPGATYtokfyL3FG8Uh89IB4A+9R9o4GTNzpDYSQObQNHgYLarzlm
-         AGT1edocS5jaBLSi4rVHLNEMjUCDt0z1xlzYA830qlSkgGohopjNUkB0w+c/gXr2JIsQ
-         Lx3g==
-X-Gm-Message-State: APuU4Z8SVRb1tC7Vj7HKP/iI68OhGmIrAUuYrIVlPeFuBuph4SaaKsOH
-	2eW0pxg8YTh5cTLOW3enj8fi88uOzhM9HnpGG47nMWa3gvtpuUA77a6OG2bGqg==
-X-Gm-Gg: AZFdTZdFy0sePiM37OxcOjAJ41pyJ3NZXWwZAJKYgOTMKNAppHDWIiyaMr7VYBrN01i
-	aVGU5xTkYNLg/OgHwd//sVBk1RHnjehkuT/JSWUzvomSTp/17lpk17MjHlga5GjsJXSULrsvc9R
-	b3Ejsp9ahqhKoi83M9tSGZHw0CJxik3nxbfEe/JNrAI2RYhoiVfmNUib3ghc9XXkympwPfVV0ZN
-	BeyNQyrliNGJGBO3ohAxXFaECif2R4HRjvnazL52oevknyl3xPoPWALPYGGFKobbdjHojqJbztR
-	RColg5h4a8D7ykzN4ZROwpSrrqvU1ZO6GUcY1teo0x+rIkTAgBsj3+BGhfnca0aPdAKKi3w1j+K
-	LkXmLsJqXBGPd8CisCvjl2MT+1eqqthQ0nWoiyX4eB1ZJm/LURTSXgkGal+B9+WazbnvBuM+hyR
-	D/vY6oT7i5qtkLwfOgUgOeZUr05a0Mw7BQAyx/4PRw227NoUhjpcI+LzXYODm2B5SUUp/iGvptR
-	8zMTDWzF4TsQVeWXK0nQ+TUefk8O54RqmlLytCZhT/hfAa9+yigEyLW2+HaQjSGujOImc36/Eq3
-	icmjkT4SycJQRMCz+PbZBqVie9I1Q9cvu4RXpq0oXj7JRJMPqrA3SEkLl6rES1s/
-X-Received: by 2002:a05:6a21:7d0b:b0:40a:4e89:ede3 with SMTP id adf61e73a8af0-40a4e99315fmr706550637.79.1795671034056;
-        Wed, 25 Nov 2026 21:30:34 -0800 (PST)
-Received: from cps-manycore-1 ([147.46.174.222])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cde6cea7c29sm9961429a12.1.2026.11.25.21.30.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Nov 2026 21:30:33 -0800 (PST)
-From: Sechang Lim <rhkrqnwk98@gmail.com>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	ihor.solodrai@linux.dev,
-	yatsenko@meta.com
-Subject: [PATCH bpf] bpf: Reject kernel threads in bpf_task_work_schedule()
-Date: Thu, 26 Nov 2026 05:30:06 +0000
-Message-ID: <20261126053016.1145482-1-rhkrqnwk98@gmail.com>
-X-Mailer: git-send-email 2.56.1
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Axn59QpV
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA0951F000C0;
+	Thu, 26 Nov 2026 05:38:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795671518;
+	bh=fF6iLg7K5hOrnySQEXPXyu/mTZlnOMFRavzCIW+zF9A=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject;
+	b=Axn59QpVakGgNyL3YGUW2y+MNysVDkwBJwXt2bwGyGWwJ6ppuSsBM4Zxfg4d3RUgm
+	 ZmzaFNR1jJs0kRTyIaq+asqXVGWJbqAFIUuAvgvdi+CxOJPSI+99urH075WOGpWR5n
+	 btoW38OJ90yh1Pq22faxdO2hg9i5LN5e9GVqN5mqfXCqTVsvWV9Y2E1MU/0UcE0zKK
+	 W47NgC+oNZtYAFJxl1K/BoKbNNjeV2gDoAXGLv0c/aR6HUSjKGzzf17uJA+85EgoSa
+	 OhdqMBwHBthbwBLQ809oKm3F5SETXI9ear00rgGHcxJyAEdOuSbwEwyyCpMIm3fBcX
+	 Hvj7PSW9DfsdA==
+Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
+	by mailfauth.phl.internal (Postfix) with ESMTP id BC164F40066;
+	Thu, 26 Nov 2026 00:38:36 -0500 (EST)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-01.internal (MEProxy); Thu, 26 Nov 2026 00:38:36 -0500
+X-ME-Sender: <xms:3MUHa7CbtHZzfdflziH6xls68Rrs3Ac3bam82QjuBPNiGD14dMPm_Q>
+    <xme:3MUHa8U9ldCHfoskHzX4Aypah4SgmbGNhcmzs6etnkA_98WpiiRWAM6kTwd8aW5o0
+    TmM0ysbx786avnAnM542Q_kGQw4KFoPVviyz27LXlgZSV-K7Nthfnsf>
+X-ME-Proxy-Cause: dmFkZTEusPZhsxb8yJH6h7uBLIaqXnUP8bHmTmhMylIFaKiuE+AYYytkULIsfUoy6qXeN8
+    b5i0khJN7OXjg9Y+Vdo6TGyEjxYxp3vthssDQSyfalzXvwM5CG810DESHYIdDhLfQX+nAp
+    ruBI6+93JhwIWUIR29iGTKRP1dnHJKBJUA8B4pPJ4AxAQKUtNwHtvIKhqnXmyZ0jKqMyaA
+    lomV5mfFKhNe0pGHdRKtq7fZJv72Z+/AP7zsXEdeWZ5JaiINZRy66AyzTAJYrD9vN0OIdO
+    jHxeqP7JNDRJ6EQtsfoKnnAkCrHl/ALsOpMS5TsQFoCMG3UDHkGIsMcBpEW/PReBlc7BhZ
+    1WZnufz006UaAyz07e8soRVwBaFQBd+Dx0Wz1CzjECXa/2SbG5k4dsw64OQiq407WfILXy
+    SHflvqaniiyRYV0ro7jYAGbfL6BGr1hBfEbLHELnIQ9IfsHNJLrCV+9oyIV2HMOm4cO6LR
+    z4KNn+mQDHhCesYPHISJCVXBo/BJQ3o7Dvum/KhxYs7lSGEccyIxW+4P80udGtkeu7rgFa
+    L1+kSA4jIJvq5faIO9MITpcIAaIChF8ykGcya5tDZUxioigMae5YmTFi0J5atqApDbkpkH
+    HByhlxFFUeEfuYDuXXDtEKaSec/O9mtwo6uUsLlfpvn5nIeFjP9OWuRdg/NA
+X-ME-Proxy: <xmx:3MUHa5kmJpfNEXhXclAicIQDtXsCiCEhXkOR_NpfsHytb_d8GDUMkQ>
+    <xmx:3MUHa6UEly84sxWDGeXBwqWF-eqxBK6T3r2vrNQXz6iRxlLT8pZFRg>
+    <xmx:3MUHa3_Pr7FJmQXGsh9-nIfZkqiyzcAcqPG7cyrnpJu4F6cwgk448g>
+    <xmx:3MUHa3oyEqPra-P40x4dkETp2mAwcfPXwiFzlnjIg4vqPpPnq2yKFw>
+    <xmx:3MUHa5nQhyAnrF4N44sdgnPk4dnAPvREV4ebdjQpXE91AfgHgDX-0ASW>
+Feedback-ID: ieff94742:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 979FA700065; Thu, 26 Nov 2026 00:38:36 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -102,47 +77,72 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-ThreadId: AisSLPdYCdlo
+Date: Wed, 25 Nov 2026 21:38:16 -0800
+From: "Andy Lutomirski" <luto@kernel.org>
+To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>,
+ "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, bpf@vger.kernel.org
+Cc: "Puranjay Mohan" <puranjay@kernel.org>,
+ "Andrii Nakryiko" <andrii@kernel.org>,
+ "Daniel Borkmann" <daniel@iogearbox.net>,
+ "Eduard Zingerman" <eddyz87@gmail.com>,
+ "Emil Tsalapatis" <emil@etsalapatis.com>,
+ "Ihor Solodrai" <ihor.solodrai@linux.dev>,
+ "Dave Hansen" <dave.hansen@linux.intel.com>,
+ "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+ "Thomas Gleixner" <tglx@kernel.org>, "Ingo Molnar" <mingo@redhat.com>,
+ "Borislav Petkov" <bp@alien8.de>, kkd@meta.com, kernel-team@meta.com,
+ "the arch/x86 maintainers" <x86@kernel.org>,
+ "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>
+Message-Id: <5f46d1c1-fdce-4f3b-9d56-675a822b2d65@app.fastmail.com>
+In-Reply-To: <DN437OYZ5FGP.20VLV7ZEXQ5YY@gmail.com>
+References: <20261009024925.3169077-1-memxor@gmail.com>
+ <20261009024925.3169077-2-memxor@gmail.com>
+ <df69ab5d-bc97-4651-8668-a2b3e4bb272a@app.fastmail.com>
+ <DN437OYZ5FGP.20VLV7ZEXQ5YY@gmail.com>
+Subject: Re: [PATCH bpf-next v1 1/3] x86/mm: Resolve BPF exception fixups for user
+ address faults under SMAP
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-bpf_task_work_schedule_signal() on a kernel thread sets
-TIF_NOTIFY_SIGNAL, but the thread never returns to user space, so
-nothing clears it and signal_pending() stays true. Interruptible sleeps
-in the thread return immediately.
 
-For kthreadd this means spinning at 100% CPU. io_ring_exit_work() waits
-on ctx->ref_comp interruptibly, assuming a kworker gets no signals. If a
-prog running in that kworker schedules task work on current, the wait
-returns -ERESTARTSYS and the ctx is freed while ctx->refs is still
-switching to atomic:
+On Tue, Nov 24, 2026, at 10:45 PM, Alexei Starovoitov wrote:
 
-  WARNING: lib/percpu-refcount.c:114 at __percpu_ref_exit+0x77/0x110
-  Workqueue: iou_exit io_ring_exit_work
-  ...
-  BUG: KASAN: slab-use-after-free in rcu_cblist_dequeue+0xd3/0x120
+>
+> The range check is not a heuristic for "safe to read". It's the user
+> address part of get_kernel_nofault(), inlined. You asked for that in 2021.
+> Its job is to keep user addresses away from the load. SMAP does the same
+> job. With patch 2 PROBE_MEM reads the same addresses as
+> copy_from_kernel_nofault().
 
-The callback can't run before the thread exits anyway. Reject kernel
-threads with -EPERM, as bpf_send_signal() does.
+With copy_from_kernel_nofault(), I can grep the kernel sources and attempt to determine whether it's being used in problematic ways.  With eBPF, this is not really possible.
 
-Fixes: 38aa7003e369 ("bpf: task work scheduling kfuncs")
-Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
----
- kernel/bpf/helpers.c | 3 +++
- 1 file changed, 3 insertions(+)
+>
+> In both threads you wanted probe_kernel_read() / get_kernel_nofault() to
+> tell MMIO from RAM. arch/x86/mm/maccess.c has no such check.
 
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index bc0dd36a2799..42f3f7599567 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -4806,6 +4806,9 @@ static int bpf_task_work_schedule(struct task_struct *task, struct bpf_task_work
- 
- 	BTF_TYPE_EMIT(struct bpf_task_work);
- 
-+	if (task->flags & PF_KTHREAD)
-+		return -EPERM;
-+
- 	prog = bpf_prog_inc_not_zero(aux->prog);
- 	if (IS_ERR(prog))
- 		return -EBADF;
--- 
-2.56.1
+Okay.  I randomly sampled a few use cases.  I found some that are only run on paths where we're already crashing and lots that would require an entire separate major screwup to point to MMIO.  (The most common pattern appears to be reading regs->ip in a path where *usually* regs->ip points to kernel text and, if we have gotten so corrupt that it doesn't, then at least we want to crash cleanly instead of recursively.)
 
+x86 does not have a special syscall to do copy_from_user_nofault().  If we did, it would be a pretty obviously terrible idea.  But eBPF has an actual API here.  I think it should make sense.
+
+Off the top of my head, I see two possibly severe problems:
+
+1. MMIO and, more generally, addresses where reads may have side effects.
+
+2. Really nasty information leaks.
+
+Let me elaborate on #2.  I'm informed by reliable sources (a chatbot) that a common use of PROBE_MEM is to read from pointers where the verifier can't verify the lifetime.  I bet it's not terribly uncommon to find progrrams in the while where it is genuinely possible for the program to follow a pointer in a data structure that has been freed.
+
+This gives something to the effect of:
+
+u64 value = read_nofault(foo->p);
+
+where foo points to freed memory and value is either the actual bytes at whatever address is currently in foo->p or zero (or a MMIO screwup that will take down the whole system in creative ways).
+
+And the author of the program thinks "well, *usually* it's the right value and I'm just collecting statistics".
+
+These days it's easier than ever for a malicious user to write a cute little tool to put a value they control into foo->p.  And they can point it at *someone else's* memory.  And they can get that memory leaked into the statistics.  And probably find a clever way to extract the value.
+
+*If* it were somehow deemed that #1 was the *only* major problem with PROBE_MEM and the feature otherwise made sense and it could have well-defined semantics, I think that x86 could offer a reasonably performant way to do a read that's guaranteed to be side-effect-free.  I can think of at least two ways to do it, both nontrivial.  But there are a lot of ifs here.
+
+--Andy
