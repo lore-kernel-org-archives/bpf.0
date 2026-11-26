@@ -1,54 +1,47 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.94
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795707201;
-	b=mfMlsVIJbzQyEyfIpXKqV5+N8OClQ5B0b0rWIJknsgIjsvYSI2/MwicB1xQYA9QmlV6l
-	 stkBhot+ujTO1eO3RVhGnPxz1F+/e0IG+f6/k+hmspXxtYATlQA1Df8UEI9OtK04OW3GK
-	 /7v/05qRhjT20GDkvmsXkHV4GzZd5VZG/syT349xDH/lHKidjwSIRh80RcWwSBdXwhang
-	 0k0rklKneI85B/TMKdCIBb/zXUfcuOK1y5nAx5+WS6a04fa+MBdgzqb8TkPQ6KOekJjhY
-	 SIyjB4mWlQtu0I3YuiQRhscODsNDMBtYHZ9jYsWWW1zVhuo/kWWxf0JVmkntRfp2Lnw==
+	t=1795707234;
+	b=AnIJ3HInc1Cab58cyIdpKZgih+mK2oSS4GUFOWUKSTBEKRdqQonJt9yW8ydkGCKHY55A
+	 0drb/ER6rOWWiJbU7NE24GxbXxN858xC3yvqFY8zs0XVtfpYq5icCEcA63LFD5jTZxZqL
+	 X3eIlul/03eYKxAp7CBeL+5Bm71nWtREhiDKV9JjMTYLRPUvMraREcXvTDpqTWTREGy3s
+	 DSW6+qzA3ga1v4JAcSEzaqOaef3ExPnJdOjKK2nIFahivefzRkDX72WMeHNKxTkolONa4
+	 FF0OXSZUJfCa5npBtAIt4Uxkjoz32JzyM+3yWnICA0l6rR3ZViTNmw4SC/JwsMWCYKA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795707201;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	a=rsa-sha256; c=relaxed/relaxed; t=1795707234;
+	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:From:Content-Language:In-Reply-To:
 	 Content-Type:Content-Transfer-Encoding;
-	bh=kRp4wRTGUX5Nc07ITKcIm26w+g1oTAepPRAIzZzp2p0=;
-	b=MGVR8GIM4pH1Ah1oBe0yO6zu7mK9tDRh1kIdEVahpEAncdOOAiuvjg6sOT4vwgjCiq4u
-	 3T2pxkClD2/k1HprcftGXJA3y0FZPZd0KB5aunRUnlNT9+9nh3YhztuQ1GdJTzctD6RHB
-	 M7i80SJ6N4SdSD2Bym0T1vggG+7uidVjLVYxkmalZzpMD69HFMeYJtVwhgL4DBx18th28
-	 +3DC6OwMbXvYrrmcQ4PiHLrDPJ94j+vJUHfkkiEJ+8ZHe1x1dl1NXrDhdBVv2X39GTsw2
-	 XRlBs88I8w32UUzAWQ1+xzAjrnLg8xt8/pyfn9veYYZeDNEdUa9ZSg6rifSu2B6o1OQ==
+	bh=2t/qriAq+s9/2TT61qP0ALnEqG01i43rdHLuNJHM008=;
+	b=IWRRnrdEH4NrfSjVq07QsnJe5/axr5bYMHA7BkzDDU2EkXo3Js5en6bdlTdHEtAbUoXX
+	 /2N5DKvlht3SzZ8xR72D5HAATkqbWe4T9El8TcKYPcEIl50YNM+IqiYq2M3VqQBP4MsiL
+	 QzEwGmJyseHEmKzykTbk1cuqqcN/DTYIth9vLHqSK31oFkTGLJ4LOm8Cvbq8A43tGA6yb
+	 Cd0hMddehOhIQybEo8+wLO5EOB0QV3Xqoas+zZgGrgNicXtYA0r/l/aXw415tJi8eK0RV
+	 +QioAQzO+Hs7g2UMu5aFKWD4XMwhqcM1X8Bw+IZZdihpRw3fphwbvZqmytubhw1jGVQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=E5m87UiI;
-	arc=none smtp.remote-ip=91.218.175.94
-Received: from mta0.migadu.com (out-94.mta0.migadu.com [91.218.175.94])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fpzLRBwb;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0010E606A31E
-	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 15:33:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0010E606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 546AF606A31C;
+	Thu, 26 Nov 2026 15:33:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=E5m87UiI
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=mwJLewJ9zSnI5WWBwaIqRXXu8I3527mjgT72PP6DPTc=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1795707198; v=1; x=1796311998;
- b=E5m87UiIVTh5aopPtUryf6t8fVBmYN+bUlyQ4rnpUAZHpP9mjtBCzfgg1/lhENZlPf25of+g
- 88MVClLSBrsuTUFIQhV5sF0ncqYPl7qw4rJd2umGGbPK74hH4rPDkUjp0aWQivEJV4YYMDehdI6
- UZ1g0FLlfvuO+4sOCo50a8tw=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id fa146ce35f58f9d5;
-	Thu, 26 Nov 2026 15:33:17 +0000
-X-Mizu-Trace-ID: fa146ce35f58f9d5
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <a3f3f62b-7642-423f-ab86-9faf6bbc0ffd@linux.dev>
-Date: Thu, 26 Nov 2026 23:33:13 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fpzLRBwb
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C58F1F000C6;
+	Thu, 26 Nov 2026 15:33:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795707233;
+	bh=2t/qriAq+s9/2TT61qP0ALnEqG01i43rdHLuNJHM008=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=fpzLRBwb83mu12SXb+xOhWBHhP4ZOBOh542o1H30jAUiEJONAyPacCHLtGkbxVz5L
+	 7F4IbYh9FWNLURA/MAYhsm2Hu/nqDIk37ihsVIgy+1JqJQIeAP5kI5aGJQ4ZsUgS+U
+	 jPYasZHuqzGlmn6HZ2mIRIfUFFRFA12lXRA4fnus3WuvH0TTStPBtP/fe+brxosN7s
+	 jCJmcwLNMGm+ed86r905vtX89v0ClGB7rH7QR+LQcLjfcME6GbNmz+idvlq8EblPz2
+	 ROTl/7cLC07OriG0nDcjjGNv0ohLlwEE5Hy3kGkQA7ouUsxnlkZe68gtqzJBGNOq+4
+	 QHAyxy35MojSw==
+Message-ID: <59f72367-d65a-48a1-ae77-c95f7f805ccb@kernel.org>
+Date: Thu, 26 Nov 2026 15:33:49 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -59,61 +52,47 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH linux-6.12.y 0/4] bpf: Fix interpreter-unsupported insns
-To: Guillaume Laporte <glapt.pro@outlook.com>,
- Vincent Thiberville <vincent@harfanglab.fr>, stable@vger.kernel.org,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20261126153002.162337-1-leon.hwang@linux.dev>
-Content-Language: en-US
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <20261126153002.162337-1-leon.hwang@linux.dev>
+Subject: Re: [PATCH bpf 1/3] selftests/bpf: Move verifier failure tests out of
+ test_global_percpu_data
+To: =?UTF-8?Q?Thi=C3=A9baud_Weksteen?= <tweek@google.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Shuah Khan <shuah@kernel.org>,
+ Leon Hwang <leon.hwang@linux.dev>
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>, Sid Nayyar <sidnayyar@google.com>
+References: <20261125004911.3937193-1-tweek@google.com>
+ <20261125004911.3937193-2-tweek@google.com>
+From: Quentin Monnet <qmo@kernel.org>
+Content-Language: en-GB
+In-Reply-To: <20261125004911.3937193-2-tweek@google.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-cc Guillaume and Vincent.
+2026-11-25 11:49 UTC+1100 ~ Thiébaud Weksteen <tweek@google.com>
+> Commit 4c9241bd731a ("selftests/bpf: Add tests to verify global percpu
+> data") added test_global_percpu_data.c to LSKELS_EXTRA. Later, commit
+> 1ed2294b31fc ("selftests/bpf: Test verifier log for global percpu data")
+> added two verifier failure tests (verifier_strncmp and
+> verifier_snprintf), both marked as non-autoload (SEC("?kprobe")).
+> 
+> When bpftool generates light skeletons, non-autoload programs are
+> skipped during loading, causing the loader program to store subsequent
+> program FDs into incorrect skeleton struct fields (for example,
+> dump_percpu_data's FD was stored into verifier_strncmp's descriptor,
+> leaving dump_percpu_data.prog_fd unpopulated).
+> 
+> Move the two verifier failure tests to a dedicated test file,
+> test_global_percpu_data_failure.c, and run them via RUN_TESTS in
+> global_data_init.c. This leaves test_global_percpu_data.c with only
+> autoloaded programs, allowing its light skeleton to be generated cleanly
+> and preparing selftests for rejecting non-autoload programs in light
+> skeletons.
+> 
+> Fixes: 1ed2294b31fc ("selftests/bpf: Test verifier log for global percpu data")
+> Signed-off-by: Thiébaud Weksteen <tweek@google.com>
 
-Guillaume, please test them.
-
-Thanks,
-Leon
-
-On 2026/11/26 23:29, Leon Hwang wrote:
-> Request from Guillaume and Vincent [1][2], backport the following commits to
-> linux-6.12.y with editing the commits manually.
-> 
-> 9a6df65d5c6a ("bpf: Introduce jit_required flag and remove bpf_prog_has_kfunc_call()")
-> f1c27922576e ("bpf: Reject programs with inlined helpers if JIT is not available")
-> 34746b5a84ec ("bpf: Disallow interpreter fallback for arena-related insns")
-> 7a0855e73757 ("bpf: Disallow interpreter fallback for BPF_ADDR_PERCPU insn")
-> 
-> As there was a big code refactoring in linux 7.1, the changes in the new
-> file kernel/bpf/fixups.c will be backported to the positions in
-> kernel/bpf/verifier.c.
-> 
-> Patch 1 introduces a new bit 'jit_required' in struct bpf_prog. The
-> other patches set 'jit_required' to fix the issues.
-> 
-> Links:
-> [1] https://lore.kernel.org/bpf/BESPR02MB12296D62B1B3F33BA21C4F24AF1432@BESPR02MB12296.eurprd02.prod.outlook.com/
-> [2] https://lore.kernel.org/bpf/MR1P264MB331494502C9D13D8A9EAFB99B7E82@MR1P264MB3314.FRAP264.PROD.OUTLOOK.COM/
-> 
-> Leon Hwang (2):
->   bpf: Disallow interpreter fallback for arena-related insns
->   bpf: Disallow interpreter fallback for BPF_ADDR_PERCPU insn
-> 
-> Tiezhu Yang (2):
->   bpf: Introduce jit_required flag and remove bpf_prog_has_kfunc_call()
->   bpf: Reject programs with inlined helpers if JIT is not available
-> 
->  include/linux/bpf.h   | 22 +++++++++++++++-------
->  kernel/bpf/core.c     |  7 ++-----
->  kernel/bpf/verifier.c | 21 ++++++++++++---------
->  3 files changed, 29 insertions(+), 21 deletions(-)
-> 
-> --
-> 2.55.0
-> 
-
+Acked-by: Quentin Monnet <qmo@kernel.org>
