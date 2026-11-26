@@ -1,100 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.167.41
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795697598;
-	b=r7MoeyWPP0CEL7leKAHASXczQqe3EBl7b3N0ptocp7pbs41DpYy4PrsaQGgwhnI42+nh
-	 0D7LthQRdqe+/nmkCZJ67MmHAPpR3W2ODqFKIhti9pwwFlI8grmYR71izSFZtUJdhAK1n
-	 GUNPSHM04Y66niYw2ggPtg556nGptmkDAE+2AgOfT3qT3HktRCRUPFfiFwWEgSAbmLVU4
-	 4MeIEIcsHLWU4Paf4yb3BEy7Nyup4Xw0bxkgfBG9DwVlm+3+sf3H2/rKBS+xlBL7RReKw
-	 6Hpgb9WVVCfzeYEe4JqMhffCn61XMo6zykiYaJ8cozWycHrWrg3+UIyuaXu6OgwaM6g==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795697598;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=lGc9B3jyrGJ4akeMJZzBnHn2T1j3IVSiriGjwJai8GE=;
-	b=j0NgfRAVz7QepYXzPPW1OQZV7imQn0nD32xr9b5ggcE+TJxOyHVTyq860cP6AmBa922W
-	 KowBOffHLpbqfCQjNAS0DvrCHcl5hxxAd8Qn1T2Y+rJrpk+ie6/Q62hLWlt9ZvRn8fdNN
-	 7rKJVzzmxHWYl1kXfWWJ0OZkHX+fprGdT61chuCfIyyc2O+J/y+CdYvU9rrdchcsYDIxp
-	 qpQj2EhcCKoM/epbn2kwbrHVn9BnlrDyhbcmPmLzrPIjPL/NGImYSXM99OBakczoyMhsV
-	 tXSoLknTsompfivZEnDqnrVOa0NErPBiDRtQSjYmiRgkAWIeKs0iR8f0PJVwtVJUcag==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=FORWBKgw;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.167.41
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795697735;
+	b=KO8mFSnn5yjZAAWnwd05Cj8o5UstlFCBXu0Nt3fls4D7qE97uIZMImPsAxQss+GwUluT
+	 DJIJj8AzeVJrJb0dEPCNItI9nzkHlpcPnN/Yze5/q83f50G2OBFrev1tOT9aWB+cuTMmT
+	 8fhGDp2bwCL3pWAR7SA0TJNmZQd3dLn7/NIhWsYYiTgOhNcYX+HT8raJ25LDfEMyq1V0j
+	 XO46mjc3aXd1VtJVSl49I+1gErHW10p8YGPljC3YmHBHuV/ch36lNd0po6cIeGS7fWZGR
+	 Az+m9zFJUDhPpoZYfkwzoDsOcwSwrbRhK57FUZgo/P1LRFil3Zj6Xn3TEEtfVQOEInQ==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795697735;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=U+nzHiJ88YOWpRwppN5sbLZe/c6Di7F1lgfZ3A2+xio=;
+	b=MIWjozK9MhVR92gEHjx6ehG6nEYhj+UYK9YhlAgMPX0pPwKFVkKpz7KSXP4z0bcrb/nO
+	 pBH80t8SfJ7H2dbecHj75wLW6LSBtGT50t6ThHT1PB+f9VDwLY5EzSnpxMBIx8ImCPqFB
+	 tgkCnHHmeir0F4ok+jDs43J04pe+DN/NKNpfQndN6E2wOadMaWPZmlWB3/X9L+Yi4nyHz
+	 tLfq4BRAKcB6cMO/rnvRIAzBPfojMxqqj3dzHRYY0LfAw1jsLC4C4gvmlApZX17a3emnD
+	 w9m/kNCY9aBLk9X5vkxQB8YA9VYOurSDWRPIpbU61cXrhpjI1BaR1KIwIpfSqd1YSgQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BAOMkGQe;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30F86606A321
-	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 12:53:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 30F86606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14BE7606A31C;
+	Thu, 26 Nov 2026 12:55:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=FORWBKgw
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-5be3ed646a5so387549e87.1
-        for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 04:53:17 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795697596; cv=none;
-        d=google.com; s=arc-20260327;
-        b=j91xDRP+YbMvJrfQOPoEqVhSSOybkLXyFDfWZ3uVIS7jpNy9qDJdfxkOLC49kOJuUe
-         f5lDeWHa0GeNtTkgsqLeoarwn5rTlii6k7iStfGbrQ2ndQbiR35oDSlLsRFz+4+Cpr4I
-         CUSXlK8OQeIvFt0WX7/4oVGh6AYo6kkHJywU0mZazi0JBZLTrTrvaa4gEBl9dKQJP2Im
-         uirtJtHx0+l865wLCDShqi7aXBMBPXXYxfOi/Osm+eYsNSlSDX6+5Wu1suL+IEuliQH1
-         NgkTZELFEO7wiYyo7uyRai/sUcPk13mLXdMqKAKS9QfPPm+NSwuGfsognxxclllY1db0
-         xEkw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=lGc9B3jyrGJ4akeMJZzBnHn2T1j3IVSiriGjwJai8GE=;
-        fh=xE8AEZL1wTibs61ROpHQSQ06g/vnZ1ApdlLKNgg9RiU=;
-        b=bSj2yE12C/qYTGf6nRz1NT3hISMUtgn/szK7KxyFPSDPxRRaUki6T/oCRn+c7Ev8Io
-         +Mg5yf0ZFD14lLGpWQs3szSKDe0zmxwii7mtrUNovWjD7c4/ZVtWXYxBJmPGv169AsmU
-         Xh1qj2/ooCSARNxiFmPZJ3EXD0eRfVkbwSk2a6boeQWDKORLdBQ1i4NQi5RXicZMGSZ2
-         vjq40uDYXy2/1WDf3aXXlDj/mKhthuhgHivq93ZeagmLJrAj1Jz7ulVBSFUVlsiZLEPP
-         UNftOoG9OVhsKj1uPyFGOF3VUMY20VD4BIJhmU/Kl5jZ3dZ7In30plSbXmsrG4sDJUOh
-         oZeQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795697596; x=1796302396; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=lGc9B3jyrGJ4akeMJZzBnHn2T1j3IVSiriGjwJai8GE=;
-        b=FORWBKgwsA7he+yhIejYmX3C8mLyffMOydsVSolS5B9UxM/d6GN9EfR/WDQnPxM59i
-         I8V6kZ/8BCzmnDAJZDiYTIggQsKvlYEoBOQ6VOaPjuRScNUe+Nv/34RmmjzPre8+QCii
-         svin+SE79f2EIjvbqI+at/bTde6GLq2GkUerBK+q3/xO+kSqiqd390kpOWbo0xbmS3EP
-         HhgnZyq1/RsPyte70TPtCraHQ1qJScwh0kGrn+u7cLEkNU1RZKh+x4HrDRvojD7cZ9+i
-         7ElD/IEkweh4cSXSarOg4tsLELOaArmaKLCFc20DyW0O8+8DAbBqXtCU1of40mjEY1H8
-         yXXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795697596; x=1796302396;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=lGc9B3jyrGJ4akeMJZzBnHn2T1j3IVSiriGjwJai8GE=;
-        b=HLLAOaBd8BIKce+y5rOcQpYyzDWLvc0X1/ZHJ5hga5/IgNobsTEpacI3nrH7ElCL4b
-         TI6m229i7wVy7FJHIS1iGgK1UQfpQiuv0kQKLTFTeU3aNFtoP/vTimRguRoWa0Amr60g
-         oFa5hKZfFM2WOuGlQQl++4SheLkUnA6M1tCeWeiBG0qmgcYlrTLYmvawnDXQ77xOq5w0
-         bzRcPfhe4HRrSVzcE0IsMcNnwyUAqufidpvLICVtV69gnJhCiituVcpxFweVBJZB20xQ
-         LPeYu0AiOuNxrXOpVF2CqvJHtzcQzaEdVAWneVfVW1MNmpukNe91/rOIqF7SwgqXq0D4
-         6jkA==
-X-Forwarded-Encrypted: i=1; AL+hErH+rZk1GnTi4E/4bSYyA/1FWQOIjHxvp1oLm1A1vpyGe6VcyFZIHVViyFojzGadl2CSW5o=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+DbnJdak8rOgS3SOLNawX0F7oUJ41eHYQVtl0tLspvEwj55Hsy
-	jcwQQlJTdWwKidl2Sfna8C7kgCDc0GJ9QfOAWoNlXXQOhC75ho0xUX8TVb7wFUHY3OBNgbSCMAl
-	SzjT8yybbhYs1AaXdXViV6mXLTQEyo4s=
-X-Gm-Gg: AZFdTZfC9Ur+4OaibS4VXX4u6WezwDaybiAMhFscB7tSivVHplqq5bJyDqUiLamiS2R
-	NwK7iZltMh/1JF0xnjd+xByKY1QnYOGHUGfwyr2xs+yHIINMPISxgLPOnrNZCrtWXu4wnwJOi9Q
-	kmUu5E22TYgBlv6pvbidMKQtBvp76RViNX2GnqFMVtSpDWjXhr/CX+gYipNVax3e4zyOiYFCrDQ
-	qc2pwXQJ+DOATxyY1KyFhUAJYLsyqlAdkiqY37FoWMOmuUAOn2CQowbqsL4T2Gj1rFvhwGDFtNi
-	dlM23v7BZDFJkN0m42iiR7fi95C3doOnXeUUCXT5jLq3g9jlmSOeL1xTDVzjuoJWiKY7l/0j6nl
-	ta706vuVOShvjnlt7NJtcxE0htx/fCYzeCudWkg==
-X-Received: by 2002:a05:6512:6311:b0:5bf:c4d2:b074 with SMTP id
- 2adb3069b0e04-5c1bc81b1eemr5244475e87.55.1795697596151; Thu, 26 Nov 2026
- 04:53:16 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BAOMkGQe
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF5811F000C0;
+	Thu, 26 Nov 2026 12:55:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795697734;
+	bh=U+nzHiJ88YOWpRwppN5sbLZe/c6Di7F1lgfZ3A2+xio=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=BAOMkGQe14Ub4YREQBETzHfioaEM0ff1RL+bshcEsZohMPmdyvs3Xch3i58InmLEW
+	 YHkiijBZTNeHVsFaw7MWzgkRhmi8rMVGJ2nMd7d2d03AIutRW3BYOb7Aukzv6thRYZ
+	 EjC4UHuvAsYdfLUfOJoTnmF+SYp29jUPDK9tnWMRn1tD6Yihbu8B0Rc2HPfDSVm/PH
+	 z49PBf+FmD5n8LxIW0sZ6vldRZLBjU/+HrQf2VCTqkeajhIzG/BptuV/YLk7kkjCI6
+	 QV+go6ZMUWNyARRqyqxtNu102YROkRypGROXky0jRpN3nQ+Q9Ic+pTHJ1igoJ6bFIp
+	 sqCZbdKlGq2rQ==
+Message-ID: <sashiko-outbox-235545@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v3 8/8] selftests/lsm: add lockdown securityfs test
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Cai Xinchen" <caixinchen1@huawei.com>
+Cc: linux-security-module@vger.kernel.org, bpf@vger.kernel.org
+In-Reply-To: <20261126131315.1256553-9-caixinchen1@huawei.com>
+References: <20261126131315.1256553-1-caixinchen1@huawei.com>
+ <20261126131315.1256553-9-caixinchen1@huawei.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 26 Nov 2026 12:55:34 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -103,52 +59,54 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-References: <20261124230228.3868519-1-graypanda.inzag@gmail.com> <DN3TX43KWXO5.JWLJ9HO1C9K7@gmail.com>
-In-Reply-To: <DN3TX43KWXO5.JWLJ9HO1C9K7@gmail.com>
-From: Junyoung Jang <graypanda.inzag@gmail.com>
-Date: Thu, 26 Nov 2026 21:53:04 +0900
-X-Gm-Features: Aa3M54ptuj7zEv__cM-ZP_znEaMpCD4YLDPrlyY2oJoeO2RPwi4yvnEBtuW6DHg
-Message-ID: <CAO7ntTQ0bJGezMUFMoy=_Ns63Pw_1Tbw0_QKtXVoh2Wst26Orw@mail.gmail.com>
-Subject: Re: [PATCH net] tcp: avoid NULL skb dereference in zerocopy receive
- with sockmap
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Eric Dumazet <edumazet@kernel.org>, Neal Cardwell <ncardwell@google.com>, 
-	Gwanhyun Lee <gwanhyunlee@gmail.com>, Kuniyuki Iwashima <kuniyu@google.com>, 
-	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Simon Horman <horms@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
-	Jakub Sitnicki <jakub@cloudflare.com>, Jiayuan Chen <jiayuan.chen@linux.dev>, netdev@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi Alexei,
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue to consider:
+- [Medium] selftests/lsm: missing $(OUTPUT) prefix in run_lockdown_test
+  target
+--
 
-I noticed Kyuwon Cho already reported the ingress_msg copied_seq issue
-last week ("bpf, sockmap: data left in ingress_msg is dropped without
-moving copied_seq, and TLS RX then warns"), so I'll drop this patch to
-avoid duplicating work.
+commit ae0a97bf5c81e3abb82a38d806d0a81d48473b52
+Author: Cai Xinchen <caixinchen1@huawei.com>
 
-Thanks,
-Junyoung
+selftests/lsm: add lockdown securityfs test
 
-On Wed, Nov 25, 2026 at 8:28=E2=80=AFAM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Tue, Nov 24, 2026 at 03:02 PM Junyoung Jang <graypanda.inzag@gmail.com=
-> wrote:
-> > Check tcp_recv_skb() before using its result in both paths. Also stop
-> > before advancing beyond the last skb in sk_receive_queue. Neither
-> > check consumes data in the sockmap ingress queue.
->
-> This should be fixed on bpf side. Other readers trust copied_seq too:
->
->   reader                             with stale copied_seq
->   ---------------------------------  ----------------------------
->   tcp_recvmsg_locked()               WARN "TCP recvmsg seq # bug"
->   tcp_read_sock()                    frees new skbs
->   tcp_collapse()                     BUG_ON(offset < 0)
->   tls_strp_load_anchor_with_queue()  WARN_ON_ONCE(!first)
->
->
-> pw-bot: cr
+This commit adds a kselftest for the lockdown securityfs interface along
+with a shared file-reading helper and a custom run_lockdown_test make
+target.
+
+> diff --git a/tools/testing/selftests/lsm/Makefile b/tools/testing/selftes=
+ts/lsm/Makefile
+> index 3f80c0bc093de..3be7aa42761ce 100644
+> --- a/tools/testing/selftests/lsm/Makefile
+> +++ b/tools/testing/selftests/lsm/Makefile
+> @@ -8,10 +8,18 @@ LOCAL_HDRS +=3D common.h
+>  TEST_GEN_PROGS :=3D lsm_get_self_attr_test lsm_list_modules_test \
+>  		  lsm_set_self_attr_test
+> =20
+> +# lockdown_test changes the machine's lockdown level, so do not run it
+> +# by default.
+> +TEST_GEN_PROGS_EXTENDED :=3D lockdown_test
+> +
+>  include ../lib.mk
+> =20
+>  $(OUTPUT)/lsm_get_self_attr_test: lsm_get_self_attr_test.c common.c
+>  $(OUTPUT)/lsm_set_self_attr_test: lsm_set_self_attr_test.c common.c
+>  $(OUTPUT)/lsm_list_modules_test: lsm_list_modules_test.c common.c
+> +$(OUTPUT)/lockdown_test: lockdown_test.c common.c
+> +
+> +run_lockdown_test: all
+> +	$(call RUN_TESTS, lockdown_test)
+
+[Severity: Medium]
+Does run_lockdown_test fail when building with an out-of-tree OUTPUT
+directory?  The binary is built at $(OUTPUT)/lockdown_test (and lib.mk
+rewrites TEST_GEN_PROGS_EXTENDED with the $(OUTPUT)/ prefix), so passing
+a bare lockdown_test to RUN_TESTS causes runner.sh to look in the source
+directory and fail with a missing file error.  Passing
+$(OUTPUT)/lockdown_test or $(TEST_GEN_PROGS_EXTENDED) to RUN_TESTS would
+avoid this.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261126131315.1256=
+553-1-caixinchen1@huawei.com?part=3D8
