@@ -1,68 +1,65 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.69
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795672410;
-	b=10XojXp+hLOIYgCjFISt7eKy7JR4hISWy8KDkRVIBosUrpYAdYfSrnh/daGemnD38Qht
-	 g+7sWciFiispUxybLRbwBuICCoula1L9S1F4NIOSgx+JCRL7Wxaa0ecGDI+5umsdCnWee
-	 /Algm4mwBjuBYOcMk8y7y4ObHgiWIKm2mtsw0TNN5WOlQ4qeZTJmkdOZWUtnhJuQ8PUB9
-	 1cCuPIpGxqaHfPizv5wCTnvD83BuMQGdXEJFLiQbv/un2gQ1GkfzbBARFg0dqSjcOPogs
-	 UZl4AbwwOG9g4mTP2Pt/uREBlcOW3IiM/LIg36UYOJ16XfPSSqVyi4hDo2ia8LQuTHg==
+	t=1795672446;
+	b=Pfp6SdGxxz4niS9Iu565+EhuYPY0jxRdCFJlz9cUT70t7AO0+QTO1GaxLgHnimgh93Jg
+	 yd4eq5HdcGukPtVpWdKOJR9S9ONkJdf2v4Y0J5lltf3BbJoehW7j+kA5xYfv+may6388A
+	 jU2a6A0kmtnoLVAcyjhjbtMsMiSJt/iivSO0zCEp7vRDPszrzi9MS8QM4YYvcafQchcBl
+	 RjPTXQg94t/q8bh6Rx0ZzmjXWalhsHij/imf0YTYCYvD8xYCyZtHxxpBq53ezDieHfl0s
+	 k88p6aPRS2jDTWHCCsY+FqBtCLJi8F/O/veFNwIUYy59kctdYzM2hdUUDBFKs1QFqKQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795672410;
-	h=DMARC-Filter:X-UUID:X-CID-P-RULE:X-CID-O-INFO:X-CID-META:X-CID-BVR:
-	 X-CID-BAS:X-CID-FACTOR:X-CID-RHF:X-UUID:X-User:Received:From:To:Cc:
-	 Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=ra7LaUQ9JUQBkxGCXeGWTiweCdwL+ozh23gAP3eLfVw=;
-	b=NjjvpjwIb6v01ntAkR+TwCNoS4Kyj1Jvd4pV81DsRg6hpXyOIt3f1zJhh+iW0y8NHpB3
-	 wRTffq9x95tnC5XLpeOGGk/8skm2Rpv/iqDOzmPJWrlgRFyRM7XHBvnL9npt56r1ue7Ec
-	 TqT5UvHq4IWZOY+Gb5Fgj3HAP9NG15zamDkrIsCzwv5eUJFbylGA4kYY7vDtev4As76/C
-	 NV7n6bIBlXBAt3o+BTrIwky0bnKahjvU/W04/DZFmAvMefVtmSybS9sSEtXuFoFHQZLWT
-	 wMpWfr/10m+B/WVAEFr+dDF/KAjvTD2+U4n3XbDIx1qpoEgqiB03TqcjUy6Bb0+JtiQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795672446;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=sy8OCHsSECMY/f4pzR3nMQfXTLgjwJahY/PuIuEYUM4=;
+	b=Rmdmwg6Yvn8IbpoGGXBVq7g4H++Tr29v8jCQ2rt3AH99v8e/wLYn+yNozd0vSswmn2mz
+	 vQY+sYsV0CxLdSTuh5I2UwWJhULhpGGzcwRMNlLppRHnxI4eP+q40jlfGB3s4n3AIPqHx
+	 6hLQ4cwG8mWoX/e6uSGL5MF+gVrHhOVSlh4X5M5scNyZlzZ7ry3ycDQukGu1AVCkyNsda
+	 AQb1lPq2WSvog7sQayr74r6/5AtGAlBEii/0JMM/aE0KlscXE2h0OrtQa2KN2IAqhQi7N
+	 ipbaa5qpt2bZO3dwVn51kf6xSCKl/Yb3EBUGqZpS2QdWQd22TwuIPMdNJKJGPITkfhg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=kylinos.cn;
-	spf=pass smtp.mailfrom=kylinos.cn;
-	arc=none smtp.remote-ip=124.126.103.232
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=FncFVUau;
+	arc=none smtp.remote-ip=95.215.58.69
+Received: from mta1.migadu.com (out-69.mta1.migadu.com [95.215.58.69])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E396A606A31E;
-	Thu, 26 Nov 2026 05:53:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E396A606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: b06cbcdce95d11f19a56ed5b684f684d-20261126
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.19,REQID:452bdda6-a909-41fa-8d32-ec859bd9b39b,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:7db8b62,CLOUDID:80195e9552410481c2bffcb4d680bff0,BulkI
-	D:nil,BulkQuantity:0,SF:102|136|865|898,TC:nil,Content:0|15|50|99|100|102|
-	155,EDM:-3|-100,IP:nil,URL:1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-	,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULS
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: b06cbcdce95d11f19a56ed5b684f684d-20261126
-X-User: sunshaojie@kylinos.cn
-Received: from sunshaojie-pc [(10.44.16.150)] by mailgw.kylinos.cn
-	(envelope-from <sunshaojie@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 1764309833; Thu, 26 Nov 2026 13:53:22 +0800
-From: Shaojie Sun <sunshaojie@kylinos.cn>
-To: Tejun Heo <tj@kernel.org>,
-	sched-ext@lists.linux.dev,
-	David Vernet <void@manifault.com>,
-	Andrea Righi <arighi@nvidia.com>,
-	Changwoo Min <changwoo@igalia.com>
-Cc: linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	Shaojie Sun <sunshaojie@kylinos.cn>
-Subject: [PATCH] tools/sched_ext: Document clang requirement for arena schedulers
-Date: Thu, 26 Nov 2026 13:53:01 +0800
-Message-ID: <20261126055301.652002-1-sunshaojie@kylinos.cn>
-X-Mailer: git-send-email 2.50.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 215B6606A31C
+	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 05:54:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 215B6606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=FncFVUau
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=MhyRJ8jiUP4r8T6n581TUC2swBZMvDYOP+3qPSW8ysk=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1795672444; v=1; x=1796277244;
+ b=FncFVUauXD3srqbg+KPdw4vnFEP7kR63DWnz5xWAvJ6ykNIS7H1ybZrJs7NFJMS0OVCWwcFH
+ rkwZ+2lypkMw1oqs82UjzaIFpPcopNt1XYMgBp5Zlo8xmRMnxUjhWQXdGV+vpgWZUJHIa/4h5VQ
+ mt6s2kZv1dOW+wQRJGczl9JI=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id a832319221069530;
+	Thu, 26 Nov 2026 05:54:04 +0000
+X-Mizu-Trace-ID: a832319221069530
+X-Migadu-Flow: FLOW_OUT
+From: George Guo <dongtai.guo@linux.dev>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com
+Cc: bpf@vger.kernel.org,
+	loongarch@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	George Guo <guodongtai@kylinos.cn>
+Subject: [PATCH bpf-next v1 0/5] selftests/bpf: Enable private stack, large stack and arena tests for LoongArch
+Date: Thu, 26 Nov 2026 14:53:49 +0900
+Message-ID: <20261126055355.9967-1-dongtai.guo@linux.dev>
+X-Mailer: git-send-email 2.53.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -74,69 +71,60 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Schedulers that use BPF arena (address space 1), such as scx_qmap, only
-load correctly when built with clang 22 or newer.  Older compilers do not
-insert addr_space_cast around inlined memory intrinsics (llvm.memset(),
-llvm.memcpy(), ...) on arena pointers, so the verifier may reject the
-program with "invalid mem access 'scalar'".  LLVM fixed this in 22:
-"[BPF] Handle certain mem intrinsic functions with addr-space arguments".
+From: George Guo <guodongtai@kylinos.cn>
 
-Mention the requirement in the toolchain dependency list and add a load
-failure entry with the characteristic libbpf error, so that users can
-tell it apart from other load failures.
+This series enables the BPF selftests for the new LoongArch JIT
+features, and fixes a libarena build failure with clang 19.
 
-Signed-off-by: Shaojie Sun <sunshaojie@kylinos.cn>
----
- tools/sched_ext/README.md | 29 +++++++++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+Patch 1 fixes the build of the libarena buddy allocator selftests with
+clang 19, which refuses the signed remainder in test_buddy_alloc_free().
 
-diff --git a/tools/sched_ext/README.md b/tools/sched_ext/README.md
-index 0ee5a3d997e5..10d767f3a7c6 100644
---- a/tools/sched_ext/README.md
-+++ b/tools/sched_ext/README.md
-@@ -33,6 +33,9 @@ is actively working on adding a BPF backend compiler as well, but are still
- missing some features such as BTF type tags which are necessary for using
- kptrs.
- 
-+Schedulers that use BPF arena (address space 1) need clang 22 or newer. See
-+the [troubleshooting entry](#bpf-arena-schedulers-require-clang-22).
-+
- 2. pahole >= 1.25
- 
- You may need pahole in order to generate BTF from DWARF.
-@@ -246,6 +249,32 @@ In order to resolve this, please follow the steps above in
- [Getting a vmlinux.h file](#getting-a-vmlinuxh-file) in order to ensure your
- schedulers are using a vmlinux.h file that includes the requisite types.
- 
-+## Load Failures
-+
-+### BPF arena schedulers require clang 22
-+
-+Schedulers that use BPF arena (address space 1), such as `scx_qmap`, need
-+clang 22 or newer. With older compilers the program may be rejected by the
-+verifier, for example:
-+
-+```
-+libbpf: prog 'qmap_dequeue': BPF program load failed: -EACCES
-+...
-+R7 invalid mem access 'scalar'
-+...
-+libbpf: failed to load object 'scx_qmap'
-+```
-+
-+The register number varies with the program. Clang older than 22 does not
-+insert `addr_space_cast` around inlined memory intrinsics (`llvm.memset()`,
-+`llvm.memcpy()`, ...) on arena pointers, so the verifier sees a plain scalar
-+being dereferenced. This was fixed in LLVM 22 ("[BPF] Handle certain mem
-+intrinsic functions with addr-space arguments"):
-+https://github.com/llvm/llvm-project/commit/94f290fffd80bd7c7d65db1df78cdacab633aab4
-+
-+Rebuild the scheduler with a sufficiently new clang; run `make clean` in this
-+directory first if the object files were built with an older compiler.
-+
- ## Misc
- 
- ### llvm: [OFF]
+Patches 2-5 enable the following tests for LoongArch:
+
+  - the 2 KiB private stack test in verifier_large_stack
+  - the struct_ops private stack tests
+  - the arena LDSX tests in verifier_ldsx
+  - the arena load-acquire and store-release tests in arena_atomics, and
+    the libarena spmc and bitmap parallel tests
+
+The LoongArch JIT support for these features is in the following series,
+which goes through the LoongArch tree:
+
+  LoongArch: BPF: Add private stack, exceptions, large stack and arena support
+  https://lore.kernel.org/loongarch/20261126034048.7370-1-dongtai.guo@linux.dev/T/#u
+
+These patches were part of v2 of the LoongArch BPF series:
+https://lore.kernel.org/loongarch/20260702022322.51033-1-dongtai.guo@linux.dev/
+
+Since then:
+  - Split the selftests patches out of the LoongArch series and rebase
+    them onto bpf-next.
+  - New patch 1: use an unsigned loop counter in test_buddy_alloc_free.
+  - New patch 2: enable the 2 KiB private stack test.
+  - Patch 5: also enable the libarena spmc test, which has the same
+    guard as arena_atomics (Sashiko), and the libarena bitmap test,
+    which needs cmpxchg on arena too.
+  - Drop "selftests/bpf: Add LoongArch deny list" (Tiezhu).
+  - Reword the subjects and commit messages.
+
+George Guo (5):
+  selftests/bpf: Use unsigned loop counter in test_buddy_alloc_free
+  selftests/bpf: Enable 2 KiB private stack test for LoongArch
+  selftests/bpf: Enable struct_ops private stack tests for LoongArch
+  selftests/bpf: Enable arena LDSX tests for LoongArch
+  selftests/bpf: Enable arena atomics tests for LoongArch
+
+ .../bpf/libarena/selftests/test_buddy.bpf.c     |  3 ++-
+ .../selftests/test_parallel_bitmap.bpf.c        |  1 +
+ .../libarena/selftests/test_parallel_spmc.bpf.c |  1 +
+ .../bpf/prog_tests/struct_ops_private_stack.c   |  3 ++-
+ .../testing/selftests/bpf/progs/arena_atomics.c |  3 +++
+ .../selftests/bpf/progs/verifier_large_stack.c  |  1 +
+ .../testing/selftests/bpf/progs/verifier_ldsx.c | 17 +++++++++++++++++
+ 7 files changed, 27 insertions(+), 2 deletions(-)
+
+
+base-commit: 486b5ce7184f7449ef2fe1e951455b0b8a114060
 -- 
-2.50.1
+2.53.0
 
