@@ -1,83 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.42
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795702666;
-	b=eOe+puBlPNGpvaW13rGGzfbbgSx+eiUtB5p3BmuahN6L4atF1SR9Qu6uBUdTwiP3kT/K
-	 oR9xJswmCK20aEDu6PxKbiGsgEanrQ3Xzm+uHlwdzJSqPLqMCV0KEbRB5CSm1Pw1UbMke
-	 wlJfjw/GrApzCdhW9caY2uF3Aekwcgy/wHRSp+kmHhUFsK0CbF2QXnJ7Pk+UyKJ74u2oy
-	 sU80lJKSNik8RgDc5qqyyYZTAavPJfX7h6gVSWO9Gi2wA5tfRH1oe9gqmJcGtWcG2Onmh
-	 kdAYf26jnTA7FlBrb4tzLLgjOG5YEiztn14GMhTYajfNFwm8XVxLr2TL+WpH6hxUtsA==
+	t=1795702667;
+	b=eYLVu0ADsNEYnTkCifJe9Gupolao0r7qzPU3tA3yexiBlb9pFoFgeJmGpc9tsrFnyCLd
+	 631ytAElSahxwrOLHte8rIFFJc6AfIQhRawXwXPqoaUBV9DP2tiqNHwgAfFQFoEsBI/cI
+	 lmTy3VG3B0ZuD7nVZvOgmlO30/xitx5xPn/swnjK0PbiJXAeMKFyuFebF42grP3GdF9HV
+	 QT7sxx+gnnZpWC5cJOygHz6AYuwR8dAh7Qdj9P8cLsenbmsO55rpbHaCbqAhCaHBpEaNj
+	 h0CrCjSmWuDcTKKm8Uqs1TFk+H6Y0T0nVPOHvqvqfum4pCm5EKacb+zlAcxm+sVLkMA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795702666;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795702667;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=d5kPjlmVukUgh2VIiEqN1J+EQssu+1tSxEHNxTN5XCU=;
-	b=ZZoGod41eDu7XjAxQVzaNVcep8XtgFHmF2kXrfZbq+Smxh6ByNrTgY+mENAT4dfTqDkd
-	 5vtAUK1kIfL8HKSsvAhCCBjsIATew3T7CnhRUnMfe0S3dEYZTiHDUkajOROVe7+RrmFIx
-	 vBPGr4h8zQJ3LbXqp4I7rg73wEeOMtTkK9hFkWrg05BoPNO7kOOo26ftFgMNs42HLLOUH
-	 l0gsYO4JYEmxdJdhvVP5Zp6ysEZIjVWx8CpnUWqRO05XFwDMh2jQa2U742NLKcpufDVmG
-	 cTjrIW/g+IC4TYLoldGHlNVtrrYgAG4RMr6NhpUun/O1ZCtwVQ2ADTY3Ty3/+dkKQ+A==
+	bh=TEG9M41Q8ewXtwGQfG4tnvfBTrejLAcva0flrqD/WdY=;
+	b=bH7Uwz8/ojq1Ma6u5nBIZMwNmO6+getRQ70v/80xK9rSgpE4OSNnUdghM53x8da04Ej2
+	 j/pg07r+sGfb8mC6u78rceiRE19udnIcDe65OsHXFt6GalvPdxQjcFCMevcW+bwItwm9X
+	 bsFpNxos8ClVg7leaZflo1KI7G7Zu+9jF7KeWnfTG1VqvvD0olbEfYLVbU9mcFW00Ud4u
+	 r1dMJCxuRXRTiknh/Hr9khmgjOtQTk5lguGnDtfUAN7UHwPY2q5SP3CwCFtFkwrLvWtYA
+	 aFyUojrI2q8PjRxTl0TnT6O7k1/Fn6K4HQDFUllVfqCRtbdp62zbmSF7Ya+tuZtsBIw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=jc6iRkKp;
-	arc=none smtp.remote-ip=209.85.128.45
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=UUExD2lS;
+	arc=none smtp.remote-ip=209.85.128.42
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC55C606A32C
-	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 14:17:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DC55C606A32C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FD45606A331
+	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 14:17:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9FD45606A331
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=jc6iRkKp
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4bba5e17cbeso17920315e9.1
-        for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 06:17:45 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=UUExD2lS
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4bb64ef5a00so57390145e9.3
+        for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 06:17:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795702664; x=1796307464; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1795702665; x=1796307465; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=d5kPjlmVukUgh2VIiEqN1J+EQssu+1tSxEHNxTN5XCU=;
-        b=jc6iRkKpoFBU8iE35sewqPITyGJuG166299CPS6EGuA1MTv+7/ZLihTvos0Fh5qfqm
-         //OrOPspQGnskk63DexqSOVcP9jV5zksVNcUeFDNdgWdt1ADjI5cp4gPFXkhZ7bGzUn5
-         QX3W1ZrMMAP4A9CnEbe9u7dEcH+uJ4GYBtZp1sX4cdXdUHokiKvHMCj6XDWuPYRY0wDX
-         AuTRSls6qmDE22dR7V4zhO1TfJoqgQYxNFWIar8+hFqBl9FyV7OIxBkdjEmwdkrYwUDh
-         pr7HaPWq+XDf9HGl0m8SzkNJ6+GkAo1r4jKY7N369k+wIISjGSUDZFemE1bUGwJD5uFs
-         NcaA==
+        bh=TEG9M41Q8ewXtwGQfG4tnvfBTrejLAcva0flrqD/WdY=;
+        b=UUExD2lSHlv1C8XJ58Swk3tRE7jjkVbazal67gFvBdd/yTOZvUw6ioYN6f2rHKrA5u
+         5ER4A6LttQZ8lxmyQHQ4iasQQq5ftufLqJiAd9jfjNoVPHmLWqHmFQYOXggJXMNJKKqq
+         8MOOlGOICHLP9M6QJAJ2iJiUL3B7z4pjPYe/qlUDKtahfGzly0YAkygyECZAg0W9p5T1
+         NcSjLjIbHpbA1iHK0evCtQIw9+fm3Df/kW+akbC2F9mJXpYngRdbe+AXiiTwmexjiHeA
+         A2+I90v7XkYlP5zIplBKPRceHKa3O0gwlbGlOL8mcX6Qb85mrxr31+6yUq7NhGx/cOty
+         ptxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795702664; x=1796307464;
+        d=1e100.net; s=20260707; t=1795702665; x=1796307465;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=d5kPjlmVukUgh2VIiEqN1J+EQssu+1tSxEHNxTN5XCU=;
-        b=M78Ko2ovFCiA4Rh/3LNdPsweFIVcuGlsGdyz7ueLspvD0etTyiC27pRodNyrMX4fgy
-         ObcCOq3EYUuTPfMrbQZrN9aI52rpoWGAeKwYbn9/quNOHD+dxbv036TOmsktLG521G3q
-         W/rngPsqyCJTvFe11bDfZy9zfABTz7mEiCGccZS4VN63x5/Mord5ZWPzOZSUhOqq3JTd
-         JO1XlCJuiglkQ06A5ggN4TnO+zHd0+MnBd9riMsGpeurL124OuP7IKw7ORMe890vdVFK
-         IAU1UlG8ZdbL6jc0Sc23CgTV/Gfkl0PZvsGQ+Z6hpCy8djrrCop5iIksrxNmB279wP57
-         QLfw==
-X-Forwarded-Encrypted: i=1; AL+hErGXRPnT8wFQkYJ2vStAalHtrAKMdQbi0vGFJuQYGDPlQckDaS4HSihZY8DetBP4e+J6YkE=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/+5acemdJXnFFl8ilb9sXdE+dA0tP5plQW7rKFfctKV6qT9RWl
-	aILPu5GI86UeoIQPnZXJQ9wVL+X5UPfxq1i8wUrDOhh4R64kTBQBIg+r
-X-Gm-Gg: AZFdTZeQdZlCEjcaUFogCHrevVj/Rr+8td3VF+CCCGK2tSMbV+sVfIrNbwdkPKOQD0K
-	sjAKPoYrZ50sJ7+KJF3gAy35dRzpt7aGAhQGLWCqJ/bcQIfigL47TXebihj4n4St+qU4OcLncgY
-	FRuuzqS2P3oTtuZeXv3sK4Rp5oe2yq4jaE3FEZcH6L2HNApoycscYmAAohDI0kiOhFt+XpsAFQT
-	8oVb6ga9PXFjq4RK6UwofOPJbPLf9KLJMlX7szho+4SaDMRw6V0UsbpG/OqxOLDPKIsFF9efwcS
-	ki6/vrIKJroxiaYXaZISC1y2gWfidn61LGRahXNHDlqmK3n2G5kEFMMMfJsn0/yVCjI2KdzCK/o
-	ImWeOuPH3aHnJ52QNyfl2qlu18OJWEet2a6ApbL/UZ7nMRcglScczswvGe3OQTWgjgtaI4l4wfE
-	PB71A8Px2+UlGP/5u07qJj6w+rYlduA2xSUbvWW9Hz7bSMR0G8UM7w3GYliax3T3bF8fCzejmai
-	qnUOfDHB3tbAQFXK2EXTHupkCaKJf4HUsCofpJz4amC9RC4h3RQjRuc2Xo2KNIvY2dH5inJGs0F
-	etyzHDVFR/9hoGmSbvcGXuz1XEYVew2QugsqtMkFEPn1pSM=
-X-Received: by 2002:a05:600c:3b84:b0:4bb:6f45:2a6d with SMTP id 5b1f17b1804b1-4bb888074bbmr515405005e9.12.1795702664026;
+        bh=TEG9M41Q8ewXtwGQfG4tnvfBTrejLAcva0flrqD/WdY=;
+        b=cL1r2eSFPgfvM7Ta+6bu8T87mVovSSAHupwl2x6xFRcKcXAX5cRZA6B39qGl8QrPLa
+         Ma4P1202lRpnaH/JphDeIIE2WFEXu8Z7cjixTqrS33YBo8DaSkx/ZV/RPsZyieJI9v0W
+         Mhh9F2iIvEi1EW2JzJQe9EVcKKxhg6cWmcywCjBusR84kpDnthBE/KuxfWwQ1KVOZLm0
+         hsSAxJeZvz/J6sjmR59U2HXUgcShRiK4+iPvtKHJIWd3KjHcqjGXVHWsoW1Stnukz0Uo
+         Chs8TqSPkTmBKIWhcUh6hqaRMD2mcQnvZMdWaOPv88mDWV8qc0jJ82xczS3Fqqr+qSzo
+         t6aQ==
+X-Forwarded-Encrypted: i=1; AL+hErFKM54d4nh+Ky/gvydYRPzX+rpsRxcaifC6LhJcBY929wCu0dchMSmxIpcsqaIKRRMFhrI=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/SC3qUVz8g513WLz1Q+k8BSH3Ntv+uDSO5pcf8ICrjv5HQrURE
+	KjAECRDMEN4oHEmSI7dRNihtrNcjjNCSy38ijQdORbx3T5miiC6swyfL
+X-Gm-Gg: AZFdTZeoAj+l9iKL+3a1SEhdyibJ9SQs2xe5wL1VnYfqYjDYKWykCNEomUYRotJZWpt
+	99ld5tZx64X2x5KI5FUMV2Tuw8bcfHg6a7hCbT+BQUZyXDCGuq9A9yyWOEyTh786oESEM4yqa3w
+	HdNW/z/PBFXThjVqVyLr9RBro6ZgHUJuMsZHKcq8OrPPvml/+H1Xs3grCyUCGpW6joH43/j/A45
+	s1WOegwqxSB1KEqENmvjuDgHKwnXV64Lh0yOEkyX3wBhqwI6x2Akx1kncmJh2alDkvelnj7Ppgu
+	WEfsdrfINBaQZRON+5k3rWAam23Ll5LDi3vStxloLwgfyiG3pmc9dFv1zhhrPKlsYdexXk0vAc7
+	d07bNJDysI+HNEBA+/5CfuIddSVQe+M/QqG+Mh+uyw8i6Ufy8+lr15mstXmc0rOQQ8hyOIqN29U
+	wSF5cuLwgVDb30FFXivQLnSQ+DNOSd+Tgiv7eKrmEFoF+3V5+HarzQoywQ/XoKPj+JNnpKTCOqZ
+	0C4AJDt1W1axGF1d4Voj5w/aV7dGfpr2iGDMl+jPwzD486BGQy+xF058Yz9v8gF2/jSfcYN236H
+	tNCTOpXsrVq15zRpPjuNBDjwygCUynxaV7OU4fk6FGzoe+E=
+X-Received: by 2002:a05:600d:82e4:b0:4bb:6847:7927 with SMTP id 5b1f17b1804b1-4bb8882677cmr449695905e9.7.1795702664892;
         Thu, 26 Nov 2026 06:17:44 -0800 (PST)
 Received: from localhost.localdomain ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb8538b2c5sm596496575e9.5.2026.11.26.06.17.43
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb8538b2c5sm596496575e9.5.2026.11.26.06.17.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Nov 2026 06:17:43 -0800 (PST)
+        Thu, 26 Nov 2026 06:17:44 -0800 (PST)
 From: Anton Protopopov <a.s.protopopov@gmail.com>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -89,9 +89,9 @@ To: Alexei Starovoitov <ast@kernel.org>,
 	John Fastabend <john.fastabend@gmail.com>,
 	bpf@vger.kernel.org
 Cc: Anton Protopopov <a.s.protopopov@gmail.com>
-Subject: [PATCH v2 bpf-next 1/7] selftests/bpf: Test the tag of vmlinux with do_epoll_create()
-Date: Thu, 26 Nov 2026 14:29:07 +0000
-Message-ID: <20261126142915.1106330-2-a.s.protopopov@gmail.com>
+Subject: [PATCH v2 bpf-next 2/7] resolve_btfids: Do not tag functions which work on BPF objects
+Date: Thu, 26 Nov 2026 14:29:08 +0000
+Message-ID: <20261126142915.1106330-3-a.s.protopopov@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20261126142915.1106330-1-a.s.protopopov@gmail.com>
 References: <20261126142915.1106330-1-a.s.protopopov@gmail.com>
@@ -106,80 +106,72 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-tag_of_vmlinux attaches to the bpf_dummy_reg() of bpf_testmod. It
-shares the FUNC of vmlinux with a bpf_dummy_reg() which has a tag,
-and the verifier must not take that tag. But the one of vmlinux takes
-a struct bpf_link, and the build is going to stop tagging such
-functions. The test would then pass without testing anything.
+A program on tracing_iter_filter() which returns -EACCES makes the
+verifier miss that a global subprog throws. A function which takes or
+returns a bpf_* or btf_* type, or struct btf, works for BPF itself:
+for the verifier, a link or a map. Do not tag it.
 
-Use do_epoll_create() instead, and load a program on the one of
-vmlinux: if it loses its tag, that test fails. It needs CONFIG_EPOLL,
-add it to the config of the selftests. (It is on by default, but make
-it explicit.)
+__sys_bpf() loses its tag. A program can still deny a bpf command on
+the syscall, which is on the error injection list, or on a
+security_bpf*() hook.
 
 Signed-off-by: Anton Protopopov <a.s.protopopov@gmail.com>
 ---
- tools/testing/selftests/bpf/config              |  1 +
- .../selftests/bpf/progs/fmodret_retval.c        | 17 ++++++++++++-----
- .../bpf/test_kmods/bpf_testmod_retval.c         |  6 ++++++
- 3 files changed, 19 insertions(+), 5 deletions(-)
+ tools/bpf/resolve_btfids/fmodret.c | 34 ++++++++++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
-index 30b744844ef5..ce0db4be4d26 100644
---- a/tools/testing/selftests/bpf/config
-+++ b/tools/testing/selftests/bpf/config
-@@ -30,6 +30,7 @@ CONFIG_DMABUF_HEAPS=y
- CONFIG_DMABUF_HEAPS_SYSTEM=y
- CONFIG_DUMMY=y
- CONFIG_DYNAMIC_FTRACE=y
-+CONFIG_EPOLL=y
- CONFIG_FPROBE=y
- CONFIG_FTRACE_SYSCALLS=y
- CONFIG_FUNCTION_ERROR_INJECTION=y
-diff --git a/tools/testing/selftests/bpf/progs/fmodret_retval.c b/tools/testing/selftests/bpf/progs/fmodret_retval.c
-index 112f1575ce1f..ae2332bff2f0 100644
---- a/tools/testing/selftests/bpf/progs/fmodret_retval.c
-+++ b/tools/testing/selftests/bpf/progs/fmodret_retval.c
-@@ -176,13 +176,20 @@ int BPF_PROG(not_a_target, int value, int ret)
- 	return 0;
+diff --git a/tools/bpf/resolve_btfids/fmodret.c b/tools/bpf/resolve_btfids/fmodret.c
+index e1afdb6dedd5..aaff58718da3 100644
+--- a/tools/bpf/resolve_btfids/fmodret.c
++++ b/tools/bpf/resolve_btfids/fmodret.c
+@@ -56,6 +56,37 @@ static bool fits_trampoline(const struct btf *btf, const struct btf_type *func)
+ 	return btf_vlen(t) <= 12;
  }
  
-+SEC("fmod_ret/do_epoll_create")
-+__success
-+int BPF_PROG(tag_in_vmlinux, int flags, int ret)
++static bool is_bpf_type(const struct btf *btf, __u32 type)
 +{
-+	return 0;
++	while (type) {
++		const struct btf_type *t = btf__type_by_id(btf, type);
++		const char *name = btf__name_by_offset(btf, t->name_off);
++
++		if (!strncmp(name, "bpf_", 4) || !strcmp(name, "btf") || !strncmp(name, "btf_", 4))
++			return true;
++		if (btf_is_array(t))
++			type = btf_array(t)->type;
++		else if (btf_is_ptr(t) || btf_is_mod(t) || btf_is_typedef(t))
++			type = t->type;
++		else
++			return false;
++	}
++	return false;
++}
++
++static bool has_bpf_types(const struct btf *btf, const struct btf_type *func)
++{
++	const struct btf_type *proto = btf__type_by_id(btf, func->type);
++	unsigned int i;
++
++	if (is_bpf_type(btf, proto->type))
++		return true;
++	for (i = 0; i < btf_vlen(proto); i++)
++		if (is_bpf_type(btf, btf_params(proto)[i].type))
++			return true;
++	return false;
 +}
 +
  /*
-- * vmlinux has a bpf_dummy_reg() of the same type, so the two share the FUNC of
-- * vmlinux. That one returns an error and has a tag. This one returns only 0.
-+ * The do_epoll_create() of bpf_testmod has the type of the one of vmlinux, so
-+ * the two share the FUNC of vmlinux. This one returns only 0.
-  */
--SEC("fmod_ret/bpf_testmod:bpf_dummy_reg")
--__failure __msg("bpf_dummy_reg() is not modifiable")
--int BPF_PROG(tag_of_vmlinux, void *kdata, struct bpf_link *link, int ret)
-+SEC("fmod_ret/bpf_testmod:do_epoll_create")
-+__failure __msg("do_epoll_create() is not modifiable")
-+int BPF_PROG(tag_of_vmlinux, int flags, int ret)
- {
- 	return 0;
- }
-diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_retval.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_retval.c
-index 85722e48d34c..ba48f0f393f3 100644
---- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_retval.c
-+++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_retval.c
-@@ -159,3 +159,9 @@ static __used noinline __init int bpf_testmod_retval_init(int value)
- {
- 	return value ? -EINVAL : -ENOMEM;
- }
-+
-+/* vmlinux has a do_epoll_create() of this type, which returns errors */
-+static __used noinline int do_epoll_create(int flags)
-+{
-+	return 0;
-+}
+  * The codes of include/linux/errno.h, 512 and up, never reach user space. They,
+  * -EAGAIN, -EMSGSIZE and -EINPROGRESS tell the caller to retry, to go on or to
+@@ -220,6 +251,9 @@ int fmodret_tag(Elf *elf, struct btf *btf, int verbose)
+ 		size = int_return_size(btf, t);
+ 		if ((size != 4 && size != 8) || !fits_trampoline(btf, t))
+ 			continue;
++		/* Skip functions which take or return BPF objects */
++		if (has_bpf_types(btf, t))
++			continue;
+ 		/* Init code is gone before a program can attach */
+ 		name = btf__name_by_offset(btf, t->name_off);
+ 		func = image_func(&img, name);
 -- 
 2.43.0
 
