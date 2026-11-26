@@ -1,108 +1,108 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795686702;
-	b=qIu9LPkU2nMSxhS68mBrD0qfG5gpn7vNtZt00rwGNSTp9QxJ6i4zwqrkhG3CBY9VOo9P
-	 5PzTo8Gfbgv+EnfEoME/mw1+K15iYTwj/Pp6OtA6AJSiJ1VFkwEXmrkts4cBLtgARkVR8
-	 bCpLsWXfY2SCL5r8/bLW9HYyZ7vVCtMt88kbCcoPAssCggQKhlhQt/tzxJXAGuGlmIKr5
-	 PYCuTAHqA0rZB4Y/sxT2Vui8iuu37OmbTo5K6QQhxDiB0YhAkWGJXmJO+BHhVyF02Mmm5
-	 QfHEgZ8V1Jzt2h1MqfbiqO+ZyKsSFLme9KfFp/GUs82v9BN6QKAO32meCoVCtbkvPww==
+	t=1795686845;
+	b=HPrDX5aflsTV7Rx9kTe1tnF9NiXM1ZzyYo0D76GWJ5qtopLmEQQVAPlFmKI1ZEilqydW
+	 ylUBLUg6xZdpz2MqGLqFsdYnlvVllDXNTjl7eRrfqQwyawF68M2PxCb1c87w1sP3USD+R
+	 j+uG3rKxDcnE1PffRUNz2K9UfmLFXaJ6LdRxSPaAsrVHO8ZdxmeEQqwDBew+GyDbQJmqd
+	 ELOZHbEIptaBjBoSFr7zsnx3UiqUaET+CTFp0JEtV8hp32jwwA8G59aaDEylnbZU099fg
+	 MQuCa8Ewt5uS8zVbzIjJnTVeuYXJSfxfnD0gvRLKPtCTUp2/yJtRjYy+/4xqZOeutcg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795686702;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795686845;
 	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
 	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
 	 X-Received:Received:Message-ID:Date:MIME-Version:User-Agent:Subject:
 	 To:Cc:References:Content-Language:From:In-Reply-To:Content-Type:
 	 Content-Transfer-Encoding;
-	bh=b2b0R37N0cNDG6LwdnW9AOEOCqhnsuMIntkJk3OiCVk=;
-	b=ag7/r0NocBFDqUEUYD9CEPNbHAO/VKCCC3L2gh1eQeeheICjUH5IkwwUshwWQdsvN8oK
-	 TdHxwj2RRPwGnSrU/Jqe5fJ7mfq9P+7E7u/fLFjb0USM5JqjwXMPqgj40A+H/uozavfuw
-	 DrIBnV/Y+FZPkF4+yP1ZYelwOdVZeM5e9nI4D/8z3NAv8XClALbar3tSOrVxFaGcCuvg4
-	 kzvXDJnUOvhT7vnt0q/dCecg4L8mjkFOqbr14/SnUEPxepkyvzvMP8ai0cYb6kb/Fp8Vu
-	 z+xkzVTESeb0Z5tlTqqTLNtEMPBepOLzHmvdzImQMQ2G5z1EgkT5DfGwyoCHbJ0exng==
+	bh=7CCtYtbFe6le29oXXPU1ooKs9Dx0yxyQEI4GjlG+sf0=;
+	b=R36NIOSMDVPL1eX57jgsybeJTlo6p0vBrgoRIR/H1vv9Sv7g0DxkjNTcspRs2D+qEdns
+	 t7UbjZEsKF4peapJSaKMdUmTIzGxxCS1lSq0ahv86Yfqo1CX083MB4/BSBVAcM38JbGMU
+	 8QQoJFVDK/yDxkqEM1b4rIkrmuZPcdlEje0HRWNyZnX9/TnaKTleiVEzkVPDDhuc84wLR
+	 U1WkEBoMbDuPMPRTCJoOkY4ucQKTwgulJbNy5fEXdYDGKZckTZIr3ZecUug8mU9ockzRq
+	 9CmivFlETRmITeId+Yt9vzWXVY/iI+y3fDS6voYTkwNRlF/ExemS6Og1uuYEh1VQ5wQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=redhat.com;
 	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=NglhJyuj;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=eSf5YhDs;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=RV9FN4OI;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=lLANQDpJ;
 	arc=none smtp.remote-ip=170.10.133.124
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2B0C606A327
-	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 09:51:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B2B0C606A327
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9474360A261F
+	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 09:54:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9474360A261F
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=NglhJyuj;
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=eSf5YhDs
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=RV9FN4OI;
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=lLANQDpJ
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1795686700;
+	s=mimecast20190719; t=1795686843;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=b2b0R37N0cNDG6LwdnW9AOEOCqhnsuMIntkJk3OiCVk=;
-	b=NglhJyujZidG1wh9KnE18o4xefEtv14FMcA8ak08V8XoQBmG1b/fEVGJVd93CrD2oKQcEL
-	BfK9jY60wQ/5xihueEr7sr0WBEX6qLW+zwl6kFe7MB78aGE4j3q+XqVaOHzFE/VuEvQPPk
-	1W1N1J9zC+JGOaMEj4ahFxjpNHuJLP4=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=7CCtYtbFe6le29oXXPU1ooKs9Dx0yxyQEI4GjlG+sf0=;
+	b=RV9FN4OI/ZTrw+N+1q5AxeSan5a/Mc0XQxKdy92oratGqXcj3yBvhwrtqP9sbY0AfA8van
+	+x8uF5Gz43fNFcAlobm83Gd7p/TW29gE7YD5prLbbNFdJ34ZwbqpUzxwPFoykVXz6tMoP6
+	kGKAJ1P7Uxh2X4M3Tr+UZQXcMJGfi4Q=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-620-022P-ELKO1mTzHtcXwifWQ-1; Thu, 26 Nov 2026 09:51:38 +0000
-X-MC-Unique: 022P-ELKO1mTzHtcXwifWQ-1
-X-Mimecast-MFC-AGG-ID: 022P-ELKO1mTzHtcXwifWQ_1795686697
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-4ab855a8c21so5385466f8f.1
-        for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 01:51:38 -0800 (PST)
+ us-mta-490-D2zK_CdTNZqF6BUDrkVUYg-1; Thu, 26 Nov 2026 09:54:01 +0000
+X-MC-Unique: D2zK_CdTNZqF6BUDrkVUYg-1
+X-Mimecast-MFC-AGG-ID: D2zK_CdTNZqF6BUDrkVUYg_1795686840
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-4bb68d624baso36792145e9.2
+        for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 01:54:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1795686697; x=1796291497; darn=vger.kernel.org;
+        d=redhat.com; s=google; t=1795686840; x=1796291640; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:in-reply-to:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=b2b0R37N0cNDG6LwdnW9AOEOCqhnsuMIntkJk3OiCVk=;
-        b=eSf5YhDs7s4d/I+PuOqPG7GnNpSXVv5YHZf2MTaDiGSvROudWXnjtlOkgjVsqw+WpP
-         lTDSssv14eAoLBy0bl1Ci2jfbWBegKn7XEOaliLTA5vt1Z6j1pZiFCA0AAj3hDDltBos
-         6C3+AdPdLxVsXx8Xv/cyIHWJ4ltIx7vVQKZE/K8Nue9lFYlJMLTfgqalzC2E/rzpZQPA
-         O1mCoK87jRv6TIUQaOmHgKqRFIOu4HKDLbFnkUfgPdOLYDcP41qbWWBllhlVS+lVs3lb
-         QH0d9NXFvc+ZBTENAKxP/WwA5UuA0jDFKl8yuoT0dYbrNJ8LouJ070V2AyeDNGcZVAq1
-         XW/g==
+        bh=7CCtYtbFe6le29oXXPU1ooKs9Dx0yxyQEI4GjlG+sf0=;
+        b=lLANQDpJub1DKFq7TEwFDOcI3TJRHlZmh/96ElOaxlirzCADY6GEeAAS0Ytz4xY9ac
+         5B1akJcEHITQjWhDe8R0Pnm0DnHAKpgdvwivbzSVQMYqVO2uQbxzKM/G0ulUAQBFOCbU
+         oej8brmCszD1p185zkHyss2sZ+zOsT6Qvgpub0JOaSbzWMrEqPYip1KYARYYkNnFmv6V
+         wu+0jdFe5/Tg9vPOBQ2dyGMB4w72BWETBgiI8GoSNbYX9y1MLJLbhsHuR347/DiYP+eO
+         njm3nb5bzAMHRw7otWLdk9Gkb8UUOazx9ZrH/dhp1I6vG5mBOSZjRbcjITQEtmneLnVO
+         YnsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795686697; x=1796291497;
+        d=1e100.net; s=20260707; t=1795686840; x=1796291640;
         h=content-transfer-encoding:content-type:in-reply-to:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=b2b0R37N0cNDG6LwdnW9AOEOCqhnsuMIntkJk3OiCVk=;
-        b=jQRECQZ0So/Wd0b/cmHWsdFUQTk/ZOXBTTFjZ5lFpj6GCW2CT2eW021B2torL7i7MZ
-         iTjqWetqCP6DTwxiYBXK3mk2YgqPPkf1T3fy+5Ol2LaxgRtPDA8ovI0T3kw0fl/T75V3
-         6LZjWUCXfyp2VrORCmyh32NTnGBR909GYyMERHxvZxX9rE+gMHDEmXVdGTIehO1Hox/a
-         5j+WnYwme0x8jpkcnmJQWoWIUwug1SApITbe/pSwlpKBPozEhgmXdN11pAXwV8im6Ed+
-         qpDO/8x5TnJmfXvOl0NEUnVhKQzyhXPLIihktOBK3iWcyt4k8jqtn/LRLU1pqhBnuiJS
-         kEYw==
-X-Forwarded-Encrypted: i=1; AL+hErFmXYO2o48jnCXGIAEO+pUMmdxahc6iMTeKVaST/VsBw8xWXwmULnQFc8y8Z7MtZ/FrDEc=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9xQFSiY/MOvtUF/cE6hKyGngkLADQvMcGGsebSdcOvbmxifehF
-	9uZ0iTsLNqzcMZoNla1h4mAqgawVTffpNxOAFywVmR/77aY1MyM9m6X7NI2sgbvzLes/jF8tjSp
-	JaD0W+PPUcd3OD+IT4fOZdj+UzVOHsALiTMX2kTNmq4mL01/R+SOINQ==
-X-Gm-Gg: AZFdTZcLd1aDjrqDdWYORUpe9ZGfeu8buGcRUTrW9kN5naBAKp03oxqseeR6GL03M9S
-	QY8r+bM3EK59NsAuK0az4/8ta3JPW/KMhVivQ+NVCR8JmwodDXe/o3RvPSVADhv0u8iBYusqrzZ
-	3evUjYibCq6GNjNHbIZqWJHKYrDDRsDRtUJOBr04VqwBLLAtVROrVj1i9CUCGgIwFnSiOFzUBcY
-	pfk65CiG0JSwwGKjoDyu4qUms4F3fTZHBGUiOtG2+nU2C/Ms/tvXzeKgY/kYs9K0nkd/x/A4U+l
-	L5z2M4EzwKQgMfiB+Xbxs5sfZ+3erdRCaeudopEhm8atov/VXXiuRUGuB/82pSjptonfdcrBRmt
-	0TcOU49inueaxOgeefso/K1EPf7rzDB+a+K/yfWSiDyvDDqfOT1ypr71Cp/EQifnrUp/nrakxq2
-	lvp+gqV8qXA9jnD1hwzjG+iAAT1U4UMr8Sl3i5SdE7Yhwu
-X-Received: by 2002:a05:6000:2c13:b0:4a6:9f2f:4153 with SMTP id ffacd0b85a97d-4abaac57ba9mr38614684f8f.1.1795686697208;
-        Thu, 26 Nov 2026 01:51:37 -0800 (PST)
-X-Received: by 2002:a05:6000:2c13:b0:4a6:9f2f:4153 with SMTP id ffacd0b85a97d-4abaac57ba9mr38614627f8f.1.1795686696684;
-        Thu, 26 Nov 2026 01:51:36 -0800 (PST)
+        bh=7CCtYtbFe6le29oXXPU1ooKs9Dx0yxyQEI4GjlG+sf0=;
+        b=1fEj9/80lde+CiywRUMzwbMQ0B/jXIhX2U8zfk3zb1CeCgeO77JY7TnGUadSBRL+Za
+         qveJtmsDo1M0+zvXnIBvhtQngGVGuNFlO/0zqmGDm/sknDxTxLoFV2Tkz6DYig7ubIs/
+         tCXYHJYZ0UvHSlnzf1ZECPDI1oz38DQtwjkkDVjyltX2w4ekxpvzNvXt8K8ZKci/O2Xs
+         RDYD5Dd7fqgXf/yfM3u3C0TxgEmH8Y5N2Ymn55SRoozwYUNMCXpN5dZwOwSceHQG3jnP
+         tJBg1tzNgosdBh0QZiTTDmrUiNzn3GnyJ5qgzsdHju+G8ng8AQxWCr7wduNQTP02G51G
+         oYzw==
+X-Forwarded-Encrypted: i=1; AL+hErFwhwk/5n9lcqZ66eRODkRMMkjSMv375n53h1IXzEaQtdU9t4Ob5xfSCVeQ050w2ZrrMEU=@vger.kernel.org
+X-Gm-Message-State: APuU4Z8sDSd4dN4w4WivSVmu0VL4PyIhSBPwjCnwy2zwYbMl7+ztu2sm
+	XYyzn3Fh1FmbxR3CDr2jlBjGIjaesnyQ1SMeVn5ECkSJsJnP8u6kNuEz39YqMug41QIeOg9AX9C
+	3Fjm9fRw3aeVqSPBJ5dmYstEdeYF1BWQ/6+Hvaj89p8PAmuhTG1Q4MQ==
+X-Gm-Gg: AZFdTZeDK5qOcruDCjm/LZ/w6by5dJVzAHI5EmJhlRO5uoSmdpnSyk8LzQhW6PpB04+
+	lt4geVrSAUtr9s9yth+s78RbVRQouyTRYyogUNVSl9kBW1ASR+jI0Z1NGvENjMPFUFyd1ACM3gz
+	LNDkd+AzVUQT8dD/9YyskK3DZg8Nx6UU3kISYthF37tqpp0fu7htZcBWQM+iUVXt8l4KE0rLdo8
+	nENwz0qGnfHWBIXg/ClDDvuYk9Msx8p+bj4vmy23xsUa6WG37UkKfQ7hHyrXwIBGW71TfxFpOCs
+	nBqq2S5YjpXTXojy5KRG3OUK3T42gMgKNtTgl6ioHWKe8//8vp78Pgy4OniS43+PyRMqMSwdvlv
+	dmfZmiLiXAmr9VU25msj0uf9OikabsYua+h77jpkT1xyZhQlOCFUepm+iQcDAAGQpYceCdEOVQ8
+	qi3VEJVq3tFytSf/Dhm16aW9uaBNJO//g7HUUK0kHG5Hz6
+X-Received: by 2002:a05:600c:4e16:b0:4bb:6f77:1e35 with SMTP id 5b1f17b1804b1-4bb88810991mr440506965e9.21.1795686839753;
+        Thu, 26 Nov 2026 01:53:59 -0800 (PST)
+X-Received: by 2002:a05:600c:4e16:b0:4bb:6f77:1e35 with SMTP id 5b1f17b1804b1-4bb88810991mr440506695e9.21.1795686839381;
+        Thu, 26 Nov 2026 01:53:59 -0800 (PST)
 Received: from [192.168.88.30] (ip231-128-192-82.pool-bba.aruba.it. [82.192.128.231])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4ab6bb989e3sm39627871f8f.52.2026.11.26.01.51.34
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4ab658e2d1bsm41250729f8f.8.2026.11.26.01.53.57
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 Nov 2026 01:51:36 -0800 (PST)
-Message-ID: <e07adc3e-838a-4c46-a56c-eb47bb9e77f4@redhat.com>
-Date: Thu, 26 Nov 2026 10:51:34 +0100
+        Thu, 26 Nov 2026 01:53:58 -0800 (PST)
+Message-ID: <34e77fff-c57b-4ed0-9035-b9682ad3914e@redhat.com>
+Date: Thu, 26 Nov 2026 10:53:56 +0100
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -113,8 +113,8 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net v3 2/2] selftests: net: check TCP IP IDs across
- tunnels after GRO and GSO
+Subject: Re: [PATCH net v3 1/2] net: keep the TCP fixed-ID flags on the header
+ they describe
 To: Julius Bairaktaris <julius@bairaktaris.de>, netdev@vger.kernel.org
 Cc: davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org,
  willemb@google.com, horms@kernel.org, andrew+netdev@lunn.ch,
@@ -134,31 +134,50 @@ Cc: davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org,
  linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <cover.1795284858.git.julius@bairaktaris.de>
- <2f75527eb49d7d4ffec32a61fd7dd080673dc57f.1795284858.git.julius@bairaktaris.de>
+ <7c74b2076dc7dee1d481d39a135e0946d5e04145.1795284858.git.julius@bairaktaris.de>
 Content-Language: en-US
 From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <2f75527eb49d7d4ffec32a61fd7dd080673dc57f.1795284858.git.julius@bairaktaris.de>
+In-Reply-To: <7c74b2076dc7dee1d481d39a135e0946d5e04145.1795284858.git.julius@bairaktaris.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 11/21/26 19:27, Julius Bairaktaris wrote:
-> Send TCP segments with fixed or incrementing IPv4 IDs from a packet
-> socket, let GRO on a veth merge them, forward the merged packets into
-> IPIP, GRE and VXLAN tunnels over IPv4 and IPv6 and into ESP tunnel and
-> transport mode SAs offloaded to netdevsim, with segmentation done in
-> software, and check that the IDs of the IPv4 header in front of TCP come
-> out as they went in and the IDs of a new outer IPv4 header are unique,
-> or for ESP tunnel mode increment within each packet. Also forward a
-> VXLAN stream with one header's IDs fixed after decapsulation into IPIP,
-> and send the merged packets through a tunnel that the far end
-> decapsulates without segmenting them before it forwards them.
+On 11/21/26 19:26, Julius Bairaktaris wrote:
+> Commit 3271f19bf7b9 ("net: gso: restore ids of outer ip headers
+> correctly") made SKB_GSO_TCP_FIXEDID describe the outermost IPv4 header
+> and added SKB_GSO_TCP_FIXEDID_INNER for the inner header of an
+> encapsulated packet. Every path that adds or removes a header then has to
+> move the flags, and none does. A TCP stream that GRO merged with fixed
+> IDs and that is forwarded into an IPIP tunnel, or into an ESP tunnel mode
+> SA with crypto offload, is segmented with one outer ID for all segments
+> and with incrementing inner IDs. A tunnel that decapsulates such a packet
+> in iptunnel_pull_offloads() leaves the state of the removed outer header
+> on the new outer one, and the inner header of a GRE or UDP tunnel, which
+> segmentation reads at encap_level 0, gets the state of the outer header.
 > 
-> A test where GRO merged nothing is skipped.
+> Let SKB_GSO_TCP_FIXEDID describe the innermost IPv4 header again, as it
+> did before that commit, and replace SKB_GSO_TCP_FIXEDID_INNER with
+> SKB_GSO_TCP_FIXEDID_OUTER for the outermost header of an encapsulated
+> packet. Where a header is added in front of a GSO packet, in
+> iptunnel_handle_offloads() and in the BPF LWT encapsulation, clear the
+> outer flag, so that the new header gets incrementing IDs as it does on a
+> packet that was not encapsulated before. Clear it as well where
+> iptunnel_pull_offloads() and bpf_skb_net_shrink() remove the outer
+> header. ESP transport and BEET mode with crypto offload set
+> skb->encapsulation but keep the IPv4 header and its ID, so xfrm_output()
+> copies the inner flag to the outer one for them. Convert mlx5 and sfc,
+> the two drivers that use the inner flag.
 > 
+> Two flags cannot describe a header between the outermost and the
+> innermost one of a packet with three IPv4 headers: software segmentation
+> uses SKB_GSO_TCP_FIXEDID for it, as it used SKB_GSO_TCP_FIXEDID_INNER
+> before.
+> 
+> Fixes: 3271f19bf7b9 ("net: gso: restore ids of outer ip headers correctly")
+> Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 > Signed-off-by: Julius Bairaktaris <julius@bairaktaris.de>
-This test is very unstable:
+This patch is IMHO too invasive for 'net' at this point of the cycle.
 
-https://netdev.bots.linux.dev/flakes.html?tn-needle=tcp-fixed
+I suggest targeting net-next in the next iteration
 
 /P
 
