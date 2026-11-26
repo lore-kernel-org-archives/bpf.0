@@ -1,101 +1,57 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.219.44
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795678877;
-	b=ocXst6L8Ac5L3T4m14Ujcv8PSQZLtyZ8BTlv3cw6cxUj3/bidWo9hgCTeGPcVK8y6sZ8
-	 7hfIGgh49v/bHjxBbzVgM7iczLTdtr1gu8JAEHwXGrtDUypmJAnq48crXUsXpj5UwYuxj
-	 hXG+w4ivAxhU+4V10qthYX8u6dO8ZcyTzhN2cQVpffopIC4PlEhPaVOIoA48OyD4ekK0+
-	 BqZTLgUUuRB5OwaJ2bDALRwoyYRmyuQJHSrzquL3i6rluNk4lNYLmjwnQZpcJyKRWTmEx
-	 oO+TzbwDrVeIq0uwqYaDR7nI+PTysrlUzbO5flW6Ke3MGd5MQwCdBljQcPAHfbqidXg==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795678877;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=q+Ubm2QAGWkkevqcn++H+wXuVangaT2LjNLkyOWvZa4=;
-	b=zBGLW3eaqHslsZTFyXcEaHTHcpMuLzkik3/JzweBZm42yAeM/S7tBSiryJrjlziUVnoB
-	 rpdIGikJgkQWH+ZZjFavqPbmrb/602v4evE+rFfbDr5N6v75JjQrRyi8ZDpk2GHxGcRU/
-	 N2pVp5tatu93MDGwgf27HuNRWyc8q9ylG3IjKibXlYL/XwOKw13BbypdxkxhPGhCp26ke
-	 stjzpaj4UoH5Ne1ryorgs6gTDVptdII39w+wkbWf88VRdRvEXFBxlXXPt+webA8QWD5bt
-	 fhCdC3e6cw5lJqBATyOFnethq96GluKOu/atUQqZZrNZ6rIhfdCdYvTzYzsifLT3ICQ==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=vjYWWtOT;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.219.44
-Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795679611;
+	b=B4AsDA+H+VCfXGHnR4K8X+zIxTegbjrEANvgWki5Y9DtjKb3vMish+oOBxDZF57/vC+8
+	 I+16SLGR6+4mfjXoqkhcpQeRT4xZKUK3pzvyOQjWsreFHEGRwlysomuUKMTBOMlGdHRWz
+	 r5ByknGylC0u35XmPGOaPXZgbcQVzZ3/NuicseJc6FwkLa+cXFg1D3CVtT4hhyFpEVJp5
+	 S5KwUYz9VubXWkjhBERzGfcbROltYxikaxqaW2qmAzABt8ofPmcHrE9vs19C7MBABg1D3
+	 2vIyuKyAgAShVLFiW5T6ocM2xyng0N0QGdzJpVNmqJPtyx6JAj2zDIDJvpBHJ/KSLxw==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795679611;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=y8pQkHSHjKzzBsWJDIR+/U3YAnJbZoUs6stomKR/JeM=;
+	b=YFKEbTlVdz+azq1I8gvzGIaHqWgn2bn6VXftJd/VWvWOKrlJWQS2zhiHSIDRFRX/PGhd
+	 ZznJYDlyNDSwmfdrUNkVdoVzPwG3BFvLyarX7Xf3VDe0mi7IRkxXIqOwzX3sNv4oQOmqg
+	 QyUOPnWm+IveMDU4aQM7/m40FA0VMb2gEgEuAg2ezfNgPz626p+PNK3XuyelBRQOsm1vG
+	 do8iZwCXy07qJNF2K7w1sxG6cZJK0LsGcP+e31UonqanSbRyrPcblLifKFGudZQWmioGo
+	 9CH8DMtdfuj5mT6sxumZdwbG9WvU+ItatLzHEfyA9063F8KExw6qLprcZyN1y4D0lxA==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=OQM7aUf5;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A732606A33C
-	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 07:41:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6A732606A33C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BED0606A321
+	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 07:53:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=vjYWWtOT
-Received: by mail-qv1-f44.google.com with SMTP id 6a1803df08f44-91c1f548f87so89680536d6.2
-        for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 23:41:17 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795678876; cv=none;
-        d=google.com; s=arc-20260327;
-        b=Z57D72skVSVuxCr/hzyyHjYo2orzIFydrzKeXQd6OyrqoRccBl6IoiVlAvh8LKLJnG
-         u30nCMcRZ60eFfCYEiw2FSpsqA94X02oELhA9xXaECsTrwQp9nJkcYnNuTe5AEJX3FhZ
-         VdyoIqHEdG/NsMMR/2mCe3p7jpHUQr9nxMSoY/THcLDtaICA0SStdkQmGvBkL2+m9Dsz
-         bfUyu5UT9ugraDsME9fi9piN+BO16azDwdp29jLTa0rMII8c4StSFFxrFGbMnNxwdW2P
-         jV03IttDYZ/TOrflpoL7LV4pBeZgh3talU5Eaqv8DCMa693Vfs26pft6ftY2mPoMFjot
-         yMwQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=q+Ubm2QAGWkkevqcn++H+wXuVangaT2LjNLkyOWvZa4=;
-        fh=ujgYXoZ0rIAk3TQ450btFpNiCoet7nGnnviBYannNxs=;
-        b=YkxaaZx1NDsavRCaw8gVgNA9FifK30O25VggRy8OzkGEo8DB+VDMxpy7RZ0YpnXERv
-         Yo9/Tnkf7owPGIWMBX6R3q7SiCmCLITjz6zv7zdyUfD1Ep++06eva2LW1S0zNhQlH7SY
-         k/5T1PxDKNkYmrhR/6AaHTV+sSIcdWprxGFbgtTNCqMJudzMt0AL5sw5IEStGThCH6Gu
-         UJAZhyOWVXuKnJTuSfAjoENqK+YJzYFyMcxRkKpFHAd2LhR8yoKNe8OaZUJ4PLtmMTVI
-         H18f1unlkiG6XHwLYLPSoK2cfgDnwj6WuYFJa5L+cJDgPLKG1Rh/74ANGFFE7RTm9IGf
-         KGAA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795678876; x=1796283676; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=q+Ubm2QAGWkkevqcn++H+wXuVangaT2LjNLkyOWvZa4=;
-        b=vjYWWtOTVjxpRitCs1Ov3QfzRRQ2tY06zy3Y4ik8hHED3h0mwrmhU4UHOeuxdpnybT
-         7K0KCZprMY+v7Kf3EnwopbyboNiElX037NRr3V/r8mrSPbt0dydicTRGKCNM/YvakosY
-         DeFt3u1m6GAKDxGX0FP7t0dj/wi37BL+9UGm/YJ+/WM03m2s6XB3JpF6UXxiVEOgR5+P
-         cTgi43oizecs1Yim1tbYfiQipIDE1BH6qm26/gMv3m/BnArrLv5J+9iKty2YWpjH93QA
-         QI3RxCRnkIkW7Ab/zCVx5SJlLYJ5y19biI3QXqmrVdCqPbG9V7gxMUJTtvgwFum0snZ9
-         peCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795678876; x=1796283676;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=q+Ubm2QAGWkkevqcn++H+wXuVangaT2LjNLkyOWvZa4=;
-        b=asgzfWxqSjeuiNk14M7KwfoMcewOumpxT//O/7Qw5TI6HB+cjjr2ZwBImSJWqORNKK
-         J7S3wBdb7OknMM/vIsBauGgKdEcV8a4CzJxldjsY/KOe7KoRSRXa1XxSRAsgJC19EQ7h
-         b/n0GYJww9PvFTGWCdqB2XzumZw32jk4++rHwvpdyueVG0AWdBd8yNX40tPY4dqfkWgw
-         yAmFRnT3j6LbOsRjTETdvMVP5QySqXImlRsVc9KGKZ9LN1IsdH+OHKi76WkMjxhCxzEx
-         sgZEF029mDMxMjZGD/SjL2emFND4YuQ0MCXSFW/vuFSIFqz9U9IH05oiIdzV5omBbZI/
-         skBQ==
-X-Forwarded-Encrypted: i=1; AL+hErHagCujAfA4iIsaKGOlKgenPuT6AjtB74cE4uu1V8PLas3a4uyDTMH34o+sKF1WilVDid0=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/qNiDDXnaS6RiAyIZXRC/l0uL37900+V10vGp6pbKk/yo5Zbhm
-	skXWBaG9Xg9ricuBkaVZ98kT8wPPHDdZiSAyLtZpIJnrWtRGPVuhC9V+flFNrSdSqQl+e2YQ3Wp
-	RCNmN5N4axjewrZBE8NGLdDVvCXsuNaLSDnGsSixeMA==
-X-Gm-Gg: AZFdTZe422nNy3s2HDAmYQ9mSXRLAVEorqu/MOjvx+6O6zqE2EZKGpJf0HhsTck0Ria
-	DBVpb9jm+fBKCcRT94jXgJDF9McZzzQId++kG5/flmWdmIDvGSAnk4c/dyf67/4daxELCXL38YJ
-	E7+IGxFxQoSk3oXZ2F/127qZjRj2eIP6iGQdVzfo1l4bFkluMWqNLPVJsWG9yOGcA7pniGZQVPK
-	zh0R2IhFGKbTt1wO7SQuAwvFcexfUHKjd8QTzW6incrRaWGe1thpTc/j0Sww13dGg4fzIBiXqme
-	EAnwpoh7M1dMvPs+Sk3kcIacpxGrJ0gIL0vftCaoIrm3rdIixKTtrFea6SUPdDhFPVBzeQ4MwvM
-	WxTJHVetvUswGYahWnj1cnBJhstg38guJgg7VQryK6txq8QEdSbEejCY7T4vzVDPZkomQMSXAFC
-	60YvCdA1u9cmOrO4cBiw==
-X-Received: by 2002:a05:6214:8616:b0:91f:2374:d001 with SMTP id
- 6a1803df08f44-92134aef4e6mr379882716d6.25.1795678876352; Wed, 25 Nov 2026
- 23:41:16 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=OQM7aUf5
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BAD41F000C4;
+	Thu, 26 Nov 2026 07:53:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795679610;
+	bh=y8pQkHSHjKzzBsWJDIR+/U3YAnJbZoUs6stomKR/JeM=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=OQM7aUf5FVg6P4Sxwj6kNeZEmKy7QkjBjmqcehLH5XTnsN7SUQE5n0Lf1waIvbJD5
+	 t3EpgPYMbroxPXmKqZO81c3VCvpkhLh9tmBEqaNLTKta8pxwt+DtnDr2WH+2chVhTs
+	 9I8Gf/XTAA0z486N8et7MchD/C/tGshKMVMcjGudsGICzWlf5dnpysbnv4D4BclLHU
+	 V+f5vsPur3wMCURUKWVKAan1Esx55zWDKnlAaUoifZMz/trnmrWQpBiIos6ExcvtmX
+	 VRYFgzXABisKgchQKPVz6EWsgcMeHiV/fQ8/diciALd5j0bRAQa6UMmBJLQ5gPdJHt
+	 radd5G+CAMyvg==
+Message-ID: <sashiko-outbox-234974@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net v3 2/5] vmxnet3: fix the error path of XDP program
+ setup
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Philipp Sudakas" <filzador@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20261125075255.1517-3-filzador@gmail.com>
+References: <20261125075255.1517-1-filzador@gmail.com>
+ <20261125075255.1517-3-filzador@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 26 Nov 2026 07:53:29 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -104,34 +60,154 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-References: <CAMcAce97zgo7c2f5Th9FguAHEL5gL87NrJ9MJkJghMm6M44g6Q@mail.gmail.com>
- <2026112651-peso-sandy-64a1@gregkh>
-In-Reply-To: <2026112651-peso-sandy-64a1@gregkh>
-From: Yingke Xiao <inkxiao12@gmail.com>
-Date: Thu, 26 Nov 2026 02:41:05 -0500
-X-Gm-Features: Aa3M54oG0R2UVhL1kMFuTme6_Ok82BveIP2T0l92n5M8-7IZtdNkPstPzAyhzvA
-Message-ID: <CAMcAce-_hShop0MH1Q4p6Y0uf=ApmLoxuKQ9Kjms_4s-Gv1epw@mail.gmail.com>
-Subject: Re: [PATCH 6.12.y v2] bpf: Reject NULL data/sig in bpf_verify_pkcs7_signature
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: stable@vger.kernel.org, bpf@vger.kernel.org, kpsingh@kernel.org, 
-	sashal@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Sorry for the mistyped full SHA-1 in this earlier v2 email.
-The valid upstream commit is 49b18315be4eecfc36b75f4aecb4d40a87d68a20
-("bpf: Reject NULL data/sig in bpf_verify_pkcs7_signature"), which was
-corrected in v3 and already queued as [PATCH 6.12 015/816]. Please
-ignore this old v2 thread.
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue to consider:
+- [Medium] vmxnet3: RTNL deadlock and missing RESETTING bit in
+  vmxnet3_xdp_set()
+--
 
-Thanks,
-Yingke
+commit 584df80e321cf69400a7b01cc8f4da9b076182a5
+Author: Philipp Sudakas <filzador@gmail.com>
 
-Greg KH <gregkh@linuxfoundation.org> =E4=BA=8E2026=E5=B9=B411=E6=9C=8826=E6=
-=97=A5=E5=91=A8=E5=9B=9B 02:22=E5=86=99=E9=81=93=EF=BC=9A
->
-> On Thu, Nov 19, 2026 at 11:55:07AM -0500, Yingke Xiao wrote:
-> > [ Upstream commit 49b18315be4e590fae0fc39c87d46c87e9ec903c ]
->
-> Not a valid upstream git id :(
+vmxnet3: fix the error path of XDP program setup
+
+This commit reworks vmxnet3_xdp_set() to recover or close the interface when
+recreating the RX queues or reactivating the device fails during XDP attach=
+ or
+detach.
+
+> diff --git a/drivers/net/vmxnet3/vmxnet3_xdp.c b/drivers/net/vmxnet3/vmxn=
+et3_xdp.c
+> index 5f470499e6002..a57866753d0fb 100644
+> --- a/drivers/net/vmxnet3/vmxnet3_xdp.c
+> +++ b/drivers/net/vmxnet3/vmxnet3_xdp.c
+[ ... ]
+> @@ -55,46 +72,61 @@ vmxnet3_xdp_set(struct net_device *netdev, struct net=
+dev_bpf *bpf,
+>  		adapter->netdev->features &=3D ~NETIF_F_LRO;
+>  	}
+> =20
+> -	old_bpf_prog =3D rcu_dereference(adapter->xdp_bpf_prog);
+> +	old_bpf_prog =3D rtnl_dereference(adapter->xdp_bpf_prog);
+>  	if (!new_bpf_prog && !old_bpf_prog)
+>  		return 0;
+> =20
+>  	running =3D netif_running(netdev);
+>  	need_update =3D !!old_bpf_prog !=3D !!new_bpf_prog;
+> =20
+> -	if (running && need_update)
+> -		vmxnet3_quiesce_dev(adapter);
+> +	if (!running || !need_update) {
+> +		vmxnet3_xdp_exchange_program(adapter, new_bpf_prog);
+> +		goto done;
+> +	}
+> =20
+> +	vmxnet3_quiesce_dev(adapter);
+>  	vmxnet3_xdp_exchange_program(adapter, new_bpf_prog);
+> -	if (old_bpf_prog)
+> -		bpf_prog_put(old_bpf_prog);
+> -
+> -	if (!running || !need_update)
+> -		return 0;
+> -
+> -	if (new_bpf_prog)
+> -		xdp_features_set_redirect_target(netdev, false);
+> -	else
+> -		xdp_features_clear_redirect_target(netdev);
+> -
+> -	vmxnet3_reset_dev(adapter);
+> -	vmxnet3_rq_destroy_all(adapter);
+> -	vmxnet3_adjust_rx_ring_size(adapter);
+> -	err =3D vmxnet3_rq_create_all(adapter);
+> -	if (err) {
+> -		NL_SET_ERR_MSG_MOD(extack,
+> -				   "failed to re-create rx queues for XDP.");
+> -		return -EOPNOTSUPP;
+> +	err =3D vmxnet3_xdp_restart_dev(adapter);
+> +	if (err && new_bpf_prog) {
+> +		/* Attach failed (old_bpf_prog is NULL here): the core drops
+> +		 * its reference to the new program and keeps nothing
+> +		 * attached. Bring the device back up without XDP.
+> +		 */
+> +		NL_SET_ERR_MSG_MOD(extack, "failed to restart device for XDP");
+> +		vmxnet3_xdp_exchange_program(adapter, NULL);
+> +		if (vmxnet3_xdp_restart_dev(adapter))
+> +			goto err_close;
+> +		return err;
+>  	}
+> -	err =3D vmxnet3_activate_dev(adapter);
+>  	if (err) {
+> -		NL_SET_ERR_MSG_MOD(extack,
+> -				   "failed to activate device for XDP.");
+> -		return -EOPNOTSUPP;
+> +		/* Detach failed. The core may ignore an error here (XDP link
+> +		 * release), so complete the detach on a closed device.
+> +		 */
+> +		netdev_err(netdev, "XDP removal failed to restart, closing\n");
+> +		goto err_close;
+>  	}
+>  	clear_bit(VMXNET3_STATE_BIT_RESETTING, &adapter->state);
+> =20
+> +done:
+> +	if (need_update) {
+> +		if (new_bpf_prog)
+> +			xdp_features_set_redirect_target(netdev, false);
+> +		else
+> +			xdp_features_clear_redirect_target(netdev);
+> +	}
+> +	if (old_bpf_prog)
+> +		bpf_prog_put(old_bpf_prog);
+>  	return 0;
+> +
+> +err_close:
+> +	/* The device is left quiesced, with IRQs freed and NAPI disabled,
+> +	 * as vmxnet3_close() expects after a quiesce: close the interface.
+> +	 * vmxnet3_force_close() would quiesce it and free the IRQs again.
+> +	 */
+> +	dev_close(netdev);
+> +	if (new_bpf_prog)
+> +		return err;
+> +	goto done;
+>  }
+
+[Severity: Medium]
+Can jumping to err_close deadlock on VMXNET3_STATE_BIT_RESETTING and
+rtnl_lock?
+
+vmxnet3_xdp_set() runs under rtnl_lock and clears VMXNET3_STATE_BIT_RESETTI=
+NG
+on the success path, but unlike vmxnet3_change_mtu() and
+vmxnet3_set_ringparam() it never waits to acquire VMXNET3_STATE_BIT_RESETTI=
+NG
+before quiescing the device, nor clears it before calling dev_close():
+
+CPU0                                  CPU1 (kworker)
+vmxnet3_xdp_set()                     [rtnl_lock held]
+  vmxnet3_quiesce_dev()
+                                      vmxnet3_reset_work()
+                                        test_and_set_bit(..._RESETTING)
+                                        rtnl_lock()  <-- blocks
+  vmxnet3_xdp_restart_dev() fails
+  goto err_close
+  dev_close()
+    ...
+      vmxnet3_close()
+        while (test_and_set_bit(..._RESETTING))
+          usleep_range(1000, 2000);  <-- spins forever
+
+ *** DEADLOCK ***
+
+Because vmxnet3_xdp_set() does not set VMXNET3_STATE_BIT_RESETTING on entry,
+it also lacks serialization against paths such as vmxnet3_shutdown_device()
+that rely on that bit without holding rtnl_lock, and can clear the bit on
+the success path while another thread owns it.
+
+Should vmxnet3_xdp_set() acquire VMXNET3_STATE_BIT_RESETTING with a
+test_and_set_bit() loop before vmxnet3_quiesce_dev() and clear it on the
+rollback and err_close paths before dev_close(), matching
+vmxnet3_change_mtu()?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261125075255.1517=
+-1-filzador@gmail.com?part=3D2
