@@ -1,51 +1,51 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=45.145.95.4
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
 	t=1795699269;
-	b=S2noSYxsjLbV+4pHdYnqVnCikS1DT7Q9BVwgT7l0iggUpnnZ78cXfS2Skr4p5gwsTPyA
-	 SYk3gk7aqNwTvGASMCx/ZgRD8i5ieBUQcy6pbxdUteKhe8KOcXgly3GReE7RoQsnHNhwv
-	 UUmAZCBtgL3BacsFlfc1tM3kA90l1AWQfGmdoICQr7sZd+9TsIxxBZ+lcaT7o4tjCXoUb
-	 HA6JymObhc/RdGoTywx0KxpOTjSeN9MnN9CsUN1KzYQT9BchOQ0x6cJOI7nR6zfPZ8aCf
-	 Tr371xG1XPt1PeBR3m7AYhagv7s/+qiVsxEUu06XBvAozaPfIeOQQjfk1Nf2yL1m0hg==
+	b=uwdfbu6KQwHQXOVJYawI1eoqoQitlq9g4yruNhfiiSFP/HUJErB1RIjp/Syw4Gg6Gxwg
+	 h3DcoujLQVWjVxBJTKS1MeoL3Rs8fQNjJ2w1p1miEX8oxsdEeqCjYlTU+ULOGyx0KhhEX
+	 GcmcvgffZQh3KF9gfIznJkWJouCInjzjyeuG/IV8AtdEub7zAoT1MNuFutxEFn00n4yfL
+	 oPphl/0qQt19niLQM6hISjJhfu/tL5kCzFIYeKdkDhZ1J/A1PwzQMWEUO3Ap948ZcktVS
+	 BwH/idCQ8waHSu1aWPjKO7cLc0Z+BmLfgpR0C1DvtHf5SD7jwgobJii3BbSK3S9AJgw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1795699269;
 	h=DMARC-Filter:DKIM-Signature:From:Date:Subject:MIME-Version:
 	 Content-Type:Content-Transfer-Encoding:Message-Id:References:
 	 In-Reply-To:To:Cc;
-	bh=JaVwLddjL06wLjnEBOretW2mEzxR0eBwYBGY8pvmHWc=;
-	b=Q1aLs3P6J2AbbsRXF22Y6Tat34nRrnsNlbOdOoBKHNycw6pT7cEQ1xaRdKbdUdkfSSZn
-	 s7c0UGjcAki9kivmA9jiA2YgFwfynih82g6RqCSTDd/8Ajc5x+rpsTL0JAlEGzOJc2Fsh
-	 MRRsQm3eJrvAMMpAW/KD1dwO8VadCj0GHvDyyNLlWMzfo30D/n4elekkLyO8DW1r6ZOpO
-	 gWc/+wY+EUOorEQD4n8V9RmQPNxoh7lNkAsH21mE5I9NmJp7PsVkpSUL7viiJR4K0URZG
-	 eTgrTDBswG1naOGaLHuUn9J9nUV2i0CfTWovf/zf0QoQiAYoyD7k8En8w2q8iBMRJ5g==
+	bh=UTUUcT/7L2700NzDXIKy1q+MUtNyZGf4JTtHtb0Va1w=;
+	b=NsiNamVCCDkz0AXEtwiiPzBFY+3Obg2imB6sNZ+D0O8bB98ueHN2ocIxeFqvpfbVI0xj
+	 Vn8ckeYGtOClfdQZMBLmZTowUQ2Qf5eybH8Z+wVRGv6jZNAi2nzpHD34Bvh/zkho+uOdB
+	 Zpij8T11QnpIxk7TizG9OFg6WXm4ypDjqRJbPBoiam7uRREa+ZvEURJUXpJASN3o945S3
+	 OdJN1R3Gw9YemfE02m1MytXH7xz6S4adBb1sTc4Lu9/OVyrimREkX+VKj8olovqmWpuYp
+	 GjIQvjkqwi9TjK+JoVo/nfpSgT6btUxJaWxY6L6e/X+gtx+9/fyV/xiOXTKtPcQXk2g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=toke.dk;
 	spf=pass smtp.mailfrom=toke.dk;
-	dkim=pass header.d=toke.dk header.i=@toke.dk header.a=rsa-sha256 header.s=20161023 header.b=CsTUf828;
+	dkim=pass header.d=toke.dk header.i=@toke.dk header.a=rsa-sha256 header.s=20161023 header.b=agb1L7qL;
 	arc=none smtp.remote-ip=45.145.95.4
 Received: from mail.toke.dk (mail.toke.dk [45.145.95.4])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 738EF606A31C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 739B5606A31E
 	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 13:21:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 738EF606A31C
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 739B5606A31E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=toke.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=toke.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=toke.dk header.i=@toke.dk header.a=rsa-sha256 header.s=20161023 header.b=CsTUf828
+	dkim=pass (2048-bit key) header.d=toke.dk header.i=@toke.dk header.a=rsa-sha256 header.s=20161023 header.b=agb1L7qL
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=toke.dk; s=20161023;
-	t=1795699266; bh=cr+KZ7IzXFOWSi0buatt8pPJFehbvIpt09nwtynyWe8=;
+	t=1795699266; bh=dkUfooYISzmKnk5P0bc72xIXEWgrKzJY0K9qkurHRXA=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=CsTUf8289+L5r5wQcZRCH9d6tdTTNEcFxxOoegje1XNsXnZ/4g60cWngB07xFS4qi
-	 c4l0mAGCAPp2EMiEhIITpwVwt5hXd0yh34GCBLdIkQjmooNt5sXQ4svgAM3hfKUFKs
-	 rJJ1iFKPVAz2W4L8nunrZo3I0HmCbAzwJxCwDqP9Y/z7OtLo6nx33le2wBJ2moHA+f
-	 h+RHlefkeWVd8EU6xOiosRiL68TUFJj6YyYx4BMR01VrUsM7MY9HabfZr0tjXeuZ1x
-	 UQYdd64Sdw1FZaWRn06dx84FauK3ybQOarYGlNK2nZALmHwbP9CNzZurZxgx7fpG3p
-	 2vrIg01IXPAgQ==
+	b=agb1L7qLpqIQ6pa8ZhaqFf1ymIu//w1JFm0G4rEYFJqaSEiLlqFlCLyEq/wB/40rC
+	 mTw/YOQupOnVI0UJFN32I3fOMvhaT4ig1Q9ELzZS9tYvi1ZUqGKYmO7dtGI2Disoii
+	 Ozx839m7qPmIVwmclrprNJhlAi4G7KtxLMV8X0Pp7YVr+Z0ilCcQkbLusaUXpYmEZA
+	 HsafYNH2b2VzQAoDF+LrbL7PdLPyttUhtSXp7ilMKWaahvin1Ylps3YLR0VqXZvDaq
+	 2qFuDlwOKNLni8FPQ9CMW5hY3FcusRnDd6DuVOK2Up2XegubnfJ0cxQGqTx9wlP0Yf
+	 B1ljACBjGe74A==
 From: =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>
-Date: Thu, 26 Nov 2026 14:21:04 +0100
-Subject: [PATCH bpf-next v2 6/7] selftests/bpf: Explicitly disable token in
- token/obj_priv_freplace_prog_fail test
+Date: Thu, 26 Nov 2026 14:21:02 +0100
+Subject: [PATCH bpf-next v2 4/7] libbpf: Move bpf_object_prepare_token() to
+ object creation
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -57,7 +57,7 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20261126-bpf-relax-get-next-id-v2-6-039e92757f9c@toke.dk>
+Message-Id: <20261126-bpf-relax-get-next-id-v2-4-039e92757f9c@toke.dk>
 References: <20261126-bpf-relax-get-next-id-v2-0-039e92757f9c@toke.dk>
 In-Reply-To: <20261126-bpf-relax-get-next-id-v2-0-039e92757f9c@toke.dk>
 To: Alexei Starovoitov <ast@kernel.org>, 
@@ -72,57 +72,36 @@ To: Alexei Starovoitov <ast@kernel.org>,
 Cc: bpf@vger.kernel.org, 
  =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>
 
-Now that we changed the behaviour of libbpf to automatically load the
-token fd on object creation, we can no longer rely on the absence of
-bpf_object__prepare() preventing the token from being present. Instead,
-explicitly disable the token by setting token_path to '\0' in the
-token/obj_priv_freplace_prog_fail test.
+Move the automatic acquisition of a bpf_token from object prepare time
+to object creation time. This ensures that the token is available for
+any probing done before loading the object, in particular for BTF access
+in bpf_program__set_attach_target().
 
 Signed-off-by: Toke Høiland-Jørgensen <toke@toke.dk>
 ---
- tools/testing/selftests/bpf/prog_tests/token.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ tools/lib/bpf/libbpf.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/token.c b/tools/testing/selftests/bpf/prog_tests/token.c
-index f2f5d36ae00a..17cd7f176e09 100644
---- a/tools/testing/selftests/bpf/prog_tests/token.c
-+++ b/tools/testing/selftests/bpf/prog_tests/token.c
-@@ -797,7 +797,7 @@ static int userns_obj_priv_prog(int mnt_fd, struct token_lsm *lsm_skel)
- }
- 
- static int userns_obj_priv_freplace_setup(int mnt_fd, struct priv_freplace_prog **fr_skel,
--					  struct priv_prog **skel, int *tgt_fd)
-+					  struct priv_prog **skel, int *tgt_fd, bool fr_token)
- {
- 	LIBBPF_OPTS(bpf_object_open_opts, opts);
- 	int err;
-@@ -813,6 +813,8 @@ static int userns_obj_priv_freplace_setup(int mnt_fd, struct priv_freplace_prog
- 	if (!ASSERT_OK(err, "priv_prog__load"))
- 		return -EINVAL;
- 
-+	if (!fr_token)
-+		opts.bpf_token_path = "";
- 	*fr_skel = priv_freplace_prog__open_opts(&opts);
- 	if (!ASSERT_OK_PTR(*skel, "priv_freplace_prog__open_opts"))
- 		return -EINVAL;
-@@ -830,7 +832,7 @@ static int userns_obj_priv_freplace_prog(int mnt_fd, struct token_lsm *lsm_skel)
- 	struct priv_prog *skel = NULL;
- 	int err, tgt_fd;
- 
--	err = userns_obj_priv_freplace_setup(mnt_fd, &fr_skel, &skel, &tgt_fd);
-+	err = userns_obj_priv_freplace_setup(mnt_fd, &fr_skel, &skel, &tgt_fd, true);
- 	if (!ASSERT_OK(err, "setup"))
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 540daf7752b4..6d0e71aff3e1 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -9281,6 +9281,7 @@ static struct bpf_object *bpf_object_open(const char *path, const void *obj_buf,
+ 	err = err ? : bpf_object__init_maps(obj, opts);
+ 	err = err ? : bpf_object_init_progs(obj, opts);
+ 	err = err ? : bpf_object__collect_relos(obj);
++	err = err ? : bpf_object_prepare_token(obj);
+ 	if (err)
  		goto out;
  
-@@ -858,7 +860,7 @@ static int userns_obj_priv_freplace_prog_fail(int mnt_fd, struct token_lsm *lsm_
- 	struct priv_prog *skel = NULL;
- 	int err, tgt_fd;
+@@ -9873,7 +9874,6 @@ static int bpf_object_prepare(struct bpf_object *obj, const char *target_btf_pat
+ 	}
  
--	err = userns_obj_priv_freplace_setup(mnt_fd, &fr_skel, &skel, &tgt_fd);
-+	err = userns_obj_priv_freplace_setup(mnt_fd, &fr_skel, &skel, &tgt_fd, false);
- 	if (!ASSERT_OK(err, "setup"))
- 		goto out;
- 
+ 	err = bpf_object_check_gen_loader(obj);
+-	err = err ? : bpf_object_prepare_token(obj);
+ 	err = err ? : bpf_object__probe_loading(obj);
+ 	err = err ? : bpf_object__load_vmlinux_btf(obj, false);
+ 	err = err ? : bpf_object__resolve_externs(obj, obj->kconfig);
 
 -- 
 2.56.1
