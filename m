@@ -1,81 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.47
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.52
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795698807;
-	b=d8mXV7l/epaTZW48UVWpu/aPPoBhg4S2Pvo2wdp7xAL1XmHKnL0KDKXX7splHRzQ1eNE
-	 l4b+YeF24+O2JRP3mknZHHwAJH89v9wgrkX6kH9mQkJtMBOGuOTweVs7ZobSAMlL6Xsnj
-	 BxAJL2gDiabdfi3OuhTRR/St+VwsSfEeqltH32CM2YsrEmn8LyALTZlVuTSdu/uBX24u4
-	 gH80pQQTFA4ABP0+Mt47YGEVpYqaM4iYKYx8oMNF3W/wKL9dPdRI8wXDiAP9BrkvqzfYF
-	 JcMLNd9/MMG3LKLdpM2SsZxHM0tjFvtytUX8IOjFN+8Lh58JCQpDGjEFrP/Cn++1Q6g==
+	t=1795698808;
+	b=fEpme8SW6TLB3Edk4GHWwiid5Y0nQGVSDJxpPEnh3/kk9V0OcVp+S1KalQo3cMBTeULH
+	 JTLcSIfZvWSMRKpTGZaKVZ+l0FLZ1XnMEdSUdfUPfZfdpgwW7+Wzt+nAobTRmFoSKVM1O
+	 PvAFxotdXmCs3KtvRx8C/Uo766M9CN2lz49wUmsEFuRZWSQblGR8u2xJ9rQpovJOdEFk9
+	 iUjiyRFh0GUYnIy6PtavcXqnjQS/GZRacGcB7BOPjdjjtZ07lwrr4omnozk4DJNDMoXHm
+	 sBUdfaU9jCdhsurbJDGYPiB9cBvuaHQWcNKY/p5XZasJ4L8i2wYZHBS8mYyZHG31lEQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795698807;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795698808;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=45M1pglWyzJAfT+SzxQfEEVe/IyIyurkT0fnn9e5xvc=;
-	b=cCKJr1qgVlEoPaT9PrcwCW5+ee4zzQSQiTU3/NH/Cs4PQcwK3S8ouDWDOfHhZMbWLdWp
-	 xIVwRr2x9BURqvHvKZH31+0vcivn8AIfNZh5ms6XRmvUTfF7YSTghvV0KkLPCb1YlAq0f
-	 ux/s05mlAq4JRXAZc7FOfBtEof1vTNuzYeq73G9rJqxu/4McLCkw9WPGMvguh+xzlfDnt
-	 N/1uiW9xWy8fq4EUlpsZZsnFsMPvXZ+5NQIOEiULVptHfL+p1NLOr/HPylDeQIz9gahx9
-	 P7kNiXVDarbur/a9fVdNowvcJHfulhOWmo6TfSZpRREW3DuNC2fRoq0jS+BbMzHHiQw==
+	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=daRFrpcIrlH42tetS90Eak1tlN3MgASpqpr5j9a3ui4=;
+	b=vC+BfPq+NS5xWd3uql7WbQqjtNAKCrHNnjsu3E6zmT27aBm4C6A4ZylmguLdObXFN5LF
+	 cneWSIYZFKqqBowwZcAiIHjOfnC0iPLLSfJDpvSbnwzsFEpInLR+r3BDKp0GFDTnZ5Qqd
+	 biuviz1VyNSHnYrPQqHK+O6bSi/9cN87HvVJmSNlcKUuojsrgViYK95dWdC44Sv7PDxLD
+	 uanHxAldyOopb0zZ+tbl7aInj0X8esjFICe4qqCLejrEgGCbLxkfVmmpffpc3QZsJWWY5
+	 P+zM9dy2v0dk4ZP+7CIaLrT/r/2XaOX0FplXDoHW4o+pcywo23lFjC2f4lJmH7AiRcg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=DJyNfUAz;
-	arc=none smtp.remote-ip=209.85.221.47
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=mxyvLAly;
+	arc=none smtp.remote-ip=209.85.221.52
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CEC7606A31E
-	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 13:13:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1CEC7606A31E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F5AD606A329
+	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 13:13:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6F5AD606A329
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=DJyNfUAz
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-49465892f7bso5104482f8f.1
-        for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 05:13:26 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=mxyvLAly
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-498f5fa4f70so5730941f8f.0
+        for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 05:13:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795698805; x=1796303605; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=45M1pglWyzJAfT+SzxQfEEVe/IyIyurkT0fnn9e5xvc=;
-        b=DJyNfUAzWCoUZaHPCGXoNx2PHzBS1sxXZWwwQ8JxZ6e+pdyeJXAUSqYxV1WEDFHtN+
-         jEz7LoSzhwdAPUXI5jfFdsbBdtDtKNgnCrPoYN7aqtpdHBV3Pmj+ZgudAXWUZv7yQ+Ki
-         woAqTh0b0XYKbwd4d3K6/ZTBkrTjBnHtg1nxjd+LR1xdu1mj15qnVQG3wnzfYaBgt0m7
-         NZwtHdwa6UQ+QHINK9GukPP+cJiLc8xz4FdInsyM7fhPzUgbxsjUxH/HmOt0LgTCTFL/
-         bDkYHuP0R4Nw/QvBorzDL33vkfZwk4pDLWhlZHGWI5V9yL3Hbehgoj/GFW5mC7tCKSHb
-         J48Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795698805; x=1796303605;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20260707; t=1795698806; x=1796303606; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=45M1pglWyzJAfT+SzxQfEEVe/IyIyurkT0fnn9e5xvc=;
-        b=hNw1QhmBISpV1ABXp4JpNDt4oj3IvGRfNbBpG/7LYVuAzRH5wFtPjpBs9de32Os5fc
-         EcSM8iwlxXhpK9cjA12xGpruS44HnWUcIJL1Lig09d1Uxp+fWveI8ATVdMuL829zaTT4
-         qSdZg6MgU4y7e6QZog3azweIXJuK9LYlXrgYm/qrLv+Er6hsK6ERKT+TOCePXpJO5xHT
-         XnucsrJpiThbOWj/FORb+s43Iozb3UcshDtKaVLyX4xfzsQJA00z2+AqLHC5Wk7Ntdq5
-         eTACkcWlmfI1oipXxSYK4LMaU4zVDXB+xzLWuTvhYlLuvfBlv+/3P5t8ca+THAyurJLA
-         cwRg==
-X-Gm-Message-State: APuU4Z9AxhCITRhe/3YOGwo9zT5zk2nOlDzm+iowBDj7teivLMzjQHmW
-	u+JYjRh/lOMGhshff5Bl9yxYGD/kscZKLhT2HcMpOKH/PeFZ21UmM6gclXtdKkZX
-X-Gm-Gg: AZFdTZdtdc7OFpLE9oWJ9mZ47msGlRAIBq/IoGmZW80OdxXRfAJnedCiamGCBDRS7ZK
-	lw/rHxlmaHtX8xT9tn25LS98dWUjvzkcSadQcoVV6HajgfChFsUVdNH/wN7bolPjRMG26UqUJgY
-	QK3ZFntk+2vmH4Yhpkn4Cu9+MmclR5g16eHwY3IIYdStkWMuAdkOrvLccyQsLxKbSUCZ5zozxoN
-	MpvAVMGMd0nPSyKUx8fvusMS5ZSYe1NFjx8u/NgjhOh6zAgT/W1ylPA3Xu6k5cPdzlAfqLChe1o
-	nmpjgMFtpmf7MDSqpKnvGaYpfxug/sMfOtOLrAc/AsyEowRQcxPRCI4OzlcdLaSpXKP31zIWLYk
-	7v32WfAup2haYMpvBBb8OXncOu9ce/Z/wyn8nK9HPGYll4hzlKKWnE0CcwF0zUxMyBd/V72/Hmc
-	6KtSgm8VQ9osHFKYbIYgnA4KWcpCTbLzm6oCj5hoV25+O7zF1f1myok+jI+mORFDP3NN+brbIKj
-	R/W48C6nadb1KOCetCGm9FuGoXzJQ7r1uHH2jpRwHZDNybTGnEWU/Co/il/2lpfKd9CC32Yb2at
-	k3izidcJF8tiQ9+K1/JYB89OoVaRdhMwMfZyM39SplyEMpw9XpLIWSpbNInyZioYq6Wp1CZRcKe
-	Fo4uEZW2J2sgQYxLNqpzcog==
-X-Received: by 2002:a05:6000:4812:b0:4a9:1b17:4f34 with SMTP id ffacd0b85a97d-4abb57f7036mr38287533f8f.50.1795698805223;
+        bh=daRFrpcIrlH42tetS90Eak1tlN3MgASpqpr5j9a3ui4=;
+        b=mxyvLAlyUVE+0osyMFx67YYa0114KEwR80/ILtfHiAA06149BQAbxGOFGwWpKis++i
+         vp/WieV9Or02ciaLI4k9Zs5qsmgIlb/CsH3RIO7OwoxKTisggAGnXAnlr2P19JR6e5UC
+         cor3LpmMwQUU90h7Wap+H58UpLiodl+V6i9RHC1hNiym5ndproAqi0U8+aHpRyxlwuSE
+         j7zj23IKUlSx0v9T+mNXDatA6LhXuIh4K0RhA/ay8rH9ONHZTZd2RTrWPft17ANAjRo7
+         wIsSC+bNTK0oamz1+AGbArsgfr0c6o1rRyY0yl4Ir1n+pURb3OV0cGqdh7jdOQ1cgc3q
+         kLSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795698806; x=1796303606;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=daRFrpcIrlH42tetS90Eak1tlN3MgASpqpr5j9a3ui4=;
+        b=Mjo9w7ardsgwGM4hdvGS40Jfyi4NUwbO3x1wdQyB05CL/Wbob+ONifLKBUdJ4KQC4s
+         l+hHlsGlhT6ahH5LP8kD3rFxYLC0iCVPBtIduMI+GeAQaWqtYhtml6pRWGrA4v9yiEF/
+         S7nvbRf4MSyMzmBMfEmY8FwxBvvuzP6RifyT2Lk28YPYeyjQuaUn+fAZDug/ZlOp17GR
+         vI8/FuIxWzwb3jza2LuN5bRkMPJYM9A3SCkgRT/4ti5xq8oT2kbekAYyUyaK9zsssZlM
+         ftlrGruAUwfZSmmMobUhNqHKTWSjxA2r+eOccYS/pM7z6m6MGsSQdrNRfHrLQFPsoPz9
+         vh4Q==
+X-Gm-Message-State: APuU4Z/s/hnGr9Uelt/9mXZU1c9rRM0wZqiNmKEe2BUlCbeuISc3cMMG
+	TY7CkKmxguirDqkBzc2FdoGJ92sWxFITtmxnVgC1GQLYteNPDbyyEffRGIESSwQM
+X-Gm-Gg: AZFdTZcOgcHtCusSaOKcEz6fIUrdExdEqskNj6q5QG7vRRCDMIhoCcPndQBQvESTVVL
+	Ve8sG95Bw12oStjeCq+tUm01swhmsIgozVnZtQ5w3axS9yspnQxsOIymOEWIJggI93Spc/jlBW2
+	9GwYghoiU8CYWk4qzkiK+9F4undi/mfC4xNs2i++FsVnM7ZRUieQjc8SHw+IWTai4gCb5NS+PRG
+	EFBUZYcQt/Kvz8NFQQtzSJDUKMsgrosT20XqZdyKq3jnHoswyZZqalyy6cDHh6SjyHbqAhWz+UT
+	lKnoRUKf7kaKXB3xLsemPwgMqnOR+oa0pl2jbbfAN1pR9pjn1rCvsFb5LT6EymFIUYOxgZoLIVX
+	yUr8fIBS9XzwaDqpcX7UlPbPSImFtbh3mpDhpJV6Ha1ylWM8a/s9J92c+xWAoa4oDrX5bdxnske
+	YRkOIFdZ/HivQvSK1G49DXLZeEUBA/1yoWAXKeuoqci3lOpXkypgDGgi5GwjrVkWtR/Gc8Q/5zd
+	kUmemoH21e2irg821cPEg5NQXSAoA6FaWGEeMEpbgHb4O7mwbwoaJuZEFpsra0foYwH4DU0znFf
+	yE/A6l7BaGO/cFvNCCBmskJ5nV2UlZYm4tkozPIr4Fx2xbpBD8qljLPYmJVw23IyM3Ig285GVso
+	y
+X-Received: by 2002:a05:6000:41d2:b0:48b:1296:52ec with SMTP id ffacd0b85a97d-4abb0c5d65amr39924027f8f.18.1795698805751;
         Thu, 26 Nov 2026 05:13:25 -0800 (PST)
 Received: from mtardy-friendly-lvh-runner.europe-west1-c.c.cilium-dev.internal ([2600:1900:4010:1a8::])
-        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-4ab6c61f558sm41679091f8f.58.2026.11.26.05.13.24
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-4ab6c61f558sm41679091f8f.58.2026.11.26.05.13.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Nov 2026 05:13:24 -0800 (PST)
+        Thu, 26 Nov 2026 05:13:25 -0800 (PST)
 From: Mahe Tardy <mahe.tardy@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -95,10 +97,12 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Mahe Tardy <mahe.tardy@gmail.com>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next 1/2] bpf: account for local storage map elements memory
-Date: Thu, 26 Nov 2026 13:13:17 +0000
-Message-ID: <20261126131318.470837-1-mahe.tardy@gmail.com>
+Subject: [PATCH bpf-next 2/2] selftests/bpf: test task storage memory accounting
+Date: Thu, 26 Nov 2026 13:13:18 +0000
+Message-ID: <20261126131318.470837-2-mahe.tardy@gmail.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20261126131318.470837-1-mahe.tardy@gmail.com>
+References: <20261126131318.470837-1-mahe.tardy@gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -110,49 +114,92 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Commit 7490b7f1c02e ("bpf, net: bpf_local_storage memory usage")
-introduced bpf_local_storage_map_mem_usage() to compute the memory usage
-of local storage related maps but left the accounting of the allocated
-element aside. For users of these maps, the elements can quickly make up
-the majority of the memory usage and make the reported memory usage
-quite wrong.
-
-Walk the bucket's list to count the number of elements in the map, note
-that concurrent insertions and deletions can make the count imprecise.
+This tests that the memory increase as we add elements to a
+task_storage. Copy the map_memlock() helper from arena_mem_usage.c.
 
 Signed-off-by: Mahe Tardy <mahe.tardy@gmail.com>
 ---
- kernel/bpf/bpf_local_storage.c | 16 ++++++++++++----
- 1 file changed, 12 insertions(+), 4 deletions(-)
+ .../bpf/prog_tests/task_local_storage.c       | 61 +++++++++++++++++++
+ 1 file changed, 61 insertions(+)
 
-diff --git a/kernel/bpf/bpf_local_storage.c b/kernel/bpf/bpf_local_storage.c
-index b12fcec47ffa..6fb95503441e 100644
---- a/kernel/bpf/bpf_local_storage.c
-+++ b/kernel/bpf/bpf_local_storage.c
-@@ -792,11 +792,19 @@ u32 bpf_local_storage_destroy(struct bpf_local_storage *local_storage)
- u64 bpf_local_storage_map_mem_usage(const struct bpf_map *map)
- {
- 	struct bpf_local_storage_map *smap = (struct bpf_local_storage_map *)map;
--	u64 usage = sizeof(*smap);
-+	struct bpf_local_storage_elem *selem;
-+	u64 nbuckets = 1ULL << smap->bucket_log;
-+	u64 nr_elem = 0;
-+	u64 i;
-+
-+	for (i = 0; i < nbuckets; i++) {
-+		rcu_read_lock();
-+		hlist_for_each_entry_rcu(selem, &smap->buckets[i].list, map_node)
-+			nr_elem++;
-+		rcu_read_unlock();
-+	}
-
--	/* The dynamically callocated selems are not counted currently. */
--	usage += sizeof(*smap->buckets) * (1ULL << smap->bucket_log);
--	return usage;
-+	return sizeof(*smap) + nbuckets * sizeof(*smap->buckets) + nr_elem * smap->elem_size;
+diff --git a/tools/testing/selftests/bpf/prog_tests/task_local_storage.c b/tools/testing/selftests/bpf/prog_tests/task_local_storage.c
+index 5b2b56cc3a4f..1415782ad72f 100644
+--- a/tools/testing/selftests/bpf/prog_tests/task_local_storage.c
++++ b/tools/testing/selftests/bpf/prog_tests/task_local_storage.c
+@@ -495,6 +495,65 @@ static void test_uptr_map_failure(const char *map_name, int expected_errno)
+ 	uptr_map_failure__destroy(skel);
  }
 
- struct bpf_map *
++static long map_memlock(int map_fd)
++{
++	char path[64], line[128];
++	long memlock = -1;
++	FILE *f;
++
++	snprintf(path, sizeof(path), "/proc/self/fdinfo/%d", map_fd);
++	f = fopen(path, "r");
++	if (!ASSERT_OK_PTR(f, "open_fdinfo"))
++		return -1;
++	while (fgets(line, sizeof(line), f)) {
++		if (sscanf(line, "memlock:\t%ld", &memlock) == 1)
++			break;
++	}
++	fclose(f);
++	ASSERT_NEQ(memlock, -1, "parse_memlock");
++	return memlock;
++}
++
++static void test_memory_usage(void)
++{
++	struct task_local_storage_exit_creds *skel;
++	struct bpf_program *prog;
++	int map_fd, task_fd = -1;
++	long baseline;
++	u64 value = 12;
++
++	skel = task_local_storage_exit_creds__open();
++	if (!ASSERT_OK_PTR(skel, "skel_open"))
++		return;
++
++	/* Just load the map */
++	bpf_object__for_each_program(prog, skel->obj) {
++		if (!ASSERT_OK(bpf_program__set_autoload(prog, false), "disable_autoload"))
++			goto out;
++	}
++
++	if (!ASSERT_OK(task_local_storage_exit_creds__load(skel), "skel_load"))
++		goto out;
++
++	map_fd = bpf_map__fd(skel->maps.task_storage);
++	baseline = map_memlock(map_fd);
++	if (!ASSERT_GE(baseline, 0, "baseline_greater_zero"))
++		goto out;
++
++	task_fd = sys_pidfd_open(getpid(), 0);
++	if (!ASSERT_OK_FD(task_fd, "task_fd"))
++		goto out;
++
++	if (!ASSERT_OK(bpf_map_update_elem(map_fd, &task_fd, &value, BPF_NOEXIST), "update_map"))
++		goto out;
++
++	ASSERT_GT(map_memlock(map_fd), baseline, "memory_increase");
++out:
++	if (task_fd >= 0)
++		close(task_fd);
++	task_local_storage_exit_creds__destroy(skel);
++}
++
+ void test_task_local_storage(void)
+ {
+ 	if (test__start_subtest("sys_enter_exit"))
+@@ -521,5 +580,7 @@ void test_task_local_storage(void)
+ 		test_uptr_map_failure("empty_uptr_map", EINVAL);
+ 	if (test__start_subtest("uptr_map_failure_kstruct"))
+ 		test_uptr_map_failure("kstruct_uptr_map", EINVAL);
++	if (test__start_subtest("memory_usage"))
++		test_memory_usage();
+ 	RUN_TESTS(uptr_failure);
+ }
 --
 2.43.0
 
