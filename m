@@ -1,74 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.219.69
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.227
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795718941;
-	b=pd0Zl+1fG1QnIazIURSc3AJN/LJrEr2y8zyQZ/irUfqJpwBe/AgXjHZ1SMNDIWaOs2XE
-	 mCK7xcHFwG2oYMXkExcMtTyb9iToleqAOKDLRFFlH6tEJ+MOtH+rfdvg/jRmivNWaQvsG
-	 ZY0MOz+rY6veJxlu+J5/vvWmggn1zFHDvHZsgAnxkVqK7szRMMifBQnK1IGcDXE9CJxux
-	 Xwme5seb86SjvdRyn3D+D39ykZtMIvX/GmeNJAaoxTvJLJM99SahGuYlBhSFnboahtRYt
-	 DL1GahM6vXP6Z4WDTf4HMXYamvya2G3r7bhkGaZsZzoy3ToNY6r4mBnqE6bb2rCamqg==
+	t=1795721754;
+	b=T3Le093vwMGIzr4C2kLvgT5BRtd/9w6+/8OcwTIpn7MnlxVmLwG8NevLY2rkkWMYQabv
+	 pmNAwd5d/45Rjqfomlkm6qD15E37o0qGWXp0vH8SOPUCQhyupBNwEzHWTQnhYElyRZ+gC
+	 ujGz9lxFRX05PbQNoijedTWjiQRlOXQUajBSoZUoH4dApRKKgenFHDpevuPkV6rte7TsR
+	 l4w7xXfJc2qzSN6Sy8RJEilBjp5Wj3USiu3pYakMdNG9EQUz1TdBg/iqJoYV4WKjvsNRv
+	 En7npG56JeTTDawkIRniIgno9VtLxg3lh6QbvX7KXZR5nsIoA8AhBdpGz9oGs2Kr/Tg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795718941;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
-	 Mime-Version:References:Message-ID:Subject:From:To:Cc:Content-Type;
-	bh=fBtb0BMz5hkNQGeq8zzQt7EyteYPxkW8SwexoB3Gq1M=;
-	b=L7I1HUJWa1LE7IQ8FCZBcOT39mJGiNvui5kYMlEck3FfsIp3ziYtaOsNGDPtcP6d8PAM
-	 aATfR3bS+FAD8lVkIfVND/ucyKoATdBZ8s6gB+v6A5KIbnNrRT3Do9qyYjv+achGkEMeL
-	 MC6AAi8Lk7c/kQEFSmZQKVFlVCsRH64KbBINeYvMrfpZIlRo0+DHzb56g49cLpDB/4tPe
-	 lu0vlYl1VWp33+zeG+MpyaYNsFv8qejKgSNCi+jN32N5MBsv9DSY08p9uXR/qBhnjiapt
-	 6a6OTbDqrdEMmQJGo26PkYXEEyVA8fc1yUr07xHbndwOUyPh8vNsq9I+JaQ/mtT03Aw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795721754;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=Cr1ILRgs8ZUdAXciHMSDpnnf5jBEtObzeMiER0D/S0o=;
+	b=MCrTGEZqB9MZChiIEGfZhhjTN9np5B+JTfLhaGNS1R8LXtjFH+bLEFaiUzggaqlK/dMO
+	 akGe14aNw2ZWtMCvca7GAAIJi9aAN/ZtDydyNK8KNarNNJxobYRNz1kbPNGN1IfZX5Pv0
+	 wMmGyt9613vWDtBZja+Po+vtyblFS3NjLyA/fOpsnSUn6rzY8r9ad5fe4S859jc1PTk5S
+	 gIHALoDPtiSZzXzw0CqEnpYO4ErKYFN23G3Uo6Pm3VTMBg9uclqbqD1HdV+Z2SVXMHthU
+	 RGfNkjTRZMbwuu2gsMC4PiQh9eP4cLqD+gDT7x47KKx+KxbMmOtxJs+MthbpT+rCYwA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=flex--willemb.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=bhqpbwgU;
-	arc=none smtp.remote-ip=209.85.219.69
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com [209.85.219.69])
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=mOAgsGK2;
+	arc=none smtp.remote-ip=95.215.58.227
+Received: from mta1.migadu.com (out-227.mta1.migadu.com [95.215.58.227])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07FC9606A31C
-	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 18:49:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 07FC9606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--willemb.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B54A606A31C
+	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 19:35:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7B54A606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=bhqpbwgU
-Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-91256a7b7b3so105063176d6.2
-        for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 10:49:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795718940; x=1796323740; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=fBtb0BMz5hkNQGeq8zzQt7EyteYPxkW8SwexoB3Gq1M=;
-        b=bhqpbwgUDX6KpywFECdFKx+yR6Vmxexr77cWP7CfQ5RrH7RlteE5HSiWONA+v1gFDG
-         lx2uRNLgEy/P0pEGf9XCQO2Q3Jm6ysDvrB9BJRPT1DHC4qImbkCSo2Bzl7UQ9bjiijHv
-         I1I8arFPDQVPqz4QkStm1Faw4/Uhr7cyBTdnA3Ap72OZAUOOixub0LWeQGcR6FXCt5Zq
-         xTra2RXtW3u+N+3f/UFzlyUqX27/9L6ibodGkodwU5mQsym30uyP3DnZHYD0mZdrSLGr
-         zG1RjB0kvOOjMC8cpiZBfjZT4GurB8jE330ChQ6qlIt5EY98MNd/ApmiP33G3Hg9e9N0
-         fMGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795718940; x=1796323740;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=fBtb0BMz5hkNQGeq8zzQt7EyteYPxkW8SwexoB3Gq1M=;
-        b=oD2dTX8yDMUKedfjqaxRclz9189Ig7Bol6mNkJLGe5hJP30/xUOiMMgwnCw7AtuN68
-         /sfqNLFGGutf3KQyMbQ+r0nqsIQBmLOhRzJlDFbcuMz7HkaCHo8SNaiZjULzPZ7AcEKO
-         sk2+hOU5oosBBiqD1mNp8khH/tTQhPqeoIKT1H5vzPaXamcqe6C6ZoS8S1oFRqPPR8z6
-         nV9E/0qXi4Wai/lvC9oraqWrVt7c4csYMV90DnV79VITlNuVZKoOLCLO+krwxUl/4uRQ
-         sC/qnvZx/ec+XTgaBY3KG9SIdGy40ykvFOwRGu/TItBmjinob6+no2LYDOWS7GR4fxzA
-         x6FQ==
-X-Forwarded-Encrypted: i=1; AL+hErHIuav1sagWXj35Vf0DvoqpPKaVNk10V/IfJ+BYapBg2Iw5/SztAvaTmfVgKm7n4N/O7JA=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9htfwahhWQ+H1qDGtVS6AHy3fRFygWsAwlg6dIHwVLlECfjxyg
-	EQ9FBl941DDkHZu7oFWbHGpbZr2MACcNjNGPagJEtN2RsrIOwBWUGWsMeNlNRFJBXMFIXDCGdNQ
-	ya8jPwQPoCw==
-X-Received: from qvbw16.prod.google.com ([2002:a05:6214:6350:b0:921:8507:17fc])
- (user=willemb job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6214:4902:b0:921:4095:deae
- with SMTP id 6a1803df08f44-9214095e374mr373511836d6.42.1795718939796; Thu, 26
- Nov 2026 10:48:59 -0800 (PST)
-Date: Thu, 26 Nov 2026 13:48:59 -0500
-In-Reply-To: <20261124235959.1141963-3-antonio@mandelbit.com>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=mOAgsGK2
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=tOn7o6D230EwWW3ZzRNubWzSgq9j0czih7VpwrFm48w=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1795721751; v=1; x=1796326551;
+ b=mOAgsGK26qgcO31Ucd9NG2Eoh2Thm9T3sdOLh2p350aXrFpkG/fznAxIHqnJvq86HgvtbNgc
+ pmhcVxmH4XTiZdyaeLdQjyjTDv8AxAwbYu8pl3qAfeZtOVMCLHew+0IiPTQ8V6GgKVMHHJ0TTsz
+ +lL1sWJwmstICxaUvKt+FLOg=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id a35781529f35255c;
+	Thu, 26 Nov 2026 19:35:39 +0000
+X-Mizu-Trace-ID: a35781529f35255c
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <9d2c8268-0ad4-4f39-80e9-ba9393d88f15@linux.dev>
+Date: Thu, 26 Nov 2026 11:35:34 -0800
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -77,74 +57,108 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-References: <20261124235959.1141963-1-antonio@mandelbit.com> <20261124235959.1141963-3-antonio@mandelbit.com>
-Message-ID: <willemb.880316e8f949@google.com>
-Subject: Re: [PATCH net-next v2 2/2] tun: skip the virtio-net header parsing
- without IFF_VNET_HDR
-From: willemb@google.com
-To: Antonio Quartulli <antonio@mandelbit.com>, willemdebruijn.kernel@gmail.com, 
-	jasowangio@gmail.com
-Cc: Antonio Quartulli <antonio@mandelbit.com>, andrew+netdev@lunn.ch, davem@davemloft.net, 
-	edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, ast@kernel.org, 
-	daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com, 
-	sdf@fomichev.me, netdev@vger.kernel.org, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next 1/3] libbpf: Poison an enum value relocation out
+ of the local enumerator range
+To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
+Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+ eddyz87@gmail.com, kernel-team@fb.com, martin.lau@kernel.org,
+ mason@kernel.org, ihor.solodrai@linux.dev
+References: <20261126175607.1883240-1-yonghong.song@linux.dev>
+ <2c14a84ab2ca76b12c34e5be65c4e51a969151f0c831386519a47a9c6245671b@mail.kernel.org>
+Content-Language: en-GB
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <2c14a84ab2ca76b12c34e5be65c4e51a969151f0c831386519a47a9c6245671b@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Antonio Quartulli wrote:
-> Without IFF_VNET_HDR, tun_get_user() still passes an all-zero header to
-> tun_vnet_hdr_tnl_to_skb(), which then only resets the MAC header. The
-> parser is not inlined, so that costs two nested calls per packet. Reset
-> the MAC header directly, as tap_get_user() already does.
 
-> 2.0% fewer instructions per 1400-byte UDP packet written and dropped at
-> the raw table, 1.2% fewer when forwarded (qemu -icount, x86_64).
 
-> Signed-off-by: Antonio Quartulli <antonio@mandelbit.com>
+On 11/26/26 10:36 AM, bot+bpf-ci@kernel.org wrote:
+>> libbpf: Poison an enum value relocation out of the local enumerator range
+> TL;DR: Possible wrong behaviour in relo_core.c: enum value relocations may be
+> wrongly poisoned when target BTF lacks the kflag (pre-6.0 kernels) and
+> negative enumerators, so valid programs could fail to load.
+
+Please take a look at commit 6036922777d3 or
+    https://lore.kernel.org/all/20261124000514.2955878-1-yonghong.song@linux.dev/
+We do assume that kflag 0 is taken as unsigned.
+
+>
+>> diff --git a/tools/lib/bpf/relo_core.c b/tools/lib/bpf/relo_core.c
+>> --- a/tools/lib/bpf/relo_core.c
+>> +++ b/tools/lib/bpf/relo_core.c
+> [ ... ]
+>
+>> +static bool bpf_core_enum_val_fits_int(__u64 val, bool val_signed)
+>> +{
+>> +	return val_signed ? (__s64)val == (__s32)val : val <= INT_MAX;
+>> +}
+> [ ... ]
+>
+>> +	local_t = btf_type_by_id(local_spec->btf, local_spec->spec[0].type_id);
+>> +	targ_t = btf_type_by_id(targ_spec->btf, targ_spec->spec[0].type_id);
+>> +	local_signed = BTF_INFO_KFLAG(local_t->info);
+>> +	targ_signed = BTF_INFO_KFLAG(targ_t->info);
+>> +
+>> +	if (bpf_core_enum_fits_int(local_t)) {
+>> +		type = "int";
+>> +		fits = bpf_core_enum_val_fits_int(targ_val, targ_signed);
+>> +	} else if (local_t->size == 4) {
+>> +		type = "unsigned int";
+>> +		/* a negative value is sign-extended, so it is also too big */
+>> +		fits = targ_val <= UINT_MAX;
+> Can this reject valid programs when the target BTF has no kflag on a signed
+> enum?
+>
+> Before commit 6089fb325cf7 ("bpf: Add btf enum64 support"),
+> btf_enum_check_meta() rejected any BTF_KIND_ENUM with kind_flag set, so
+> vmlinux and module BTF from pre-6.0 kernels (and from kernels built with
+> pahole older than 1.24) have kflag == 0 and store negative enumerators as
+> their u32 bit pattern.
+>
+> For kflag == 0, bpf_core_enum_val() returns (__u32)e->val, so a target
+> enumerator of -1 becomes targ_val = 0xffffffff with targ_signed = false.
+>
+> Consider a local enum such as enum perf_event_state from a modern
+> vmlinux.h, where PERF_EVENT_STATE_OFF = -1, running on a 5.x kernel:
+>
+>      bpf_core_enum_fits_int(local_t)                 -> true
+>      bpf_core_enum_val_fits_int(0xffffffff, false)   -> 0xffffffff <= INT_MAX
+>                                                         -> false
+>
+> The relocation is poisoned and the program fails to load if the
+> instruction is reachable.  Before this patch the ld_imm64 got 0xffffffff,
+> which truncates to the correct -1 in an int context such as:
+>
+>      int x = bpf_core_enum_value(enum perf_event_state,
+>                                  PERF_EVENT_STATE_OFF);
+>
+> The mirror case also looks affected.  If the local enum comes from a
+> vmlinux.h generated on an old kernel, btf_dump prints the kflag == 0
+> values with %u (e.g. PERF_EVENT_STATE_OFF = 4294967295), so the local
+> enum is a 4-byte unsigned enum.  On a 6.0+ kernel with kflag set, targ_val
+> is 0xffffffffffffffff, which fails "targ_val <= UINT_MAX" and is
+> poisoned, where bpf_core_enum_value() previously returned the kernel's -1.
+>
+> The commit message says pahole sets the kflag for a signed enum since
+> v1.24, "the minimum version now required for kernel BTF".  Doesn't that
+> only cover kernels built from this tree, rather than the older running
+> kernels that CO-RE targets?
+>
+> The selftests added later in the series appear to use only target BTF
+> compiled by a modern clang that sets kflag, so they would not exercise
+> this.
+>
+> Would it make sense to judge a 4-byte BTF_KIND_ENUM target without kflag
+> by its low 32 bits, accepting the value if it fits as either int or
+> unsigned int against a 32-bit local enumerator?
+>
+>
 > ---
->   drivers/net/tun.c | 17 ++++++++++++-----
->   1 file changed, 12 insertions(+), 5 deletions(-)
-
-> diff --git a/drivers/net/tun.c b/drivers/net/tun.c
-> index 408bb0b40348..79aaadd9a2aa 100644
-> --- a/drivers/net/tun.c
-> +++ b/drivers/net/tun.c
-> @@ -1951,11 +1951,18 @@ static ssize_t tun_get_user(struct tun_struct  
-> *tun, struct tun_file *tfile,
->   		break;
->   	}
-
-> -	if (tun_vnet_hdr_tnl_to_skb(tun->flags, features, skb, &hdr,
-> -				    (tun->flags & TUN_TYPE_MASK) == IFF_TAP)) {
-> -		atomic_long_inc(&tun->rx_frame_errors);
-> -		err = -EINVAL;
-> -		goto free_skb;
-> +	if (tun->flags & IFF_VNET_HDR) {
-
-
-     Checking tun->flags & IFF_VNET_HDR a second time here is not tied to the
-     earlier check at line 1832 and introduces a narrow TOCTOU race with
-     tun_set_iff()
-
-     snapshot `unsigned int flags = READ_ONCE(tun->flags);` once at the  
-start of tun_get_user()
-
-> +		bool has_eth = (tun->flags & TUN_TYPE_MASK) == IFF_TAP;
-> +
-> +		if (tun_vnet_hdr_tnl_to_skb(tun->flags, features, skb, &hdr,
-> +					    has_eth)) {
-> +			atomic_long_inc(&tun->rx_frame_errors);
-> +			err = -EINVAL;
-> +			goto free_skb;
-> +		}
-> +	} else {
-> +		/* a zero hdr would only reset the MAC header */
-> +		skb_reset_mac_header(skb);
->   	}
-
->   	if ((tun->flags & TUN_TYPE_MASK) == IFF_TAP)
-> --
-> 2.56.1
-
-
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/45873143557
 
