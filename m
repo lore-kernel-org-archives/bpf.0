@@ -1,66 +1,51 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=45.145.95.4
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795704631;
-	b=Cd8NUnNJO3Yb22ONx35nJ224+n/Y9SIjrA4IvYg/uKpMKEBHGM4NO11RYfcP7bOmDGbB
-	 VWr+vwkvmYk3TSxWYUE6FGz7KENKrnIT/+aiPDyAMYp1BgsA6V4Tflv1OysvkRjp4v32t
-	 Sn2wJdX77ovZPK3iCDtGeflUR32JVJevgJGcVnh6S1yVZRXhD0GM4D1LvKnxn5+2Tnlw5
-	 cuiw8QVQh/j0xWGEhYfCbSTlK676qjeFj+J4mJAx+Lq9B2y+QNveq2o3506YauY+TNQWd
-	 yfV/CdzF21kaLFqL6QB5HaUSgg3B4Twj45aGf2DmbvMc8Gz30xWqP/kCSUm9na2DEgQ==
+	t=1795704705;
+	b=GdH2JdztACjT/rm6t5IIEraME3lB0FmcieA09blAJbnU5Q/eFJrRPFYOqgC2CnP7Gprs
+	 LOHEQ+J8fGg4j8fUPFlfueHhV13l9sFgvw0WrulqjwLcYgxkbnlIupny3++50QmqGK/Cf
+	 8rViis8xu3f2J3Wt7HXZG62XUdD3WNcIqiLfe6yHLJy2/+y0LPCuqlnqngXRiQ8UNA8EX
+	 JgBntRoOY9mHdo7tanOh/3c79yMgyGdY7Q+YQW+0HgoysD3eh6qhUT3KFGoogYqNSHCIS
+	 IVZvGMvg23/82ajoRYeO5EBqTdE17mvbg8FGC9DGoLMrzy2/QXhlQAp1mWwD1CDYGoA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795704631;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=tU3UXJgwi6ZtFFA0yj6phXlxRTX8RBgqFHdyXavkSKY=;
-	b=d+iAoC/ydA9F/yavgUWf30HLQFdASf5C9zpl+tQVeYSX0mjtIvXJvtrILllhwgV51Tdv
-	 2HOY21APTmobubx5/EfZTG2ehZKCpDJQ3Zy5oSsHipTI+69ppbIbdHLig9WktyaJiY5RJ
-	 oULuQDB9hf3JqSc4w0oQOOX5JN36ijMTp4+7YsXMEMdI8xBnQb5qjehk4SLxWkLTXZ8FU
-	 w1f20hI/foqU8cFCsJ1FDmNMwyrkyE+zMc35Pd+IMK3s76qyISgk+rhlooUMFKD2x3V/F
-	 J+fe+vE2n6Fp/5vAhjQsg9Xi9U5a/3aXqDKYSWB2NYv83WxWYxQECBvcj8k0wp4Pixw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795704705;
+	h=DMARC-Filter:DKIM-Signature:From:Date:Subject:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:Message-Id:References:
+	 In-Reply-To:To:Cc;
+	bh=IGnDONoodJNq9AhalceE8gWCLIGMe+tCDoPS7kPTZ/4=;
+	b=AD/m6HV2/DZ54V/74e0bJR4o4PD+npa1duQbV+bonj66wwDjXj/k0JGh2saX4880HftT
+	 NUoE06iiGlpoRk/9G8qYtxoHs+J1DOL12Ag7tr5bppOU0zWHcImRmUIzJzZwNqFFH52jF
+	 kXhSsNtIP388WIfRYalUrhe49Ud38pm0HW2xg338LDoSssRj1MpTPKr5XXJbQ6vxQ2Cyf
+	 +SttDruVW+XEEaTuNXF2d8wC8plO/Md8YqbGFTa9WCJqTZZv7mmoUCbJanwkZVSiQ5YHk
+	 YJNmTARgyBdqTcqW5+UJhEqmTe3/g0X8y2DJMCIWtaGYgXca0TXiwtu/9S+jrqgGDMw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=b8dLbiGh;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=toke.dk;
+	spf=pass smtp.mailfrom=toke.dk;
+	dkim=pass header.d=toke.dk header.i=@toke.dk header.a=rsa-sha256 header.s=20161023 header.b=Yy27RZRL;
+	arc=none smtp.remote-ip=45.145.95.4
+Received: from mail.toke.dk (mail.toke.dk [45.145.95.4])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15B1B606A329;
-	Thu, 26 Nov 2026 14:50:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75971606A323
+	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 14:51:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 75971606A323
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=toke.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=toke.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=b8dLbiGh
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 362E61F000C6;
-	Thu, 26 Nov 2026 14:50:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795704630;
-	bh=tU3UXJgwi6ZtFFA0yj6phXlxRTX8RBgqFHdyXavkSKY=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=b8dLbiGh4UnheWOuB4pacuOD2yW26oLEacXbPYb71h7Wsn3zofScGjXdt/MFURPKl
-	 ZvG15626NYEMQeZ0RVE3pxmznKLOIIRZoOLSeKk/zCdPlvJutRfnJCG+0FTqAcFSe6
-	 9ronHxyoVMh51ztnk9wL4ixBhln/7DuL0E3h5QfhQ0eBzsXeLazhw9bO8Uv3YeKTcQ
-	 AHtLALwK/vOxikVj41ng5t7D3uRQkplVdakocaNdnHCRcZqKWqUBKOQl/EJh24Lka2
-	 3brL46lJc1ffJRaVfei0uEf/NP+CBebLtZpUdWgyDp4ipd/DT5u2K5kasx6N5tYt7v
-	 J6laNAAp9b60A==
-Subject: Re: [PATCH net-next v13 5/5] net: stmmac: rework stmmac_rx to support
- XDP rx multi-buff
-From: netdev-bot+sashiko@kernel.org
-To: lorenzo.bianconi@oss.qualcomm.com
-Cc: maxime.chevallier@bootlin.com, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
- mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com, ast@kernel.org,
- daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
- sdf@fomichev.me, Jose.Abreu@synopsys.com, boon.leong.ong@intel.com,
- horms@kernel.org, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
- martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
- jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
- matthew.gerlach@altera.com, boon.khai.ng@altera.com, netdev@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org, nb@tipi-net.de
-Date: Thu, 26 Nov 2026 14:50:28 +0000
-Message-ID: <179570462877.3135.11557910879568810263@kernel.org>
-In-Reply-To: <20261125-stmmac-rx-mb-v13-5-0f6bac53e8d5@oss.qualcomm.com>
-References: <20261125-stmmac-rx-mb-v13-5-0f6bac53e8d5@oss.qualcomm.com>
-X-sashiko-severity: Low
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=toke.dk header.i=@toke.dk header.a=rsa-sha256 header.s=20161023 header.b=Yy27RZRL
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=toke.dk; s=20161023;
+	t=1795704702; bh=4oga7aOqhwHQ+hyoQDJ7/qwrpXTBz9Nv3lSeN94a8vs=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=Yy27RZRLGNyOuI/qXg0qwhGEZ2AlVErK2uQlbTUL7GoRu/8M7JJ5Uo0oms8GB4EPO
+	 4xhC3fvR1NQKBUUlQZrl+ONKP73IAJ3SOJstl6I8A54IEX/LfW+NPif0unz3XKIAw+
+	 VMc81h6/WA4WF4TeFz+taaUm3qjn4HwgTRVOJQ/dhSxU9LknO45+UOFnm6Jkt97K8+
+	 /pqb1VmUXGOOLz/AdDYcM4P6kjbrXdEO5oCPmCMdhhl3u+hg3ACiEkqZbHe2MHtRK/
+	 M7hgWQMDZUmF44AWUrIuDb1lYuNfzp4t8zfAbQISfupLFSC6DhA4/6aIszeDJvsXTE
+	 Q4IfT8YkfmV3g==
+From: =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>
+Date: Thu, 26 Nov 2026 15:51:40 +0100
+Subject: [PATCH bpf-next v3 4/7] libbpf: Move bpf_object_prepare_token() to
+ object creation
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -70,173 +55,69 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20261126-bpf-relax-get-next-id-v3-4-338e1d3077e7@toke.dk>
+References: <20261126-bpf-relax-get-next-id-v3-0-338e1d3077e7@toke.dk>
+In-Reply-To: <20261126-bpf-relax-get-next-id-v3-0-338e1d3077e7@toke.dk>
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>
+Cc: bpf@vger.kernel.org, 
+ =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>
 
-Thank you for your contribution! Sashiko AI review found more severe
-issue(s) in other patches of this series. This mail is only an FYI, in case
-you want to address the nit picks below when you respin.
+Move the automatic acquisition of a bpf_token from object prepare time
+to object creation time. This ensures that the token is available for
+any probing done before loading the object, in particular for BTF access
+in bpf_program__set_attach_target().
 
-Low priority / nit picks for your consideration:
+To avoid the move re-instating the token fd into a generated loader,
+clear the token fd in bpf_object__gen_loader().
 
-- [Low] In stmmac_rx()
-  (drivers/net/ethernet/stmicro/stmmac/stmmac_main.c:6056), the FCS is…
+Signed-off-by: Toke Høiland-Jørgensen <toke@toke.dk>
+---
+ tools/lib/bpf/libbpf.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-Pre-existing issues:
-- [High] This problem wasn't introduced by this patch, but the patch
-  extends it.
-
---
-
-net: stmmac: rework stmmac_rx to support XDP rx multi-buff
-
-This reworks stmmac_rx() to collect all the descriptors of a frame in an
-xdp_buff. XDP programs loaded with BPF_F_XDP_HAS_FRAGS now see the whole
-fragmented packet, and the skb is built with xdp_build_skb_from_buff().
-The in-progress xdp_buff is saved in rx_q->state across NAPI polls, and
-the FCS is stripped with xdp_buff_shrink_tail().
-
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> index 7896364c43e95..56355d80ba161 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-
-[ ... ]
-
-> @@ -5999,120 +6014,79 @@ static int stmmac_rx(struct stmmac_priv *priv, int limit, u32 queue)
-
-[ ... ]
-
-> +		n_descs++;
->  
-> -drain_data:
->  		if (likely(status & rx_not_ls))
->  			goto read_again;
-> -		if (!skb)
-> -			goto next;
->  
-> -		/* Got entire packet into SKB. Finish it. */
-> +		/* ACS is disabled; strip manually. */
-> +		len -= ETH_FCS_LEN;
-> +		if (xdp_buff_shrink_tail(&ctx.xdp, ETH_FCS_LEN)) {
-> +			if (!error)
-> +				rx_dropped++;
-> +			error = 1;
-> +		}
-
-[Severity: Low]
-Is skb->truesize overstated when a frame spans several buffers and the
-last buffer holds only FCS bytes (1 to 4 bytes)?
-
-For a fragmented xdp_buff, xdp_buff_shrink_tail() calls
-xdp_frags_shrink_tail(). That function returns the FCS-only page to the
-pool through xdp_buff_shrink_data(), but it only adjusts nr_frags and
-xdp_frags_size:
-
-net/core/xdp.c:xdp_frags_shrink_tail() {
-    ...
-	sinfo->nr_frags -= n_frags_free;
-	sinfo->xdp_frags_size -= len_free;
-    ...
-}
-
-sinfo->xdp_frags_truesize still counts the xdp->frame_sz that
-stmmac_build_xdp_frags() charged for that page through
-xdp_buff_add_frag(). If at least one fragment is left,
-xdp_build_skb_from_buff() uses that value unchanged:
-
-net/core/xdp.c:xdp_build_skb_from_buff() {
-    ...
-		tsize = sinfo->xdp_frags_truesize ? : nr_frags * xdp->frame_sz;
-    ...
-}
-
-As a result, skb->truesize includes a full page_pool allocation
-(PAGE_SIZE << order) for a page that has already been released.
-
-In the common case the old code fixed this up. pskb_trim(), removed
-below, went through ___pskb_trim()->skb_condense() (skb->sk is NULL on
-RX), which pulled small leftover frags into the head and recomputed
-truesize.
-
-The commit message says the new truesize "is more accurate". Does that
-hold for this case?
-
->  
-> -		/* Remove FCS if needed */
-> -		if (!fcs_stripped && pskb_trim(skb, len)) {
-> -			dev_kfree_skb_any(skb);
-> -			rx_dropped++;
-> +		if (unlikely(error))
-> +			goto error_free_frag;
-> +
-> +		ctx.desc = p;
-> +		ctx.ndesc = np;
-> +
-> +		skb = stmmac_xdp_run_prog(priv, &ctx.xdp);
-> +		/* For Not XDP_PASS verdict */
-> +		if (IS_ERR(skb)) {
-> +			unsigned int xdp_res = -PTR_ERR(skb);
-> +
-> +			if (xdp_res & STMMAC_XDP_CONSUMED) {
-> +				__xdp_return_buff(&ctx.xdp, true);
-> +				rx_dropped++;
-> +			} else if (xdp_res & (STMMAC_XDP_TX |
-> +					      STMMAC_XDP_REDIRECT)) {
-> +				xdp_status |= xdp_res;
-> +			}
->  			goto next;
->  		}
-
-[Severity: High]
-This issue was not introduced by this patch, but the patch makes it
-wider. With the stmmac_xdp_run_prog() change, programs with
-xdp_has_frags can now return XDP_TX on fragmented buffs. Is the direct
-recycling done when the TX completes safe here?
-
-stmmac_tx_clean() returns XDP_TX frames like this:
-
-drivers/net/ethernet/stmicro/stmmac/stmmac_main.c:stmmac_tx_clean() {
-    ...
-		if (xdpf &&
-		    tx_q->tx_skbuff_dma[entry].buf_type == STMMAC_TXBUF_T_XDP_TX) {
-			xdp_return_frame_rx_napi(xdpf);
-    ...
-}
-
-xdp_return_frame_rx_napi() calls __xdp_return() with napi_direct set to
-true. That path ends in page_pool_recycle_in_cache(), which writes
-pool->alloc.cache[pool->alloc.count++] with no locking.
-
-stmmac_tx_clean() runs from stmmac_napi_poll_tx() on ch->tx_napi. That
-is not the ch->rx_napi which owns and refills rx_q->page_pool.
-
-stmmac_xdp_xmit_back() also picks the TX queue by CPU through
-stmmac_xdp_get_tx_queue(priv, smp_processor_id()). The completion can
-therefore run on a different channel's tx_napi.
-
-The pool is created without pp_params.napi, so page_pool has no way to
-detect the foreign context.
-
-Some setups put the two NAPI contexts on different CPUs:
-
-  - MSI with independent rx/tx IRQ affinity, for example 4 RX and 2 TX
-    queues on 4 CPUs
-  - irqbalance
-  - threaded NAPI
-  - busy polling
-
-In those setups rx_napi can pop from pool->alloc.cache while tx_napi
-pushes into it from another CPU. With this patch, rx_napi uses that
-cache more, through __xdp_return_buff(&ctx.xdp, true) and
-page_pool_put_full_page(..., true).
-
-Could the racing alloc.count updates lose a page, so that the pool never
-drains? Could they also hand the same page out twice, so that two RX
-descriptors DMA into it, or a page is DMA-written while the stack still
-owns it?
-
-This race already exists for head pages. With fragmented XDP_TX,
-xdp_return_frame_rx_napi() now also direct-recycles every fragment page
-from that context.
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 540daf7752b4..1f1569a35f92 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -9281,6 +9281,7 @@ static struct bpf_object *bpf_object_open(const char *path, const void *obj_buf,
+ 	err = err ? : bpf_object__init_maps(obj, opts);
+ 	err = err ? : bpf_object_init_progs(obj, opts);
+ 	err = err ? : bpf_object__collect_relos(obj);
++	err = err ? : bpf_object_prepare_token(obj);
+ 	if (err)
+ 		goto out;
+ 
+@@ -9873,7 +9874,6 @@ static int bpf_object_prepare(struct bpf_object *obj, const char *target_btf_pat
+ 	}
+ 
+ 	err = bpf_object_check_gen_loader(obj);
+-	err = err ? : bpf_object_prepare_token(obj);
+ 	err = err ? : bpf_object__probe_loading(obj);
+ 	err = err ? : bpf_object__load_vmlinux_btf(obj, false);
+ 	err = err ? : bpf_object__resolve_externs(obj, obj->kconfig);
+@@ -10543,6 +10543,11 @@ int bpf_object__gen_loader(struct bpf_object *obj, struct gen_loader_opts *opts)
+ 	gen->opts = opts;
+ 	gen->swapped_endian = !is_native_endianness(obj);
+ 	obj->gen_loader = gen;
++	if (obj->token_fd) {
++		close(obj->token_fd);
++		obj->token_fd = 0;
++		obj->feat_cache->token_fd = 0;
++	}
+ 	return 0;
+ }
+ 
 
 -- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261125-stmmac-rx-mb-v13-0-0f6bac53e8d5%40oss.qualcomm.com
+2.56.1
+
