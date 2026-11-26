@@ -1,56 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795698832;
-	b=u5lzltZrtuj1RCfwRa77R3xJkTaz0UW0l/I9TX5A3AQly/dyhkPE9S/Or9m82j8pHGxg
-	 o6s7J7v2qVVsczqirTDdx6pruHOF1L9exDIzQFoRGuir61Gx3ekfqJVypwaPPNkILyThU
-	 9+hntXeyw3VG9qAGHabkenGYlzv536+fN4oPGnnxP+AKCn04pDNIKTITXxjhWp69/6Vzn
-	 Z3oC+dCKr3Q8pfTtS4kcAVM9A2OvW06PuakgPCZTGOfISYkNb1wA6wnqYrWC0lMeLOqFb
-	 6+IfICftPgEIgziNjc5eRCO775dsI7UI/wATJDJvWUp680XiMmHlD+p6xfMpG3lImfQ==
+	t=1795698849;
+	b=GW/6J0yiHvRrLnP2QsRMAXAVLAPvbZg272JGhU5F3MO3Mm8pwJ7sMfm1cdzEajuIQW6b
+	 gKys56yRK0/gEHr6kZmgWfQQnwn+7wgwS5FeWfmdobpEk9tkKKtq1lVqprjAkwdpqPCab
+	 EtRiskehw9kuPp1qNR9q9FbEk6TYIlaB30dgqC42AzM0PYdNOth8Dq8gNiFGkvy+Rg/7F
+	 ohX6utsFTO5TqelrugRma8jmNZoWivBH3Q0ZJTBSNMwAnXx93zHcKftMucX7KpF74i0Uj
+	 I4u1CPNJfEOuROuH8jc6ZWTh2EZAb166ttMV3iRgcsn01j3RgY4lMBWXNNF07C0/zPA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795698832;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795698849;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=Qi3Jocybrq+ZLQPnY5PxIGQt0Ou9QPikkmlHIdJMbL0=;
-	b=jKBml4jviJMfOhTcI/b/8BiMbH1RoEBmSPA8OwtOqKUhpSMmkTqBXwKW+iVcuPRfRN8K
-	 iPpuvburlmFPrQS92VZ0OapJDIanA8//rkmmnQA/t3mziPODEvtm5uYIBS+Tea10ydLtQ
-	 z3CeegDWqywqxTdUz7bX/+v0zcslsKHSIjqgI4ATANdM2sFQHkCcTWJ/oueszP9sovgkA
-	 UcODcw2jiqykicOCbIuC2Sc/SjJ6waszJv4kNfvb576uTvHtiLBbuWZZ0N+EaNBOyWtKS
-	 nXZH4CZxmC8O6m+tBspSNHQ8JyIlAuSFsvGqZgrFIMKmWD+E3g/erGZMvP9RgemZoag==
+	bh=xgwVa0m0aXTKiVPkkq5QsNPPYdL+qFmTJdPiRPU/kpg=;
+	b=EFQUV8ZnsPIZ7qcZq3/U3ZfVbznh0iYl6+t+NR3xGUW6y7GQU7i2/YhMqoiksMymH/Z7
+	 SVPwbq+K8wx/56SAU0yRyJvXmzGxR+NOFY1MXYYpky++N3xx6zeohd6g1PYxKzUbbqmnM
+	 5VB9FBZRk2fXFrRarU8593KhbH5bG8OGaH0fTOeKL0aX2MHP8DOKahwrDu2wCZUfpz9vO
+	 VDHgm/pkb5e6gToW5L5qK4A5+Z90CSn2+yrm5NIX0qkJH1hwJt6N3zYMJpSZOps5gnLkO
+	 hGmvV+2cwLPfcJ30qHQK6AnNRHEUl4bIV0kxGjE7CcgPBTl5gFWzvjNXjsiv/JxTS3g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MZqUPzzU;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ggKeX++U;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75CB9606A31C;
-	Thu, 26 Nov 2026 13:13:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 002C4606A31E;
+	Thu, 26 Nov 2026 13:14:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MZqUPzzU
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC7241F000CA;
-	Thu, 26 Nov 2026 13:13:51 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ggKeX++U
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77E491F000D0;
+	Thu, 26 Nov 2026 13:14:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795698831;
-	bh=Qi3Jocybrq+ZLQPnY5PxIGQt0Ou9QPikkmlHIdJMbL0=;
+	s=k20260515; t=1795698848;
+	bh=xgwVa0m0aXTKiVPkkq5QsNPPYdL+qFmTJdPiRPU/kpg=;
 	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=MZqUPzzUYwnDvQf+iqrUl/rH1Gi225HU1LIYPu8Fr/SnTD4bemrk6US6b3qa+0Sl7
-	 JbfjYSLr6114NuvCSJbE+YeK0LbPMdzKBpr8R0K1hOgsiNn6t4y+grz6LCuWgctPMM
-	 IKN2hSX/4B2ADubZDFIWR10GrwX15O0cY/oHxERS27oyfbmgYKi0GQ+dNVy0cKeFbr
-	 TMy1ggYZkI9VJ//6j52RwZ40YKxhnNEbVBh0hx1cyqBaVlSWr0ibDsDJA3NWGNRcn5
-	 j3c+fvYG+uwEwT+MJzvKGaAxgK+uDpvZ9WhgH4IBQ72Jk0WxVd0ZvQ1V4hSlvSSWY4
-	 oeU3ZfOA1zswg==
-Message-ID: <sashiko-outbox-235580@kernel.org>
+	b=ggKeX++U2bST8EA/sMksxRZ42dkNcvHInMzHTYPxswKsXSx10EsQ0WvxxeOzJe9FF
+	 +KWerhXKKYxXiRiGLrLpW1LIOYmP/DaMB8ELT9yAoJkoizIiunnEpjBi9XbwqvFKO1
+	 9OAC3ayFUIXTC2WwidD7nSTS2m22s02/AMZbKnXKgRfCkDRIPxej8e/kGoyeTizcpZ
+	 J6nIoUJMjRS2kQhYRI1RxPjUF7YSYHRZISxBDpiKG18NbcFuO4gZc0GZA6ZTq4vSSX
+	 Hdofrwea17rJQYYIK/JUL9wZGp86YlbjNROljYXBVEKqd6fk0gyb09dUaHiDk3GRr9
+	 D2TQiDzcAVfHw==
+Message-ID: <sashiko-outbox-235581@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 11/18] tools/rv: Rework tracing to support generic
- events
+Subject: Re: [PATCH v3 10/18] tools/rv: Implement BPF monitor loading and
+ tracing
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Gabriele Monaco" <gmonaco@redhat.com>, linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
-In-Reply-To: <20261126130004.127155-12-gmonaco@redhat.com>
+In-Reply-To: <20261126130004.127155-11-gmonaco@redhat.com>
 References: <20261126130004.127155-1-gmonaco@redhat.com>
- <20261126130004.127155-12-gmonaco@redhat.com>
+ <20261126130004.127155-11-gmonaco@redhat.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 26 Nov 2026 13:13:51 +0000
+Date: Thu, 26 Nov 2026 13:14:08 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -62,92 +62,65 @@ Precedence: list
 
 Thank you for your contribution! Sashiko AI review found 1 potential
 issue to consider:
-- [Low] tools/rv: missing pid field check in enable_specific_event()
-  self filter
+- [Medium] tools/rv: undefined reference to bpf_usage_print_reactors()
+  when BUILD_BPF=3D0
 --
 
-commit 6b11a8a850e9f9fbce2a029fa1ab5858e9dcc9dc
+commit 32e1d389b743671fba97d9526fde476a03a6fc44
 Author: Gabriele Monaco <gmonaco@redhat.com>
 
-tools/rv: Rework tracing to support generic events
+tools/rv: Implement BPF monitor loading and tracing
 
-This commit replaces the DA-specific trace event formatting callbacks
-with default tep_print_event() formatting and moves self-PID filtering
-into ftrace event filters to support LTL and generic BPF monitor events.
+This commit implements BPF monitor loading, execution, and optional trace
+event attachment for the rv tool.
 
-> diff --git a/tools/verification/rv/src/trace.c b/tools/verification/rv/sr=
-c/trace.c
-> index aa4bb73624ecd..6fdbff2c28d45 100644
-> --- a/tools/verification/rv/src/trace.c
-> +++ b/tools/verification/rv/src/trace.c
-[ ... ]
-> +/*
-> + * enable_specific_event - enable a monitor-specific event with filters
->   */
-> -static int da_event_handler(struct trace_seq *s, struct tep_record *reco=
-rd,
-> -			    struct tep_event *trace_event, void *context)
-> +static int enable_specific_event(struct trace_instance *inst, const char=
- *event_name)
->  {
-> -	char *state, *event, *next_state;
-> -	unsigned long long final_state;
-> -	unsigned long long pid;
-> -	unsigned long long id;
-> -	int val;
-> -	bool missing_id;
-> -
-> -	if (config.has_id)
-> -		missing_id =3D tep_get_field_val(s, trace_event, "id", record, &id, 1);
-> -
-> -	tep_get_common_field_val(s, trace_event, "common_pid", record, &pid, 1);
-> +	struct tep_event *tevent =3D tep_find_event_by_name(inst->tep, "rv", ev=
-ent_name);
-> +	char filter[FILTER_MAX] =3D "";
+> diff --git a/tools/verification/rv/include/utils.h b/tools/verification/r=
+v/include/utils.h
+> index 61f77a72a1a23..d6b4e60df7ffa 100644
+> --- a/tools/verification/rv/include/utils.h
+> +++ b/tools/verification/rv/include/utils.h
+> @@ -10,11 +10,13 @@ void mon_usage(int exit_val, char *monitor_name, cons=
+t char *fmt, ...);
+>  int parse_arguments(char *monitor_name, int argc, char **argv);
 > =20
-> -	if (config.has_id && (config.my_pid =3D=3D id))
-> -		return 0;
-> -	else if (config.my_pid =3D=3D pid)
-> -		return 0;
-> -
-> -	tep_print_event(trace_event->tep, s, record, "%16s-%-8d [%.3d] ",
-> -			TEP_PRINT_COMM, TEP_PRINT_PID, TEP_PRINT_CPU);
-> -
-> -	if (config.is_container)
-> -		tep_print_event(trace_event->tep, s, record, "%s ", TEP_PRINT_NAME);
-> -	else
-> -		trace_seq_printf(s, "event ");
-> +	if (!tevent) {
-> +		err_msg("trace: fail finding the rv:%s event\n", event_name);
-> +		return -1;
-> +	}
+>  void ikm_usage_print_reactors(void);
+> +void bpf_usage_print_reactors(void);
 > =20
-> -	if (config.has_id) {
-> -		if (missing_id)
-> -			/* placeholder if we are dealing with a mixed-type container*/
-> -			trace_seq_printf(s, "        ");
-> +	if (config.my_pid > 0) {
-> +		if (tep_find_field(tevent, "id"))
-> +			snprintf(filter, sizeof(filter), "common_pid !=3D %d && id !=3D %d",
-> +				 config.my_pid, config.my_pid);
->  		else
-> -			trace_seq_printf(s, "%8llu ", id);
-> +			snprintf(filter, sizeof(filter), "common_pid !=3D %d",
-> +				 config.my_pid);
->  	}
+>  struct config {
+>  	bool debug;
+>  	bool is_container;
+>  	bool trace;
+> +	bool is_bpf;
+>  	int has_id;
+>  	int my_pid;
+>  	char *initial_reactor;
+> diff --git a/tools/verification/rv/src/utils.c b/tools/verification/rv/sr=
+c/utils.c
+> index e19dd65ec789e..1b1ad7a3ca32e 100644
+> --- a/tools/verification/rv/src/utils.c
+> +++ b/tools/verification/rv/src/utils.c
+> @@ -81,7 +81,10 @@ void mon_usage(int exit_val, char *monitor_name, const=
+ char *fmt, ...)
+>  	for (i =3D 0; usage[i]; i++)
+>  		fprintf(stderr, "%s\n", usage[i]);
+> =20
+> -	ikm_usage_print_reactors();
+> +	if (config.is_bpf)
+> +		bpf_usage_print_reactors();
+> +	else
+> +		ikm_usage_print_reactors();
+>  	exit(exit_val);
+>  }
 
-[Severity: Low]
-Does enable_specific_event() miss filtering the target task PID for LTL
-monitors?
+[Severity: Medium]
+Does building rv with BUILD_BPF=3D0 (or without libbpf installed) fail at
+link time with an undefined reference to bpf_usage_print_reactors()?
 
-While per-task DA monitor tracepoints name their target task PID field
-"id", LTL monitor tracepoints (event_ltl_monitor_id and
-error_ltl_monitor_id in kernel/trace/rv/rv_trace.h) define that field as
-"pid".  Because tep_find_field(tevent, "id") returns NULL for LTL
-events, the filter falls back to "common_pid !=3D %d" and will not filter
-out events targeting the rv process when emitted from another task or
-interrupt context (such as sched_waking waking the rv process).
+utils.o is built unconditionally, while bpf_monitor.o is only linked when
+BUILD_BPF is enabled.  Should bpf_usage_print_reactors() be declared in
+include/bpf_monitor.h with a static inline stub under #ifndef HAVE_LIBBPF,
+like bpf_list_monitors() and bpf_run_monitor()?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261126130004.1271=
-55-1-gmonaco@redhat.com?part=3D11
+55-1-gmonaco@redhat.com?part=3D10
