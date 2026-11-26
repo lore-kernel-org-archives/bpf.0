@@ -1,88 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.53
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795689925;
-	b=swvZQPKZE2zbGW9U3QLl+PR3sgBtXaVC3yh70jbNIfeQucY8q1I5vclwaaDIFmSJ3jfm
-	 Pqq6mEXlnQAohVBtSTpUL7DaUws5y51Mrx0JQfbLLBaTGm/KvxacQWstGMlb6NQIXewHC
-	 Gbw1mwisHrXzsA32Qt1xsBrn3kg2k9FVdShXYZqly4Bh7Veebu/SQxuGRaG/FITSV0Avm
-	 ccJ6N3lvaGKpr8TL3wmfYDc5MlraP9yWDDEH06JyAYTni3IpFURXQ1rbJEBh/AmwwwCAs
-	 961P0S0FlLDoeq1Pik9AdlAatnvKmYo4RJaLH0zGOTjH86k2hORc9Pt4U/fY/edU/Mw==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795689925;
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.167.47
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795690927;
+	b=pnJ0eriPyA4H/ZZIQTg2XFwAqkuubgwdoqdgxxuhTvhUNismr3p10sB6KmL5m/NomFiy
+	 QniEc00bGKpGbtwhrJaL9V5i7R+nDBQ0JJ//FV9NJloA22XyozcMbRoDcErLVECsjgCeF
+	 jYxQ36RVrW3TvJyMWwyiJuu48CZtrPZXbhJHIPEa+Oa40xjEwp8PMe4Sq7nfXRVnWDoWs
+	 UB4i8BCgNYY8uF6C2k5glB/lspFU+Fa3uYBw82oqm63TrtZCgMydM5RZHNziTx2TU/+vc
+	 65s9xnkHSFhY1CCOxm4v7UeKCEmeGHun7AEQ+JAocBMIpVpD/ya5FpkiC8PzdtTWR+g==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795690927;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
-	 Content-Language:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=Un6gMhy72C5GdMKpxarLNGYbqAQ9rBfW8csPHV3xsTs=;
-	b=txtQ0mKayah1IDxPYCU9JvyqG7kyJDHYTI2CP1g9mIppe1kBwdgJYJjHvCWyG7Z6JdtU
-	 N1IlZ7uNeqZ6R2OYiCqlDbaEAP3oyaR7pGc/j1TaBlqvadlduPna3Z6vVOxMOEgeq61eL
-	 SWH3eVMoBwBDJMCeOGmgtDI6CeYOySeGOpJu+ixjllOqP48xC/YSGVLHgL+OTaxcyl+rg
-	 GXZJu090I4sIZ0eVX5kXQ6LqVUMENLNf9XI7q5pzbVTLz74gkHdjuG43UrXo4T43vE1tW
-	 ho6B/ewWvmC/i/zQ+SLf6rjj5+lWTR6udrJUyHntborCrXsHLnUuxFauoElZuoIBi/A==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=suse.com;
-	spf=pass smtp.mailfrom=suse.com;
-	dkim=pass header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b="fb/AnGuu";
-	arc=none smtp.remote-ip=209.85.221.53
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=o3qX6nwpicEW2fl1FvvlS5HfR0XjRdgEkcwqkTjatNg=;
+	b=E4jclLf+FKnX2hWJcuzKv6Gh90iBjNrAjplXHTNnCa1/piEe9LZbqhWc08f/8zgqSRIk
+	 jikzcJS70eShxlaSAUdROj7kJXvj8q99L/kphHGMidDjbrzTHIxDpKkyF+SO5CHy74WtF
+	 0zvI5GLDAagSQ722ey++BK/fXi7I4XV8MJiT5sYV4ItH5UOHDIw1+ZNJKMCFxYfoWdbgM
+	 HA5Rt1eVMYMtGmnXL1PFXmBaHUINCCiJ46ic3qVvvbO8u4e7B4E2dGIrGzdBx3fnvFsqf
+	 HXXpzyt/Kzo4WCFV5bsDlfhGbe+mR+qbYsyLy76mdyfzVyu6D4GITEJw0QxryNl+4Yg==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=kU2BKQTM;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.167.47
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEA6B606A329
-	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 10:45:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CEA6B606A329
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92453606A31E
+	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 11:02:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 92453606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=fb/AnGuu
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-492fcbfaa88so4535179f8f.3
-        for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 02:45:24 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=kU2BKQTM
+Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-5c10dc41270so7278549e87.2
+        for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 03:02:06 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795690925; cv=none;
+        d=google.com; s=arc-20260327;
+        b=l351ZhUiBxReeMgRcQeC6UDBJwpdc728h5D+oTmen0Xy0d2ZvFIyeK5k8aNgcnMCl6
+         mg1KORdY+SLi4DXDb/RMtcwWLU9gJXDkeTVaX3qjv/W4gY7HBwBLHEOR2RHlTf+N58Xg
+         mF9asaI3GI9m1OhKUEyt2f5bDkVb/KxFfziTr8cdvzfx2lasfW5YkhgElmLdHmJ7ZNbQ
+         pI3xDwarlP5nyxte992ScstU4mq7sah4Gw0svrU36cQOGS3qgPVArhWvGKH+bkP7Nwvt
+         IA01zvsUeokfbPzVb2d3BHX2H62EDsDCMvlqSdijelfC/jJieXdySYn6ToJUhJA2VGLj
+         5fGQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=o3qX6nwpicEW2fl1FvvlS5HfR0XjRdgEkcwqkTjatNg=;
+        fh=MgAviQE40+cIwgyR2wRi78WTva7thx/SVVmZAvMasys=;
+        b=oAFhv70qHK4VVUaRXyafMqiej2L14XGyCK+SRdfajcAywm8WaC4eJrcKiit60ilxTn
+         Zp/pJ7JXK0LaXe6dFh+4m6h7ttvHHMbka5RpHrFJcuiBABxjA3x05C2YDqi9HLIAppSG
+         wlA0mrP2FeHSqR8CHOX/T77J+8PV1t/RadZuwFb/kFqbTtQ7RR9LmODksXGwVAiK50mK
+         cqY0I8PVToY5Vkz8XAUCn0yQ5d2XgxV1oCFCVNQaJGUeKqGlVhBY6LAstUTUpw6Pj0Dg
+         wRCRrRPKyoUSnohJmIoQrLE2yeZesO8YRu14KZjWm4LShIes0cv21rnPZbbHtx5kSY/f
+         u5yA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1795689923; x=1796294723; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Un6gMhy72C5GdMKpxarLNGYbqAQ9rBfW8csPHV3xsTs=;
-        b=fb/AnGuufRVSuumZI6EQLA6cj75+M3xYaDzd0Gy6RIfFD9vTufZ0ocvqMKbKkCMuJU
-         HCBXLOxx8vgikybvFGaP8kOTEPC96KRwXnjjGdmpRLIAP3v7/cEX49ZmqXzavqZRuij3
-         yAgWXhNLnFWVkhqNg9FhZPzLqKHj3vih4TQBrzWrYFpbfSQ4U8bI/qVviCwdNFG1GKRg
-         Hxn6CMjZT5DpBlzV5e6WnYlgdhQXs2yNA/UJVS7jWkPiOHnO8ZNEWlUFaREDrgmI9OpC
-         SZzobCPy89LxilfHUkDRa5QJboD//JYUx9AJLoSKPUrVgXCRpyowQ5xPdH3/qHs9I8jV
-         3Rpw==
+        d=gmail.com; s=20260707; t=1795690925; x=1796295725; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=o3qX6nwpicEW2fl1FvvlS5HfR0XjRdgEkcwqkTjatNg=;
+        b=kU2BKQTMXXv3BRkWSjgJApdVGGMzJ30Wpt7Wt44ffvSXP1QNShOd5bntN0WKZi/Rv3
+         x3QIlQS8Cpgd0c2QzOTkIcWEjKNHRpquJlbxD2/OIFo44iWIDsxQF+9wkp/8GTQVauyY
+         eTX2+BF0515Mc5XZ/xKtVkuThiVTUrhcSUPOOeCYzZgJeadUDdCmy27I2lGMI9pRpr8r
+         ynxXv2grpUtWzlIMfDidSjNfyrX8GLSWgqTun2vkQ+nS0gxxyp8OOxr8xuEPlWrWpAwQ
+         Zd1oevWhPgZNYumQZQ2g+SAdPKK6EVyEin2n7j2KtUP+Nq5CtxmAcg1XqDxw071J71Wl
+         Iy9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795689923; x=1796294723;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=Un6gMhy72C5GdMKpxarLNGYbqAQ9rBfW8csPHV3xsTs=;
-        b=kStQUMFUsVXTgMdThSTu8TYbI4R+kFWbYR7QwW6974GSof09BK6I0QbfCq9nj92xNI
-         2TYDSrKOgHNZFGMGc33d6BEgtaGegzEzSfRLc3dNcrv/I3anjGLMOwkNgPxf5lDPnZ5k
-         8beDXKfCrALsbeLoNlUC9IwewSFtxUqVOfZ7mG2fNoeMMWWafwzV70ICWl3QO99g+LT8
-         PijbqBizrr5KwkLW1GLqp8fhyUQGf5TUjpTz6g/7luFishFWv9D1LtacIP3MxvpITk11
-         sE9UphIwY9tmz8eqzXb+QbnAyNS0h9LfgmiALNOM0WbLMXwV3Dh1yXPEUleG5xGpXl8r
-         1c1g==
-X-Forwarded-Encrypted: i=1; AL+hErF9NJzWjFoweV2d+kWjQYX7Xd4s82cNbQ0xuRfVF1QUmkg6+Ojb8eBGMhIy2nCe5oO0E04=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9zAviO8JCSpgrgOsQxa/NRztG6IVjzE31b2wU9D0DSMTecyqir
-	OJs12CAdl9OAnCe203B5CLfLxlsEqlRI4wqd+jqVn67I21Sk0sPDSvMvjddo6vOQOW4=
-X-Gm-Gg: AZFdTZdy7mgQNa1giwlNugs33uwXvDuEVZ8HNmzaOv1JUI5Gi9EKzGG5YD12IGC3qlT
-	3xF2aR2LsRmIBAECxKgkW/QQdvKgCFx1aYZjCYr5ZCrFmFgtYo0wiLaCItirSCyM1OB2Rf66NA7
-	o3gMjOYlG/EL30q0u2JFxp10v0NYER+JNxLIQqhg6yZ6poo20KpeWPAymjRNmIdhTW2KlAD9TB9
-	aYYEmxF/MFPvclx7xZl6apX5xdap+ay5Q3wymPQ0Q1qb+xJbjo9sDqoGyhZ9U8vykaexZ+JHer1
-	i2UZsGJyeilLz59IcYxE4EAQyAzuSZ0PPFgfe/rXTMF+xHt3TtPXtP0Z5WTTgH+jkhUEmfuPBdQ
-	VV3517D4/Cgt4peyKdvwrhkuajdVIMH6+8UAbg4Bnu/vJWxw7iCAKwbwKR5scLXyhoCDgKHPUQo
-	S1z5smE3LLneXp9vIQf1fUF/wEmP50u+GCEaG2omgJ5PsSMVw14DXCRSKTlvl2/QLKyftIp1ySg
-	S9uJgvWOBHOYDYJ2vk7k0d+Wr6t0J04/tne+7RJYf33SgK1FnhDIf3/SneHSX7zTC6nrZoCIYiN
-	p3kHOS+6n6TCrO/XtTU9c48GAK6dBvJwX9AfSp/roO4dovlpYVdUrJK/YCxmAgrBfQ==
-X-Received: by 2002:a05:6000:248a:b0:487:b50:101c with SMTP id ffacd0b85a97d-4abaa97702bmr38359967f8f.5.1795689923186;
-        Thu, 26 Nov 2026 02:45:23 -0800 (PST)
-Received: from ?IPV6:2a07:de40:8100:0:89a9:fd0e:583d:4a53? ([2001:af0:8000:1409:193:86:92:181])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4ab6bb98b4dsm40416103f8f.53.2026.11.26.02.45.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 Nov 2026 02:45:22 -0800 (PST)
-Message-ID: <a40ad738-cb7b-469e-b67b-353b64622dbd@suse.com>
-Date: Thu, 26 Nov 2026 11:45:21 +0100
+        d=1e100.net; s=20260707; t=1795690925; x=1796295725;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=o3qX6nwpicEW2fl1FvvlS5HfR0XjRdgEkcwqkTjatNg=;
+        b=tJFoR8EC+ImB8jq6ib4TtEmWiObmZWk2KGlmeNjgumnZ9mhaBvHb4ONtBuCHQH/sV+
+         apthFdZicuY/GgBN2ZjtFjMcFEjYGqtDfHW+UJRF+RLswag6EfpfUvLWE1Il3tpYY/f6
+         z8tcAOJDfVI2krHg5n4Y2afLHKIVxDpKK1i8xKDXNmp967XhfGU5txqhic5PwrTm7bf7
+         cAA9WRlpKgC4ERDz0vrYBDR9oHxhTgwPW+gwwmB8lP1CLKXWWH83CeYXgK6qrOcD9JU8
+         GOEKRo0bQ/Ve6yc2RYvFWEv9pt4ecpNHtPVMGjlehB1Eg+IZgOqDwsKN8Aoc7v0yBLNB
+         C29w==
+X-Forwarded-Encrypted: i=1; AL+hErG3TuPM1ELYHv8XbJq7v2wh1uyD7oYlkMJeKEw4lioWfrtev3bvaBalpapK9aVYKwiQftk=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/LLcc/K3Ga6JeYX8GwD/nXZgcu1BMZ3xWe2RL2hWkEZQT4Ug/k
+	6k99vm7gafJDzVysSGwb+PTdUpnF7i2ulPS+P7ZcEZuAgKumRi0uKwikk2Xc7t4P5L7IGLCpIBQ
+	oC93pINkRYmSuLEzKAHBQ9rhxONPpgEI=
+X-Gm-Gg: AZFdTZefmCnH7hRmiZyiit47WqBgKTbmyERYFtPplGDtS2Ru3Pbfozf5hKK7s4saSBE
+	Q5umW0g+S2KVrvOgzz9Y2rfO8sTKiMqefTsh1CvWmHVKQBbS/ggnDG1Bs7cSVCvs2Tyg4KfbdNn
+	mzRXhxAOlxYY9FVVjMoNk7HLYjBoDugdVRHJTnOliRODXeWsPmPmud0maCiOC/7qk532ImHDCsy
+	LEO+ySSE3Ggh781fU/pSI+frcbtfzXMEbgQu7yzf5xZ5tfHWuKbTOwLL5UFrz6NnorJjHKM2pcR
+	CtoSYMiYXUEQ9o1W7xcekgw5aexGZxUI206smWL/7ivRx6auC02Mvm3U34aK0XN6HpkiO1CkPj0
+	4MMXLFyGO/n5oN+1yH2Ul16nv2CvLY8V7sveVJSutlnQfNArvL1xRLsPO9Z2AUHAqac80fQd/vE
+	0RZKAE/wvvED9bzNgaGQ6Too1g2+ajg/w+PvsyRxLCUdkHNAFUbG148E3KAErlMsZIVuNRtjTK
+X-Received: by 2002:a05:6512:2c8a:b0:5c1:5be1:2ecf with SMTP id
+ 2adb3069b0e04-5c1bc814182mr6139415e87.51.1795690924381; Thu, 26 Nov 2026
+ 03:02:04 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -92,57 +105,400 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v3 3/9] kallsyms: Add KALLSYMS_QUERY_BY_NAME
- ioctl to /proc/kallsyms
-To: Samuel Wu <wusamuel@google.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- Randy Dunlap <rdunlap@infradead.org>, Luis Chamberlain <mcgrof@kernel.org>,
- Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>,
- Aaron Tomlin <atomlin@atomlin.com>, Alexander Viro
- <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>,
- Jan Kara <jack@suse.cz>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>,
- Ihor Solodrai <ihor.solodrai@linux.dev>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Andrew Morton <akpm@linux-foundation.org>, Petr Mladek <pmladek@suse.com>,
- David Laight <david.laight.linux@gmail.com>, kernel-team@android.com,
- linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-modules@vger.kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
-References: <20261113221248.3535369-11-wusamuel@google.com>
- <20261113221248.3535369-14-wusamuel@google.com>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20261113221248.3535369-14-wusamuel@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20261124083520.45547-1-kerneljasonxing@gmail.com> <179559599390.3135.18275141505690596469@kernel.org>
+In-Reply-To: <179559599390.3135.18275141505690596469@kernel.org>
+From: Jason Xing <kerneljasonxing@gmail.com>
+Date: Thu, 26 Nov 2026 19:01:26 +0800
+X-Gm-Features: Aa3M54q9M1KxrcgztkclcDrO-at-kTSB-Pt_13lBw6qxag-Mp8jUQDjzV68UwyM
+Message-ID: <CAL+tcoDMr4abaXMONP_gegib7tShRQrsFVoJ+EW9gV0=Af5G-w@mail.gmail.com>
+Subject: Re: [PATCH net] xsk: fill in header offsets for TX checksum offload
+To: netdev-bot+sashiko@kernel.org
+Cc: magnus.karlsson@intel.com, maciej.fijalkowski@intel.com, sdf@fomichev.me, 
+	davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, 
+	horms@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org, 
+	stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 11/13/26 11:12 PM, Samuel Wu wrote:
-> To find a few kernel symbols, users such as libbpf parse all of
-> /proc/kallsyms, which is several MB and text based.
-> 
-> Add the KALLSYMS_QUERY_BY_NAME ioctl. It finds a symbol by exact name or
-> by prefix in the entries of /proc/kallsyms, with vmlinux matches first,
-> and optionally in a single module with module_filter, or all modules by
-> default. Each call returns one match and its position; pos + 1 continues
-> the search, until -ENOENT. The output returns the address, the size, and
-> optional name and module buffers. A buffer that is too small gives
-> -ENAMETOOLONG and the required size.
+On Wed, Nov 25, 2026 at 4:39=E2=80=AFPM <netdev-bot+sashiko@kernel.org> wro=
+te:
+>
+> Thank you for your contribution! Sashiko AI review found 6 potential
+> issue(s) to consider.
+>
+> Critical: 0 =C2=B7 High: 1 =C2=B7 Medium: 2 =C2=B7 Low: 3
+>
+> If you believe none of the issues are legitimate, please reply to each
+> issue of Medium severity or higher and explain why the AI is wrong.
+> If any of them are legitimate and you plan to respin, please let patchwor=
+k
+> know by including "pw-bot: cr" as a separate line at the end of your repl=
+y
+> (one such reply per series is enough).
+>
+> - [High] xsk_skb_sw_csum() sets protocol, network_header and
+>   transport_header but leaves skb->mac_header at the ~0 (0xffff)=E2=80=A6
+> - [Medium] The commit message says ICE (ice_tx_csum) and mana
+>   (skb->protocol) misbehave on AF_XDP copy-mode checksum requests.
+> - [Medium] For frames with in-band 802.1Q/802.1AD tags, xsk_skb_sw_csum()
+>   sets skb->protocol to the innermost ethertype returned by=E2=80=A6
+> - [Low] xsk_skb_sw_csum() adds a rejection that the commit message does
+>   not mention.
+> - [Low] The new 'csum_start must not point into the L2 header' rule
+>   applies in only one configuration: AF_XDP copy mode, without=E2=80=A6
+> - [Low] Before setting skb->protocol to a user-chosen ETH_P_IP/ETH_P_IPV6
+>   and network_header to nhoff, xsk_skb_sw_csum() only checks=E2=80=A6
+>
+> --
+>
+> xsk: fill in header offsets for TX checksum offload
+>
+> This patch makes xsk_skb_sw_csum() parse the Ethernet header and any
+> in-band VLAN tags of AF_XDP copy-mode frames that request TX checksum
+> offload. It then sets skb->protocol, the network header and the transport
+> header. Frames whose csum_start points into the L2 header are rejected
+> with -EINVAL.
+>
+> > Drivers like ICE do read network_header/transport_header
+> > fields which actually point to the wrong place, leading to wrong action=
+.
+>
+> [ ... ]
+>
+> > Also, initialize skb->protocol
+> > because of some drivers (e.g. mana_start_xmit()) using it.
+>
+> [Severity: Medium]
+> Could this description be made more accurate? Before this patch, could
+> ICE or mana ever get a CHECKSUM_PARTIAL skb from this path?
 
-The kallsyms data in the kernel can change between two
-KALLSYMS_QUERY_BY_NAME calls, for instance, when a new module is loaded.
-Should the mechanism provide a way to detect such changes, likely by
-tracking and exposing some kind of generation number, or is it
-unnecessary?
+I'd remove or revise this. As you pointed out, initializing this field
+changes the previous behavior in harmonize_features().
 
--- 
+>
+> xsk never set skb->protocol, so it stayed 0. On the
+> __dev_direct_xmit()->validate_xmit_skb()->netif_skb_features() path,
+> harmonize_features() then cleared the checksum features on any device
+> without NETIF_F_HW_CSUM:
+>
+> net/core/dev.c:harmonize_features() {
+>     ...
+>         if (skb->ip_summed !=3D CHECKSUM_NONE &&
+>             !can_checksum_protocol(features, type)) {
+>                 features &=3D ~(NETIF_F_CSUM_MASK | NETIF_F_GSO_MASK);
+>         }
+>     ...
+> }
+>
+> skb_csum_hwoffload_help() then fell back to skb_checksum_help(), which
+> computed the checksum correctly in software.
+>
+> By default ICE only advertises NETIF_F_IP_CSUM, NETIF_F_IPV6_CSUM and
+> NETIF_F_SCTP_CRC (see ice_set_netdev_features()). On E830 with HW_CSUM
+> enabled, ice_features_check() still removed the checksum features,
+> because skb_network_offset() was negative with network_header at 0.
+>
+> mana only advertises NETIF_F_IP_CSUM | NETIF_F_IPV6_CSUM in
+> mana_probe_port(), so it also always got a software checksum.
+>
+> So for these devices, doesn't the patch actually turn on hardware TX
+> checksum offload in AF_XDP copy mode, where the checksum used to be done
+> in software? The commit message doesn't say this, and the patch is
+> tagged for stable.
+>
+> About the transport header: validate_xmit_skb() already sets it from
+> csum_start before ndo_start_xmit() runs:
+>
+> net/core/dev.c:validate_xmit_skb() {
+>     ...
+>                         else
+>                                 skb_set_transport_header(skb,
+>                                                          skb_checksum_sta=
+rt_offset(skb));
+>                         if (skb_csum_hwoffload_help(skb, features))
+>     ...
+> }
+>
+> So by driver xmit time, only network_header and protocol were wrong. The
+> new transport header setter still helps ndo_features_check callbacks
+> such as ice_features_check(), because they run before this point.
+>
+> > diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+> > index ab2e4fa87a4f0..d599fe161857f 100644
+> > --- a/net/xdp/xsk.c
+> > +++ b/net/xdp/xsk.c
+>
+> [ ... ]
+>
+> > @@ -1026,10 +1028,37 @@ static int xsk_skb_metadata(struct sk_buff *skb=
+, void *buffer,
+> >
+> >  static int xsk_skb_sw_csum(struct sk_buff *skb, struct xsk_buff_pool *=
+pool)
+> >  {
+> > -     if (unlikely(pool->tx_sw_csum &&
+> > -                  skb->ip_summed =3D=3D CHECKSUM_PARTIAL))
+> > +     struct ethhdr eth_buf, *eth;
+> > +     int nhoff =3D ETH_HLEN;
+> > +     __be16 proto;
+> > +
+> > +     if (unlikely(skb->ip_summed !=3D CHECKSUM_PARTIAL))
+> > +             return 0;
+> > +
+> > +     if (unlikely(pool->tx_sw_csum))
+> >               return skb_checksum_help(skb);
+> >
+> > +     if (unlikely(skb->dev->type !=3D ARPHRD_ETHER))
+> > +             return 0;
+> > +
+> > +     eth =3D skb_header_pointer(skb, 0, sizeof(*eth), &eth_buf);
+> > +     if (unlikely(!eth))
+> > +             return -EINVAL;
+> > +
+> > +     proto =3D eth->h_proto;
+> > +     if (eth_type_vlan(proto)) {
+> > +             proto =3D __vlan_get_protocol(skb, proto, &nhoff);
+> > +             if (unlikely(!proto))
+> > +                     return -EINVAL;
+>
+> [Severity: Low]
+> Is this rejection intended for deeply nested tags? __vlan_get_protocol()
+> also returns 0 when the VLAN_MAX_DEPTH parse limit is hit, i.e. with 8
+> or more 802.1Q/802.1AD tags:
+>
+> net/core/skbuff.c:__vlan_get_protocol_offset() {
+>         unsigned int vlan_depth =3D skb->mac_len, parse_depth =3D VLAN_MA=
+X_DEPTH;
+>     ...
+>                 if (unlikely(!vh || !--parse_depth))
+>                         return (struct vlan_type_depth) { 0 };
+>     ...
+> }
+>
+> When that happens, __xsk_generic_xmit() calls xsk_drop_skb() and the TX
+> batch fails with EINVAL. This happens even when csum_start is well past
+> the L2 header. Before the patch these frames were sent, and got a
+> correct software checksum on non-HW_CSUM devices.
+>
+> The commit message only talks about rejecting frames whose csum_start
+> points into the L2 header. Should this case be mentioned too?
+>
+> Short frames and truncated VLAN headers are rejected too, but there
+> csum_start does have to point into the L2 header, so the described rule
+> covers them.
+
+It makes sense. I would add the following code to keep the previous
+behavior (falling back to software computation):
+---diff---
+  eth =3D skb_header_pointer(skb, 0, sizeof(*eth), &eth_buf);
+  if (unlikely(!eth))
+- return -EINVAL;
++ return skb_checksum_help(skb);
+
+  proto =3D eth->h_proto;
+  if (eth_type_vlan(proto)) {
+  proto =3D __vlan_get_protocol(skb, proto, &nhoff);
+  if (unlikely(!proto))
+- return -EINVAL;
++ return skb_checksum_help(skb);
+  }
+
+>
+> > +     }
+> > +
+> > +     if (unlikely(skb_checksum_start_offset(skb) < nhoff))
+> > +             return -EINVAL;
+>
+> [Severity: Low]
+> This check only runs in one configuration: copy mode, without
+> XDP_UMEM_TX_SW_CSUM, on an ARPHRD_ETHER device.
+>
+> The same XDP_TXMD_FLAGS_CHECKSUM request is still accepted in these
+> cases:
+>
+>   - with tx_sw_csum, because skb_checksum_help() runs first
+>   - on non-Ethernet devices, because of the early return above
+>   - in zero-copy mode, where csum_start goes to the driver's
+>     tmo_request_checksum without any check
+>
+> Documentation/networking/xsk-tx-metadata.rst just describes csum_start
+> as the byte offset where checksumming should start. It gives no lower
+> bound relative to L2 and no error behaviour.
+>
+> How is user space supposed to know whether such a descriptor will be
+> sent or fail with EINVAL? Since this change is going to stable, should
+> the uAPI documentation describe the new constraint?
+
+The same here. I would use this with a new variable (l3_min):
+- if (unlikely(skb_checksum_start_offset(skb) < nhoff))
+- return -EINVAL;
++ if (unlikely(skb_checksum_start_offset(skb) < nhoff + l3_min))
++ return skb_checksum_help(skb);
+
+>
+> > +
+> > +     skb->protocol =3D proto;
+>
+> [Severity: Medium]
+> For frames with in-band VLAN tags, this sets skb->protocol to the
+> innermost ethertype (e.g. ETH_P_IP), not the outer 802.1Q/802.1AD type.
+> Doesn't that hide the tags from the core's VLAN-aware feature masking?
+>
+> include/linux/if_vlan.h:skb_vlan_tagged() {
+>         if (!skb_vlan_tag_present(skb) &&
+>             likely(!eth_type_vlan(skb->protocol)))
+>                 return false;
+>     ...
+> }
+>
+> With the inner protocol here, __netif_skb_features() never intersects
+> dev->vlan_features. vlan_features_check()->skb_vlan_tagged_multi() also
+> returns false right away. QinQ frames therefore skip the mask that
+> limits checksum offload to NETIF_F_HW_CSUM devices.
+>
+> That mask is used by dflt_features_check() and by drivers like r8169
+> (rtl8169_features_check() ends with return vlan_features_check(skb,
+> features)), stmmac, bnxt, bnx2x and mlx4/mlx5.
+>
+> Before the patch, skb->protocol was 0, so IP_CSUM-only devices got a
+> software checksum for these frames. Now they get CHECKSUM_PARTIAL
+> single- and multi-tagged frames that the core normally keeps away from
+> their hardware. Could that put wrong checksums on the wire?
+>
+> AF_PACKET does this differently in packet_parse_headers(). It keeps the
+> outer h_proto in skb->protocol, resets the mac header, and only moves
+> network_header past the tags:
+>
+> net/packet/af_packet.c:packet_parse_headers() {
+>         skb_reset_mac_header(skb);
+>
+>         if (!skb->protocol && sock->type =3D=3D SOCK_RAW)
+>                 skb->protocol =3D dev_parse_header_protocol(skb);
+>     ...
+>         if (likely(skb->dev->type =3D=3D ARPHRD_ETHER) &&
+>             eth_type_vlan(skb->protocol) &&
+>             vlan_get_protocol_and_depth(skb, skb->protocol, &depth) !=3D =
+0)
+>                 skb_set_network_header(skb, depth);
+> }
+>
+> Would setting skb->protocol =3D eth->h_proto and resetting the mac header
+> fit better? skb_vlan_tagged_multi() reads skb_vlan_eth_hdr(), which
+> depends on skb_mac_header().
+>
+> > +     skb_set_network_header(skb, nhoff);
+
+I need some time to rethink about this...
+
+>
+> [Severity: Low]
+> Should there be a check that an L3 header of type proto fits between
+> nhoff and csum_start?
+>
+> The only layout check above is csum_start >=3D nhoff, and
+> xsk_skb_metadata() only requires csum_start + csum_offset + 2 <=3D
+> desc->len.
+>
+> Take a 22-byte frame on ICE with h_proto 0x0800, csum_start 14 and
+> csum_offset 6:
+>
+>   - ice_features_check() sees network offset 14 and an L3 length of 0,
+>     and lets the frame through.
+>   - skb_csum_hwoffload_help() accepts csum_offset 6, which equals
+>     offsetof(struct udphdr, check).
+>   - ice_tx_csum() then reads l4_proto =3D ip.v4->protocol at frame offset
+>     23. That is past skb->tail, in tailroom that sock_alloc_send_skb()
+>     does not zero.
+>
+> That uninitialized byte then picks the L4 type and length written into
+> the TX descriptor, with an IP length of 0. Before the patch, such frames
+> got a software checksum.
+>
+> Would a minimal check help here? For example, require csum_start - nhoff
+> to be at least sizeof(struct iphdr) or sizeof(struct ipv6hdr), and leave
+> protocol unset otherwise. That would keep these frames on the old
+> software checksum path.
+
+I'll double check that. Probably like this:
++ switch (proto) {
++ case htons(ETH_P_IP):
++ l3_min =3D sizeof(struct iphdr);
++ break;
++ case htons(ETH_P_IPV6):
++ l3_min =3D sizeof(struct ipv6hdr);
++ break;
++ default:
++ return skb_checksum_help(skb);
++ }
+
+>
+> > +     skb_set_transport_header(skb, skb_checksum_start_offset(skb));
+>
+> [Severity: High]
+> Should the mac header be set here too? skb->mac_header still holds the
+> ~0 sentinel from __finalize_skb_around(), and mac_len is 0. Neither the
+> xsk TX path nor __dev_direct_xmit() calls skb_reset_mac_header().
+>
+> With the correct network offset, ice_features_check() now lets these
+> skbs through for hardware offload. On E830 with NETIF_F_HW_CSUM (GCS)
+> enabled, ice_tx_csum() computes:
+>
+> drivers/net/ethernet/intel/ice/ice_txrx.c:ice_tx_csum() {
+>     ...
+>                 /* Set GCS */
+>                 u16 csum_start =3D (skb->csum_start - skb->mac_header) / =
+2;
+>     ...
+> }
+
+To solve this, there are a few options:
+1. reset the header in xsk, which was actually rejected by Eric[1]. I
+think it makes sense that we should fix it in a more general layer
+(__dev_direct_xmit()) to cover xsk/af packet/other types of
+situations.
+2. avoid using mac_header on ICE side.
+
+At least for now, I think we need both of them in the next iteration.
+
+[1]: https://lore.kernel.org/all/CANn89i+aacS2PfaMXnimzGgbCLz-JSnqo6QyoS122=
+Gf+kxya3w@mail.gmail.com/
+
+>
+> It then writes this value through FIELD_PREP(ICE_TX_GCS_DESC_START_M,
+> ...), where ICE_TX_GCS_DESC_START_M is GENMASK(7, 0).
+>
+> For example, take headroom 64 and an IPv4/UDP frame with csum_start 34.
+> That gives skb->csum_start =3D 98:
+>
+>   - (98 - 65535) / 2 =3D -32718, which is 0x8032 as a u16 and 0x32 after
+>     the mask.
+>   - The NIC is then told the checksum starts 100 bytes into the frame
+>     instead of 34.
+>
+> Wouldn't that put a corrupted frame on the wire? Before the patch,
+> ice_features_check() stripped the checksum features and the stack
+> computed a correct software checksum. That makes this a regression on
+> the driver the commit message says it fixes.
+>
+> There is also a related issue that predates this patch.
+> ice_xmit_frame_ring() reads the mac header for every xsk copy-mode skb
+> whose priority is not TC_PRIO_CONTROL:
+>
+> drivers/net/ethernet/intel/ice/ice_txrx.c:ice_xmit_frame_ring() {
+>     ...
+>         eth =3D (struct ethhdr *)skb_mac_header(skb);
+>     ...
+> }
+>
+> With mac_header unset, eth->h_proto is read from skb->head + 0xffff +
+> 12. Resetting the mac header only for CHECKSUM_PARTIAL skbs would not
+> fully fix that.
+>
+> Would it help to call skb_reset_mac_header(skb) and set skb->mac_len =3D
+> nhoff next to the new header setters? That may be needed for every xsk
+> generic TX skb on Ethernet devices, not only CHECKSUM_PARTIAL ones.
+
+Not really. See the comments above.
+
 Thanks,
-Petr
+Jason
