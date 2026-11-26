@@ -1,50 +1,51 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.215
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.219
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795664455;
-	b=HmgtYC6mO+yNqqJtiHOAqAUjMP5eDXu+s2RryuRGlkAtPcbmRW2qj5DEfOeH+i9W/jbl
-	 q4DM7PdN62KpKTAUmFytadCGHwkkv7WoWM9GujAhRPuFR9FJU29S7JNnKV8QBhWGybeIG
-	 ObKUGpNtlW4JZRr0yVgIm0PVextwwHsaJLmUgZiqWeN8RxSPfSy5oeglvJyNq/qR1Li7K
-	 8dygA+ILs6JNziymgZ5ahgvZbbIVPQHMx/V9obtMFA6p08LBG1YKd7lDv0ijN2M5Hozdr
-	 QLhXvMUs3R1VB5CkAe3K0Q764cX0nS0khjXXWWfXRkWHAAWnkUbQ7BasMhT539gholA==
+	t=1795664460;
+	b=dLYwrbBn4ZUQEjKbApahnfXONLRnwB8U3tTR2cAYVPB4xVO4mmyUmA2GP/h4UJu50Ht5
+	 ak81SGGNBh42Il2UqKx06+JaBVL3f6Z9ExNfA5SOnisgNbIxTLkYgKBTfQpiE3/hKUAbn
+	 XJl4WJ0/K7o2LJN3JAUogPGGXZoB2eYS30WDMQ1t0ePMaRxb9NjQNmjTbgIBbT9kLTf/M
+	 TUyj7REgD2EWPmYiS6EIu+uWgxauU5iJGFSL7snx55NhXFMpRzO+QmVYVmoOn6ETH0eq0
+	 Ta2NtgyxENBSevt7e/eE9a79KVlIp1S8BCtybTdXcmEoH0uyP4nOBDVVoNjfRm7+Pnw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795664455;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795664460;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=gArFDwX8F1ZKFuEtJo/mKeuuQAwTF3/hfhRHsBkxe14=;
-	b=IwYmTw0lhlLtndgeWd4FUg1o0bMJr+JC269gxIbtdv2btM4x73N30FeVNjpH/hWBH27W
-	 X2xeXXwOC9iGivw+ICZi/JwDYyU3dnpTnTTA1jT8qe09WYQ/ztNlEtTfeyrr2lOG1+IG5
-	 kfIK4G826jlpoqV3sjVcM4etWSz+T/PBml05wQEU9AwgCs4gV4cfDCYHXsJXK2mze1r2c
-	 zDqQbCNUfoXRCjzhkL93JIL2fIphvc0H1Bb0Vo/a6ln0iiLIxpqV/7a9wmDHdLd9BNGxe
-	 xESNPRVdMGQDWnhb9RqulanRL3WR2yKnSE9BUg6fSK4ZVbGFYLn4Pces5VGF8a+pJog==
+	 X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=2iOrCUIj378mJyxyHnqkmZI6s41NJbMX2yVLmntQcE4=;
+	b=G3lAD7c23qCZdKJglwwjVeoSo9TczMJHFSIvB0dATVmye1D5CbHqh5+82/5QX4xyYPpc
+	 bgIOTd37wjE4hTGgHHDTpEiBQxsjmdNtSIJmyvTCAlizXUCw9bGIczxYaMzTnHgj3Ld5X
+	 9OAi37ncA8OSQpRmtvy2Ym3pzg8hVGb/oAYVLwE/tTsbAjWt/qK8tnEFQvfUz6q0QlYmg
+	 aD2hkTyxWq9U26H9uSPcrAJD5jJeKMRJUEA8Pf1ToQT0koacrfw3O1zxjdod6oSS+Dmzm
+	 /uqMBRfWDHT5GTndpFKscXCCEiOIyg2BTaVyhTavk4tw0I6XIQx/YwFErmjy6YEkJxg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="cA45a/GP";
-	arc=none smtp.remote-ip=95.215.58.215
-Received: from mta1.migadu.com (out-215.mta1.migadu.com [95.215.58.215])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=fbhxRlMD;
+	arc=none smtp.remote-ip=95.215.58.219
+Received: from mta1.migadu.com (out-219.mta1.migadu.com [95.215.58.219])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D270606A32A
-	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 03:40:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1D270606A32A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C954606A336
+	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 03:40:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7C954606A336
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=cA45a/GP
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=fbhxRlMD
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=2mQrwVec4mBUIh1UvZd6SVhlMXO5Z7932el8cKLMyWc=;
+DKIM-Signature: a=rsa-sha256; bh=uUmdahuLxDNRbhHZJ2aVyJ/ZZn+3XnApmgUizSYaQtw=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1795664453; v=1; x=1796269253;
- b=cA45a/GPeNtob3E1DZ6v6zvPtaHSJ2zV+2ZGwxFdPDVWjGvlYKDXFJN2KenV5/QxMFKJpqHK
- PLHDhQ0jZvG918CwdwUXX8EeenfnumAXg8SdcF4on30zVflgfGG2xAKLFrYyzbqlRQlXQMXAHKY
- ZXgZZE7EGTIKIuiPd5qGEOTk=
+ t=1795664457; v=1; x=1796269257;
+ b=fbhxRlMDmhFx6oNo7b/Eg2HlLlIeUsghTqy31bVyqoLIJcIB745PIdlC8kR5gMTrWlYZ6ZMV
+ EKYySql2eaR3pfTtc9WrZ/MrBp9wV4LXXnjuBUHrlT8gZQWYretMWsDYxjs55BXYUKmeRulGgKH
+ yPoX+U04WEN4YqTTaCQNazdo=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id eca903fa5c9c47af;
-	Thu, 26 Nov 2026 03:40:53 +0000
-X-Mizu-Trace-ID: eca903fa5c9c47af
+Received: by smtp.migadu.com with ESMTPS id 42b23a4beb871a18;
+	Thu, 26 Nov 2026 03:40:57 +0000
+X-Mizu-Trace-ID: 42b23a4beb871a18
 X-Migadu-Flow: FLOW_OUT
 From: George Guo <dongtai.guo@linux.dev>
 To: chenhuacai@kernel.org,
@@ -54,10 +55,12 @@ Cc: hengqi.chen@gmail.com,
 	bpf@vger.kernel.org,
 	loongarch@lists.linux.dev,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v3 0/5] LoongArch: BPF: Add private stack, exceptions, large stack and arena support
-Date: Thu, 26 Nov 2026 12:40:42 +0900
-Message-ID: <20261126034048.7370-1-dongtai.guo@linux.dev>
+Subject: [PATCH v3 1/5] LoongArch: BPF: Add support for private stack
+Date: Thu, 26 Nov 2026 12:40:43 +0900
+Message-ID: <20261126034048.7370-2-dongtai.guo@linux.dev>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20261126034048.7370-1-dongtai.guo@linux.dev>
+References: <20261126034048.7370-1-dongtai.guo@linux.dev>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -71,118 +74,245 @@ Content-Transfer-Encoding: 8bit
 
 From: George Guo <guodongtai@kylinos.cn>
 
-This series adds the following features to the LoongArch BPF JIT:
+Currently, the BPF stack of a program always lives on the kernel stack.
+If the JIT supports private stack, the verifier marks a deep tracing or
+struct_ops program with jits_use_priv_stack, so that its BPF stack can
+be moved into a per-CPU allocation to reduce the kernel stack pressure.
 
-  - private stack
-  - exceptions (bpf_throw)
-  - 2 KiB of stack for programs, the same as on x86-64 and arm64
-  - sign-extending loads from arena (BPF_PROBE_MEM32SX)
-  - atomics on arena pointers (BPF_PROBE_ATOMIC)
+Allocate a per-CPU private stack with guard regions to detect overflow
+and underflow, and check the guards in bpf_jit_free(). In the prologue,
+use $r21 to locate the current CPU's private stack and set the BPF frame
+pointer, instead of allocating the BPF stack on the kernel stack.
 
-The series is based on 7.4-rc4 with the following patches applied:
+This is similar to commit 6c17a882d380 ("bpf, arm64: JIT support for
+private stack").
 
-  1. My 1 fix patch:
-     LoongArch: BPF: Fix the offset of stptr.w and stptr.d stores
-     https://lore.kernel.org/loongarch/20261118071444.10258-1-dongtai.guo@linux.dev/
+Signed-off-by: George Guo <guodongtai@kylinos.cn>
+---
+ arch/loongarch/net/bpf_jit.c | 111 ++++++++++++++++++++++++++++++++++-
+ arch/loongarch/net/bpf_jit.h |   1 +
+ 2 files changed, 109 insertions(+), 3 deletions(-)
 
-  2. Tiezhu's 1 optimization patch:
-     LoongArch: BPF: Optimize doubleword loads with ld.d and ldptr.d
-     https://lore.kernel.org/loongarch/20261118081201.10498-1-yangtiezhu@loongson.cn/
-
-  3. Tiezhu's 4 feature patches:
-     LoongArch: BPF: Support instructions array, indirect jumps and calls
-     https://lore.kernel.org/loongarch/20261123043907.20225-1-yangtiezhu@loongson.cn/
-
-"LoongArch: BPF: Allow programs 2 KiB of stack" needs the stptr fix:
-stack stores beyond the signed 12-bit offset range use stptr.{w/d}.
-
-With this series, the following tests passed on a LoongArch VM (Fedora
-43, clang 22.1.8):
-
-  $ sudo ./test_progs -t exceptions
-  Summary: 1/119 PASSED, 0 SKIPPED, 0/0 FAILED
-
-  $ sudo ./test_progs -a verifier_large_stack
-  Summary: 1/17 PASSED, 1 SKIPPED, 0/0 FAILED
-
-  $ sudo ./test_progs -t tailcalls
-  Summary: 1/43 PASSED, 0 SKIPPED, 0/0 FAILED
-
-  $ sudo ./test_progs -t struct_ops_private_stack
-  Summary: 1/4 PASSED, 0 SKIPPED, 0/0 FAILED
-
-The skipped verifier_large_stack test only runs without large stack
-support.
-
-  $ sudo ./test_progs -t verifier_ldsx | tail -1
-  Summary: 1/24 PASSED, 0 SKIPPED, 0/0 FAILED
-
-  $ sudo ./test_progs -t arena_atomics | tail -1
-  Summary: 1/11 PASSED, 0 SKIPPED, 0/0 FAILED
-
-  $ sudo ./test_progs -t libarena | tail -1
-  Summary: 2/43 PASSED, 0 SKIPPED, 0/0 FAILED
-
-libarena also needs commit 27f2cf406a35 ("selftests/bpf: libarena: Raise
-arena spinlock CPU limits") from bpf-next, since CONFIG_NR_CPUS is 2048
-by default on LoongArch.
-
-The struct_ops_private_stack, arena_atomics load-acquire/store-release
-and libarena parallel tests, the arena tests in verifier_ldsx and the
-"private stack: two frames of 2048 bytes" test in verifier_large_stack
-are enabled for LoongArch by a separate selftests series for bpf-next,
-which was applied for these runs.
-
-Changes since v2:
-  - Drop v2 patches 1-3: "Support internal-only MOV to resolve per-CPU
-    addrs" and "Add timed may_goto support" are in mainline, and "Fix
-    tail call count pointer offset for arena programs" is superseded by
-    commit cd7e356b07a2 ("LoongArch: BPF: Move arena register slot below
-    TCC context").
-  - Patch 2: arch_bpf_stack_walk() went into mainline on its own as
-    commit e7103e5e3bde ("LoongArch: BPF: Add arch_bpf_stack_walk()
-    implementation"), so this patch only changes bpf_jit.c now.
-  - New patch 3: allow programs 2 KiB of stack.
-  - Patch 4: add bpf_jit_supports_insn() without the atomics rejection
-    that patch 5 used to remove (Tiezhu).
-  - Patch 5: on a fault, clear the register that the instruction loads
-    into instead of leaving it stale (Sashiko).
-  - Patch 5: emit cmpxchg on arena as a single amcas_db.{w/d}, only when
-    the CPU has LAMCAS, since the sc of an ll/sc loop can fault too
-    (Sashiko). Pass the new value in a temporary register, since rd of
-    amcas_db must differ from rk.
-  - Patch 5: drop the __add_exception_handler() split, which only the
-    ll/sc entry needed.
-  - Drop "selftests/bpf: Add LoongArch deny list" (Tiezhu).
-  - Move the selftests patches to a separate series for bpf-next,
-    "selftests/bpf: Enable private stack, large stack and arena tests
-    for LoongArch".
-  - Reword the subjects and commit messages following Tiezhu's style.
-  - Rebase onto 7.4-rc4 and the patches listed above.
-
-v2: https://lore.kernel.org/loongarch/20260702022322.51033-1-dongtai.guo@linux.dev/
-
-George Guo (5):
-  LoongArch: BPF: Add support for private stack
-  LoongArch: BPF: Add support for exceptions
-  LoongArch: BPF: Allow programs 2 KiB of stack
-  LoongArch: BPF: Add support for signed arena loads
-  LoongArch: BPF: Add support for arena atomics
-
- Documentation/bpf/bpf_design_QA.rst |  13 +-
- arch/loongarch/include/asm/inst.h   |   4 +
- arch/loongarch/net/bpf_jit.c        | 391 ++++++++++++++++++++++++----
- arch/loongarch/net/bpf_jit.h        |   1 +
- 4 files changed, 355 insertions(+), 54 deletions(-)
-
-
-base-commit: b6a9fa34ce4187cb69d3c588a4bbffc31ce5db8f
-prerequisite-patch-id: ee451ad20d651112f42e66d7ba6fa4242b124fb4
-prerequisite-patch-id: 403cb992a7f660379bedce79e3068f1bc6facf05
-prerequisite-patch-id: 221fa3fc56a55b9a7462ae7b21330a660240c8d2
-prerequisite-patch-id: 08e033b51cefbf1d41f2e5325d591ff900ab81ef
-prerequisite-patch-id: ffd6050832069f626c1f55492f0a1898137f6aa4
-prerequisite-patch-id: 25f0b3ea5219dfd0676bdf22466453f2bf5dd5ea
+diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
+index 567729921d6d..3ff15b64925f 100644
+--- a/arch/loongarch/net/bpf_jit.c
++++ b/arch/loongarch/net/bpf_jit.c
+@@ -30,6 +30,10 @@
+ #define REG_ARENA	LOONGARCH_GPR_S6 /* For storing arena_vm_start */
+ #define BPF_TAIL_CALL_CNT_PTR_STACK_OFF(stack) (round_up(stack, 16) - 80)
+ 
++/* Memory size/value to protect private stack overflow/underflow */
++#define PRIV_STACK_GUARD_SZ	16
++#define PRIV_STACK_GUARD_VAL	0xEB9F12345678eb9fULL
++
+ static const int regmap[] = {
+ 	/* return value from in-kernel function, and exit value for eBPF program */
+ 	[BPF_REG_0] = LOONGARCH_GPR_A5,
+@@ -50,6 +54,15 @@ static const int regmap[] = {
+ 	[BPF_REG_AX] = LOONGARCH_GPR_T0,
+ };
+ 
++static void emit_percpu_ptr(struct jit_ctx *ctx, u8 dst, void __percpu *ptr)
++{
++	move_imm(ctx, dst, (__force long)ptr);
++#ifdef CONFIG_SMP
++	/* dst += __my_cpu_offset, held in $r21 */
++	emit_insn(ctx, addd, dst, dst, LOONGARCH_GPR_U0);
++#endif
++}
++
+ static void prepare_bpf_tail_call_cnt(struct jit_ctx *ctx, int *store_offset)
+ {
+ 	const struct bpf_prog *prog = ctx->prog;
+@@ -133,7 +146,14 @@ static void build_prologue(struct jit_ctx *ctx)
+ 		stack_adjust += sizeof(long);
+ 
+ 	stack_adjust = round_up(stack_adjust, 16);
+-	stack_adjust += bpf_stack_adjust;
++
++	/*
++	 * When a private stack is used the BPF stack lives in a per-CPU
++	 * allocation rather than on the kernel stack, so only the non-BPF
++	 * part is reserved here.
++	 */
++	if (!ctx->priv_sp_used)
++		stack_adjust += bpf_stack_adjust;
+ 
+ 	/*
+ 	 * Save the original return address to a temporary register to prevent
+@@ -188,8 +208,16 @@ static void build_prologue(struct jit_ctx *ctx)
+ 
+ 	emit_insn(ctx, addid, LOONGARCH_GPR_FP, LOONGARCH_GPR_SP, stack_adjust);
+ 
+-	if (bpf_stack_adjust)
++	if (ctx->priv_sp_used) {
++		/* Point the BPF frame pointer at the top of this CPU's private stack */
++		void __percpu *priv_stack_ptr;
++
++		priv_stack_ptr = prog->aux->priv_stack_ptr + PRIV_STACK_GUARD_SZ;
++		emit_percpu_ptr(ctx, regmap[BPF_REG_FP], priv_stack_ptr);
++		emit_insn(ctx, addid, regmap[BPF_REG_FP], regmap[BPF_REG_FP], bpf_stack_adjust);
++	} else if (bpf_stack_adjust) {
+ 		emit_insn(ctx, addid, regmap[BPF_REG_FP], LOONGARCH_GPR_SP, bpf_stack_adjust);
++	}
+ 
+ 	ctx->stack_size = stack_adjust;
+ 
+@@ -2280,6 +2308,39 @@ int arch_bpf_trampoline_size(const struct btf_func_model *m, u32 flags,
+ 	return ret < 0 ? ret : ret * LOONGARCH_INSN_SIZE;
+ }
+ 
++static void priv_stack_init_guard(void __percpu *priv_stack_ptr, int alloc_size)
++{
++	int cpu, underflow_idx = (alloc_size - PRIV_STACK_GUARD_SZ) >> 3;
++	u64 *stack_ptr;
++
++	for_each_possible_cpu(cpu) {
++		stack_ptr = per_cpu_ptr(priv_stack_ptr, cpu);
++		stack_ptr[0] = PRIV_STACK_GUARD_VAL;
++		stack_ptr[1] = PRIV_STACK_GUARD_VAL;
++		stack_ptr[underflow_idx] = PRIV_STACK_GUARD_VAL;
++		stack_ptr[underflow_idx + 1] = PRIV_STACK_GUARD_VAL;
++	}
++}
++
++static void priv_stack_check_guard(void __percpu *priv_stack_ptr, int alloc_size,
++				   struct bpf_prog *prog)
++{
++	int cpu, underflow_idx = (alloc_size - PRIV_STACK_GUARD_SZ) >> 3;
++	u64 *stack_ptr;
++
++	for_each_possible_cpu(cpu) {
++		stack_ptr = per_cpu_ptr(priv_stack_ptr, cpu);
++		if (stack_ptr[0] != PRIV_STACK_GUARD_VAL ||
++		    stack_ptr[1] != PRIV_STACK_GUARD_VAL ||
++		    stack_ptr[underflow_idx] != PRIV_STACK_GUARD_VAL ||
++		    stack_ptr[underflow_idx + 1] != PRIV_STACK_GUARD_VAL) {
++			pr_err("BPF private stack overflow/underflow detected for prog %s\n",
++			       bpf_jit_get_prog_name(prog));
++			break;
++		}
++	}
++}
++
+ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_prog *prog)
+ {
+ 	bool extra_pass = false;
+@@ -2288,7 +2349,9 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
+ 	struct jit_ctx ctx;
+ 	struct jit_data *jit_data;
+ 	struct bpf_binary_header *header;
+-	struct bpf_binary_header *ro_header;
++	struct bpf_binary_header *ro_header = NULL;
++	void __percpu *priv_stack_ptr = NULL;
++	int priv_stack_alloc_sz;
+ 
+ 	/*
+ 	 * If BPF JIT was not enabled then we must fall back to
+@@ -2304,6 +2367,22 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
+ 			return prog;
+ 		prog->aux->jit_data = jit_data;
+ 	}
++	priv_stack_ptr = prog->aux->priv_stack_ptr;
++	if (!priv_stack_ptr && prog->aux->jits_use_priv_stack) {
++		/*
++		 * Allocate the actual private stack: the verifier-calculated
++		 * stack size plus two guard regions to detect overflow and
++		 * underflow.
++		 */
++		priv_stack_alloc_sz = round_up(prog->aux->stack_depth, 16) +
++				      2 * PRIV_STACK_GUARD_SZ;
++		priv_stack_ptr = __alloc_percpu_gfp(priv_stack_alloc_sz, 16, GFP_KERNEL);
++		if (!priv_stack_ptr)
++			goto out_priv_stack;
++
++		priv_stack_init_guard(priv_stack_ptr, priv_stack_alloc_sz);
++		prog->aux->priv_stack_ptr = priv_stack_ptr;
++	}
+ 	if (jit_data->ctx.offset) {
+ 		ctx = jit_data->ctx;
+ 		ro_header = jit_data->ro_header;
+@@ -2321,6 +2400,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
+ 		ctx.arena_vm_start = bpf_arena_get_kern_vm_start(prog->aux->arena);
+ 		ctx.user_vm_start = bpf_arena_get_user_vm_start(prog->aux->arena);
+ 	}
++	ctx.priv_sp_used = priv_stack_ptr ? true : false;
+ 
+ 	ctx.offset = kvzalloc_objs(u32, prog->len + 1);
+ 	if (ctx.offset == NULL)
+@@ -2422,7 +2502,17 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
+ 		bpf_prog_update_insn_ptrs(prog, ctx.offset, ctx.ro_image);
+ 
+ out_offset:
++		/*
++		 * A NULL ro_header here means the JIT failed, so release the
++		 * private stack that was allocated above; on success the
++		 * program keeps it until bpf_jit_free().
++		 */
++		if (!ro_header && priv_stack_ptr) {
++			free_percpu(priv_stack_ptr);
++			prog->aux->priv_stack_ptr = NULL;
++		}
+ 		kvfree(ctx.offset);
++out_priv_stack:
+ 		kfree(jit_data);
+ 		prog->aux->jit_data = NULL;
+ 	}
+@@ -2439,6 +2529,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
+ 	if (header) {
+ 		bpf_arch_text_copy(&ro_header->size, &header->size, sizeof(header->size));
+ 		bpf_jit_binary_pack_free(ro_header, header);
++		ro_header = NULL;
+ 	}
+ 	goto out_offset;
+ }
+@@ -2448,6 +2539,8 @@ void bpf_jit_free(struct bpf_prog *prog)
+ 	if (prog->jited) {
+ 		struct jit_data *jit_data = prog->aux->jit_data;
+ 		struct bpf_binary_header *hdr;
++		void __percpu *priv_stack_ptr;
++		int priv_stack_alloc_sz;
+ 
+ 		/*
+ 		 * If we fail the final pass of JIT (from jit_subprogs), the
+@@ -2461,6 +2554,13 @@ void bpf_jit_free(struct bpf_prog *prog)
+ 		}
+ 		hdr = bpf_jit_binary_pack_hdr(prog);
+ 		bpf_jit_binary_pack_free(hdr, NULL);
++		priv_stack_ptr = prog->aux->priv_stack_ptr;
++		if (priv_stack_ptr) {
++			priv_stack_alloc_sz = round_up(prog->aux->stack_depth, 16) +
++					      2 * PRIV_STACK_GUARD_SZ;
++			priv_stack_check_guard(priv_stack_ptr, priv_stack_alloc_sz, prog);
++			free_percpu(prog->aux->priv_stack_ptr);
++		}
+ 		WARN_ON_ONCE(!bpf_prog_kallsyms_verify_off(prog));
+ 	}
+ 
+@@ -2544,6 +2644,11 @@ bool bpf_jit_supports_ptr_xchg(void)
+ 	return true;
+ }
+ 
++bool bpf_jit_supports_private_stack(void)
++{
++	return true;
++}
++
+ /* Indicate the JIT backend supports mixing bpf2bpf and tailcalls. */
+ bool bpf_jit_supports_subprog_tailcalls(void)
+ {
+diff --git a/arch/loongarch/net/bpf_jit.h b/arch/loongarch/net/bpf_jit.h
+index 777c76112d95..bd11ca8fec53 100644
+--- a/arch/loongarch/net/bpf_jit.h
++++ b/arch/loongarch/net/bpf_jit.h
+@@ -22,6 +22,7 @@ struct jit_ctx {
+ 	u32 stack_size;
+ 	u64 arena_vm_start;
+ 	u64 user_vm_start;
++	bool priv_sp_used;
+ };
+ 
+ struct jit_data {
 -- 
 2.53.0
 
