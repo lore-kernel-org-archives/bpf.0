@@ -1,93 +1,88 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.53
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795689556;
-	b=BCq0rbRDqrVcXWx9jGo0KKM5CYy0A7TmjnqMfHAoPbbXMufaFAV7T0SmVJsDeImRMDuQ
-	 vDcMYQdS8MKtNkz2tYf5YItBeWtHrgXuo1oIa/mPfGm/Kqa3Bhlksg+5D/FJWKgI1FPdc
-	 XsiKq2NHh5LD2KdrAakkx0Dkz7Rj1D2/slkSLF8AWWJXEiiFi6rIAQRod7hoI8GUs/lNQ
-	 nYWT4XWXdA01LiYJBsR74hUiUeMxcwRSw7/XrymrKZiJ11xBsbV++zJLYM7kzlGBdmNCg
-	 18nUL5UowSLIfd0E1rsk9ypiKNqxInU1zRmdugVXq9MphjewD9tWKOXuLHqvocRXnSQ==
+	t=1795689925;
+	b=swvZQPKZE2zbGW9U3QLl+PR3sgBtXaVC3yh70jbNIfeQucY8q1I5vclwaaDIFmSJ3jfm
+	 Pqq6mEXlnQAohVBtSTpUL7DaUws5y51Mrx0JQfbLLBaTGm/KvxacQWstGMlb6NQIXewHC
+	 Gbw1mwisHrXzsA32Qt1xsBrn3kg2k9FVdShXYZqly4Bh7Veebu/SQxuGRaG/FITSV0Avm
+	 ccJ6N3lvaGKpr8TL3wmfYDc5MlraP9yWDDEH06JyAYTni3IpFURXQ1rbJEBh/AmwwwCAs
+	 961P0S0FlLDoeq1Pik9AdlAatnvKmYo4RJaLH0zGOTjH86k2hORc9Pt4U/fY/edU/Mw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795689556;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795689925;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:Content-Transfer-Encoding:In-Reply-To;
-	bh=y97/jaewEHbT2OW6StbmLAd/jwpSWkq1Rhi9mBatr9c=;
-	b=gNVeKsZw01cm1PDJENYlkZAoTsJzKC6b5hbn7djeVmqHVEVCeWAsomjM1wGxxBNaHiwu
-	 8GuSOxazaalqHbXEyEcD1m3tAruurBHewZfF//VhF7NAUre/XT/uAPzYneiEddSSANIn/
-	 NhAjufBJttS1bnO5QGydYqtSF8P4N/FU1PJcfvWxY683WnZ7FxT0HqQ9/Ub6Ia7bsdae6
-	 VAppRu1xZjz8vW6z3/BVD8tM2fexqEnXCPmcOLJJPnkF7EK8m55tt4GrMfWehfuK1qOz3
-	 aJntEFZKRCow7D09h72id9ouG2tS9iE+g+sqIjA0wn7GGQRzJteSCbPjKZl3twnoQfA==
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
+	 Content-Language:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=Un6gMhy72C5GdMKpxarLNGYbqAQ9rBfW8csPHV3xsTs=;
+	b=txtQ0mKayah1IDxPYCU9JvyqG7kyJDHYTI2CP1g9mIppe1kBwdgJYJjHvCWyG7Z6JdtU
+	 N1IlZ7uNeqZ6R2OYiCqlDbaEAP3oyaR7pGc/j1TaBlqvadlduPna3Z6vVOxMOEgeq61eL
+	 SWH3eVMoBwBDJMCeOGmgtDI6CeYOySeGOpJu+ixjllOqP48xC/YSGVLHgL+OTaxcyl+rg
+	 GXZJu090I4sIZ0eVX5kXQ6LqVUMENLNf9XI7q5pzbVTLz74gkHdjuG43UrXo4T43vE1tW
+	 ho6B/ewWvmC/i/zQ+SLf6rjj5+lWTR6udrJUyHntborCrXsHLnUuxFauoElZuoIBi/A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=n8M3CYVz;
-	arc=none smtp.remote-ip=209.85.128.42
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	dmarc=pass header.from=suse.com;
+	spf=pass smtp.mailfrom=suse.com;
+	dkim=pass header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b="fb/AnGuu";
+	arc=none smtp.remote-ip=209.85.221.53
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF02B606A31E
-	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 10:39:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BF02B606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEA6B606A329
+	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 10:45:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CEA6B606A329
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=n8M3CYVz
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4bb666304fdso68420295e9.0
-        for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 02:39:15 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=fb/AnGuu
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-492fcbfaa88so4535179f8f.3
+        for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 02:45:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795689554; x=1796294354; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=y97/jaewEHbT2OW6StbmLAd/jwpSWkq1Rhi9mBatr9c=;
-        b=n8M3CYVzCKvn9tyl2yeeNtnis3O/d+zxsopmHRJQ8nJ9crUq/TiXL3TbtI/UU7sqsP
-         ilG3/Sh1+Mw7dlKLJIR/dN1sBrPW2eEk/V8qxt9xieaR6JTG9R1SZ44u2J1LWmhfrWYP
-         uNKnVpfkIQIIPCSF/XWdljt93vPuP6gtkw5CRMyjuZ3It5MXFp7mTB6WgM8RA1I7uAYG
-         kv65bs9BnYpLr4WlNTRIgo4wfWyTE+xeqz0k3F4Mr+EjHL4DgK58AjlIWTu9U3AdL8ab
-         RvabepS2cEHSeNrUqSohSV04DuVFkJ7xjdoJCyu2PLMPm68lBzi311KCK0NzBJeDaFq6
-         aXVg==
+        d=suse.com; s=google; t=1795689923; x=1796294723; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Un6gMhy72C5GdMKpxarLNGYbqAQ9rBfW8csPHV3xsTs=;
+        b=fb/AnGuufRVSuumZI6EQLA6cj75+M3xYaDzd0Gy6RIfFD9vTufZ0ocvqMKbKkCMuJU
+         HCBXLOxx8vgikybvFGaP8kOTEPC96KRwXnjjGdmpRLIAP3v7/cEX49ZmqXzavqZRuij3
+         yAgWXhNLnFWVkhqNg9FhZPzLqKHj3vih4TQBrzWrYFpbfSQ4U8bI/qVviCwdNFG1GKRg
+         Hxn6CMjZT5DpBlzV5e6WnYlgdhQXs2yNA/UJVS7jWkPiOHnO8ZNEWlUFaREDrgmI9OpC
+         SZzobCPy89LxilfHUkDRa5QJboD//JYUx9AJLoSKPUrVgXCRpyowQ5xPdH3/qHs9I8jV
+         3Rpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795689554; x=1796294354;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=y97/jaewEHbT2OW6StbmLAd/jwpSWkq1Rhi9mBatr9c=;
-        b=NOKloH298sqRADqA8g0qon7llpSrRWJMjHZ1UI1YdenVVCn6x44f1FEmWTfvqFatpW
-         NB4a9ZgYwx0Hk4WoiUDgY97p1M1s+IHcETY3/q2mp2YSDg9BHov669V9zgn49ptAXXSv
-         DP7RkoIfb1cQygDGMjiPeyb6Typfgx2Tm/0uzVOrvkFpkYyMGVUpnfSOESkfyz/JDlbF
-         3UgyMj+a0XUkW4xb5pdI8JaiGYOWyuLZ1vs6dVwb2uASB3treho96FLpfliqB6gLuS3P
-         V71H48Sp54DNcYdLaKdw0UOvt4EgUDWMGQFreZoSnfrPRJD+tH+4SGo96PHSv8XPC7yH
-         aHtg==
-X-Gm-Message-State: APuU4Z964JjYGqGDYzOSqoQXtQ33+SuVWN1fRWYtX4RWnYn2u3eWvX5J
-	8hLMRbli0+eZxiSINsHuUuIjyXbsSCJnC+rsxZ2XaeyOj9u7QitQ5efcJCk8vA==
-X-Gm-Gg: AZFdTZe4ieAcLO1Y38z2Haait2ORsB/KiyLhk64v3RGnna6lylHXidsNw99zzWzYUSg
-	NJtdjLQDhaY4efV5wfP6BjURLoZtaVzt1N2UROCRo1663Ggonb1W3qlzojh3WHH62xoDEwwOUYv
-	mw2IN56QFdBC5OVudGB0ueBrQe6vTN6dEwlTY/OYDW7m7gB0x+Qp5rgMAo4ocy2pHS/odutKBL3
-	NvT1p0/ADcO3iy7oENVq+QAf7skAd2B5BrTuz5TS5CP3c9f8BVZxbbOm+0uzXiMr+T9m9JwXUuQ
-	oD71C6AJqU9YfEvbbFVXjtNCMiGQXDaMZjcuCSvejAragMcb5IoAr6KERI3SFrq6uWHEVH+Kebq
-	IqgAh3Arh2ipSjCUZqlSXUni4k9Tj886t9IZrQMpEtA9zjZsukqkGoQzgEkpKi8AowL4Qr916jV
-	eSvlaLe4BpHoNbh4Rvko59tJ9unQBlVtBoOGmnvhxXYDMBkFFeo/0M+FBiX9MVSjRyE8o+duRYn
-	XO81cOfRryvVxqKbHP4F8nYRCoekS3dtOKd/Q6goD1nmDfTK/de6p3sVv+k/kQvKJjIc88PMQXV
-	suxXlGKadKhX8xM5WLcHDFCEcBGAr2asgh4T/g==
-X-Received: by 2002:a05:600c:8905:b0:4bb:6816:127c with SMTP id 5b1f17b1804b1-4bb861468cdmr394543635e9.8.1795689553958;
-        Thu, 26 Nov 2026 02:39:13 -0800 (PST)
-Received: from mail.gmail.com ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4ab6b2052c8sm40021061f8f.41.2026.11.26.02.39.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Nov 2026 02:39:13 -0800 (PST)
-Date: Thu, 26 Nov 2026 10:50:50 +0000
-From: Anton Protopopov <a.s.protopopov@gmail.com>
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-Subject: Re: [PATCH v1 bpf-next 1/5] resolve_btfids: Do not tag functions
- which work on BPF objects
-Message-ID: <awgPCnuRzevgb60e@mail.gmail.com>
-References: <20261125212849.868523-1-a.s.protopopov@gmail.com>
- <20261125212849.868523-2-a.s.protopopov@gmail.com>
- <sashiko-outbox-234173@kernel.org>
+        d=1e100.net; s=20260707; t=1795689923; x=1796294723;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=Un6gMhy72C5GdMKpxarLNGYbqAQ9rBfW8csPHV3xsTs=;
+        b=kStQUMFUsVXTgMdThSTu8TYbI4R+kFWbYR7QwW6974GSof09BK6I0QbfCq9nj92xNI
+         2TYDSrKOgHNZFGMGc33d6BEgtaGegzEzSfRLc3dNcrv/I3anjGLMOwkNgPxf5lDPnZ5k
+         8beDXKfCrALsbeLoNlUC9IwewSFtxUqVOfZ7mG2fNoeMMWWafwzV70ICWl3QO99g+LT8
+         PijbqBizrr5KwkLW1GLqp8fhyUQGf5TUjpTz6g/7luFishFWv9D1LtacIP3MxvpITk11
+         sE9UphIwY9tmz8eqzXb+QbnAyNS0h9LfgmiALNOM0WbLMXwV3Dh1yXPEUleG5xGpXl8r
+         1c1g==
+X-Forwarded-Encrypted: i=1; AL+hErF9NJzWjFoweV2d+kWjQYX7Xd4s82cNbQ0xuRfVF1QUmkg6+Ojb8eBGMhIy2nCe5oO0E04=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9zAviO8JCSpgrgOsQxa/NRztG6IVjzE31b2wU9D0DSMTecyqir
+	OJs12CAdl9OAnCe203B5CLfLxlsEqlRI4wqd+jqVn67I21Sk0sPDSvMvjddo6vOQOW4=
+X-Gm-Gg: AZFdTZdy7mgQNa1giwlNugs33uwXvDuEVZ8HNmzaOv1JUI5Gi9EKzGG5YD12IGC3qlT
+	3xF2aR2LsRmIBAECxKgkW/QQdvKgCFx1aYZjCYr5ZCrFmFgtYo0wiLaCItirSCyM1OB2Rf66NA7
+	o3gMjOYlG/EL30q0u2JFxp10v0NYER+JNxLIQqhg6yZ6poo20KpeWPAymjRNmIdhTW2KlAD9TB9
+	aYYEmxF/MFPvclx7xZl6apX5xdap+ay5Q3wymPQ0Q1qb+xJbjo9sDqoGyhZ9U8vykaexZ+JHer1
+	i2UZsGJyeilLz59IcYxE4EAQyAzuSZ0PPFgfe/rXTMF+xHt3TtPXtP0Z5WTTgH+jkhUEmfuPBdQ
+	VV3517D4/Cgt4peyKdvwrhkuajdVIMH6+8UAbg4Bnu/vJWxw7iCAKwbwKR5scLXyhoCDgKHPUQo
+	S1z5smE3LLneXp9vIQf1fUF/wEmP50u+GCEaG2omgJ5PsSMVw14DXCRSKTlvl2/QLKyftIp1ySg
+	S9uJgvWOBHOYDYJ2vk7k0d+Wr6t0J04/tne+7RJYf33SgK1FnhDIf3/SneHSX7zTC6nrZoCIYiN
+	p3kHOS+6n6TCrO/XtTU9c48GAK6dBvJwX9AfSp/roO4dovlpYVdUrJK/YCxmAgrBfQ==
+X-Received: by 2002:a05:6000:248a:b0:487:b50:101c with SMTP id ffacd0b85a97d-4abaa97702bmr38359967f8f.5.1795689923186;
+        Thu, 26 Nov 2026 02:45:23 -0800 (PST)
+Received: from ?IPV6:2a07:de40:8100:0:89a9:fd0e:583d:4a53? ([2001:af0:8000:1409:193:86:92:181])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4ab6bb98b4dsm40416103f8f.53.2026.11.26.02.45.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 26 Nov 2026 02:45:22 -0800 (PST)
+Message-ID: <a40ad738-cb7b-469e-b67b-353b64622dbd@suse.com>
+Date: Thu, 26 Nov 2026 11:45:21 +0100
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -97,41 +92,57 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <sashiko-outbox-234173@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v3 3/9] kallsyms: Add KALLSYMS_QUERY_BY_NAME
+ ioctl to /proc/kallsyms
+To: Samuel Wu <wusamuel@google.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ Randy Dunlap <rdunlap@infradead.org>, Luis Chamberlain <mcgrof@kernel.org>,
+ Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>,
+ Aaron Tomlin <atomlin@atomlin.com>, Alexander Viro
+ <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>,
+ Jan Kara <jack@suse.cz>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Petr Mladek <pmladek@suse.com>,
+ David Laight <david.laight.linux@gmail.com>, kernel-team@android.com,
+ linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-modules@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
+References: <20261113221248.3535369-11-wusamuel@google.com>
+ <20261113221248.3535369-14-wusamuel@google.com>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <20261113221248.3535369-14-wusamuel@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 26/11/25 09:25PM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential
-> issue to consider:
-> - [Low] resolve_btfids: missing Fixes trailer for fmodret_tag() BPF type
->   exclusion
-> --
+On 11/13/26 11:12 PM, Samuel Wu wrote:
+> To find a few kernel symbols, users such as libbpf parse all of
+> /proc/kallsyms, which is several MB and text based.
 > 
-> commit 36940d1b337a769c63009cfc2b22cfd69fcc61f9
-> Author: Anton Protopopov <a.s.protopopov@gmail.com>
-> 
-> > resolve_btfids: Do not tag functions which work on BPF objects
-> >
-> > A program on tracing_iter_filter() which returns -EACCES makes the
-> > verifier miss that a global subprog throws. A function which takes or
-> > returns a bpf_* or btf_* type, or struct btf, works for BPF itself:
-> > for the verifier, a link or a map. Do not tag it.
-> >
-> > __sys_bpf() loses its tag. A program can still deny a bpf command on
-> > the syscall, which is on the error injection list, or on a
-> > security_bpf*() hook.
-> >
-> > Signed-off-by: Anton Protopopov <a.s.protopopov@gmail.com>
-> 
-> [Severity: Low]
-> This fixes a bug in the automatic fmod_ret tagging where internal BPF
-> functions were left modifiable.  Should this include:
-> 
->   Fixes: 4dd950adacad ("resolve_btfids: Tag the functions that return errors")
+> Add the KALLSYMS_QUERY_BY_NAME ioctl. It finds a symbol by exact name or
+> by prefix in the entries of /proc/kallsyms, with vmlinux matches first,
+> and optionally in a single module with module_filter, or all modules by
+> default. Each call returns one match and its position; pos + 1 continues
+> the search, until -ENOENT. The output returns the address, the size, and
+> optional name and module buffers. A buffer that is too small gives
+> -ENAMETOOLONG and the required size.
 
-I didn't add any tags because I consider this as a follow up.
+The kallsyms data in the kernel can change between two
+KALLSYMS_QUERY_BY_NAME calls, for instance, when a new module is loaded.
+Should the mechanism provide a way to detect such changes, likely by
+tracking and exposing some kind of generation number, or is it
+unnecessary?
 
-> -- 
-> Sashiko AI review · https://sashiko.dev/#/patchset/20261125212849.868523-1-a.s.protopopov@gmail.com?part=1
+-- 
+Thanks,
+Petr
