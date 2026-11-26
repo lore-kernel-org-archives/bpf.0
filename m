@@ -1,51 +1,51 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.82
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.88
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795672455;
-	b=dk8eHw5iDxgi+hePGtOs+ZRO+Z3iXKfw6V/eHdr4GJ1LS3LLQa7egOjcdVtaBh49C3nx
-	 nUd0MRZBWPbdhYfGtKIP23/fawQmP6vv8bBXfCpSFpUYeWJa9TQUEuqgLcHdARP16G6AH
-	 c7TjzxR9xALRLJ7NvhQC2zxbaQ3mXYdqVuRxZxHUj/qJbzJC4RVDeb1jUGJ8PYpnCOtbU
-	 G86d+0CgMx1Ovwnon37/8VXv7LEGgskkxeW0Z0doAtRIoqEi4/FJxV4eVZqrDIvFI2Z2z
-	 09pF+G9SfyjYBzJTIVA9CPmqomqZ3ycbclkfg5KI1SBtEN41Ad9I/AqrTiplmi972IA==
+	t=1795672460;
+	b=m/G5InQ5kH5PxJLtGjNsjGt9NlD00XLXtTEAUxcND3Nk2J1SSDhwVALohD/AWL4eIPAP
+	 h4AQ90oGZ/onyXF5UTbfg+L2Xhux+bfOPNxj+dfwQGUitn8JyoU+fgHuxfWCy5CpsfyYG
+	 xgpllpa1Sy2JsMzgSP7YCzoqJfyX5Gh1i2EDUOmivd0UflHeqW4UqufaXoTEUVnfSYed8
+	 OEnfwxrdaMZ+0G3XIptftmzceYRziWxKuEIA7minnm1tvUHyqwD2FuaNjZ5zT0uRjIQ1F
+	 9WE5QQO9SXek08SeD770EpcMOY8Vgyv5A488I/SEXmLsRIigsSXWMe7Sw8O8Iql8k5w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795672455;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795672460;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
 	 X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=qH3mpj2/hJm9tn/Nzzofy4FMFli+1gACokUbRo8C0+o=;
-	b=o0DxXEtePXYRHF/z4zw6a/zn8Cn8NftPJxun5jS3ndEYqoPCjWNbQvvWGYyT370ItgMZ
-	 6JR256C+95N5XwKul1Yhy8WvQvdS0c09ZHBOuy0310Y9NRsBnIZMei7EGtF0uSiDqdDGu
-	 pkDBSjduy87F2MWb5W3wwY3ZXLaErE10hkKCe0D/bjIyH0LHs5SwV9CJ1x7tV1DEpN/vv
-	 1loZg5Muei7E8qbxUws4AM23qXPtcDG6PhxTu26aX903MFpoF6166J+tAwxzGFbFDhzkC
-	 cUtiFdRX+tw3kByk0djKzVt31vKnFBuSM1dcr7bmwSHoYPfZ3t6Qni7kh6lhFBuOqfw==
+	bh=6sqiVTrDEe2NBuw3nlAAoo2cHvqlzBtrt28T5zPPIyU=;
+	b=kWf1gw5fDWyPHy61fwjuAXX0YFRLDmdYPej2wW/GnAenC2LcICYCjMkWwQp36OhX/jT2
+	 B2fmLYOZC6d43h8pTsQ7uC7PDjtoXVYHgPUziUAaDkZP10foVkq3MwMIpPJKiE/lvoiht
+	 5quHKW04YSi4imvDCEsf/7mK+d9GxRtWkBh9Q1vOS/odqqg1OITn3LVUSBFJxyLbdXjne
+	 eb8vu7Flb9GjK/17AvNJILCxlR3y5PWUopYIE7zCyNrchk64Zz9Hu1yiu3uao5hJlO+p9
+	 RJkRpR+LKv0aih5Qs7YfF3tqRXYSQMd1XWYnLZ6FnBtORIXN/h5tlT58IDF717cWPSw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=hwPqy6Kf;
-	arc=none smtp.remote-ip=95.215.58.82
-Received: from mta1.migadu.com (out-82.mta1.migadu.com [95.215.58.82])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=m9HX0h2S;
+	arc=none smtp.remote-ip=95.215.58.88
+Received: from mta1.migadu.com (out-88.mta1.migadu.com [95.215.58.88])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1699C606A327
-	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 05:54:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1699C606A327
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE6B9606A326
+	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 05:54:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BE6B9606A326
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=hwPqy6Kf
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=m9HX0h2S
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=5IXQjQYl3ynF57FUD38TBi94RLTKK46vofzPlB9f6f0=;
+DKIM-Signature: a=rsa-sha256; bh=48jh6X0S0d/3YzMepgD+fBr+qcdyyP0trXSd2pnvpUM=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1795672453; v=1; x=1796277253;
- b=hwPqy6KfVg3zbFdhCTE7msVrzQb5RMIIFxdo8weWnVfOEudM4rgTyRqaHKZcrulCVrH7c+XZ
- nhFt7tEb7TG4rhaJ6kexYMXKj6d6KKR1IvrfsR0u0kbVL2A4Vuvc50C7hnuhQ9kUPuuw6zjuYIP
- tEb0Xt6y37HqjC3Sz1s0SCcQ=
+ t=1795672457; v=1; x=1796277257;
+ b=m9HX0h2SfK2mGszpXzDcz1LbtCXh9UiltXV301pmtOqaBIBZnBFOngjFtQhKvjX/ZkTqCgHM
+ LEILn7hXtLwTYtLUjyVOufsYYt9S+oxy2aXBWvX7ZbEnrvCBZqonEd5PXWLOf1S2a4jWy9yq2RR
+ bYlolNI74K3bSQkn1rihzx1k=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 02c115c139af8cae;
-	Thu, 26 Nov 2026 05:54:12 +0000
-X-Mizu-Trace-ID: 02c115c139af8cae
+Received: by smtp.migadu.com with ESMTPS id d7a20327b4be166a;
+	Thu, 26 Nov 2026 05:54:17 +0000
+X-Mizu-Trace-ID: d7a20327b4be166a
 X-Migadu-Flow: FLOW_OUT
 From: George Guo <dongtai.guo@linux.dev>
 To: ast@kernel.org,
@@ -57,9 +57,9 @@ Cc: bpf@vger.kernel.org,
 	loongarch@lists.linux.dev,
 	linux-kernel@vger.kernel.org,
 	George Guo <guodongtai@kylinos.cn>
-Subject: [PATCH bpf-next v1 2/5] selftests/bpf: Enable 2 KiB private stack test for LoongArch
-Date: Thu, 26 Nov 2026 14:53:51 +0900
-Message-ID: <20261126055355.9967-3-dongtai.guo@linux.dev>
+Subject: [PATCH bpf-next v1 3/5] selftests/bpf: Enable struct_ops private stack tests for LoongArch
+Date: Thu, 26 Nov 2026 14:53:52 +0900
+Message-ID: <20261126055355.9967-4-dongtai.guo@linux.dev>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261126055355.9967-1-dongtai.guo@linux.dev>
 References: <20261126055355.9967-1-dongtai.guo@linux.dev>
@@ -76,31 +76,32 @@ Content-Transfer-Encoding: 8bit
 
 From: George Guo <guodongtai@kylinos.cn>
 
-As the LoongArch JIT supports both private stack and large stack, enable
-the "private stack: two frames of 2048 bytes" test in
-verifier_large_stack for LoongArch.
+As the LoongArch JIT supports private stack, enable the struct_ops
+private stack tests for LoongArch.
 
 With this patch:
-  $ sudo ./test_progs -a "verifier_large_stack/private stack: two frames of 2048 bytes" | tail -1
-  Summary: 1/1 PASSED, 0 SKIPPED, 0/0 FAILED
+  $ sudo ./test_progs -t struct_ops_private_stack | tail -1
+  Summary: 1/4 PASSED, 0 SKIPPED, 0/0 FAILED
 
 Signed-off-by: George Guo <guodongtai@kylinos.cn>
 ---
- tools/testing/selftests/bpf/progs/verifier_large_stack.c | 1 +
- 1 file changed, 1 insertion(+)
+ .../selftests/bpf/prog_tests/struct_ops_private_stack.c        | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_large_stack.c b/tools/testing/selftests/bpf/progs/verifier_large_stack.c
-index cbabb41d973c..f25455d628d5 100644
---- a/tools/testing/selftests/bpf/progs/verifier_large_stack.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_large_stack.c
-@@ -248,6 +248,7 @@ __description("private stack: two frames of 2048 bytes")
- __load_if_large_stack()
- __arch_x86_64
- __arch_arm64
-+__arch_loongarch
- __success __log_level(4)
- __msg("stack depth max 2048")
- __msg("subprog 0 (private_stack_two_frames) main {{.*}} stack 2048")
+diff --git a/tools/testing/selftests/bpf/prog_tests/struct_ops_private_stack.c b/tools/testing/selftests/bpf/prog_tests/struct_ops_private_stack.c
+index 103179ff8733..730d5741591c 100644
+--- a/tools/testing/selftests/bpf/prog_tests/struct_ops_private_stack.c
++++ b/tools/testing/selftests/bpf/prog_tests/struct_ops_private_stack.c
+@@ -7,7 +7,8 @@
+ #include "struct_ops_private_stack_large.skel.h"
+ 
+ #if defined(__x86_64__) || defined(__aarch64__) || defined(__powerpc64__) || \
+-	(defined(__riscv) && __riscv_xlen == 64)
++	(defined(__riscv) && __riscv_xlen == 64) || \
++	(defined(__loongarch__) && __loongarch_grlen == 64)
+ static void test_private_stack(void)
+ {
+ 	struct struct_ops_private_stack *skel;
 -- 
 2.53.0
 
