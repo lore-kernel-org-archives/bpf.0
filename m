@@ -1,100 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.53
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795654409;
-	b=YVz6bsTxrIhhnqd4mmkF05ElYrzv9B93QJ+RWUQy630tZbvRAl7jgkUVYiO0iKowTTBF
-	 zmqjEUmh0cac1wdiqSXN4kvqZEYlC4FOyzmC0AixyuXMo+piws2yFAC2j+euqyz9gvc02
-	 fK2KHP1/gvX1DESNRAlvSgwn4qoTnV1BeWW1u69uJhq1v3DX0PGSXFuGEOrzgemfplH4k
-	 l2NE/a5rHa8vMDBoew3GUfqTnSjVo+vkgeGiSzZCkY7AVeE23F7Qw6IQ9D8F4y5gUhXOI
-	 Qwfn4aelR6HprqGES/LLY5uRepn9DjT+B3vNWSH2ez/CIAAZJICLmFejE1NDyvs1Gpg==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795654409;
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.45
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795654442;
+	b=opnGvnhAiZg7Au39SmaZVr/eNlnJezznzR+DKNQgNPfn94GGVa5hY7nbnS+Rhc0Bls8m
+	 eMXB++31f4SDcBwfxgv0wmn0DSfcU1lw4qT0WEcd7d/QhGq8huzkt1eLnU37p46c1135A
+	 aNFZNZWrIkPrnrgihskZZAXXuSHLABQ7xOv2M784pYGSTLwg+6TRfoN03DlBXkRKBwWEG
+	 IhzV+NhBV8a6fY0pXXlh87ZYc6FhT4pzQmX/kLK5irH/8YAxp9Til65outNUX4VQO38z6
+	 Lo2dAxA9ZIeE8PryanXDqQ+oispZ7eMICGglsotw8nhO5cEHt18UTJLeYjhG8+DvZtQ==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795654442;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=ssrpjNNwMPYh08mQfz/FC+I2tBSrmUfphBtDGQUYlDo=;
-	b=1/swpcwpp9Cl2AzT6RZ2Y8l6Mymaqtnadq2R24t75xyIK/WlAi0nC+wy3ao8a7bks5Xz
-	 tOMlrGcPht/NEXvy4K1nRD/PQxmaCmJnzuPOq/oz6ikCgaAu8Yb6IcQdQPZ7APK0W0ays
-	 ZDmT1P8VyZtS5+FY/BTrVfV5hU4nG8S1S7f4+54FKQdBY0c0ptV3XxLWhBqxv3+1WIU/7
-	 gEqD9XIK4I2AeIVPFx8lI9G5YS+9O0okgo+i7i6OfIZ4+Z/kyI6KavMPSyLR2TAG570pz
-	 V0hXOfucWedc5EROVZkb/Lx1eb+DL9guqvPTiJ2Eqq2qRu7Bq6n+mtIpoVXDN77OP8Q==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=OMbLOmTg;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.53
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Content-Type:Date:Message-Id:Subject:From:To:In-Reply-To:References:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=98cf/8mtmNoT8GGw7cQ1J4o8GeVXMUs//JNPNbEqGKE=;
+	b=i0LCKZgvSTaswRS00bSSX1dT9C0tlQ2uzWA/76jx15KkT+YvJpuwwVWpRd7DakTmXEDh
+	 YMpxob50d8/tuf+emSMYIa6DM53KfIN47iMle69vKl01uIAx6UmqO6QrzrVCLS+YtP6Tn
+	 0/QHa9b71TmdjnDZHjALxXK67C/QTVv/b0jMEBQ6NoQnvoq1nsxgh2v2eiWYQkz+wXg6H
+	 QXZpSxnYrRcuzP3zpiQ8kX3wFmwRLCLFwDMNs7BJ9BPMec/pqUiZRrTPiYYsB7WnDmnuo
+	 674qeIpIXN7z99cThucTj0f/iQe1v9eSunrG8IP14ZspuBnZXRJuwLUBKdnbgSSVxdA==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=pRM05+HA;
+	arc=none smtp.remote-ip=209.85.216.45
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44097606A33A
-	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 00:53:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 44097606A33A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2B4D606A688
+	for <bpf@vger.kernel.org>; Thu, 26 Nov 2026 00:54:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B2B4D606A688
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=OMbLOmTg
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-c4d2b741ed9so1038065566b.2
-        for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 16:53:29 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795654408; cv=none;
-        d=google.com; s=arc-20260327;
-        b=LDg4oAMIg3YY+AEeWg4ohX6gf86pe+BZ1pEOU9xSIsZBaLlBUYZ+ZxfXp+VwjtF53k
-         eJoeWOsBhjpJjnf0mjv62HnFF4MWgpMqYrwDRB2HzkEXDipaj/UW28ZeHdujZ4BYtMQO
-         24znYit3tmtCtj6/h6mrUDdeklf/0fhhNCkXqTtANY14wqUMuSUlOu7NyFU70BtKLqva
-         HiJXLrWURrD7keigM+dFykTgOEmKfJ5uJPwQidnNyeLQSD0o17N97P8T/tOgFyOS5Ddl
-         MM4oslazYy2pxak0WMSyuikBZCixMIv1W4ujL/tfHA948vKLQNgN0tmyB6BsZ8KRQBPI
-         T6KA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=ssrpjNNwMPYh08mQfz/FC+I2tBSrmUfphBtDGQUYlDo=;
-        fh=GlYZra/M0ZAff5VFaZuXJvZrs2A1v9LpX5ItNOEWJ/I=;
-        b=m10jE0XiGXhVqII1BwsCxZvfHGGW97kzXOgG2LHmMTSr/6nY0d3RESpedzC/bd+Mvg
-         i5BnOjhXtB0RItERiBJwCDwqHtlQ33/qUIPi73dEAP+84gUVSPEL31ruTELQ3o585rEL
-         cIGKv6lPXXIA1gj37YvzOLAI0j34lqwONNGFPR16PbofLKCUn59NiL20CsQb1RzQa8r/
-         2IID6t4J0ItliwTFJsrqA7oT/v7lLh8ZuKif3NZQ1Kjofg4+5370jBw7RQplEIibzzJ0
-         vDqpAFG6N9DDnH5Maz73yNKNBlqCfgZ+kSz3WvWN++aVanEWX2AWmYRGqDlnlPGDzSmR
-         F1sw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=pRM05+HA
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-3b155f50c24so5241399a91.3
+        for <bpf@vger.kernel.org>; Wed, 25 Nov 2026 16:54:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795654408; x=1796259208; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=ssrpjNNwMPYh08mQfz/FC+I2tBSrmUfphBtDGQUYlDo=;
-        b=OMbLOmTgwkBLdVF5EdkYSC2XrgccLIkkqOXgyFgiuHmBsv8YiKTp9E0NEIyhirgYwo
-         BZ+ApH53YZ2KTVkaJNbDjcMue9DCSXid0Du4+70qfpSn/U6BPQcaO0rTHvaEKiMrhjq+
-         cgrO6KnCn2xh6qE6NyajQBDq/7N3cmFb2502QyBeGyuN0J8TZ8STFtPa+xPXpE5PEied
-         9EIDboORco4TC6wv1vXi5MBxzHo/qEkcV1RPpsCU6P4rl7yl2ijcQhep5KTjor4bMPiQ
-         FloIu+x3tOotka6vXyHSWrSW9RsgR8EkvzFkVBto/arghTtNsJHfG3gnYoPBAaEQS9BY
-         49RQ==
+        d=gmail.com; s=20260707; t=1795654441; x=1796259241; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:message-id:date:content-type:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=98cf/8mtmNoT8GGw7cQ1J4o8GeVXMUs//JNPNbEqGKE=;
+        b=pRM05+HARc9+7hsQ1mFSA/W5myrL07S3NZNghmXFdsWRY0Y9d0ZDIiIOhzxfUEoX23
+         ksy6KDyFb/nZRfKUEliM8ZuOiOuKIlezmxJhhavQlsN2FfLOaKK2ugyTd1KHssXxwSL3
+         f/6m0WMcmX7DHE/reSp2RyNeI4L21qmRuhsoPvVL9cxL1JN+gNxCCBvaSoDaNlPSPoai
+         h1deVE/cwqIQIsrzzbH6PsxGx6ACnWk5OEFj4xRbtLWmIERVcJVpfO0ezWpfLbLrMvFP
+         aJAFiouUcT7R4uAbfNepM55VWpHeWQSn62+3T+A+wMIjmWS+4VQqSF9h/xDkUhRAOt9u
+         gK8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795654408; x=1796259208;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20260707; t=1795654441; x=1796259241;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:message-id:date:content-type:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=ssrpjNNwMPYh08mQfz/FC+I2tBSrmUfphBtDGQUYlDo=;
-        b=Hzb38XIysGxz50oAFHl/4QT8AiTIU4uzP7PMVQmXCGpUu1lr8r+vsZrwDHsD6gPZLW
-         QTd2OlkVUzhekV88k91Ssc4lqBDBrT8mWQ7I2Y9IHBw9hrfkROiwURV2Xb+PUVTJmMZ2
-         K9CaTg0x5Nsi1RuQI116jR5uCBdMDn8oM5G0t4z4GBmr7n1NjGioax8utCll0zMm91d9
-         0f0Pr+ijQxYXugPYICR70nDLbv+GxTCH/Cx/fLfXPq0YKDgVUh7ReYNx1L5X04zSuPIC
-         RKWNtP3dsSKHN9NYpSnjbXMXH7VZ1iEMriQA6CI3JiZIA5n7vscx2tOedwy5Sh1v6Ya1
-         AQ0A==
-X-Forwarded-Encrypted: i=1; AL+hErEwpgv7xLDHoWs/y8aUrliDWKx4meUsXV/dvcyrwXgNzQWGGlHmxWYIqnhzdng5zXKxMZk=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/GSSv8EsVyBwnmrodjnNXZJh0xoClD1L3iAmi0T6ZN8IjBDyW/
-	VdKUPy41yX0MaaoOO7DA1eNxDVzf2tXdrdgMI4i5LT0YPdNYSxMOskdrRKV2wIpSV1YMwKBtC9/
-	sFmTmw2aGuQEyZSrIdAvmMwObnHRFQ9gB6zX5eZC4
-X-Gm-Gg: AZFdTZfpeQ88L5F1S5K7dKbZktwrHr1GEvK+VhqHaxUGtiu1KGzNRn3qPPAMmvbgdMZ
-	ifWb2TPSf2viQJA5cb61ErjXD4+2QcRj3AlKrnaYEwyntSZSSIdyLqPclBKMBYKA001CjnNq4xz
-	ykxTwMPFvQ3SBnEvpZJv46uXM0ob0R+rEgLoxinXEvArdMq8CPHgDaFcUpHZTl3djGfHP4LZ254
-	8sHI6e9ALdisjNjeP31qj7lWg98F3bWmeRIn4b7VthDVYEo8G1VfhK21sqSgU9miacV5G24kiwy
-	dY6vjXBluIku8UTE0HVXDjeqqR5QLcHxttChN6gXmxNEvfyRB8kQrLqk/RU5PZgyQT1u6OTz1fv
-	2/o9p/8R51j5LIsNUOAPMfTE+S2oXS2RGK1Bjbb9QtAcVWF0M3OXZ9a1rDJ8TQ513m5k=
-X-Received: by 2002:a17:907:c643:10b0:c2e:4292:d27e with SMTP id
- a640c23a62f3a-c513a816d3amr1138026566b.22.1795654407168; Wed, 25 Nov 2026
- 16:53:27 -0800 (PST)
+        bh=98cf/8mtmNoT8GGw7cQ1J4o8GeVXMUs//JNPNbEqGKE=;
+        b=h4B/YJuY8PDOhxKLpMx/tFygnJAIV4x1DbD3tT18nEpyFZZxq76NuTCgojtBU8zwnH
+         +Ji8IzxeMW6GtOl7bpe30nE8opN/REqAFqEGHkxqP6ryMCJX9xy3IYOV4n69R636UWzO
+         xCQsT5NoS9nGTW383QJF2waOEOXO3Xg8gn/tx+IRSriQmNshte5vh4rExSWCcCPqB9LS
+         FNDWHdLmht4yqxonkbdJA0PnEeWLhS68DdIc4ZvK6y/W0/P7+6pKkF29VKSkNjzlUVhI
+         TiQTGibEGhFAH0rHrF2vc1URK0eucB9UTW55+vrfG1e761XrOo3dW6IU17IG6TADXJ4v
+         9WGw==
+X-Forwarded-Encrypted: i=1; AL+hErF82j1nFso0zHYkN6nPrihINoLD78ueDhrA1OuCrELhGrfVd0RcmLx9EultvQfBxk+dS54=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9nsP2zuKPktPcMaX2B7JOiR9EWpqSGutGCbs0Vi24YmGa3vM0v
+	JkStY6DwoO6H9DzyRXUhdlTBSfvdN1816rTX9KOqw4C/9GB/rfENx21j
+X-Gm-Gg: AZFdTZdzAGlSMm4HJosysK7tIw2V9C9W/yN/8TwTRFPBRHVrRqosRTJHkF9DX63d7k1
+	w43DITBmT9HaMFty3siyqf/AhSfykovVT7ZeCAhTbuYFn5tRbJtY3Jl4SSZ0Jdoo0Qwppj4JYlv
+	3E4vyYhuwPVhS2cWBFVRvw3uOAzlrfq9Vaq1Yoj5iZQ01b41X8rpYiqyGBG98pDgI3V8XT12DX6
+	4UTEtDIxUDrroOTWRgjxcBTRugLJ9ePhSQqa2IGxI2jOwF8NePQfEbzJIv1K3ommwUFCqCu62Ik
+	Wy0ACfVvNKozaLvzxOwXuTioQM2mzHur6oO9n+TwJnOJxp52iasQtIgb2PhO2g1jkzY0Sj55Q6H
+	riypDaWp43SVQIfucOpC5rs7571AydmQ2HGlNQJVZylcY8iPWCcYrHadX8X9BXsm1OSYCj7+YmW
+	cvWz6yWE+xzSukzs2EYqs/PVvpnDOz7mnHcBByNa8qw846HDbC9udjE44AAYXZThgohvrGc8VBD
+	NOXAgaHsWpBMxuVR+jpTLbwsxICXQLUHB7CvF9mm59dAmCHhGP80k3lmehxXK+JqR5aZ1L0PoPn
+	MQMRNC4c8Z/hcs8apArShnKgHEXL2IAZGt13pnhP8WIDAmyXttY5cHVaEWjXCMhx/JiyE5f5qYW
+	996WLlN2zAt2T07BBOvF7iuQIuVldUQOGaA==
+X-Received: by 2002:a17:90b:2416:b0:3b4:a6ab:b841 with SMTP id 98e67ed59e1d1-3b4a6abb92dmr6670700a91.32.1795654440645;
+        Wed, 25 Nov 2026 16:54:00 -0800 (PST)
+Received: from localhost ([153.61.198.244])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b495035339sm17006163a91.0.2026.11.25.16.54.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 Nov 2026 16:54:00 -0800 (PST)
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 26 Nov 2026 00:53:59 +0000
+Message-Id: <DN4QDHMFA99A.27B7GAJLQQ7DK@gmail.com>
+Subject: Re: [PATCH v1 bpf-next 4/5] resolve_btfids: Exclude the code of
+ kernel/bpf and of the JIT
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Anton Protopopov" <a.s.protopopov@gmail.com>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
+ Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
+ <memxor@gmail.com>, "Jiri Olsa" <jolsa@kernel.org>, "Alan Maguire"
+ <almagui@kernel.org>, "John Fastabend" <john.fastabend@gmail.com>,
+ <bpf@vger.kernel.org>
+In-Reply-To: <20261125212849.868523-5-a.s.protopopov@gmail.com>
+References: <20261125212849.868523-1-a.s.protopopov@gmail.com> <20261125212849.868523-5-a.s.protopopov@gmail.com>
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -104,128 +104,174 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261113221248.3535369-11-wusamuel@google.com>
- <20261113221248.3535369-19-wusamuel@google.com> <CAEf4Bza48tGhcUhFRhSSv3qijV0uF8YrAQcLM6Qv9az-8zvK_Q@mail.gmail.com>
-In-Reply-To: <CAEf4Bza48tGhcUhFRhSSv3qijV0uF8YrAQcLM6Qv9az-8zvK_Q@mail.gmail.com>
-From: Samuel Wu <wusamuel@google.com>
-Date: Wed, 25 Nov 2026 16:53:16 -0800
-X-Gm-Features: Aa3M54rfuKAHSB0QMI506grzDhwAStyJm9gAvy8QXVpNXfEJd-B8LId_HiOPEPc
-Message-ID: <CAG2Kctq98pvyV=jmN0Di+p7m0AWQKg8+QF5YBvdLi79kTJaKoQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 8/9] libbpf: Resolve typeless ksyms via
- KALLSYMS_QUERY_BY_NAME ioctl
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Randy Dunlap <rdunlap@infradead.org>, Luis Chamberlain <mcgrof@kernel.org>, 
-	Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
-	Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Petr Mladek <pmladek@suse.com>, David Laight <david.laight.linux@gmail.com>, kernel-team@android.com, 
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-modules@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Nov 25, 2026 at 12:25=E2=80=AFPM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Fri, Nov 13, 2026 at 2:14=E2=80=AFPM Samuel Wu <wusamuel@google.com> w=
-rote:
-> >
-> > libbpf parses all of /proc/kallsyms to resolve typeless ksyms.
-> >
-> > Use KALLSYMS_QUERY_BY_NAME instead: exact names, plus "<name>.llvm."
-> > prefix matches. Ambiguous matches at different addresses fail the load.
-> > A missing strong extern still fails and a missing weak extern is 0,
-> > without a text scan.
-> >
-> > On any other error (e.g. -ENOTTY on older kernels, or -EPERM), fall bac=
-k
-> > to the text parser.
-> >
-> > Signed-off-by: Samuel Wu <wusamuel@google.com>
-> > ---
-> >  tools/lib/bpf/libbpf.c | 99 +++++++++++++++++++++++++++++++++++++++++-
-> >  1 file changed, 97 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> > index 44134421bd7d..f3f3475a64d3 100644
-> > --- a/tools/lib/bpf/libbpf.c
-> > +++ b/tools/lib/bpf/libbpf.c
-> > @@ -59,6 +59,34 @@
-> >  #define BPF_FS_MAGIC           0xcafe4a11
-> >  #endif
-> >
-> > +#ifndef KALLSYMS_QUERY_BY_NAME
-> > +/* 'f' is PROCFS_IOCTL_MAGIC */
-> > +#define KALLSYMS_QUERY_BY_NAME _IOC(_IOC_READ | _IOC_WRITE, 'f', 48, 0=
-)
-> > +
-> > +enum kallsyms_query_flags {
-> > +       KALLSYMS_QUERY_NAME_PREFIX =3D 0x01,
-> > +};
-> > +
-> > +struct kallsyms_query_sym {
-> > +       __u64 sym_addr;
-> > +       __u64 sym_size;
-> > +       __u64 sym_name;
-> > +       __u64 sym_name_len;
-> > +       __u64 sym_module;
-> > +       __u64 sym_module_len;
-> > +};
-> > +
-> > +struct kallsyms_query_by_name {
-> > +       __u64 size;
-> > +       __u64 query_flags;
-> > +       __u64 query_name;
-> > +       __u64 module_filter;
-> > +       __u64 pos;
-> > +       __u64 sym;
-> > +       __u64 sym_struct_size;
-> > +};
-> > +#endif
-> > +
->
-> there is no need for this, libbpf in kernel can use kernels' most up
-> to date UAPI headers directly, and on Github we sync necessary UAPI
-> headers into include/ directory, so libbpf source code can be built
-> with latest definitions of kernel UAPI. So you can drop this part
+On Wed, Nov 25, 2026 at 01:28 PM Anton Protopopov <a.s.protopopov@gmail.com> wrote:
+> bpf_tramp_ftrace_ops_func() and bpf_arch_text_invalidate(). Read the
+> symbols of kernel/bpf/built-in.a and arch/<arch>/net/built-in.a with
+> the llvm-nm of llvm-config, which reads ELF objects and LTO bitcode,
+> and do not tag these functions.
 
-Ack, will drop entire #ifndef block
-[...]
+bot is correct.
+Let's run ${NM} in gen-btf.sh and give its output to resolve_btfids ?
+kbuild knows the paths and the arch. The tool doesn't have to.
+${NM} reads what ${CC} writes. HAS_LTO_CLANG requires it to be llvm-nm.
+link-vmlinux.sh runs it for kallsyms already.
+llvm-config can be of another LLVM than the compiler. llvm-mc.sh says so.
+image_func() finds a function by name. No need to copy and sort the names.
+Then LLVM_NM, the nm mode of llvm-mc.sh, bpf_archives[], popen(), qsort()
+and bsearch() go away.
 
-> > +
-> > +       while (!ioctl(fd, KALLSYMS_QUERY_BY_NAME, &q)) {
-> > +               if (!ext->is_set) {
-> > +                       ext->is_set =3D true;
-> > +                       ext->ksym.addr =3D sym.sym_addr;
-> > +                       pr_debug("extern (ksym) '%s': set to 0x%llx\n",
-> > +                                ext->name, ext->ksym.addr);
-> > +               } else if (sym.sym_addr !=3D ext->ksym.addr) {
-> > +                       pr_warn("extern (ksym) '%s': resolution is ambi=
-guous: 0x%llx or 0x%llx\n",
-> > +                               ext->name, ext->ksym.addr,
-> > +                               (unsigned long long)sym.sym_addr);
-> > +                       return -EADDRNOTAVAIL;
->
-> I think there is ENOTUNIQ which we can utilize here
+It replaces patch 4.
 
-Ack
-[...]
+diff --git a/scripts/gen-btf.sh b/scripts/gen-btf.sh
+index b17f118..341885b 100755
+--- a/scripts/gen-btf.sh
++++ b/scripts/gen-btf.sh
+@@ -75,8 +75,17 @@ gen_btf_data()
+ 		--btf_encode_detached=${btf1}		\
+ 		"${ELF_FILE}"
 
-> > +               /* Check exact name and then LTO .llvm.<hash> prefix */
-> > +               err =3D query_ksym_by_name(fd, ext, false);
-> > +               if (!err)
-> > +                       err =3D query_ksym_by_name(fd, ext, true);
->
-> err =3D err ?: query_ksym_by_name(fd, ext, true /* lto_prefix */);
++	# The code of BPF itself is not a target of fmod_ret
++	fmodret_deny=
++	if [ -z "${BTF_BASE}" ] && is_enabled CONFIG_BPF_FMODRET_SCAN; then
++		fmodret_deny="${ELF_FILE}.fmodret_deny"
++		${NM} --defined-only kernel/bpf/built-in.a	\
++			arch/${SRCARCH}/net/built-in.a > ${fmodret_deny}
++	fi
++
+ 	${RESOLVE_BTFIDS} ${RESOLVE_BTFIDS_FLAGS}	\
+ 		${BTF_BASE:+--btf_base ${BTF_BASE}}	\
++		${fmodret_deny:+--fmodret_deny ${fmodret_deny}}	\
+ 		${inline}				\
+ 		--btf ${btf1} "${ELF_FILE}"
+ }
+@@ -148,6 +157,7 @@ cleanup()
+ 	rm -f "${ELF_FILE}.BTF"
+ 	rm -f "${ELF_FILE}.BTF.inline"
+ 	rm -f "${ELF_FILE}.BTF.inline.link"
++	rm -f "${ELF_FILE}.fmodret_deny"
+ 	if [ "${BTFGEN_MODE}" = "module" ]; then
+ 		rm -f "${ELF_FILE}.BTF.base"
+ 		rm -f "${ELF_FILE}.BTF_ids"
+diff --git a/tools/bpf/resolve_btfids/fmodret.c b/tools/bpf/resolve_btfids/fmodret.c
+index e1afdb6..d2fa9b7 100644
+--- a/tools/bpf/resolve_btfids/fmodret.c
++++ b/tools/bpf/resolve_btfids/fmodret.c
+@@ -188,12 +188,41 @@ static void set_protos(struct scan *scan, const struct image *img, const struct
+ 	}
+ }
 
-Ack- will update in v4. Thanks for the thoughtful review!
+-int fmodret_tag(Elf *elf, struct btf *btf, int verbose)
++/*
++ * Mark the functions of IMG which are in PATH, the output of nm. The line of a
++ * symbol is "<address> <type> <name>". The other lines have fewer words.
++ */
++static bool *read_denied(const struct image *img, const char *path)
++{
++	bool *denied = calloc(img->nr_funcs, sizeof(*denied));
++	FILE *f = fopen(path, "r");
++	char line[1024], name[1024];
++
++	if (!denied || !f) {
++		fprintf(stderr, "FAILED: --fmodret_deny: cannot read %s\n", path);
++		free(denied);
++		denied = NULL;
++	}
++	while (denied && fgets(line, sizeof(line), f)) {
++		const struct image_func *func = NULL;
++
++		if (sscanf(line, "%*s %*s %1023s", name) == 1)
++			func = image_func(img, name);
++		if (func)
++			denied[func - img->funcs] = true;
++	}
++	if (f)
++		fclose(f);
++	return denied;
++}
++
++int fmodret_tag(Elf *elf, struct btf *btf, const char *deny_path, int verbose)
+ {
+ 	size_t nr_funcs = 0, nr_scanned = 0, nr_undecodable = 0, nr_tags = 0;
+ 	const struct btf *base = btf__base_btf(btf);
+ 	__u32 id, nr_types = btf__type_cnt(btf);
+ 	struct scan *scan = NULL;
++	bool *denied = NULL;
+ 	struct image img;
+ 	char counts[200];
+ 	int err;
+@@ -206,6 +235,11 @@ int fmodret_tag(Elf *elf, struct btf *btf, int verbose)
+ 	if (!scan)
+ 		goto out;
+ 	set_protos(scan, &img, btf);
++	if (deny_path) {
++		denied = read_denied(&img, deny_path);
++		if (!denied)
++			goto out;
++	}
+
+ 	for (id = base ? btf__type_cnt(base) : 1, err = 0; id < nr_types && err >= 0; id++) {
+ 		const struct btf_type *t = btf__type_by_id(btf, id);
+@@ -225,6 +259,8 @@ int fmodret_tag(Elf *elf, struct btf *btf, int verbose)
+ 		func = image_func(&img, name);
+ 		if (!func || !strcmp(func->section, ".init.text"))
+ 			continue;
++		if (denied && denied[func - img.funcs])
++			continue;
+ 		nr_scanned++;
+ 		err = scan_func(scan, func, &values);
+ 		if (err == -EINVAL) {
+@@ -257,6 +293,7 @@ int fmodret_tag(Elf *elf, struct btf *btf, int verbose)
+ 		printf("  FMODRET %s\n", counts);
+ 	}
+ out:
++	free(denied);
+ 	scan_close(scan);
+ 	image_close(&img);
+ 	return err < 0 ? err : 0;
+diff --git a/tools/bpf/resolve_btfids/fmodret.h b/tools/bpf/resolve_btfids/fmodret.h
+index d61a9de..177b116 100644
+--- a/tools/bpf/resolve_btfids/fmodret.h
++++ b/tools/bpf/resolve_btfids/fmodret.h
+@@ -6,7 +6,7 @@
+
+ struct btf;
+
+-/* Tag the functions of ELF which return errors in BTF */
+-int fmodret_tag(Elf *elf, struct btf *btf, int verbose);
++/* Tag the functions of ELF which return errors in BTF, but not those in DENY_PATH */
++int fmodret_tag(Elf *elf, struct btf *btf, const char *deny_path, int verbose);
+
+ #endif
+diff --git a/tools/bpf/resolve_btfids/main.c b/tools/bpf/resolve_btfids/main.c
+index 0ac8952..b277a65 100644
+--- a/tools/bpf/resolve_btfids/main.c
++++ b/tools/bpf/resolve_btfids/main.c
+@@ -2100,6 +2100,7 @@ int main(int argc, const char **argv)
+ 		.sets     = RB_ROOT,
+ 	};
+ 	const char *btfids_path = NULL;
++	const char *fmodret_deny = NULL;
+ 	struct btf_links btf_links = {};
+ 	bool fatal_warnings = false;
+ 	bool resolve_btfids = true;
+@@ -2121,6 +2122,8 @@ int main(int argc, const char **argv)
+ 			    "extract location BTF into a .BTF.inline file"),
+ 		OPT_BOOLEAN(0, "fmodret_scan", &fmodret_scan,
+ 			    "tag the functions which return errors as fmod_ret targets"),
++		OPT_STRING(0, "fmodret_deny", &fmodret_deny, "file",
++			   "output of nm with the functions which get no tag"),
+ 		OPT_CALLBACK(0, "btf_link", &btf_links, "section:module:btf-file",
+ 			     "patch a BTF link with --patch_btfids", parse_btf_link),
+ 		OPT_STRING(0, "patch_btfids", &btfids_path, "file",
+@@ -2182,7 +2185,7 @@ int main(int argc, const char **argv)
+ 	if (btf2btf(&obj))
+ 		goto out;
+
+-	if (fmodret_scan && fmodret_tag(obj.efile.elf, obj.btf, verbose))
++	if (fmodret_scan && fmodret_tag(obj.efile.elf, obj.btf, fmodret_deny, verbose))
+ 		goto out;
+
+ 	if (finalize_btf(&obj))
+
+pw-bot: cr
