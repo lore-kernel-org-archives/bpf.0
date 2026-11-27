@@ -1,55 +1,71 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.122
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795748947;
-	b=jF2ocxPxbB5WKZhjlK7wG8M0jbSMNFT1ipHBC8AJKI6cZAowwbCCSdyl5K3a5NitSC5X
-	 ny7XNG8qZpG+uOzK9oEfT9y59tBD8G/LClp25A+Ta/0TOy0XCbE/+HZu6bUK8tBvXD0HD
-	 xc0WqUzd6hbmfsJfPiKk8p3LI4G7abje8jsOJGj9H2zMvKiuhIdTWqMxOIdhcIJQ3hif4
-	 F1WZWd0JfRyV3/ImWZxT1CuWcd0KP+lMoF1QKnkyPyW0trxxsLnlHCVbfKps3zSDXMgHV
-	 lHy2jui534FBynqBN6DvW8aSQZ+Yp6aRhu0hyH1b8OJm3g781ylplRjX9Agyj7gHVng==
+	t=1795758830;
+	b=Q4ur/R2GOI7ZJ/nd1kpGGfz23xrQCTtgNHsvZBW9+qKo/5eGXco8qFXTrPPrLnd83CoP
+	 OXO2471DgIKM3p5sinzz1g6h6aiT6i3KhCqFU/Yr04BTeJ4I7v9ppINL6b+5JgTw2/eQ/
+	 3DvPH+dbfovNtamqGW4AtgWBOye4zRcB2grdg2AzedOU3+8YUp+Nxq2qTnZku5bRFJr8m
+	 dmStYyMTuqM8/FD4d3y6FJW6oOvT2jSrM6dNMOWGQ0CaksfeDunSRUQMZuZCDqrhqYQfv
+	 17VY3Pj9pUS3BF1XGjxMqM2PRQixQRUu1lvz6iybYBbxHsjzgjzeSQ/tOK5i5R6RvpQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795748947;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:From:Date:Subject:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding:Message-Id:X-B4-Tracking:
-	 X-Change-ID:To:Cc:X-Mailer;
-	bh=T6qnIZ7knEuhMvn/FGLmk9K4xZfB2NGqdkhivjTYbDY=;
-	b=gEoAouIT7G5aH4pI0P2ruej210UKcUIJnLmHOZVwOtkuQhpqCYPtX2JJWlO0KIHq+2V4
-	 IJJoLFW5yKYmbefUPFjj9JHO795SDDnWfP0RLiS7g8Rg4Q/HJ0wlCYSBz08KYHihYbMe2
-	 52rHccMJUD9FH9CgJS4QRe8r/lQJaCyls09d3ZK1vtU2Pa9PhK+0uuaxj2L2wwphxC9Aj
-	 SXCa7TFtdBLQULuiBs7T6gb8C1DGbAtiV+PiBmc4fSrHWhxP0PlJeVLeUd/tAAu8SGTkU
-	 Xl0R3d+F/XGj6MDIfupVOh0WzdV8l0z/SjkUiQK6OVxsxlenKGAzFB0iyA2YsHvA1nw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795758830;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding;
+	bh=JrUvEB9bKJ/BNC3KUGPkt1IQIMmXxUgGHDAUEm/+p4g=;
+	b=hm1mOIWOnptb472LlpWXZlIF5vH9y9q9IAj79zrBLDOCw5klPxTmzPOiJ2N7Z2yYQEi5
+	 q8RkkuLYTTMqONnS0vprusMn2LqXje22lpl1gN2r0vM7wi1N+o51EegEukl2F0C2xF11b
+	 YC9jbbQk+NaBB2Mi7B3i0DUxMZ8eyVqpudFWhGa84U/jwbZ8LghY3TyJXDWZ3X2xsD+jv
+	 Wg4bAGr3oKrfTLalX3jrvOwaIsxb4tY7xPn/liQEPdKf3s5dRxo+g/Dca6jP8vYwjMK94
+	 ZzUQvRO3sk6JrZu3liWyNhwI3FyFRQu5x7+VRgTdj4K0oIBRctXiXMRCk2QnXtArixA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=s0BSqbI+;
-	arc=none smtp.remote-ip=95.215.58.122
-Received: from mta1.migadu.com (out-122.mta1.migadu.com [95.215.58.122])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Nk8Bv3Ih;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF2FB606A326
-	for <bpf@vger.kernel.org>; Fri, 27 Nov 2026 03:09:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CF2FB606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25FEC606A31E;
+	Fri, 27 Nov 2026 05:53:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=s0BSqbI+
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=mCX+dAX2Y234AOj5HIr3xihBIeZcfHva9jzek9gcGfU=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1795748945; v=1; x=1796353745;
- b=s0BSqbI+eAbIQqC7WMFoNdn47RylD755qd0VR+036T8m52Ar8tR63oEecIsgItGiKgs2C/vv
- UkxVguf2TdE07mwDwTK1ddkUxop3ynfH9Gb/V2tdjk05xa9Bd1RrZ/x+RCM8U8pKjJNsqNwstsa
- 72nOPI+k3ushVLwMUPQOzHrQ=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by mta11.migadu.com with ESMTPS id cfccce07b52ac0bc;
-	Fri, 27 Nov 2026 03:09:04 +0000
-X-Mizu-Trace-ID: cfccce07b52ac0bc
-X-Migadu-Flow: FLOW_OUT
-From: Hangbin Liu <hangbin.liu@linux.dev>
-Date: Fri, 27 Nov 2026 11:08:54 +0800
-Subject: [PATCH net] bonding: check slave xdp_features in bond_xdp_xmit
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Nk8Bv3Ih
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF2C61F00893;
+	Fri, 27 Nov 2026 05:53:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795758829;
+	bh=JrUvEB9bKJ/BNC3KUGPkt1IQIMmXxUgGHDAUEm/+p4g=;
+	h=From:To:Cc:Subject:Date;
+	b=Nk8Bv3Ih9yrsmEYJyuitgiLr8W1ZkwCY+r0HW3grzEQft4VtQ4XSsvYzrzXu7O3yu
+	 YQw4KKnWNVy8WVnFCVq1CVHZnCnvl5K7kXQUOG4AKxmYaNtg4kH3ljhk8D9OFoLRO8
+	 Y2A2KuXL4mRG44/vI0l08KDHC89vAJEUhmDmrNQPAz+EpCe9BkyaIArZEfJ87K5Fhz
+	 aOh46GRefK+KEEea0u7Y1EJD91kip7UBgtOj50nZyKaxFOGWKcSMTdaHALr85/QWSP
+	 TIXvho1NVxI29D+YhP+sIKliZp0DGiMzM8hBnOUhrqfqGvJg1joGWQWrxNmPU90eDe
+	 S1rkyfz2eZkag==
+From: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>
+To: Alexander Duyck <alexanderduyck@fb.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	netdev@vger.kernel.org,
+	bpf@vger.kernel.org
+Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+	kernel-team@meta.com,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Simon Horman <horms@kernel.org>,
+	Dimitri Daskalakis <dimitri.daskalakis1@gmail.com>,
+	Bobby Eshleman <bobbyeshleman@meta.com>,
+	Daniel Zahka <daniel.zahka@gmail.com>,
+	"Mike Marciniszyn (Meta)" <mike.marciniszyn@gmail.com>,
+	Mohsin Bashir <hmohsin@meta.com>,
+	Breno Leitao <leitao@debian.org>
+Subject: [PATCH net-next] eth: fbnic: Support XDP redirect
+Date: Fri, 27 Nov 2026 06:53:32 +0100
+Message-ID: <20261127055334.3156389-1-bjorn@kernel.org>
+X-Mailer: git-send-email 2.56.1
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -59,101 +75,106 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20261127-bond_xdp_xmit-v1-1-c2a7b622b95d@kylinos.cn>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yWMUQqDMBAFryLvuwETsGKvUoqY7Gq30ChJlIB49
- 6b6OQMzOyIH4YhHtSPwJlFmX0DfKrj34CdWQoVhanPX2rTKzp76TEufv5JUQyM3tutI1w6lWQK
- Pks/fE54TXpeMq/2wS/8TjuMHzHcuNnYAAAA=
-X-Change-ID: 20261127-bond_xdp_xmit-5dfe5b99d10c
-To: Jay Vosburgh <jv@jvosburgh.net>, Andrew Lunn <andrew+netdev@lunn.ch>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
- Jesper Dangaard Brouer <hawk@kernel.org>, 
- John Fastabend <john.fastabend@gmail.com>, 
- Stanislav Fomichev <sdf@fomichev.me>, Jussi Maki <joamaki@gmail.com>
-Cc: Hangbin Liu <hangbin.liu@linux.dev>, netdev@vger.kernel.org, 
- bpf@vger.kernel.org, stable@vger.kernel.org, 
- Hangbin Liu <hangbin.liu@linux.dev>
-X-Mailer: b4 0.16.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-From: Hangbin Liu <liuhangbin@kylinos.cn>
+fbnic treats XDP_REDIRECT as an invalid action: it warns and drops the
+packet, so programs on fbnic cannot redirect to devmap, cpumap or
+AF_XDP sockets.
 
-bond_xdp_xmit() may select a slave that bond_enslave() made visible
-before bond_xdp_set_features() republished the bond's xdp_features.
-Frames enqueued in that window pass __xdp_enqueue()'s bond-level
-checks, and the bulk-queue flush later calls bond_xdp_xmit() without
-rechecking anything. The selected slave may be unable to transmit
-XDP frames:
+Support the verdict and advertise NETDEV_XDP_ACT_REDIRECT. The buffers
+of a redirected packet go to the target, and a failed redirect drops
+the packet as XDP_ABORTED does. Each RX queue flushes its redirects
+once per poll.
 
-  - NETDEV_XDP_ACT_NDO_XMIT appears only once the driver's XDP TX
-    queues are up.
-  - a linear-only slave receives multi-buffer frames enqueued while
-    the bond still advertised NETDEV_XDP_ACT_NDO_XMIT_SG.
-  - with no bond->xdp_prog, bond_enslave() skips the capability
-    check: a slave without XDP joins while the bond still
-    advertises NETDEV_XDP_ACT_NDO_XMIT (built from the other
-    slaves; __xdp_enqueue() never looks at dev->xdp_prog) and
-    bond_xdp_set_features() drops the flag only afterwards.
+The NAPI vector, not a variable of the RX loop, notes that a flush is
+due, as one more live variable in that loop costs XDP_DROP six
+instructions per packet.
 
-Apply the __xdp_enqueue() contract to the selected slave at xmit
-time: require NETDEV_XDP_ACT_NDO_XMIT and, for fragmented frames,
-NETDEV_XDP_ACT_NDO_XMIT_SG, failing with -ENXIO otherwise (the
-caller frees the frames).
-
-Fixes: 9e2ee5c7e7c3 ("net, bonding: Add XDP support to the bonding driver")
-Cc: stable@vger.kernel.org # b9d460c92455 ("bpf: devmap: check XDP features in __xdp_enqueue routine")
-Signed-off-by: Hangbin Liu <liuhangbin@kylinos.cn>
+Signed-off-by: Björn Töpel <bjorn@kernel.org>
 ---
-The issue was identified when sashiko review other patches.
-The issue is theoretical and only happen in a race window, I didn't
-reproduce it.
+ drivers/net/ethernet/meta/fbnic/fbnic_netdev.c |  3 ++-
+ drivers/net/ethernet/meta/fbnic/fbnic_txrx.c   | 13 +++++++++++++
+ drivers/net/ethernet/meta/fbnic/fbnic_txrx.h   |  1 +
+ 3 files changed, 16 insertions(+), 1 deletion(-)
 
-For Sashiko,
-Please ignore the error out issues during bond_enslave. They will
-be addressed in other patches.
----
- drivers/net/bonding/bond_main.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
-
-diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
-index 042d7c75548f..6ceefb0bfc20 100644
---- a/drivers/net/bonding/bond_main.c
-+++ b/drivers/net/bonding/bond_main.c
-@@ -5664,6 +5664,7 @@ static int bond_xdp_xmit(struct net_device *bond_dev,
- 		struct xdp_frame *frame = frames[nxmit];
- 		struct xdp_frame *frames1[] = {frame};
- 		struct net_device *slave_dev;
-+		xdp_features_t feats;
- 		struct xdp_buff xdp;
+diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_netdev.c b/drivers/net/ethernet/meta/fbnic/fbnic_netdev.c
+index 52244219d166..9f0d8c070d1c 100644
+--- a/drivers/net/ethernet/meta/fbnic/fbnic_netdev.c
++++ b/drivers/net/ethernet/meta/fbnic/fbnic_netdev.c
+@@ -822,7 +822,8 @@ struct net_device *fbnic_netdev_alloc(struct fbnic_dev *fbd)
+ 	netdev->hw_enc_features |= netdev->features;
+ 	netdev->features |= NETIF_F_NTUPLE;
  
- 		xdp_convert_frame_to_buff(frame, &xdp);
-@@ -5674,6 +5675,18 @@ static int bond_xdp_xmit(struct net_device *bond_dev,
- 			break;
- 		}
+-	netdev->xdp_features = NETDEV_XDP_ACT_BASIC | NETDEV_XDP_ACT_RX_SG;
++	netdev->xdp_features = NETDEV_XDP_ACT_BASIC | NETDEV_XDP_ACT_REDIRECT |
++			       NETDEV_XDP_ACT_RX_SG;
  
-+		/* The slave can be selected before bond_xdp_set_features()
-+		 * republishes the bond's xdp_features, so apply the
-+		 * __xdp_enqueue() contract to the slave itself.
-+		 */
-+		feats = READ_ONCE(slave_dev->xdp_features);
-+		if (unlikely(!(feats & NETDEV_XDP_ACT_NDO_XMIT) ||
-+			     (!(feats & NETDEV_XDP_ACT_NDO_XMIT_SG) &&
-+			      xdp_frame_has_frags(frame)))) {
-+			err = -ENXIO;
-+			break;
-+		}
+ 	netdev->min_mtu = IPV6_MIN_MTU;
+ 	netdev->max_mtu = FBNIC_MAX_JUMBO_FRAME_SIZE - ETH_HLEN;
+diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c b/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c
+index 07d4b2e92362..da38ac1146c0 100644
+--- a/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c
++++ b/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c
+@@ -22,6 +22,7 @@ enum {
+ 	FBNIC_XDP_PASS = 0,
+ 	FBNIC_XDP_CONSUME,
+ 	FBNIC_XDP_TX,
++	FBNIC_XDP_REDIRECT,
+ 	FBNIC_XDP_LEN_ERR,
+ };
+ 
+@@ -1211,10 +1212,15 @@ static struct sk_buff *fbnic_run_xdp(struct fbnic_napi_vector *nv,
+ 		return fbnic_build_skb(nv, pkt);
+ 	case XDP_TX:
+ 		return ERR_PTR(fbnic_pkt_tx(nv, pkt));
++	case XDP_REDIRECT:
++		if (xdp_do_redirect(nv->napi.dev, &pkt->buff, xdp_prog))
++			goto xdp_exception;
++		return ERR_PTR(-FBNIC_XDP_REDIRECT);
+ 	default:
+ 		bpf_warn_invalid_xdp_action(nv->napi.dev, xdp_prog, act);
+ 		fallthrough;
+ 	case XDP_ABORTED:
++xdp_exception:
+ 		trace_xdp_exception(nv->napi.dev, xdp_prog, act);
+ 		fallthrough;
+ 	case XDP_DROP:
+@@ -1334,6 +1340,8 @@ static int fbnic_clean_rcq(struct fbnic_napi_vector *nv,
+ 				napi_gro_receive(&nv->napi, skb);
+ 			} else if (skb == ERR_PTR(-FBNIC_XDP_TX)) {
+ 				pkt_tail = nv->qt[0].sub1.tail;
++			} else if (skb == ERR_PTR(-FBNIC_XDP_REDIRECT)) {
++				nv->xdp_flush = true;
+ 			} else if (PTR_ERR(skb) == -FBNIC_XDP_CONSUME) {
+ 				fbnic_put_pkt_buff(qt, pkt, 1);
+ 			} else {
+@@ -1387,6 +1395,11 @@ static int fbnic_clean_rcq(struct fbnic_napi_vector *nv,
+ 		fbnic_clean_bdq(&qt->sub1, head1, budget);
+ 	fbnic_fill_bdq(&qt->sub1);
+ 
++	if (nv->xdp_flush) {
++		nv->xdp_flush = false;
++		xdp_do_flush();
++	}
 +
- 		err = slave_dev->netdev_ops->ndo_xdp_xmit(slave_dev, 1, frames1, flags);
- 		if (err < 1)
- 			break;
+ 	/* Record the current head/tail of the queue */
+ 	if (rcq->head != head) {
+ 		rcq->head = head;
+diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_txrx.h b/drivers/net/ethernet/meta/fbnic/fbnic_txrx.h
+index 6ee3cce3d942..7bc0c25ac50b 100644
+--- a/drivers/net/ethernet/meta/fbnic/fbnic_txrx.h
++++ b/drivers/net/ethernet/meta/fbnic/fbnic_txrx.h
+@@ -173,6 +173,7 @@ struct fbnic_napi_vector {
+ 	u16 v_idx;
+ 	u8 txt_count;
+ 	u8 rxt_count;
++	bool xdp_flush;		/* An XDP redirect awaits xdp_do_flush() */
+ 
+ 	struct fbnic_q_triad qt[];
+ };
 
----
-base-commit: e1055cbfd6eb578417f3ce983cf44462e8465267
-change-id: 20261127-bond_xdp_xmit-5dfe5b99d10c
-
-Best regards,
---  
-Hangbin Liu <liuhangbin@kylinos.cn>
+base-commit: ccb81d5e317b0ae2cc66ca1c628c0ca907928f94
+-- 
+2.56.1
 
