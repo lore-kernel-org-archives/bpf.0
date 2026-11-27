@@ -1,95 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.82.45
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795777435;
-	b=v5xWI7jIzuxy/hbTd+O5ewUChVsnb2/K4ij7g1V7PTsrUCRoV3d7sIr5WqTvrMENkhOk
-	 ah4aLiCQ0Fj++3Tqj5yPTbcIYI7nSMUkOIhcBIYWaxhZ+LZgzVOUqMQOWF6dX6Js8WQQP
-	 rgtkkPSpDfFQ8F00LZIiMZv62tVEAoyfVnOo8RvZDrqC7Gi4wrj9HAK4GBtPyj1NysIb3
-	 keGFLezv3CKzK1c8/T656Ej17KaO8H6rki4T5nHnigDHExRBvirOdrB9GM86jWfL2GML5
-	 /YbxamR3JOY1FdoCdp+wBUanJbZd1kJC+nwgU/LgGaCkof3aCr8+CpW3yA2ZyVeXClw==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795777435;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:From:Date:
-	 X-Gm-Features:Message-ID:Subject:To:Content-Type;
-	bh=4Be8VXnaq3SJu2co7uqEZlqXTgzfcxmVLcZdxR9TIV0=;
-	b=RmgJmQOTycXHtg1YfIJzTXqQ5uZKs9aSa2zqUSb8TPJNrms1NKwJH9RS9CcfqsUfR4bO
-	 8gSITBN7D5gLF9/37kPVD9rl5RuPBBXx/05tIcBsNcDFMnCFToDuVDRA1qLx9lteQc1dv
-	 qy/dfEfSCffhwaa14zhbeTbO2b1vRpKYGixklN0TbhvCw+tVcf+JfZ9n+4my3j+TUaa2v
-	 lhdK/72n7R+809rB/CKotvyQBUoETJ24Wvn3yRnkAFDhFGI0fraK4zgCfQ+ypL9o4eN8g
-	 2NSOWrjB9cLcMleMCnQb+sND2tI7GaG+RPoTwTB+ed+V5BK1XgoN8Aa5LTYOeFgPMDg==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=u9n6OxsG;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.82.45
-Received: from mail-dl1-f45.google.com (mail-dl1-f45.google.com [74.125.82.45])
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.202
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795777817;
+	b=e5UlE3DHV7AyLixiweP6udDRKAMQuUIBS9rj90Gb5qdeEUaCpx+BVef/OktlTc6TxPA1
+	 CdAl682gfkzLSAvNs9X/YhJUzh7Dh1gjrRKeO6t6x+LutUXCTb/rXFlz9SfBiN7pmhlaP
+	 xB1vdDgK4nbpi0Fobfw79F6DoP0l56J++tlHsKeja5F5MmJJ1XCetyRPM3me8uzAqW+ez
+	 OdpRvsbcPPkcFKCpp3gkHJZPmYyGd0d/8UoAqdM6El2Z6+if0WYeW8bZgjZjYmGPXarnV
+	 t3wbhixV8We2OYIwZSBQWWkxWyZmhlwttoqOFXFGkXKgRAS3WmNiH0mhCVdnvvPghMQ==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795777817;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=yAseJCXCkp3H58r0OVANX+f+65Cd2MGF7drdzRohz2Q=;
+	b=Fa2PqXwbpE8VKO1wMzPrOzBJUt+6BdHdaxijEMf4nbuwXK11aDwk5KMyiJCvJBuiDzbn
+	 W/9NFYAfWXHb+QveDWpL7akE1U7ojO2KUKitd1ZGH+zAiolLQkJ9ULGrMWEbrMS1bGU9I
+	 A2Oz8wNLCUsekkuvb1w1vvrUG6CBxPMtgFy7wR6MvIQ82tkdPdTlpm67Eh0rXMPM6Y1df
+	 O2TQD0viMOHZPR6v+VUGq0dkkfas/aH8WjTibpoNZ0jMYibFVDFXf8nPEaux6ajxBRkyq
+	 PHSrJoO0Vy8KZrQVrcWFH5hbnSPutdF8ABPELKTol+bQ162qu+sfT4qt684GlZKDykw==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="PI/ATG4u";
+	arc=none smtp.remote-ip=95.215.58.202
+Received: from mta1.migadu.com (out-202.mta1.migadu.com [95.215.58.202])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECEB1606A32D
-	for <bpf@vger.kernel.org>; Fri, 27 Nov 2026 11:03:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org ECEB1606A32D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47B12606A32C
+	for <bpf@vger.kernel.org>; Fri, 27 Nov 2026 11:10:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 47B12606A32C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=u9n6OxsG
-Received: by mail-dl1-f45.google.com with SMTP id a92af1059eb24-1b546061d58so18479014c88.1
-        for <bpf@vger.kernel.org>; Fri, 27 Nov 2026 03:03:54 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795777434; cv=none;
-        d=google.com; s=arc-20260327;
-        b=kig57sfexD123EhSxQ9PusYb1ZujoIhcIt5LPvpodzOh0cd3jHr4kToz7Z02sIa+Nm
-         4QcU0R2bRfBFJ4fKPOtRpCJYnuwqBTsdj/eA8q0o+ercS9PTaCPOdjVFB0HZFEPBy5e0
-         8OZBS0ghFe8zSWNBIMIOGEpV5t3YdKq6HWHe9AhWs4gCTT6+cm6TST2xoYkAlyvHWPV4
-         957b+2mzpFoMYxvXuwHyrYTAIhr4pF85S9bkK6ADFNF2Z6d9VLQ29HzuNh4ZUXIIMoPn
-         y0s/wegFPL5Ll6cY2JBtiLMYAvXtrl2uR2tqlNROosVglgjri5shynhiqgZvnwki2GFk
-         wQIw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=to:subject:message-id:date:from:mime-version:dkim-signature;
-        bh=4Be8VXnaq3SJu2co7uqEZlqXTgzfcxmVLcZdxR9TIV0=;
-        fh=EzXzCgbyZE43JYT8VpZvdMGfP04YCbq1jqk2hq2thO0=;
-        b=GuB63fTDPhuKYex5Fz+6HYU4It/L3uwXcbSqVUas9XtYC6LZQ+9z3k8ud3ojyVbEzn
-         y3TNElpk9/FYfk5WhzreTN57bnLvSuDheRej/tL/9414eZOEh4VD3tXpFbuFncJTE0Cd
-         yK3uitF8D1wzVvHZ6GyAu4bIrxF5r1NGftmMfXZFQJGgZYad4U9YRTYNFpVAfpOfvFwX
-         uqlQvpwXfGOTHWjuxkIBzjUnZOmkJl5E9+Ceb8fv4nMKgP5J1eEfYEu6ryo1YbPbl4t5
-         PONNQ9RB15WcGhBux+is3vpM/WrU+OKJid+e3YHBAedg8cxOFJ3hpYIqN9DhS0jEhSRB
-         t28A==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795777434; x=1796382234; darn=vger.kernel.org;
-        h=content-type:to:subject:message-id:date:from:mime-version:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=4Be8VXnaq3SJu2co7uqEZlqXTgzfcxmVLcZdxR9TIV0=;
-        b=u9n6OxsG1k3r9Ivy0OMJiUCP7bT9//f7i6t1VpCk6ydyEmhLStc6SK52Ms4YhAZzQB
-         5U69r4TVS6uOp2huxePaLT8/3aj7899LHrcpmVYdY+XSRVuHOYuCaumPSCEr+8rdOlHl
-         zY/r8R1EmtstZOXDO1c1JLsqfyajHkhKOlm5+ZN+O9/gDmAlhxmjWQbw1AeMWpV/IWfG
-         NNitZZ87Y+hsgZ773+05Ps5ktmHm5Mw1XlnvL2xVQ/10+dyLinZevE5tBFBCwuXaUwxR
-         bjN47R5TiyhXiVVYdfwjDy8elBo4skX3v0WVhzrnl7eOkEpBSVpPncd7WYtsVPz+UaOD
-         iuIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795777434; x=1796382234;
-        h=content-type:to:subject:message-id:date:from:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=4Be8VXnaq3SJu2co7uqEZlqXTgzfcxmVLcZdxR9TIV0=;
-        b=FCOwxdr6xPujwLzYV5lEcUS+nUDcnc7FanCKWbPobzdZdnafdxVvKRT4QhyVlVbepG
-         ADGNhJRx7sYgTOnFgU31EXgcxwThOYZoix7P4JGX8m3iNxbg2QOR5zD7KmJeibdfKkxh
-         PyTpWd4PPvFQgtQjDPLAbMNPoq9MSrC+uaWIGLJMtrqHKR5/vJqEDvTPeSjGhcRCzeR6
-         NyEr1VMMEYccjqwfjtwC9jR9/8bhZiW99pvgfQxu6Yoxkk3fx9jNj4DvP7npA4HzWHQ1
-         +lT1dF47VdW3ttG3wvSxYsQxlFFjgoTbws6gHqEAp2ZoCbTFOz14/1OnP0MSM10QgXpi
-         YiDg==
-X-Gm-Message-State: APuU4Z8iwvvQ/qRF5dLESScIL6KzKLYR5o4hXpEikOiq4oO195X1c3RL
-	fa1yOx2XiL8RKeB0aqd5j183qb1yyHE7igEkO/EsG5jsxstVEGKsgqwlZ5C4/8MJ4bxF2IWtXVz
-	XDNJA+Q4gXfBdYiICw0XtsiJUa+LFxqKJ6U6igdl/GnzH
-X-Gm-Gg: AZFdTZdPdpCWiAgecqEcRApxeFmQyTH323bR9sLC5zHXG8VSu1R7cqtqBnd0/Ma9x60
-	UV7T4p3kaOZapfO3feayYyJl0k5/dGzleYoydnEcNddM3sKgi0DrjHlBVecxRxtrL0gW7GWhAlF
-	JQNwx17Y8KVgw5+YW74RgpF/r0/8fUhsIMxClOEZ6b408n1rpjrK5r6UClTPDFqBL/rGIgAT1Px
-	F7Yf+zWVx4kD0QCJBop7PnQ9G13VuLzNg+zUCdn1d/W4TCOO6PSncXyG6zxXsSLxg0LgPPt3vrq
-	7rOdSrmPJO5sN0z/4I97Gqj/O1gd0xHFpFxL3FhCypt9LNU4tdmI35YdqfvhEYLNUky/ICTlczd
-	+QB78YYle5PgZW+tLnhp+IhvyJ/w4GOxEJ3waASc=
-X-Received: by 2002:a05:701b:428a:20b0:1b5:1a0d:b544 with SMTP id
- a92af1059eb24-1b5568a145bmr25834569c88.7.1795777433663; Fri, 27 Nov 2026
- 03:03:53 -0800 (PST)
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=PI/ATG4u
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=N8t62i7CUa3ZOxo+eFaX+w6ClZWF5P21IBj52O6aWrk=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1795777815; v=1; x=1796382615;
+ b=PI/ATG4uuVBho8Drhu9kpzKcA1keVE+vWfo12+W1jsBfE9AY+x1E/ZZYtN8hQWTgEAFKJLfg
+ mmHiDSKz4UMHSg9KA8TxwdU9bN5iXcTnK/AoTynCTunMvsWNKTMKXA7MX/98HANxYITmE0ndggv
+ mElyve8H9A+6BvKmWEyNyOh8=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id b147367c39aa5312;
+	Fri, 27 Nov 2026 11:10:10 +0000
+X-Mizu-Trace-ID: b147367c39aa5312
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <da0323dd-441a-46a6-ad9a-39def5fc08dc@linux.dev>
+Date: Fri, 27 Nov 2026 19:10:01 +0800
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -99,132 +58,124 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-From: ZNV <mejedi@gmail.com>
-Date: Fri, 27 Nov 2026 14:03:40 +0300
-X-Gm-Features: Aa3M54rXVy_lxET-Jghtvn0pONWmIyVu3gzJlsfMgOf4WY932yKa0ZePHJ06U7U
-Message-ID: <CAAYXoE8ORWnqLVofqZf2AxUvnV_Bd1Gsqb3qdJv+dCM2bVkvAg@mail.gmail.com>
-Subject: out of bounds context access with syscall programs + tail calls
-To: bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net 10/10] tcp: do not pass a BPF reqsk to an MPTCP
+ listener
+To: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>,
+ Eric Dumazet <edumazet@kernel.org>, "David S. Miller" <davem@davemloft.net>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Willem de Bruijn <willemb@google.com>, Simon Horman <horms@kernel.org>,
+ Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>,
+ Christoph Paasch <cpaasch@openai.com>, Florian Westphal <fw@strlen.de>
+Cc: netdev@vger.kernel.org, mptcp@lists.linux.dev,
+ Davide Caratti <dcaratti@redhat.com>, Chris Mason <mason@kernel.org>,
+ stable@vger.kernel.org, Neal Cardwell <ncardwell@google.com>,
+ Kuniyuki Iwashima <kuniyu@google.com>, Martin KaFai Lau <kafai@fb.com>,
+ Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov <ast@kernel.org>,
+ Martin KaFai Lau <martin.lau@kernel.org>, bpf@vger.kernel.org
+References: <20261123-net-mptcp-misc-fixes-7-4-rc5-v1-0-278042217e8d@kernel.org>
+ <20261123-net-mptcp-misc-fixes-7-4-rc5-v1-10-278042217e8d@kernel.org>
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <20261123-net-mptcp-misc-fixes-7-4-rc5-v1-10-278042217e8d@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi!
 
-Verifier computes prog->aux->max_ctx_access, a buffer passed to
-sys_bpf(PROG_RUN) must be at least that big (see
-bpf_prog_test_run_syscall).
 
-As far as I can tell, tail call map only enforces that the caller/callee
-program types are compatible, ignoring max_ctx_access. It is possible to
-chain 2 syscall programs via tail calls; the second one having a larger
-max_ctx_access (reproducer follows).
+On 11/23/26 9:24 PM, Matthieu Baerts (NGI0) wrote:
+> From: Chris Mason <mason@kernel.org>
+> 
+> A slab-out-of-bounds write and a panic can occur if a tc BPF program
+> that validates SYN cookies assigns an ACK to a TCP listener, and the ACK
+> then goes to an MPTCP listener of the same SO_REUSEPORT group.
+> 
+> bpf_sk_assign_tcp_reqsk() attaches a plain TCP request sock to the skb,
+> and returns -EINVAL if the program passes in an MPTCP listener. But
+> inet_steal_sock() and inet6_steal_sock() select a listener again from
+> the SO_REUSEPORT group of the listener that was passed in, and the
+> result can be an MPTCP listener. cookie_bpf_check() then passes the
+> request sock to mptcp_subflow_init_cookie_req(), which writes to members
+> of the larger struct mptcp_subflow_request_sock, so the writes can land
+> in the next object of the slab.
+> 
+> The fix used here is to drop the segment in cookie_bpf_check() if the
+> listener is an MPTCP listener. The connection then fails, instead of
+> corrupting the memory.
+> 
+> This issue has been found with the help of an LLM, and reproduced in a
+> VM, with the reproducer shared with the original version of this patch:
+> a tc BPF program validating SYN cookies -- the one from the BPF
+> selftests -- and an SO_REUSEPORT group with a TCP listener and an MPTCP
+> one, the latter being selected. With KASAN, the original version of this
+> patch reported:
+> 
+>   BUG: KASAN: slab-out-of-bounds in mptcp_subflow_init_cookie_req
+>   Write of size 1 at addr ... by task python3
+>    mptcp_subflow_init_cookie_req
+>    cookie_bpf_check
+>    cookie_v4_check
+>    tcp_v4_do_rcv
+>    tcp_v4_rcv
+> 
+> Without debug options, and with request sockets of half-open connections
+> next to the corrupted one, the kernel panicked a second later, when the
+> timer of a request socket fired:
+> 
+>   BUG: kernel NULL pointer dereference, address: 000000000000058f
+>   #PF: supervisor read access in kernel mode
+>   #PF: error_code(0x0000) - not-present page
+>   Oops: Oops: 0000 [#1] SMP NOPTI
+>   CPU: 3 UID: 0 PID: 0 Comm: swapper/3 Not tainted 7.4.0-rc1+ #1 PREEMPT(lazy)
+>   RIP: 0010:tcp_syn_ack_timeout+0xd/0x30
+>   Call Trace:
+>    <IRQ>
+>    reqsk_timer_handler+0x22e/0x500
+>    call_timer_fn+0x2a/0x140
+>    __run_timers+0x1f7/0x280
+>    run_timer_softirq+0x49/0xf0
+>    handle_softirqs+0xfa/0x300
+>    __irq_exit_rcu+0xb5/0xf0
+>    sysvec_apic_timer_interrupt+0x73/0x80
+>    </IRQ>
+>   Kernel panic - not syncing: Fatal exception in interrupt
+> 
+> Fixes: e472f88891ab ("bpf: tcp: Support arbitrary SYN Cookie.")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Chris Mason <mason@kernel.org>
+> [ Shorter comment. Commit message: how the issue was found, its
+>   symptoms, and that the connection then fails. ]
+> Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 
-I hope that the fix won't be banning bpf_tail_call in syscall programs.
-It should be possible to augment compatibility check done by
-bpf_prog_map_compatible. Apparently struct bpf_map_owner has an
-alignment gap between .sleepable and .storage_cookie[] that is large
-enough to host the 16 bit max_ctx_access.
 
-Reproducer follows. User space invokes syscall1, which in turn
-tail-calls syscall2. Syscall2 loads and returns an __u32 at ctx+8192.
-Since syscall1 doesn't access ctx at all, sys_bpf(PROG_RUN) permits any
-context size. User space invokes syscall1 with different context sizes
-and prints the returned value. Size varies to make it less likely for
-the context buffer to end up at the same address in subsequent calls,
-making syscall2 sample different locations.
+Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 
-Example output:
 
-0
-0
-ff2950a3
-ff2950a3
-492f3000
-492f3000
-7bb8
-7bb8
-0
-0
-0
-0
-0
-0
-0
+Actually, we still have a few issues with bpf_sk_assign semantics...
 
-k.c:
-#include <linux/bpf.h>
-#include <bpf/bpf_helpers.h>
+> ---
+> Cc: Neal Cardwell <ncardwell@google.com>
+> Cc: Kuniyuki Iwashima <kuniyu@google.com>
+> Cc: Martin KaFai Lau <kafai@fb.com>
+> Cc: Daniel Borkmann <daniel@iogearbox.net>
+> Cc: Alexei Starovoitov <ast@kernel.org>
+> Cc: Martin KaFai Lau <martin.lau@kernel.org>
+> Cc: bpf@vger.kernel.org
+> ---
+>  net/ipv4/syncookies.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/net/ipv4/syncookies.c b/net/ipv4/syncookies.c
+> index 89169c82431c..f39600ee3f17 100644
+> --- a/net/ipv4/syncookies.c
+> +++ b/net/ipv4/syncookies.c
+> @@ -312,7 +312,8 @@ struct request_sock *cookie_bpf_check(struct sock *sk, struct sk_buff *skb)
+>  	skb->sk = NULL;
+>  	skb->destructor = NULL;
+>  
+> -	if (cookie_tcp_reqsk_init(sk, skb, req)) {
+> +	/* reuseport can pick an MPTCP listener: req is too small for it */
+> +	if (sk_is_mptcp(sk) || cookie_tcp_reqsk_init(sk, skb, req)) {
+>  		reqsk_free(req);
+>  		req = NULL;
+>  	}
 
-SEC("syscall")
-int syscall2(void *ctx)
-{
-    bpf_printk("syscall2");
-    return 2048[(int *)ctx];
-}
-
-struct {
-    __uint(type, BPF_MAP_TYPE_PROG_ARRAY);
-    __uint(max_entries, 1);
-    __uint(key_size, sizeof(__u32));
-    __uint(value_size, sizeof(__u32));
-    __array(values, int (void *));
-} prog_array SEC(".maps") = {
-    .values = {
-        [0] = &syscall2,
-    },
-};
-
-SEC("syscall")
-int syscall1(void *ctx)
-{
-    bpf_printk("syscall1");
-    bpf_tail_call(ctx, &prog_array, 0);
-    return 0;
-}
-
-char LICENSE[] SEC("license") = "GPL";
-
-syscall-oob.c:
-#include <stdio.h>
-#include <unistd.h>
-#include <bpf/bpf.h>
-#include <bpf/libbpf.h>
-#include "k.skel.h"
-
-int main(void)
-{
-    struct k *k = k__open_and_load();
-    if (!k) {
-        perror("k__open_and_load");
-        return 1;
-    }
-
-    int fd = bpf_program__fd(k->progs.syscall1);
-    int buf[256];
-    LIBBPF_OPTS(bpf_test_run_opts, opts, .ctx_in = buf);
-
-    for (int i = 1; i < 16; i++) {
-        // do different size classes to avoid sampling the same location
-        opts.ctx_size_in = i * 16;
-        int rc = bpf_prog_test_run_opts(fd, &opts);
-        if (rc != 0) {
-            perror("bpf_prog_test_run_opts");
-        } else {
-            printf("%x\n", opts.retval);
-        }
-    }
-
-    return 0;
-}
-
-Makefile:
-syscall-oob: syscall-oob.c k.skel.h
-    clang -o syscall-oob syscall-oob.c -lbpf
-k.skel.h: k.o
-    bpftool gen skeleton k.o > k.skel.h
-k.o: k.c
-    clang -g -O2 -c -target bpf k.c -isystem
-/usr/include/aarch64-linux-gnu/ -isystem
-/usr/include/x86_64-linux-gnu/
-.PHONY:clean
-clean:
-    rm -f syscall-oob k.o k.skel.h
