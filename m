@@ -1,49 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.165
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795760411;
-	b=nukiH/LNhe8xKhhAvn+WaCGQWDXIYxgoGTQrRVvUvmB5Mto1aZoqDZah+oMFPzVOBIpX
-	 xfRW/bhtT7R08JBkAEtM0zDxQ/sbwV0/DTgMRkpVAuUPBneM/gg3CQFwIdBAkt7yEWgti
-	 w5tvU+K1a5AkHDW004CbXgMCwERjGFaqX/P4fffZuTeJXXVJTkpAX6as+53IWL4sFkwkh
-	 0303JFoYCcNSVWKvAaFAdBCMJMnZtcYyChhcV97QooMERjODxngoC8aWbQarvf2fPxlqc
-	 AKc4Ga16nsszNfCmrezEe//7w/WaiWPKQeUiLYxM1ho4DqIXzhYzLnitXahyWKVJ9Qw==
+	t=1795761219;
+	b=qZ2o5piPALjpyye41AfsiTtf/FYf2UslhJaxD54jsOcSsYBDycBzwkmw08aT0cevxqP5
+	 Sxi4QsEWcbFO5EuACAdxRylHcQwNjeXZZjhilFl2ZG5lzpPpfOQpx/jZlqjLubAKUTJrU
+	 PKwKSSYnWr6FC/WIPz7mMHn4QYUs5lh1D/ICCTIpGYY624/4R7eazr8VA5XmI1A88K4yF
+	 +pplYsoi5oNvZe6wlp8Om3DFE6Xpujvx64I4DZkYXTHAoWvW3CmpJKTjZWfwc20hvHKUr
+	 jnCMQeb2FG6HilEGrIhoo8onGjDVggENUlgI1gwViGkNAD18QNQJGj5lfRUUX6kEeYQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795760411;
-	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
-	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc;
-	bh=PcfCubSNUxJgEf/1hhF244cDfFf6tJ8Nkez42tmLWWM=;
-	b=j39D1Su5NjJNw6YCxuErHR/+Gne7vOq59uH2ikm94y9hyFL809JXZCYvZrzpWh9RPLcF
-	 OmCaRCZ5Oq8goarEVLMCSUlUk4TZIAcD6vmsV6FiO71AuhNDaI10fyWUcjCMDg7IGZUZt
-	 Pf8KDlh953OQThnz+n7mYYOj8+ARKPBTt/e17zoVadmirAbWU9M3DOWMiRN5vyWBRvhdM
-	 Rz6I3ULP/jKs/hSb22Aoo+4jigRQ0edI8iIIMqA9L8naJZ3t8BrA4sNLtfSJCi+5m/WLo
-	 nb9sghywkuCPuxQxckT4TG13LTgTBh30v+QJs+LdAyCCKZ4Gri8SN4lbjTsAtcGkSDA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795761219;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=6LC43k933l8Ek/GrSPWgwkIQo2nW1+6+OwznWt8NdeU=;
+	b=aTB3m/zuW5EbXo1SHSNgWlnzthpqL1SRvnbJ1edj4NwgU8pDwekrAuj5eQP95Aj910hB
+	 BYICxsm95WlUw0YnQKDMO+BrsEQbaxusBUIdF9gd6yd4VQwV0RLXKL0z00Klc1MVK8RLc
+	 wfLF6sUxuX26KeTC5B5Ww6zAtCPlYEc+jFDjtkGa2IS5I1+KFdZkC92Z1eLkiJckxWk6f
+	 CbDBRL3RBmxCJZ6Oh+5nKbwT2doYBCMeoWNhQvlqwh7v1+1sQVyPPjU6KTCeQgH73a3W+
+	 NujkvPqdnhUMlr0ZtC8u6/hPiQzy2A8U0wVJkcjuTkfkXpaoVrlevYBjvsFhg5dUFnQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=aAE24rwW;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Pyc4YtWB;
+	arc=none smtp.remote-ip=91.218.175.165
+Received: from mta0.migadu.com (out-165.mta0.migadu.com [91.218.175.165])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34853606A326
-	for <bpf@vger.kernel.org>; Fri, 27 Nov 2026 06:20:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85F11606A32D
+	for <bpf@vger.kernel.org>; Fri, 27 Nov 2026 06:33:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 85F11606A32D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=aAE24rwW
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 795171F00893;
-	Fri, 27 Nov 2026 06:20:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795760410;
-	bh=PcfCubSNUxJgEf/1hhF244cDfFf6tJ8Nkez42tmLWWM=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=aAE24rwWZkpSIa/8Fj4QTmr08jBgG4A1EuhyOwCBKtx+jtqBMY72sD0AoMwrXEhZT
-	 SFXvIe4Y1oJt20lUb6gtp8VZ1iRodf9OgMAa/7BBA9ja/oUdvm6L46kyBwMh4MN7BA
-	 /c8f9k9Kx+ClWvVb9DgBInUe376vsBVzBgy4fMHg6ZHBuXDqnggRpYumC7NGRIn0pH
-	 FWOlrPV8SLAKZRkZz5tG9oz6BWaWxJGq/hnbZFQStuDeOSPDSeDAN01+H/FbYP11kR
-	 4aT3CvaKBPuS6pN/H9j2KEup2mo2q80dNLRvFFhAzSjR5JyiPv3AAz8xqhlqqa9MgH
-	 ufewUXmDsAJzQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 717A53803232;
-	Fri, 27 Nov 2026 06:20:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Pyc4YtWB
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=Aqo9Gh/z13+vrH5nhABhxwXDDFLj9lawY51vL3ULqrs=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1795761215; v=1; x=1796366015;
+ b=Pyc4YtWBMb+uDyjRZFohccHRXDcqxjekMGI9XBuOksTtl7RsTdQSl90YeRagfq6ustsfEyj9
+ RXxSbMkwBQgQSKiCwi2CDTcdMz72XIz3prRT/9iFhHufQspLXgM2e/yR5BFUF99cVMJIl7Yeejd
+ l3jHHduYcvGqugwctNqkEQD4=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id bf87ac2432157dd5;
+	Fri, 27 Nov 2026 06:33:35 +0000
+X-Mizu-Trace-ID: bf87ac2432157dd5
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <bffee809-2992-40eb-97c7-72d919de0aed@linux.dev>
+Date: Fri, 27 Nov 2026 15:33:15 +0900
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -53,51 +58,91 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next 0/4] bpf: Fixes for calls,
- struct_ops and bpf_throw()
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <179576040899.781390.13687454584482283022.git-patchwork-notify@kernel.org>
-Date: Fri, 27 Nov 2026 06:20:08 +0000
-References: <20261126030342.4013902-1-alexei.starovoitov@gmail.com>
-In-Reply-To: <20261126030342.4013902-1-alexei.starovoitov@gmail.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- eddyz87@gmail.com, memxor@gmail.com
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v1 0/6] net: avoid stack canaries in TCP/IPv4
+ fast paths
+To: David Laight <david.laight.linux@gmail.com>
+Cc: netdev@vger.kernel.org, "David S . Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>, Matthieu Baerts
+ <matttbe@kernel.org>, Mat Martineau <martineau@kernel.org>,
+ Geliang Tang <geliang@kernel.org>, David Ahern <dsahern@kernel.org>,
+ Ido Schimmel <idosch@nvidia.com>, Stanislav Fomichev <sdf@fomichev.me>,
+ Neal Cardwell <ncardwell@google.com>, Kuniyuki Iwashima <kuniyu@google.com>,
+ Pablo Neira Ayuso <pablo@netfilter.org>, Florian Westphal <fw@strlen.de>,
+ Phil Sutter <phil@nwl.cc>, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, mptcp@lists.linux.dev,
+ netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+ Xuanqiang Luo <luoxuanqiang@kylinos.cn>
+References: <20261124130631.1886963-1-xuanqiang.luo@linux.dev>
+ <20261126102058.1fecf50f@pumpkin>
+From: Xuanqiang Luo <xuanqiang.luo@linux.dev>
+In-Reply-To: <20261126102058.1fecf50f@pumpkin>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hello:
-
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
-
-On Thu, 26 Nov 2026 03:03:38 +0000 you wrote:
-> From: Alexei Starovoitov <ast@kernel.org>
+On 2026/11/26 at 19:20 David Laight wrote:
+> On Tue, 24 Nov 2026 22:06:25 +0900
+> Xuanqiang Luo <xuanqiang.luo@linux.dev> wrote:
 > 
-> These patches fix bugs in the verifier. Each refuses what was allowed:
+>> From: Xuanqiang Luo <luoxuanqiang@kylinos.cn>
+>>
+>> With CONFIG_STACKPROTECTOR_STRONG=y, a function that has a local array or
+>> passes the address of one of its locals to another function needs a stack
+>> canary. The canary is set up and checked on every call, also when the
+>> local is only used on a path that almost never runs.
+>>
+>> This series removes the canary from functions of the TCP/IPv4 fast paths,
+>> by returning results by value, by using storage that is not on the stack,
+>> or by not calling a function that has nothing to do.
+>>
+>> Patch 1 returns the two mptcp_space() values in a structure, so that
+>> __tcp_select_window() no longer needs a canary.
 > 
->   patch  refused now
->   -----  ------------------------------------------------------------------
->   1      a stack that is over the limit with outgoing stack arguments
->   2      recursion without CAP_PERFMON
->   3      a reference that the caller of a struct_ops prog does not take
->   4      fexit and fsession on a subprog that throws
+> While all (I think) architectures can return a big integer in two
+> registers (dx:ax on x86), not all ABI do the same for small structures.
+> For those architectures returning a struct by value is implemented by
+> passing the address of a hidden on stack structure.
+> So code generation may be worse than passing the values by reference.
+> I can't remember the list of architectures, mostly old ones - but not
+> 32bit x86 because the compiler option was set when regparm=3 was added
+> for 2.6.
+> (Note that this is different from passing small structures by value.)
 > 
-> [...]
+> David
 
-Here is the summary with links:
-  - [bpf-next,1/4] bpf: Count outgoing stack arguments in the combined stack size
-    https://git.kernel.org/bpf/bpf-next/c/84b738acee7b
-  - [bpf-next,2/4] bpf: Require CAP_PERFMON for recursion
-    https://git.kernel.org/bpf/bpf-next/c/0d6bb3033868
-  - [bpf-next,3/4] bpf: Fix reference leaks in struct_ops programs
-    https://git.kernel.org/bpf/bpf-next/c/163a692345e5
-  - [bpf-next,4/4] bpf: Allow only fentry on a subprog that can throw
-    https://git.kernel.org/bpf/bpf-next/c/e16e7782115d
+Hi David,
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Good point! thanks for bringing that up.
 
+The small-struct-by-value pattern in patches 1 and 4 follows the same
+approach Eric used in commit 7a4cd71fa451 ("net: add
+vlan_get_protocol_offset_inline() helper"), which returns a 2-field
+struct vlan_type_depth to avoid stack canaries in callers.
 
+I did note the 8-byte struct ABI distinction you mentioned:
+- On the main 64-bit targets (x86_64, arm64, riscv64, ppc64le, loongarch64)
+   as well as 32-bit x86 (with -mregparm=3 / reg-struct-return), both
+   8-byte structs (struct mptcp_space_info and struct skb_coalesce_res) are
+   returned in registers and the stack canaries are dropped cleanly.
+- On ABIs that return structs (> 4 bytes on 32-bit ARM EABI, or any struct
+   on s390x) via a hidden stack buffer, it indeed falls back to a hidden
+   pointer. Even there, the callers previously passed *two* pointers to
+   locals (&space/&full_space in patch 1, &fragstolen/&delta_truesize in
+   patch 4), so passing one hidden 8-byte return slot should not be worse
+   than before, while keeping the code cleaner and type-safe.
+
+That said, if maintainers prefer packing the two fields into a u64 so that
+even 32-bit ARM / s390x return them in registers, I'd be happy to change
+patches 1 and 4 to do that in v2.
+
+Thanks,
+Xuanqiang
