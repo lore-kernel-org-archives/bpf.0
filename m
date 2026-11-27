@@ -1,82 +1,147 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=148.163.156.1
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795794384;
-	b=5WYgmUVPxB1uGEmHsHoetAAwjQaCV2ACsln82Fjgmr/MYM+XRDrTDTgiCkS2i6iytnDg
-	 w8VUnzXLwgIvrRKtQImWHRJEwKcfewOw+nlqLQr3HLgomUoaKRskbgrWAqdc7aM4Ur1mF
-	 s+R71t9yfnAwY8Gu8fY70UgtXjup7UpqSAvqz/q7cMALS7IlODgvV4xi31J+4suGI65a8
-	 3K09T33cYT0srd0OE4hMAZCAckXgjSm+b0EnrHh8qXRUGHv9GdieMJa8ylWl8e+eq947C
-	 oBJ/lmHO/v5hrFt48iFLLEsIwew9YLn6HvxGtRrgu6BPuwBmWzr+u9F7ITBgGCRFzfQ==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795794384;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:Received:
-	 Received:Received:Received:Received:Message-ID:Date:MIME-Version:
-	 User-Agent:Subject:To:Cc:References:Content-Language:From:
-	 Organization:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-	 X-TM-AS-GCONF:X-Proofpoint-Reinject:X-Authority-Analysis:
-	 X-Proofpoint-Spam-Info:X-Proofpoint-ORIG-GUID:X-Proofpoint-GUID:
-	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-Virus-Version:
-	 X-Proofpoint-Spam-Details;
-	bh=Ef79Sm+tXuuwj3ufmXm7GJ7x61OFnxYLGpboMdf9IBI=;
-	b=C/a+2C4ySS/wUkQifHDfC7NBIoZs06MMuL9CxIwo6IpCTHGql/BivVqDktb0lq5K3Z6O
-	 cLd79Bw+GpRaOGVcWBQwVfUeT+2Y/JVkOMDgBFhZegQJnJ02hgNGljcNH1uZzdTRYbHPP
-	 Fem7zxFPS2mra7h84AVlkh5lFYaKfvhjOkvQQovKqVrhZqepe/XzT4oU1umYZn6LBbnIl
-	 sZnnrmASLZpCb3xst4Doo9ZgPrerAjzCYiS0GxENVjgE7ACrPi8cfOhjY00MZXGKICM+V
-	 5x2HqMARPQf3YbKUT4bT8HTs1/UrUS/ROboh96I7Z6r1KNcIRYXcymmyPm0DQr4qYYQ==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.ibm.com;
-	spf=pass smtp.mailfrom=linux.ibm.com;
-	dkim=pass header.d=ibm.com header.i=@ibm.com header.a=rsa-sha256 header.s=pp1 header.b=sdEQ0NsA;
-	arc=none smtp.remote-ip=148.163.156.1
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.remote-ip=192.198.163.19
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=fail;
+	t=1795794583;
+	b=rktC8gLabKLmfBCS05aPMTmUdiMjkU1mCimab2rMAlsGm42IuNiROGJRalheTbj1g2mt
+	 vBKo59/+ZIosE+r3p/vaicTYAQlJetfLpTqgeHTXDMClZ3LJDq2YbeP42JxvIg0p/Mqc4
+	 ewAvz+E2JIRUEjxw7Nwsn0o3Uc6rbjy+LV3QoLjcReIOnGQZrt3v6kFMm0M6gtuCq3DS2
+	 yDL1LSWeeXqUpewdrJAwXZA/y8RcecI8qzW1G2bwIvs8/QX1XXkuQBJimmZU8jRpBiwDS
+	 LphDndFKLVcWkpBHGNtdTmHRMo2RL/KI5uMfmqlERybY77+0RI1HeMBGLbw7iL66QSg==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795794583;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Received:
+	 Received:Received:Received:Date:From:To:CC:Subject:Message-ID:
+	 References:Content-Type:Content-Disposition:Content-Transfer-Encoding:
+	 In-Reply-To:X-ClientProxiedBy:MIME-Version:X-MS-PublicTrafficType:
+	 X-MS-TrafficTypeDiagnostic:X-MS-Office365-Filtering-Correlation-Id:
+	 X-MS-Exchange-SenderADCheck:X-MS-Exchange-AntiSpam-Relay:
+	 X-Microsoft-Antispam:X-Microsoft-Antispam-Message-Info:
+	 X-Forefront-Antispam-Report:
+	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
+	 X-MS-Exchange-AntiSpam-MessageData-0:X-Exchange-RoutingPolicyChecked:
+	 X-MS-Exchange-CrossTenant-Network-Message-Id:
+	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
+	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
+	 X-MS-Exchange-CrossTenant-FromEntityHeader:
+	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
+	 X-MS-Exchange-CrossTenant-UserPrincipalName:
+	 X-MS-Exchange-Transport-CrossTenantHeadersStamped:X-OriginatorOrg;
+	bh=MK3FeUwe+4ajkJpyWp+UrFpr8iQf77Aov7cMvruCFlk=;
+	b=nQbAsExMdLfC5FC+5bUqE8up7qB2606UygkZ/Z2eCNZS4pN5qxZ+Y6carkohI8AV8XXm
+	 CNO6igv/doCCveGxO1Bh+7okTjrKDSda0aONWn5EEXXCW5Hlz0lvSaXtyeWGmTHub0Rjj
+	 wzI6L20x55XqCOBXGT7KQ5UY7nhwUeOr1XKG5AufPiCKiwQHXHzQgUzzHI4hOWh24bUIF
+	 IszdLSyPt9J5cvacLXGM9tsCXaKITxBBsd0PARIi2USDDv6+BLz0AD1B+kmcss2CkPW/K
+	 gxi4SCtgXV8reayt87+71Lt8Rxb5n6xl0B7YsZWAlepNYypSn7LOlMi+JjzvBmYdpTg==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=UkX1ef0V;
+	arc=fail smtp.remote-ip=192.198.163.19
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54A08606A31C;
-	Fri, 27 Nov 2026 15:46:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 54A08606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82A3B606A32D;
+	Fri, 27 Nov 2026 15:49:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 82A3B606A32D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.a=rsa-sha256 header.s=pp1 header.b=sdEQ0NsA
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6ARE4xWq1650913;
-	Fri, 27 Nov 2026 15:45:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=Ef79Sm
-	+tXuuwj3ufmXm7GJ7x61OFnxYLGpboMdf9IBI=; b=sdEQ0NsA1Rp5M9ki4aIM4f
-	7cZlgbBScopeC6p1ATCCEH+WXpatpRevj3IPaed0EcBpANh42lq2uuIXWlyy1qU7
-	AkeFHkXLSpPKXcnkFJDFdSLOtI/VyBJfwHC7ZMtZTsNYDZ/brU3myrmKhfiUjWPy
-	0fI8n1roGMw2d2nWhp0xrHWd4Pqao3FqfDG8U6CAbdzPwA3tXYpeymgXa8Q9aXTI
-	/BAS04+efAngyb4Ciq8AIUvwu3Loung1K6tCkLRINQO28gp3wVNH5YxoVv8t+jDY
-	eWi+1fVPMLICcXI0S937RiF/RVzMcibVDsTH60heWnzWLNRZxFvwet0mBj0ZpjfA
-	==
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4j34g3pgxr-1
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Fri, 27 Nov 2026 15:45:18 +0000 (GMT)
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.18.1.11/8.18.1.11) with ESMTP id 6ARE4HlC3245420;
-	Fri, 27 Nov 2026 15:45:17 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4j5uxx9cpw-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 27 Nov 2026 15:45:17 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6ARFjFm540763836
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 27 Nov 2026 15:45:15 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 08B6B2004E;
-	Fri, 27 Nov 2026 15:45:15 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id C3D1120040;
-	Fri, 27 Nov 2026 15:45:12 +0000 (GMT)
-Received: from [9.111.162.114] (unknown [9.111.162.114])
-	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Fri, 27 Nov 2026 15:45:12 +0000 (GMT)
-Message-ID: <b3e99b3a-7dd6-4e3a-97a8-3011a5f52569@linux.ibm.com>
-Date: Fri, 27 Nov 2026 16:45:12 +0100
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=UkX1ef0V
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1795794583; x=1827330583;
+  h=date:from:to:cc:subject:message-id:references:
+   content-transfer-encoding:in-reply-to:mime-version;
+  bh=GoNKTHQUYTmUsSc6yyAk4DQTkNraJXpwn99cOCL3rpc=;
+  b=UkX1ef0VWe0KwUkNpoCF5KD/8bU03ZBk0GUDdi/IgEZ2VNZLpr6YPteC
+   fUH6SaF1Cs1LxmiOXSFqcQKFzckg9FYdIfolCgL/aomWUWMjsFwfZmtz8
+   Oon7H6jpnJ+uBlIschcvj+EKUuGOlrHfgV0DljhLzw9YZWSjQ3EHdR3LH
+   fWk3i3CT827Xhc4nvtqMZnXfn4d3atkNZPynJjAsbhg2yBqwfrl71km28
+   /lqSdjp7cuavzAPfxSIGJ0BQQcDzFCiaBeX2ssjmpgaZfaMUEnXt/oKvw
+   dSRYJZlC+UPIq364KmCFxBarLrHJPjBh5IkQ41t5/4AAe8AtqMYChwepa
+   A==;
+X-CSE-ConnectionGUID: lMMtXfH4RhqUizRQQ+8YQg==
+X-CSE-MsgGUID: dHjjYrdjQO2yUnCipHl+0Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11979"; a="4727867"
+X-IronPort-AV: E=Sophos;i="6.27,237,1787036400"; 
+   d="scan'208";a="4727867"
+Received: from fmviesa011.fm.intel.com ([10.60.135.151])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2026 07:49:42 -0800
+X-CSE-ConnectionGUID: e7604/dYRXqQA3mEM5vZxQ==
+X-CSE-MsgGUID: Ycrv5VaTTdG+Igd0F/18Xw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,237,1787036400"; 
+   d="scan'208";a="14186790"
+Received: from fmsmsx903.amr.corp.intel.com ([10.18.126.92])
+  by fmviesa011.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2026 07:49:42 -0800
+Received: from FMSMSX903.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx903.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.57; Fri, 27 Nov 2026 07:49:41 -0800
+Received: from fmsedg901.ED.cps.intel.com (10.1.192.143) by
+ FMSMSX903.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.57 via Frontend Transport; Fri, 27 Nov 2026 07:49:41 -0800
+Received: from CH1PR05CU001.outbound.protection.outlook.com (52.101.193.47) by
+ edgegateway.intel.com (192.55.55.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.57; Fri, 27 Nov 2026 07:49:41 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=GFtWvczU0Pt3ay8eV02BeOFCpz3KpwXrPETvygRn/AHoLMaRvmktRyeiJCpNid2/51oVZLX/Zm5AXvyOoSCpyknUO6GFkciIkS7y249dcyFHAH7AmpfwnkRpt1oV5NAzJetObne14AnOE/pICfESnm6hCskl9Lmi9CT5Rul3+uCLrkuBU3uprpxvq28YE8XfCCU73ig7cN3VIdvNunagJSAM/31HP4sAphclBZZUJMYGN9dd2ATbNf7gKi5q+MQS918u81tg5rGtdwQ0FOJkDENLkx6hdpuCZyfSTkWeih6tkF98G/2aEl76OdwPx+nuMFQpAfMpTdPdDFDo0IafiQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=LsTEHeBiy0yp7okSUrB7FKoOr5JajlRuzt12xYwhjNw=;
+ b=jmxL4oDVo4Fbj2oFjiZ1ma8o4PAzY7M+zVBJFbFpnrz0LXlBznn1ZzqfGtS6uvEvHnTfTjZJfFdEO78Rt7dc6XC8SHKXbiTeYS6Kr80lsXPYzU6F208JVeifHmCQiUXtEi5mz5+lzDW3IW5OhDXTTX299uNJyRHK5Wa4T5Y/g9d+L4RhczEE7SRQnzbyR11FvfFk7htr1FkzsPjbSI4uW0zpRYvXRDRTvUPSmxmQbhdpiUVpA8fFce9K2iRL5DNic6fYVhBqqNJ1AHPW9j7uuFlLnDHP0QS0Uw3xN/mPNL9v9Pd6c2eMwhxNFOf5bu+1Xn1wjcXuL8IU6HolEkJVtA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from LV2PR11MB868673.namprd11.prod.outlook.com
+ (2603:10b6:408:422::13) by CH3PR11MB976373.namprd11.prod.outlook.com
+ (2603:10b6:610:364::24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.662.9; Fri, 27 Nov
+ 2026 15:49:38 +0000
+Received: from LV2PR11MB868673.namprd11.prod.outlook.com
+ ([fe80::5bfd:6afe:a9db:b7de]) by LV2PR11MB868673.namprd11.prod.outlook.com
+ ([fe80::5bfd:6afe:a9db:b7de%4]) with mapi id 15.21.0662.007; Fri, 27 Nov 2026
+ 15:49:38 +0000
+Date: Fri, 27 Nov 2026 16:49:30 +0100
+From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To: =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>
+CC: Magnus Karlsson <magnus.karlsson@intel.com>, Alexander Lobakin
+	<aleksander.lobakin@intel.com>, Alexei Starovoitov <ast@kernel.org>, "Daniel
+ Borkmann" <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>, "David S. Miller"
+	<davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski
+	<kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Willem de Bruijn
+	<willemb@google.com>, Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman
+	<eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Shuah Khan
+	<shuah@kernel.org>, <netdev@vger.kernel.org>, <bpf@vger.kernel.org>, "Simon
+ Horman" <horms@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, "Martin
+ KaFai Lau" <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song
+	<yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis
+	<emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, Tony Nguyen
+	<anthony.l.nguyen@intel.com>, Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Larysa Zaremba <larysa.zaremba@intel.com>, Tushar Vyavahare
+	<tushar.vyavahare@intel.com>, Jason Xing <kerneljasonxing@gmail.com>,
+	"Bastien Curutchet" <bastien.curutchet@bootlin.com>, Colin Ian King
+	<colin.i.king@gmail.com>, <intel-wired-lan@lists.osuosl.org>,
+	<linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH net 3/3] selftests/bpf: Drop the zero-copy tailroom from
+ the xsk tests
+Message-ID: <awmmhuuailYkTtLu@boxer>
+References: <20261127142131.3527737-1-bjorn@kernel.org>
+ <20261127142131.3527737-4-bjorn@kernel.org>
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20261127142131.3527737-4-bjorn@kernel.org>
+X-ClientProxiedBy: DB9PR02CA0007.eurprd02.prod.outlook.com
+ (2603:10a6:10:1d9::12) To LV2PR11MB868673.namprd11.prod.outlook.com
+ (2603:10b6:408:422::13)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -86,165 +151,218 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v2 03/30] unwind_user: Support Minimal DWARF CFI
- user-space unwinding
-To: Ian Rogers <irogers@google.com>, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org
-Cc: jpoimboe@kernel.org, rostedt@goodmis.org, peterz@infradead.org,
-        mingo@redhat.com, tglx@kernel.org, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, catalin.marinas@arm.com,
-        will@kernel.org, mark.rutland@arm.com,
-        linux-arm-kernel@lists.infradead.org, pjw@kernel.org,
-        palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr,
-        linux-riscv@lists.infradead.org, acme@kernel.org, namhyung@kernel.org,
-        linux-perf-users@vger.kernel.org, mhiramat@kernel.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, bpf@vger.kernel.org,
-        nathan@kernel.org, llvm@lists.linux.dev, nsc@kernel.org,
-        linux-kbuild@vger.kernel.org, ojeda@kernel.org,
-        rust-for-linux@vger.kernel.org, ardb@kernel.org,
-        linux-efi@vger.kernel.org, maz@kernel.org, oupton@kernel.org,
-        kvmarm@lists.linux.dev, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org, indu.bhagat@oracle.com,
-        wnliu@google.com, dylanbhatch@google.com
-References: <20261125061523.1540234-1-irogers@google.com>
- <20261125061523.1540234-4-irogers@google.com>
-Content-Language: en-US
-From: Jens Remus <jremus@linux.ibm.com>
-Organization: IBM Deutschland Research & Development GmbH
-In-Reply-To: <20261125061523.1540234-4-irogers@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Authority-Analysis: v=2.4 cv=SoQFe/O0 c=1 sm=1 tr=0 ts=6b09a58f cx=c_pps
- a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
- a=IkcTkHD0fZMA:10 a=zJRp6_cAMcgA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=uAbxVGIbfxUO_5tXvNgY:22 a=VnNF1IyMAAAA:8
- a=1XWaLZrsAAAA:8 a=SydnlHaeet_-pvNvn0IA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMTI3MDA2MiBTYWx0ZWRfX//27zJLiQVYf
- xNjLa9qa44AULBZTtm4EESxzfRForMWNqSTmBaImA7YWQRwKK193TC19ItTlLVgilaXwZcnzcHe
- QICuhIDhMKp+bHoMoSt/uaiJRuECQxw=
-X-Proofpoint-ORIG-GUID: cZ0MGuDQofjwbSOIcLLHaDoI3HDF3ZM6
-X-Proofpoint-GUID: qPE-_zE0roniklQP5kQm896Xq2TUdaEX
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTI3MDA2MiBTYWx0ZWRfX4zkwEbYrR0Ub
- t0vOYaJYi0U5fCUQEvK7YRpLsUhXmMQXuiM36maaVxnFZXU1rrQUthFEbLYJHfQ8mCgalEmUz9e
- B7Mif8gfIPXAX3kO+XyYclvI0cKi9WMZ/7JlebSj2IAYBHr/ka7KsyN89Cdhrx4wT4PbAfWQBAT
- vaAk2DkMcgC44nO7KjdUz6R5rjsODltvTuqXXm5ALXPLp0H/ZO8Ct1digR3BRypj4Uc1sUtuPzF
- ZH5ChZOtmSI6NzV3W/BZjmJ0Q7pdKguTBaz/OmLbUQKxiK6RMKntlafD4sSPwuDe3SlxeWhjXJO
- Vqj6sUGeFx60W2WrESFJ1gQtM74EOPI8YX9qEdKmzlI+AznCNZl6L3cVAyBCU2FLCWaOPTohD6h
- 8lDI6YxQCvH59CpgKFzbug+kiskWWh+Pqw1qEnxi9LnGRL4Ikg2RHebJTdd7adhpf3ze38WyP0K
- aXhNs6vkU6Uy4I0JVFA==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
- definitions=2026-11-27_02,2026-11-27_03,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 suspectscore=0 spamscore=0 bulkscore=0 adultscore=0
- lowpriorityscore=0 clxscore=1015 malwarescore=0 impostorscore=0 phishscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2611040001 definitions=main-2611270062
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR11MB868673:EE_|CH3PR11MB976373:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8a13797f-3c7b-43fb-0ef3-08df4c9e0b47
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|1800799024|7416014|23010399003|10067099003|56012099006|261102123227099003|261026140227099003|261026121527099003|261028144727099003|261022105027099003|261021123027099003|261021121427099003|261009221227099003|261009223027099003|17002099007|22082099003|18002099003|6133799003|11063799006|4143699003;
+X-Microsoft-Antispam-Message-Info: OghzbOwp5Bm4ZOb2ruKX+NVyvSxTKR6MMyNu2GW6/YsMajsT7c8L8jz/v3fN7PanXbrz1vpWjFIECRo037caqa1G4EqSMaqglZrXmkMhDrZvZ1JRhWxiaaYbGp5pPUY91VAoBgCddJBeL750IGGRfIOLET46SrRV+dFCPNSZnEFyf2RuUvb7enZepUHhv1s6oOJhvCht+R6IbYHX3jH17yNm3m21n/OZHqoV85rGTxB3XZxRLqoUCB7yJ4RN6Ztv+PrZt/tnusnHoh14hNFt87rdleezHq2MqAVdguql61QhlMtcJ6KmG9a81egR8euz1ek3IU1gQ707QN4y5VL2RaPv5bDnmnot4gGpXvNS/AONEXPm+jXZqd2mnIKRLVQjjBRiJRzhk95M8goxw0v7D1Upy9n6gBQVc9twL1p1t8kKEEdRLm8t3rOmBO2ale/vPw2EGba/8svTspw6+G4cDcujAkpO/mweI8RCELvbOllTJFi9IFUEHGfuHHro7UzkbZnN8yWmhv0kDJZ5AVyGLGmbFfVGYyg7flcrmAbKnUEuhUVQmgIGCFPTCQ856sj7UcovPhWe67a/FTPLOMS8tgv1WDOc7zcde90am2RDAhILe9R+SPaVU6lR0l+J1uBRYtYhiBSABMo9xqTJg5Ga8n0w0m3Aqy0Dk1kXT1v8Wjw=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR11MB868673.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024)(7416014)(23010399003)(10067099003)(56012099006)(261102123227099003)(261026140227099003)(261026121527099003)(261028144727099003)(261022105027099003)(261021123027099003)(261021121427099003)(261009221227099003)(261009223027099003)(17002099007)(22082099003)(18002099003)(6133799003)(11063799006)(4143699003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?CZp3uPec1LePFog0hbHNJL76VeYaPDzFRzBQTIb93or7/sh4oYR4hYgS1J?=
+ =?iso-8859-1?Q?3B+kKUX5HqiRXJFcs+u0Ifo472fNDwTQBYvOsvGmzC1eyd260LzX+RX7Rw?=
+ =?iso-8859-1?Q?0ZUTlCkD5ripjAwgDy6Q4SQXIc3sZn2iRzCs8JWvrz3o6zsI9koK8SocGd?=
+ =?iso-8859-1?Q?ckJlLg2TWgiFe2oRc9q3uyAR0D3C2NNdXRhKDSzLrLV6bS9cHEaaP9kFVg?=
+ =?iso-8859-1?Q?Zr7h/5CaGeh4VJc/MT01kIiPFMyZ0yuik30f7Dr0MVDZUGJksMq2UCs/BF?=
+ =?iso-8859-1?Q?qMA07jQzqLuJ0zZnPcV/j1hfebSgVWckvzmPSIpC65536NQHc5SBdsVvGJ?=
+ =?iso-8859-1?Q?rYAgjtlj7Nc9+5OhoMW08E+gAoj4G8ZKL00iWsaApgBjCM+x5NXcknWdRD?=
+ =?iso-8859-1?Q?KYgo/CWI6icLdMPgoy935nlC+wAHUU9DHsA2Q+5i7eVS3ZMH0Y4i4ofG5O?=
+ =?iso-8859-1?Q?7SMkfx3Jt4Y43LknkQoNQlYPJ2F5MHpFB4Mew6A/7ME2d5qfKBx+G6F3Tc?=
+ =?iso-8859-1?Q?PS2vxRZJaYW18DMTyj3nMa1tE+LDXU2xJNcE/4Qbgsrkhmhfb9YqJzrSGT?=
+ =?iso-8859-1?Q?DAbV6lMcrk/UuPUfL9idBm5WWWpnElFljB1LUDCxKML+gtYavnHLRxms4F?=
+ =?iso-8859-1?Q?cNagPUF4M1SHWbG5iQcYUAiK7DFnF36g+3UnMwKvIqVY9FS+E9YdJjKN/i?=
+ =?iso-8859-1?Q?SR8901gHUE3wkRMAvq3HvHiIFwb7DzbZzEoBL0xj1dwSohw6q8saeQqcNQ?=
+ =?iso-8859-1?Q?3ZDhJJLHs+K3kp6wCZ+kVjfevtr6y0pvKtVYTLJsujVxL/OmNBP2d4EfDo?=
+ =?iso-8859-1?Q?m8Z2Rfx769X6NvhdHa45U9hJu2dfl31e8+YC4y9e4+XKt6SUBey6PzZWeg?=
+ =?iso-8859-1?Q?xsXc3GkUe3yEkCWilJwAoOnOkj8LIXGPdAsQwvhCLMcQIVxz0Vn9MtHjxF?=
+ =?iso-8859-1?Q?EYAk9R/87C9tVVdtCxlT7G0m8zJ0HcCCe39rhIjH3Ml6UPjf6BllLxmUuE?=
+ =?iso-8859-1?Q?nNAQ/HCvuaOkEIz51CxpzMpXBpqddXYIFMPNfdExCIE0phCpedSo8lFYE5?=
+ =?iso-8859-1?Q?MVAX8RYWZHkVnw8OcnLlPpoU20lRQTSuEertGoJ3b/ZV162jL2LFpTJ+TR?=
+ =?iso-8859-1?Q?fOggl+nJU69rKxWxOxIibeERwxggenBaPnNsbu2eG095p1vgEqtix0sErs?=
+ =?iso-8859-1?Q?LyeL62EywwGXlo8EiE//G5PgVyyYUImIGZNvGaonRlSjkT19mOL0757s4c?=
+ =?iso-8859-1?Q?mzC36sQMrbaAfKS7EU4rpwDD77AtLzTaXj4JVyAaf0ewfDb8i/bvmpWNhi?=
+ =?iso-8859-1?Q?oiYjlF3YN8N5HD5t8QMn7l02a3nRjCrppXHWNrfmmV/RxAVG2SfgiR/D93?=
+ =?iso-8859-1?Q?b8f0j7fn2kC3vCW33ThwLP1lxB7Pv2XDEDj3d1UgqE6jiI3GPMtUAHlHj0?=
+ =?iso-8859-1?Q?5vnFoWNs6Tt+0hf6auwBIHOZl8fAyD+UH6L0y0ZW2fT/iYvEpFQL70QoAY?=
+ =?iso-8859-1?Q?kRtfRzC9O6tiQeJaOm6ei2OPcrwDW2Ev+BdnnUFnrz1HS2fZH39iKE7tDq?=
+ =?iso-8859-1?Q?j0QJFSmpuj106zhsQXhQXGoewgRVJMw1+JQsK3XhUGxWqcnV/cyM49bzDi?=
+ =?iso-8859-1?Q?DQoarn1yK9AhogD1WNi3A65N1UbB2fViV4ff6+2jBGDFYc5GFVoAqfjAQQ?=
+ =?iso-8859-1?Q?ggiWFbC+GiXqFfttCmzW5vhZfEF87MufAWlwFETsjqfuzc6eSxIhnjONTJ?=
+ =?iso-8859-1?Q?FJeMytTFt+EtQK9ctRZ8g5Bfg5mqloCAunxfN2GKxs72R7Vv5XtdQ80kzJ?=
+ =?iso-8859-1?Q?mW+IvBI1ydfJPMadxRwjqSdlxwRG/FA=3D?=
+X-Exchange-RoutingPolicyChecked: JdtkCx3/NtRv8/MTBf3RXEL2PKhX/Tkz0+fAGfik3ZcTdC2tpKWRv3w1oc/ZvN5e5hih4qiscXbZ4KHO0kWKRj7ks4l1nHKbkryQQCSt1jW+4cuTpOQnaerXe8vvhLzCLaRgOFPjdErofYJUrZb3EwjlO11HkqNIae2tPEUym80WcjmkGaO4XOuIlcydG4skFCl4yVxAnqkCZFwzros139f+pf2I8YcxqbtwiCIUnk6/ELcxCEqcJqmkKgQ8TxzQhrTuOvweprXVT5Opfy2bq3MmByoagiWxplVL9KKPVDOMXVsEj2lAqHIVnNKmrw5bB0DYictJxAyKNNNx5tf3GA==
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8a13797f-3c7b-43fb-0ef3-08df4c9e0b47
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR11MB868673.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Nov 2026 15:49:38.8539
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: e28Ny8DgTGhU3whzST1GktzaIklrLX1Ifat6TQt89V3MyxDEb/idBJlwbTZeMjwMAyPS6lkRfMjP9+6ymiiKR4XVZb2hoBdg6VLCVE5tGWk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR11MB976373
+X-OriginatorOrg: intel.com
 
-Hello Ian,
-
-some early feedback.
-
-On 11/25/2026 7:14 AM, Ian Rogers wrote:
-> Extend the generic user-space unwinder (kernel/unwind/user.c) with
-> UNWIND_USER_TYPE_CFI (CONFIG_HAVE_UNWIND_USER_CFI), resolving ELF
-> PT_GNU_EH_FRAME headers across executable VMAs in kernel/unwind/user_cfi.c.
+On Fri, Nov 27, 2026 at 03:21:29PM +0100, Björn Töpel wrote:
+> The xsk tests take the size of the shared info off the UMEM headroom
+> of RX_DROPPED and off the growth of XDP_ADJUST_TAIL_GROW_MULTI_BUFF,
+> as zero-copy multi-buffer pools kept it at the end of each chunk.
 > 
-> Key design details:
->  - Find the executable VMA and its base ELF mapping (vm_pgoff == 0)
->    under mmap_read_lock_killable(), then drop mmap_read_lock() before
->    issuing any faultable copy_from_user() reads.
->  - Cache VMA -> PT_GNU_EH_FRAME lookups (including negative lookups for
->    anonymous/JIT VMAs so unwind_user_next() falls back per frame to FP)
->    in a 4-slot per-walk cache on struct unwind_user_state.
->  - Track stack-pointer validity (state->sp_valid and
->    unwind_user_fp_sets_sp()) across mixed CFI -> FP -> CFI walks so
->    architectures whose FP step does not recover exact caller SP reject
->    SP-based rules until an outer FP-based FDE or sigreturn restores SP,
->    and support signal-frame SP recovery from *(CFA + sp_off).
->  - Provide overridable unwind_user_frame_pointer() (guarded by
->    CONFIG_HAVE_UNWIND_USER_FP), unwind_user_fp_sets_sp(), and
->    unwind_user_sigreturn() hooks alongside unwind_user_link_register()
->    and unwind_user_strip_pac(), and allow up to UNWIND_USER_MAX_SIGNALS
->    signal frames per walk to switch stacks (SA_ONSTACK).
->  - Support link-register leaf frames, DRAP/sigframe indirect CFA rules,
->    and clean bottom-of-stack termination on DW_CFA_undefined or zero RA.
+> The previous patch moves the shared info into the buffer pool, so the
+> UMEM headroom limit and the frame size no longer leave room for it.
+> Drop it from both tests.
 > 
-> Signed-off-by: Ian Rogers <irogers@google.com>
+> Signed-off-by: Björn Töpel <bjorn@kernel.org>
+> ---
+>  tools/testing/selftests/bpf/prog_tests/test_xsk.c | 10 ++++------
+>  tools/testing/selftests/bpf/prog_tests/test_xsk.h |  2 --
+>  tools/testing/selftests/bpf/prog_tests/xsk.c      | 13 +------------
+>  tools/testing/selftests/bpf/xskxceiver.c          | 15 +--------------
 
-> diff --git a/include/linux/unwind_user_types.h b/include/linux/unwind_user_types.h
+This is based on old xskxceiver location, would it be better to have this
+one send to -next out of this set? I assume the move might not have been
+back-propagated yet...so seems we would have to double the effort?
 
-> +/**
-> + * struct unwind_user_frame - Evaluated unwind rule for stepping one user frame
-> + * @cfa_off: Byte offset added to FP (when @use_fp is true) or SP to form CFA.
-
- * @cfa_off: Byte offset added to CFA base register (SP or FP) to form CFA.
-
-> + * @sp_off: Byte offset from CFA to saved caller SP when @sp_from_cfa is true.
-> + * @ra_off: Byte offset from CFA (or SP when @ra_from_sp is true) to saved RA.
-> + * @fp_off: Byte offset from CFA, FP, or SP to saved caller FP (0 if unchanged,
-> + *          unless @fp_from_fp or @fp_from_sp is set).
-> + * @use_fp: True if the CFA base register is FP rather than SP.
-> + * @cfa_indirect: True if the computed CFA address must be dereferenced once in
-> + *                user memory (DRAP or signal trampoline frame).
-> + * @sp_from_cfa: True if saved SP is located at *(cfa + @sp_off) (e.g. vdso32
-> + *               sigreturn frame where CFA points at sigcontext).
-> + * @fp_from_fp: True if saved FP is located at *(state->fp + @fp_off).
-> + * @fp_from_sp: True if saved FP is located at *(old_sp + @fp_off).
-> + * @ra_from_sp: True if saved RA is located at *(old_sp + @ra_off).
-> + * @ra_from_reg: True if RA is still in @state->ra rather than on the stack.
-
-This flag soup is confusing.  For s390 support I would need to add the
-following to support DW_CFA_register, which would make it even worse:
-
- * @sp_reg: DWARF register number containing the saved SP when if @sp_from_reg
-            is true.
- * @fp_reg: DWARF register number containing the saved FP when if @fp_from_reg
-            is true.
- * @ra_reg: DWARF register number containing the saved RA when if @ra_from_reg
-            is true.
- * @sp_from_reg: True if saved SP is located in @sp_reg.
- * @fp_from_reg: True if saved FP is located in @fp_reg.
- * @ra_from_reg: True if saved RA is located in @ra_reg.
-
-Wouldn't it be preferable to use something more similar to struct
-dwarf_cfi_row?
-
-  cfa_rule: UNDEFINED, SP, FP, SP_INDIRECT, FP_INDIRECT, REGISTER
-  cfa_reg
-  cfa_off
-
-  {sp|fp|ra}_rule: SAME, OFFSET, SP_OFFSET, FP_OFFSET, VAL_OFFSET,
-                   REGISTER, UNDEFINED
-  {sp|fp|ra}_reg
-  {sp|fp|ra}_off
-
-> + * @ra_signed: True if the recovered RA carries an AArch64 PAC signature.
-> + */
->  struct unwind_user_frame {
->  	s32 cfa_off;
-> +	s32 sp_off;
->  	s32 ra_off;
->  	s32 fp_off;
->  	bool use_fp;
-> +	bool cfa_indirect;
-> +	bool sp_from_cfa;
-> +	bool fp_from_fp;
-> +	bool fp_from_sp;
-> +	bool ra_from_sp;
-> +	bool ra_from_reg;
-> +	bool ra_signed;
-> +};
-Regards,
-Jens
--- 
-Jens Remus
-Linux on Z Development (D3303)
-jremus@de.ibm.com / jremus@linux.ibm.com
-
-IBM Deutschland Research & Development GmbH; Vorsitzender des Aufsichtsrats: Wolfgang Wendt; GeschÃ¤ftsfÃ¼hrung: David Faller; Sitz der Gesellschaft: Ehningen; Registergericht: Amtsgericht Stuttgart, HRB 243294
-IBM Data Privacy Statement: https://www.ibm.com/privacy/
-
+>  4 files changed, 6 insertions(+), 34 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/prog_tests/test_xsk.c b/tools/testing/selftests/bpf/prog_tests/test_xsk.c
+> index 4549358cc8c2..7145a36e6ea2 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/test_xsk.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/test_xsk.c
+> @@ -1984,17 +1984,16 @@ int testapp_headroom(struct test_spec *test)
+>  int testapp_stats_rx_dropped(struct test_spec *test)
+>  {
+>  	struct xsk_umem_info *umem = test->ifobj_rx->xsk->umem;
+> -	u32 umem_tr = test->ifobj_tx->umem_tailroom;
+>  
+>  	if (test->mode == TEST_MODE_ZC) {
+>  		ksft_print_msg("Can not run RX_DROPPED test for ZC mode\n");
+>  		return TEST_SKIP;
+>  	}
+>  
+> -	if (pkt_stream_replace_half(test, (MIN_PKT_SIZE * 3) + umem_tr, 0))
+> +	if (pkt_stream_replace_half(test, MIN_PKT_SIZE * 4, 0))
+>  		return TEST_FAILURE;
+>  	umem->frame_headroom = umem->frame_size -
+> -		XDP_PACKET_HEADROOM - (MIN_PKT_SIZE * 2) - umem_tr;
+> +		XDP_PACKET_HEADROOM - MIN_PKT_SIZE * 3;
+>  	if (pkt_stream_receive_half(test))
+>  		return TEST_FAILURE;
+>  	test->ifobj_rx->validation_func = validate_rx_dropped;
+> @@ -2592,12 +2591,11 @@ int testapp_adjust_tail_grow_mb(struct test_spec *test)
+>  	 * pkt_len, expect that it will be broken down to 2 descs each
+>  	 * with 3k payload;
+>  	 *
+> -	 * 4k is truesize, 3k payload, 256 HR, 320 TR;
+> +	 * 4k is truesize, 3k payload, 256 HR;
+>  	 */
+>  	grow_size = XSK_UMEM__MAX_FRAME_SIZE -
+>  		    XSK_UMEM__LARGE_FRAME_SIZE -
+> -		    XDP_PACKET_HEADROOM -
+> -		    test->ifobj_tx->umem_tailroom;
+> +		    XDP_PACKET_HEADROOM;
+>  	test->mtu = MAX_ETH_JUMBO_SIZE;
+>  
+>  	return testapp_adjust_tail(test, grow_size, XSK_UMEM__LARGE_FRAME_SIZE * 2);
+> diff --git a/tools/testing/selftests/bpf/prog_tests/test_xsk.h b/tools/testing/selftests/bpf/prog_tests/test_xsk.h
+> index 03753ddc5dcd..1b816226597b 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/test_xsk.h
+> +++ b/tools/testing/selftests/bpf/prog_tests/test_xsk.h
+> @@ -32,7 +32,6 @@
+>  #define USLEEP_MAX			10000
+>  
+>  #define MAX_SKB_FRAGS_PATH "/proc/sys/net/core/max_skb_frags"
+> -#define SMP_CACHE_BYTES_PATH "/sys/devices/system/cpu/cpu0/cache/index0/coherency_line_size"
+>  
+>  extern bool opt_verbose;
+>  #define print_verbose(x...) do { if (opt_verbose) ksft_print_msg(x); } while (0)
+> @@ -137,7 +136,6 @@ struct ifobject {
+>  	int mtu;
+>  	u32 bind_flags;
+>  	u32 xdp_zc_max_segs;
+> -	u32 umem_tailroom;
+>  	u32 max_skb_frags;
+>  	bool tx_on;
+>  	bool rx_on;
+> diff --git a/tools/testing/selftests/bpf/prog_tests/xsk.c b/tools/testing/selftests/bpf/prog_tests/xsk.c
+> index 772f3dd7ce64..b3758b9bf2ec 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/xsk.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/xsk.c
+> @@ -62,7 +62,7 @@ int configure_ifobj(struct ifobject *tx, struct ifobject *rx)
+>  
+>  static void test_xsk(const struct test_spec *test_to_run, enum test_mode mode)
+>  {
+> -	u32 max_frags, umem_tailroom, cache_line_size;
+> +	u32 max_frags;
+>  	struct ifobject *ifobj_tx, *ifobj_rx;
+>  	struct test_spec test;
+>  	int ret;
+> @@ -85,10 +85,6 @@ static void test_xsk(const struct test_spec *test_to_run, enum test_mode mode)
+>  		ifobj_tx->set_ring.default_rx = ifobj_tx->ring.rx_pending;
+>  	}
+>  
+> -	cache_line_size = read_procfs_val(SMP_CACHE_BYTES_PATH);
+> -	if (!cache_line_size)
+> -		cache_line_size = 64;
+> -
+>  	max_frags = read_procfs_val(MAX_SKB_FRAGS_PATH);
+>  	if (!max_frags)
+>  		max_frags = 17;
+> @@ -96,13 +92,6 @@ static void test_xsk(const struct test_spec *test_to_run, enum test_mode mode)
+>  	ifobj_tx->max_skb_frags = max_frags;
+>  	ifobj_rx->max_skb_frags = max_frags;
+>  
+> -	/* 48 bytes is a part of skb_shared_info w/o frags array;
+> -	 * 16 bytes is sizeof(skb_frag_t)
+> -	 */
+> -	umem_tailroom = ALIGN(48 + (max_frags * 16), cache_line_size);
+> -	ifobj_tx->umem_tailroom = umem_tailroom;
+> -	ifobj_rx->umem_tailroom = umem_tailroom;
+> -
+>  	if (!ASSERT_OK(init_iface(ifobj_rx, worker_testapp_validate_rx), "init RX"))
+>  		goto delete_rx;
+>  	if (!ASSERT_OK(init_iface(ifobj_tx, worker_testapp_validate_tx), "init TX"))
+> diff --git a/tools/testing/selftests/bpf/xskxceiver.c b/tools/testing/selftests/bpf/xskxceiver.c
+> index 7dad8556a722..a385464cfaf8 100644
+> --- a/tools/testing/selftests/bpf/xskxceiver.c
+> +++ b/tools/testing/selftests/bpf/xskxceiver.c
+> @@ -334,7 +334,7 @@ static void print_tests(void)
+>  int main(int argc, char **argv)
+>  {
+>  	const size_t total_tests = ARRAY_SIZE(tests) + ARRAY_SIZE(ci_skip_tests);
+> -	u32 cache_line_size, max_frags, umem_tailroom;
+> +	u32 max_frags;
+>  	struct pkt_stream *rx_pkt_stream_default;
+>  	struct pkt_stream *tx_pkt_stream_default;
+>  	struct ifobject *ifobj_tx, *ifobj_rx;
+> @@ -356,12 +356,6 @@ int main(int argc, char **argv)
+>  
+>  	setlocale(LC_ALL, "");
+>  
+> -	cache_line_size = read_procfs_val(SMP_CACHE_BYTES_PATH);
+> -	if (!cache_line_size) {
+> -		ksft_print_msg("Can't get SMP_CACHE_BYTES from system, using default (64)\n");
+> -		cache_line_size = 64;
+> -	}
+> -
+>  	max_frags = read_procfs_val(MAX_SKB_FRAGS_PATH);
+>  	if (!max_frags) {
+>  		ksft_print_msg("Can't get MAX_SKB_FRAGS from system, using default (17)\n");
+> @@ -370,13 +364,6 @@ int main(int argc, char **argv)
+>  	ifobj_tx->max_skb_frags = max_frags;
+>  	ifobj_rx->max_skb_frags = max_frags;
+>  
+> -	/* 48 bytes is a part of skb_shared_info w/o frags array;
+> -	 * 16 bytes is sizeof(skb_frag_t)
+> -	 */
+> -	umem_tailroom = ALIGN(48 + (max_frags * 16), cache_line_size);
+> -	ifobj_tx->umem_tailroom = umem_tailroom;
+> -	ifobj_rx->umem_tailroom = umem_tailroom;
+> -
+>  	parse_command_line(ifobj_tx, ifobj_rx, argc, argv);
+>  
+>  	if (opt_print_tests) {
+> -- 
+> 2.56.1
+> 
