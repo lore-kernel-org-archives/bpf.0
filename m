@@ -1,105 +1,88 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.54
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.52
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795776856;
-	b=a5DcIzyX1OuZYkSQTkddkFsdl90lDQSrLgRuJLG1fqEU1kG8j5CnKmryYf1Pd7rJ+/40
-	 ZS1L2BTqe8QAWSg4gJW/innKWis9zfkaFTZlvoy5bMW0n94e7pZYMkxwte1PXYpeLJi2K
-	 I+pyT5MQml1laWvQwC3cHsobwAZasQ9ET4AhQTr2JUm8wc3o2Cnujghrm6DW86PxTn3uV
-	 SVo8Oz1//3mDa4i6e65h6B5jV5sG1Cvcq+oY/yENLiOsH3TfHEQZPlwpbwAl/2hXVr88M
-	 X2RPDRT4kuXvAF9VU8SIvhszECfv1V/zzoCQimnVxcsH6rJH2DzwwKdXJApKAwXGuVw==
+	t=1795776992;
+	b=2Tn/PSYZLZDX9ar9ikgVeCj5WHd/iUod2bM3RbxvDEGw9zd76fnk0diB8/3y34BxvMnB
+	 BkIA5w+NpALADqunhazGTsAAdTdDEnCstTcU9aIFfJui82as8qRzYTBJx4EGniKburgog
+	 Yd0IGk14iAnTTDjmd39nwMa+WQH0OZQvbyBwSOIAJ2vESsG2MjbzNWN5+IW1P5FOHqsZF
+	 FCj3jLHRbkD+u8kwLlrbNVFk8ZABNPxqYYUwwSFYOaINMXlCp5VHO4lZJiLkGpQWNxGCx
+	 ZU1ezcaXynOplA7/J0UklQoQY5zv07zdvqsKXqZCVE8YLflqCyv89W/VKcr6Os5CusA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795776856;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795776992;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=8A+EQrzJxMOhp05uqIiyAdwIGwBoCs9Lfd8U4FtouNs=;
-	b=M3cVdKTUt72xCaSlL92gQb0zIx2+vVBqagAduF+vYTreKA2vvl5oNmEYfjnv3Woze7Q6
-	 5PNMk45BkPVvl0rFSgI5CseX5QBpRNH0W6t0uDu31D4zWwjE7jjKjoEYT2dZ5qYQsWPa7
-	 FPuoRI5W5F1C8Kp6ubLnbBOP+5Ow05HE0dK+h5RigI8tIgR4fpMyHibynUJeSuDO4yJry
-	 d/B+OW7ynp433DGzf1wimxpA5zjt2RLl/id9c3LxlzqApIUB11Kl0ulULm8JdSHp/r8+M
-	 ih/UlthTd1OZUgj+Rk4ESbodhooaGxn0pL1gThm6Bg+/dytc+bfsaFmckQ3fn7csCuw==
+	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
+	 Content-Language:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=1P9jh/3dNVPHo3/JRb6QOjFyR52ByPWaY+Xbs/2Psnw=;
+	b=OrKi/s7C4P46cNlBauFi8MOSGFuZO97WX91EIGaLNyYFozC/a67EEQZETaiZ3S9kjh1F
+	 RCK2ih40Icqj0f75fRq6X3ql1qeFYkdBUU/Va4y8lgATYxsJ2FTFribLE21yHwDRAdG6v
+	 EGHy6lFoBL3W3VXgB6FetS+3O6mkdpkO0YAuPdSC9dRVc6QuobjTiXuKBgJCaqn5EG8CW
+	 Rsokr3YL3CoMa5fEzc/f9QgCqJZU2/Z7Ox/GoMDyQDZGwQOU0eSV+UOMdXiThJYFUx1Iq
+	 qZ9Fmig8tCxOUnFlFJG9CRU9/3Z4VDNWWxk7/UF3I3nlvFZTxAp+uyBr64YYSUmTQxQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=roQiyCLR;
-	arc=none smtp.remote-ip=74.125.82.54
-Received: from mail-dl1-f54.google.com (mail-dl1-f54.google.com [74.125.82.54])
+	dmarc=pass header.from=linaro.org;
+	spf=pass smtp.mailfrom=linaro.org;
+	dkim=pass header.d=linaro.org header.i=@linaro.org header.a=rsa-sha256 header.s=google header.b=dyb5RJbM;
+	arc=none smtp.remote-ip=209.85.128.52
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 196CA606A31E
-	for <bpf@vger.kernel.org>; Fri, 27 Nov 2026 10:54:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 196CA606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BF94606A33B
+	for <bpf@vger.kernel.org>; Fri, 27 Nov 2026 10:56:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9BF94606A33B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=roQiyCLR
-Received: by mail-dl1-f54.google.com with SMTP id a92af1059eb24-14394530ec6so1886876c88.1
-        for <bpf@vger.kernel.org>; Fri, 27 Nov 2026 02:54:15 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.a=rsa-sha256 header.s=google header.b=dyb5RJbM
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4bb6886d30aso75835275e9.3
+        for <bpf@vger.kernel.org>; Fri, 27 Nov 2026 02:56:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795776855; x=1796381655; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=8A+EQrzJxMOhp05uqIiyAdwIGwBoCs9Lfd8U4FtouNs=;
-        b=roQiyCLRC4uvpI5vicgQSn0D6YDyr292LYaiB4arRewxkM5Kko8Be0nR+WndvstWOF
-         qUxf8uhP7eGSO9j/ADZoYb6YeHrZk11DlnJTD1p/K+VC4ELbctqXUHFFy5L3iVFlpUyH
-         l2mG+tdARplQCQrasDGvJAVDkcvG96MUEEz8EwD8FLTbmTZf36jgpqF55mhWtu8rfPMe
-         ovKCgBMixV6+0uL61QLUJRnAkAZn6y5JmldEPDa6FbDPUuutuC5Hb6Q5yde/oAu2PChD
-         sAQAi8JdcC1lV3a3xNPR8OdzRW56V79t44RyhhP8SwaSxuxt0iFbOJ8WpLVQuSeIr2Zm
-         cm9A==
+        d=linaro.org; s=google; t=1795776990; x=1796381790; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=1P9jh/3dNVPHo3/JRb6QOjFyR52ByPWaY+Xbs/2Psnw=;
+        b=dyb5RJbMSTNIthJgsi/N2ySzW1R3mcY+ZvZe6M9AuUMbmlx2TUCqkrG2xu3erNO2t+
+         Qoj9vIYm2Fdngl22sNhHrSlriisnh2LFEUQqXdYF6mSfhVxPdTknYvcBiynXMFaSR+wG
+         WnCOHJTLxU8GWrIjotHjCKr0AWZuFkiFCDMF98GVoeoJyg2WPjK6644T4whLKPa3QPV0
+         VFP1nA5/mud1GwPgrX7H1aMp2ftpoQlR1vr3Jj0gbxdP2IX1nO5tLsBKPIcxsGi98L8N
+         WBKsN0ILSfkYkl0WsTMR2/rxCZqw4WtQ988KHlu8QZXS6aLMpHItXNprbyyTSPNXrAp4
+         6tZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795776855; x=1796381655;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=8A+EQrzJxMOhp05uqIiyAdwIGwBoCs9Lfd8U4FtouNs=;
-        b=iJIfLOx81RF7Y0IAjVqylXjXaihVRBhJLabMWHbXNWYW/9Arfsx1q7Nb1m3ni2mimx
-         kV7sVmcaLPLxBb6LByCpgXrbI1Ugn3q0uDSiANVQvc93K+IQFi+FUQ7b4eQFAZtIkpvG
-         nESXndXFR7CtrWlFBgmb6PriHT14Vb+ZfMrk5xhIyIRfem4DYa6HkmiMQeFB4NMShgTF
-         JYtL5uzN+2G/PLPtnsUtuB0XIXDXogUePXAAkjFgnAfmGS4e6ezMa6TLOdLU9yVtaA29
-         6UayN6xs5j9QFUH9AgqZWUEGtzN1DYYLI4jjBrFyQbxQQoQt07cKhjwR+Z1iV3So5ffA
-         5S+Q==
-X-Forwarded-Encrypted: i=1; AL+hErGvYXwhgVJ+Nrq+etmZ4rn3ss9DJfIzCWDAOE3hPNxeH7Uf9yr8uAmSadn4IKwimyBp1As=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8lcfbmsWSJhss6zyhiaMgC0fN/dGczy8zKw+Zuu0oEDrPBrMGI
-	lUdKrTdXDSWFapKuMp5fCFmfXUfKECwzLS7GSLiTBIwFBLJUG5/BVUD3
-X-Gm-Gg: AZFdTZcMnvJrtvaUjiEYfyqAHtDr/lAiGC/AyyYmwfFF/DZeXWcQp6+PO4SphLYx5Bj
-	eGFccX9yZWSK6WHRQ2hEhrjFIforjD0Z8aUkZsoco3gwZh42jclzpOlrZ/BGx+2en67KK7lPcUc
-	2Cqr+b6eVcdk5PX740YWO8qtA4RvErmpdaK5zvzAPoL5A5CLQBPD7syyxTZ86qd0b48BOz0CvTs
-	QZsaz13LqPR2lFGwfDgZ9nAGNYy0t7Alwe2CZChRe4C7YMmkVOIwh/WjivSaAWBmzEK0WODtYqs
-	knu8romv6YW+g1PUzlK8+MCOHcHKvhG17YAAn5jTolqYIP9O+2giuSFXCEPGspI0pcnfp9lLOH7
-	Wf3+uA7RuzNCRDGvkm25m9oPMbUnDKq//g4uHZgxFXRAaMbbpjOziLvisJEp0NCS76esoIiJE1P
-	0ludZdriJSSHXlMEiXFGPpt4QSr69sw1Cvm08DsnZ5eCTEpKFgJJkjTk+VqnZY6y2S9bbpXqaKY
-	9Rd29wrndVRAjebilMwRvWrQsXRjYIi9ZxoUXFGnen+gPpleXLNZZkIrYbt5cp3clnoI5bOuEsU
-	aJPZH+fZReb97ekNWAGcudgj6QfW1EQ8AUuZucRtUXnMcDX+LAnUfq/GJdPYuDD24N3BXd2QlZP
-	ie/h493c9oUQBh4Wv86wolPw5vGYCWo3UtCDTRWZFzDYjmbonMKctcgNYtIZRiiXYjJe+lz68
-X-Received: by 2002:a05:7022:3f01:b0:160:90a3:ca8c with SMTP id a92af1059eb24-1b55689f73amr27029644c88.7.1795776855158;
-        Fri, 27 Nov 2026 02:54:15 -0800 (PST)
-Received: from localhost.localdomain ([38.114.108.154])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1b5566c1142sm54992326c88.2.2026.11.27.02.54.11
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Fri, 27 Nov 2026 02:54:14 -0800 (PST)
-From: Jason Xing <kerneljasonxing@gmail.com>
-To: willemb@google.com,
-	magnus.karlsson@intel.com,
-	maciej.fijalkowski@intel.com,
-	sdf@fomichev.me,
-	bjorn@kernel.org,
-	davem@davemloft.net,
-	edumazet@kernel.org,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org
-Cc: netdev@vger.kernel.org,
-	bpf@vger.kernel.org,
-	Jason Xing <kerneljasonxing@gmail.com>,
-	stable@vger.kernel.org
-Subject: [PATCH net v2 2/2] xsk: fill in header offsets for TX checksum offload
-Date: Fri, 27 Nov 2026 18:53:47 +0800
-Message-ID: <20261127105347.72997-3-kerneljasonxing@gmail.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20261127105347.72997-1-kerneljasonxing@gmail.com>
-References: <20261127105347.72997-1-kerneljasonxing@gmail.com>
+        d=1e100.net; s=20260707; t=1795776990; x=1796381790;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=1P9jh/3dNVPHo3/JRb6QOjFyR52ByPWaY+Xbs/2Psnw=;
+        b=Clj/vw8qWT44ESlq4DMnyk6ErnGQiVie9TyvBGfShywVKcg4gL1D15zdQCDGKJOm+a
+         iXMtoBp4lNWRYnMkDl//Za4TQzIsOTIRxZzCorQd17xNzvnUVtOe+8KKooofaluGwqdE
+         9nHZltv0D6S+HPWamo6A7N0I5nEI9BpadyMZq4OelUQjVSCYSAD8YNoc4ZI2g6UmVOWQ
+         qquKQS1YgVn07IxbyXb30SGruBsCCQNFQ45HLKotvPQbQaBxHvpLT5fkBgj/eH477XIH
+         PcD0m4JsZUG3R0ZXwJ6fKOAiB63BZCMqfEK5o8K1lroH9lWKdjDYQEBCClaCvSV22jH3
+         CL8A==
+X-Forwarded-Encrypted: i=1; AL+hErGb0Ll1TEjvA8ZdzIkA2DjmVcVdlzxJZsKz+swJsAxoc7Z12+ThOH+doyaRuq/E+j4xhMU=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+kASbvTOaEPSup8QdZV8B+qL73eo/hFGIe88h3lvtcPDHMe2zd
+	iVYUUe+ae7FFBpeffGKiQeblKhx2GDjs+dPMycX4F2a+fevkgHzZmObYeKjgRAgWlJA=
+X-Gm-Gg: AZFdTZfMsc2AuV5QxGFRGvvwbnliOIZ6kpJCZpov30BB/UTLfu1SP2eIfMxf+Klr40d
+	Zy5ayDxWyUwlTCtB/Lx0Tvr/dB+KJEqJmvil1IGcSKjVdoQIAtU5VxSgopoMIXT9/maWasuYT24
+	1bu41aGUFyhaAokMuycoZ8ZTR3OH0ZO/7Q0BxWORGa1U+XL8b+L8M6VgqV4Hgm+WI2lyOarP2nr
+	0UPu9cdLRRIXPm2xBrMQ3rwrT2bbyR4wucit925bV86N3Wi8m5cpz/KCLOHfEs696paPQQNT9Pp
+	XIZfMo4Rz8JLkJQeXbuPVC/MvyQkzs2RsSZOHZKOVkb7Ok+pde+l7aBzVLdF5D7/a1ejVhPHdgW
+	Sf0wVUp7VpIuKGt19eckKAnHV1yj4SysMCMNLAMopNw/bNDVq110AlXaWQunY8ZLLMjLG2FPTG2
+	tYWJNiKeORju1i0HINBbCBrLrVGc0FEAhdcsO7paBr4yPMw+kURMupx5XsjcsWBjcr1qyLGj5Ru
+	RIK6S1OCoDfMlgP7oECFh0oi4skRHqJlGDUK7hC3bosCOyrBB3T/aB0+GZUjXjHDYyhk7S7JYGc
+	WfcO0JR1PBKw8wqNc7zDvPvVj0ld434HHQ==
+X-Received: by 2002:a05:600c:6744:b0:4bb:afae:150d with SMTP id 5b1f17b1804b1-4bbafae24acmr75249945e9.33.1795776990010;
+        Fri, 27 Nov 2026 02:56:30 -0800 (PST)
+Received: from [192.168.1.3] ([37.18.141.193])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb906c089dsm408746585e9.1.2026.11.27.02.56.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 Nov 2026 02:56:29 -0800 (PST)
+Message-ID: <9a471409-04c2-4f6e-aec9-0b23bb9b69f0@linaro.org>
+Date: Fri, 27 Nov 2026 10:56:27 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -109,120 +92,90 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 0/3] arm64: Add BRBE support for
+ bpf_get_branch_snapshot()
+To: Leo Yan <leo.yan@arm.com>, Puranjay Mohan <puranjay12@gmail.com>
+Cc: vladimir.murzin@arm.com, Mark Rutland <mark.rutland@arm.com>,
+ Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
+ Anshuman Khandual <anshuman.khandual@arm.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ Rob Herring <robh@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
+ Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>,
+ Adrian Hunter <adrian.hunter@intel.com>, Shuah Khan <shuah@kernel.org>,
+ Breno Leitao <leitao@debian.org>, Ravi Bangoria <ravi.bangoria@amd.com>,
+ Stephane Eranian <eranian@google.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Usama Arif
+ <usama.arif@linux.dev>, linux-arm-kernel@lists.infradead.org,
+ linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, kernel-team@meta.com,
+ Andrii Nakryiko <andrii.nakryiko@gmail.com>
+References: <20260810164622.1829843-1-puranjay@kernel.org>
+ <CANk7y0ixo5a3Vfzj_HVhVHRNce2Rsit4pP27GCtXd4jHHzmiKg@mail.gmail.com>
+ <CAEf4BzapC=7YM2QLMyKKfyOWGgBTfEJmPPN8e9Jf5xT9SutBTQ@mail.gmail.com>
+ <dfa8362e-0dad-4f23-9d2e-dde03cb5facc@linaro.org>
+ <CAEf4BzZ=ahQNtA-1KdZFRONXMOEkV9Nb1OUY==JRQCarkbMM0Q@mail.gmail.com>
+ <5c7f4a5f-fe5e-4367-9c60-86f1818346e8@linaro.org>
+ <20261126180214.GB809232@e132581.arm.com>
+Content-Language: en-US
+From: James Clark <james.clark@linaro.org>
+In-Reply-To: <20261126180214.GB809232@e132581.arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-An XDP_TXMD_FLAGS_CHECKSUM request is turned into an skb carrying
-CHECKSUM_PARTIAL by xsk_skb_metadata() where csum_start/csum_offset/
-ip_summed are set.
 
-However skb->protocol stays 0, the offload never actually reaches
-the hardware and checksum ends up being computed in software every time
-(please see skb_checksum_help() in xsk path):
-1. harmonize_features() strips the checksum features on devices.
-2. ice_features_check() rejects the frame on NETIF_F_HW_CSUM capable ice.
 
-The frame layout comes from user space, and request.csum_start is
-already the offset of the L4 header from the start of the frame, so the
-transport header is known exactly.
+On 26/11/2026 18:02, Leo Yan wrote:
+> On Thu, Nov 26, 2026 at 12:39:52PM +0000, James Clark wrote:
+> 
+> [...]
+> 
+>>>>> Mark, Will, you guys seems to be designated as maintainers for
+>>>>> drivers/perf/arm_brbe.c, can you please take a look and give your
+>>>>> feedback as well? This is important and useful feature for newer arm64
+>>>>> CPUs, it would be great to get access to this functionality that we
+>>>>> had on x86-64 side for a long while now. Please help get this upstream
+>>>>> or, if it's not in the right shape, guide Puranjay towards a better
+>>>>> implementation. Thank you!
+> 
+> ...
+> 
+>> + Vladimir
+>>
+>> Hi Mark, Will, Vladimir,
+>>
+>> Any thoughts on this approach where NMIs need to be disabled? Alternatively
+>> we could do something like track where the PMU interrupts and BPF snapshots
+>> overlap and then discard the BRBE buffer and make sure they don't trample on
+>> each other etc, but it looks like it would be significantly more
+>> complicated.
+> 
+> Could we restrict bpf_get_branch_snapshot() on arm64 to a free-running
+> BRBE mode? On a given CPU, at least one active event would have to
+> request a branch stack, and every such event would have to be a
+> counting event.
+> 
+> This seems to fit in this series. The selftest opens a CPU-cycles event
+> with PERF_SAMPLE_BRANCH_STACK and sample_period = 0, then takes the
+> snapshot from an fexit program.
+> 
+> Counting events can still generate overflow interrupts for bookkeeping.
+> It requires to refactor the PMU driver to leave BRBCR_ELx.FZP clear so
+> an overflow doesn't freeze BRBE. The interrupt handler could service the
+> counters without touching BRBE and losing the branch records.
+> 
+> Thanks,
+> Leo
 
-Only the L2 length has to be found, by parsing the Ethernet header and,
-when present, the VLAN tag stack. skb_header_pointer() is used for that,
-so it works for frames whose data is not in the linear part of the skb.
+Yeah I think this is a pretty good idea. It looks like it would avoid 
+having to disable NMIs. You only need a local_irq_save() to avoid new 
+events from reconfiguring BRBE while taking a snapshot, and you don't 
+have to disable the PMU counters either.
 
-skb->protocol is set to the outer ethertype, as the rest of the stack does
-for in-band VLAN tags, so skb_vlan_tagged() and vlan_features_check()
-keep seeing the tags. can_checksum_protocol() and the drivers get the L3
-type through vlan_get_protocol(). The mac header is anchored by
-__dev_direct_xmit() in the previous patch.
-
-A frame whose L2 header cannot be parsed, whose L3 type is not IPv4 or
-IPv6, or whose csum_start does not leave room for an L3 header cannot be
-described to the hardware, so it keeps being checksummed in software
-exactly as before.
-
-The patch is based on Maciej suggestion: 1) do not rely on mac header that
-probe in AF_PACKET uses, 2) use skb_header_pointer and walk vlan tags to
-inspect the accurate location of each field that existing drivers
-possibly use.
-
-[1]: https://lore.kernel.org/all/arKm5gCaERk6MaGA@boxer/
-
-Fixes: 48eb03dd2630 ("xsk: Add TX timestamp and TX checksum offload support")
-Cc: stable@vger.kernel.org
-Suggested-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Signed-off-by: Jason Xing <kerneljasonxing@gmail.com>
----
- net/xdp/xsk.c | 47 +++++++++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 45 insertions(+), 2 deletions(-)
-
-diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-index 52d538160e0a..8f566996a6dd 100644
---- a/net/xdp/xsk.c
-+++ b/net/xdp/xsk.c
-@@ -11,8 +11,12 @@
- 
- #define pr_fmt(fmt) "AF_XDP: %s: " fmt, __func__
- 
-+#include <linux/if_arp.h>
-+#include <linux/if_vlan.h>
- #include <linux/if_xdp.h>
- #include <linux/init.h>
-+#include <linux/ip.h>
-+#include <linux/ipv6.h>
- #include <linux/sched/mm.h>
- #include <linux/sched/signal.h>
- #include <linux/sched/task.h>
-@@ -1027,9 +1031,48 @@ static int xsk_skb_metadata(struct sk_buff *skb, void *buffer,
- 
- static int xsk_skb_sw_csum(struct sk_buff *skb, struct xsk_buff_pool *pool)
- {
--	if (unlikely(pool->tx_sw_csum &&
--		     skb->ip_summed == CHECKSUM_PARTIAL))
-+	struct ethhdr eth_buf, *eth;
-+	int nhoff = ETH_HLEN;
-+	unsigned int l3_min;
-+	__be16 proto;
-+
-+	if (unlikely(skb->ip_summed != CHECKSUM_PARTIAL))
-+		return 0;
-+
-+	if (unlikely(pool->tx_sw_csum))
-+		return skb_checksum_help(skb);
-+
-+	if (unlikely(skb->dev->type != ARPHRD_ETHER))
-+		return 0;
-+
-+	eth = skb_header_pointer(skb, 0, sizeof(*eth), &eth_buf);
-+	if (unlikely(!eth))
-+		return skb_checksum_help(skb);
-+
-+	proto = eth->h_proto;
-+	if (eth_type_vlan(proto)) {
-+		proto = __vlan_get_protocol(skb, proto, &nhoff);
-+		if (unlikely(!proto))
-+			return skb_checksum_help(skb);
-+	}
-+
-+	switch (proto) {
-+	case htons(ETH_P_IP):
-+		l3_min = sizeof(struct iphdr);
-+		break;
-+	case htons(ETH_P_IPV6):
-+		l3_min = sizeof(struct ipv6hdr);
-+		break;
-+	default:
- 		return skb_checksum_help(skb);
-+	}
-+
-+	if (unlikely(skb_checksum_start_offset(skb) < nhoff + l3_min))
-+		return skb_checksum_help(skb);
-+
-+	skb->protocol = eth->h_proto;
-+	skb_set_network_header(skb, nhoff);
-+	skb_set_transport_header(skb, skb_checksum_start_offset(skb));
- 
- 	return 0;
- }
--- 
-2.43.7
-
+If any sampling BRBE event gets scheduled then the snapshots just start 
+skipping and returning empty.
