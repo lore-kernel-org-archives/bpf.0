@@ -1,48 +1,48 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795760406;
-	b=1FXrNt7kIn3QhDhX9dSUheAGd3rzIHJB38s56SIia+oqiMs5GkpK1DXk2FyO8dqF3R6+
-	 IL2c9MusiB031IXvh/PCNP9W0TPXXjT0MMhL0VwlagmVDmrnaPrOoFJxtLZI1FohI1o7B
-	 7eRPSSF4Yo4LPCc7AdRmMVCkM1PfsSyi40p4AA19PiY0XyCDD0rhYUNjsgUloQMo0xBDU
-	 /SilQ0VL82ktpW/uF1GK2L16qa2YZ2nAIegef+bMKhkthUdDCpN1+hFCqQKc1eiOnvNfl
-	 rBOBZlYH/6UP0TLddnI836slqr26p0oG5o6XPhhzKuwA66yK3Pko5eYl+bJMJ7pwDrg==
+	t=1795760411;
+	b=nukiH/LNhe8xKhhAvn+WaCGQWDXIYxgoGTQrRVvUvmB5Mto1aZoqDZah+oMFPzVOBIpX
+	 xfRW/bhtT7R08JBkAEtM0zDxQ/sbwV0/DTgMRkpVAuUPBneM/gg3CQFwIdBAkt7yEWgti
+	 w5tvU+K1a5AkHDW004CbXgMCwERjGFaqX/P4fffZuTeJXXVJTkpAX6as+53IWL4sFkwkh
+	 0303JFoYCcNSVWKvAaFAdBCMJMnZtcYyChhcV97QooMERjODxngoC8aWbQarvf2fPxlqc
+	 AKc4Ga16nsszNfCmrezEe//7w/WaiWPKQeUiLYxM1ho4DqIXzhYzLnitXahyWKVJ9Qw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795760406;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795760411;
 	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
 	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
 	 In-Reply-To:To:Cc;
-	bh=5XcuTyDwg/MEDvXo1mNORYpYATakPkZce3MDDEj6eNg=;
-	b=Q6YWZXlxjfjPObHicY95I/PvYLAq92MLZzALq+Szw34fVvgbKCDZ1QfI5V+E8+HYC2w7
-	 T13f1/QmRlb3WUUEkWO5nsYWyZWrVGkqLw7s0Sa4tqqG/6ILNICJVXaosl00CloiHyXl8
-	 I2XH0GLVxMXksunxlpjr4bOgcFEot9MKV2UHXrizd4Ji6/g+Ym40gew1mctX6RHPYjC2d
-	 LvSbHJzePiNYFby9RBhH4aHpqSAoTRQD1tkUg43XH9jsuX6OWfmt/5YB8cVcjyI6tRf0k
-	 x9nTCbo1Yo5PTR4SbLquIJy6Pf7x3DURF2u8TYFgY6+832xsXZfj+vB5ttSDSv0XE/Q==
+	bh=PcfCubSNUxJgEf/1hhF244cDfFf6tJ8Nkez42tmLWWM=;
+	b=j39D1Su5NjJNw6YCxuErHR/+Gne7vOq59uH2ikm94y9hyFL809JXZCYvZrzpWh9RPLcF
+	 OmCaRCZ5Oq8goarEVLMCSUlUk4TZIAcD6vmsV6FiO71AuhNDaI10fyWUcjCMDg7IGZUZt
+	 Pf8KDlh953OQThnz+n7mYYOj8+ARKPBTt/e17zoVadmirAbWU9M3DOWMiRN5vyWBRvhdM
+	 Rz6I3ULP/jKs/hSb22Aoo+4jigRQ0edI8iIIMqA9L8naJZ3t8BrA4sNLtfSJCi+5m/WLo
+	 nb9sghywkuCPuxQxckT4TG13LTgTBh30v+QJs+LdAyCCKZ4Gri8SN4lbjTsAtcGkSDA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="h/JcxjDu";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=aAE24rwW;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1AAC606A31C
-	for <bpf@vger.kernel.org>; Fri, 27 Nov 2026 06:20:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34853606A326
+	for <bpf@vger.kernel.org>; Fri, 27 Nov 2026 06:20:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=h/JcxjDu
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 019AF1F00898;
-	Fri, 27 Nov 2026 06:20:06 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=aAE24rwW
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 795171F00893;
+	Fri, 27 Nov 2026 06:20:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795760406;
-	bh=5XcuTyDwg/MEDvXo1mNORYpYATakPkZce3MDDEj6eNg=;
+	s=k20260515; t=1795760410;
+	bh=PcfCubSNUxJgEf/1hhF244cDfFf6tJ8Nkez42tmLWWM=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=h/JcxjDu45mAacvrgali8EQNc6rzXI73KV1OoJSZaqOMvMlEsXs12PEgNO2ZcbozH
-	 uUJs1+TnfVz9hyT36lFszfw46oAx0N6q6WSobK8SSVv4sexai1o0WLd9rnr8iYYstm
-	 7z4DM9krKJ3hhW6qE3OSAufVLugbCAfSGici7cX4pRUTw4zJ8/4izeMese7ZeZry+l
-	 D2JhhNMZ+Knl/jDdSAGmEsmBCJm4ISDHyn4Dy6x3nePny4aKfvGmHia6XBlIj9EiuZ
-	 sl+P0SNjqp3wewPTXkfV8bsn8dhhjnuTmXUSAqTajU53BKE0y4m1YyCV79lz5aawnv
-	 pCQULTSUivsxA==
+	b=aAE24rwWZkpSIa/8Fj4QTmr08jBgG4A1EuhyOwCBKtx+jtqBMY72sD0AoMwrXEhZT
+	 SFXvIe4Y1oJt20lUb6gtp8VZ1iRodf9OgMAa/7BBA9ja/oUdvm6L46kyBwMh4MN7BA
+	 /c8f9k9Kx+ClWvVb9DgBInUe376vsBVzBgy4fMHg6ZHBuXDqnggRpYumC7NGRIn0pH
+	 FWOlrPV8SLAKZRkZz5tG9oz6BWaWxJGq/hnbZFQStuDeOSPDSeDAN01+H/FbYP11kR
+	 4aT3CvaKBPuS6pN/H9j2KEup2mo2q80dNLRvFFhAzSjR5JyiPv3AAz8xqhlqqa9MgH
+	 ufewUXmDsAJzQ==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EB8813803232;
-	Fri, 27 Nov 2026 06:20:05 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 717A53803232;
+	Fri, 27 Nov 2026 06:20:10 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -54,38 +54,46 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf] bpf: Set the run context for async callbacks
+Subject: Re: [PATCH bpf-next 0/4] bpf: Fixes for calls,
+ struct_ops and bpf_throw()
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <179576040475.781390.18065692189241483869.git-patchwork-notify@kernel.org>
-Date: Fri, 27 Nov 2026 06:20:04 +0000
-References: <20261126033114.4111944-1-alexei.starovoitov@gmail.com>
-In-Reply-To: <20261126033114.4111944-1-alexei.starovoitov@gmail.com>
+ <179576040899.781390.13687454584482283022.git-patchwork-notify@kernel.org>
+Date: Fri, 27 Nov 2026 06:20:08 +0000
+References: <20261126030342.4013902-1-alexei.starovoitov@gmail.com>
+In-Reply-To: <20261126030342.4013902-1-alexei.starovoitov@gmail.com>
 To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 Cc: bpf@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org,
  eddyz87@gmail.com, memxor@gmail.com
 
 Hello:
 
-This patch was applied to bpf/bpf.git (master)
+This series was applied to bpf/bpf-next.git (master)
 by Alexei Starovoitov <ast@kernel.org>:
 
-On Thu, 26 Nov 2026 03:31:14 +0000 you wrote:
+On Thu, 26 Nov 2026 03:03:38 +0000 you wrote:
 > From: Alexei Starovoitov <ast@kernel.org>
 > 
-> bpf_get_retval(), bpf_set_retval() and bpf_get_local_storage() use
-> current->bpf_ctx, which the hook sets. bpf_getsockopt() and
-> bpf_setsockopt() count on the hook to hold the socket lock.
-> bpf_sys_bpf(), bpf_sys_close(), bpf_btf_find_by_name_kind() and
-> bpf_kallsyms_lookup_name() use the credentials and the files of
-> current. An async callback runs in a timer, in a kworker, in an RCU
-> callback or in a task that the program has picked.
+> These patches fix bugs in the verifier. Each refuses what was allowed:
+> 
+>   patch  refused now
+>   -----  ------------------------------------------------------------------
+>   1      a stack that is over the limit with outgoing stack arguments
+>   2      recursion without CAP_PERFMON
+>   3      a reference that the caller of a struct_ops prog does not take
+>   4      fexit and fsession on a subprog that throws
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf] bpf: Set the run context for async callbacks
-    https://git.kernel.org/bpf/bpf/c/02d3452bdd80
+  - [bpf-next,1/4] bpf: Count outgoing stack arguments in the combined stack size
+    https://git.kernel.org/bpf/bpf-next/c/84b738acee7b
+  - [bpf-next,2/4] bpf: Require CAP_PERFMON for recursion
+    https://git.kernel.org/bpf/bpf-next/c/0d6bb3033868
+  - [bpf-next,3/4] bpf: Fix reference leaks in struct_ops programs
+    https://git.kernel.org/bpf/bpf-next/c/163a692345e5
+  - [bpf-next,4/4] bpf: Allow only fentry on a subprog that can throw
+    https://git.kernel.org/bpf/bpf-next/c/e16e7782115d
 
 You are awesome, thank you!
 -- 
