@@ -1,79 +1,165 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=40.107.130.125
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795769060;
-	b=xyKY1cnxnElNY2xBnTMrM9uAtzMliK3S6gScdUGsaA41V6gEetJpVCRu3PVElHFOsjCW
-	 7Wf9lwZtB3jcv5R9WS1MptpDcffWpfdMY59HxGSv0UYs4Dy1OclqTS9O8pcONpdWW4dlt
-	 behjAFFiW2Q/ZfR8od1pQxOEYza8vzm7jH0SZa7xYMl+VOsMP5RIu/vOA5qFb9pFQf/1d
-	 yyWBGtmww3bByqQwokZb/zIPvNYYB/Zv5sfduvB3yv0eM8p9lw7ySGVB1wQmXghtBQ3xK
-	 Lu/3lDUqnYmTkcL4EAeU/mQlBIzAp8EuHx0DgbJaQsdVH5FhHzdRhKcMznrGRVJ5GwA==
+	t=1795769358;
+	b=sBGoDG0nU6nwuPfeQEuZ9kWUs7zBpLHSyiGVrEYYqtC2VbTKXLF63il7H1XiOQb48xLt
+	 EYvYWFtDyU7A6mPDs4Er6GCw+bRRfNSyJ+PHgJSg2EQGmeUU+rbMXkI37gGj1fWCCtXnA
+	 7cyu001avbR+ICnfPhaWhqN8NMb5y2pWGgk/TItZB1tPL/HTwbarC35SrOLL6D3BP/SgU
+	 9UYoMRelRuWbqYMlcC7weVpDr9BWW4naili+AMHXKldxTLgSZLMiZrTe1VY6FC0htsWUq
+	 kmsM72pvKHSxQz/bHg4GbODngHGqkFicf+8IMfyLzhfkZ5HPn1J1H6M+idplfJz8agQ==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795769060;
-	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
-	 Content-Type:Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=ft75ArHu5r34Kk5GxNfYciluJYRTvCnqrrb0D3xZQgQ=;
-	b=WSC6kpHfKSoAQjRhK49CM5o7UJ0mjED3u3z93pdKSJEPFbYdBQ/iYhrfee7jQvP7cbdY
-	 UBPu7g1MSNcqHIE+Sgw7GMa4c9DINlx4PxFA/oZe2aQtz+PbZP7scHNykJp1LTXyPaOd3
-	 4NgaYXfM3QLQ6GaSeUvCeZZN2+KweH7LbvTzZFWnqgPa4DBh9kZaW+RvXep2PJdSvFdeL
-	 5TzSlxOpfAqBEvJCt3k6xnsXrpSYHCgrrMk/gh+U3jmcuK71MGTmV8lPCTrW6DYWoiPy2
-	 jgcY/Xn/ttRu6DKPDWpkYu/RXT2utnYkaODfsgM0psOSDsrpBNP6IuScGLbW+LDOn9g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795769358;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:From:To:CC:Subject:
+	 Thread-Topic:Thread-Index:Date:Message-ID:References:In-Reply-To:
+	 Accept-Language:Content-Language:X-MS-Has-Attach:X-MS-TNEF-Correlator:
+	 x-ms-publictraffictype:x-ms-traffictypediagnostic:
+	 x-ms-office365-filtering-correlation-id:x-ms-exchange-senderadcheck:
+	 x-ms-exchange-antispam-relay:x-microsoft-antispam:
+	 x-microsoft-antispam-message-info:x-forefront-antispam-report:
+	 x-ms-exchange-antispam-messagedata-chunkcount:
+	 x-ms-exchange-antispam-messagedata-0:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version:X-OriginatorOrg:
+	 X-MS-Exchange-CrossTenant-AuthAs:X-MS-Exchange-CrossTenant-AuthSource:
+	 X-MS-Exchange-CrossTenant-Network-Message-Id:
+	 X-MS-Exchange-CrossTenant-originalarrivaltime:
+	 X-MS-Exchange-CrossTenant-fromentityheader:
+	 X-MS-Exchange-CrossTenant-id:X-MS-Exchange-CrossTenant-mailboxtype:
+	 X-MS-Exchange-CrossTenant-userprincipalname:
+	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
+	bh=3RGnzTdg+afaO5IiH9+ZS8CbcQlMKxIDvDKlgMyZiS0=;
+	b=g1uviTI5gvyPA9t6ZX7mdYGkrZfbZVO18kkAjWKCuZMoHXNvCkRIaxU3VOV5RULV7CWO
+	 HkQwCjMr/+4V3N6FosYnAlHIOGFxCOswepGh5Qeq/wLfAQFAFNFDJkbnUw7ZIPKKLCW/O
+	 ZsM2QZf+7IsBOyogzN+EbMldxDegQqaEsIuLdq1n7uss54vMC2zvuPLETgMxpOCwkUmLP
+	 TkPwBeWqxlmI+32q9iAUTIV4GhG8JNG1BVgP+1vZD/8mHcjKyasLgK6V2rO3rFNgOCIsf
+	 it5eokzUzb8bgiK4AY3QnU9f5N+r+KKrrocqg/y4dinHRsALCjTg/3TpLD/AMRL2qLw==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hWW1WySc;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=aweta.nl;
+	spf=pass smtp.mailfrom=aweta.nl;
+	dkim=pass header.d=aweta.nl header.i=@aweta.nl header.a=rsa-sha256 header.s=selector1 header.b=eYy3nb1N;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=40.107.130.125
+Received: from MRWPR03CU001.outbound.protection.outlook.com (mail-francesouthazon11021125.outbound.protection.outlook.com [40.107.130.125])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 482AD606A31C;
-	Fri, 27 Nov 2026 08:44:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F23AB606A326;
+	Fri, 27 Nov 2026 08:49:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F23AB606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=aweta.nl
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aweta.nl
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hWW1WySc
-Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
-ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1795769059;
-	b=qjqomTrFyJCzy8s+H2UzCi7Y7vpjJ1jwY/ZUw2EZgKO04LHthOJtV/fjHl+ZqINrpd13
-	 z78GjYuWs77eKsPSfQIu1fjyAJ35gzUt6w9jJdMWOj5UhnVP5JA/wf844Rd3PRg8Jf3kb
-	 GoyrFKAb0sRmQGEON26QX8LQr1yHWmLYOyHYxKDpxrgnJWyJqEE4MsyT4Qu9nKp44tgxC
-	 fDilbBvCPgLJT20Ce79D1/nY4gzSEvoWKRPKFaCblh1Ru/xIIun+FQcFyKXu6ZbCvGfR/
-	 /yitkU9YQ7ulDw8328PF11rSeetbV0I7i+e690nLaF7+t7JQIEJk1sBIPMCjfrG6MkQ==
-ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1795769059;
-	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
-	 Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=ft75ArHu5r34Kk5GxNfYciluJYRTvCnqrrb0D3xZQgQ=;
-	b=gbkA4baXupFTA7OBWKXCBocxtdH5PNZlpJJR24qs7VoHQMxQ7Oq4Zm7Pc8CH/B/Nvdvf
-	 2A7i/zzzx0gRNkWlRA2jqEInC6g4KUupwmnzfASyc+CPqW7mLQcw36SqWfU29AnsYxDKu
-	 qttGud7T3NJkgBfxYFj6gdQzWUP+zEQSEt3YNTIfhbVEJvcQOKYn28EXzb2LfZ8lOaJux
-	 TZvWcEsf82pwrosTwzbWz89PL7gE+P7DUPF1GZhP1+aDqL8/Tb3A4hi2SSwhnek6hENaZ
-	 1BDCgBzbcMyx3rP9AKqTXl47//k7GIke7HRYVOhT6tO9JPUcpPP3hCBpzW+FzGnfZ3g==
-ARC-Authentication-Results: i=1; smtp.kernel.org; 
-	arc=none smtp.remote-ip=100.80.115.77
-Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 903BC1F00899;
-	Fri, 27 Nov 2026 08:44:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795769059;
-	bh=ft75ArHu5r34Kk5GxNfYciluJYRTvCnqrrb0D3xZQgQ=;
-	h=From:Date:Subject:To:Cc:Reply-To;
-	b=hWW1WySc7+j/cSN/syzUfzn2F355NkIJXfTkO3SuE0Aje7YWwmBkdq0NnutSuqKl6
-	 Zw7tApTdHPJ5mUy4yQftBai5I9PzC9xKtdxuSb5FLGERPMw5MBzBjWKVpK1c/PjnjO
-	 8RJB/BQPPsGwpfx6XIBvYngn1yHs0cdH7hc+Qo28H/sA7qW9NZUtY6PaJBScMssTCT
-	 jccOOasYeSq1usd+eUokPUF4E4qXGrXFwYiEkyxNtCTJg29uB7QSl21IXXbDTU4Da7
-	 91Scwmdn0l1UTQjEtVW9AC8Yi38LX2ru+uE0mv50xUb9UUy5yn2iXrYsPQ3lk9eP7e
-	 xUWpItORdzzEw==
-Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id 1CD6B4B63D;
-	Fri, 27 Nov 2026 08:44:03 +0000 (UTC)
-From: Tjerk Kusters via B4 Relay <devnull+tkusters.aweta.nl@kernel.org>
-Date: Fri, 27 Nov 2026 09:43:59 +0100
-Subject: [PATCH net] igb: leave room for the Rx timestamp header in 2 KiB
- build_skb buffers
+	dkim=pass (2048-bit key, unprotected) header.d=aweta.nl header.i=@aweta.nl header.a=rsa-sha256 header.s=selector1 header.b=eYy3nb1N
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=mtV+canPLX/G/tQ0/sXcyrsPPstsJj0570sK/nC8YitQw9Yxs92aDSDyXgI4ARU/ZV/YgOgAiqcjK2j+z55WRrvIBGAq6Mp1MSlhcnVC+M9ura53d11bOTLg70w4jvj3wTdADXfiFSdVZGFh8IHP6JSLUynnx1IAyWIl/CAiRpktcJAQhkZYHsydy9B+epzf0SfFHkr17+MZ2xLoEupH7GsPg1iN9zwoq/BeOHuzjo4htUvaem3Lbh4B5HfsRgvYcFRqxI0jbR0aRdjB2/ldSBd33pimC3Ya1Fs9s5wyDVRoODUvidXOwx3ocRM/aNvZ6myIkLPK9MJ4YHTyrjq1oQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3RGnzTdg+afaO5IiH9+ZS8CbcQlMKxIDvDKlgMyZiS0=;
+ b=fsdI6LNKOz2/iYVQVDnoqWTvrosyuSji+HPVcRUiyBWmhIZTSXOCAWS1hwIng8dkAFnhp/FXeqvkwKwA21zHz1o4uJ1jT9Ed6TprRWq0jt8GfNv7TeGAdqGAmg3GsHsFIU3cKB4VxyOlU9q9nRw8SI4BZ2cSYF66ctxRiun+LntOmWQuBP4LVlXB0t/LaS5MobDLQs+mFZGKB/+O58+e4jJpx2CAIdYtfyozgx/bAfMTu+lFEw8+bDOCMdtR0qducG04/gYIzw9G5W96tOwX+i+a0W7gN/3HBj+cblHqblTQ28ZvXu2B+IuqbKoXPZqIVhMZSsBOsOIwNYTOcMC3ug==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=aweta.nl; dmarc=pass action=none header.from=aweta.nl;
+ dkim=pass header.d=aweta.nl; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aweta.nl; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3RGnzTdg+afaO5IiH9+ZS8CbcQlMKxIDvDKlgMyZiS0=;
+ b=eYy3nb1NwAKHBQyVIJCyjDYNltpzrVwl7+TM3qdFiX4Vx0MLgjw1QKqXBBRwX1TjZLUyuruhe75DdkQ+e5X9cjSVlydiIxWY+9WJoSmwA7N16KvG5mTovuO1NEGCVOG9FoB7tyXViBqAw6cUcRqGhw/pYYVQi6fi3ixzsHwTWVCqC1yfxD4JkCxD4zos4EIMMzgd3ygIfAwCWZV4qTg3rCsWce9R/LGZg9tYHT6HnkoE2+Y/S1QUzG3YqSfN+P2P1HYtnXHCObA20BD5JxIrtGqcn+sp2KRlixXlxTYjM4W8SybPzKP5V/6XEWzrb11tY7pFfrkW3pg0yM5SrzcIOA==
+Received: from AS5PR05MB11020.eurprd05.prod.outlook.com
+ (2603:10a6:20b:67d::13) by AS5PR05MB11846.eurprd05.prod.outlook.com
+ (2603:10a6:20b:6c5::8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.662.10; Fri, 27 Nov
+ 2026 08:49:12 +0000
+Received: from AS5PR05MB11020.eurprd05.prod.outlook.com
+ ([fe80::2dc4:6bec:d87e:3492]) by AS5PR05MB11020.eurprd05.prod.outlook.com
+ ([fe80::2dc4:6bec:d87e:3492%4]) with mapi id 15.21.0662.004; Fri, 27 Nov 2026
+ 08:49:12 +0000
+From: Tjerk Kusters <tkusters@aweta.nl>
+To: "netdev-bot+sashiko@kernel.org" <netdev-bot+sashiko@kernel.org>
+CC: "anthony.l.nguyen@intel.com" <anthony.l.nguyen@intel.com>,
+	"przemyslaw.kitszel@intel.com" <przemyslaw.kitszel@intel.com>,
+	"andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>, "davem@davemloft.net"
+	<davem@davemloft.net>, "edumazet@google.com" <edumazet@google.com>,
+	"kuba@kernel.org" <kuba@kernel.org>, "pabeni@redhat.com" <pabeni@redhat.com>,
+	"ast@kernel.org" <ast@kernel.org>, "daniel@iogearbox.net"
+	<daniel@iogearbox.net>, "hawk@kernel.org" <hawk@kernel.org>,
+	"john.fastabend@gmail.com" <john.fastabend@gmail.com>, "sdf@fomichev.me"
+	<sdf@fomichev.me>, "sven.auhagen@voleatech.de" <sven.auhagen@voleatech.de>,
+	"richardcochran@gmail.com" <richardcochran@gmail.com>, "kurt@linutronix.de"
+	<kurt@linutronix.de>, "sriram.yagnaraman@ericsson.com"
+	<sriram.yagnaraman@ericsson.com>, "intel-wired-lan@lists.osuosl.org"
+	<intel-wired-lan@lists.osuosl.org>, "netdev@vger.kernel.org"
+	<netdev@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+	"maciej.fijalkowski@intel.com" <maciej.fijalkowski@intel.com>, "p@1g4.org"
+	<p@1g4.org>, "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: RE: [PATCH net v6 3/3] igb: do not split AF_XDP zero-copy frames over
+ several Rx buffers
+Thread-Topic: [PATCH net v6 3/3] igb: do not split AF_XDP zero-copy frames
+ over several Rx buffers
+Thread-Index: AQHdcakNwPgs9FTQsEys1XYyFZRXXrcu5yEAgBLN1UA=
+Date: Fri, 27 Nov 2026 08:49:12 +0000
+Message-ID:
+ <AS5PR05MB11020FF8D6CFDDFB1DA15BA99B9412@AS5PR05MB11020.eurprd05.prod.outlook.com>
+References: <20261111-igb-rx-ts-fix-v6-3-ba5b9903859c@aweta.nl>
+ <179473557614.2199510.972066447270237709@kernel.org>
+In-Reply-To: <179473557614.2199510.972066447270237709@kernel.org>
+Accept-Language: en-US, nl-NL
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: mx.microsoft.com 1; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=aweta.nl;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: AS5PR05MB11020:EE_|AS5PR05MB11846:EE_
+x-ms-office365-filtering-correlation-id: 9870550f-f6b8-4484-b024-08df4c634f39
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|366016|1800799024|376014|7416014|23010399003|38070700021|10067099003|56012099006|261026140227099003|261026121527099003|261028144727099003|261022105027099003|261021121427099003|261102123227099003|5023799004|22082099003|18002099003|4143699003;
+x-microsoft-antispam-message-info:
+ FMvBKsfybtKU7rJ7L7JUl8J33AAAX41RGV9/edXVPGElzO3+UHic1Vfl9b6BgMPsN1BAtkePfhwD/ID8r4A+X3CwnMqHfYHHjVLId9guRybQAF5tfl/VVByvtFOMrPbEjgW94XhZbFyvllN89vb/lzq8AfIr1qkcrwQK5TO+Z/OKWhd+MZMhdCrdcRd53TdPM0olnJd1OWk7TcP0xJ/t7c+O1Ykbwy7HiRvUBRwHbqDjBshDzy2Vlb9rVJRtQxf9ze2F4vyADNk8BSHGreS63t5A7u7Yn9DjXtgeLXqGMlgupPweU0NXUHU1ygQjOFo4lcmGqQB/My9Kf7UPnzaVuKVTSZIAtCyAObjnG77CF3qFu7IsVRhlM6C1XbCfPaW0FDFQd2qmztveHYLiHO12b1bCFf3giq4wNII3MAPQYuc4reP1BZvLI3mzwCizUh+uZuLKbtfuJez3qT1yBa3vlTxVxcBo/DFxtWs2l0bJ/MSA8QH4r0C6qSgWZY3soIs5zyV5Bl5ACdyxTKB2G8izoRkhKhVIOgJf5CW8puIkOujyCmZDXGTjznd40Cb72nIdd78oAfhzNApicbSTM1cli5jSw1yg6bcOFa/lLZ5DeGqLNqkOUpA6GTilT+dBWrXwV5TMVrEhFF+m6BycDOd2DCJYTMSOnfQJk8R5rRPCjxDwSh1gNTwJPqDMDN9GIwPur1vV3G8Px/cz44BQFQjG/w==
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS5PR05MB11020.eurprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014)(23010399003)(38070700021)(10067099003)(56012099006)(261026140227099003)(261026121527099003)(261028144727099003)(261022105027099003)(261021121427099003)(261102123227099003)(5023799004)(22082099003)(18002099003)(4143699003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?bWNSVjV5S0l4T3ROSFI1SEJiLzRGRHBqSnIyZmhQUkRMUjhpUVBiWm83Sy9C?=
+ =?utf-8?B?Rk1HVVcvVDdNNVFrV1ZraXRoS05DMU5seHYyVEp2N3JuT2VwS0JnT25qeGNt?=
+ =?utf-8?B?aWFtR0pXZ05CbzZERmZIQVZQc0RDTzcxbGJQdDFQOXpXUm9pdjlNcWRjc3Jq?=
+ =?utf-8?B?YWpseVZKb0kxaGUvKytZczhBK1FQYlVOTC9pMjZoMVRHcjFoV2ppZnZnaVVs?=
+ =?utf-8?B?WEwvTnV3TGl3WExHR0JWVVRvL3RkSDNqd1h0UUJOU20xNVB1b2d3bFhHZG14?=
+ =?utf-8?B?Nkk1UHFXL1A4dUx6ZUZiSTlwUStkZ001WDJSTUZiS2pOUGxpM0lVUEhZam50?=
+ =?utf-8?B?V0sxWmp5N3BhZ243OE51NW90RmljTUdpaUNGZ21XU2YyUE8wY0prclpGSVRi?=
+ =?utf-8?B?Y1dOSjhlY3BlMS9Cb1I2aWRSYkVsT1NuNHNwVUhZZnVHbUJrYkMwS1Y4clZE?=
+ =?utf-8?B?YTJ4bHhYVjNvTHRRenhQY2cvaTBvQTJSTXByNGlhM3RnZlk4TzR1YWIvamJx?=
+ =?utf-8?B?cGtyTzdFUUV0WFk5bGtsT2dTRm54eDM3OEsrUVZzYmF2c0h0QkI2VTdDS2Er?=
+ =?utf-8?B?azNBdDR5V2hncXJGMEZKOEVqWTN3M2RSUWpGTjRZZ0dKM1pJUzJDTys3NXM4?=
+ =?utf-8?B?SElyQ1FRWTE1MWMyOW10cmNWK1Y5dXZsZE1jTitEU29VcGhBREx0L2UxaCs0?=
+ =?utf-8?B?UHRtY1FsNExaUjB2UklRajNwS3kzN0NXcmcydG9HSXplU2VINzNDWjBhMTcx?=
+ =?utf-8?B?ZnYvRTRYZ0U1bXptck41RmQ1VEdMaVZRM0VTeGlkRkd1VCt3WjdrV3ljN2I0?=
+ =?utf-8?B?K0NaYjJaSnNrUUgxODdhTTZLVjY3OE5FelJHMTJOMk82cStPemNTdlpHcmNz?=
+ =?utf-8?B?NWNpRFQ0dVlmRSs4U3czamVkT2ZNSUw1SWpEMWNEZng4eUhXNUxvYnJ3NG5q?=
+ =?utf-8?B?ZzU5R05UVVdMSG1LUVVDMjViWjRTdXdpQlM4OTY5cGlJMjN6eTZuOU9DWnEy?=
+ =?utf-8?B?YUJYRVpkYTdDZ3BUZ1hOYnJ4SUlTU0RSL1RwWXd1VVhhdEF4NWxnVlR4NXg5?=
+ =?utf-8?B?U3JQZzk5WmZKRDhLc01RelMzdjczbS91MTZIejNrMmdhUHNUYTVQLzR2aFY3?=
+ =?utf-8?B?bFFpYzNmdzlvME84emR1M2VTK1NEakhDR3NWTGpmSG91bFB6UlZlVE4wM0dK?=
+ =?utf-8?B?WWpzc2ttQXhjMVJDcWtZQVc1TDZmNG9hN0RWbHVVSktGT2tKeUJQVlpRU1k4?=
+ =?utf-8?B?dUxiMFhmazFtSTNoaXJFNlRCaWhkeElyMzI4Y1VKWm5aOS9lbjRCMGtyTzQ2?=
+ =?utf-8?B?MEMwYzZuamlFRTNRdmx5ZmVDdmM0dXVkeStxNmtEZGtuWkxsNmxpKy9GY3Jz?=
+ =?utf-8?B?KzZLdGhSUEpLNFVWcTZNUGZaeEtoL2pvdFhuUDZBRmhVZCtaRmhDRjJzZGRU?=
+ =?utf-8?B?OEp1WlJIL1pZNWxaR2Zyay9ERXFBOGVKVytjVVEyUWxtZGhaVmtvTzh1QUpi?=
+ =?utf-8?B?MlRhbldMU3RXazR0bWVZZHhlUzhJUW9veTJ6S0R6WnFzRGhYZG5McmZ4Qml1?=
+ =?utf-8?B?NEkxVjB1Y2czVTd0d3FNWlJtTUxPelVNRE14ZC9tTXZCNjlEbStIaUtTNldQ?=
+ =?utf-8?B?a3p6a1Y3MEIyalhtK3FyZ0xoNGpJZEZyZG5PTG54bzNUWWNRdmJvaDJkdzE4?=
+ =?utf-8?B?T3lxS0tVNEwrMEJQL09pRVR5OFl6WE1hQTVubkJQd0R4TE9OaHU1VkQraXZD?=
+ =?utf-8?B?NWk3TXZkaWpnYzRrNjh6MnVlVVBGWlZnQVg2c2ZOVGV3VjJwUlAwT2ozWnJn?=
+ =?utf-8?B?RURzWWJKd0c5cDVNMXNkcHJKN3ZNL285ZVdkdDJVT0dBek9qMCtWWEorRDlr?=
+ =?utf-8?B?U2FRZmhZdEV3N3gvb3hlYktHVU5hMC91TThveGNVWFFmRjdjV1doQmdySkZz?=
+ =?utf-8?B?R09tbC9GWFNod3JtQ2NTKzNkVWp1amtKWjMvUGJGUDV1b3ArdlM0VGNrdnlq?=
+ =?utf-8?B?ZHRnaUxHdlp0d0JxUGJvRmszZk5IYzBwSEhmR2hnbmF5VkRLR1AzQmNXOFl4?=
+ =?utf-8?B?eTdDT3NsSHMzbmNpMEZ2Tnc0RGdQU3Y1QVlnU1pWODVyR3hUbUJvenVvZTRG?=
+ =?utf-8?B?ckpFNVhHa3FRSmdIcnJ4RXUrR0VxRzFWY3FiMHl2djNXQ2loOVFhSWdFRGpi?=
+ =?utf-8?B?bVU3K2N5b044OTB2SFJXT00vaDQ1eWhMMDMrZXVuUExxYlZFTmtzTG90ZDMy?=
+ =?utf-8?B?bFk1cEF1d05VR2RjTTFaaUczTlRNNHZGQnRYdUVIOUc3bjlYQU9HME9LQTkv?=
+ =?utf-8?Q?FUR3u3rZr1BW2ks4V0?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -83,191 +169,44 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261127-igb-skb-pad-v1-1-7e069eaf16d7@aweta.nl>
-X-B4-Tracking: v=1; b=H4sIAM5CCWsC/yWMwQrCMBAFf6W8cxeSgFH7K+Ihada6FmLJVhFK/
- 72xPc7AzALlIqzomgWFv6LyzhVs26B/hjwwSaoMZ5y31p1Jhkg6RppCoku6eg4meDYn1GIq/JD
- ffrsh84z7IfUTX9zP/w/WdQMLR1Z2dAAAAA==
-X-Change-ID: 20261127-igb-skb-pad-8d96ea0a6e05
-To: Tony Nguyen <anthony.l.nguyen@intel.com>, 
- Przemek Kitszel <przemyslaw.kitszel@intel.com>, 
- Andrew Lunn <andrew+netdev@lunn.ch>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
- Jesper Dangaard Brouer <hawk@kernel.org>, 
- John Fastabend <john.fastabend@gmail.com>, 
- Stanislav Fomichev <sdf@fomichev.me>, 
- Sven Auhagen <sven.auhagen@voleatech.de>
-Cc: intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org, 
- bpf@vger.kernel.org, stable@vger.kernel.org, 
- Tjerk Kusters <tkusters@aweta.nl>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1795769042; l=7109;
- i=tkusters@aweta.nl; s=20260619; h=from:subject:message-id;
- bh=LHZjkEOidXK7kx+tT6vj/G3tkhiPxIUoim+0JCqFf24=;
- b=AEkgnroG0gFyvAxAf2gDtHDf0wW2hJiBZV8LFjagw2b1mNptyxATLN3Htuf4uOhCZNK1fOU1e
- ipDBqw2GDHqAhCAz9ML1zYapEPSHFJVzaKpQXXJQtNZE9v4CGCfgbmN
-X-Developer-Key: i=tkusters@aweta.nl; a=ed25519;
- pk=JYRpYQ3+LrphEabgnxcbiOUpwvNP8WDDMcLzz+cwKsk=
-X-Endpoint-Received: by B4 Relay for tkusters@aweta.nl/20260619 with
- auth_id=831
-X-Original-From: Tjerk Kusters <tkusters@aweta.nl>
-Reply-To: tkusters@aweta.nl
-Content-Transfer-Encoding: 7bit
+X-OriginatorOrg: aweta.nl
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AS5PR05MB11020.eurprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9870550f-f6b8-4484-b024-08df4c634f39
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Nov 2026 08:49:12.3995
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 6546512a-ba20-41bf-9d8d-c076dcbf6fd9
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 5RWUX0rQxLwgmMzb8nIWJn1tgqTIJC2TUo6mguO40BolLKq75MVWOPZ058uat411ttCyGUiYxA5iuzKVZ3MNjQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS5PR05MB11846
 
-From: Tjerk Kusters <tkusters@aweta.nl>
-
-On 2 KiB build_skb Rx rings (PAGE_SIZE < 8192, legacy-rx off),
-igb_skb_pad() places the DMA start so that exactly
-IGB_MAX_FRAME_BUILD_SKB bytes (1536 on x86_64) are left before
-skb_shared_info, and RLPML, or the PF pool limit in VMOLR when VFs are
-allocated, is set to the same value. With Rx timestamping on, 82580 and
-later MACs write a 16-byte timestamp header in front of the frame, so a
-frame of more than 1520 bytes (without FCS) runs into skb_shared_info.
-napi_build_skb() then zeroes the start of skb_shared_info, which holds
-the last bytes of the frame, and __skb_put() moves skb->tail past
-skb->end.
-
-The MAC has checked the TCP or UDP checksum before that, so the payload
-is delivered with its last bytes zeroed and without an error. Any
-sender on the link can trigger this with frames of 1525 to 1536 bytes on
-the wire, for example double-tagged frames or a peer with a larger MTU.
-Any Rx timestamp filter is enough, as these MACs then timestamp all
-packets. With XDP_TX, or XDP_REDIRECT to a device or CPU map,
-xdp_update_frame_from_buff() hits the "missing reserved tailroom" WARN
-for each such frame and drops it.
-
-Before commit 9cbc948b5a20 ("igb: add XDP support"),
-IGB_MAX_FRAME_BUILD_SKB left room for the header. That commit fixed the
-frame size at 1536 bytes and gave the rest of the 2 KiB buffer to the
-headroom. Reserve the header again in igb_skb_pad(). IGB_SKB_PAD is the
-same for all build_skb rings, so the headroom goes from 192 to 176 bytes
-on x86_64 for 2 KiB and for 3 KiB rings, and XDP programs have 16 bytes
-less for bpf_xdp_adjust_head() and metadata. It was already below
-XDP_PACKET_HEADROOM. The frame limit, the buffer size selection and the
-MTU range for XDP do not change. IGB_2K_TOO_SMALL_WITH_PADDING already
-counts the header, so the headroom stays at least NET_SKB_PAD.
-
-That commit also took the header out of igb_rx_bufsz(), which is the
-length of the DMA sync when a buffer goes to the hardware. Add
-igb_rx_dma_len() for the two syncs. igb_rx_bufsz() itself stays as it
-is, because it is also the frame size limit for XDP.
-
-Tested on an I350 with kernel 7.3.1 (igb in net is the same apart from
-the treewide kmalloc_obj conversions) at MTU 1500, with the Rx timestamp
-filter set to ALL. A peer sent UDP datagrams of 0xff bytes in frames of
-1521 to 1532 bytes (without FCS). Before this patch they were delivered
-with their last 1 to 12 bytes zeroed, starting 1520 bytes into the
-frame, and pings with a 0xff pattern of those sizes failed. With this
-patch all of them arrive intact, also with an XDP program attached.
-Frames of 1533 bytes and more are dropped by the MAC, as before. With
-the timestamp filter off, and at MTU 3000 (3 KiB rings), nothing
-changes. Frames that a VF sends to the PF, of up to 1536 bytes, arrive
-intact with and without this patch; the MAC does not put the header in
-front of them.
-
-This was found by the Sashiko AI review of another igb series.
-
-Link: https://lore.kernel.org/all/179551973551.3135.7270095499525377709@kernel.org/
-Fixes: 9cbc948b5a20 ("igb: add XDP support")
-Cc: stable@vger.kernel.org
-Signed-off-by: Tjerk Kusters <tkusters@aweta.nl>
----
-The Sashiko AI review reported this on v4 to v7 of my igb Rx timestamp
-series; it is older than that series. Most recently:
-https://lore.kernel.org/all/179551973551.3135.7270095499525377709@kernel.org/
-
-This patch is independent of that series and applies on its own.
-
-At MTU 1500, iperf3 TCP and UDP from a peer run at line rate (938 and
-950 Mbit/s) with and without this patch, with the Rx timestamp filter
-off and on, and the receiver's CPU load does not change measurably
-(6 runs of 10 s per case, the differences are within the spread).
-
-The patch and its description were prepared with the help of an AI
-coding assistant (Claude). I reviewed them and ran the tests described in
-the commit message on my test bench.
----
- drivers/net/ethernet/intel/igb/igb.h      | 21 +++++++++++++++++----
- drivers/net/ethernet/intel/igb/igb_main.c |  4 ++--
- 2 files changed, 19 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/net/ethernet/intel/igb/igb.h b/drivers/net/ethernet/intel/igb/igb.h
-index 8c9b02058cec..74e441a140c1 100644
---- a/drivers/net/ethernet/intel/igb/igb.h
-+++ b/drivers/net/ethernet/intel/igb/igb.h
-@@ -153,9 +153,9 @@ struct vf_mac_filter {
- 
- /* Attempt to maximize the headroom available for incoming frames.  We
-  * use a 2K buffer for receives and need 1536/1534 to store the data for
-- * the frame.  This leaves us with 512 bytes of room.  From that we need
-- * to deduct the space needed for the shared info and the padding needed
-- * to IP align the frame.
-+ * the frame, plus IGB_TS_HDR_LEN for the timestamp the hardware can place
-+ * in front of it.  From the rest we need to deduct the space needed for
-+ * the shared info and the padding needed to IP align the frame.
-  *
-  * Note: For cache line sizes 256 or larger this value is going to end
-  *	 up negative.  In these cases we should fall back to the 3K
-@@ -190,7 +190,7 @@ static inline int igb_skb_pad(void)
- 	if (IGB_2K_TOO_SMALL_WITH_PADDING)
- 		rx_buf_len = IGB_RXBUFFER_3072 + SKB_DATA_ALIGN(NET_IP_ALIGN);
- 	else
--		rx_buf_len = IGB_RXBUFFER_1536;
-+		rx_buf_len = IGB_RXBUFFER_1536 + IGB_TS_HDR_LEN;
- 
- 	/* if needed make room for NET_IP_ALIGN */
- 	rx_buf_len -= NET_IP_ALIGN;
-@@ -421,6 +421,19 @@ static inline unsigned int igb_rx_bufsz(struct igb_ring *ring)
- 	return IGB_RXBUFFER_2048;
- }
- 
-+/* Number of bytes the hardware can write to an Rx buffer. On 2K build_skb
-+ * rings the frame is limited to IGB_MAX_FRAME_BUILD_SKB, and the timestamp
-+ * header comes in front of it.
-+ */
-+static inline unsigned int igb_rx_dma_len(struct igb_ring *ring)
-+{
-+#if (PAGE_SIZE < 8192)
-+	if (ring_uses_build_skb(ring) && !ring_uses_large_buffer(ring))
-+		return IGB_MAX_FRAME_BUILD_SKB + IGB_TS_HDR_LEN;
-+#endif
-+	return igb_rx_bufsz(ring);
-+}
-+
- static inline unsigned int igb_rx_pg_order(struct igb_ring *ring)
- {
- #if (PAGE_SIZE < 8192)
-diff --git a/drivers/net/ethernet/intel/igb/igb_main.c b/drivers/net/ethernet/intel/igb/igb_main.c
-index 131df3e09ba1..67fd24d71746 100644
---- a/drivers/net/ethernet/intel/igb/igb_main.c
-+++ b/drivers/net/ethernet/intel/igb/igb_main.c
-@@ -5084,7 +5084,7 @@ void igb_clean_rx_ring(struct igb_ring *rx_ring)
- 		dma_sync_single_range_for_cpu(rx_ring->dev,
- 					      buffer_info->dma,
- 					      buffer_info->page_offset,
--					      igb_rx_bufsz(rx_ring),
-+					      igb_rx_dma_len(rx_ring),
- 					      DMA_FROM_DEVICE);
- 
- 		/* free resources associated with mapping */
-@@ -9225,7 +9225,7 @@ void igb_alloc_rx_buffers(struct igb_ring *rx_ring, u16 cleaned_count)
- 	bi = &rx_ring->rx_buffer_info[i];
- 	i -= rx_ring->count;
- 
--	bufsz = igb_rx_bufsz(rx_ring);
-+	bufsz = igb_rx_dma_len(rx_ring);
- 
- 	do {
- 		if (!igb_alloc_mapped_page(rx_ring, bi))
-
----
-base-commit: cc7fe6e741730fef549e484379281736d32746f0
-change-id: 20261127-igb-skb-pad-8d96ea0a6e05
-
-Best regards,
---  
-Tjerk Kusters <tkusters@aweta.nl>
-
-
+PiAtIFtNZWRpdW1dIFRoaXMgaXMgYSBoYXJkd2FyZS1kZXBlbmRlbnQgRE1BIGJvdW5kLg0KDQpU
+ZXN0ZWQgb24gYW4gSTM1MCAoNy4zLjEpLCB3aXRoIG9uZSBWRiBvbiB0aGUgc2FtZSBob3N0IGlu
+IGFub3RoZXINCm5ldHdvcmsgbmFtZXNwYWNlIGF0IE1UVSA5MDAwLCBzZW5kaW5nIHRvIHRoZSBQ
+RjoNCg0KLSBQRiBhdCBNVFUgMTUwMCB3aXRoIGFuIFhEUCBwcm9ncmFtIGF0dGFjaGVkLCBzbyB0
+aGUgUEYgcG9vbCBsaW1pdCBpcw0KICAxNTI2IChnbG9iYWwgUkxQTUwgOTcyOCB3aXRoIFZGcyks
+IHdpdGggUnggdGltZXN0YW1waW5nIG9mZiBhbmQgb246DQogIGZyYW1lcyBvZiB1cCB0byAxNTI2
+IGJ5dGVzIHdpdGhvdXQgRkNTIHJlYWNoIHRoZSBQRiwgZnJhbWVzIG9mIDE1MjcNCiAgYnl0ZXMg
+YW5kIG1vcmUgZG8gbm90LiBUaGUgTUFDIGNvbXBhcmVzIHRoZSBmcmFtZSB3aXRob3V0IEZDUyB3
+aXRoDQogIFZNT0xSLlJMUE1MLCBzbyBpdCB3cml0ZXMgYXQgbW9zdCB0aGUgbWF4aW11bSBmcmFt
+ZSBzaXplIHBsdXMgdGhlDQogIDE2LWJ5dGUgaGVhZGVyLCB3aGljaCBpcyB3aGF0IGlnYl94c2tf
+ZnJhbWVfZml0cygpIGNoZWNrcyBhZ2FpbnN0IHRoZQ0KICBYU0sgZnJhbWUuDQotIFRoZSBzYW1l
+IHdpdGggeGRwc29jayBpbiB6ZXJvLWNvcHkgbW9kZSB3aXRoIDIgS2lCIGNodW5rcyBvbiBQRiBx
+dWV1ZQ0KICAwOiAxNTAwLWJ5dGUgcGluZ3MgZnJvbSB0aGUgVkYgYXJyaXZlIG9uIHF1ZXVlIDA7
+IDE2MDAsIDMwMDAgYW5kIDgwMDANCiAgYnl0ZSBwaW5ncyBhZGQgbm90aGluZyB0aGVyZSBidXQg
+dGhlIGJhY2tncm91bmQgdHJhZmZpYy4NCi0gQSAzMDAwLWJ5dGUgYnJvYWRjYXN0IG9yIElQdjYg
+bXVsdGljYXN0IGZyb20gdGhlIFZGIGRvZXMgbm90IHJlYWNoIHRoZQ0KICBQRiBlaXRoZXI7IDUw
+MC1ieXRlIG9uZXMgZG8uDQotIFdpdGggdGhlIFBGIGF0IE1UVSA5MDAwIChwb29sIGxpbWl0IDk3
+MjgpIGFuZCBubyBYRFAsIHBpbmdzIG9mIDE2MDANCiAgdG8gODAwMCBieXRlcyBmcm9tIHRoZSBW
+RiBhcmUgYW5zd2VyZWQsIGFuZCB0aGUgc2FtZSAzMDAwLWJ5dGUgZnJhbWVzDQogIHNlbnQgdG8g
+YSBNQUMgYWRkcmVzcyBvbiB0aGUgd2lyZSBkbyBsZWF2ZSB0aGUgVkYuDQoNClNvIG9uIHRoZSBJ
+MzUwIHRoZSBpbnRlcm5hbCBzd2l0Y2ggYXBwbGllcyB0aGUgUEYgcG9vbCdzIFZNT0xSLlJMUE1M
+IHRvDQpWRi10by1QRiBsb29wYmFjayBhbmQgdG8gcmVwbGljYXRpb24gYXMgd2VsbCwgYXQgdGhl
+IGV4YWN0IGxpbWl0LiBUaGUNClZGJ3Mgb3duIFNFVF9MUEUgbGltaXQgaXMgd3JpdHRlbiB0byB0
+aGUgVkYncyBwb29sIG9ubHkuDQoNClRoZSAyIEtpQiBidWlsZF9za2IgcmluZ3MgYWxyZWFkeSBk
+ZXBlbmQgb24gdGhpcyBsaW1pdDogd2l0aCBWRnMgdGhlDQpnbG9iYWwgUkxQTUwgaXMgOTcyOCwg
+YW5kIG9ubHkgdGhlIFBGIHBvb2wgbGltaXQga2VlcHMgYSBmcmFtZSBpbnNpZGUNCnRoZSBoYWxm
+IHBhZ2UsIGFsc28gZm9yIGZyYW1lcyBmcm9tIGEgVkYuIFRoaXMgcGF0Y2ggbWFrZXMgWFNLIHJp
+bmdzDQpkZXBlbmQgb24gaXQgaW4gdGhlIHNhbWUgd2F5LiBJIGhhdmUgbm8gODI1NzYgdG8gdGVz
+dCB0aGlzIG9uLg0K
