@@ -1,54 +1,86 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.202
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.140.110.172
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795777817;
-	b=e5UlE3DHV7AyLixiweP6udDRKAMQuUIBS9rj90Gb5qdeEUaCpx+BVef/OktlTc6TxPA1
-	 CdAl682gfkzLSAvNs9X/YhJUzh7Dh1gjrRKeO6t6x+LutUXCTb/rXFlz9SfBiN7pmhlaP
-	 xB1vdDgK4nbpi0Fobfw79F6DoP0l56J++tlHsKeja5F5MmJJ1XCetyRPM3me8uzAqW+ez
-	 OdpRvsbcPPkcFKCpp3gkHJZPmYyGd0d/8UoAqdM6El2Z6+if0WYeW8bZgjZjYmGPXarnV
-	 t3wbhixV8We2OYIwZSBQWWkxWyZmhlwttoqOFXFGkXKgRAS3WmNiH0mhCVdnvvPghMQ==
+	t=1795777892;
+	b=jG9/GpBTYJfnNtPDe3+bR4I24rFKxuhPzVQ5ZCaai4lTa2GmtomqPXL/FXTgQgO3r1ll
+	 ImDkoq7UkPlhpbU2M6xoX85+dx8nIghu1GAHt1wxv00Ph++tzDv3+UhN45Y55MULR6PAl
+	 6uGxkOjNKruSWsKIr1ob8tcy9NWoJoKlrGMtOfsMeVR+2zycAthGA5nNWY+Kc9XcnEt7f
+	 yC1OmViVn62yN2XgUUvMj5D2DhJ5LuOd7KrMHtH8kynrClu7VGbgh6yEeXE28G1hatL5e
+	 uMOrjGkc8/CNDNFxArlYsq5FNyILJcg86o1rPvMZN3k7gyvfAumTX4e7SSWIfQt8qxQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795777817;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=yAseJCXCkp3H58r0OVANX+f+65Cd2MGF7drdzRohz2Q=;
-	b=Fa2PqXwbpE8VKO1wMzPrOzBJUt+6BdHdaxijEMf4nbuwXK11aDwk5KMyiJCvJBuiDzbn
-	 W/9NFYAfWXHb+QveDWpL7akE1U7ojO2KUKitd1ZGH+zAiolLQkJ9ULGrMWEbrMS1bGU9I
-	 A2Oz8wNLCUsekkuvb1w1vvrUG6CBxPMtgFy7wR6MvIQ82tkdPdTlpm67Eh0rXMPM6Y1df
-	 O2TQD0viMOHZPR6v+VUGq0dkkfas/aH8WjTibpoNZ0jMYibFVDFXf8nPEaux6ajxBRkyq
-	 PHSrJoO0Vy8KZrQVrcWFH5hbnSPutdF8ABPELKTol+bQ162qu+sfT4qt684GlZKDykw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795777892;
+	h=DMARC-Filter:Received:Received:DKIM-Signature:Date:From:To:Cc:
+	 Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=ntucoBJTEaHY4nS4xGinqu4auOiGQOC/h2sxnNGH6F0=;
+	b=msMWKM0KqPzfREZDWr3FzjMKSf3jho7ZbYzbZ9GlURV7cPBNHTK4dfntuJrRzRmO38J7
+	 sEVduC8QAJb9h8qWDinvXHUTHgXOjIVV6oebMXiTlMm/mnmt3h9M/A/pc3ueujzpjnYb7
+	 clul987Jalupy2je3yXBILFxFskEGq3yVEaURFCZnRdQAOsKemhWHzlwbrKfa5TTMeT6d
+	 HUQXmxmsHBXBBTJTqxK0qw/Z89HP8+TC6HwJZhRIK2t9kNyT2mLj7xCVB0Bf+Yri5tWk1
+	 e0zk8Ujl5v0afESuLt/qwOUiFkVqksb4Ud8LC0E43SAmF/d3qoHV92kGhghgT8OM1xA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="PI/ATG4u";
-	arc=none smtp.remote-ip=95.215.58.202
-Received: from mta1.migadu.com (out-202.mta1.migadu.com [95.215.58.202])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47B12606A32C
-	for <bpf@vger.kernel.org>; Fri, 27 Nov 2026 11:10:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 47B12606A32C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	dmarc=pass header.from=arm.com;
+	spf=pass smtp.mailfrom=arm.com;
+	dkim=pass header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=XAubkvTI;
+	arc=none smtp.remote-ip=217.140.110.172
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E791B606A336;
+	Fri, 27 Nov 2026 11:11:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E791B606A336
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=PI/ATG4u
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=N8t62i7CUa3ZOxo+eFaX+w6ClZWF5P21IBj52O6aWrk=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1795777815; v=1; x=1796382615;
- b=PI/ATG4uuVBho8Drhu9kpzKcA1keVE+vWfo12+W1jsBfE9AY+x1E/ZZYtN8hQWTgEAFKJLfg
- mmHiDSKz4UMHSg9KA8TxwdU9bN5iXcTnK/AoTynCTunMvsWNKTMKXA7MX/98HANxYITmE0ndggv
- mElyve8H9A+6BvKmWEyNyOh8=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id b147367c39aa5312;
-	Fri, 27 Nov 2026 11:10:10 +0000
-X-Mizu-Trace-ID: b147367c39aa5312
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <da0323dd-441a-46a6-ad9a-39def5fc08dc@linux.dev>
-Date: Fri, 27 Nov 2026 19:10:01 +0800
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.a=rsa-sha256 header.s=foss header.b=XAubkvTI
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 033EC1756;
+	Fri, 27 Nov 2026 03:11:28 -0800 (PST)
+Received: from localhost (unknown [10.2.196.114])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6FD1F3F632;
+	Fri, 27 Nov 2026 03:11:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1795777890; bh=ntucoBJTEaHY4nS4xGinqu4auOiGQOC/h2sxnNGH6F0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=XAubkvTIvWQmtGwwh0Lui5Pw4zp9veJEvuEOcvujRLkNv++5qc6SoWo/GW5AlSQl6
+	 PgIau2CJndplgHI3uAEWKBwn7RGP6JWE+1RW9hDpLE9y06g/euKPpYtIfRzAut7vKE
+	 pfJILfoOkaWjEC5EtOAXJ6zpZlfQxguXEus0BLvo=
+Date: Fri, 27 Nov 2026 11:11:28 +0000
+From: Leo Yan <leo.yan@arm.com>
+To: James Clark <james.clark@linaro.org>
+Cc: Puranjay Mohan <puranjay12@gmail.com>, vladimir.murzin@arm.com,
+	Mark Rutland <mark.rutland@arm.com>, Will Deacon <will@kernel.org>,
+	bpf@vger.kernel.org, Anshuman Khandual <anshuman.khandual@arm.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Rob Herring <robh@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Shuah Khan <shuah@kernel.org>, Breno Leitao <leitao@debian.org>,
+	Ravi Bangoria <ravi.bangoria@amd.com>,
+	Stephane Eranian <eranian@google.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Usama Arif <usama.arif@linux.dev>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, kernel-team@meta.com,
+	Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Subject: Re: [PATCH v6 0/3] arm64: Add BRBE support for
+ bpf_get_branch_snapshot()
+Message-ID: <20261127111128.GB861809@e132581.arm.com>
+References: <20260810164622.1829843-1-puranjay@kernel.org>
+ <CANk7y0ixo5a3Vfzj_HVhVHRNce2Rsit4pP27GCtXd4jHHzmiKg@mail.gmail.com>
+ <CAEf4BzapC=7YM2QLMyKKfyOWGgBTfEJmPPN8e9Jf5xT9SutBTQ@mail.gmail.com>
+ <dfa8362e-0dad-4f23-9d2e-dde03cb5facc@linaro.org>
+ <CAEf4BzZ=ahQNtA-1KdZFRONXMOEkV9Nb1OUY==JRQCarkbMM0Q@mail.gmail.com>
+ <5c7f4a5f-fe5e-4367-9c60-86f1818346e8@linaro.org>
+ <20261126180214.GB809232@e132581.arm.com>
+ <9a471409-04c2-4f6e-aec9-0b23bb9b69f0@linaro.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -58,124 +90,31 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net 10/10] tcp: do not pass a BPF reqsk to an MPTCP
- listener
-To: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>,
- Eric Dumazet <edumazet@kernel.org>, "David S. Miller" <davem@davemloft.net>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Willem de Bruijn <willemb@google.com>, Simon Horman <horms@kernel.org>,
- Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>,
- Christoph Paasch <cpaasch@openai.com>, Florian Westphal <fw@strlen.de>
-Cc: netdev@vger.kernel.org, mptcp@lists.linux.dev,
- Davide Caratti <dcaratti@redhat.com>, Chris Mason <mason@kernel.org>,
- stable@vger.kernel.org, Neal Cardwell <ncardwell@google.com>,
- Kuniyuki Iwashima <kuniyu@google.com>, Martin KaFai Lau <kafai@fb.com>,
- Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov <ast@kernel.org>,
- Martin KaFai Lau <martin.lau@kernel.org>, bpf@vger.kernel.org
-References: <20261123-net-mptcp-misc-fixes-7-4-rc5-v1-0-278042217e8d@kernel.org>
- <20261123-net-mptcp-misc-fixes-7-4-rc5-v1-10-278042217e8d@kernel.org>
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <20261123-net-mptcp-misc-fixes-7-4-rc5-v1-10-278042217e8d@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9a471409-04c2-4f6e-aec9-0b23bb9b69f0@linaro.org>
 
+On Fri, Nov 27, 2026 at 10:56:27AM +0000, James Clark wrote:
 
+> > Could we restrict bpf_get_branch_snapshot() on arm64 to a free-running
+> > BRBE mode? On a given CPU, at least one active event would have to
+> > request a branch stack, and every such event would have to be a
+> > counting event.
 
-On 11/23/26 9:24 PM, Matthieu Baerts (NGI0) wrote:
-> From: Chris Mason <mason@kernel.org>
-> 
-> A slab-out-of-bounds write and a panic can occur if a tc BPF program
-> that validates SYN cookies assigns an ACK to a TCP listener, and the ACK
-> then goes to an MPTCP listener of the same SO_REUSEPORT group.
-> 
-> bpf_sk_assign_tcp_reqsk() attaches a plain TCP request sock to the skb,
-> and returns -EINVAL if the program passes in an MPTCP listener. But
-> inet_steal_sock() and inet6_steal_sock() select a listener again from
-> the SO_REUSEPORT group of the listener that was passed in, and the
-> result can be an MPTCP listener. cookie_bpf_check() then passes the
-> request sock to mptcp_subflow_init_cookie_req(), which writes to members
-> of the larger struct mptcp_subflow_request_sock, so the writes can land
-> in the next object of the slab.
-> 
-> The fix used here is to drop the segment in cookie_bpf_check() if the
-> listener is an MPTCP listener. The connection then fails, instead of
-> corrupting the memory.
-> 
-> This issue has been found with the help of an LLM, and reproduced in a
-> VM, with the reproducer shared with the original version of this patch:
-> a tc BPF program validating SYN cookies -- the one from the BPF
-> selftests -- and an SO_REUSEPORT group with a TCP listener and an MPTCP
-> one, the latter being selected. With KASAN, the original version of this
-> patch reported:
-> 
->   BUG: KASAN: slab-out-of-bounds in mptcp_subflow_init_cookie_req
->   Write of size 1 at addr ... by task python3
->    mptcp_subflow_init_cookie_req
->    cookie_bpf_check
->    cookie_v4_check
->    tcp_v4_do_rcv
->    tcp_v4_rcv
-> 
-> Without debug options, and with request sockets of half-open connections
-> next to the corrupted one, the kernel panicked a second later, when the
-> timer of a request socket fired:
-> 
->   BUG: kernel NULL pointer dereference, address: 000000000000058f
->   #PF: supervisor read access in kernel mode
->   #PF: error_code(0x0000) - not-present page
->   Oops: Oops: 0000 [#1] SMP NOPTI
->   CPU: 3 UID: 0 PID: 0 Comm: swapper/3 Not tainted 7.4.0-rc1+ #1 PREEMPT(lazy)
->   RIP: 0010:tcp_syn_ack_timeout+0xd/0x30
->   Call Trace:
->    <IRQ>
->    reqsk_timer_handler+0x22e/0x500
->    call_timer_fn+0x2a/0x140
->    __run_timers+0x1f7/0x280
->    run_timer_softirq+0x49/0xf0
->    handle_softirqs+0xfa/0x300
->    __irq_exit_rcu+0xb5/0xf0
->    sysvec_apic_timer_interrupt+0x73/0x80
->    </IRQ>
->   Kernel panic - not syncing: Fatal exception in interrupt
-> 
-> Fixes: e472f88891ab ("bpf: tcp: Support arbitrary SYN Cookie.")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Chris Mason <mason@kernel.org>
-> [ Shorter comment. Commit message: how the issue was found, its
->   symptoms, and that the connection then fails. ]
-> Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+> Yeah I think this is a pretty good idea. It looks like it would avoid having
+> to disable NMIs. You only need a local_irq_save() to avoid new events from
+> reconfiguring BRBE while taking a snapshot, and you don't have to disable
+> the PMU counters either.
 
+I'd like to avoid local_irq_save() if we can protect BRBE snapshot
+reentry in another way.
 
-Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+> If any sampling BRBE event gets scheduled then the snapshots just start
+> skipping and returning empty.
 
+BPF program can be attached to interrupt handlers (even it can be
+attached to PMU interrupt handler). As you suggested, we can use per-CPU
+flag to return an empty snapshot for the nested call.
 
-Actually, we still have a few issues with bpf_sk_assign semantics...
-
-> ---
-> Cc: Neal Cardwell <ncardwell@google.com>
-> Cc: Kuniyuki Iwashima <kuniyu@google.com>
-> Cc: Martin KaFai Lau <kafai@fb.com>
-> Cc: Daniel Borkmann <daniel@iogearbox.net>
-> Cc: Alexei Starovoitov <ast@kernel.org>
-> Cc: Martin KaFai Lau <martin.lau@kernel.org>
-> Cc: bpf@vger.kernel.org
-> ---
->  net/ipv4/syncookies.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/net/ipv4/syncookies.c b/net/ipv4/syncookies.c
-> index 89169c82431c..f39600ee3f17 100644
-> --- a/net/ipv4/syncookies.c
-> +++ b/net/ipv4/syncookies.c
-> @@ -312,7 +312,8 @@ struct request_sock *cookie_bpf_check(struct sock *sk, struct sk_buff *skb)
->  	skb->sk = NULL;
->  	skb->destructor = NULL;
->  
-> -	if (cookie_tcp_reqsk_init(sk, skb, req)) {
-> +	/* reuseport can pick an MPTCP listener: req is too small for it */
-> +	if (sk_is_mptcp(sk) || cookie_tcp_reqsk_init(sk, skb, req)) {
->  		reqsk_free(req);
->  		req = NULL;
->  	}
-
+Thanks,
+Leo
