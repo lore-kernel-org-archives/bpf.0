@@ -1,59 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=203.254.224.25
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795790324;
-	b=WWT0PlkF3eGgO34mReBkmYREN2Um9CEZPOc6Du77mf0/r3dXN39G4DudlE9bX/mFXnST
-	 1A7LbUsJ4zbgqvhZUlBwIq8wN/W+wsbkLHV59puz+yqrLOoAzp7bMjCna8MeO4HdVYrpc
-	 1F5O4v3xZDx1pQrOwP5u67BJJfybfyRs2Q63unMRuhBBgjGtTbjPqDMEmWm8RfbvMLlOU
-	 /xZ6uFVvoeINXdkulmyixA6c0yz0iEtX4s4Jv42VDAtQHnZaxUzlQD+Czy0kp16fEJerg
-	 B6y/ehNjeaLsaXwEmrpSJewudoXZdIH8wu/KI2KwzPHiWB8m/lD2HbJcnEK/5u5y/MQ==
+	t=1795790876;
+	b=eAKsVYmIM39erFu9NT1Nx3rlDiJTd5ukCJeqspeyi2C6Mt5rOA5IM11x+aVIg3GJs0G4
+	 NE/crU4hF3Ng800+2zcLkjB7TO/KYuVkSNhaxrdtVA5yQkTL+769J3aXc/Lebg4aYx6yA
+	 seOQG2aSYIAWOweM8J6Tn5d+QArbItJk2c5Hy9j4icU3JxM/E6yFMlt1wsGfAw69dczuJ
+	 DicOFoSsVEQGoqA8T7G1dFECly6Q96oYVxnGfS+5OYUviaoyISRZx4xZeqjxm8mKPv+uI
+	 /7i9CFZcmpJhQYf1KMLs7xoQcg2FZwyvbOvCz/FQiRQuXS7tjPPHyDUeR2PeOEdm5+w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795790324;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:In-Reply-To:References:
-	 Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=xJpIceYu2KxI6ncR8keKatQpZCcoR32gRrL57WMYwKo=;
-	b=yXipJa34oVl1fx9EeAU3FIJa/ezBhH5tz8t5z5E7TiuaJUYWtI9fXQ30+ZvchDhFp6fR
-	 nAX8YB0srM7wANwAHpB58bIO7ZWLDR8MbAJaDIBeZIIjursEsEtwxqqtMd78F21FQvi1Q
-	 WtLCV3JzVHaexBjZkuUlq7pDNMT7rVwqcmtGZ757G+7KXNFNl6KGYJsmD79kDbL0OvoKA
-	 a3eDnjBAIwCMLc7jABrAytvDBqs7ovoHsffJlhrBJgsmiLi3s1HABKrqBiNIBtWSoSDlS
-	 6Z2tK97B10YFE5Mb1n8un+S4MP4CA/skYjk7R2MY1Vr39Xl5YwphnjnhTr6JS1J4QRA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795790876;
+	h=DMARC-Filter:Received:DKIM-Filter:DKIM-Signature:Received:Received:
+	 Received:Received:From:To:Cc:In-Reply-To:Subject:Date:Message-ID:
+	 MIME-Version:Content-Transfer-Encoding:X-Mailer:Thread-Index:
+	 Content-Language:X-CMS-MailID:X-Msg-Generator:Content-Type:CMS-TYPE:
+	 X-CPGSPASS:cpgsPolicy:X-CFilter-Loop:X-CMS-RootMailID:References;
+	bh=LigbDYHgFUyhETTkgekQg93P9iKK9kMEZK/QoESy0XE=;
+	b=vpH+79mhLd52XdyXoXJLsd3+yw72JGOhG9Oaio5YYobkyyll93OMHZ0MwmCp8J1gxcx3
+	 80Wkkt131YtAeLx10pOnDaQ8KgjqBu/hkH185IU61L7mdSH6qC5b0be0cCr0YmZB8V8uZ
+	 EcntrBf5nSZslyWdzdLPdomZIRfJrZv4w89OQ/U4xRBgsPN2BD9QWabxbAwbbj5Igt2iy
+	 f0b6GNe1CulDTlyLtwUjEUKhBJthpri30whFFdZh1VGNO7jm7PQjnznGEjuXf/3NOB9uT
+	 sHvIATsma7SHb5mhk2/Kibf1OzBB8h0VWiyIlQywQHa4k/bWIiFd14UnuBnXYb9jdCQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=I+UqYskQ;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=samsung.com;
+	spf=pass smtp.mailfrom=samsung.com;
+	dkim=pass header.d=samsung.com header.i=@samsung.com header.a=rsa-sha256 header.s=mail20170921 header.b=sIbjzqZ6;
+	arc=none smtp.remote-ip=203.254.224.25
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74CD8606A333;
-	Fri, 27 Nov 2026 14:38:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B593606A337
+	for <bpf@vger.kernel.org>; Fri, 27 Nov 2026 14:47:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0B593606A337
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=I+UqYskQ
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 697601F000C1;
-	Fri, 27 Nov 2026 14:38:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795790324;
-	bh=xJpIceYu2KxI6ncR8keKatQpZCcoR32gRrL57WMYwKo=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=I+UqYskQCs6jwv4Cusi7O+4pkTVlALVF1TR+b+Kgf+/PonKcfSXU00z977gQ/tBcp
-	 FGkyl4J2uQZKym3I7F+tDjiSBdEzOjUTx1xgOMfRypRpK0vzAaAHarr38o7eVYC+hA
-	 DMzW/o15vea1pYkiMi76xXQqRmInwGYUX9TKpIB6u03wJfJ9alVRvr27zZS39FD8FE
-	 0/vL3o0Xs5LyYAVK+tCdysBuzI+1oMzgIDl/Vm7t7yFKyIJZORfmBd9G9h7zNsz3ME
-	 F9vOALJ60KMrJFwgsa9Ud56Rut7MVOEYa0MLOv1wJ05559wERQgvZqNeLaKJGuq7Ip
-	 YayBJ2Zk0Aiyg==
-From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To: Jason Xing <kerneljasonxing@gmail.com>, willemb@google.com,
- magnus.karlsson@intel.com, maciej.fijalkowski@intel.com, sdf@fomichev.me,
- davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org
-Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, Jason Xing
- <kerneljasonxing@gmail.com>, stable@vger.kernel.org, Petr Oros
- <poros@redhat.com>
-Subject: Re: [PATCH net v2 1/2] net: reset the mac header in
- __dev_direct_xmit()
-In-Reply-To: <20261127105347.72997-2-kerneljasonxing@gmail.com>
-References: <20261127105347.72997-1-kerneljasonxing@gmail.com>
- <20261127105347.72997-2-kerneljasonxing@gmail.com>
-Date: Fri, 27 Nov 2026 15:38:40 +0100
-Message-ID: <87cxrqgwzz.fsf@all.your.base.are.belong.to.us>
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.a=rsa-sha256 header.s=mail20170921 header.b=sIbjzqZ6
+Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
+	by mailout2.samsung.com (KnoxPortal) with ESMTP id 20261127144750epoutp029f25936c217d689f51bdd049738c3673~r7khK49Gp0300803008epoutp02Q
+	for <bpf@vger.kernel.org>; Fri, 27 Nov 2026 14:47:50 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20261127144750epoutp029f25936c217d689f51bdd049738c3673~r7khK49Gp0300803008epoutp02Q
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1795790870;
+	bh=LigbDYHgFUyhETTkgekQg93P9iKK9kMEZK/QoESy0XE=;
+	h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+	b=sIbjzqZ641dRkba/PO0L2PZ/V2F+oqYTeIritnuJjc/vA9WhmIQjSJp3l60NRP5tQ
+	 lv3vpu2MBtWR9tyz+7YyytgzzNwodVWAiZOGwirlprkZoWqyaARQqcFclSbHW5wU/Q
+	 OPq/FJ/cvYwDi/yJfwmvMz+Ea3e8MG+YVt4KenJQ=
+Received: from epsnrtp04.localdomain (unknown [182.195.42.156]) by
+	epcas5p4.samsung.com (KnoxPortal) with ESMTPS id
+	20261127144749epcas5p49e7591462797aaed3ad3aebe6d3ce918~r7kfprcBC2671426714epcas5p4v;
+	Fri, 27 Nov 2026 14:47:49 +0000 (GMT)
+Received: from epcas5p2.samsung.com (unknown [182.195.38.91]) by
+	epsnrtp04.localdomain (Postfix) with ESMTP id 4jbbqm2VM4z6B9m5; Fri, 27 Nov
+	2026 14:47:48 +0000 (GMT)
+Received: from epsmtip1.samsung.com (unknown [182.195.34.30]) by
+	epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
+	20261127144747epcas5p3ea5291d4421b9dd1c7b5bd9f689d7639~r7kd9qO0n2159821598epcas5p3p;
+	Fri, 27 Nov 2026 14:47:47 +0000 (GMT)
+Received: from SRIBCU13LG9P71 (unknown [107.108.208.92]) by
+	epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20261127144743epsmtip11a938de5238cc75244ef9229b378d8a2~r7kaaIVkO2293022930epsmtip1S;
+	Fri, 27 Nov 2026 14:47:43 +0000 (GMT)
+From: "Irlanki Sandeep" <irlanki.s@samsung.com>
+To: "'Kuniyuki Iwashima'" <kuniyu@google.com>, <ameryhung@gmail.com>
+Cc: <netdev@vger.kernel.org>, <bpf@vger.kernel.org>, <kuba@kernel.org>,
+	<cpgs@samsung.com>, <edumazet@google.com>, <davem@davemloft.net>,
+	<pabeni@redhat.com>, <ncardwell@google.com>, <ast@kernel.org>,
+	<alexei.starovoitov@gmail.com>, <ameryhung@gmail.com>,
+	<daniel@iogearbox.net>, <andrii@kernel.org>, <corbet@lwn.net>,
+	<linux-kernel@vger.kernel.org>, <lorenzo@google.com>, <maze@google.com>,
+	<sporeba@google.com>, <motomuman@google.com>, <madhan.raj@samsung.com>,
+	<srihari.k@samsung.com>, <g.pokhra@samsung.com>, <r.kumawat@samsung.com>,
+	<raj.kumars@samsung.com>, <ts413.lee@samsung.com>,
+	<ramyashree.s@samsung.com>, <daeil2.hwang@samsung.com>,
+	<sharmasagarika@google.com>, <irlanki.s@samsung.com>
+In-Reply-To: <av8pip2n63ZBofcE@google.com>
+Subject: RE: [PATCH bpf-next v9] bpf: tcp: add ecn_init callback to
+ bpf_tcp_ops for per-connection ECN
+Date: Fri, 27 Nov 2026 20:17:42 +0530
+Message-ID: <000001dd7e7e$448c3000$cda49000$@samsung.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -63,39 +87,84 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQLz+NqzmYpujPtDh8x08WfmcH857AK2nUVDAsdHS6ECyy+hMbTSuHvQ
+Content-Language: en-in
+X-CMS-MailID: 20261127144747epcas5p3ea5291d4421b9dd1c7b5bd9f689d7639
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+X-CPGSPASS: Y
+cpgsPolicy: CPGSC10-065,Y
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20261116151200epcas5p4218c26338b3e9580a9e232be400aecc5
+References: <DM6GLQVDXGWL.1ZV7PCL5B2B0K@gmail.com>
+	<CGME20261116151200epcas5p4218c26338b3e9580a9e232be400aecc5@epcas5p4.samsung.com>
+	<20261116151331.500313-1-irlanki.s@samsung.com>
+	<av8pip2n63ZBofcE@google.com>
 
-Jason Xing <kerneljasonxing@gmail.com> writes:
+Hi Kuniyuki,
 
-> Compared to __dev_queue_xmit(), __dev_direct_xmit() is the only open
-> gate for skbs whose mac_header might not be initialized. A few months
-> ago commit c2707480cfbf ("net/packet: reset the MAC header on the
-> packet-socket transmit path") solves the case where AF_PACKET skb can
-> miss resetting mac header if a few conditions in packet_parse_headers()
-> are not satisified and it will cause out-of-bounds access.
->
-> Similarly, Petr reported an issue about AF_XDP path where copy mode
-> can also trigger the uninitialized mac header problem.
->
-> In reply to Petr's patch, Eric suggested to add the reset logic in a
-> general layer to stop future issues like this happening instead of
-> dealing with scattered cases one by one[1]. So anchor the mac header in
-> __dev_direct_xmit() exactly as __dev_queue_xmit() does, before
-> validate_xmit_skb_list() so that ndo_features_check() and the vlan helpers
-> see it too.
->
-> For callers that already reset the header the operation is idempotent.
->
-> [1]: https://lore.kernel.org/all/CANn89i+aacS2PfaMXnimzGgbCLz-JSnqo6QyoS1=
-22Gf+kxya3w@mail.gmail.com/
->
-> Fixes: 35fcde7f8deb ("xsk: support for Tx")
-> Cc: stable@vger.kernel.org
-> Reported-by: Petr Oros <poros@redhat.com>
-> Closes: https://lore.kernel.org/all/20260817153957.3177627-1-poros@redhat=
-.com/
-> Suggested-by: Eric Dumazet <edumazet@kernel.org>
-> Signed-off-by: Jason Xing <kerneljasonxing@gmail.com>
+Thanks for the review. v10 is posted as 0/2, 1/2 and 2/2.
 
-Reviewed-by: Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org>
+> Why can't ip-rule (or VRF) be used with a per-route attribute ?
+
+Routes and rules select traffic by destination, interface, mark, uid
+range, protocol and port, not by cgroup or application. A uid or mark
+rule can separate apps, but the existing per-route ECN bit
+(RTAX_FEATURE_ECN) only force-enables classic ECN, so selecting AccECN
+would need a new route feature. VRF separates traffic by routing table
+and interface, not by application on the same route.
+
+> Also, a route attribute would work with syncookie.
+
+Correct. Syncookie connections do not run the callback, so with this
+series they use the sysctl; the route bit still applies via
+cookie_ecn_ok(). ip-sysctl.rst documents this. An automated review of
+v10 pointed out that the commit message is wrong about syncookies. It
+says no request_sock is created, but a request_sock is allocated; it just
+has no listener, so sk_to_full_sk() returns NULL and the program is
+skipped. v11 will fix the commit message and add a comment at the call
+site. I consider the fallback acceptable, since syncookies only come into
+play under load. If you think the per-connection policy should also cover
+the syncookie path, I'm happy to discuss options.
+
+> This is simple, but one concern would be that we end up adding more
+> single-purpose stateless callbacks during 3WHS, which could be more
+> expensive than stateful solution.
+>
+> For stateful use case w/ per-socket field, rwnd_init() + kfunc would
+> suffice (and we have such a use case).
+
+The cost concern is valid. The callback runs at most once per side per
+handshake, and since v10 on the passive side only for SYNs that request
+ECN.
+
+For the stateful alternative, rwnd_init() + kfunc works on the active
+side, because rwnd_init() runs in tcp_connect_init() before
+tcp_ecn_send_syn(). On the passive side it does not, because
+tcp_ecn_create_request() decides the ECN bits before rwnd_init() runs,
+so a field set there would not affect that SYN-ACK. If your per-socket
+use case is active-side only, rwnd_init() + kfunc is viable for it, and
+we can discuss it as a follow-up.
+
+> nit: reverse xmas tree order
+
+> Please avoid calling it if not needed,
+> !tcp_accecn_syn_requested && !th_ecn
+>
+> also nit: reverse xmas tree
+
+Done in v10. The declarations in tcp_ecn_send_syn() and
+tcp_ecn_create_request() are reordered. tcp_ecn_create_request() now
+returns before calling tcp_ecn_init_bpf() unless the SYN requests AccECN
+or carries ECE+CWR.
+
+> Please split selftest into a separate patch.
+
+Done in v10. The selftests are in their own patch (2/2).
+
+Thanks,
+Sandeep
+
