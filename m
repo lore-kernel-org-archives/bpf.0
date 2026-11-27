@@ -1,81 +1,85 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=195.10.208.42
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795788864;
-	b=MKcCLLe868FaK/FYqtjDBeurfweFspWaA28S29oRnHdt14GZFKsewQQJJnMEtIgK91Fb
-	 DFvFklLd1BAAVSgrhBiF/RNWH7kwgF1AW4ok5iQttkfS3PHxWa63Wo6ym4um8g8AhgnyN
-	 VMQ2bH3uyIU5aK5lgnk5VegEtUCvpB7mcqyKblQE7lv2s6sBxOc+LbljHyde+syB8BEGy
-	 wIulxGgqWl2eMsiD3qGzV+IgkElF0O/Mskyh71xb7lWlol816lgVKqZOdqqY9O/IJK6TS
-	 KeIt0X1cBY8G2KYXAgexsqrxF46p/KTymWSfs6l9OWIhNpAHtgjfimKdSKGNWXUNmEg==
+	t=1795789303;
+	b=LBlOP0Dpp2F4m6nq/sR0wbgfO9L7M9sg00Rv91/KNNd4pR8Tk7sgqeAbml7dd7950BKB
+	 0cZvZS4MlgRPmn7tBdFoHXhQ9Pm6DTKk12RG4tHtprFRNkh5+4VqlxaH6NBW1zvRJLdjz
+	 Ls45S/4XnJ4nOxfEniy9yVjy/krBjVBNsd4oD737QONGHLjX/TsybEx9UU3qriHMVnuLi
+	 BBxhLJf6MI586ZOEhyCfX59Hio25OJcs8HS1c5uOrQhiafjy6/h4VSen6IP1u1FmxUfMz
+	 TeEVJJgVWExute4nfXhA7qatC/Zq13W5dnkeVBTRpYi6Qm1fyYP2K6Lk+eIeBNZcEdA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795788864;
-	h=DMARC-Filter:Received:DKIM-Signature:From:To:Cc:Subject:Date:
-	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding:X-Rspamd-Queue-Id;
-	bh=gWmlZS2QEdndqaaG1v0KNH/Xqwd52KcDv0A7eCgo+VI=;
-	b=NtBixonUb6k+t21P1yRI8opDtTUO9M6Qhbi4rYFX0Es8R+IgL/theiLQtyhuR0JZOUVN
-	 /ZesGY0dsmcthtHHuRp2VEgQ6TvtdG0sgYan38kN7jE/IHeSMQ6yjyufuVAmfbRbkBbLl
-	 Rs55d+siXDKAlQaSRQ6ecq7OVAW4A6n4s27hiAmwi1jTNmlyeNMFo1cnVvyxHaKP0A8+g
-	 ngX8S8yNWC8NbnaWpR0mVRbOtX/Txgg/XDwdw/Q52tO/AuT0wuPN6pEGs55BNKh3OWXWx
-	 0/GxgnNwIvVTwpcqUc7yddiRNt48/zG3/mMNzsIarcafZYxfKgpxOX56BBbVIKCPIVA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795789303;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding;
+	bh=HE7gEqGCw4EyFiuV8uGktoGe7HLL7Xdr4RQo2bxKmaU=;
+	b=kdq0CIzc9MQzrjJrNvM4CUVLsrV8zFIPtNW5LqRyQ8EaLmnhn6Bj/2Ua5NK/5gssV2nJ
+	 QHiNn9sfG9ArkMXSpx5X6OCEIVuLHuZ8Tq6+RM1K/y5sJSYXrjjsIwXc9P/GTJ/bs9myT
+	 sHw4o8L27Ti6jnylNwpHIWySvrIWCwh1JKiRBmL5FEK9NAHL+1g99CKupgm5cEqh+jAgU
+	 Ia8gD9HJ0BUFfWbTY/Kj89Yv0tdd+UYKweOLxfLOTvmJS7DTy8kzxCsz1Z9dfNAbazeaJ
+	 ExnSZkUnb6WjGuBwHQ8jja63ouTKq9c+onbUXJDIGdDAsXgEkn8KotktsahwkcLZvtw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=mandelbit.com;
-	spf=pass smtp.mailfrom=mandelbit.com;
-	dkim=pass header.d=mandelbit.com header.i=@mandelbit.com header.a=rsa-sha256 header.s=MBO0001 header.b=VI8QU8qU;
-	arc=none smtp.remote-ip=195.10.208.42
-Received: from mout-b-112.mailbox.org (mout-b-112.mailbox.org [195.10.208.42])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DSZfoBMC;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85923606A685;
-	Fri, 27 Nov 2026 14:14:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 85923606A685
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mandelbit.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mandelbit.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E92AB606A32E;
+	Fri, 27 Nov 2026 14:21:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=mandelbit.com header.i=@mandelbit.com header.a=rsa-sha256 header.s=MBO0001 header.b=VI8QU8qU
-Received: from smtp102.mailbox.org (smtp102.mailbox.org [IPv6:2001:67c:2050:b231:465::102])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519MLKEM768 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-b-112.mailbox.org (Postfix) with ESMTPS id 4jbb530l8mz5vdq;
-	Fri, 27 Nov 2026 15:14:15 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mandelbit.com;
-	s=MBO0001; t=1795788855;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=gWmlZS2QEdndqaaG1v0KNH/Xqwd52KcDv0A7eCgo+VI=;
-	b=VI8QU8qUATvQCAUolKhM2vpwhS/noVVlQAVMhWsvzfu7mP6a7OUPoo2OgJIaNasesc+UEr
-	OQWympo7Bj/EijtA5eWwdZjL4wp/Kvg1iM59gZfCIu0taU7hxzk+z+82oRwLz0QX40f/F5
-	DaKSqtW5JWXUYG0YBlUIMSph9o7HVFs13LNQ8CnIXN4kA20/eaDTBcWQQ3LVzkoKNuL+7K
-	hUwepVBPEzo45KRd8PDPUFqDjPfGdEHPnUFATx/ei4Q2ICuw0lU5HWRYEMC18euOI5q9V/
-	dC1dbNbEAeaW68QPVSC/qKVufOI0xxKHCNZT9/H9lnR5WcbajLLqi+bwW09Nbg==
-Authentication-Results: outgoing_mbo_mout;
-	dkim=none;
-	spf=pass (outgoing_mbo_mout: domain of antonio@mandelbit.com designates 2001:67c:2050:b231:465::102 as permitted sender) smtp.mailfrom=antonio@mandelbit.com
-From: Antonio Quartulli <antonio@mandelbit.com>
-To: willemdebruijn.kernel@gmail.com,
-	jasowangio@gmail.com
-Cc: Antonio Quartulli <antonio@mandelbit.com>,
-	andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@kernel.org,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	sdf@fomichev.me,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DSZfoBMC
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0AC91F000C1;
+	Fri, 27 Nov 2026 14:21:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795789302;
+	bh=HE7gEqGCw4EyFiuV8uGktoGe7HLL7Xdr4RQo2bxKmaU=;
+	h=From:To:Cc:Subject:Date;
+	b=DSZfoBMCSmtY1GfTC/aIsp071xWx6Mp0hDMLkQraEQDi8XJb1Dd9rqkypOU8L1psY
+	 eB/vAXVvxYh1jKxDT/9Viqq1QtP9B3iC1uSoeVW8JbqQrgdN88s6KprKBUH4Ghe6gx
+	 wqw9+rMaO8T2/38DOzym6kcukJMMMiz0vkyocUzAKxI4iCXlQgl/2oVSstArCKrqJu
+	 qayNzLkTUVxoSA7IdZXIinv836XVHWNwDFBu7pMC+749RSbQ3+KqIlMVcHAExQWYxa
+	 3YWSAnVYjz8+U+KvJz1JwGKBzqyEsNoWS3dUTHyHkepJH25gf9HhnzboSb0zrqsUAd
+	 IeL4x1WxCS2kQ==
+From: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>
+To: Magnus Karlsson <magnus.karlsson@intel.com>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Willem de Bruijn <willemb@google.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Shuah Khan <shuah@kernel.org>,
 	netdev@vger.kernel.org,
 	bpf@vger.kernel.org
-Subject: [PATCH net-next v3 3/3] tun: skip the virtio-net header parsing without IFF_VNET_HDR
-Date: Fri, 27 Nov 2026 15:14:05 +0100
-Message-ID: <20261127141406.651406-4-antonio@mandelbit.com>
+Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+	Simon Horman <horms@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Tony Nguyen <anthony.l.nguyen@intel.com>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Larysa Zaremba <larysa.zaremba@intel.com>,
+	Tushar Vyavahare <tushar.vyavahare@intel.com>,
+	Jason Xing <kerneljasonxing@gmail.com>,
+	Bastien Curutchet <bastien.curutchet@bootlin.com>,
+	Colin Ian King <colin.i.king@gmail.com>,
+	intel-wired-lan@lists.osuosl.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net 0/3] xsk: Keep the shared info of zero-copy buffers in kernel memory
+Date: Fri, 27 Nov 2026 15:21:26 +0100
+Message-ID: <20261127142131.3527737-1-bjorn@kernel.org>
 X-Mailer: git-send-email 2.56.1
-In-Reply-To: <20261127141406.651406-1-antonio@mandelbit.com>
-References: <20261127141406.651406-1-antonio@mandelbit.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -85,51 +89,60 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 4jbb530l8mz5vdq
 
-Without IFF_VNET_HDR, tun_get_user() still passes an all-zero header to
-tun_vnet_hdr_tnl_to_skb(), which then only resets the MAC header. The
-parser is not inlined, so that costs two nested calls per packet. Reset
-the MAC header directly, as tap_get_user() already does. The check uses
-the same copy of the flags that decided whether the header was read.
+A packet that AF_XDP receives in zero-copy mode over several buffers
+keeps its shared info, the fragment list and its count, in the UMEM,
+which userspace can write while the kernel uses it. A rewritten list
+or count makes the kernel read and write out of bounds.
 
-1.9% fewer instructions per 1400-byte UDP packet written and dropped at
-the raw table, 1.1% fewer when forwarded (qemu -icount, x86_64).
+Patch 2 moves the shared info into the buffer pool and lets the device
+write up to the end of each chunk. Patch 1 makes libeth count XSk
+XDP_TX buffers one by one, as it read the shared info at a later bulk
+flush. Patch 3 updates the xsk selftests.
 
-Signed-off-by: Antonio Quartulli <antonio@mandelbit.com>
----
- drivers/net/tun.c | 17 ++++++++++++-----
- 1 file changed, 12 insertions(+), 5 deletions(-)
+Sashiko found this in its review of the AF_XDP device buffer layout
+series [1].
 
-diff --git a/drivers/net/tun.c b/drivers/net/tun.c
-index 09f31faaced2..a644fab4321f 100644
---- a/drivers/net/tun.c
-+++ b/drivers/net/tun.c
-@@ -1970,11 +1970,18 @@ static ssize_t tun_get_user(struct tun_struct *tun, struct tun_file *tfile,
- 		break;
- 	}
- 
--	if (tun_vnet_hdr_tnl_to_skb(flags, features, skb, &hdr,
--				    (flags & TUN_TYPE_MASK) == IFF_TAP)) {
--		atomic_long_inc(&tun->rx_frame_errors);
--		err = -EINVAL;
--		goto free_skb;
-+	if (flags & IFF_VNET_HDR) {
-+		bool has_eth = (flags & TUN_TYPE_MASK) == IFF_TAP;
-+
-+		if (tun_vnet_hdr_tnl_to_skb(flags, features, skb, &hdr,
-+					    has_eth)) {
-+			atomic_long_inc(&tun->rx_frame_errors);
-+			err = -EINVAL;
-+			goto free_skb;
-+		}
-+	} else {
-+		/* a zero hdr would only reset the MAC header */
-+		skb_reset_mac_header(skb);
- 	}
- 
- 	if ((flags & TUN_TYPE_MASK) == IFF_TAP)
+I tested this on mlx5 hardware, and on igb and veth in QEMU. None of
+them receives multi-buffer packets in zero copy, so i40e, ice and
+idpf, which do, are only build-tested. Intel folks, could you run your
+multi-buffer zero-copy tests on them?
+
+Also for Intel, found while auditing the drivers and not touched here:
+ice no longer sizes its zero-copy RX buffers from the XSK pool. Commit
+3a4f419f7509 ("ice: drop page splitting and recycling") programmed a
+fixed 3072 bytes, and 93f53db9f9dc ("ice: switch to Page Pool")
+changed ice_setup_rx_ctx() to use ring->rx_buf_len, which only the
+page pool path sets. An XSK ring gets the length of its last page pool
+setup, 3456 bytes on 4K pages, or 0 if it never had one. With 2K
+chunks the device can write past the chunk into the next one. I found
+this by reading the code and did not test it.
+
+[1] https://lore.kernel.org/netdev/179561567996.3135.9952128421877275714@kernel.org/
+
+Björn Töpel (3):
+  libeth: xsk: Count each XDP_TX buffer on its own
+  xsk: Keep the shared info of zero-copy buffers in kernel memory
+  selftests/bpf: Drop the zero-copy tailroom from the xsk tests
+
+ include/net/libeth/tx.h                       |  3 +-
+ include/net/libeth/xdp.h                      |  9 +++++-
+ include/net/libeth/xsk.h                      |  6 ++--
+ include/net/xdp.h                             | 32 +++++++++++++++----
+ include/net/xdp_sock_drv.h                    | 29 ++++++-----------
+ include/net/xsk_buff_pool.h                   |  2 ++
+ net/xdp/xdp_umem.c                            |  3 +-
+ net/xdp/xsk_buff_pool.c                       | 17 +++++-----
+ .../selftests/bpf/prog_tests/test_xsk.c       | 10 +++---
+ .../selftests/bpf/prog_tests/test_xsk.h       |  2 --
+ tools/testing/selftests/bpf/prog_tests/xsk.c  | 13 +-------
+ tools/testing/selftests/bpf/xskxceiver.c      | 15 +--------
+ 12 files changed, 67 insertions(+), 74 deletions(-)
+
+
+base-commit: 28a371228d4eb4857cc31eeb1a0d7d01e9c3ea2f
 -- 
 2.56.1
 
