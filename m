@@ -1,80 +1,59 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795789462;
-	b=lhv7QRGcVUFyxfQLygJGDbpvi9yKbHB/CxT/47yNDWteBBuDNjSsX8Rp25QOnJBu4aXJ
-	 agqbOvEt58IuKLZs4MINg+sntksIDFmfVDh01AfZFMr+QRhhYrCo2XRWMCXlXaYmPr5Kn
-	 qZMQsamLHWuI4O6tqbArFqFBLyBFfD2NEczvrB2m0VKSHqRWxHsfsqmyJfrN5TFZXryyI
-	 xJN1KL5arnf/0zMERzWqwurcsRI8n4ozFVlU8vjdtbJ+kSbD6+4D5Q/GyW/7+1Zb+4Un0
-	 u6vYTG7cKQX244azgAZrYGKeOWOxTm62NAjExgbqT12TpAicHKIOAnkvfSlzOU1ZSFA==
+	t=1795790324;
+	b=WWT0PlkF3eGgO34mReBkmYREN2Um9CEZPOc6Du77mf0/r3dXN39G4DudlE9bX/mFXnST
+	 1A7LbUsJ4zbgqvhZUlBwIq8wN/W+wsbkLHV59puz+yqrLOoAzp7bMjCna8MeO4HdVYrpc
+	 1F5O4v3xZDx1pQrOwP5u67BJJfybfyRs2Q63unMRuhBBgjGtTbjPqDMEmWm8RfbvMLlOU
+	 /xZ6uFVvoeINXdkulmyixA6c0yz0iEtX4s4Jv42VDAtQHnZaxUzlQD+Czy0kp16fEJerg
+	 B6y/ehNjeaLsaXwEmrpSJewudoXZdIH8wu/KI2KwzPHiWB8m/lD2HbJcnEK/5u5y/MQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795789462;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:
-	 In-Reply-To:References:Auto-Submitted:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=Ps3dmenyy5Kz+Ld8FFyPnRbKN1BblcpmGxOsdgzLlkg=;
-	b=TQ3GVVAse96Zvj6V7KUiNZCKQ2wZNqbJyI/5ZfB6em0EqBrMwMNCJuGNyASNk9FpK3NY
-	 cGJJtxibS0VDBJrTF8WJWqp+RmVzenafKoP8enC+xE7Tgp3Uinvk5NXcW/0+WvKuvBG3x
-	 i1GV/gIY82OwqPjGjAwxsx0h7tIY6lfYMTRxOCLC1Twzj7a4BgHlNHW4Uh4fm/0bEfZee
-	 WMFWqL8Qc6zqfv6jzjwTIjWDeYAzPRPbE6QmfhMl4gKhXd3NgooaEXqiESQBKfjoeuxXf
-	 KZEUrpbXV5m4bLvqqLy998gktt8onpyCvwlbgR1Q8l7Ck4R/pFxfcIk20Fv2DVz9Bqg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795790324;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:In-Reply-To:References:
+	 Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
+	bh=xJpIceYu2KxI6ncR8keKatQpZCcoR32gRrL57WMYwKo=;
+	b=yXipJa34oVl1fx9EeAU3FIJa/ezBhH5tz8t5z5E7TiuaJUYWtI9fXQ30+ZvchDhFp6fR
+	 nAX8YB0srM7wANwAHpB58bIO7ZWLDR8MbAJaDIBeZIIjursEsEtwxqqtMd78F21FQvi1Q
+	 WtLCV3JzVHaexBjZkuUlq7pDNMT7rVwqcmtGZ757G+7KXNFNl6KGYJsmD79kDbL0OvoKA
+	 a3eDnjBAIwCMLc7jABrAytvDBqs7ovoHsffJlhrBJgsmiLi3s1HABKrqBiNIBtWSoSDlS
+	 6Z2tK97B10YFE5Mb1n8un+S4MP4CA/skYjk7R2MY1Vr39Xl5YwphnjnhTr6JS1J4QRA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="JiSaHsN/";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=I+UqYskQ;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90CA4606A689;
-	Fri, 27 Nov 2026 14:24:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74CD8606A333;
+	Fri, 27 Nov 2026 14:38:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JiSaHsN/
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6389C1F00934;
-	Fri, 27 Nov 2026 14:24:20 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=I+UqYskQ
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 697601F000C1;
+	Fri, 27 Nov 2026 14:38:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795789462;
-	bh=Ps3dmenyy5Kz+Ld8FFyPnRbKN1BblcpmGxOsdgzLlkg=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=JiSaHsN/eSaFadoc5tJ5VpXhzsvdCL87P+2sY3nhUY+cxtvQ88EyBcTq5fEP8Aw7F
-	 4vqC+aJOYByatEIRgQoADHOEfgTfQCjZ0wwKW3t/Z1Us+yb0Hmg4yf63LNY9og8WeV
-	 FuJ0ll92LJW0f//eDjv0hmdIceQRUtyXwxrD4mse/tfrhaDuJWDPXFAFTQy5ApqlMJ
-	 jxW/4yJ0rh8s/EIfYop/r0Uom2+Goi5WNdYoxoG2e/xqUYBy0UEMcXPp7NGSqcU1AY
-	 mMnSgGTjD/+FQ3sN+1sUFINBNvtR5sV7EniSzic+IXxVQch7GUA6SHPE+LRfXdb2Ke
-	 2xc7ddc9edrWw==
-From: netdev-bot+sinfo@kernel.org
-To: =?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>
-Cc: Magnus Karlsson <magnus.karlsson@intel.com>,
- Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
- Alexander Lobakin <aleksander.lobakin@intel.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Willem de Bruijn <willemb@google.com>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Shuah Khan <shuah@kernel.org>,
- netdev@vger.kernel.org, bpf@vger.kernel.org, Simon Horman <horms@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Martin KaFai Lau <martin.lau@linux.dev>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>,
- Ihor Solodrai <ihor.solodrai@linux.dev>,
- Tony Nguyen <anthony.l.nguyen@intel.com>,
- Przemek Kitszel <przemyslaw.kitszel@intel.com>,
- Larysa Zaremba <larysa.zaremba@intel.com>,
- Tushar Vyavahare <tushar.vyavahare@intel.com>,
- Jason Xing <kerneljasonxing@gmail.com>,
- Bastien Curutchet <bastien.curutchet@bootlin.com>,
- Colin Ian King <colin.i.king@gmail.com>, intel-wired-lan@lists.osuosl.org,
- linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net 0/3] xsk: Keep the shared info of zero-copy buffers in
- kernel memory
-Date: Fri, 27 Nov 2026 14:24:19 +0000
-Message-ID: <179578945993.3294.13218544631013207467@kernel.org>
-In-Reply-To: <20261127142131.3527737-1-bjorn@kernel.org>
-References: <20261127142131.3527737-1-bjorn@kernel.org>
-Auto-Submitted: auto-generated
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+	s=k20260515; t=1795790324;
+	bh=xJpIceYu2KxI6ncR8keKatQpZCcoR32gRrL57WMYwKo=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date;
+	b=I+UqYskQCs6jwv4Cusi7O+4pkTVlALVF1TR+b+Kgf+/PonKcfSXU00z977gQ/tBcp
+	 FGkyl4J2uQZKym3I7F+tDjiSBdEzOjUTx1xgOMfRypRpK0vzAaAHarr38o7eVYC+hA
+	 DMzW/o15vea1pYkiMi76xXQqRmInwGYUX9TKpIB6u03wJfJ9alVRvr27zZS39FD8FE
+	 0/vL3o0Xs5LyYAVK+tCdysBuzI+1oMzgIDl/Vm7t7yFKyIJZORfmBd9G9h7zNsz3ME
+	 F9vOALJ60KMrJFwgsa9Ud56Rut7MVOEYa0MLOv1wJ05559wERQgvZqNeLaKJGuq7Ip
+	 YayBJ2Zk0Aiyg==
+From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To: Jason Xing <kerneljasonxing@gmail.com>, willemb@google.com,
+ magnus.karlsson@intel.com, maciej.fijalkowski@intel.com, sdf@fomichev.me,
+ davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org,
+ pabeni@redhat.com, horms@kernel.org
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, Jason Xing
+ <kerneljasonxing@gmail.com>, stable@vger.kernel.org, Petr Oros
+ <poros@redhat.com>
+Subject: Re: [PATCH net v2 1/2] net: reset the mac header in
+ __dev_direct_xmit()
+In-Reply-To: <20261127105347.72997-2-kerneljasonxing@gmail.com>
+References: <20261127105347.72997-1-kerneljasonxing@gmail.com>
+ <20261127105347.72997-2-kerneljasonxing@gmail.com>
+Date: Fri, 27 Nov 2026 15:38:40 +0100
+Message-ID: <87cxrqgwzz.fsf@all.your.base.are.belong.to.us>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -84,22 +63,39 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Hi!
+Jason Xing <kerneljasonxing@gmail.com> writes:
 
-This is an automated message. This series looks like a fix, but its
-commit messages seem to be missing some information:
+> Compared to __dev_queue_xmit(), __dev_direct_xmit() is the only open
+> gate for skbs whose mac_header might not be initialized. A few months
+> ago commit c2707480cfbf ("net/packet: reset the MAC header on the
+> packet-socket transmit path") solves the case where AF_PACKET skb can
+> miss resetting mac header if a few conditions in packet_parse_headers()
+> are not satisified and it will cause out-of-bounds access.
+>
+> Similarly, Petr reported an issue about AF_XDP path where copy mode
+> can also trigger the uninitialized mac header problem.
+>
+> In reply to Petr's patch, Eric suggested to add the reset logic in a
+> general layer to stop future issues like this happening instead of
+> dealing with scattered cases one by one[1]. So anchor the mac header in
+> __dev_direct_xmit() exactly as __dev_queue_xmit() does, before
+> validate_xmit_skb_list() so that ndo_features_check() and the vlan helpers
+> see it too.
+>
+> For callers that already reset the header the operation is idempotent.
+>
+> [1]: https://lore.kernel.org/all/CANn89i+aacS2PfaMXnimzGgbCLz-JSnqo6QyoS1=
+22Gf+kxya3w@mail.gmail.com/
+>
+> Fixes: 35fcde7f8deb ("xsk: support for Tx")
+> Cc: stable@vger.kernel.org
+> Reported-by: Petr Oros <poros@redhat.com>
+> Closes: https://lore.kernel.org/all/20260817153957.3177627-1-poros@redhat=
+.com/
+> Suggested-by: Eric Dumazet <edumazet@kernel.org>
+> Signed-off-by: Jason Xing <kerneljasonxing@gmail.com>
 
- - Whether the issue was actually triggered, or is only theoretical
-   (e.g. found by LLM and not proven at runtime). If it was triggered
-   please include the symptoms, like the stack trace or kernel messages.
-
-Please do not repost the series just to address the above. Instead,
-reply to this email with the missing information, so that reviewers
-can take it into account.
-
-*IMPORTANT*: If you do repost (for other reasons) - please include
-the relevant info in the cover letter or commit messages.
--- 
-The evaluation is done by an LLM so it may be wrong, if you think
-that is the case please reply and explain.
+Reviewed-by: Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org>
