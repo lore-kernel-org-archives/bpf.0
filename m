@@ -1,45 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=81.187.191.129
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795788246;
-	b=BrwaE1qmSSTAnJujOZwpdqVfAp1asSYMk14eAOqO+aNm5yd+pxMOi38wYKF+EzZpx2KB
-	 rY31G0QVQugISWBKCqdzjzHAFW362I+wYUWOzZKZV+9wrKJd70UrOmKDCeBsnJLYo0zMx
-	 /+WNTzdYGm/OT7d6BHCmZ7Yj0/dDW2wQq7gjuL/Rmg4gK0S+sCj1/IiziI8cY3c9FEWc3
-	 pUGSHiPePH5DX3Z+B0kR1qvKr5wMM/+Q2CFY0T54wEAInxs2Vquegqh2vw/f89i80QBtv
-	 3gJRy2xW0cAXYrsHH2gVFcRLGNGH8rvD46Q10K0niD0HOlYtQ56iQO8hUVr+yTIqKBA==
+	t=1795788447;
+	b=VxalbvZcNZ6Vhv9daWLrM3StvFbLZnzNJwHrp/2S2D1POvoaIP+xg0jGBwxCVStpMwOj
+	 gD8O5Y5Gf82EXEb+mJsLHOYBCmKo/9ej1AZPAarQGNm8DcQ7vVyojW0ZNn/nArKQmyIj1
+	 4Z2q8ooaa906SxRKX7X2XWQtrQaab2XT8n9L5hyHQW6FGI35H4HZ33HA9zWfibmtA1ve0
+	 78Hs59aYtE9nb0OAAHvrXpdTDbRlQL+wuLRaF7BBDPVfVqT93bs1LLCevUsbtf+FSLx6d
+	 xCzOeSTMs43wLzP67aYZyVMVCYCGbeCV1tFwr8c/mISM6GYzK3BT41igBfbCBFX5xQA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795788246;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=/oInJo8vXdWdzusi1A6UniTrK0nXFaYuOLA3sRJZHVo=;
-	b=HHRZ/b3wuCzEYvwWVpmQmMY0g/SbwFwwwDk/3O95k4E8xnNw/i35wZzhqN3xUhqIFpyi
-	 2AaY+hn/Dn0lzCryLeUwT8wWtmceVlyP2LJUiiwwcmFKYEhpV2hE3B7QGe5UXqxvTWyxW
-	 ovhsUmqumUzO0dpJFT34c42z9zQaf2g/fgDL+kNqSTB2AsBqg8MvJMF5oBWlxB3xSIlI1
-	 Xi12H5LMwBMoJKpwMdKVromkU+Z4aQNpuPC1YpEGA8gc9qCvfa0MdZ8bx6hELiFBUAmr+
-	 eGo11ENqyboWTCmTXK14cvDWsJ7cNmEyxvEm3bwzjCzfasH9+6C7Ue+IrL8urN4Hnag==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795788447;
+	h=DMARC-Filter:Received:From:To:Cc:Subject:In-Reply-To:References:
+	 Emacs:Date:Message-ID:User-Agent:MIME-Version:Content-Type:
+	 X-DCC--Metrics;
+	bh=k3IRFjTa40yijxkZ99mvI6rZpFQBTdXXPJw6CdGe++A=;
+	b=JzO5b6vJtDmKoolA2jEniUllBG8vP6Wf0TYyB8z7ByIw3GpZWQ0dElSIFehG87+bJpkK
+	 Ak61z/YhbG2THvsQcnIEO85FKmdPvsqbtyGnWuakyYrwN+u+BOCA/howS9Hniw/dTEiK0
+	 xlf1IS36P2/ZUUoAzVcSF/NmNY/KbItuWhWIac3o/hEeg0mYd2Zi2mv6I/ZCTGGYOia3c
+	 WSqWMXOvHN1RlZg7W8AUOak83t+jjsrJvY6VhYTR7kIPULQIzYUdKhNdlxo3l0cHaFq/W
+	 fHJOAZ+K4UGKdwN9o5FJvqs/Ag3hBen7PrQuJINbYzkzErO4srKqE2X7PbykMmc3Z6A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=gmvrnUMV;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=none header.from=esperi.org.uk;
+	spf=pass smtp.mailfrom=esperi.org.uk;
+	arc=none smtp.remote-ip=81.187.191.129
+Received: from mail.esperi.org.uk (icebox.esperi.org.uk [81.187.191.129])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE3D6606A31C;
-	Fri, 27 Nov 2026 14:04:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=gmvrnUMV
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 640FA1F00925;
-	Fri, 27 Nov 2026 14:04:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795788246;
-	bh=/oInJo8vXdWdzusi1A6UniTrK0nXFaYuOLA3sRJZHVo=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=gmvrnUMVwfdN0snrK0lo2swGupjTqd8Atp2w+NKm7Ak134BtC9w3Qp4x0w2Tu3y2K
-	 dRwC+sHsEmm98mEBlL4qvA7ytTSjXqJdahTOSjadAiVMEXV8KfAseTaHe7TLWdWIEg
-	 Z6JNSKYOPSTE6hrxtKLEDtoLueuO15aH8FGdlrLaxtKvgiEc1NX5fvRxtrItVHlcmP
-	 jvB/zNU6bJGXnW2k+vZ55TnUSghagm0coC7MXYZZrf/km4UPXExZr/HAKoRk9YXlvt
-	 yH9Xxhu6/6fRgq8JHGNuIR1r1q58tvU+AWuStPT/U+EoDstmJrplfeWOvUlLz+kD3O
-	 wsfFnfbQJIJXg==
-Content-Type: multipart/mixed; boundary="===============1281668951458116797=="
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADBCB606A32E
+	for <bpf@vger.kernel.org>; Fri, 27 Nov 2026 14:07:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org ADBCB606A32E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=esperi.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=esperi.org.uk
+Received: from loom (nix@sidle.srvr.nix [192.168.14.8])
+	by mail.esperi.org.uk (8.17.2/8.17.2) with ESMTPS id 6ARE7DIa020970
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
+	Fri, 27 Nov 2026 14:07:14 GMT
+From: Nick Alcock <nix@esperi.org.uk>
+To: "Jose E. Marchesi" <jemarch@gnu.org>
+Cc: "Can" <can@tartanoglu.com>, <bpf@vger.kernel.org>,
+        "Alexei
+ Starovoitov" <ast@kernel.org>,
+        "Daniel Borkmann" <daniel@iogearbox.net>,
+        "Andrii Nakryiko" <andrii@kernel.org>,
+        "Eduard Zingerman"
+ <eddyz87@gmail.com>,
+        "Kumar Kartikeya Dwivedi" <memxor@gmail.com>,
+        "Martin KaFai Lau" <martin.lau@linux.dev>,
+        "Song Liu" <song@kernel.org>,
+        "Yonghong Song" <yonghong.song@linux.dev>,
+        "Jiri Olsa"
+ <jolsa@kernel.org>,
+        "Emil Tsalapatis" <emil@etsalapatis.com>,
+        "Ihor
+ Solodrai" <ihor.solodrai@linux.dev>,
+        "Alan Maguire"
+ <alan.maguire@oracle.com>,
+        "Arnaldo Carvalho de Melo" <acme@kernel.org>,
+        "David Faust" <david.faust@oss.qualcomm.com>,
+        "Bruce McCulloch"
+ <bruce.mcculloch64@gmail.com>,
+        "Nathan Chancellor" <nathan@kernel.org>,
+        "Nicolas Schier" <nsc@kernel.org>, <linux-kbuild@vger.kernel.org>,
+        <dwarves@vger.kernel.org>, <llvm@lists.linux.dev>
+Subject: Re: RFC: vmlinux BTF from clang -gbtf, stock lld and a libbpf tool
+In-Reply-To: <87fqwmspyg.fsf@gnu.org>
+References: <20261121205803.b46d9bd1a88c@tartanoglu.com>
+	<87fqwmspyg.fsf@gnu.org>
+Emacs: if SIGINT doesn't work, try a tranquilizer.
+Date: Fri, 27 Nov 2026 14:07:13 +0000
+Message-ID: <87ecc6fjvy.fsf@esperi.org.uk>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,100 +78,100 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <3f89ad0cf49f89f8d10f230ecb61bd69bebef63465e260b3e4faf4e2eb65799d@mail.kernel.org>
-In-Reply-To: <20261127133051.2540069-1-irlanki.s@samsung.com>
-References: <20261127133051.2540069-1-irlanki.s@samsung.com>
-Subject: Re: [PATCH bpf-next v10 1/2] bpf: tcp: add ecn_init callback to bpf_tcp_ops for per-connection ECN
-From: bot+bpf-ci@kernel.org
-To: irlanki.s@samsung.com,kuniyu@google.com
-Cc: alexei.starovoitov@gmail.com,ameryhung@gmail.com,andrii@kernel.org,ast@kernel.org,bpf@vger.kernel.org,corbet@lwn.net,cpgs@samsung.com,daeil2.hwang@samsung.com,daniel@iogearbox.net,davem@davemloft.net,edumazet@google.com,g.pokhra@samsung.com,irlanki.s@samsung.com,kuba@kernel.org,linux-kernel@vger.kernel.org,lorenzo@google.com,madhan.raj@samsung.com,maze@google.com,motomuman@google.com,ncardwell@google.com,netdev@vger.kernel.org,pabeni@redhat.com,r.kumawat@samsung.com,raj.kumars@samsung.com,ramyashree.s@samsung.com,sharmasagarika@google.com,sporeba@google.com,srihari.k@samsung.com,ts413.lee@samsung.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Fri, 27 Nov 2026 14:04:03 +0000 (UTC)
+Content-Type: text/plain
+X-DCC--Metrics: loom 1102; Body=23 Fuz1=23 Fuz2=23 rep=100%
 
---===============1281668951458116797==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On 27 Nov 2026, Jose E. Marchesi uttered the following:
 
-> bpf: tcp: add ecn_init callback to bpf_tcp_ops for per-connection ECN
+> [Fixing email adresses of David Faust and Bruce McCullough and Nick
+>  Alcock]
 
-TL;DR:
-- Commit message may misdescribe why syncookies skip ecn_init (no listener,
-  not no request sock); a comment is suggested
-- Design question: Kuniyuki's v9 concerns (route attribute, callback cost) may
-  be unresolved
+Thanks!
 
->     bpf: tcp: add ecn_init callback to bpf_tcp_ops for per-connection ECN
->
->     [ ... ]
->     the default via bpf_get_retval(); an out-of-range return keeps it. With
->     syncookies no request_sock is created, so the program is not invoked and
->     the sysctl and route decide as before. No negotiated-mode state is
->     stored; the decision taken at handshake time stands for the connection.
->     [ ... ]
+>> Alexei asked in llvm/llvm-project#183915 [1][2] for native-vs-pahole
+>> results to come here, and suggested dropping BTF dedup from lld in
+>> favour of a stock link plus a libbpf-based kernel tool. I closed
+>> #183915 and tested that route on saved x86-64 kernel objects.
+>>
+>> Two headline findings up front:
+>>
+>> 1. On those saved objects, unmodified ld.lld plus a libbpf prototype
+>> reproduced the patched linker's decoded vmlinux BTF (bpftool raw
+>> dumps match) and byte-identical .BTF_ids, though not byte-identical
+>> .BTF and without booting a host-tool image.
+>> 2. On the booted native kernel from the earlier patched-lld run, a
+>> verifier negative test (flex_array_unaligned_step in
+>> verifier_btf_array_access) unexpectedly loads across all three
+>> test_progs flavours because struct vring_used is only a FWD in
+>> native BTF. Static checks also show shifted-register FUNC
+>> prototypes (e.g. __add_to_kill) and two duplicate-ID warnings in
+>> resolve_btfids that fail CONFIG_WERROR=y.
+>>
+>> The compiler side is LLVM #183929 (-gbtf for non-BPF ELF targets);
+>> its
 
-Is this accurate?  In tcp_conn_request() a request sock is still allocated
-when syncookies are in use, and tcp_ecn_create_request() still runs on it
-and reaches tcp_ecn_init_bpf():
+Ooh! I thought I was going to have to implement this. :)
 
-    req = inet_reqsk_alloc(rsk_ops, sk, !want_cookie);
-    ...
-    tcp_ecn_create_request(req, skb, sk, dst);
+>> Discourse RFC [3] drew a key question from LLVM DebugInfo
+>> maintainers:
+>> LLVM debug info is best-effort, whereas the verifier and trampolines
+>> treat vmlinux BTF as trusted safety and ABI metadata. Before
+>> reshaping #183929 or proposing kbuild patches, I'd like feedback on where that
+>> trust boundary sits, how functions and DATASECs should be handled,
+>> and what GCC/Clang/linker contract makes sense.
 
-The program appears to be skipped only because a syncookie request sock is
-allocated without a listener (attach_listener is false, so rsk_listener is
-NULL).  That makes sk_to_full_sk() return NULL inside bpf_tcp_ops_call_int():
+I'm quite interested in this too, given my past, ah, arguments over the
+possibility of structs with conflicting definitions in different TUs,
+the mess pahole makes of them (because it assumes they don't exist, and
+accepts the first available struct with a given name it sees), and their
+occasional appearance in the kernel. We've even had cases where setting
+the wrong kconfig options can cause wildly different duplicate
+definitions of things like task_struct, though having structs this
+important with the wrong definitions causes the BTF self-tests to fail
+disastrously so hopefully nobody would actually ship a kernel that
+turned those on.
 
-    struct sock *__sk = sk_to_full_sk(sk);
-    ...
-    if (__sk) {
+(I am willing to believe that there is an intent that no such structures
+exist in the kernel and thus the file format need not accommodate them,
+though CTF, being meant for userspace, has to be more flexible. I stil
+don't believe that they don't *appear*, because I've seen them, and
+there is no obvious means to keep them from reappearing accidentally.
+A deduplicator is of course the perfect place to implement guards
+against such things appearing in built kernels, but it has to be able to
+spot them first...)
 
-If the program did run on a cookie SYN, its ecn_ok decision would be encoded
-in the cookie timestamp, but the ACK path re-validates it with
-cookie_ecn_ok(), which reads only the sysctl and the route.
+>> true_signature [7]. Whatever comes out of this should work for GCC
+>> objects too.
 
-Could the commit message describe the actual mechanism (a request sock with
-no listener, so sk_to_full_sk() returns NULL)?  Would a short comment at the
-tcp_ecn_create_request() call site also help keep the two paths from
-silently disagreeing later?
+I intend to build CTFv4 support for LLVM on top of it, too, following
+which BTF-compatible (CTFv4) support in LLVM-compiled userspace should
+be practical, modulo bugs.
 
-> diff --git a/include/net/tcp.h b/include/net/tcp.h
-> --- a/include/net/tcp.h
-> +++ b/include/net/tcp.h
+>> Saved-object replay (experimental instrument, not a kbuild API)
 
-[ ... ]
+This is really neat :)
 
-> @@ -3035,6 +3035,12 @@ struct bpf_tcp_ops {
->  	 */
->  	int (*rwnd_init)(struct sock *sk, struct request_sock *req);
->
-> +	/* Should return the ECN variant to negotiate in this handshake:
-> +	 * one of net.ipv4.tcp_ecn values. bpf_get_retval() has the sysctl.
-> +	 * @req as in timeout_init().
-> +	 */
-> +	int (*ecn_init)(struct sock *sk, struct request_sock *req);
-> +
+>> Types. In raw BTF, 132 STRUCT/UNION definitions present in pahole are
+>> FWD-only in native. In the normalized C-dump comparison (23,109 exact
+>> of 23,216 native and 23,490 pahole declaration rows), only 39 show up
+>> in fwd_vs_definition.txt; the other 93 (including vring_used) were
+>> paired as "exact" against bpftool's synthetic forward declarations
+>> and
+>> filed under extras.txt (111 pahole rows = 93 missing definitions + 18
+>> extra FWDs; 2 native FWDs). Walking pahole's BTF from those 132 roots
+>> reaches 149 of 178 pahole-only rows (e.g. acpi_gpio_params via
+>> acpi_gpio_mapping).
+>>
+>> The cause confirmed per-object in libahci.o (ahci_cmd_hdr) and
+>> e1000_hw.o (e1000_shadow_ram) is clang's deferred pointee traversal,
+>> which emits a FWD even when the CU's DWARF has the full definition.
 
-Kuniyuki Iwashima raised design concerns on v9 that do not look fully
-resolved.
+libctf fuses such things together when it sees them (addition of
+structs/unions to a dict when a forward already exists mutates the
+forward into a struct/union; addition of a forward when a struct/union
+already exists just returns the struct/union; the deduplicator also
+avoids emitting forwards unless no concrate definition is visible, and
+by the time it emits anything it's already seen everything there is to
+see.)
 
-He asked why ip-rule (or VRF) with a per-route attribute cannot be used,
-noting that a route attribute would also work with syncookies:
-
-> Why can't ip-rule (or VRF) be used with a per-route attribute ?  Also, a
-> route attribute would work with syncookie. ... one concern would be that we
-> end up adding more single-purpose stateless callbacks during 3WHS, which
-> could be more expensive than stateful solution.
-
-The v10 respin only adjusted the commit message and applied his nits.  Was
-there a reply on the callback cost question, or from Amery Hung whom he
-asked for input?  Is ecn_init() still preferred over a stateful approach
-such as rwnd_init() plus a kfunc, given that syncookies still bypass the
-callback?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/46008849646
---===============1281668951458116797==--
+This sort of thing may not be practical in your model though.
