@@ -1,74 +1,78 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=81.187.191.129
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=195.10.208.62
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795788447;
-	b=VxalbvZcNZ6Vhv9daWLrM3StvFbLZnzNJwHrp/2S2D1POvoaIP+xg0jGBwxCVStpMwOj
-	 gD8O5Y5Gf82EXEb+mJsLHOYBCmKo/9ej1AZPAarQGNm8DcQ7vVyojW0ZNn/nArKQmyIj1
-	 4Z2q8ooaa906SxRKX7X2XWQtrQaab2XT8n9L5hyHQW6FGI35H4HZ33HA9zWfibmtA1ve0
-	 78Hs59aYtE9nb0OAAHvrXpdTDbRlQL+wuLRaF7BBDPVfVqT93bs1LLCevUsbtf+FSLx6d
-	 xCzOeSTMs43wLzP67aYZyVMVCYCGbeCV1tFwr8c/mISM6GYzK3BT41igBfbCBFX5xQA==
+	t=1795788855;
+	b=11YpTSsnwEizG8d5nVVpRVjHdSplvEIrK3ajST21vtwuq7Qp7IMHw5OGtHRyuIaWaYlM
+	 7W7tDPHLdaSi3MdCaLLoaIqbM9B3n7/fvarM1KRrw135EfMv/c/hIF04Fdn4vw8E5S2gu
+	 aQAL+5ZuzCUueQQt9JpY9H73cm7zlczrmPMg5H0x2Aa9mxPDj/5ZCSg6Rz3bWJrzbcCG5
+	 oYUWijyOHSUC9mf5u9nbdiB8L1QYgQJ/s1+j7ghn8GyK/fS6KAhgPz9+giEyToPOIfOpP
+	 me7HyXjQyaP5DjplGLtJrMbnbkssRuplgCtODSgWr/XUt7BpMMba8U+9IgvQaPietLQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795788447;
-	h=DMARC-Filter:Received:From:To:Cc:Subject:In-Reply-To:References:
-	 Emacs:Date:Message-ID:User-Agent:MIME-Version:Content-Type:
-	 X-DCC--Metrics;
-	bh=k3IRFjTa40yijxkZ99mvI6rZpFQBTdXXPJw6CdGe++A=;
-	b=JzO5b6vJtDmKoolA2jEniUllBG8vP6Wf0TYyB8z7ByIw3GpZWQ0dElSIFehG87+bJpkK
-	 Ak61z/YhbG2THvsQcnIEO85FKmdPvsqbtyGnWuakyYrwN+u+BOCA/howS9Hniw/dTEiK0
-	 xlf1IS36P2/ZUUoAzVcSF/NmNY/KbItuWhWIac3o/hEeg0mYd2Zi2mv6I/ZCTGGYOia3c
-	 WSqWMXOvHN1RlZg7W8AUOak83t+jjsrJvY6VhYTR7kIPULQIzYUdKhNdlxo3l0cHaFq/W
-	 fHJOAZ+K4UGKdwN9o5FJvqs/Ag3hBen7PrQuJINbYzkzErO4srKqE2X7PbykMmc3Z6A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795788855;
+	h=DMARC-Filter:Received:DKIM-Signature:From:To:Cc:Subject:Date:
+	 Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding:
+	 X-Rspamd-Queue-Id;
+	bh=Rsmts2EOzDPxmWrjfgARbxt81aNFkdaXSifeh0H+Uew=;
+	b=bcZ6GhsWU8DE6+yG9+spWFqSDAzNA+YDwWdRUEnKAkR+eHLLeNEkHnB0V8/M4HTL5mv8
+	 0AEIIiGcnqJJE2jXjsYp8djk0G5HSqnoUPQibns2jKWFEpmN8SH5f+QhHuCl5zXw+EZmT
+	 hFZrIAkjbMy8QaPd9FAAVCdr6YLxlzLC+kpa9zJ71z2m7Ni4JjorDM9EAYALks7teUzRV
+	 V0h4WF/i0mQDsDCSCif0gY6q2ATUsoS2AbDeTW9mseuwSn7K1q/vMQ8S6ONnEKlcjbRKh
+	 lKiTCIP+CKOu0HyVZXHjsbddgO33PvYsFL2a8/5tQbDHekRLt8mAir0884zYoEJFxqQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=esperi.org.uk;
-	spf=pass smtp.mailfrom=esperi.org.uk;
-	arc=none smtp.remote-ip=81.187.191.129
-Received: from mail.esperi.org.uk (icebox.esperi.org.uk [81.187.191.129])
+	dmarc=none header.from=mandelbit.com;
+	spf=pass smtp.mailfrom=mandelbit.com;
+	dkim=pass header.d=mandelbit.com header.i=@mandelbit.com header.a=rsa-sha256 header.s=MBO0001 header.b=ZLOqBDrF;
+	arc=none smtp.remote-ip=195.10.208.62
+Received: from mout-b-202.mailbox.org (mout-b-202.mailbox.org [195.10.208.62])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADBCB606A32E
-	for <bpf@vger.kernel.org>; Fri, 27 Nov 2026 14:07:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org ADBCB606A32E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=esperi.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=esperi.org.uk
-Received: from loom (nix@sidle.srvr.nix [192.168.14.8])
-	by mail.esperi.org.uk (8.17.2/8.17.2) with ESMTPS id 6ARE7DIa020970
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-	Fri, 27 Nov 2026 14:07:14 GMT
-From: Nick Alcock <nix@esperi.org.uk>
-To: "Jose E. Marchesi" <jemarch@gnu.org>
-Cc: "Can" <can@tartanoglu.com>, <bpf@vger.kernel.org>,
-        "Alexei
- Starovoitov" <ast@kernel.org>,
-        "Daniel Borkmann" <daniel@iogearbox.net>,
-        "Andrii Nakryiko" <andrii@kernel.org>,
-        "Eduard Zingerman"
- <eddyz87@gmail.com>,
-        "Kumar Kartikeya Dwivedi" <memxor@gmail.com>,
-        "Martin KaFai Lau" <martin.lau@linux.dev>,
-        "Song Liu" <song@kernel.org>,
-        "Yonghong Song" <yonghong.song@linux.dev>,
-        "Jiri Olsa"
- <jolsa@kernel.org>,
-        "Emil Tsalapatis" <emil@etsalapatis.com>,
-        "Ihor
- Solodrai" <ihor.solodrai@linux.dev>,
-        "Alan Maguire"
- <alan.maguire@oracle.com>,
-        "Arnaldo Carvalho de Melo" <acme@kernel.org>,
-        "David Faust" <david.faust@oss.qualcomm.com>,
-        "Bruce McCulloch"
- <bruce.mcculloch64@gmail.com>,
-        "Nathan Chancellor" <nathan@kernel.org>,
-        "Nicolas Schier" <nsc@kernel.org>, <linux-kbuild@vger.kernel.org>,
-        <dwarves@vger.kernel.org>, <llvm@lists.linux.dev>
-Subject: Re: RFC: vmlinux BTF from clang -gbtf, stock lld and a libbpf tool
-In-Reply-To: <87fqwmspyg.fsf@gnu.org>
-References: <20261121205803.b46d9bd1a88c@tartanoglu.com>
-	<87fqwmspyg.fsf@gnu.org>
-Emacs: if SIGINT doesn't work, try a tranquilizer.
-Date: Fri, 27 Nov 2026 14:07:13 +0000
-Message-ID: <87ecc6fjvy.fsf@esperi.org.uk>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 856C7606A31C;
+	Fri, 27 Nov 2026 14:14:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 856C7606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mandelbit.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mandelbit.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=mandelbit.com header.i=@mandelbit.com header.a=rsa-sha256 header.s=MBO0001 header.b=ZLOqBDrF
+Received: from smtp102.mailbox.org (smtp102.mailbox.org [IPv6:2001:67c:2050:b231:465::102])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519MLKEM768 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mout-b-202.mailbox.org (Postfix) with ESMTPS id 4jbb4y3BkQzKm3t;
+	Fri, 27 Nov 2026 15:14:10 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mandelbit.com;
+	s=MBO0001; t=1795788850;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Rsmts2EOzDPxmWrjfgARbxt81aNFkdaXSifeh0H+Uew=;
+	b=ZLOqBDrFq1+3MTlewRBAHX3k9p4L/oiUOtXAI5Wjz2Qhn/G8Hhgp5o27tm+Xj2I2N1CHo4
+	jGbCQV7hoMhT8zNLJwBr7MeXukBq9uXoi47Q0mZO57n2QKgORYTP8+BcBEAtlng+But54O
+	ltm0XVookLBSytpNF8WoVW2mFOqSjNSKGTzPXXlCdF9BKaCNGPta3wBl9PKfcdVM8lzTVp
+	cynVxnpSYRaNpH8psLqXDHgGQpFP/PCr+4EjzE4DrZHv3ExpryEPKOMoTXbkwWdA29oubf
+	fPiaH2P36WREc8m4QkCphfWRqzBBkNENGfh6z223av/mV3XHm+oC05hYmoF9Zg==
+Authentication-Results: outgoing_mbo_mout;
+	dkim=none;
+	spf=pass (outgoing_mbo_mout: domain of antonio@mandelbit.com designates 2001:67c:2050:b231:465::102 as permitted sender) smtp.mailfrom=antonio@mandelbit.com
+From: Antonio Quartulli <antonio@mandelbit.com>
+To: willemdebruijn.kernel@gmail.com,
+	jasowangio@gmail.com
+Cc: Antonio Quartulli <antonio@mandelbit.com>,
+	andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@kernel.org,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	hawk@kernel.org,
+	john.fastabend@gmail.com,
+	sdf@fomichev.me,
+	netdev@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: [PATCH net-next v3 0/3] tun: trim per-packet work on the write path
+Date: Fri, 27 Nov 2026 15:14:02 +0100
+Message-ID: <20261127141406.651406-1-antonio@mandelbit.com>
+X-Mailer: git-send-email 2.56.1
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -78,100 +82,51 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain
-X-DCC--Metrics: loom 1102; Body=23 Fuz1=23 Fuz2=23 rep=100%
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: 4jbb4y3BkQzKm3t
 
-On 27 Nov 2026, Jose E. Marchesi uttered the following:
+Profiling a link-bonding daemon that writes every packet to a tun device
+showed tun doing per-packet work its packets do not need:
 
-> [Fixing email adresses of David Faust and Bruce McCullough and Nick
->  Alcock]
+- patch 1: a BH-disabled RCU section, only to check for tun's XDP
+  program, which only TAP devices can have
+- patch 3: the parsing of an all-zero virtio-net header without
+  IFF_VNET_HDR
 
-Thanks!
+Patch 2 reads tun->flags once in tun_get_user(), so that patch 3 and the
+existing checks all see the same flags. The other paths read each flag
+only once and are left as they are.
 
->> Alexei asked in llvm/llvm-project#183915 [1][2] for native-vs-pahole
->> results to come here, and suggested dropping BTF dedup from lld in
->> favour of a stock link plus a libbpf-based kernel tool. I closed
->> #183915 and tested that route on saved x86-64 kernel objects.
->>
->> Two headline findings up front:
->>
->> 1. On those saved objects, unmodified ld.lld plus a libbpf prototype
->> reproduced the patched linker's decoded vmlinux BTF (bpftool raw
->> dumps match) and byte-identical .BTF_ids, though not byte-identical
->> .BTF and without booting a host-tool image.
->> 2. On the booted native kernel from the earlier patched-lld run, a
->> verifier negative test (flex_array_unaligned_step in
->> verifier_btf_array_access) unexpectedly loads across all three
->> test_progs flavours because struct vring_used is only a FWD in
->> native BTF. Static checks also show shifted-register FUNC
->> prototypes (e.g. __add_to_kill) and two duplicate-ID warnings in
->> resolve_btfids that fail CONFIG_WERROR=y.
->>
->> The compiler side is LLVM #183929 (-gbtf for non-BPF ELF targets);
->> its
+Together they cut the instructions per 1400-byte UDP packet written to a
+TUN device by 3.3% when an iptables raw-table rule drops it on ingress,
+and by 1.9% when it is forwarded to a dummy device. Counted under qemu
+-icount on x86_64, with ERMS/FSRM hidden so that user copies are not
+counted per byte; the counts include the syscall, so tun's own share of
+the saving is larger. The tun selftests pass.
 
-Ooh! I thought I was going to have to implement this. :)
+v3:
+- Add patch 2, reading tun->flags once in tun_get_user(), and base the
+  vnet header check on it (Willem)
 
->> Discourse RFC [3] drew a key question from LLVM DebugInfo
->> maintainers:
->> LLVM debug info is best-effort, whereas the verifier and trampolines
->> treat vmlinux BTF as trusted safety and ABI metadata. Before
->> reshaping #183929 or proposing kbuild patches, I'd like feedback on where that
->> trust boundary sits, how functions and DATASECs should be handled,
->> and what GCC/Clang/linker contract makes sense.
+v2: https://lore.kernel.org/netdev/20261124235959.1141963-1-antonio@mandelbit.com/
+- Drop the patch that stopped probing the transport header: tc ematches
+  and generic XDP rely on it (Sashiko)
+- Rename the XDP check variable, which shadowed another one (Sashiko)
+- Patch 2: adapt to the has_eth argument tun_vnet_hdr_tnl_to_skb()
+  gained in 73e08d50eb13
 
-I'm quite interested in this too, given my past, ah, arguments over the
-possibility of structs with conflicting definitions in different TUs,
-the mess pahole makes of them (because it assumes they don't exist, and
-accepts the first available struct with a given name it sees), and their
-occasional appearance in the kernel. We've even had cases where setting
-the wrong kconfig options can cause wildly different duplicate
-definitions of things like task_struct, though having structs this
-important with the wrong definitions causes the BTF self-tests to fail
-disastrously so hopefully nobody would actually ship a kernel that
-turned those on.
+v1: https://lore.kernel.org/netdev/20261112150612.3866546-1-antonio@mandelbit.com/
 
-(I am willing to believe that there is an intent that no such structures
-exist in the kernel and thus the file format need not accommodate them,
-though CTF, being meant for userspace, has to be more flexible. I stil
-don't believe that they don't *appear*, because I've seen them, and
-there is no obvious means to keep them from reappearing accidentally.
-A deduplicator is of course the perfect place to implement guards
-against such things appearing in built kernels, but it has to be able to
-spot them first...)
+Antonio Quartulli (3):
+  tun: don't disable BHs for the XDP program check of every packet
+  tun: read tun->flags once in tun_get_user()
+  tun: skip the virtio-net header parsing without IFF_VNET_HDR
 
->> true_signature [7]. Whatever comes out of this should work for GCC
->> objects too.
+ drivers/net/tun.c | 54 +++++++++++++++++++++++++++++------------------
+ 1 file changed, 33 insertions(+), 21 deletions(-)
 
-I intend to build CTFv4 support for LLVM on top of it, too, following
-which BTF-compatible (CTFv4) support in LLVM-compiled userspace should
-be practical, modulo bugs.
 
->> Saved-object replay (experimental instrument, not a kbuild API)
+base-commit: f89726ffabef1b08c52e6163b7ab94b0d5f15503
+-- 
+2.56.1
 
-This is really neat :)
-
->> Types. In raw BTF, 132 STRUCT/UNION definitions present in pahole are
->> FWD-only in native. In the normalized C-dump comparison (23,109 exact
->> of 23,216 native and 23,490 pahole declaration rows), only 39 show up
->> in fwd_vs_definition.txt; the other 93 (including vring_used) were
->> paired as "exact" against bpftool's synthetic forward declarations
->> and
->> filed under extras.txt (111 pahole rows = 93 missing definitions + 18
->> extra FWDs; 2 native FWDs). Walking pahole's BTF from those 132 roots
->> reaches 149 of 178 pahole-only rows (e.g. acpi_gpio_params via
->> acpi_gpio_mapping).
->>
->> The cause confirmed per-object in libahci.o (ahci_cmd_hdr) and
->> e1000_hw.o (e1000_shadow_ram) is clang's deferred pointee traversal,
->> which emits a FWD even when the CU's DWARF has the full definition.
-
-libctf fuses such things together when it sees them (addition of
-structs/unions to a dict when a forward already exists mutates the
-forward into a struct/union; addition of a forward when a struct/union
-already exists just returns the struct/union; the deduplicator also
-avoids emitting forwards unless no concrate definition is visible, and
-by the time it emits anything it's already seen everything there is to
-see.)
-
-This sort of thing may not be practical in your model though.
