@@ -1,85 +1,96 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=217.74.67.49
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795773723;
-	b=qe6ybxTMkTw83HxyXOUf9d2e0eFhv64JIeqkD3/2Z5/nZKjZnqe26gspWnZNqp0xeVdC
-	 x50ei566KYlMCTtWwKmLPVC82tdlB1dfWz1Yeca33r0okFMaUwpIRwZwMHTHMlm0zpPYX
-	 pLmdWQUJ7rrRCEskKRTwHKmXudDoMZWIbpFECqoR7H982Re8WqMJFBWQvD5a1SJjs8rzR
-	 xhpJSRGI/7xZNk1TUFCiPF43D+1HexRGf4HNSNbo61xPlKUTdQMOohzL38EXdTm3bb2yg
-	 OOQks446hGyOj5tQsIQuEY7FS91Kt7nT79ypSAOm9mUgV5HS4eQPtzr+zD6iARxDzkw==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795773723;
-	h=DMARC-Filter:Received:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:
-	 DKIM-Signature;
-	bh=/f+dIXrZDME1HzzTlAG04proZNX5+hxrBwLcvRGWskU=;
-	b=Vt2wsyqUvW7efJ0Wp2GRnV1alKS8B7Qzk6KPhr9Q+vVkbIVpNunj9YpaiJvybhuUSL8u
-	 cfCRlzSNU8FCn50CTITXU2JaRf69O6+Mj3C54OTL5EWSLYWfYrh4PL5mrx9zvNQaz4HTk
-	 vpesVHOXmSevVZYTOii9oM4PZfFnl2x0zhy8LeFIFKVePr9AIOFVWcTY+d7hmYQnaYslH
-	 7G8qonydncUwmpz+gFY1y4ndWaAY55fBV2CHAYx64ul/9eaEdbE4yGLsQcZK3V12QP5/w
-	 hp5V70NKbfV/9zpKhd0/xniwRY+5bUmOK6LzCkaj68C9Jq19pMJQ4apctKsG5F6xTjQ==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=poczta.fm;
-	spf=pass smtp.mailfrom=poczta.fm;
-	dkim=pass header.d=poczta.fm header.i=@poczta.fm header.a=rsa-sha256 header.s=dk header.b=dvpxZnrM;
-	arc=none smtp.remote-ip=217.74.67.49
-Received: from smtpo49.interia.pl (smtpo49.interia.pl [217.74.67.49])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.43
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795774452;
+	b=GBuM0D06uWKLszqQr03ZBIn2AHbv5/gocrklhfI1nQCvY8kK4QAzkbRnCH0F5qHm6OCX
+	 ogc2j8JdVFsCKWDHuByKzxcgatJBRbTdDYGsjN/z1h/Dd7EBf3CKi2N1Id1BlfxZnyjoG
+	 ixeF0BaDW8GUcgxbyw4511uwJOFgJdpWDeVG4ZcMvcF4mpaB3jcO8mkSHZ0LHjtf2RYUh
+	 VK/vtbxWpMx4nzWbVkFqMylEqCH4n0QXHTwQDfsuIeqGKE0cMnA2dEeWd9I5TxCz5fOxr
+	 r0dGSnlSsa3HjoVhwefILVl3jNOlACITOJQGLvemqcJI0ETQQalPphW3WY67XU/wlGA==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795774452;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:From:Date:
+	 X-Gm-Features:Message-ID:Subject:To:Cc:Content-Type;
+	bh=pnSZi82mVfZLS6PwIZVcWPzE7AlvW48La+q7lJF7NRc=;
+	b=lp6zERjXdVALcbxAWxPi8sYbWn8M4R59aLO0FZyazSFGNLSKU7mYdOQdt6DTlZZFq6Rj
+	 Khdd0Rv3/PAW7K01aNTQQqYC5FXKUxFw6MWQtFGm6yfrEBRuy5QbYn+/6D64UowE5LKoj
+	 CQAKDOiJ29BudMamS4mSTB86umqrzEh1BivwT5fCfWvZDAeTBA0iQ4f0wLRxuhT1pf1Ph
+	 8zzaZtOXg1vm7eJZExviXyd1B8MvRYOpMCHClN459lORLIcLlqgqPvpNaofWXlARkeBv4
+	 Rfjm5yDQy2Snbz511hujMlKbRQaJjI5Kr1Ir61oJg4NFyc+xyf9X+Wbz15D6PBOcZgw==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=YDGzarso;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.43
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59895606A326
-	for <bpf@vger.kernel.org>; Fri, 27 Nov 2026 10:02:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 59895606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=poczta.fm
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=poczta.fm
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F0BE606A683
+	for <bpf@vger.kernel.org>; Fri, 27 Nov 2026 10:14:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0F0BE606A683
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=poczta.fm header.i=@poczta.fm header.a=rsa-sha256 header.s=dk header.b=dvpxZnrM
-Received: from localhost (unknown [80.68.231.31])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by poczta.interia.pl (INTERIA.PL) with ESMTPSA;
-	Fri, 27 Nov 2026 11:01:57 +0100 (CET)
-From: Slawomir Stepien <sst@poczta.fm>
-To: "David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>
-Cc: bpf@vger.kernel.org,
-	netdev@vger.kernel.org,
-	Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Dudu Lu <phx0fer@gmail.com>,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	Tianyi Gao <tianyi@cloudflare.com>,
-	Octavian Purdila <tavip@google.com>,
-	=?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	Lorenzo Bianconi <lorenzo@kernel.org>,
-	Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Willem de Bruijn <willemb@google.com>,
-	Simon Horman <horms@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org,
-	Slawomir Stepien <sst@poczta.fm>
-Subject: [PATCH net v9 6/6] selftests/bpf: Grow test_run and generic XDP frags after a test run
-Date: Fri, 27 Nov 2026 11:01:32 +0100
-Message-ID: <20261127100132.1977890-7-sst@poczta.fm>
-X-Mailer: git-send-email 2.56.0
-In-Reply-To: <20261127100132.1977890-1-sst@poczta.fm>
-References: <20261127100132.1977890-1-sst@poczta.fm>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=YDGzarso
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-6b47c1a3c74so1960735a12.3
+        for <bpf@vger.kernel.org>; Fri, 27 Nov 2026 02:14:11 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795774450; cv=none;
+        d=google.com; s=arc-20260327;
+        b=TsMlBLRwE73/IHcEvCtca3atvNvvD7pEWM01OEvN+NaIEFSEiLo0MI/dHzc39hTkgP
+         mYs7sV42cX2WIbk3GMMD2i9igh3IOLwaZa8S/di6WqQqW1TKrrqbwO/l59lFqlg5N6Mb
+         FbotfsHkFR/eSM6rOjoHyzfvAAEX32VKj5yDLu6+Z4U5X8NG/PzgxW4zmn06r1iacWQ7
+         zAjT71ECI60GZv5l1MBkXK6NnkekQPxNxK8KNOkRCikh3XBmOvrETTZ9lMlWdgeKpsJl
+         XlCZGpoLKV9++GK0Fm2qw70aZkCwhCwgXNtyGXhCy/2IGNoO4EmkYbz88u3d9MX9e2I5
+         8vTQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:mime-version:dkim-signature;
+        bh=pnSZi82mVfZLS6PwIZVcWPzE7AlvW48La+q7lJF7NRc=;
+        fh=4/pdzE7RJVsxRhciQE4A7C5Lve+yuR3C3Hdg+m6NdrA=;
+        b=JJBHGHweDc6cc0Ob8f/JFRQFWHg/rOQ4tAgPfVHQuplp3aDcYj1Pp/PkEk3tPUxd9h
+         8Q2tn76yktgN7EDg29V54fLSl1qAajrEIdcwF5YKWXtk2m4WIBKjKBIHaSqD7Qd1aesk
+         HFp5VDchpZDSxy8jjolLbH4a+c57RqyFNV1bxhhQpRcw0IZhXUx/QXaSwyzMySrjkQi3
+         dmDGU50XMaHgtSGZJPdWhGsfINyzr8po6xsdofJL7uaQsyqXJHibWb/PGJ66y7MFFVdE
+         bz6Y7MSYRo8Yh9aNklePQh7HZGpm+IXYKlLcmOlLXN9dX/2Ly+AEZjw6x5ogFw7/xwc3
+         6BCw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795774450; x=1796379250; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:mime-version:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=pnSZi82mVfZLS6PwIZVcWPzE7AlvW48La+q7lJF7NRc=;
+        b=YDGzarsoRdrYESd0WQH9jBHguYTwQ4MWdevK+E8KmC2uyYZLyscJgJwBjwonhC0NwT
+         Bpl0R8s2k8kM3FuRv9FJf/wNwnI4Fc8/M8oqwnbMB+SuPWfh5FQpVSPenWXXWhy0LSkG
+         sihB80deO7zB26y3FM3Qxo63SaGHV4Hlk0xud2yxHvlJcFdpP2r7KfcKkQcS7J5mMOIk
+         yNq+7yigz9q0FaWoAyhrYX8dVr28Zsxpht995AvRZ0JNonpCR15863AMxYKEzaVj9BIN
+         ZE+9pctjIYTqfK5r0M9n6Op5Mo20Hpx0XYCb1SgrrnlTiDwGGAuSqSE2STS7RkRnUD6U
+         JwxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795774450; x=1796379250;
+        h=content-type:cc:to:subject:message-id:date:from:mime-version
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=pnSZi82mVfZLS6PwIZVcWPzE7AlvW48La+q7lJF7NRc=;
+        b=a8HZhO+6iwOVCHY552jen3U0Zz0OnLY25B7Uxk9naFVyQ7L/tVcl2k4DIx3A7juTwe
+         fn6+b0Iya36/56pqZBBGjtfAtaEoDBcaI8n5+3bkf8d6bsMcGVyvMBLjf51QHZrEfl0m
+         n0gp1S4mEH8CX5PJVFzZAtNkjdDQsDMAtjQfua5Y/h6iXyhvIITwGd/rNP0YYQnkyJyD
+         D1ijffC5SvTPp5dZ0iTKF7AuMLTw0fUavTIBxcqGeBAmED9g1IPv67DWhiDzExxrpMoZ
+         P6HgB3toGRjgGea4yADzvB+U6y+sgt/Xehvi0mU9Iz2Y5J1Ku8NC9veu69a1zfxaQ+ZK
+         NwZQ==
+X-Gm-Message-State: APuU4Z/7OBircyTH1XKcygcaQ19Awd2om3SiH2OtUc2TuGbvhjkfruKv
+	ItK5YJERGI6SgxkKBfqc7m2w7Yt6tV1XaTOtmogbRaLnK3XsEcKhX2ewtI5R3Qs4tjPQsozegJn
+	NUMTEI8ughnVnyNG7a+fed/K45IIG0CinrCp0
+X-Gm-Gg: AZFdTZdarPriYXpm/d9179FxKXM36uT+CfjAinppzITLbnK2/qxBLZtwZEbuamSoki/
+	vCRWOn2YphI6lVuxjOIwXaq2AxkZNB8LBI6RauQ8FrmpKZoGNflniYOTdEQ2k+AscatffuXFjVs
+	xR68DSS+SdMo1iSFAu6i/ki4FDuTxqf3y15n17EHB1WFDddd00v111STmGtL2g86/nmsKYAzcgh
+	zyH0o6z8plsjG4pNtSReoZirzYoxpA8FkfEAAnUlx5aUGJ28OF5KNJWm5LxnfG4l6NkmXvI/k4l
+	/UNvmxhWefZs5NqGKolSgnvkIN/7k6ttuh6I4RTzCfEO486Hc8z8pWYjFoiC1Uq35KSWUlAoYyJ
+	N3ybw8viVl9krelQhDhlwBE8dYSKtRvWAbDazXOeF31HckNrIwbUTLLkpY1mVrc0wfoFlbf/TYJ
+	dO2K6b5el0dJwfLZ/x
+X-Received: by 2002:a05:6402:44d2:b0:6b4:5d8c:95e2 with SMTP id
+ 4fb4d7f45d1cf-6ba37c7a0dfmr13780450a12.4.1795774450046; Fri, 27 Nov 2026
+ 02:14:10 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -89,227 +100,36 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=poczta.fm; s=dk;
-	t=1795773720; bh=/f+dIXrZDME1HzzTlAG04proZNX5+hxrBwLcvRGWskU=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=dvpxZnrMvl70aWoArprhjd2f5oBIu0n75QQMSFhBOZSFKAp/CBYsq2iy/zyLx1lkA
-	 uEHXsNuYGd5fvggpTr4cKJi+svYKbWN7897eXzpt+Ih7AxjQ+b7JNmGKtzDjfQ+Rcx
-	 wPV+7792xEC8j7PBV1sBAolRwstjzdaamM8x3cuA=
+From: Abhishek Khade <abhishekkhade69@gmail.com>
+Date: Fri, 27 Nov 2026 15:43:32 +0530
+X-Gm-Features: Aa3M54oFJndZgHbtbGYTQ8JLkfWXcGRfcl4DQYm07uiwGxgi46GejzDgXxTGmzU
+Message-ID: <CANspbQrVUG8h5ZWBW6croG=+VnDoseeJvPwid=gYazA4aKRjOQ@mail.gmail.com>
+Subject: [RFC] bpf: Is an open-coded bpf_iter_mount kfunc wanted?
+To: bpf@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
+	brauner@kernel.org, viro@zeniv.linux.org.uk, jack@suse.cz, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Add two xdp_adjust_tail subtests for frag_size of the rxq info a
-program runs with:
+Hi all,
 
-- xdp_adjust_frags_tail_grow_ingress_ifindex grows the last frag of a
-  9000 byte test_run packet with ingress_ifindex set to a veth device.
-  test_run allocates PAGE_SIZE frags, so the grow must succeed.
+Before writing any code, I wanted to check if there is interest in an
+open-coded BPF iterator for struct mnt_namespace mounts
+(bpf_iter_mount_{new,next,destroy}).
 
-- xdp_adjust_frags_tail_grow_lo_after_test_run does a test run, then
-  sends a UDP packet a bit larger than a page over lo with a generic XDP
-  frags program attached, or is skipped with 64K pages. Generic XDP
-  copies the packet into a page_pool head page and a frag, which can be
-  a part of a page, so growing the frag must fail with -EOPNOTSUPP. The
-  program asks for more than any tailroom, so nothing is written even
-  when the grow is allowed.
+I tested doing this without a kfunc in a BPF program first:
+- Using bpf_probe_read_kernel() + bpf_for(), a BPF program can walk
+  ns->mounts (rb_node) and read scalar fields like mnt_id and
+  mnt_flags, though without namespace_sem protection.
+- However, pointers obtained via bpf_probe_read_kernel() become
+  untrusted scalars, so the verifier rejects passing them to VFS kfuncs
+  such as bpf_path_d_path() or bpf_get_dentry_xattr().
 
-Signed-off-by: Slawomir Stepien <sst@poczta.fm>
----
- .../bpf/prog_tests/xdp_adjust_tail.c          | 137 ++++++++++++++++++
- .../test_xdp_adjust_frags_tail_grow_lo.c      |  25 ++++
- 2 files changed, 162 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/test_xdp_adjust_frags_tail_grow_lo.c
+If an open-coded sleepable iterator (taking namespace_sem during step
+lookup and returning a trusted struct vfsmount * or struct path) would
+be useful for BPF LSM / tracing use cases, I would be happy to work on
+an RFC patch and selftests. If bpf_probe_read_kernel() or userspace
+listmount() is preferred instead, please let me know.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c b/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c
-index 43264347e7d7..c7c803fd9241 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c
-@@ -1,6 +1,10 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <test_progs.h>
- #include <network_helpers.h>
-+#include <linux/if_link.h>
-+#include <net/if.h>
-+#include "test_xdp_adjust_frags_tail_grow_lo.skel.h"
-+#include "test_xdp_adjust_tail_grow.skel.h"
- 
- static void test_xdp_adjust_tail_shrink(void)
- {
-@@ -355,6 +359,135 @@ static void test_xdp_adjust_frags_tail_grow_64k(void)
- 	bpf_object__close(obj);
- }
- 
-+/*
-+ * test_run allocates PAGE_SIZE frags, so a program may grow the last one up
-+ * to the end of its page, also when ingress_ifindex picks the rxq info of
-+ * another device.
-+ */
-+static void test_xdp_adjust_frags_tail_grow_ingress_ifindex(void)
-+{
-+	struct xdp_md ctx = { .data_end = 9000 };
-+	struct test_xdp_adjust_tail_grow *skel;
-+	struct netns_obj *ns = NULL;
-+	int err, ifindex, prog_fd;
-+	__u8 *buf = NULL;
-+	LIBBPF_OPTS(bpf_test_run_opts, topts,
-+		.ctx_in = &ctx,
-+		.ctx_size_in = sizeof(ctx),
-+	);
-+
-+	if (getpagesize() != 4096) {
-+		test__skip();
-+		return;
-+	}
-+
-+	skel = test_xdp_adjust_tail_grow__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "skel open_and_load"))
-+		return;
-+
-+	ns = netns_new("xdp_adjust_tail_ns", true);
-+	if (!ASSERT_OK_PTR(ns, "netns_new"))
-+		goto out;
-+
-+	SYS(out, "ip link add veth_xat0 type veth peer name veth_xat1");
-+	ifindex = if_nametoindex("veth_xat0");
-+	if (!ASSERT_GT(ifindex, 0, "veth ifindex"))
-+		goto out;
-+	ctx.ingress_ifindex = ifindex;
-+
-+	buf = malloc(16384);
-+	if (!ASSERT_OK_PTR(buf, "alloc buf 16Kb"))
-+		goto out;
-+	memset(buf, 1, 16384);
-+
-+	/* Test case add 10 bytes to last frag */
-+	topts.data_in = buf;
-+	topts.data_out = buf;
-+	topts.data_size_in = 9000;
-+	topts.data_size_out = 16384;
-+	prog_fd = bpf_program__fd(skel->progs._xdp_adjust_tail_grow);
-+	err = bpf_prog_test_run_opts(prog_fd, &topts);
-+
-+	ASSERT_OK(err, "9Kb+10b");
-+	ASSERT_EQ(topts.retval, XDP_TX, "9Kb+10b retval");
-+	ASSERT_EQ(topts.data_size_out, 9000 + 10, "9Kb+10b size");
-+out:
-+	free(buf);
-+	netns_free(ns);
-+	test_xdp_adjust_tail_grow__destroy(skel);
-+}
-+
-+/*
-+ * The frags generic XDP gets from skb_pp_cow_data() can be parts of a
-+ * page_pool page, so its rxq info must not allow growing them. test_run
-+ * must not change that for lo.
-+ */
-+static void test_xdp_adjust_frags_tail_grow_lo_after_test_run(void)
-+{
-+	struct sockaddr_in addr = {
-+		.sin_family = AF_INET,
-+		.sin_addr.s_addr = htonl(INADDR_LOOPBACK),
-+		.sin_port = htons(9),
-+	};
-+	struct test_xdp_adjust_frags_tail_grow_lo *skel;
-+	struct netns_obj *ns = NULL;
-+	static char payload[60000];
-+	int fd = -1, lo, i, len, prog_fd;
-+	LIBBPF_OPTS(bpf_test_run_opts, topts,
-+		.data_in = &pkt_v4,
-+		.data_size_in = sizeof(pkt_v4),
-+		.repeat = 1,
-+	);
-+
-+	/* larger than the head generic XDP copies the packet into */
-+	len = getpagesize() + 500;
-+	if (len > (int)sizeof(payload)) {
-+		test__skip();
-+		return;
-+	}
-+
-+	skel = test_xdp_adjust_frags_tail_grow_lo__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "skel open_and_load"))
-+		return;
-+
-+	ns = netns_new("xdp_adjust_tail_ns", true);
-+	if (!ASSERT_OK_PTR(ns, "netns_new"))
-+		goto out;
-+
-+	SYS(out, "ip link set dev lo up");
-+	lo = if_nametoindex("lo");
-+	if (!ASSERT_GT(lo, 0, "lo ifindex"))
-+		goto out;
-+
-+	/* a test run in this netns, before generic XDP sees a packet on lo */
-+	prog_fd = bpf_program__fd(skel->progs.xdp_grow_frags);
-+	ASSERT_OK(bpf_prog_test_run_opts(prog_fd, &topts), "test_run");
-+
-+	if (!ASSERT_OK(bpf_xdp_attach(lo, prog_fd, XDP_FLAGS_SKB_MODE, NULL),
-+		       "attach generic XDP"))
-+		goto out;
-+
-+	/*
-+	 * a linear skb with little headroom: generic XDP copies it into a
-+	 * page_pool head page and a frag
-+	 */
-+	fd = socket(AF_INET, SOCK_DGRAM, 0);
-+	if (ASSERT_GE(fd, 0, "socket"))
-+		ASSERT_EQ(sendto(fd, payload, len, 0, (struct sockaddr *)&addr,
-+				 sizeof(addr)), len, "sendto");
-+	for (i = 0; i < 100 && skel->data->grow_ret == 1; i++)
-+		usleep(10000);
-+	bpf_xdp_detach(lo, XDP_FLAGS_SKB_MODE, NULL);
-+
-+	if (ASSERT_TRUE(skel->data->grow_ret != 1, "xdp prog saw frags"))
-+		ASSERT_EQ(skel->data->grow_ret, -EOPNOTSUPP, "grow frag on lo");
-+out:
-+	if (fd >= 0)
-+		close(fd);
-+	netns_free(ns);
-+	test_xdp_adjust_frags_tail_grow_lo__destroy(skel);
-+}
-+
- void test_xdp_adjust_tail(void)
- {
- 	int page_size = getpagesize();
-@@ -373,4 +506,8 @@ void test_xdp_adjust_tail(void)
- 		else
- 			test_xdp_adjust_frags_tail_grow_4k();
- 	}
-+	if (test__start_subtest("xdp_adjust_frags_tail_grow_ingress_ifindex"))
-+		test_xdp_adjust_frags_tail_grow_ingress_ifindex();
-+	if (test__start_subtest("xdp_adjust_frags_tail_grow_lo_after_test_run"))
-+		test_xdp_adjust_frags_tail_grow_lo_after_test_run();
- }
-diff --git a/tools/testing/selftests/bpf/progs/test_xdp_adjust_frags_tail_grow_lo.c b/tools/testing/selftests/bpf/progs/test_xdp_adjust_frags_tail_grow_lo.c
-new file mode 100644
-index 000000000000..207346b14ad8
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_xdp_adjust_frags_tail_grow_lo.c
-@@ -0,0 +1,25 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+
-+/* 1 until the program saw a packet with frags */
-+int grow_ret = 1;
-+
-+SEC("xdp.frags")
-+int xdp_grow_frags(struct xdp_md *xdp)
-+{
-+	void *data_end = (void *)(long)xdp->data_end;
-+	void *data = (void *)(long)xdp->data;
-+
-+	if (grow_ret != 1 || bpf_xdp_get_buff_len(xdp) <= data_end - data)
-+		return XDP_PASS;
-+
-+	/*
-+	 * More than the tailroom of any frag, so nothing is written: the
-+	 * result only tells if frag_size of the rxq allows a grow at all.
-+	 */
-+	grow_ret = bpf_xdp_adjust_tail(xdp, 0x10000);
-+	return XDP_PASS;
-+}
-+
-+char _license[] SEC("license") = "GPL";
--- 
-2.56.0
-
+Thanks,
+Abhishek Khade
