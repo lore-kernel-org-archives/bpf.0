@@ -1,73 +1,88 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.161.43
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795801892;
-	b=mFqAJMNsE+bOjwCdDuxnVgbgt1bP4L9lZaVseeDhwEilF/gK0qGk30oVuaRExK2A5Jk/
-	 yxgmrUfSth5ftl8ztUyoUPWNmXzzWuBg7ZOrI5io4QKTylh6cKZiHKqzVsvJL56wjVA21
-	 Nsylo5zJtiUOapRKp64DrmTJtW2JgKwyqUXp4IxOOdsbh9R24p9BoxLfHhxdalPIrAOQo
-	 Q7C44DdPkYqDfFzVg2XRwecrtIl5f5MwRXkrKjsiy3v62iNe15ugXX+1N1CbHqAlW/if2
-	 +RjUrUHXVLEnEi5F7GwJomyIMZTCu8pRRY3ZmL8/DUCuR7SZplSWFqw44UmkhifaFQw==
+	t=1795802599;
+	b=fSgR92UnL3574qANw35hEsh6Yo/CeN8b1cyeE1x0aHUlRM7TOE1HHIu80dg9ACnro+dL
+	 rQ13A8AIRr18KlevH1O6MBpLbYCqUlfLniHDWXzzpeIzWXvdi4hWIN3liRG9h53MBl8Ma
+	 VUXyROAl/X2Qzq9gepW7VSWN+Yy0SaUp3IYVxMVUzYvMpeTSIhaw6fFdk91SU4EBCoaDc
+	 a5CAh6ZbQHDBvc46KN/5m9N/6OLBBBXyzBvqxpxCmYxOyXQbTnEwvM02BwN0PTH08sXOS
+	 mgysy0sq77LCifJzOeCiztGFK6m9t67JhhSwQZng9dA6EBjLDmbuZLWQSfEVZiNn9HQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795801892;
-	h=Received:DKIM-Signature:Received:Received:X-ME-Sender:
-	 X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:X-Mailer:
-	 MIME-Version:X-ThreadId:Date:From:To:Cc:Message-Id:In-Reply-To:
-	 References:Subject:Content-Type:Content-Transfer-Encoding;
-	bh=vaTm8zyMYvne9oPsZa0I6jcRniOKGde2BII9Cy3AZb8=;
-	b=39QULR1BH4RNh85YFsHXZqWXza/zKSh/Pufs294J2PB/vS54pkMQsLA8ShwIotnaXBoD
-	 8JHO9hoYQmRY+NPT29ev1dVp2EDTqUSyktqNRB+a/TgYrmE0fK4da/j4CPK8FLHcphqfo
-	 XyDgSEN90MpkFBA38j3aQb8uVSPsWU51PouCKW8FIclem5nIGSrO1qQXN8y+NrAoL2D6U
-	 YsLVLtee7ShVDa3GIU7MWiEXVF3TfaLRtkG8+vZ6vk5+uHezc3C4L2RUNu+rCRPNebTRo
-	 cFa5ICDicunQPByPTu1C7h8tpUHvYuXjfpn54MaG7dDXlt6RI3vVWf5VDwKViTQ5Mvw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795802599;
+	h=DMARC-Filter:Received:X-Google-DKIM-Signature:X-Gm-Message-State:
+	 X-Gm-Gg:X-Received:Received:Received:DKIM-Signature:From:Date:Subject:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:
+	 X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:X-Developer-Signature:
+	 X-Developer-Key:X-Last-TLS-Session-Version;
+	bh=rD90LW/g1uRft8V8loea8ddnC8E+29zzF3dbDqD0xKk=;
+	b=XCmE8FAWZWOYe5RV/wlZRVJmXyKvGWMDeXU1+/ZyGZ1pGpwqMRp/ifpMAR9P7vMflXVU
+	 1AErTlSEp0WSSMISHO7hoJJdX9v58+RDy+/0itnPjZychKGUO+ROnLz5MN605SXejSG8N
+	 xSGuPDHbm8jtrSbRHbEoIdJtDxZBEx/E+dXZCVvOWLSP6V8dat/E+XV5pT5CyO7y1HruC
+	 lGYwJ/3K1eUiSoOxWHKZj25bs41HLoJD6/fAfxkGVGEwBHDozqAyCiHXGCqcxqnVYhj1N
+	 3O6trbtgLqMhrbXvcm+xOh72YUIfrmLUQQWidUobZH8oZM0nDJeCgqQiBW5YMXznNgw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Y3esDjJI;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=marliere.net;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=marliere.net header.i=@marliere.net header.a=rsa-sha256 header.s=dkim header.b=MGtSOfyM;
+	arc=none smtp.remote-ip=209.85.161.43
+Received: from mail-oo1-f43.google.com (mail-oo1-f43.google.com [209.85.161.43])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 171F6606A31C;
-	Fri, 27 Nov 2026 17:51:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E255606A683
+	for <bpf@vger.kernel.org>; Fri, 27 Nov 2026 18:03:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2E255606A683
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marliere.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Y3esDjJI
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC4461F00923;
-	Fri, 27 Nov 2026 17:51:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795801891;
-	bh=vaTm8zyMYvne9oPsZa0I6jcRniOKGde2BII9Cy3AZb8=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject;
-	b=Y3esDjJIzF9Up6hlH1AcD5hSKTw4TMIZkXVJ4XOT8UHBoEqHugiSRBVf2zjTs099t
-	 ta6Q+DgSzflJNgrLbIn6SCMhaPBdzsDeJ+AHXU7QHx8yJiu6jnO47zeZd9d+l1bwQ8
-	 d6rxHN8B6viOqEZeCGtArwy+5MBkryIP4E5LmLnZAPMw82uTUAAlADHSbwI37UEzq5
-	 BcuPWD0sGuH2qJPDgIOR7FlREuXlu38rSLZ+7bJtNArbrmo1I221OVdGuvxzUiPWyP
-	 lYiSd3pPmHZfrd7PeqW7Kg8+fekvWOcjTBmWVF6WAm9/C4RYph6jim3fTb0VzbDqIN
-	 9xM1N3sYkhn/A==
-Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 03ABDF40066;
-	Fri, 27 Nov 2026 12:51:29 -0500 (EST)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-01.internal (MEProxy); Fri, 27 Nov 2026 12:51:30 -0500
-X-ME-Sender: <xms:IcMJa1BhQ_IoHMFIJ21_IM2SR33uXCcL86dAL-fOK4F5qobu75xbZQ>
-    <xme:IcMJa-UibaFqtsZUwcRp5MkCrE907PllAh4VIVchq8mErOAVxChnNr8SjKxM9hHn2
-    iJ840EgUXiNDsoAg9O2Ew-w0wwI91GnDlzQ1mn7HrANQlg2evRK5dn6wQ>
-X-ME-Proxy-Cause: dmFkZTEWY3vXFk6Qj2qtZa3/yffkiMiEG82uJyPASb2q0GY5Qy5oukiV/d76RKewOepQX1
-    dauwntytq7LYtWbmiMIgTdMOK8zATV8LTOIILM6xnrmjq2pkW3IpAjy/b0Seuw4mpQWLgM
-    makgjwig14S/t6nwwl3mrxjpiPSW9uDf9WCo4FxWqmT78HiDwZDZW7yLDRquN7H9Njt6vi
-    JLybuGpNc91CWCvp6ytq47tmtcZQefPWdpkoXofiPQ0rsIMYN6IlBrYl10mJMr4xfwvJPg
-    m+ncp88DOezGX0RLLfH/IaJtjeonXJAJwLxeVu2ITf5FrpbJ0HYgYnQrGbWWpIdBQ/xIuD
-    TlJlYSTyT/UZ4bKL5XDzyYplljaSAzNqmrLtKFR/wtG4y3qCwSAYXeeR0xDMlixtfdNvnr
-    g6A0VM9vPRtXpiKGOxvmx3N8g5Z7CGhEgcs6Fz16KiwQvFQxEi+2SKI1nypdA/7HvKCMr+
-    ixNsz580kf/5q0GsPJWAQZLSfauEvWyXlZla7lygpDKrakSc6zQlI2uXhIgjm3ZfdjStxY
-    oewtJzzjB2PkV6Sdd333uDmqeAX9VlmNH7tDc/prMjbGHYqXsiWr9vsgLwxF5esDluskF6
-    q9nN/RoY9Y3oNQb8lVn34iQAyfuH5C0j4i0BFIkJbeoYN8Qf/D2FshtczdTw
-X-ME-Proxy: <xmx:IcMJa_li-4YRPiKEExkBLv3Wu3CXF_T5W5Ss1XG01JRBOKHUurfgFw>
-    <xmx:IcMJa7l1qRxQf0O08tfQW_hLIwJs7eEnuwurUI64AG07fpRw2c5WmA>
-    <xmx:IcMJa0V1FrMqrS3SZmy_BB14ryMme9BMWghWHskuzF_lX61R-QtZ7g>
-    <xmx:IcMJa5-DosFbiQ8bvLfJg4iZQGwoUAbzlHnNvO05l6lY1SSUhSwpgA>
-    <xmx:IcMJaxqkvUgBhvJtZXqYr_UlDePmqfHhHZ-4CclZNcUwfNUp3H7RizyS>
-Feedback-ID: ieff94742:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id D13ED700069; Fri, 27 Nov 2026 12:51:29 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key, unprotected) header.d=marliere.net header.i=@marliere.net header.a=rsa-sha256 header.s=dkim header.b=MGtSOfyM
+Received: by mail-oo1-f43.google.com with SMTP id 006d021491bc7-71b945cc4a6so707276eaf.2
+        for <bpf@vger.kernel.org>; Fri, 27 Nov 2026 10:03:18 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795802597; x=1796407397;
+        h=cc:to:message-id:content-transfer-encoding:content-type
+         :mime-version:subject:date:from:dkim-signature:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=rD90LW/g1uRft8V8loea8ddnC8E+29zzF3dbDqD0xKk=;
+        b=Y9VGHS6Y6rmlYs3XNdw1geO0ABPo8h1OzS6IJgnit4CaqB2nE9CjSyeqtBR8zWbkCg
+         sxiDRdfxEzbHlX0/IyWiHnCBn23+T2kMByzbz6utevfkNwqH1vKVZ18IVQu7iO14CBYu
+         cvVY73qqfNBvwpdJutGuqXnw8V2fWm108ojSHuZPTMOaT1kHqneRzXg7I1XjRrYetXVV
+         QFBFHMlDcjhaiPtsg6tGpcd1L3oJzZXf/9QfjLAbR+BDKPm5pVlOt1m+lBABrfK9/d+q
+         8JWHKcmZwVQheO3C0eTLFw68swxmn6g3+wql+1MLZhBAhLXvOoSekUR5R5eLvJpAgXJJ
+         nRZA==
+X-Gm-Message-State: APuU4Z8WCr9qyiX/bJsVmNVqfBZy0SpGBohBkLwufleXnJnX3Pr2t2fW
+	zN4TBIhHZf8wLMJCeOEmbNeFr7hNVUZShqnv0arhXA57Iw371Sg3SiQs
+X-Gm-Gg: AZFdTZd3UIadfkEQKA8ObUk1WYr6szKzb+ai7sS/WZpe31LYkQUKDJvGwLrYaM0S4tA
+	w9A/df22Pt2yywikCzplKKlzEGG4m3OtV0WNusOpk3Zo1kWZgri+5hjFrG3btOqH3qtKdxKc//V
+	71gA5Pu9Y1YpLeHL0RUBP+DVYSGJiUbAcGASxulfO5AhAZPzr69t4xSJFmPteT6bYeKYVrSjD/X
+	/33Vi0vK7qDsY9YpkoNmcoRmGIUqa3KRVEJyrx2GE/pKJMEkRcTU/o63NHtyMOD9deBmoOPlZgZ
+	VImJPSVQqEZZuHsPwsTubQsmmZUdWLwJQfUHRIj84RrQdmX7/v97Wk6h4CHotD9I9P56t2sifw1
+	NJmOU92A4LMUralIxzj9lSgdvuq9YN851Hr5ybRZAqeyYb8mEg5umet6eAE8bmOWmgu2xhEmc2h
+	TCs5A+7EfplEihpr655LUgkY6GM75IZMaliKSKJkXmfW5wxtHWzDIBLojQNNiH8NNgJcHcJwY9D
+	cZP3TzaiL5uEenAwMKgmYwIHSlsY3zAlNpAM1vNFZdlxxN63ibSqFD9tCPEFC0VeGtX7XESguFn
+	w9MntfkEDp44ThOQLqX+76UuZLX9TqcaW0WJcF10f6hibBHLKFWPhclqkUVwNg+EFebRmWtRRA5
+	subL+nsV4/yNWMyBvhO0sblhbOWfktiI=
+X-Received: by 2002:a05:6820:a09a:b0:713:e3f5:251e with SMTP id 006d021491bc7-71b395332f2mr16781524eaf.48.1795802596855;
+        Fri, 27 Nov 2026 10:03:16 -0800 (PST)
+Received: from mail.marliere.net (137.65.66.34.bc.googleusercontent.com. [34.66.65.137])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-71b38015c51sm16467798eaf.3.2026.11.27.10.03.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Nov 2026 10:03:16 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id A773460CC6;
+	Fri, 27 Nov 2026 18:03:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marliere.net;
+	s=dkim; t=1795802594;
+	h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding; bh=rD90LW/g1uRft8V8loea8ddnC8E+29zzF3dbDqD0xKk=;
+	b=MGtSOfyM8oJW5jlLXp7eOcqbLPbtiuEIRY0w2wqGyeaeznIxFEc3QplzfjVgF+EaR4EuLZ
+	eIRS1n+BVPs8QTopjoGtJBLsEVGyaAyYuNplo4hcE9wKP2/QC16lzPkLaVOLZJMU8/Zb+k
+	9S2OTfLhIHxLtTuMEbaTTujEYEWQblqbhJYt9My7w2GPGXKDAzAUH2RLwqag21nbjIO/M/
+	0pR1eNpl/rarqA3NkklBShAipie9HkodgL6QGvrCJWPHySuBmR+Dt11Porm4/zXNzBlKBq
+	v3YZYsfSMc7QnvB1OoLRg63p3Gyd1xEzK4bL06u4XzkFzjzJ+gZHHUl+V0MxWw==
+From: =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re_=28SUSE=29?= <ricardo@marliere.net>
+Date: Fri, 27 Nov 2026 15:03:05 -0300
+Subject: [PATCH] selftests/bpf: Drop conflicting DWARF choice from
+ config.x86_64
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -77,116 +92,67 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-ThreadId: AisSLPdYCdlo
-Date: Fri, 27 Nov 2026 09:51:09 -0800
-From: "Andy Lutomirski" <luto@kernel.org>
-To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>,
- "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, bpf@vger.kernel.org
-Cc: "Puranjay Mohan" <puranjay@kernel.org>,
- "Andrii Nakryiko" <andrii@kernel.org>,
- "Daniel Borkmann" <daniel@iogearbox.net>,
- "Eduard Zingerman" <eddyz87@gmail.com>,
- "Emil Tsalapatis" <emil@etsalapatis.com>,
- "Ihor Solodrai" <ihor.solodrai@linux.dev>,
- "Dave Hansen" <dave.hansen@linux.intel.com>,
- "Peter Zijlstra (Intel)" <peterz@infradead.org>,
- "Thomas Gleixner" <tglx@kernel.org>, "Ingo Molnar" <mingo@redhat.com>,
- "Borislav Petkov" <bp@alien8.de>, kkd@meta.com, kernel-team@meta.com,
- "the arch/x86 maintainers" <x86@kernel.org>,
- "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>
-Message-Id: <7c7695ad-86c4-4b52-b705-71dac267cad2@app.fastmail.com>
-In-Reply-To: <DN5K8Y9824AE.3GPOE0WP9ELFN@gmail.com>
-References: <20261009024925.3169077-1-memxor@gmail.com>
- <20261009024925.3169077-2-memxor@gmail.com>
- <df69ab5d-bc97-4651-8668-a2b3e4bb272a@app.fastmail.com>
- <DN437OYZ5FGP.20VLV7ZEXQ5YY@gmail.com>
- <5f46d1c1-fdce-4f3b-9d56-675a822b2d65@app.fastmail.com>
- <DN4X9KVYMONH.VHKD1QED1BUQ@gmail.com>
- <03275761-8de2-41be-92fd-8e3012a87eeb@app.fastmail.com>
- <DN5K8Y9824AE.3GPOE0WP9ELFN@gmail.com>
-Subject: Re: [PATCH bpf-next v1 1/3] x86/mm: Resolve BPF exception fixups for user
- address faults under SMAP
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20261127-selftests-bpf-config_dwarf-v1-1-46ef5b492f41@marliere.net>
+X-B4-Tracking: v=1; b=H4sIANjFCWsC/yXMWwrCMBCF4a2UeTZoIrTqVkQkl0k6ommZiRco3
+ buJPv6Hw7eAIBMKnLoFGF8kNOUaetOBH21OqCjUBrMzvdZmUIL3WFCKKDdH5accKV3D23JUAfc
+ Hr49uCLaHCsyMkT4//Hz5tzzdDX1pYns4K6gc2+zHNk1MifL2YaUgw7p+AQgkhICeAAAA
+X-Change-ID: 20261127-selftests-bpf-config_dwarf-de38c19b7da6
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re_=28SUSE=29?= <ricardo@marliere.net>
+X-Mailer: b4 0.16.0
+X-Developer-Signature: v=1; a=openssh-sha256; t=1795802589; l=1327;
+ i=ricardo@marliere.net; h=from:subject:message-id;
+ bh=8+DByMWjm7cAR3ST0nITHLU/9D//o+2zpqhJ2WzQCZ4=;
+ b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgguRCc5X8/UX9M40lkMnr//aFGOhce
+ x5ezt8MFNUFlqYAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
+ QMneMjENWel3PSbA6CREt8noMWhcuLiVoPYrbs0oq5hnNm0VwORDPKzsIB7inPgbIaBZNvuzWbo
+ OzKWv0PhzswA=
+X-Developer-Key: i=ricardo@marliere.net; a=openssh;
+ fpr=SHA256:pzhe0fJpYLz+3cZ33FFPhIfaUElk9CXPFFXmalIH+1g
+X-Last-TLS-Session-Version: TLSv1.3
 
+config sets CONFIG_DEBUG_INFO_DWARF4=y and config.x86_64 sets
+CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y. Both are members of the same
+"Debug information" choice, so on x86_64 the fragments contradict each
+other and which one survives depends on the order they are merged.
 
+Neither needs a specific DWARF version; CONFIG_DEBUG_INFO_BTF does not
+depend on DWARF4. They only need any member other than DEBUG_INFO_NONE,
+which the generic fragment already provides for every architecture.
 
-On Thu, Nov 26, 2026, at 4:18 PM, Alexei Starovoitov wrote:
-> On Thu, Nov 26, 2026 at 09:30 AM Andy Lutomirski
-> <luto@kernel.org> wrote:
->> Okay.  So maybe there should be a nice patch set to *fix* it.
->
-> In a perfect world, yes, it would be nice to fix, but no one stumbled
-> on it since the probe_read_kernel appeared in 2009, so it's worth
-> fixing only if it doesn't kill tracing as a feature.
+Signed-off-by: Ricardo B. Marlière (SUSE) <ricardo@marliere.net>
+---
+ tools/testing/selftests/bpf/config.x86_64 | 1 -
+ 1 file changed, 1 deletion(-)
 
-You mean no one knows they stumbled upon it.
+diff --git a/tools/testing/selftests/bpf/config.x86_64 b/tools/testing/selftests/bpf/config.x86_64
+index 523e0d29bbd4..a6e9766b6b7e 100644
+--- a/tools/testing/selftests/bpf/config.x86_64
++++ b/tools/testing/selftests/bpf/config.x86_64
+@@ -44,7 +44,6 @@ CONFIG_CRYPTO_SEQIV=y
+ CONFIG_CRYPTO_XXHASH=y
+ CONFIG_DCB=y
+ CONFIG_DEBUG_ATOMIC_SLEEP=y
+-CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
+ CONFIG_DEBUG_MEMORY_INIT=y
+ CONFIG_DEFAULT_FQ_CODEL=y
+ CONFIG_DEFAULT_RENO=y
 
-> Kernel observability is a mandatory feature. Looking at 3 options:
->
+---
+base-commit: 9437ee8b6cf607e883b36e44bd755968daaebd48
+change-id: 20261127-selftests-bpf-config_dwarf-de38c19b7da6
 
+Best regards,
+--  
+Ricardo B. Marlière (SUSE) <ricardo@marliere.net>
 
-
->> 1. Walking a little list or table to validate the address (which may
->>    require some sort of synchronization and obviously needs to be NMI-
->>    safe -- for systems that use TLB-flush IPIs, blocking interrupts
->>    could probably do most of the hard work, and otherwise a little
->>    flag set while a read is in progress that can block the change of
->>    an address from safe to unsafe would do it.
->
-> walk and the synchronization makes it unusable due to NMI,
-
-I think it=E2=80=99s workable.
-
-When adding a safe range, you just add it. When removing a safe range,
-you invoke RCU and it remains allocated as safe until RCU synchronizes.
-A straightforward implementation would immediately unmap unsafe vm_areas
-but defer releasing the vm_area itself until after a grace period. On
-systems where the TLB flush is guaranteed to wait for NMI (x86 with
-neither AMD=E2=80=99s nor Intel=E2=80=99s remote flush extensions) even =
-that is
-unnecessary.
-
-The NMI walk uses your favorite wait free data structure, e.g.
-latch_tree (actually intended for approximately this use case!) or
-XArray (would need to verify that deadlocks are not possible but
-probably faster).
-
-> but we we can give uncached ioremap() a different range vs vmalloc()
-> then it might be practical with a single range check.
-
-That also seems sensible.  One could do this and the above.
-
->
->> 2. Allocate a PKS key for the purpose and use it.  (Only works on
->>    systems that have PKS.)
->
-> My research showed that the effort to get PKS into the kernel stalled
-> years ago, and it's intel only feature.
->
->> 3. Use an entire mm for the purpose and treat it as a user access.
->>    This is probably the cleanest solution but it will be
->>    slooooooooow.
->
-> You mean like use_temporary_mm() with direct cr3 writes ? If every
-> read needs mm switch that might expose intel HW bugs. I remember div
-> bug and I bet there are more lurking in the hw. I'd rather not push
-> the hw limits.
-
-We switch mm all the time. The issue you will hit is that it=E2=80=99s k=
-ind of
-expensive and that the extra pagetable synchronization is complex.  I
-don=E2=80=99t expect hardware issues.
-
->
-> As a summary I don't see a practical improvement for
-> probe_read_kernel. Maybe there is an option 4 and 5.
->
-> The main point that it's orgonal to this patchset.
-
-Except that the patchset is adding arch support to speed up a use case t=
-hat isn't even correct.
-
->
-> btw I'm planning to explore PKU for other bpf needs if writes to PKRU
-> register are fast enough.
