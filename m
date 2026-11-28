@@ -1,102 +1,94 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.45
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.208.49
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795823875;
-	b=Zp4WkF2wcc5HO7WA9TkSLnotm2EjVSHML67gc3PVlGzcgEzhXaQTmoNX2/3yM3Po6IZG
-	 wXtM6tc2B7DNWY8Eq2kdDaJEP/YWRjalT6GbjO3uNbdA0nREmxwaUY4SLpkroT5gNe8hT
-	 9NYyLxTN+FyYGxmcPwBRwhqWVEc65PD1z6lshNWY45egPt3Bf4E3IMpBerdcX/iLf79BA
-	 7wg8kPX4kaiV//zO+3AE+r/QD+m7EeurN4H84qPA8Hl3i96miSozHZAkJlajQsN+7yBD7
-	 oX8F/LYUPLyeRbzu+OAlF5z9XuZPB/cdb9Eq1+Eu4oDSrO0mexmZQWCwzd3nXLzXUaQ==
+	t=1795825130;
+	b=u/3Liv0B5sCts/FRoZ0a4NNicO/bMn/ulqJAqLrsS9yPV0iGGOatxzoyBEn2p8gcK+Ge
+	 MDxzzHm2UCbAqhPJDRk8+RSvhc/7NpGr6D7yXGMKp6rr2OHU9JppGsMk+f+NSWtiET3Jx
+	 c7mb+6NWtqj8DYxTD6jKxi2EhPVu8nYxdajGmiHuhW7TE84Sbd8BQs/S/wbwQACF5sSp2
+	 IwOviHISuj8MDP37jaNWk7fjXc5QnpQbo8y0ernkqo5hlSrohchu8bIjyeYHmZPRASAZo
+	 qqsRrYaa48ieXfmI+vJOuwhP05o34Uf+vR20Zf71hsmjp8PN2JEU4Y1ukMOYHyEPNDw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795823875;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795825130;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
-	 References:Content-Transfer-Encoding:MIME-Version;
-	bh=HOeWwMSOTYKZEoz5p7s6n0V8NpIF79oQ9Pl2GNXiK78=;
-	b=aVqN2m4qIizl4YU2AnEqkZ1YH+oiwo9Hb9dFHWHFZOPIjj5uoj4hchNkm/JE1ryYBlHv
-	 GFcTs2eA2QmDQwb6/YHvaHZ8o9w+f+yPyHcJgP/cvwwCCUQb2gOoLBYDA82ezQrQVt/GA
-	 IRkiWjK5XBzS2SL5/VhC5W/UmjUt5VstSKevJR/V8MgIgwFRatI7br+HMqYMKhI7JVRgx
-	 J6vT02Ik4+kNy253fy6Bxr/K/HxtY3NZ18xsV9ZQ7aUVhPEvrXr9vo1gX4B3afpVNmfN8
-	 Sqgpxhsc0KaYIFPVR/CMrD9rScIw3S0CCxwbiEaM+9VZhHGRmABmD3pBkx/rPqxIa0g==
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=6OQ2jIXGCbCx2gH2ueOTZDzML7ivwO7Wf75LpMaGfjc=;
+	b=dRzUV9fwRlKJA4yR7RoSSlz4oaZT1wtRUIwlZth6OyylOnR7W351RocfXiSq/1nf7BC6
+	 IOPSZEpvP8BxKYBWGpDVsKc0+YNZPt5mgxSXhwvr1smole54dt4z1mH5jmSnqaz+SEC3w
+	 SjZ50LOvzU9bDB/5hCbf1sTwViqQxWTX2IAH5+Qop/9FpQ85K72UFFx56Y2ta7zKbTPkR
+	 pwUi0Kwc5bVVsSQUPH9PJPIwatkoIiwtBzmbXPxEZK5BDNZLdxbh+usNl2MgKKRl4hxuK
+	 ABsBt2w8W/0BEo6Pg2dTlFFljK7KgfUnYchLBNafVSo+bxoVO3js+jIeWMg9nm00R5Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=MoES4Mli;
-	arc=none smtp.remote-ip=209.85.216.45
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=JnUNTTAg;
+	arc=none smtp.remote-ip=209.85.208.49
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DAC4606A31C
-	for <bpf@vger.kernel.org>; Fri, 27 Nov 2026 23:57:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6DAC4606A31C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D73FE606A31E
+	for <bpf@vger.kernel.org>; Sat, 28 Nov 2026 00:18:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D73FE606A31E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=MoES4Mli
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-3b413d04c93so4954812a91.1
-        for <bpf@vger.kernel.org>; Fri, 27 Nov 2026 15:57:55 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=JnUNTTAg
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-6b894a5ce3dso3013070a12.2
+        for <bpf@vger.kernel.org>; Fri, 27 Nov 2026 16:18:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795823875; x=1796428675; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=HOeWwMSOTYKZEoz5p7s6n0V8NpIF79oQ9Pl2GNXiK78=;
-        b=MoES4MlicHFbfTELS5EyiLrtl45WOccrlWI+fuVqp/3uSMDAStiNrJG9VZOpqNRsW1
-         pr5hheOFRch6+LX57Kg70G/KbzNLoRRAB8GRtDF7U5VxcJgmiy/u48kbge72e2Bp0pMu
-         BuowuVC1aaEvE4YKGDve1Itg13F1NS0Y1I8LwqxDaoQTG9O77ePs+J4WXZCW6wgyXe4X
-         dGnuUFGXnRLIjs6itU0EQP/CZlWPoTWQfU/KxlUU92WGlxTOdT1+gVIrX9iIbCAs7wp2
-         +wGlmlQiFHF9Qoc/AOeXsbFU2adbQhNlzyUVXhEi8iBHLP6M2+KNoTzPAlC32ITU1dvW
-         S/qA==
+        d=gmail.com; s=20260707; t=1795825128; x=1796429928; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=6OQ2jIXGCbCx2gH2ueOTZDzML7ivwO7Wf75LpMaGfjc=;
+        b=JnUNTTAgGQMnp/NZtz9Q4EbRlnsgRUMB4k9QVABlBtWPPwV5kUIZt/coGm4oTrWT9B
+         IFRyVLrNUNigaqA9qlscqhVPd590MwKx+nps6H/xZ4yiU+4DxBXWZL5wuVSKwDUSYKsl
+         gJNaYSlLVnL573AUCEAT09jdiVmfFbPu/2DfbEuOklE4Tr0EjZNUS35lANqwY8Lknxto
+         WsbzmyFVaZK+zmucVhzjJD+TXZN7AsdgNseURfTrcZIXSZ6ut1RvL//XSUo+EJDCSsPJ
+         JOMDhIdRkkW7IPYJq0uUnPKotf1uvJeEqXs0qjCL7NAjlqtWpieswpRfKQuXn0EAexWO
+         CUeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795823875; x=1796428675;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=HOeWwMSOTYKZEoz5p7s6n0V8NpIF79oQ9Pl2GNXiK78=;
-        b=K+FmktPkSY2T3KpjihavImytMY+DmLtuWkavfmhMPb9nEG6V/BHetIfNen8LP754ct
-         XqVhf16QoBpdpds0dlLZIByGOZKdzK/Zl+5fQjimgmrN9RJVfQsxuUfJm95t0AbG4+UG
-         uSzcBB298BiSP5PnKhXKCWYHrJb09VBVeVFJ0N3YqewpEUHIW6nu7VW2zhIABY+RRuhQ
-         7HISxwu+j2NF9M33sqFTSqw6+IxV10xCpIc3aOodR/P2TIRZ4o9Y3R/+0LdVSHG6dvbG
-         iQUO4rfxQ/K3Ft9Rw8e5alLwzW67sGGwZ58VWAaQQQ7zbkS6zG68bCB2tBqUqvORoxOB
-         PK3g==
-X-Forwarded-Encrypted: i=1; AL+hErFins9BEg5bgheNcCTzsXk197E8y/6AuUVVRjylfwCvkjlywqUoylczbYS8xyhD/t5PhV0=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+GIUI7C3qV4uKNf9GFBnT47AI5Ykt5l/f12mYwjOxqd67+HU2C
-	Waw9HjXcyUSNBF55+oC2sYctS1ypovv0I1d8tW7ZsYjsFi/cZlPOYV4t
-X-Gm-Gg: AZFdTZdRlTfbxu2Y8kwHM5ATVTGHPOd9EezTZUdELD8bqjBc1BT2Jp3desCp1QfxX8s
-	Mod/PrskHOv2fAZkCEwInTbE1DAod+s+O/hqSpHgcjguUZcDqnIvNr/cPRsS2iX06d8E9FLjlgm
-	OvkEBBRycUBlFocV96fvRQsf7eo22yBjGKtdpo9d7pL9RANkTbJWO1fuggwjjVv/jPHbShZ/oo6
-	QW9Uk98p6P0a9ZbnphWtJEA3nEjU2CozK2Tbg25SILmVsk839jMG0D89q1PbJZ887axhBU9/8Kk
-	nYNrTcIcdW0lzOFXSttL24UK5ayi1pToOAmi0BAWEOZ0wk29Ua+693aiBSL5TlBGfQlvgDdkmMS
-	zp9GGfG2Md0R7zqo+B3Z/dSWcLtJxzGviZ5kksu5p0AzRu0guT9y5WC/4iQiMIUPDi8OfFzr+5/
-	3uOum9W6jejtx+ARe8Qtg0Hh+JNBWNdAcdDDWlpXOgC5HlLVa8t/r+0fn35FWohigk7GOhn+UL+
-	G/6qq1DUkaIvw7vRZwEanxXAdvvnfpJrJBn27ReKPQZpRcPDqfgLE1r2qOXLbk8+8+4c7PC7Lfw
-	h52WYQm4Y6Lf7LC4VoEhZTwEcPPA0avmhfWTYORjAxeJNjcB1y2zVftXbgGXZIlcwnrLIhhfsj+
-	CziukdbMCqkvi/3EVaAMV13yVL2B56QmU0XYFT58uM5qSzX20cHpDeuA=
-X-Received: by 2002:a17:90b:3912:b0:3b3:b632:7f1b with SMTP id 98e67ed59e1d1-3b41c9b2be0mr27724599a91.12.1795823874735;
-        Fri, 27 Nov 2026 15:57:54 -0800 (PST)
-Received: from localhost ([153.61.198.243])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b41ad46ef5sm40486742a91.8.2026.11.27.15.57.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Nov 2026 15:57:54 -0800 (PST)
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 27 Nov 2026 23:57:53 +0000
-Message-Id: <DN6EFMGS13UD.3T3JBJD0ZBLWQ@gmail.com>
-Cc: <daniel@iogearbox.net>, <andrii@kernel.org>,
- <andrey.grodzovsky@crowdstrike.com>, <eddyz87@gmail.com>,
- <memxor@gmail.com>, <martin.lau@linux.dev>, <song@kernel.org>,
- <yonghong.song@linux.dev>, <jolsa@kernel.org>, <emil@etsalapatis.com>,
- <ihor.solodrai@linux.dev>, <john.fastabend@gmail.com>, <mason@kernel.org>,
- <bpf@vger.kernel.org>
-Subject: Re: [PATCH v2 bpf-next 0/5] libbpf, bpf: Utilize CO-RE for BPF
- program parameter presence, ordering
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Alan Maguire" <almagui@kernel.org>, "Andrii Nakryiko"
- <andrii.nakryiko@gmail.com>
-In-Reply-To: <21d38d84-0520-4fd2-ad98-04253d0405f2@kernel.org>
-References: <20261125165845.45806-1-almagui@kernel.org> <CAEf4BzbkrVyCSW1aRCo_s=2pxK7NRfUnznk21CY4-txqveRcnQ@mail.gmail.com> <21d38d84-0520-4fd2-ad98-04253d0405f2@kernel.org>
-Content-Transfer-Encoding: 8bit
+        d=1e100.net; s=20260707; t=1795825128; x=1796429928;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=6OQ2jIXGCbCx2gH2ueOTZDzML7ivwO7Wf75LpMaGfjc=;
+        b=epcTM+1yxtr46p+1KOpq73CXoeH3rPqsUgpg2W2FVu0lJUCPslRFeBzYAYvyxkKKvP
+         8NEPMBvnSYTnWAx9jJtbffMLiUX8rUKkdCQ34JaNX+pS897Vzq09rD9RPMDU++D7j6uM
+         mIxTOuwEwrEdDD2KakTAcgTv24s1SuH/+HU34I7UEiZsnHEc+4v4lNdQ2tV8pqGP1d1v
+         ShD9pBmBtV9auwIJ1Z1icz6ArKvdJLqtC4YRBG6CEKMCLq9c5+QnK6j+hxRNTIsuJr4M
+         DYGJQeR/1svgEXnHnfF7EKX57dfIAQcm4FXyfZEXEDLyz8tvqrLNR8ZJUkK0GGreDuK+
+         tJ9w==
+X-Forwarded-Encrypted: i=1; AL+hErF8HK9EjRLhgceHlyUshYSSlMwFy2ySo22RCjw3zbOrCPoOcaB2XY64zHHPZtKQQ0sOJnY=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/vXuVCTVSeemQEVskQWt3+UyMFzfaGizJise9LIAI2fpCiAF9j
+	Pkwvc3t2bNdLFdvbTDtjbLGVPufZuNWCijKDyAGDFaWrmnwKpuBVKAc/
+X-Gm-Gg: AZFdTZf/RSGKKob+sqH6p5cxuwZmZlS6Oukfn1OuALpcD9KhIbp64ig3zLIwvUpD8GN
+	ZRgL6w+sLRR+NZtaKdBHovf5XT1XvXo8O1+rfoBpBJ0FThy2uqx4yMZJIm/A+KeZedrOqdlcGKx
+	Nm2VuYPpaIiyz6VnUaenu8GZ6tceU/fHGxuWm66lxyfxqoGM3DPNGOaNDUqqZ0ru0k8bQTKyz+h
+	bh1ndaCaG8Gmlaz63/1AT+eGus7OsssfkOukEETe6oO2x43FfRVEQnXBnuERw3WstzW/V12dJRr
+	GtigwH0bqAaZkWfHZqWC/JRiO8kV8bOPfMfSV4MSWS/c+71Dl2iAEd6Wl8B0kKWoWPl23KdO7zN
+	fB0YwwzbakO4KuAbValWF/TSUwCVGZ2SwiWck8HBVrSWoaa1Aofv/9yg6wtQDkXtoKOkMoAcI3F
+	+i5aDYbd5CAPmEO0lPJ505lpVTYRW4Dwh87ECFDf6mk3POGzoHFt2OLJByLFPN0Ouxo8SCdpFHw
+	AchGza/l2PQ6hX/w/YLRN72m5j7lNwdF3/DUuRbl3FX+hKBD+bT1Y4k0PsdYDMpprGVEJL9gNpO
+	/NLaUB/ZF4qJ+xZYVeWRmVfDUIfBg4II1XMX4FtMsiHS8Cl0XL+IwhXyIVCq/XpNTsEGfN3S
+X-Received: by 2002:a05:6402:c47:b0:6b5:4baf:ad96 with SMTP id 4fb4d7f45d1cf-6ba37e6ee57mr18746128a12.17.1795825127925;
+        Fri, 27 Nov 2026 16:18:47 -0800 (PST)
+Received: from localhost.localdomain (17-33-201-31.ftth.glasoperator.nl. [31.201.33.17])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6bb1ca4ff7bsm4753610a12.8.2026.11.27.16.18.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Nov 2026 16:18:47 -0800 (PST)
+From: Tom Roozen <rzn.tom@gmail.com>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>
+Cc: Andrii Nakryiko <andrii@kernel.org>,
+	Thomas Gleixner <tglx@kernel.org>,
+	x86@kernel.org,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [BUG] bpf: hard lockup with ringbuf used from NMI and sched_switch on hpet clocksource
+Date: Sat, 28 Nov 2026 01:17:20 +0100
+Message-ID: <20261128001825.38905-1-rzn.tom@gmail.com>
+X-Mailer: git-send-email 2.56.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -106,15 +98,228 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Thu, Nov 26, 2026 at 08:41 AM Alan Maguire <almagui@kernel.org> wrote:
-> I couldn't find an LLVM issue for this problem specifically, but
-> looks like [1] describes things from the gcc side.
+Hi,
 
-Ihor fixed the combination in this PR:
-https://github.com/llvm/llvm-project/pull/234280
-clang 18 to 23 crash on bpf_core_field_exists(ctx->arg) when the struct
-has preserve_static_offset.
+A BPF ring buffer written from a perf_event program (NMI context) and
+from a tp_btf/sched_switch program hard-locks my machine within about
+a second when the clocksource is hpet. On acpi_pm it doesn't hard-lock.
 
-I recall we discussed making both args work in LLVM, but I don't
-recall whether anyone started working on it.
+
+Environment
+-----------
+
+- AMD Ryzen 7 7735HS, Lenovo ThinkBook 14 G7 ARP,
+  BIOS P6CN22WW
+- Kernel 7.3.3-1-default (openSUSE Tumbleweed), x86_64,
+  PREEMPT_DYNAMIC (full), HZ=1000
+- The TSC is marked unstable at every boot, so the kernel selects
+  hpet:
+
+    TSC synchronization [CPU#0 -> CPU#2]:
+    Measured 5354294254 cycles TSC warp between CPUs, turning off TSC clock.
+    tsc: Marking TSC unstable due to check_tsc_sync_source failed
+
+Reproducer
+----------
+
+Source at the end of this mail. One BPF_MAP_TYPE_RINGBUF (16 MiB)
+and two programs:
+
+- on_sample: SEC("perf_event"), attached to a
+  PERF_COUNT_HW_CPU_CYCLES event on every CPU with freq=1,
+  sample_freq=8000
+- on_switch: SEC("tp_btf/sched_switch")
+
+Each reserves 64 bytes with bpf_ringbuf_reserve() and submits them.
+It reads bpf_ktime_get_ns() before and after the reserve and keeps
+the longest reserve time in a global variable. User space consumes
+the ring buffer, runs 4 pairs of threads passing a byte over pipes,
+and prints the number of events and the longest reserve times once
+per second.
+
+  ./hpet_rb 8000 60
+
+
+Results
+-------
+
+Clocksource switched at runtime through
+/sys/devices/system/clocksource/clocksource0/current_clocksource:
+
+1. acpi_pm: ran the full 60 s, ~148500 events/s. Longest reserve
+   at the end of the run:
+
+     148638 events/s, longest reserve: NMI 0.112 ms, sched_switch 0.159 ms
+
+2. hpet: produced a single log, then hung the machine:
+
+     693 events/s, longest reserve: NMI 500.810 ms, sched_switch 1001.174 ms
+
+
+Additional test: read_hpet() replaced
+-------------------------------------
+
+To check whether the HPET read path is involved, I also used a
+livepatch that replaces read_hpet() with a plain readl() of the HPET
+main counter.
+
+With the livepatch enabled, the reproducer ran the full 60 s:
+
+  537229 events/s, longest reserve: NMI 0.034 ms, sched_switch 0.036 ms
+
+After disabling and unloading the livepatch, running the reproducer hung
+the machine instantly.
+
+My reading of the code: a CPU can be inside read_hpet() holding
+hpet.lock when a perf NMI arrives. The NMI program then queues on
+rb->spinlock behind a CPU that is in on_switch. If that
+CPU is the queue head or pending waiter, its check_timeout() calls
+read_hpet(), which waits for hpet.lock. hpet.lock is held by the
+interrupted CPU, whose NMI is waiting in the queue without a timeout
+of its own.
+
+Thanks,
+Tom Roozen
+
+
+---- hpet_rb.bpf.c ----
+
+#include <linux/bpf.h>
+#include <bpf/bpf_helpers.h>
+
+struct {
+	__uint(type, BPF_MAP_TYPE_RINGBUF);
+	__uint(max_entries, 16 << 20);
+} rb SEC(".maps");
+
+__u64 max_ns[2]; /* longest bpf_ringbuf_reserve(): [0] NMI, [1] sched_switch */
+
+static __always_inline void emit(int i)
+{
+	__u64 t = bpf_ktime_get_ns();
+	__u64 *e = bpf_ringbuf_reserve(&rb, 64, 0);
+	__u64 d = bpf_ktime_get_ns() - t;
+
+	if (d > max_ns[i])
+		max_ns[i] = d;
+	if (e) {
+		*e = t;
+		bpf_ringbuf_submit(e, 0);
+	}
+}
+
+SEC("perf_event")
+int on_sample(void *ctx)
+{
+	emit(0);
+	return 0;
+}
+
+SEC("tp_btf/sched_switch")
+int on_switch(void *ctx)
+{
+	emit(1);
+	return 0;
+}
+
+char LICENSE[] SEC("license") = "GPL";
+
+---- hpet_rb.c ----
+
+/* Usage ./hpet_rb [sample_hz=8000] [seconds=60] */
+#include <pthread.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <linux/perf_event.h>
+#include <sys/syscall.h>
+#include <bpf/libbpf.h>
+#include "hpet_rb.skel.h"
+
+static long events;
+
+static int count(void *ctx, void *data, size_t len)
+{
+	events++;
+	return 0;
+}
+
+static void *consume(void *rb)
+{
+	while (ring_buffer__poll(rb, 100) >= 0)
+		;
+	return NULL;
+}
+
+/* Two threads passing a byte back and forth to cause many context switches. */
+static void *pingpong(void *arg)
+{
+	int *fd = arg;
+	char c = 0;
+
+	while (write(fd[1], &c, 1) == 1 && read(fd[0], &c, 1) == 1)
+		;
+	return NULL;
+}
+
+int main(int argc, char **argv)
+{
+	int freq = argc > 1 ? atoi(argv[1]) : 8000;
+	int secs = argc > 2 ? atoi(argv[2]) : 60;
+	static int fds[4][2][2];
+	struct hpet_rb_bpf *skel;
+	struct ring_buffer *rb;
+	pthread_t t;
+
+	skel = hpet_rb_bpf__open_and_load();
+	if (!skel || hpet_rb_bpf__attach(skel))
+		return 1;
+
+	for (int cpu = 0; cpu < sysconf(_SC_NPROCESSORS_ONLN); cpu++) {
+		struct perf_event_attr attr = {
+			.type = PERF_TYPE_HARDWARE,
+			.config = PERF_COUNT_HW_CPU_CYCLES,
+			.size = sizeof(attr),
+			.freq = 1,
+			.sample_freq = freq,
+		};
+		int fd = syscall(__NR_perf_event_open, &attr, -1, cpu, -1, 0);
+
+		if (fd < 0 || !bpf_program__attach_perf_event(skel->progs.on_sample, fd)) {
+			perror("perf_event");
+			return 1;
+		}
+	}
+
+	rb = ring_buffer__new(bpf_map__fd(skel->maps.rb), count, NULL, NULL);
+	pthread_create(&t, NULL, consume, rb);
+
+	for (int i = 0; i < 4; i++) {
+		int a[2], b[2];
+
+		if (pipe(a) || pipe(b))
+			return 1;
+		fds[i][0][0] = a[0], fds[i][0][1] = b[1];
+		fds[i][1][0] = b[0], fds[i][1][1] = a[1];
+		pthread_create(&t, NULL, pingpong, fds[i][0]);
+		pthread_create(&t, NULL, pingpong, fds[i][1]);
+	}
+
+	for (int s = 0; s < secs; s++) {
+		sleep(1);
+		printf("%ld events/s, longest reserve: NMI %.3f ms, sched_switch %.3f ms\n",
+		       events, skel->bss->max_ns[0] / 1e6, skel->bss->max_ns[1] / 1e6);
+		fflush(stdout);
+		fsync(STDOUT_FILENO);
+		events = 0;
+	}
+	return 0;
+}
+
+---- building the reproducer ----
+
+clang -O2 -g -target bpf -c hpet_rb.bpf.c -o hpet_rb.bpf.o
+bpftool gen skeleton hpet_rb.bpf.o > hpet_rb.skel.h
+cc -O2 -Wall -o hpet_rb hpet_rb.c -lbpf
