@@ -1,104 +1,98 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.52
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795846826;
-	b=bOwk6hkW+Ydw1ul3udjKjl1/8eZYmDnTdoE2Y9YV+TCuXnN/7mVJ7AKs128lvVBUE4pg
-	 5lFAKJdhUNtz5dwNZ7GLOHKXnQSvwQrt9DRczvUd1KIYgZbfVdg8eH7ovJWpTo+ChhbWP
-	 ht/R/Nb6F/SSr0bgLpi1ZCUXTI2x1qCzEtOk8yas505M5alFgpns2zyxKRpHIQwYW2TkJ
-	 4BDFGZUazH+IKHauPe9ZtWjRHMbZkYitZtDi8+C50O0eZeYbw2INyHNw6ynU51rZPZaw4
-	 3V7HASRR7p2EeWi488eQMVeTIfR9RPwcX1QL1SdmydRFGh52HrH054/rBFjCSv5oSVQ==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795846826;
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.210.173
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795848712;
+	b=RAVMfqI0FlJXuPs4fUfT33CfupBs5H17+taUQup2euxlbCZzT9xK6KzUTTDa1DWWXI1U
+	 49xsqaUtU4JCbS19oSezuJxagOajfT2XBlhnZaBie0osh5oZUfb14N5+0GGdPbEDNnRio
+	 9bI5KszwjVkGYq+FqwS6DdD1+GM8w2X8AVEH//fUTy/qr35y7UcWtxr+2/V+UEyhT8i2W
+	 Lby3B6IL+SuOZpMbv9eoKivcbgSWSY3oGV93/KNgYofiXkD/qeypAAuFrXHXY0EednSxX
+	 cPTgU6xbpNCVom0WO9eCMl1UkXuSVzPeqOa04yhrJ2ilBUElYjaT+yOJaDdMpHadsdQ==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795848712;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=2hMGbCM5tB70FBdwb9zAs1NZJOT/JT/9Od6CekBUEzc=;
-	b=xmkxigYstZ9jR35uA/Gi9PlLJBO6moWyCFfYg5ISoEu+HUS66BcnFRz5jg1TIbVBZLJK
-	 8a17yWNQHbkHiLeOU7G8u3rh0xC1dentoFoYis+zYv3hvaiB63PK/SIcZp0Tz8jPkhXSX
-	 NLZlq2KSy9fGIkFndzUeGKsqZhVAbO6avQhOEhfnYs9e2VbXIfW9hFAs5ViAzFLrmklgr
-	 SvXRSZRSXV1zoIc5eM9nPDXJ4WMgP+0CdaTS1+FTS26M8zbZ3xHXjgYJySxUeELcobWL1
-	 0+99RNuegJ30ufcejHc0SadqwAy17642yjhRp/my4B2NFJzN5PFq45FiQROqXGQRixw==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:
+	 Content-Type;
+	bh=5fkBnBJw16iOwc8lo9gOdGyRkiJlq6Ez/w9c3KR1+bw=;
+	b=Vaqny+G73Ja9yYVu23tPflM3tPxYhx/NUQpbRLRtsEczVn8fi76HHlaJ53FWyzmJ5DNv
+	 Bl1swyCJIY8uX3C1TfQRUe0IgvGxOv1M0GVZ1djhRvpWRBFfwCf9XDzAwM8NwRO3pt9Q5
+	 DW44rOeHTjvMrpcKM7bNC8dsm6cRGO8Uyqbvh+8T/W0UIn2T4r3VSLeBZM2fpGNc2z0KM
+	 W2mh6eeD1WG4IkrH5OmjN5cm47uWDs9Ne8K/Nns2aXpahEzLVwDW+4VR5teu89KWxD/um
+	 TwkzcKltzGmFZcnthROxhZnSn9HggK9OFPUJBhmLveLWrCYbTAoVy/dDso9PZnizugQ==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Prak9o+R;
-	arc=none smtp.remote-ip=209.85.216.52
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=stkmnyeX;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.210.173
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB27C606A31E
-	for <bpf@vger.kernel.org>; Sat, 28 Nov 2026 06:20:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BB27C606A31E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C8D7606A332
+	for <bpf@vger.kernel.org>; Sat, 28 Nov 2026 06:51:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5C8D7606A332
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Prak9o+R
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-3ae6b4c669fso7474932a91.0
-        for <bpf@vger.kernel.org>; Fri, 27 Nov 2026 22:20:25 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=stkmnyeX
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-8b4c8b51b58so5177528b3a.1
+        for <bpf@vger.kernel.org>; Fri, 27 Nov 2026 22:51:52 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795848712; cv=none;
+        d=google.com; s=arc-20260327;
+        b=Arpi9NLsIkCi0MDHq9Ky7DWNffpZm8D28+eweYGbWi/PZN6l5SI4MHaYCDsoXK0qtG
+         /iuND8QNx4J+WEcEbtpSvrN7NRARwZ/Ue+1onV0QeAgETbVCCEctDXgx4Ki0cIs8np0O
+         BYjTGDIwKISjPJdvZ/spc6My4EagJ7uTkpOEt5frJwGokt6KUu6OQHh42g/cLPMConGq
+         xfqb0+pf5dCHug7ZYnnZNWwj7OmXtNY35hTmBcYRNxvYCq/7E+FQnJJIIrZYUkgh4Vfw
+         BkRiEy8YUzZA2TpgGrxcRlEF5S4IUXaMqoPDZU2OafwzgDk9QD8u9lp0nXRRvCpBCdKW
+         kmTA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:mime-version:dkim-signature;
+        bh=5fkBnBJw16iOwc8lo9gOdGyRkiJlq6Ez/w9c3KR1+bw=;
+        fh=Tnamzv19bwT2wge85uQsLDY40PKPSXM59ROzq7fzRi0=;
+        b=chSAxrjjmuBH8Cwv0QQ4HuNg2WWeoffYEC63xP6wWgLL7TUXIwgNNh/KjARoVXqad5
+         4tAGtGVFVGfGnPC2PgQ0lnl36sEMhkVH6+bz+KQs8kHSWY7oa/8GJL1RuGPgcmVmxWO9
+         XVVbDboctgxnJG98kmkfHTw2Cqqt3jUVQaTpr547jxbiSSAKBFsD76/KP6bBT5MotBvp
+         DipXtJKfUgRQjuEE2Dyr0IQN/oDt34j85t8dxqzsBKUBYe61RXtfve+1HBP8oJqCpVnO
+         Jlb8veLycs0UXc2+H69cdIr1yAkUjSli08XQE1GkkXOJu0hkzOMZdJSNvxe4xSR6LYj5
+         P+EQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795846825; x=1796451625; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=2hMGbCM5tB70FBdwb9zAs1NZJOT/JT/9Od6CekBUEzc=;
-        b=Prak9o+RMwLOyAisXlGs9WAiPIXX6RSG2RFdsICD7cJpTtubAiSuZz1Vksg4WpjDc8
-         BRWsJaaPbG7XoLe92Mv+C/BXf8THgs0uJ0uZpMFeYYhUHMm2p7WO+1mbddZvAj1uVVJ3
-         SP8VWqY8VwZKpE0PqKNsQpvxDLHd6PXX1bq77qBbAzFGACnrS4/+biDTl57BCbmMSdNI
-         mkohNqR4Mh0GoyX+Z+O1XVXXk+1QZxEPIcjWEvf7aXM3MyLwFuWYndrx5Ty9MFquX0y6
-         0/BlJHEo615HqfrTEsJvEwTRL7sjxW1TPCqsWclVlmktRoBMt8foNPajsfbDGUDqn2/o
-         n0AA==
+        d=gmail.com; s=20260707; t=1795848712; x=1796453512; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:mime-version:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=5fkBnBJw16iOwc8lo9gOdGyRkiJlq6Ez/w9c3KR1+bw=;
+        b=stkmnyeXjXrGO8ucfQh5p3r2ucwellPf1M8PDcbW5zkWf2pVteUPNRDWiVLkWb1zcb
+         XpQki5J1T71HXR8TgxpWzBkSMvbsf+7RRpfg3iPuOYsVDQKoNQiJiqeJxpcPQHV6V6pJ
+         euR/x1DYOzLSyUlsz4HtEnnqNMofisZmhVrJu/n/1LKzXUrpz0pNXh8zZWRHfESvQ8Zl
+         Jq6v8fCKpCKYBOndAWvtIca1h0BMZ5IB2BJfyJzIqsJCBGT2b6BJJtblUIC/bOjTocIk
+         PLOhgfuNlQHxmiOC/Ef+vgaxlcT8gVeid0VPgobExn9zilYuZbdQVa7IxtOLitWe0eRd
+         ad7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795846825; x=1796451625;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=2hMGbCM5tB70FBdwb9zAs1NZJOT/JT/9Od6CekBUEzc=;
-        b=S8fauXasrXAsqFJaU4bZDjUua5rPgrLIdr4dgQ9eSj+7jzEDCkIUjPDs64494YFa7x
-         7N9w4jse9e2LVuVfUCQvk5IHLlyX3u7fUKoaJKyZYHaqISUSCUnjHMpe6TSDMYRO3UfT
-         vhARuBvYemK/IXDMoV60Wvwo3hXQCj0Jr/tHZaRYLn3YsWd0yRliJZpvD/QqPfIQDGp+
-         JCvAHvUFD+iqL+3oHRdT9CU1AwSLyohJoV7KbGsRRUIzbiTuIcOjR5d0b5v9KhIb3Bsa
-         IraOnj8h9yBOsAhLv9r1GaQAhNDIwTVCchAJ3wPNXFKyGj+LzbZMlu9aAIEeFbDG+X5N
-         +JCA==
-X-Forwarded-Encrypted: i=1; AL+hErGPFYGTZs/bRYnHp1snCpiUCf9V7pCZQq8KcLpRBLyOSmhUANREzn0ch/9xmYNkKIcQqFc=@vger.kernel.org
-X-Gm-Message-State: APuU4Z8pDSereK0Iex3+3mYHKehlv5lVf8loO562gWR+Irm+QsXEjfs/
-	BLpEnbAZzcPVLXwl7qTO5fcu8CS/Z7mcE/bvEbqtwm9mugD2TUmwM8Yh
-X-Gm-Gg: AZFdTZcA52HexjCkIGp7Z0qbk7zIg/7BfL4kO7hAYGmplPS1je/BNhlq8UnYWUKG6uJ
-	gXsoCaTI4ikh91jeUUUfX25PwxT9K4lchS/qT51Ti57bjZuRe+3OaLVL8GxROp17Qo/oqgBnAqG
-	q361f4Ygn3o+xT4iI7xd1FE99uYGRW8eG3LubX1MIJfE4fDH1LbwBubrMsLJyWQidwuiMkS2bUn
-	79fsHbkFqmra3qI38eNyV5nUcqDMDOpguVs35wI0QtnKL2aa7cpqHrMEVKvRNyAPGA0ffPjblB2
-	knRqtiGFkqwpAgSjKeyBDYa0PclyLX20LnK8m8fLTULz8QYhPbjibKe0Fw+zBkkU5B/sfSIV48I
-	qTuq8PrflY7a+tVvGO9YxGXPo6AnOWTPJYjl/P3dQW6anYcWXYC/Qkfn5Lbitl16Z/oGBPzZJE5
-	RVOVDTvnH1gvKaJj8fDocWdqrKSqCUS4GFdHHQfK5W7XV1DvF/bCtFqsBSLzZ61kIn+HUu1RirR
-	LDMS5vLV5N3tj2h1w0xOHk8iScsl/hGvJvyiF5qk+7FjZBzOwH+bMRga6znAYSU9L+QCC8NdKr3
-	kdve1QyBSu+G3gpRszq7L2XBTMsqrIHL0eOZ0V1/qRj1F5CHi4F9S9cHn3f7giSb
-X-Received: by 2002:a17:90b:5350:b0:3b3:b414:9aaf with SMTP id 98e67ed59e1d1-3b41c93b4admr17215431a91.27.1795846825015;
-        Fri, 27 Nov 2026 22:20:25 -0800 (PST)
-Received: from cps-manycore-1 ([147.46.174.222])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b48b41928esm32008126a91.9.2026.11.27.22.20.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Nov 2026 22:20:24 -0800 (PST)
-From: Sechang Lim <rhkrqnwk98@gmail.com>
-To: "Paul E. McKenney" <paulmck@kernel.org>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
-	Joel Fernandes <jfern@kernel.org>,
-	Josh Triplett <josh@joshtriplett.org>,
-	Boqun Feng <boqun@kernel.org>,
-	Uladzislau Rezki <urezki@gmail.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Lai Jiangshan <jiangshanlai@gmail.com>,
-	Zqiang <qiang.zhang@linux.dev>,
-	Puranjay Mohan <puranjay@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Bradley Morgan <bradley.morgan@linux.dev>,
-	rcu@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v4] rcu: Mark rcu_read_unlock_special() notrace
-Date: Sat, 28 Nov 2026 06:19:26 +0000
-Message-ID: <20261128061955.174288-1-rhkrqnwk98@gmail.com>
-X-Mailer: git-send-email 2.56.1
+        d=1e100.net; s=20260707; t=1795848712; x=1796453512;
+        h=content-type:cc:to:subject:message-id:date:from:mime-version
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=5fkBnBJw16iOwc8lo9gOdGyRkiJlq6Ez/w9c3KR1+bw=;
+        b=sXaC6lhm+fTAedPRr3cV44twfh/6K2OMMhp+fQllOwFSVReQFMsSdgHI8AvwvhTm6a
+         rUbLyAlPkwpf4VI9wlUnpseBNhnZv8DBOVwjG4VhIXz+SYBMMjvn9ErxYbbk4UpKWAmK
+         Cqmih2LviPm8FmuCeCI79+snedRVrsLApiePHy49nE8ulvZplhhvP3uYUcfuIsFn3mPs
+         UgCC49GOnhDroV6k7URDg0shImdnmgHs60t8bPd2fdmSgsebALam58BG01/GKBpovYzO
+         5LBU5AzKDkSbREfmMiG2TQscC0+C1va2Wd7kfXqwhc3M7UDeXVaJH52z5ZLwvXfsK4Zp
+         5d7Q==
+X-Forwarded-Encrypted: i=1; AL+hErFJISefhavqajMU6Ui0W1O93pPiHFEa2ilDJWtOBdQ20CVNXIQaCXS3QFgWEvImnZ+lDQA=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9KKXiRF5BB3IwF1Ax4G+GMq5NP5xKFIwz55UUka61zlcoDCf+0
+	ljrSKTDGfq2dq+SRTgEDrztPpTD1RMcmIiCwWytR1UKhAivh8/bMyQIaX9SYHHli4QN6XcnPoEx
+	usoGvgOBQWSL18re2Gtuocnr4yZjmcL4=
+X-Gm-Gg: AZFdTZfyLV++y03uEgpGtf5KT4Btrp3qwpUCY1Rw6V/gzWGu7rq3Qtui5DPs1WbfvZm
+	5SgaSgr3T4s4Mwh29GTZlIxF7nxPZ6qd+qyPZ9FeovugTf15QWGFxErqOssWTndJ8AYC7INLn5R
+	+X5MkllDUjfT3EAnBz/eKEqe8qhIdm1tOxxDLzFnXVqxGVc8rlIc5WB9mx/DL7gHn8u2dzIG9kM
+	IiaA6UFYU5bwRIAcYalpj8cGz3UwPmbrMA5i+Nl1KrrZQ7g6gq5S+hKW2iSMbZA/E2xMDJ9W8Qs
+	8hQeU7pZ7RLi/8kGPSm8UxVEuiJmRRlF7EgqOZtzzSzWA5K5//FwViN+HDLmuTJU1Q1uFAV2yr+
+	ntULhRRvuGcWzFfH/I0lnYk2JZ8CX50wqDFE6wB3YgbzgES2z7BCnzO/blPHGUvyOt5aUjB4Fy2
+	uz/Xo4Iy+xIvxmN9NHQVDQiWeFvTA50xc82A+Of5LvBlGProaoEpM=
+X-Received: by 2002:a05:6a00:10d0:b0:8a0:1c79:b442 with SMTP id
+ d2e1a72fcca58-8c876736f60mr28100627b3a.0.1795848711653; Fri, 27 Nov 2026
+ 22:51:51 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -108,75 +102,85 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+From: Seke Kazuru <kazuruuni@gmail.com>
+Date: Sat, 28 Nov 2026 08:51:14 +0200
+X-Gm-Features: Aa3M54pZRibgmL1LzEnhMVNXmlmV3PoNLAziDiqM8EwF269XopiVH8PkrMvy8O8
+Message-ID: <CAJATrkz6CgsaAFjeGT_1TuUTxrpVYEo=9rGuobnhpU-LPxv_dA@mail.gmail.com>
+Subject: objtool/klp: ___bpf_prog_run jumptable is correlated to the original,
+ fix never runs
+To: live-patching@vger.kernel.org
+Cc: jpoimboe@kernel.org, mbenes@suse.cz, "pmladek@suse.com" <pmladek@suse.com>, 
+	"joe.lawrence@redhat.com" <joe.lawrence@redhat.com>, "song@kernel.org" <song@kernel.org>, peterz@infradead.org, 
+	bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-The BPF trampoline takes and drops the RCU read lock itself. When the
-outermost rcu_read_unlock() finds ->rcu_read_unlock_special.s set, it
-calls rcu_read_unlock_special(). If an fentry program is attached to
-rcu_read_unlock_special(), the unlock on the trampoline exit path still
-sees .s set and calls rcu_read_unlock_special() again, which recurses
-until the stack overflows:
+Hello,
 
-  BUG: TASK stack guard page was hit at ffffc90001657ff8
-  ...
-   bpf_trampoline_6442575622+0x5e/0xac
-   rcu_read_unlock_special+0x5/0x490
-   __rcu_read_unlock+0x9c/0x120
-   rcu_read_unlock_migrate+0x93/0x220
-   bpf_trampoline_6442575622+0x5e/0xac
-   rcu_read_unlock_special+0x5/0x490
-   ...
+A livepatch module built by klp-build for a fix to ___bpf_prog_run()
+loads, reports "patching complete", and lists ___bpf_prog_run as
+patched, but the fixed instruction handlers never run. The replaced
+function dispatches through vmlinux's copy of its static jumptable,
+whose entries point into the original function body.
 
-With fexit it recurses even earlier, from percpu_ref_get() in
-__bpf_tramp_enter(), which takes and drops the RCU read lock before the
-program runs.
+Setup: Linux 6.19, x86_64, gcc 13, a config without BPF JIT (so every
+program runs in the interpreter), klp-build from the same tree:
 
-Mark rcu_read_unlock_special() notrace. rcu_unlock_needs_exp_handling()
-also runs with .s set, so mark it notrace too.
+  ./scripts/livepatch/klp-build -T --no-replace -o lp.ko fix.patch
 
-Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
----
-v4:
-- Go back to notrace as in v1
-- Also mark rcu_unlock_needs_exp_handling() notrace (Alexei)
+The fix is c77b30bd1dcb ("bpf: Fix undefined behavior in interpreter
+sdiv/smod for INT_MIN"), which changes the signed DIV and MOD handlers
+inside ___bpf_prog_run(). Those handlers are reached only through the
+computed-goto table:
 
-v3: https://lore.kernel.org/bpf/20261125055359.2715140-1-rhkrqnwk98@gmail.com/
-v2: https://lore.kernel.org/bpf/20261125040106.2200628-1-rhkrqnwk98@gmail.com/
-v1: https://lore.kernel.org/rcu/20261124185659.1370644-1-rhkrqnwk98@gmail.com/
+  static const void * const jumptable[256] = { ... &&label ... };
 
- kernel/rcu/tree_plugin.h | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+klp diff refers every static local of a changed function to the
+original kernel's copy unless is_uncorrelated_static_local() exempts its
+name. "jumptable" is not on that list (6.19, and still not in
+7.4-rc4). The module's ___bpf_prog_run therefore carries a relocation
+to .klp.sym.vmlinux.jumptable.12 (R_X86_64_32S at +0x40), and every
+dispatch lands in the original handlers.
 
-diff --git a/kernel/rcu/tree_plugin.h b/kernel/rcu/tree_plugin.h
-index 3500e4874833..9c1b227f5fa0 100644
---- a/kernel/rcu/tree_plugin.h
-+++ b/kernel/rcu/tree_plugin.h
-@@ -689,10 +689,10 @@ static void rcu_preempt_deferred_qs_handler(struct irq_work *iwp)
-  *
-  * Returns true if expedited processing of the rcu_read_unlock() is needed.
-  */
--static bool rcu_unlock_needs_exp_handling(struct task_struct *t,
--				      struct rcu_data *rdp,
--				      struct rcu_node *rnp,
--				      bool irqs_were_disabled)
-+static notrace bool rcu_unlock_needs_exp_handling(struct task_struct *t,
-+						  struct rcu_data *rdp,
-+						  struct rcu_node *rnp,
-+						  bool irqs_were_disabled)
- {
- 	/*
- 	 * Check if this task is blocking an expedited grace period. If the
-@@ -746,7 +746,7 @@ static bool rcu_unlock_needs_exp_handling(struct task_struct *t,
-  * notify RCU core processing or task having blocked during the RCU
-  * read-side critical section.
-  */
--static void rcu_read_unlock_special(struct task_struct *t)
-+static notrace void rcu_read_unlock_special(struct task_struct *t)
- {
- 	unsigned long flags;
- 	bool irqs_were_disabled;
+Test, under KVM: a small helper module runs a three-instruction
+program through the interpreter (r0 = S32_MIN; r0 s/= 2 as ALU32 DIV K
+with off 1; exit) and prints r0. Unfixed code returns 0x40000000,
+fixed code 0xc0000000.
 
-base-commit: 2348d158c7fcc2c9557b2fb550ee841c62942fbd
--- 
-2.56.1
+  boot 1, klp-build module as built:
+    before load:              0x40000000 (6 of 6 runs)
+    after load, enabled=1, transition=0, "patching complete",
+    /sys/kernel/livepatch/<mod>/vmlinux/___bpf_prog_run,1 present:
+                              0x40000000 (6 of 6 runs)
 
+  boot 2, same command and same fix, with "jumptable." added to the
+  list in is_uncorrelated_static_local():
+    before load:              0x40000000 (6 of 6)
+    after load:               0xc0000000 (6 of 6)
+
+The build prints no warning, and every kernel signal reports success.
+Any klp-build fix to ___bpf_prog_run has this effect on kernels that run
+the interpreter, that is without CONFIG_BPF_JIT_ALWAYS_ON when the JIT
+is off or unavailable.
+
+Two possible fixes:
+
+1. Add "jumptable" to is_uncorrelated_static_local(). This is the change
+   tested in boot 2. It covers this function only.
+
+2. More generally, do not correlate a static local whose relocations
+   point into the changed function's own text (label addresses). Such a
+   table describes the code, not shared state, so it has to follow the
+   new function. This would also cover any other computed-goto table.
+
+I can send the helper module, the program, the kernel config and the
+two klp-build logs. I am glad to test a patch on the same setup.
+
+This came up in a study of live-patch module fidelity. Of 70 klp-build
+modules built from real stable fixes on 6.19, this is the only one in
+which a changed function's new code does not run.
+
+Thank you for your time.
+
+Regards,
+Seke Kazuru
+Independent researcher
