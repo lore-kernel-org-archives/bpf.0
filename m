@@ -1,66 +1,72 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795860243;
-	b=lLlNABcAWYs9uHafAQVUpr76XfHyk8DkpYRsRqPRYWndwropvO5gWFDsBLLzgelfA7c9
-	 wC2LTAQx9poNftu2gNPfDoaYF/knzfkuaYAK98/+oiFSCJ8hB3wSg47Ek+totlytKKthG
-	 r5DJkE220OxLMvJxRyZV/WAZ3+ltYuBYodqxR1HpCPywm0MGkn8j7bE6wsCXMgtLn9iTg
-	 uewxkFOoIJQsW3y78qZLRhHp/D1Hn+5FWT4EWFQs/TVNZ9Y+DewCqYXhECS3dDtqpOZvM
-	 1fICvT5f3vGTM3SJLak9Q/KO8MuvBqp3CrhUZIyAw5jUTOT42FLE76nJiDEiv7SNcYA==
+	t=1795862203;
+	b=IpJ59F8sJDn5LwSCQOSXoa39enmH8IJxMKsjD5GxYVaubKtNMcC7Zt2LK2J3KM0y6oO0
+	 aFs0MTkFxIcBes08Nwz0wQoDYZ7TtV6nFCBlxYD0E5cbEe09WazVLrG6S/QXdvuo8a9AY
+	 scHb4Tsmqo8YrtCxcIWwr83/a3n0G8BthiMg8YtdwLW57+MQOtxH/LJTuShOntGoc40G1
+	 TM/NI794LBG/DcVUYhp6DjMeDIfxg0O7/aTF8gMVPj2wgEVhnOLO1CDTFxbu56+xhTkJi
+	 86CLdybCmKELn3g7JGs/OdQb6xyjxCtV1CAi6ilUAZt3L6cmYQ5d4cXpdOjObW+ugPA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795860243;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=AckfiB/PsuekiwntPXxRDCpzpFz7XpY97JL9ReygHEE=;
-	b=FUARNHu1SgU8YhTqD5Yw+0FMCGlTYkmivmy0MBqqL3kiQA3tgw9l/4EeOzEVLtcnV2O9
-	 L6Sx6qp/HMttm52pVB46jeKYGZBYllRbJBZUPBSfsRps2jB99qKtiFGIXtghyYLHZv2sO
-	 OkSaSDTCz/2ejXTKtixLu+8zdgTqRAD2hg1ZyA7TAX92KRWRt3IG0hvRol3ehNTI688lr
-	 zVO8jQnuQdKiNZvG5j/G37hoDgIxqsyxgwz184oXz3z/6YVncYo5wwWyANyJPwaUDTF6h
-	 DEAmNckc9GvEBa75zIzodPR9lwcndKFnYl1hulgdmlo3XUaon73rPSaAt02tNzARWRw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795862203;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:
+	 Content-Transfer-Encoding:In-Reply-To;
+	bh=3C9fX4TIO80ht8xlUhmpeoykwcnqNbqprrFt/B+wKJc=;
+	b=feJq4ES2Fx8ZD4HszVzbNWr+JiHCT82Ur4ip9of0ADwxRWzUmumtgQkXqEhadfeCCVJi
+	 thkPUZL8LM6NWHAipTPmoweS32uDM/Cb6wPhju+BVQA1RZx52w0czJFhT932K1I1D+LQI
+	 v/8rpo/RZqgQwUQEdsMnfusPonpjxFngA9VPt9r+KbrvfF0Gv+dYbX0Do+Rk/KsxqPvtE
+	 Q6nObNR0Xi62FMO/8+pUjFlAVHkDim3QbG/sneANsPPM8Mpif1ZoBpSycNmhSMdliAR9M
+	 pY1jAELS2nvvgdKSl/cRJBmxfzGm+q6t6UiJqwXbHKPzS2gw2TjstmQO8XUWC3waaPQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Qn3MHb7i;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cfjJUrS3;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2EDE606A689;
-	Sat, 28 Nov 2026 10:04:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id 2B14A606A31C;
+	Sat, 28 Nov 2026 10:36:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Qn3MHb7i
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBF3D1F0092C;
-	Sat, 28 Nov 2026 10:04:00 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cfjJUrS3
+Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 057F61F00893;
+	Sat, 28 Nov 2026 10:36:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795860242;
-	bh=AckfiB/PsuekiwntPXxRDCpzpFz7XpY97JL9ReygHEE=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=Qn3MHb7iEK0mbwVa0j45fPpeCVJjoZw3H4QInwCsSYNblW7zUepDSO6ls7+eYPphc
-	 oYmGDLIMiboIAjTgDwBjA1wtFFXT1dowtDStv4xPyGcrlQQGR0DM0YH6CR4oCP5kQQ
-	 95gismR17z5gO2mISumhHcXCQpEcvssO7Yb6CTHSeqMTiTNLdBo7LQStHpaYJFm7bj
-	 FSjqqsTKsL2MR9DA4nBMSXgQ4FGCKU4A+JC4kZ3J33RsA1irnd4B12t7wKjeGfO2aQ
-	 XpXPi0XDBqdDgMGiXy/Q5y9eQfv+64+Y+O3moNewidUiTaHGYAebD9dX0G4lLMsMKN
-	 5dZZdlJvGx/zw==
-Subject: Re: [PATCH net v9 5/6] selftests/bpf: add xdp_shrink_frags
-From: netdev-bot+sashiko@kernel.org
-To: sst@poczta.fm
-Cc: davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org,
- pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
- john.fastabend@gmail.com, sdf@fomichev.me, bpf@vger.kernel.org,
- netdev@vger.kernel.org, jiayuan.chen@linux.dev, phx0fer@gmail.com,
- maciej.fijalkowski@intel.com, tianyi@cloudflare.com, tavip@google.com,
- toke@redhat.com, aleksander.lobakin@intel.com, lorenzo@kernel.org,
- lorenzo.bianconi@oss.qualcomm.com, ihor.solodrai@linux.dev,
- andrew+netdev@lunn.ch, willemb@google.com, horms@kernel.org,
- andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, jolsa@kernel.org, memxor@gmail.com,
- emil@etsalapatis.com, shuah@kernel.org, linux-kselftest@vger.kernel.org
-Date: Sat, 28 Nov 2026 10:04:00 +0000
-Message-ID: <179586024048.3135.6988798909394815405@kernel.org>
-In-Reply-To: <20261127100132.1977890-6-sst@poczta.fm>
-References: <20261127100132.1977890-6-sst@poczta.fm>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=k20260515; t=1795862202;
+	bh=3C9fX4TIO80ht8xlUhmpeoykwcnqNbqprrFt/B+wKJc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=cfjJUrS3gUBp7Dj8bg4xSg/pcM8dtIiFwpRZtQI3hkfgOAOpj1rtAPl8EcrkgC6Yi
+	 zF07mAyFPCnZBzmmYeYAJwOQBoS+Zm3JsVmcaKjKX3kQZUkiY+4E4oOgfiGSGsYo8D
+	 sqv5rnd8NE4FuW168wtBtZ5sx3OUiC4ISi3UeCtp8USTmKeJN7zvOdUYZ/Wv8IPeKW
+	 06Dk8OPl+36CxYkf8QRtAGB2kqhRbNtcSWPsNh5fFRMVGM627+sc3qaANYIHviDCqf
+	 j+QZkklHBewmwUrwk9T2v6rua/o6Wrozl99k9QloP7arJXXV0RSFJnE2PNyYxhWrvZ
+	 SnPGJ2wfA5hPA==
+Date: Sat, 28 Nov 2026 12:36:39 +0200
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: Askar Safin <safinaskar@gmail.com>
+Cc: aleksa@amutable.com, alex@amutable.com, alexei.starovoitov@gmail.com,
+	arnd@arndb.de, bpf@vger.kernel.org, brauner@kernel.org,
+	containers@lists.linux.dev, corbet@lwn.net, dhowells@redhat.com,
+	ebiggers@kernel.org, giuseppe@scrivano.org, hughd@google.com,
+	jack@suse.cz, jlayton@kernel.org, josef@toxicpanda.com,
+	kees@kernel.org, kpsingh@kernel.org, lennart@poettering.net,
+	linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org, linux-security-module@vger.kernel.org,
+	luto@amacapital.net, neal@gompa.dev, oleg@redhat.com,
+	paul@paul-moore.com, ptikhomirov@virtuozzo.com, sergeh@kernel.org,
+	skhan@linuxfoundation.org, viro@zeniv.linux.org.uk,
+	zygmunt.krynicki@canonical.com
+Subject: Re: [RFC PATCH v7 00/26] userland: Userland containers
+Message-ID: <awqut63HdrL97iu3@kernel.org>
+References: <awOQDOel_72Xwjm7@kernel.org>
+ <20261127214103.542291-1-safinaskar@gmail.com>
+ <awn-ioAuksHNV-Rc@kernel.org>
+ <awn_Y7oI4ckfsjSv@kernel.org>
+ <awoHex4LVst2JwkO@kernel.org>
+ <awoO9R7YF_5_6dHA@kernel.org>
+ <CAPnZJGBnFyrmr88OsYkMwtLiR93z4g0NAuoMurcnhcYFXz51jg@mail.gmail.com>
+ <awqkft-e6Tbj7dbJ@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -70,207 +76,52 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <awqkft-e6Tbj7dbJ@kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 4 potential
-issue(s) to consider.
+On Sat, Nov 28, 2026 at 11:53:06AM +0200, Jarkko Sakkinen wrote:
+> On Sat, Nov 28, 2026 at 04:50:42AM +0300, Askar Safin wrote:
+> > On Sat, Nov 28, 2026 at 2:15 AM Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> > > thinking more sequencing than data structures. I.e. I have a game where
+> > > I need to end up to process creation without embryonic state, and add
+> > > just enough weight to kernel to support that outcome, and that leads
+> > > to ~2K'ish LOC of extra kernel complexity.
+> > 
+> > So you don't have embryonic state? I don't like this.
+> > 
+> > Let's assume the following situation. Userland's PID 1 is already running.
+> > Our container manager attempts to spawn yet another process into userland.
+> > As well as I understand, it should do clone3 with CLONE_INTO_USERLAND,
+> > and then execve.
+> > This creates time hole when there is process, which already runs inside
+> > userland (i. e. its PID namespace and other namespaces), but runs
+> > container manager's binary and have container manager's mm.
+> > This invites for bugs. Other processes, which already run inside userland,
+> > may somehow take advantage of this.
+> > For example, see section "CVE-2019-5736 Is a Very Very Very Bad
+> > Privilege Escalation to Host Root"
+> > of https://brauner.io/2019/02/12/privileged-containers.html .
+> > So, here I like embryos.
+> 
+> We all have things that I like but let's talk about facts instead.
+> 
+> CVE-2019-5736 was also not a sibling process racing the pre-execve
+> window: it happened inside execve() itself via binfmt_script resolving
+> container-controlled #!/proc/self/exe.
+> 
+> CLONE_INTO_USERLAND rejects CLONE_VM, CLONE_FILES, CLONE_FS, and
+> CLONE_SIGHAND, keeps exec_state->user_ns in the caller's outer user
+> namespace, and resets exec_state->dumpable to suid_dumpable (0) when
+> installing userland->user_ns. Until execve(), ptrace_may_access() checks
+> CAP_SYS_PTRACE against the outer user_ns, so processes inside the
+> userland cannot ptrace the child or access /proc/<pid>/{exe,mem,fd}.
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 3
+The build phase on struct userland (USERLAND_INIT, before any task
+exists) lets clone3(CLONE_INTO_USERLAND) stay an atomic copy_process()
+step and execve() stay as it is.
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+It fully lives in the *pre-existing syscall paths*".
 
-- [Medium] None of the three subtests in
-  tools/testing/selftests/bpf/prog_tests/xdp_shrink_frags.c can fail on…
-- [Low] The commit message lists the three subtests and then says 'A
-  kernel without the fix will report "Bad page state ... page_pool…
-- [Low] The comment in xdp_shrink()
-  (tools/testing/selftests/bpf/progs/xdp_shrink_frags.c) says the…
-- [Low] Two comments say the veth path starts from a nonlinear skb.
-
---
-
-selftests/bpf: add xdp_shrink_frags
-
-This adds a selftest with an xdp.frags program that shrinks the tail by
-3000 bytes, so that bpf_xdp_shrink_data() releases a page_pool frag on the
-skb-backed XDP paths. Three subtests cover generic XDP on a tap device,
-the veth skb path, and a veth XDP_TX bounce to the peer, and all three
-skip on systems without 4K pages.
-
-> test_veth_tx bounces the cow'd buff with XDP_TX so the peer runs a frags
-> program on the resulting frame, covering the buff -> frame -> buff path.
->
-> A kernel without the fix will report "Bad page state ... page_pool leak".
-
-[Severity: Low]
-Is this true for test_veth_tx?
-
-On the baseline kernel, the XDP_TX branch of veth_xdp_rcv_skb() already
-restores the rxq mem type before the buff is converted to a frame:
-
-drivers/net/veth.c:veth_xdp_rcv_skb() {
-    ...
-	case XDP_TX:
-		veth_xdp_get(xdp);
-		consume_skb(skb);
-		xdp->rxq->mem = rq->xdp_mem;
-		if (unlikely(veth_xdp_tx(rq, xdp, bq) < 0)) {
-    ...
-}
-
-rq->xdp_mem comes from the MEM_TYPE_PAGE_SHARED registration, and the
-xdp_tx program on LOCAL does not shrink anything.
-
-So the frame that reaches PEER is PAGE_SHARED, and PEER's rxq is
-PAGE_SHARED too. xdp_shrink on PEER then frees a plain page through
-page_frag_free(), which is correct. An unfixed kernel would report nothing
-for this subtest.
-
-It looks like test_veth_tx only guards the reset that the veth skb-path fix
-in this series adds to veth_xdp_get():
-
-	/* the buff holds plain page references from here on */
-	xdp->rxq->mem.type = MEM_TYPE_PAGE_SHARED;
-
-If that reset went missing, the symptom would not be a "page_pool leak"
-splat. A page whose pp was cleared would be sent down the page_pool return
-path instead.
-
-Every frame veth builds from the skb path is PAGE_SHARED. That means the
-page_pool frame case handled by "veth: use the frame mem type when running
-XDP on an xdp_frame" is not reached either, despite the "covering the
-buff -> frame -> buff path" wording.
-
-The series has four fixes, so "the fix" is also ambiguous. Could the commit
-message say which fix each subtest covers and what failure it protects
-against?
-
-> diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_shrink_frags.c b/tools/testing/selftests/bpf/prog_tests/xdp_shrink_frags.c
-> new file mode 100644
-> index 0000000000000..789dfdd51b579
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/xdp_shrink_frags.c
-> @@ -0,0 +1,288 @@
-
-[ ... ]
-
-> +static void test_tun(struct xdp_shrink_frags *skel)
-> +{
-
-[ ... ]
-
-> +	n = writev(tap_fd, iov, ARRAY_SIZE(iov));
-> +	ASSERT_EQ(n, sizeof(head) + sizeof(frag1) + sizeof(frag2), "writev");
-> +
-> +	wait_for_prog(skel);
-> +	/* a buggy kernel only splats "page_pool leak", it does not fail here */
-> +	ASSERT_GT(skel->bss->shrink_ran, 0, "xdp_prog_ran");
-
-[Severity: Medium]
-Can any of the three subtests fail on a kernel without the fixes?
-
-This ASSERT_GT() is the only check here, and test_veth() and test_veth_tx()
-use the same one. xdp_shrink() increments shrink_ran whenever
-bpf_xdp_adjust_tail(ctx, -3000) returns 0:
-
-	if (bpf_xdp_adjust_tail(ctx, -3000) == 0)
-		__sync_fetch_and_add(&shrink_ran, 1);
-
-That happens on fixed and buggy kernels alike. It also happens on any
-linear buff longer than about 3014 bytes, where there is no frag at all.
-
-The regression only shows up as "BUG: Bad page state ... page_pool leak"
-from bad_page(). Nothing in the test reads /proc/sys/kernel/tainted or
-scans kmsg, so unless the harness scans dmesg, test_progs reports PASS on
-a regressed kernel.
-
-The subtests would also keep passing, without testing anything, if a later
-change to skb_pp_cow_data() or veth stopped leaving a frag after the cow.
-
-bad_page() calls add_taint(TAINT_BAD_PAGE, LOCKDEP_NOW_UNRELIABLE) even when
-its printk is rate-limited. Would it work to compare the TAINT_BAD_PAGE bit
-(bit 5) of /proc/sys/kernel/tainted before and after each subtest?
-
-Another option is for xdp_shrink() to count only when the buff had frags
-before the shrink and lost one. It could compare bpf_xdp_get_buff_len()
-against data_end - data to tell.
-
-> +
-> +	bpf_xdp_detach(ifindex, 0, NULL);
-
-[ ... ]
-
-> +/* A large ping builds a nonlinear skb that veth cow's into its page_pool. */
-> +static void test_veth(struct xdp_shrink_frags *skel)
-
-[Severity: Low]
-Is the skb here actually nonlinear?
-
-With MTU 8000 and a 5000-byte ping, __ip_append_data() puts the payload in
-the linear area. paged is false because ping has no gso_size, zerocopy or
-MSG_SPLICE_PAGES. Also fraglen + alloc_extra < SKB_MAX_ALLOC, so
-alloclen = fraglen.
-
-veth_convert_skb_to_xdp_buff() then cows the skb only because of the
-headroom check, or because the skb is shared or its head is locked:
-
-	if (skb_shared(skb) || skb_head_is_locked(skb) ||
-	    skb_is_nonlinear(skb) ||
-	    skb_headroom(skb) < XDP_PACKET_HEADROOM) {
-
-The skb only becomes nonlinear as a result of skb_pp_cow_data(). The file
-header comment ("skb-backed XDP first cow's the nonlinear skb into
-page_pool memory") has the same problem for the veth path.
-
-If the sender ever left at least XDP_PACKET_HEADROOM of headroom, veth
-would run the program on the linear skb without a cow. The 3000-byte
-shrink would still succeed, and this subtest would pass without reaching
-the page_pool frag path.
-
-Could the comment describe the headroom dependency instead?
-
-[ ... ]
-
-> diff --git a/tools/testing/selftests/bpf/progs/xdp_shrink_frags.c b/tools/testing/selftests/bpf/progs/xdp_shrink_frags.c
-> new file mode 100644
-> index 0000000000000..5d8e26f1b3a63
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/xdp_shrink_frags.c
-> @@ -0,0 +1,34 @@
-
-[ ... ]
-
-> +SEC("xdp.frags")
-> +int xdp_shrink(struct xdp_md *ctx)
-> +{
-> +	/*
-> +	 * Runs on both skb-backed XDP paths (generic XDP via tun, and veth):
-> +	 * the nonlinear skb is cow'd into page_pool memory before we run, so
-> +	 * shrinking the tail releases a whole frag that has to go back to that
-> +	 * pool. The counter only tells us the program ran and the helper
-> +	 * succeeded -- a linear buff returns 0 as well -- it does not prove a
-> +	 * frag was released.
-> +	 */
-
-[Severity: Low]
-This comment only describes the skb-backed case, but test_veth_tx() also
-attaches xdp_shrink to VETH_PEER:
-
-	if (veth_attach(ns1, VETH_PEER, bpf_program__fd(skel->progs.xdp_shrink)))
-
-On PEER the program runs from veth_xdp_rcv_one() on the xdp_frame that
-LOCAL bounced with XDP_TX, not on a cow'd skb.
-
-By then veth_xdp_get() has switched those frags to plain page references
-with MEM_TYPE_PAGE_SHARED. The released frag must go through
-page_frag_free() rather than back to a pool. The comment above
-test_veth_tx() itself says that freeing it "as page_pool memory" is the
-bug.
-
-Should this comment mention the frame case on PEER?
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261127100132.1977890-1-sst%40poczta.fm
+Br, Jarkko
