@@ -1,56 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795830085;
-	b=A96wJZlemSmDVDn2/s8FookmNdKoi9+6ew5nDJjPC5M3XTn3odasmKnz/kjCkLHWl8SY
-	 /kpBHnXN1TGpEIJcs3Y4CchR4dPOOBG89S1uhbHuSOV7GVAV11rtO7aAJhkyWDNOL1A6e
-	 8s6dbLO/Nu29iNPDpYkmZ70wtq/jMoLgpGCJgW6jCMbfCJYufjASeC1b9Ml7mEjspCAXF
-	 XgmuUJppNpWEBgmoVoamuYGRsZXyXs3yfm1Jpo7FKHRPwo+NQquguaJQCc94xK7fBAkyA
-	 Ps6vNSSSRTHpBQ4/SFfWRqqL9e5ZrSrKIKypEKyyy2JI78lWIozJatmAFOtjQ2anvkQ==
+	t=1795830420;
+	b=BFcZ9Qc+z8TKOV8rGc5INF/v3hllvxPEPTzg3byKOIAv7PMg6QpNUuY52bzxcFBfCQfw
+	 1kkDR/6IqejwOWhvf3XpBQEUhcgiAOcax3QWTZCBochUtfldAh92uzXRDUscBCRTLBf1M
+	 XwD5MxXVLO4x9zXMtg9g5tjjX6YLO6skjnzorqEZ64g38H5K4AMlj0POg2aJpgJfqxNYX
+	 Oq7cnZGlj1y3VoNQWVreeV4Vbmfzhwt/sRz5JfGzgMDkz7w9xakwpSFu5Avn/v3qS6yFk
+	 cA7qZL6YYnaHKx3yNxKDPHBtoPK/yBV9BfpX5gkjRDofR+rhMoRNxVrz4GBMmYXGf/w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795830085;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795830420;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=Rypc6+am/xaFxTFknjGuuOfY8ss6VbIJG57negI0WPE=;
-	b=ohobIXSIppKD4ZZioyo0eQ8UznYbhDe1tAwbh4PCk8hDjh29DflSclizcEFTU1PGKi5j
-	 sns8/yMwZ3jMlC3FmvcjIMnBKBRuFp1+6y2miHWvUDtVzUglUorNdHmq6uIrFsj/UKvee
-	 JFqqWh7pbewp3CpIOjJOnxf3jK6JPnewlCGK5awWTMvSrt/GL/ldXFbT+nVPW1oj5/kL/
-	 bP9SQoyCXebDZvTklezbS3o9PtY3+vEmn5tcXfZBUq7IG2r89bqxkZZmL0NE36tCHJ2dw
-	 t9l2Ferez7q91RaMwiTqm0QK5N0P+52WJ0AnNY5UfH23kEpVoGTg5cEEHb8JduMQ6fQ==
+	bh=uSihf4eP5gfyaPDgJaxYlSI6t6g19Kro1GUFW/Ps2Cc=;
+	b=zSmcgoPKKvumf/WptNZBu9YERLeD6TS94Ua+n9lXYvwpYBbyollUKF1q8NnmRbJTmAwU
+	 JjnRN3UIA3STIvTj1Nt0kqKDkKs91XPFGSWh1Lt3eeC65q4Y7MGOzisa+7mVBIO4/KP8B
+	 xzwVbA6GlWMchXapWj1XOqQD+IQK1Ed0OSREDtZt+FxzUkJOOw7/IzTBbTnITYnUwrTo0
+	 KwfRzIvmntbd7jTCRcjblMBHO0pYqhcRBDiJW4smjPacfuO0gyWX3VtIMLlZW5+tQcGQa
+	 lKKtGZk2i+ZN42k9YSJFBCcI3O+38kginZkDnrlum0stwLZ2BrwCpCnQNIJXtvjroWQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BTdJM5kL;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=P9urTLJh;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43495606A31C
-	for <bpf@vger.kernel.org>; Sat, 28 Nov 2026 01:41:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7292A606A31C
+	for <bpf@vger.kernel.org>; Sat, 28 Nov 2026 01:47:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BTdJM5kL
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C8D91F000C1;
-	Sat, 28 Nov 2026 01:41:24 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=P9urTLJh
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE52D1F000C1;
+	Sat, 28 Nov 2026 01:46:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795830084;
-	bh=Rypc6+am/xaFxTFknjGuuOfY8ss6VbIJG57negI0WPE=;
+	s=k20260515; t=1795830420;
+	bh=uSihf4eP5gfyaPDgJaxYlSI6t6g19Kro1GUFW/Ps2Cc=;
 	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=BTdJM5kLHN+6InAucTAxXM+oUT4TYO6feWaXBKI2RBhnTrDq6p58ngmFej6NfMNoP
-	 SvQm9Pu6qGGEVz4ks3vU1olkHgHbR34mT3J9w/w1L0vYPFhPYJa5KroL19WTnHv7Kc
-	 9OFrzjSbgIoEa9J+qJpm4GogVdIlph35dq27r2KI7d6Qw9UntMPakfUpn/eqFFVjr1
-	 BVYblyH79pPMk4pvvLZt/FgO84t+atYkriRfhqbG99g/iv6yWfjtOkVizxbPd3F2nd
-	 22vyi6QWhJO8JLkwfE8eip4EUTa7iXyV4g3/OR52LBTWpK9VbUt634L1KlgszfsXg+
-	 TxfVON+7TzH3A==
-Message-ID: <sashiko-outbox-238410@kernel.org>
+	b=P9urTLJhI7LHytw1b2UETApYdYEM5GsKn0ywc+Ow5MX3cSW0exJlhIZH5s2vavAKb
+	 Gh6wPkKICSpYuAKiOEYZrYujU6GXOsJYHUWHW23m5D5Yi9Rv08p+2y08sWME5cU0Hg
+	 GBSBLpR2K9CZKUyLTyTyp1s8SGob1zRVpM0RxCEAQOXFt2sA8JqLKNXYZJHCjYMnqH
+	 0RuOlHzJD4SLv/SnH2oZH347rIg8vDfoUWHpfNb5DFbQOsKzAOp2IqIcj7fpR7hcBj
+	 q7uFTWWmI72SpUDDyzY96tPWl8jDMVjMHslUOmDBQGc+UJ6U6W3u5ZwtWHFOMvi7qY
+	 7bRKThuFbIXwQ==
+Message-ID: <sashiko-outbox-238412@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v2 2/3] bpf, x86: Skip the PROBE_MEM address
- range check under SMAP
+Subject: Re: [PATCH bpf-next v2 1/3] x86/mm: Resolve BPF exception fixups
+ for user address faults under SMAP
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, bpf@vger.kernel.org
-In-Reply-To: <f2beca95aa1eb81f00c6baf408c681063e13ce83.1795829324.git.memxor@gmail.com>
+In-Reply-To: <0a30eeab6bea7ddfc0202d1970ab1b7f3a4d580c.1795829324.git.memxor@gmail.com>
 References: <cover.1795829324.git.memxor@gmail.com>
- <f2beca95aa1eb81f00c6baf408c681063e13ce83.1795829324.git.memxor@gmail.com>
+ <0a30eeab6bea7ddfc0202d1970ab1b7f3a4d580c.1795829324.git.memxor@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 28 Nov 2026 01:41:24 +0000
+Date: Sat, 28 Nov 2026 01:46:59 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -62,58 +62,66 @@ Precedence: list
 
 Thank you for your contribution! Sashiko AI review found 1 potential
 issue to consider:
-- [Medium] bpf, x86: skipping PROBE_MEM range check breaks
-  flex_array_far_join() test
+- [Medium] x86/mm: SMAP does not fault on supervisor mappings below
+  TASK_SIZE_MAX
 --
 
-commit 519a06c0e9f33f01690a25837946e3048111ee57
+commit 9b387754d627ac256ae9705ce7d6a4e7a2935051
 Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-bpf, x86: Skip the PROBE_MEM address range check under SMAP
+x86/mm: Resolve BPF exception fixups for user address faults under SMAP
 
-This commit omits the x86-64 JIT runtime address range check before
-BPF_PROBE_MEM and BPF_PROBE_MEMSX loads when SMAP is enabled and the
-program was loaded with CAP_BPF, relying on SMAP and the page fault
-handler's exception table lookup instead.
+This commit resolves EX_TYPE_BPF exception table entries on kernel-mode read
+faults in do_user_addr_fault() under SMAP, allowing the x86 BPF JIT to omit
+its software range check before PROBE_MEM loads.
 
-> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-> index d51ae52fef719..019e5da72136d 100644
-> --- a/arch/x86/net/bpf_jit_comp.c
-> +++ b/arch/x86/net/bpf_jit_comp.c
-[ ... ]
-> @@ -4862,6 +4870,15 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_ve=
-rifier_env *env, struct bpf_pr
->  		addrs[i] =3D proglen;
->  	}
->  	ctx.cleanup_addr =3D proglen;
-> +	/*
-> +	 * With SMAP enabled, a PROBE_MEM load of a user address faults (#PF, or
-> +	 * #GP with LASS) and the fault handler resolves the exception table
-> +	 * entry of the program, as for an unmapped kernel address. That lookup
-> +	 * only finds programs in the BPF ksym tree, so programs loaded without
-> +	 * CAP_BPF keep the address range check, as do kernels without SMAP.
-> +	 */
-> +	ctx.probe_mem_check =3D !cpu_feature_enabled(X86_FEATURE_SMAP) ||
-> +			      !bpf_prog_kallsyms_allowed(prog);
->  skip_init_addrs:
+> diff --git a/arch/x86/mm/fault.c b/arch/x86/mm/fault.c
+> index aa88370ce7394..9fe8705eff043 100644
+> --- a/arch/x86/mm/fault.c
+> +++ b/arch/x86/mm/fault.c
+> @@ -1263,7 +1263,16 @@ void do_user_addr_fault(struct pt_regs *regs,
+>  		     !(error_code & X86_PF_USER) &&
+>  		     !(regs->flags & X86_EFLAGS_AC))) {
+>  		/*
+> -		 * No extable entry here.  This was a kernel access to an
+> +		 * The CPU refused the access. If the BPF JIT marked this load
+> +		 * as one that may fault, skip it and zero the destination.
+> +		 */
+> +		if (!user_mode(regs) && !(error_code & X86_PF_WRITE) &&
+> +		    ex_get_fixup_type(regs->ip) =3D=3D EX_TYPE_BPF &&
+> +		    fixup_exception(regs, X86_TRAP_PF, error_code, address))
+> +			return;
 
 [Severity: Medium]
-Does skipping the range check break the flex_array_far_join() BPF selftest
-on x86-64 systems with SMAP enabled?
+Can relying on SMAP to refuse PROBE_MEM loads below TASK_SIZE_MAX allow rea=
+ds
+from supervisor mappings in the low address range when a temporary mm such =
+as
+efi_mm is active in CR3?
 
-tools/testing/selftests/bpf/progs/verifier_btf_array_access.c:flex_array_fa=
-r_join() {
-	SEC("tp_btf/exit_mmap")
-	__success __arch_x86_64
-	__jited("	leaq	0xa00000(%rbx), %r11")
-	__naked void flex_array_far_join(void)
+SMAP only faults when the page-table entries mapping the linear address have
+_PAGE_USER set.  efi_setup_page_tables() permanently maps 0x0..0xfff 1:1 in
+efi_mm.pgd without _PAGE_USER, and efi_map_region() likewise creates 1:1
+supervisor mappings below TASK_SIZE_MAX for EFI runtime and MMIO regions:
+
+arch/x86/platform/efi/efi_64.c:efi_setup_page_tables() {
+    ...
+	pf =3D _PAGE_NX | _PAGE_RW;
+	if (sev_es_active())
+		pf |=3D _PAGE_ENC;
+
+	if (kernel_map_pages_in_pgd(pgd, 0x0, 0x0, 1, pf)) {
+    ...
 }
 
-That test is loaded with CAP_BPF and matches the "leaq 0xa00000(%rbx), %r11"
-instruction from the PROBE_MEM range check to verify that the load was
-converted to BPF_PROBE_MEM, so its __jited() check fails when
-ctx.probe_mem_check is false.
+While arch_efi_call_virt_setup() has efi_mm loaded in CR3 (with LASS disabl=
+ed
+and interrupts and NMIs enabled), a BPF tracing program executing a PROBE_M=
+EM
+load through a NULL pointer or into a 1:1 EFI region will not fault into
+do_user_addr_fault() and will instead read physical page 0 or trigger an
+unintended firmware/MMIO read rather than zeroing the destination register.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1795829324.gi=
-t.memxor@gmail.com?part=3D2
+t.memxor@gmail.com?part=3D1
