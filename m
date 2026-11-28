@@ -1,56 +1,85 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.231.139
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795830420;
-	b=BFcZ9Qc+z8TKOV8rGc5INF/v3hllvxPEPTzg3byKOIAv7PMg6QpNUuY52bzxcFBfCQfw
-	 1kkDR/6IqejwOWhvf3XpBQEUhcgiAOcax3QWTZCBochUtfldAh92uzXRDUscBCRTLBf1M
-	 XwD5MxXVLO4x9zXMtg9g5tjjX6YLO6skjnzorqEZ64g38H5K4AMlj0POg2aJpgJfqxNYX
-	 Oq7cnZGlj1y3VoNQWVreeV4Vbmfzhwt/sRz5JfGzgMDkz7w9xakwpSFu5Avn/v3qS6yFk
-	 cA7qZL6YYnaHKx3yNxKDPHBtoPK/yBV9BfpX5gkjRDofR+rhMoRNxVrz4GBMmYXGf/w==
+	t=1795830512;
+	b=slemkuRIX0YwLouPvCnjDDorW2kBW1rIhUqCUj/0GgOA6c6oLedaGasSIoOofb0b3Sin
+	 Xp4AHl49dYisFVQkZ5AWqBvkvMzuVlnRRuEejio6b85T1K9A9g5HfU0P3LCEpKWO+4mzn
+	 YGZ1UAXj2WrzxMBy8tuP0VJXIW7bGo24q82554Yz2vqZDCnhBBDr6duMR+qe4JRWpPC0z
+	 qOIU4ZqmlgPfgJgI442Srim65TWVF+Dfj8JBXbajS2jM3aQL1uuoAseCtdgHAj1k0iJYM
+	 +sn4F9CFRY7MPaku7ZiRfBT+LbggFcHhhkVtX+lgwQ0BCT4yo8IQaJzFj6s5ibCXZYQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795830420;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=uSihf4eP5gfyaPDgJaxYlSI6t6g19Kro1GUFW/Ps2Cc=;
-	b=zSmcgoPKKvumf/WptNZBu9YERLeD6TS94Ua+n9lXYvwpYBbyollUKF1q8NnmRbJTmAwU
-	 JjnRN3UIA3STIvTj1Nt0kqKDkKs91XPFGSWh1Lt3eeC65q4Y7MGOzisa+7mVBIO4/KP8B
-	 xzwVbA6GlWMchXapWj1XOqQD+IQK1Ed0OSREDtZt+FxzUkJOOw7/IzTBbTnITYnUwrTo0
-	 KwfRzIvmntbd7jTCRcjblMBHO0pYqhcRBDiJW4smjPacfuO0gyWX3VtIMLlZW5+tQcGQa
-	 lKKtGZk2i+ZN42k9YSJFBCcI3O+38kginZkDnrlum0stwLZ2BrwCpCnQNIJXtvjroWQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795830512;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Message-Id:
+	 From:To:Cc:Subject:X-Mailer:References:In-Reply-To;
+	bh=21r2hb/jryykCmBdAXC3ICR29YFM48iOqHSTEFvPQaE=;
+	b=aZhhm+VsQM4OmlYlGV3bnI/r2kxJveEybZSIduEMb9MLBWg39xYr7i5E+V3XSeJfiYGR
+	 xNO/HUjUu55VFlg1lIizqYoF5LRhuqqBDInqgOy8w3i9vXGaaYtKWF9HSwLFN7htsFkpA
+	 K4wnhOThafQYjetrvUlJe9vOObWy2O6zQwQzBlLXIMZRKlj0bD+/jBmKgHLywX4pWphlM
+	 v0nyC9Z+Ht5TjEjNh2GiLcjyELPIkoxF1dfhhuqfEekcNfUca+1kyEfc41C8zLNU9jIUd
+	 bJmH++3/QrXzIatdHpQatN+1FaI79OqNTX1AWSdxFpqsqmSshODg1SFEbLtVdhEERvg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=P9urTLJh;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=PFCsrOuh;
+	arc=none smtp.remote-ip=74.125.231.139
+Received: from mail-oo2-f11.google.com (mail-oo2-f11.google.com [74.125.231.139])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7292A606A31C
-	for <bpf@vger.kernel.org>; Sat, 28 Nov 2026 01:47:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A42B0606A31E
+	for <bpf@vger.kernel.org>; Sat, 28 Nov 2026 01:48:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A42B0606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=P9urTLJh
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE52D1F000C1;
-	Sat, 28 Nov 2026 01:46:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795830420;
-	bh=uSihf4eP5gfyaPDgJaxYlSI6t6g19Kro1GUFW/Ps2Cc=;
-	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=P9urTLJhI7LHytw1b2UETApYdYEM5GsKn0ywc+Ow5MX3cSW0exJlhIZH5s2vavAKb
-	 Gh6wPkKICSpYuAKiOEYZrYujU6GXOsJYHUWHW23m5D5Yi9Rv08p+2y08sWME5cU0Hg
-	 GBSBLpR2K9CZKUyLTyTyp1s8SGob1zRVpM0RxCEAQOXFt2sA8JqLKNXYZJHCjYMnqH
-	 0RuOlHzJD4SLv/SnH2oZH347rIg8vDfoUWHpfNb5DFbQOsKzAOp2IqIcj7fpR7hcBj
-	 q7uFTWWmI72SpUDDyzY96tPWl8jDMVjMHslUOmDBQGc+UJ6U6W3u5ZwtWHFOMvi7qY
-	 7bRKThuFbIXwQ==
-Message-ID: <sashiko-outbox-238412@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v2 1/3] x86/mm: Resolve BPF exception fixups
- for user address faults under SMAP
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, bpf@vger.kernel.org
-In-Reply-To: <0a30eeab6bea7ddfc0202d1970ab1b7f3a4d580c.1795829324.git.memxor@gmail.com>
-References: <cover.1795829324.git.memxor@gmail.com>
- <0a30eeab6bea7ddfc0202d1970ab1b7f3a4d580c.1795829324.git.memxor@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sat, 28 Nov 2026 01:46:59 +0000
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=PFCsrOuh
+Received: by mail-oo2-f11.google.com with SMTP id 006d021491bc7-71b7aac1211so1190002eaf.0
+        for <bpf@vger.kernel.org>; Fri, 27 Nov 2026 17:48:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1795830510; x=1796435310; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=21r2hb/jryykCmBdAXC3ICR29YFM48iOqHSTEFvPQaE=;
+        b=PFCsrOuhKvYWkecKExagreSZMqNIYx1J9I4Yf4CUrLdWpMnVcm/nOL25IFScfnTlDG
+         EbehVJaCCimcsR/2V1R7vnG1t4qDYbdszIYo7hyfrQn8m+Afr+apqdbHuknMNYo39Wao
+         AcXet7EkLqfv91/xOUshEi+N7lscAIojxeCM8xXhdKGRn11ZrgKgY1+S2XfIZjkEV31/
+         c5M9HmOkN/S8uafflqaubnEL3hWG8548wZiXvnxbYdzKxH6hY6SeXJS+aikJ0mcdS/3T
+         AnYsPsFTFIsfOboi5rt+NK7/tezwqPdGkP8Co3XBJEInvKX3aUa1J1sbas/eMwv5MQit
+         simg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795830510; x=1796435310;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=21r2hb/jryykCmBdAXC3ICR29YFM48iOqHSTEFvPQaE=;
+        b=vR59gWtJAHOtixLxpFtWF3K8EnOkmtmmacEpt/OPoPGV6PVSwOGVS+McyhsuOXRIso
+         g2CNYLbfWLB/gxiimJRq/TL20AtIrBSsIAA3cGzOljoB9P5BF8D0eofiyx63OB9qrCQa
+         5H1FekJYaz04l89jSH4aoneBy0jNIv8OIVjzKDinh7QTWPUcHJao6sSWNa0AYmSgJ0PH
+         xT+g23mwERpT/Tbcus+NeeHdFYqfjgHRPzUaa0lcTXEOYu6RauUykzneW1CznYdP+gt8
+         rc/Phei5JIb9/e/cJ1xvIRQHHYQ+rpA1EHNbLvyBvHCHq6nFaHJQXkVxZExe5gsJMP9G
+         goUw==
+X-Forwarded-Encrypted: i=1; AL+hErH2UKaDLdYRM9eIQsmJZOlJS0pZLRy/Uou4ivBRy8DM4IErPObj8iHD+BEGaF+A06S7lNQ=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/GV4fXTk5hhNuCWjchnGZRzx6Mo89iSSE0AErkps0fqJR02auw
+	wIRZ8jW1Wu6A2AHB9VBimEBARTRRhDPFVhhq74+9IAIJwFwM00v1j90o
+X-Gm-Gg: AZFdTZfYFjSl0R3vkxdta7rVP6gWTRsQr22h7OEfUgtjR9/f0VdPowI16JGbBintIz5
+	FlhHojPnrp29/yPwGOEH2OAvw0PpTE18HSAIcPgWVIjM15DsSr/IIccblcpRwC/SpcXlsaDI/nK
+	OIGYSu7/pIGsAEbNt1blBpnekehvHxltcBCD7TqcwKgkagwfeWdMhRwvLxydz9nKO6XaCGrx/Uy
+	FpgkuHDYqoUj/Xu4dqVlhLg8fL+tBmi7O5/kMefDPRLppzwSlaJSHhfg9Xg4zdK9GUU+IKg6Mhd
+	Q6y+27XFRBhnl3XbrrHUjSMCDaJkNwqxgzsQOH5r6MVxHqBFgoZYYvG8NAZRdX6h5Mit0JJ3WAn
+	i3PswKKD8HUSKqC3LLiJiv2bjXwl9Bm/ZygrD6UvopNbsUNMIqmnGy4/MSieyFYfRpmZJgi7HEa
+	DNOFfx2BVVxji1WpJR8jGf8sTDCODOyfrJdB2JcHGRclrTSDHq93Y0jtxcxQHJcMffFyuypchrK
+	POFsc2enpxlFF1lwrEhl4MYKn7VH9UW50fZHFDmBpx6ihK1Eh1t//CLgPJwLb53bv8nZggdreSl
+	9udnHF2yL7mSPTDwVSlXNwGyvK0haZlp8vVmIk2G9qLRIEeyeHI+/qH/VifHAEsZH4K0uLlH1iG
+	GK4DUBF61lpaC4kqjKGU9GvGNi+0TGJqSDGOZ
+X-Received: by 2002:a05:6820:f034:b0:71b:3fec:38a6 with SMTP id 006d021491bc7-71b3fec4b36mr20333111eaf.12.1795830510586;
+        Fri, 27 Nov 2026 17:48:30 -0800 (PST)
+Received: from localhost ([2a03:2880:10ff:57::])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-71b380bdff9sm17750840eaf.11.2026.11.27.17.48.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 Nov 2026 17:48:29 -0800 (PST)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -59,69 +88,49 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Sat, 28 Nov 2026 02:48:27 +0100
+Message-Id: <DN6GS9V7A3HS.1COD0JUQQDHQ@gmail.com>
+From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, "Andy Lutomirski"
+ <luto@kernel.org>, <bpf@vger.kernel.org>
+Cc: "Puranjay Mohan" <puranjay@kernel.org>, "Andrii Nakryiko"
+ <andrii@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Eduard
+ Zingerman" <eddyz87@gmail.com>, "Emil Tsalapatis" <emil@etsalapatis.com>,
+ "Ihor Solodrai" <ihor.solodrai@linux.dev>, "Dave Hansen"
+ <dave.hansen@linux.intel.com>, "Peter Zijlstra (Intel)"
+ <peterz@infradead.org>, "Thomas Gleixner" <tglx@kernel.org>, "Ingo Molnar"
+ <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>, <kkd@meta.com>,
+ <kernel-team@meta.com>, "the arch/x86 maintainers" <x86@kernel.org>, "Linux
+ Kernel Mailing List" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH bpf-next v1 1/3] x86/mm: Resolve BPF exception fixups
+ for user address faults under SMAP
+X-Mailer: aerc 0.22.0
+References: <20261009024925.3169077-1-memxor@gmail.com>
+ <20261009024925.3169077-2-memxor@gmail.com>
+ <df69ab5d-bc97-4651-8668-a2b3e4bb272a@app.fastmail.com>
+ <DN437OYZ5FGP.20VLV7ZEXQ5YY@gmail.com>
+ <5f46d1c1-fdce-4f3b-9d56-675a822b2d65@app.fastmail.com>
+ <DN4X9KVYMONH.VHKD1QED1BUQ@gmail.com>
+ <03275761-8de2-41be-92fd-8e3012a87eeb@app.fastmail.com>
+ <DN5K8Y9824AE.3GPOE0WP9ELFN@gmail.com>
+In-Reply-To: <DN5K8Y9824AE.3GPOE0WP9ELFN@gmail.com>
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue to consider:
-- [Medium] x86/mm: SMAP does not fault on supervisor mappings below
-  TASK_SIZE_MAX
---
+On Fri Nov 27, 2026 at 1:18 AM CET, Alexei Starovoitov wrote:
+> On Thu, Nov 26, 2026 at 09:30 AM Andy Lutomirski <luto@kernel.org> wrote:
+>> Okay.  So maybe there should be a nice patch set to *fix* it.
+>
+> [[...]
+>
+> The main point that it's orgonal to this patchset.
+>
 
-commit 9b387754d627ac256ae9705ce7d6a4e7a2935051
-Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+I was wondering whether one concrete improvement could be to emit BTF type =
+tags
+for __iomem annotations in the kernel, then reject accesses on BTF pointers
+formed using such walks in the verifier, so such programs would fail to loa=
+d.
 
-x86/mm: Resolve BPF exception fixups for user address faults under SMAP
-
-This commit resolves EX_TYPE_BPF exception table entries on kernel-mode read
-faults in do_user_addr_fault() under SMAP, allowing the x86 BPF JIT to omit
-its software range check before PROBE_MEM loads.
-
-> diff --git a/arch/x86/mm/fault.c b/arch/x86/mm/fault.c
-> index aa88370ce7394..9fe8705eff043 100644
-> --- a/arch/x86/mm/fault.c
-> +++ b/arch/x86/mm/fault.c
-> @@ -1263,7 +1263,16 @@ void do_user_addr_fault(struct pt_regs *regs,
->  		     !(error_code & X86_PF_USER) &&
->  		     !(regs->flags & X86_EFLAGS_AC))) {
->  		/*
-> -		 * No extable entry here.  This was a kernel access to an
-> +		 * The CPU refused the access. If the BPF JIT marked this load
-> +		 * as one that may fault, skip it and zero the destination.
-> +		 */
-> +		if (!user_mode(regs) && !(error_code & X86_PF_WRITE) &&
-> +		    ex_get_fixup_type(regs->ip) =3D=3D EX_TYPE_BPF &&
-> +		    fixup_exception(regs, X86_TRAP_PF, error_code, address))
-> +			return;
-
-[Severity: Medium]
-Can relying on SMAP to refuse PROBE_MEM loads below TASK_SIZE_MAX allow rea=
-ds
-from supervisor mappings in the low address range when a temporary mm such =
-as
-efi_mm is active in CR3?
-
-SMAP only faults when the page-table entries mapping the linear address have
-_PAGE_USER set.  efi_setup_page_tables() permanently maps 0x0..0xfff 1:1 in
-efi_mm.pgd without _PAGE_USER, and efi_map_region() likewise creates 1:1
-supervisor mappings below TASK_SIZE_MAX for EFI runtime and MMIO regions:
-
-arch/x86/platform/efi/efi_64.c:efi_setup_page_tables() {
-    ...
-	pf =3D _PAGE_NX | _PAGE_RW;
-	if (sev_es_active())
-		pf |=3D _PAGE_ENC;
-
-	if (kernel_map_pages_in_pgd(pgd, 0x0, 0x0, 1, pf)) {
-    ...
-}
-
-While arch_efi_call_virt_setup() has efi_mm loaded in CR3 (with LASS disabl=
-ed
-and interrupts and NMIs enabled), a BPF tracing program executing a PROBE_M=
-EM
-load through a NULL pointer or into a 1:1 EFI region will not fault into
-do_user_addr_fault() and will instead read physical page 0 or trigger an
-unintended firmware/MMIO read rather than zeroing the destination register.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1795829324.gi=
-t.memxor@gmail.com?part=3D1
+I think in practice, at least for BPF users, this will close the issue.
