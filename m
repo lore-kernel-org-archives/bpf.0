@@ -1,57 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.198
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795863258;
-	b=clRKZE6InJegHfj8ugT1bY8+lMEpdcuJ2+nlD8S2hN0CLJ16x1ecrqeQhyOkvWN7NHFF
-	 ScOCsKXlmz1Jq/c8SlK2ogtqyiW7VOzUyqN/eoYxs9Q50gdzKhkLcP7a+aYZX9ZXg54Sn
-	 kSauuSOYUTflFIIUgmp6UHwBZvwd9mTVnpnyfbPvwfyJiziLywHePvbDYJolH2bxnAlFv
-	 zxGeJgrkZke29L0bWVGmo6bLyimhMpSi8V4JkVHXqd1CPxAJZUb0xvSUP5bLZuiWxyfLu
-	 4StqtnYXMEspIYJtAkLI8hZHiRCxETTwq9qkVmdeJWmuzMpLrxNs0l9VOGTyzbvqJtg==
+	t=1795864598;
+	b=ut5VL02znHchU0LIUwFmAeMqP25He+e+Ku6SAguiICUONh6WMqYA0S0xi0d24jlEVZH2
+	 /gXw7BwkB+kgOlGZj+hpm+qyEtmTg8OIaiLZrLpJ4fdGcyhiLZUbKwg7zIUXAO1ZXoAPR
+	 x7t4zqT8PauTLNawq+UV1BxDEguKVbpmuNiayVaB/cgEx2FUPY2/8yQjKC36hjhflKaWE
+	 IWEMCsKNq0rf9Yj2sKyHy9EAnVkNuBVDZQbHr9D4y0xNeNRf3BzcxOmXYDIkXU9YtgY4C
+	 RuURYpUfz4kK+mDyjUnHOnKgqU3/J2gZUdrm6hLRhJg/8h+yCsFPkw9zxOxBlCWRGZQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795863258;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=N+Xm0XAMHoEub66IwQguW17ohk765TLJeAwH3LiTXyU=;
-	b=pJwoMspfKkN5Q5md5altW18YbgLSSJWnPwvlhaQk/dS6xhTxvUkQOvXcCnEkEGJRfOjm
-	 TSjqj11phJ8SrWFH/CRDFU4qulMXOZG86tvOvGDOr8u1Mrvz5b//1QLbPAmVfzQBZa091
-	 gXSZKQTXfYXNd/URLv7bITt6Kfn/zLkq7n4qDIJrNhbViiCLB+u4gRzF6OTFvePsHZtp/
-	 llR3dGm5M6rGXlnGsXOLA9UK+mzDEUjhSGe4ZTXd44lBVSmhv9vFUFUO0PZPmFrftmwtP
-	 M1ZsmLT5LqsN1vlKbwLkC8i9/8MU5SSMCIi0Q6k7mLgP1YOdrhz+oFWS7hCkRrRSLAg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795864598;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
+	 Mime-Version:References:Message-ID:Subject:From:To:Cc:Content-Type;
+	bh=T8XdOzjKahmMpUz1ofbmiwjYhp8+CGhzvAVMXv3NGSU=;
+	b=UvYwYJm1RV2JIpvzxrn7q6hFs14l55gWrcl/MkmAEJEEiD7QGVxM4EWw195A5b04wz/M
+	 QjKbRbGWM6qwTN+iid6plGJ8FKUd56UoD3OVmOxbdT+jI57W4/++CqeBgrVNAttL9fqC+
+	 kz+dSgqxWYHSjheekaZJVGAcR94ZSnD4Ter1BgYshf9OZXjpSlSd8VOZKJer3XLGgJ2Al
+	 OzN/r+iv+kxfyqspL2Ssh2AJoYs4a5L1kewzpEI8JI8OQqm2+TuPWA4+PiwNtmr1weV34
+	 2Y/0eeWOMxNtWjKJcXspy6on050ksbJ7Bb0QBNhJc+xnsmBrnonErcOm1xhK5bNWsxg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=SHXp8vYT;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=orSXd3k5;
+	arc=none smtp.remote-ip=209.85.215.198
+Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com [209.85.215.198])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EFF2606A31C
-	for <bpf@vger.kernel.org>; Sat, 28 Nov 2026 10:54:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF2B3606A31C
+	for <bpf@vger.kernel.org>; Sat, 28 Nov 2026 11:16:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BF2B3606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=SHXp8vYT
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DA901F000C1;
-	Sat, 28 Nov 2026 10:54:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795863258;
-	bh=N+Xm0XAMHoEub66IwQguW17ohk765TLJeAwH3LiTXyU=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=SHXp8vYTUqWAmKtIp9Xy9u56MCJSd6BxMUnef/3OkCOSbKQPwobcmO0cOy/TleRi5
-	 GJjMl0g0PfUfcq6/aFKnbz3ombqUUIfSBPDJH65orgxma481dtUuXRoVZ+mW35znif
-	 rx7RpZ1NpyWeyHQK2eK05J7oIR+qh3tnXQcY9530kIz/8u3048sYeQ6sGqQwMEu2Zy
-	 C8pmgpwOJSg7CHj0fY4PqXHpHKPGsnboh1431WpRBD93SRwczPUCPzkxSfrA5AbJzp
-	 kpCC/r/zOpasaXYwV9sfN153uT5hHpR0iBl+YlcnKeJwUK3jZmiUAjG7rMF7DX9WIP
-	 4l9o3nOJQuMZg==
-Message-ID: <sashiko-outbox-238639@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net v2 2/2] xsk: fill in header offsets for TX checksum
- offload
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Jason Xing" <kerneljasonxing@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20261127105347.72997-3-kerneljasonxing@gmail.com>
-References: <20261127105347.72997-1-kerneljasonxing@gmail.com>
- <20261127105347.72997-3-kerneljasonxing@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sat, 28 Nov 2026 10:54:17 +0000
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=orSXd3k5
+Received: by mail-pg1-f198.google.com with SMTP id 41be03b00d2f7-cc4ac5feaa4so5100295a12.1
+        for <bpf@vger.kernel.org>; Sat, 28 Nov 2026 03:16:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20260707; t=1795864597; x=1796469397; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=T8XdOzjKahmMpUz1ofbmiwjYhp8+CGhzvAVMXv3NGSU=;
+        b=orSXd3k5fGHivfquVZ8qd0Pp4pCJ96fkmt3H0WhMevX7m+8btrRgupliyGGKYf+Uyq
+         cai/tm1nrQ4C/syOvrz+h9x1AX47/fNYpeUUC9dhlwMlIPbEF7LSffJ24vgRaZRlPAMh
+         Py1CVZhpyOg2s7+sl96XPvtdFJu2QFIJQL0RYsn4LuYKW4RCqP5/MhuSca2CX5V2RT+b
+         3Pr06+7bs/fTi6FsF8T/o8NEf8q55PB6ZHWsfREJ6FkchTHQxTjFgj4YvEIzi8QMl4cS
+         wY88XZ+H9OlZ3/ZKLHy7SWTXfGkdIVe9AWwAcUYd1BY6YLSzhLrb6GStqElBk9bs/M2Q
+         nj1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795864597; x=1796469397;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=T8XdOzjKahmMpUz1ofbmiwjYhp8+CGhzvAVMXv3NGSU=;
+        b=oSX9EJnLQsvARTbHUTDlVcdObE8w1UoFbcspzx0ztOqkHXMvKC8OSTnuQtXngZvhDA
+         /92/guSvnO4tcAkqz5UgZdculrvYVNDcddOoPKB3eiUvjspLI2NYre2+bh9wXS6Z1w9e
+         QW8OrsfzvwsYy1PqRQk3CWOkwTVcBoDzxHK6Hyqa0n4MpEK6vvCs6batoyGPxN0f2BeS
+         KYOtpd1PQKBJASCz0mx1xQCPfS0Oj7OieJTeMlcEoVr6NT8PpI1oiPuMQhdykm0oBx5/
+         Srd1FVBf1XpqSRsPeRU0O0EmI0p6adU/wtjn4tMFrg3VKIUmIMHuT4Kq4NPBtSfNSsRi
+         RQgQ==
+X-Forwarded-Encrypted: i=1; AL+hErF+fcng1AjOg+JqThhzR7A5STqnoho8a6oBXpvD+SDAyQC/TYKfCXVo82je1dOMe2ZuQfo=@vger.kernel.org
+X-Gm-Message-State: APuU4Z9T9Oct6oTOh6XdSdS0QfiH6CUqassvlOXKqPN+PigA7iZ9nFVT
+	xeSUIwOze7bhvvCGd1sz24HYlUYtdkLJHoywVReVn803nz4MM0/M7B8qo37uKi1Mnz6VBg+zw2x
+	TFKBSpQ==
+X-Received: from pjbgb22.prod.google.com ([2002:a17:90b:616:b0:3b3:c91b:f23f])
+ (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:2ecb:b0:3ac:8446:c1a5
+ with SMTP id 98e67ed59e1d1-3b41c988620mr24472096a91.48.1795864596862; Sat, 28
+ Nov 2026 03:16:36 -0800 (PST)
+Date: Sat, 28 Nov 2026 11:16:36 +0000
+In-Reply-To: <20261122-reuseport-lock-filter-v1-1-a3e5324c8d55@gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -60,106 +77,38 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+Mime-Version: 1.0
+References: <20261122-reuseport-lock-filter-v1-1-a3e5324c8d55@gmail.com>
+Message-ID: <awq4A4oFnegEB9rO@google.com>
+Subject: Re: [PATCH net] net: reuseport: honour SO_LOCK_FILTER in SO_DETACH_REUSEPORT_BPF
+From: Kuniyuki Iwashima <kuniyu@google.com>
+To: Suyuan Wang <shyckless@gmail.com>
+Cc: pabeni@redhat.com, edumazet@kernel.org, davem@davemloft.net, 
+	kuba@kernel.org, willemb@google.com, netdev@vger.kernel.org, 
+	bpf@vger.kernel.org, martin.lau@linux.dev, linux-kernel@vger.kernel.org, 
+	horms@kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issues to consider:
-- [Medium] xsk: skb_checksum_help() warning in xsk_skb_sw_csum() on
-  nonlinear skb
-- [Medium] xsk: missing skb_checksum_help() fallback in
-  xsk_skb_sw_csum() for non-Ethernet devs
---
+On Sun, 22 Nov 2026 08:17:26 +0000, Suyuan Wang wrote:
+> From: Suyuan Wang <stevewong@hust.edu.cn>
+> 
+> SO_LOCK_FILTER lets a process lock the filters on a socket before
+> handing it to a less privileged one. Once it is set, the existing attach
+> and detach paths reject changes to the socket's BPF filters with -EPERM,
+> but SO_DETACH_REUSEPORT_BPF does not check SOCK_FILTER_LOCKED. So an
+> unprivileged process that receives a locked socket can still remove the
+> reuseport program, which then changes how packets and connections are
+> spread over the whole reuseport group.
+> 
+> Return -EPERM from reuseport_detach_prog() when the filter is locked,
+> like sk_detach_filter() does.
+> 
+> Found with a static analysis tool and checked by hand.
+> 
+> Fixes: 99f3a064bc2e ("bpf: net: Add SO_DETACH_REUSEPORT_BPF")
+> Cc: stable@vger.kernel.org
+> Co-developed-by: Kaixuan Li <kaixuan.li@ntu.edu.sg>
+> Signed-off-by: Kaixuan Li <kaixuan.li@ntu.edu.sg>
+> Signed-off-by: Suyuan Wang <stevewong@hust.edu.cn>
 
-commit 56dbb0a2d6a12181bfa80e8eb8b24e6cbe5b0a5c
-Author: Jason Xing <kerneljasonxing@gmail.com>
-
-xsk: fill in header offsets for TX checksum offload
-
-This commit parses the Ethernet and VLAN headers in xsk_skb_sw_csum() to
-populate skb->protocol, the network header offset, and the transport
-header offset for AF_XDP TX checksum offload, falling back to
-skb_checksum_help() when header validation fails.
-
-> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-> index 18cbd50047d80..3827d8e4b642a 100644
-> --- a/net/xdp/xsk.c
-> +++ b/net/xdp/xsk.c
-[ ... ]
-> @@ -1028,9 +1032,48 @@ static int xsk_skb_metadata(struct sk_buff *skb, v=
-oid *buffer,
-> =20
->  static int xsk_skb_sw_csum(struct sk_buff *skb, struct xsk_buff_pool *po=
-ol)
->  {
-> -	if (unlikely(pool->tx_sw_csum &&
-> -		     skb->ip_summed =3D=3D CHECKSUM_PARTIAL))
-> +	struct ethhdr eth_buf, *eth;
-> +	int nhoff =3D ETH_HLEN;
-> +	unsigned int l3_min;
-> +	__be16 proto;
-> +
-> +	if (unlikely(skb->ip_summed !=3D CHECKSUM_PARTIAL))
-> +		return 0;
-> +
-> +	if (unlikely(pool->tx_sw_csum))
-> +		return skb_checksum_help(skb);
-> +
-> +	if (unlikely(skb->dev->type !=3D ARPHRD_ETHER))
-> +		return 0;
-
-[Severity: Medium]
-Should non-ARPHRD_ETHER devices fall back to software checksumming instead
-of returning 0 here?
-
-Returning 0 leaves skb->ip_summed as CHECKSUM_PARTIAL with skb->protocol
-still 0 and csum_start unvalidated.  On non-ARPHRD_ETHER devices that
-advertise NETIF_F_HW_CSUM (such as loopback with ARPHRD_LOOPBACK or tunnel
-devices), can_checksum_protocol() returns true even for protocol 0, so
-validate_xmit_skb() does not call skb_checksum_help() either.  On
-loopback, if csum_start < ETH_HLEN, loopback_xmit() pulls ETH_HLEN bytes
-and delivers a CHECKSUM_PARTIAL skb with a negative
-skb_checksum_start_offset(), triggering a WARN_ONCE() in
-skb_checksum_help() on the receive path.
-
-> +
-> +	eth =3D skb_header_pointer(skb, 0, sizeof(*eth), &eth_buf);
-> +	if (unlikely(!eth))
-> +		return skb_checksum_help(skb);
-> +
-> +	proto =3D eth->h_proto;
-> +	if (eth_type_vlan(proto)) {
-> +		proto =3D __vlan_get_protocol(skb, proto, &nhoff);
-> +		if (unlikely(!proto))
-> +			return skb_checksum_help(skb);
-> +	}
-> +
-> +	switch (proto) {
-> +	case htons(ETH_P_IP):
-> +		l3_min =3D sizeof(struct iphdr);
-> +		break;
-> +	case htons(ETH_P_IPV6):
-> +		l3_min =3D sizeof(struct ipv6hdr);
-> +		break;
-> +	default:
->  		return skb_checksum_help(skb);
-> +	}
-> +
-> +	if (unlikely(skb_checksum_start_offset(skb) < nhoff + l3_min))
-> +		return skb_checksum_help(skb);
-
-[Severity: Medium]
-Can calling skb_checksum_help() on these fallback paths trigger a
-WARN_ONCE() when the socket is bound to an IFF_TX_SKB_NO_LINEAR device
-such as virtio_net?
-
-d73a9a63f9f7 ("xsk: reject sw-csum UMEM binding to IFF_TX_SKB_NO_LINEAR
-devices") rejected binding in xp_assign_dev() only when pool->tx_sw_csum
-is set.  When pool->tx_sw_csum is false, xsk_build_skb_zerocopy() still
-builds skbs with skb_headlen(skb) =3D=3D 0 on IFF_TX_SKB_NO_LINEAR devices.
-If a frame with XDP_TXMD_FLAGS_CHECKSUM hits any of these fallback
-branches (for example, a non-IP ethertype or a csum_start smaller than
-nhoff + l3_min), skb_checksum_help() sees offset >=3D skb_headlen(skb),
-fires WARN_ONCE(), and returns -EINVAL.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261127105347.7299=
-7-1-kerneljasonxing@gmail.com?part=3D2
+Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
