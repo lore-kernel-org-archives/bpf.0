@@ -1,125 +1,65 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795827354;
-	b=CRLuVQaL4HCaU0DZeqhrL/wzAsJ59IUJDkn6be3MBmn5Jm4dNgopDc9XCWIkYO3RQzHH
-	 gjE8m3Hz80ES8JDopQnepWLvteo0eAh0fCG+aU9dfveHmdcaAmVTK3YTnEjOT7wjrA/8W
-	 DI86klGU8X0SXEUjCoQIUAf6dao491+NBAv9ZcLdMmSFt58A8dKu1g/N7tHy+N0kCeKvE
-	 GI12iKm7wumIy1innZL0lub+RaJV/pF3g2R2LaJJIYc987gucA2i/M2Hxp7dmEvrnYLaP
-	 9Lj4lA8YptufwB8EjI8vaJB6M7p/wCf7c7pxn5xyck9fztuGCxHKSks2/5PGI9a/cLA==
+	t=1795828136;
+	b=FNkfPSoHVCw3SiUPPSEmvmw+Wh5U8xLcNwhuOrvIo2uJFSlQwS6tO2lE3ScIZJEKHLfk
+	 EkPLcVyyvqJ7abf9pEv0sKTVTAC6mJcsVq2DYl+nONgESZhk26d4Z+d4ZzHGyS3/Ws4vb
+	 VOVCkQdhf0jHOWB2pmpN/48IRB44RxC8VxSvwqRyWIzs2lMPsPwLY6l/Sj7EKzvR7XI+t
+	 fQWkbpMBqj7LkgvA/yFW6N4aBe0S6BnMDZrXOgIAEomIzrjXtCLWrI8OQqq3rZ4dC3ral
+	 j9tdryGAUXgifOoLnoxLDQOQ/vHYi6xjpL4pApIiFE48F1D4c11Sn4xxwGt8r/Ntogw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795827354;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=M4YJXz2C1qqMpFfvawPlwYq2ZIDKs+0ke0HB93yAMqs=;
-	b=q1gwd9JxJlx8AChxB+WM2P/XQr+fliAh4dx5Dg0ByLet41mYBYg3cYe2utx0ZujZPWYt
-	 lTNSIITa4QWqtgvCvqZopMwPiG9NHuJRmThj6fZpEQeZ36629di8LaDrO7jlLLp/G2NGl
-	 cEPZwzpAv/VaEpbwroKIJuRqXXp0+nB0TNq80b+yyqTxvvXhTrsNznmvdVZVdISfv0hFp
-	 CKVrX9wbJo7Y8U8d1u9xed7Tbn0xhzFZO4DUlW4Ua7arUB3b6eKgTFeLeCqTSDpfeDr/K
-	 YbYiQ/DAPJAPIQR5z3TxoQcFOVZuOqffZkZhdTbx20XYm4DxZT9K8FJ6kufO4fJXpww==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795828136;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=BiX6ZyljcdQPQcS9kGO9WzZ1LmpsTkhRSgDRiHn9c1o=;
+	b=B8F6SatI2g49+Upcak7smdW9E5GuosVTBUYE/rCLQS8TbTtMjOmKc2EOhvpeSLGfGp9z
+	 w/pi4V2bkR0Wq1M6MXtKSKwi3vA+xtCuJCtNyhbK5bkrtnzhOVZxzpy1c8DJJIoBZpf+/
+	 KbpyMoCis7wd5S9R743/Nj7UKyEY5XhkO1bp/jHohwGvZf0bmGmbuaA1NDw7zsTxdTAuS
+	 lvYzrRzUwB3wMzcgI3mu5arnE3IeoE8firc0RY07wCmsAT1gvPKkFwriEG90VF1mvxeBA
+	 rXRVqraVfV+XtcBdAXzc4BKWmE1gGMLDwJe5TS3LnjeSKyzwc6oiRRa0YQd+T2QjHEQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=egc5oRyU;
-	arc=none smtp.remote-ip=209.85.128.47
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=m7iLJfrH;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4E80606A327
-	for <bpf@vger.kernel.org>; Sat, 28 Nov 2026 00:55:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B4E80606A327
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id A6D99606A31F;
+	Sat, 28 Nov 2026 01:08:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=egc5oRyU
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4bb85e07aadso105798815e9.1
-        for <bpf@vger.kernel.org>; Fri, 27 Nov 2026 16:55:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795827352; x=1796432152; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=M4YJXz2C1qqMpFfvawPlwYq2ZIDKs+0ke0HB93yAMqs=;
-        b=egc5oRyUW6VFDIcdxYwZDeGVcRPdqVVcw0/9bUs8kD5ZsjJsFc0wc7Ij4lq+IUwayF
-         w2XgNkLL/plAb0xjtXjWDmbgHsj8BbN8y5QH4zabvGdDwwb8xzCpvOiS/FFDQ1pAmNwA
-         4uiU6YjDORB86waZuFacytNoIhdLmWlhX93TlunzFDHBxP1tk3JWqemA4JUyNxNFOtfh
-         CKwdIz1EOzEmUqFvrYxqw/6yXUkip8rv4zUWrx4HDc3q++gCUskaW4sXZoxU4kXNS894
-         nnM8O1l8kivUFX2WTqpxfjbMSvlGbzGIvqyGbP1cvEGn8taKbCLd436XionhZ+TbNkl7
-         Tb/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795827352; x=1796432152;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=M4YJXz2C1qqMpFfvawPlwYq2ZIDKs+0ke0HB93yAMqs=;
-        b=YYqbVg6vR5vFduDDwCjMAnF8OuTkTqhcAs/8GacXpOx7jPr9XzootDr6jFvIj4oIZi
-         5TbyCRGRGNxf9lsCSb36990AoDASC6P5MGSc343br+VBsqqTJ6vi3Q6DBV6ZPFivJTaK
-         qDXZ/9GC7B2aQunW7AbJpZbMSAjybJVfyVo6L8Wtua+58Yft7Vpc5s2S5TLSy2Z5Zxa3
-         dSpvFAK/8Z1d8fu7/htfXizGmPBhMSDc1yPvX5dMlaLiQj6rVyDE+dFZiKIokuglJ1+v
-         2HfJfLv2AHUyfZih1OXNQnsxXPfP8Xd6nCwpyEEoVrkifir/PlPk70HhcdtemjNR1sef
-         vXKg==
-X-Forwarded-Encrypted: i=1; AL+hErFgJrlxSRfW+fPHR2k/Svy73umggNff/QQpdlW7h6M7Wzf/lGIbZG5j7M1hoKEu2qcsstg=@vger.kernel.org
-X-Gm-Message-State: APuU4Z+fnR5HX4bpUuLKk3EH+DN8GuK5aWZ1+FlXKyzwUxkwXJWc07iG
-	Msu51LpVth8tig10Dgw56C77QuEF6h1k+N3+I4rU5uBBp94LGIXREDgXIRbP5V9Z
-X-Gm-Gg: AZFdTZeQJxD6kbJaH8r+4ukNdB4gOxVryirXrJIKjzJoh+Ik4Uhl3tzmv5aDx9EZpRG
-	VZdbJRPZ8cUmA+DT9e+IxNzDtjZsaqS47R4dk8djCk9bYyjGyfvmM92jWJ7jGoTH2WboPupyC1x
-	nD8U09N8lFXwSA3r0xuxX0PI1aBhvrIYJay+8jtg3oQ6INKZ9sIrRJude2oSHri6X9RC7MRCEPx
-	cHp6uS0q6kMIgtIbdinlbbDg+w8376sbIibtup0nQe3IoB+fl9CkGq36TOiJ9Tazw3MH6hMtN7q
-	4QpkxnxcUgrc+9jGczWzrtFG1XqkJVbHO4iykkeuPRAW9qvoIbxNFzVUrM5BfH/VWtTSvFlFNAY
-	UZOSsnF+iRIzaoIWxukE5idC4d8uIK/3dmXG+2c8AcP18fkK4biU8lKcAiDoUcENXMiKj07GP4G
-	h7be5sWV2BedDjuPYrlc8gGVTfRPI++8oXni3+Btg7e5Wuv+frolKUdP6q0ruorkN4Q0WdZvQAz
-	YH3+ZUYULYPoJ7Bw8uO4Tpd6h1HT4384Ng9/tPpfmFq5hwm+tJGCIE3tP9bTK9L6kR9HNcyQTSD
-	TGpXdZ9gN7bzEa7x2iyHufRq9Q==
-X-Received: by 2002:a05:600c:4e0b:b0:49f:e772:6ddf with SMTP id 5b1f17b1804b1-4bb8881ae90mr541218935e9.32.1795827351797;
-        Fri, 27 Nov 2026 16:55:51 -0800 (PST)
-Received: from localhost ([212.73.77.104])
-        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-4bb8538b09bsm1328407645e9.4.2026.11.27.16.55.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Nov 2026 16:55:51 -0800 (PST)
-From: Askar Safin <safinaskar@gmail.com>
-To: jarkko@kernel.org
-Cc: aleksa@amutable.com,
-	alex@amutable.com,
-	arnd@arndb.de,
-	bpf@vger.kernel.org,
-	brauner@kernel.org,
-	containers@lists.linux.dev,
-	corbet@lwn.net,
-	dhowells@redhat.com,
-	ebiggers@kernel.org,
-	giuseppe@scrivano.org,
-	hughd@google.com,
-	jack@suse.cz,
-	jlayton@kernel.org,
-	josef@toxicpanda.com,
-	kees@kernel.org,
-	kpsingh@kernel.org,
-	lennart@poettering.net,
-	linux-api@vger.kernel.org,
-	linux-arch@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-security-module@vger.kernel.org,
-	luto@amacapital.net,
-	neal@gompa.dev,
-	oleg@redhat.com,
-	paul@paul-moore.com,
-	ptikhomirov@virtuozzo.com,
-	sergeh@kernel.org,
-	skhan@linuxfoundation.org,
-	viro@zeniv.linux.org.uk,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=m7iLJfrH
+Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 91B211F00893;
+	Sat, 28 Nov 2026 01:08:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795828136;
+	bh=BiX6ZyljcdQPQcS9kGO9WzZ1LmpsTkhRSgDRiHn9c1o=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=m7iLJfrHpA8eePZ6FYzysI93EHHYYCIo2ytcOQKp7ORyyDMSYxAtkEvF/yx09Cg4R
+	 iJpoHjXY0fVAvXCIvIs1NJ/9w+qIsCt6RlwL4ajRU1yO+cHTh7Kqs9xPXT70wa2ztz
+	 w9aAxfd4oLS/lkq6tKivYGYmqxvSr9+PmXk6sL5aSxkY+3hL8PAK3/XCPEqMlKxIz+
+	 HQtEFMtzRMrzi4vfR0aKtXsT0Hn90k3NcrBuaz2Pdcy1JZLE49YB2Eq7UcGR+3pIPL
+	 0oJTU3Xa3CDhp1P5hE3sz1DkIOuyxJP2Em7qSR+Y9YvoBlBS1Ske2Iz2DgAlZ38EGJ
+	 V6CXPjiHUEcjA==
+Date: Sat, 28 Nov 2026 03:08:52 +0200
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: Askar Safin <safinaskar@gmail.com>
+Cc: aleksa@amutable.com, alex@amutable.com, arnd@arndb.de,
+	bpf@vger.kernel.org, brauner@kernel.org, containers@lists.linux.dev,
+	corbet@lwn.net, dhowells@redhat.com, ebiggers@kernel.org,
+	giuseppe@scrivano.org, hughd@google.com, jack@suse.cz,
+	jlayton@kernel.org, josef@toxicpanda.com, kees@kernel.org,
+	kpsingh@kernel.org, lennart@poettering.net,
+	linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org, linux-security-module@vger.kernel.org,
+	luto@amacapital.net, neal@gompa.dev, oleg@redhat.com,
+	paul@paul-moore.com, ptikhomirov@virtuozzo.com, sergeh@kernel.org,
+	skhan@linuxfoundation.org, viro@zeniv.linux.org.uk,
 	zygmunt.krynicki@canonical.com
 Subject: Re: [RFC PATCH v7 00/26] userland: Userland containers
-Date: Sat, 28 Nov 2026 03:55:41 +0300
-Message-ID: <20261128005541.873229-1-safinaskar@gmail.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20261122193539.3334213-1-jarkko@kernel.org>
+Message-ID: <awoppInSWN0XVPz-@kernel.org>
 References: <20261122193539.3334213-1-jarkko@kernel.org>
+ <20261128005541.873229-1-safinaskar@gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -129,32 +69,24 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261128005541.873229-1-safinaskar@gmail.com>
 
-Jarkko Sakkinen <jarkko@kernel.org>:
-> Work on this feature started in 2025 after reviewing David Howells'
-> container object patch set [1], whose underlying mechanics made sense to
+On Sat, Nov 28, 2026 at 03:55:41AM +0300, Askar Safin wrote:
+> Jarkko Sakkinen <jarkko@kernel.org>:
+> > Work on this feature started in 2025 after reviewing David Howells'
+> > container object patch set [1], whose underlying mechanics made sense to
+> 
+> > [1] https://lore.kernel.org/all/155059610368.17079.2220554006494174417.stgit@warthog.procyon.org.uk/
+> > [2] https://lwn.net/Articles/1102593/
+> 
+> You put wrong link in "[1]". This is not Howells' container patchset. This
+> is Howells' fsopen/fsmount patchset.
+> 
+> Link "[2]" seems to be wrong, too. It is not something "earlier", this is
+> very recent LWN article.
 
-> [1] https://lore.kernel.org/all/155059610368.17079.2220554006494174417.stgit@warthog.procyon.org.uk/
-> [2] https://lwn.net/Articles/1102593/
+Thanks for pointing that out: https://lwn.net/Articles/780364/
 
-You put wrong link in "[1]". This is not Howells' container patchset. This
-is Howells' fsopen/fsmount patchset.
-
-Link "[2]" seems to be wrong, too. It is not something "earlier", this is
-very recent LWN article.
-
-> While the patch set is manually written, the original motivation came
-> from isolating LLM agents
-
-LLM agents are too strong for Linux containers. They should be isolated
-using VMs or using some Linux reimplementation, such as gVisor.
-
-Bacik said that he tested his patchset in Anthropic. But I think it
-was tested not for agents themselves, but for something else.
-
-Anyway, I suggest to drop this phrase from your cover letter and think
-about some other use case.
-
--- 
-Askar Safin
+Br, Jarkko
