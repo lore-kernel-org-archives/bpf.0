@@ -1,86 +1,125 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.225.136
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.47
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795826825;
-	b=WipHCmelcLS3mJQ8ooLFaTL4oC9QYAr68AyVhUOpT1xWYPsu7Z8cyLfJn9/oJHPBdEMf
-	 D3aa7nXjCCSMwA9CcT49UmsOxcf9S6dAEvQtu47kAb37EhqUkhcgvKDuy0bP+vefv/bcE
-	 luOkdojckHj6eXbxu3awQ/7t3AmMVN3lePBCTJd2eag9pGPaHS6oP3v5/1ghy86+LnQgW
-	 Bry9DyJ4sOI4z673geI/baOJ5vSmt6OQxy06eberjghbkSoISoIBryWXkm4eaqFLLK4q0
-	 3Ju7IVVJyyynQyYMH1C8V3ZxIsisHbnNX5RS/dLcS35RFukYLCdmA2DAoOjfUcF3LbQ==
+	t=1795827354;
+	b=CRLuVQaL4HCaU0DZeqhrL/wzAsJ59IUJDkn6be3MBmn5Jm4dNgopDc9XCWIkYO3RQzHH
+	 gjE8m3Hz80ES8JDopQnepWLvteo0eAh0fCG+aU9dfveHmdcaAmVTK3YTnEjOT7wjrA/8W
+	 DI86klGU8X0SXEUjCoQIUAf6dao491+NBAv9ZcLdMmSFt58A8dKu1g/N7tHy+N0kCeKvE
+	 GI12iKm7wumIy1innZL0lub+RaJV/pF3g2R2LaJJIYc987gucA2i/M2Hxp7dmEvrnYLaP
+	 9Lj4lA8YptufwB8EjI8vaJB6M7p/wCf7c7pxn5xyck9fztuGCxHKSks2/5PGI9a/cLA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795826825;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795827354;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Message-Id:
-	 Cc:Subject:From:To:X-Mailer:References:In-Reply-To;
-	bh=gZdi2zUPdVC7tSoW/KR9ljEMmpMHwDaDJe/0ozkzl48=;
-	b=AZyPTpvrZYKaLNvpyssRWJsZG6eq4pINNNUSqNfPAchXlt69TXQj19GjL72eZysVsJUR
-	 LvnHeF/T+rF8e12pDDtjQmJevHD2SXaA6wcRrN+YLe1NnAyE05zrwqooRrB+LtA4uj6va
-	 7S8Teh1+xdpnLK4wkbQta6eUdDmZlIzIeju97+8q2+qaqQBBc700Q6uLJXBQy0ieCGWyz
-	 8XcPwwwbP09h2qp+ToHfXv/gJ9ovBGr55N2vMzI2yS7rTwZKuS52sQ5Bn25EgKheKlG8V
-	 AN14rSeD0ACxpg+LrZfsvQqoId5kYmG3iJZUjzLwEK2fgnjBuDlQfXibxlR5oh2dAqA==
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=M4YJXz2C1qqMpFfvawPlwYq2ZIDKs+0ke0HB93yAMqs=;
+	b=q1gwd9JxJlx8AChxB+WM2P/XQr+fliAh4dx5Dg0ByLet41mYBYg3cYe2utx0ZujZPWYt
+	 lTNSIITa4QWqtgvCvqZopMwPiG9NHuJRmThj6fZpEQeZ36629di8LaDrO7jlLLp/G2NGl
+	 cEPZwzpAv/VaEpbwroKIJuRqXXp0+nB0TNq80b+yyqTxvvXhTrsNznmvdVZVdISfv0hFp
+	 CKVrX9wbJo7Y8U8d1u9xed7Tbn0xhzFZO4DUlW4Ua7arUB3b6eKgTFeLeCqTSDpfeDr/K
+	 YbYiQ/DAPJAPIQR5z3TxoQcFOVZuOqffZkZhdTbx20XYm4DxZT9K8FJ6kufO4fJXpww==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=qtkTg22I;
-	arc=none smtp.remote-ip=74.125.225.136
-Received: from mail-wm2-f8.google.com (mail-wm2-f8.google.com [74.125.225.136])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=egc5oRyU;
+	arc=none smtp.remote-ip=209.85.128.47
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04E27606A31E
-	for <bpf@vger.kernel.org>; Sat, 28 Nov 2026 00:47:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 04E27606A31E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4E80606A327
+	for <bpf@vger.kernel.org>; Sat, 28 Nov 2026 00:55:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B4E80606A327
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=qtkTg22I
-Received: by mail-wm2-f8.google.com with SMTP id 5b1f17b1804b1-4bb86801c8fso1582555e9.0
-        for <bpf@vger.kernel.org>; Fri, 27 Nov 2026 16:47:04 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=egc5oRyU
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4bb85e07aadso105798815e9.1
+        for <bpf@vger.kernel.org>; Fri, 27 Nov 2026 16:55:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795826823; x=1796431623; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=gZdi2zUPdVC7tSoW/KR9ljEMmpMHwDaDJe/0ozkzl48=;
-        b=qtkTg22ICMYp1SwJmvH3P9xPlRqFQ23Pqff5+EyZ5xtFUxeZqChQTu+l5H1iuIxFL5
-         e2PMuxxM2jYzcmh+BkXL3InWtiyNmoVNWwV7ujwYH1s3NJCF/nOpcH4Odaa7V7ovDtLe
-         aiVRdzuGGaH+hN09baBEC6e5E+j59Ud2Bzd8jvBf4KgvNlSmylA8Z7Pg9p7mb+DUQbvT
-         agUTK9BgW4T8QeFsyX+ur1O0L8lwrvdMAI6mMMYROWOjIIcJYV9i5E3q88W7Q26w9jqa
-         1yWXHj/dc0lXqVqUsLyhUGkOMNEMbOrpUykifVK7+BfSt73K8ey/l3SuZzlIwWlo1OfM
-         DT4A==
+        d=gmail.com; s=20260707; t=1795827352; x=1796432152; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=M4YJXz2C1qqMpFfvawPlwYq2ZIDKs+0ke0HB93yAMqs=;
+        b=egc5oRyUW6VFDIcdxYwZDeGVcRPdqVVcw0/9bUs8kD5ZsjJsFc0wc7Ij4lq+IUwayF
+         w2XgNkLL/plAb0xjtXjWDmbgHsj8BbN8y5QH4zabvGdDwwb8xzCpvOiS/FFDQ1pAmNwA
+         4uiU6YjDORB86waZuFacytNoIhdLmWlhX93TlunzFDHBxP1tk3JWqemA4JUyNxNFOtfh
+         CKwdIz1EOzEmUqFvrYxqw/6yXUkip8rv4zUWrx4HDc3q++gCUskaW4sXZoxU4kXNS894
+         nnM8O1l8kivUFX2WTqpxfjbMSvlGbzGIvqyGbP1cvEGn8taKbCLd436XionhZ+TbNkl7
+         Tb/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795826823; x=1796431623;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=gZdi2zUPdVC7tSoW/KR9ljEMmpMHwDaDJe/0ozkzl48=;
-        b=aHznWUbw7opx+IOLMeBXXphgmWdl02i1a6JPSFk9w2YezWxNRcQUo1lA828GJigwGQ
-         GUaKnKMdU0dsrvSYkfJ/yhYVCfOAP5wwu1Qwm+5ybE84IXsgORD07bn5HwtBytFTyu2O
-         vY43V7aW09DO+RncIyIbu2Ot8gSI+aMktf7CEhc9sptKyocQA30l7SMKEwnDooiVwBM9
-         GYn/A3eJ3NzWgq/fByjhuduELbyOc/+rLyVv6/YMwWtiORitXkshlO3ocOy+0sOyquCR
-         wfyTW04k6FDysw9DyGfk14nivTTqkNsWoQ4tu0IoUEIgKr5jzFxBpWIF7+kxam5sfbOY
-         wfug==
-X-Forwarded-Encrypted: i=1; AL+hErFQWzpY2VBN44pwbeXeB5cVMd6zdd73niXfZJzIF51Gr2+DNTZsn57senSmZMAzN25DoA4=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9gg9n73gBGNjENZHNw0uDezxhYk+Hs99XH+wsIBfolejMZ+FBl
-	FBJTndlV61vKEuf8HeoJkPM9TJVq3jt5FHFS4P7+xNltvrISEhDU+KZ5/3qhs8Px
-X-Gm-Gg: AZFdTZc0U64DnAj0Con6GOGwgxAAZtSiWtT6VctRlPisnQ8Mn7WWXarvcEjjBO8/sw0
-	VOZ9Ts/0wd77YdsxTf+lM5cwK9Y3NLKJvSTXLxjI8BpKfLaIi/T2/WtxT4J+BzIWF6MS2L7K9BH
-	BUk6XJgwWxoiR3bDpAjE0Vupe6NwHw8B52LZxl+rqw0aLIibUcFxjPGXra3HlC2c1QL4bKLjawh
-	9ZTGvL4FLDu33vmjCYbU9XEiVEStEdEqiecMrkV3xmGZvQiQA+7nSDP3iL0HzYm8Sln+XPuJqTP
-	YVAFwUDxTYSdC+3vMJXXOnk2owDSa+e+xa8fk6O5Sgdmg2zDzmC0F3ZzebXzayJsgEJYYy+YTaS
-	pM4HUUlTmvUkOR2JjtklnoJ+ZMOixG4LG5/kblcd1qv7hFQuDjeAC8XoqKykVITLhOFUjDuXht0
-	Byvl/HySLzcORaix03kLI1piACicMy/hZR/6WNAtVJfZlBdrPADBmWEcxtaMmZ/Re+tgd3ghZ8s
-	pdF8Bg+bsBG9IH1rt/ZRwDPU+ck/b+gTZoZB44oTJRmAbA6+6gU2zB7p2cpKnnVtten+WK2AReh
-	FSlcOoBfsj926hvpqH0Wqsgo5iHOr8S0NC6Yu/SlsoidvwQ4UdOM+nlYYUTOCoM7ATVzxZtx/kw
-	KAQe9IbVTFZ9m3H6LBPzXAoGk3QO+3HFOfZ2+lrQSeWEKq99NiUVx5lng+BA/0DmdDYYkp9sARQ
-	vqLldH8aWFbBDIqg==
-X-Received: by 2002:a05:600c:4e94:b0:4bb:b796:66f5 with SMTP id 5b1f17b1804b1-4bbb79667d8mr62178775e9.6.1795826823272;
-        Fri, 27 Nov 2026 16:47:03 -0800 (PST)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb884a15absm669627825e9.9.2026.11.27.16.47.02
+        d=1e100.net; s=20260707; t=1795827352; x=1796432152;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=M4YJXz2C1qqMpFfvawPlwYq2ZIDKs+0ke0HB93yAMqs=;
+        b=YYqbVg6vR5vFduDDwCjMAnF8OuTkTqhcAs/8GacXpOx7jPr9XzootDr6jFvIj4oIZi
+         5TbyCRGRGNxf9lsCSb36990AoDASC6P5MGSc343br+VBsqqTJ6vi3Q6DBV6ZPFivJTaK
+         qDXZ/9GC7B2aQunW7AbJpZbMSAjybJVfyVo6L8Wtua+58Yft7Vpc5s2S5TLSy2Z5Zxa3
+         dSpvFAK/8Z1d8fu7/htfXizGmPBhMSDc1yPvX5dMlaLiQj6rVyDE+dFZiKIokuglJ1+v
+         2HfJfLv2AHUyfZih1OXNQnsxXPfP8Xd6nCwpyEEoVrkifir/PlPk70HhcdtemjNR1sef
+         vXKg==
+X-Forwarded-Encrypted: i=1; AL+hErFgJrlxSRfW+fPHR2k/Svy73umggNff/QQpdlW7h6M7Wzf/lGIbZG5j7M1hoKEu2qcsstg=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+fnR5HX4bpUuLKk3EH+DN8GuK5aWZ1+FlXKyzwUxkwXJWc07iG
+	Msu51LpVth8tig10Dgw56C77QuEF6h1k+N3+I4rU5uBBp94LGIXREDgXIRbP5V9Z
+X-Gm-Gg: AZFdTZeQJxD6kbJaH8r+4ukNdB4gOxVryirXrJIKjzJoh+Ik4Uhl3tzmv5aDx9EZpRG
+	VZdbJRPZ8cUmA+DT9e+IxNzDtjZsaqS47R4dk8djCk9bYyjGyfvmM92jWJ7jGoTH2WboPupyC1x
+	nD8U09N8lFXwSA3r0xuxX0PI1aBhvrIYJay+8jtg3oQ6INKZ9sIrRJude2oSHri6X9RC7MRCEPx
+	cHp6uS0q6kMIgtIbdinlbbDg+w8376sbIibtup0nQe3IoB+fl9CkGq36TOiJ9Tazw3MH6hMtN7q
+	4QpkxnxcUgrc+9jGczWzrtFG1XqkJVbHO4iykkeuPRAW9qvoIbxNFzVUrM5BfH/VWtTSvFlFNAY
+	UZOSsnF+iRIzaoIWxukE5idC4d8uIK/3dmXG+2c8AcP18fkK4biU8lKcAiDoUcENXMiKj07GP4G
+	h7be5sWV2BedDjuPYrlc8gGVTfRPI++8oXni3+Btg7e5Wuv+frolKUdP6q0ruorkN4Q0WdZvQAz
+	YH3+ZUYULYPoJ7Bw8uO4Tpd6h1HT4384Ng9/tPpfmFq5hwm+tJGCIE3tP9bTK9L6kR9HNcyQTSD
+	TGpXdZ9gN7bzEa7x2iyHufRq9Q==
+X-Received: by 2002:a05:600c:4e0b:b0:49f:e772:6ddf with SMTP id 5b1f17b1804b1-4bb8881ae90mr541218935e9.32.1795827351797;
+        Fri, 27 Nov 2026 16:55:51 -0800 (PST)
+Received: from localhost ([212.73.77.104])
+        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-4bb8538b09bsm1328407645e9.4.2026.11.27.16.55.48
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Nov 2026 16:47:02 -0800 (PST)
+        Fri, 27 Nov 2026 16:55:51 -0800 (PST)
+From: Askar Safin <safinaskar@gmail.com>
+To: jarkko@kernel.org
+Cc: aleksa@amutable.com,
+	alex@amutable.com,
+	arnd@arndb.de,
+	bpf@vger.kernel.org,
+	brauner@kernel.org,
+	containers@lists.linux.dev,
+	corbet@lwn.net,
+	dhowells@redhat.com,
+	ebiggers@kernel.org,
+	giuseppe@scrivano.org,
+	hughd@google.com,
+	jack@suse.cz,
+	jlayton@kernel.org,
+	josef@toxicpanda.com,
+	kees@kernel.org,
+	kpsingh@kernel.org,
+	lennart@poettering.net,
+	linux-api@vger.kernel.org,
+	linux-arch@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-security-module@vger.kernel.org,
+	luto@amacapital.net,
+	neal@gompa.dev,
+	oleg@redhat.com,
+	paul@paul-moore.com,
+	ptikhomirov@virtuozzo.com,
+	sergeh@kernel.org,
+	skhan@linuxfoundation.org,
+	viro@zeniv.linux.org.uk,
+	zygmunt.krynicki@canonical.com
+Subject: Re: [RFC PATCH v7 00/26] userland: Userland containers
+Date: Sat, 28 Nov 2026 03:55:41 +0300
+Message-ID: <20261128005541.873229-1-safinaskar@gmail.com>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20261122193539.3334213-1-jarkko@kernel.org>
+References: <20261122193539.3334213-1-jarkko@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -89,94 +128,33 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sat, 28 Nov 2026 01:47:02 +0100
-Message-Id: <DN6FH90QBQNL.3TQOK2LID5S8D@gmail.com>
-Cc: "Andrii Nakryiko" <andrii@kernel.org>, "Thomas Gleixner"
- <tglx@kernel.org>, <x86@kernel.org>, <bpf@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>
-Subject: Re: [BUG] bpf: hard lockup with ringbuf used from NMI and
- sched_switch on hpet clocksource
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: "Tom Roozen" <rzn.tom@gmail.com>, "Alexei Starovoitov" <ast@kernel.org>
-X-Mailer: aerc 0.21.0
-References: <20261128001825.38905-1-rzn.tom@gmail.com>
-In-Reply-To: <20261128001825.38905-1-rzn.tom@gmail.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Sat Nov 28, 2026 at 1:17 AM CET, Tom Roozen wrote:
-> Hi,
->
-> A BPF ring buffer written from a perf_event program (NMI context) and
-> from a tp_btf/sched_switch program hard-locks my machine within about
-> a second when the clocksource is hpet. On acpi_pm it doesn't hard-lock.
->
->
-> Environment
-> -----------
->
-> - AMD Ryzen 7 7735HS, Lenovo ThinkBook 14 G7 ARP,
->   BIOS P6CN22WW
-> - Kernel 7.3.3-1-default (openSUSE Tumbleweed), x86_64,
->   PREEMPT_DYNAMIC (full), HZ=3D1000
-> - The TSC is marked unstable at every boot, so the kernel selects
->   hpet:
->
->     TSC synchronization [CPU#0 -> CPU#2]:
->     Measured 5354294254 cycles TSC warp between CPUs, turning off TSC clo=
-ck.
->     tsc: Marking TSC unstable due to check_tsc_sync_source failed
->
+Jarkko Sakkinen <jarkko@kernel.org>:
+> Work on this feature started in 2025 after reviewing David Howells'
+> container object patch set [1], whose underlying mechanics made sense to
 
-This is a known limitation. In general, we rely on ktime_get_mono_fast_ns()=
- to
-be safe in NMI context in a bunch of places, rqspinlock is just one instanc=
-e of
-this pattern. In case of hpet, we definitely have this problem of a deadloc=
-k.
+> [1] https://lore.kernel.org/all/155059610368.17079.2220554006494174417.stgit@warthog.procyon.org.uk/
+> [2] https://lwn.net/Articles/1102593/
 
-Maybe the documentation for ktime_get_mono_fast_ns() should be updated to s=
-top
-claiming it is NMI safe.
+You put wrong link in "[1]". This is not Howells' container patchset. This
+is Howells' fsopen/fsmount patchset.
 
-Technically, the lock only needs elapsed time on the local CPU, so I think =
-the
-simplest fix may be to stop reading the clocksource for the timeout on x86 =
-and
-use sched_clock() instead. It reads the TSC directly, also when the TSC is
-marked unstable, never calls into the clocksource, and is already used from=
- NMI
-(perf, printk).
+Link "[2]" seems to be wrong, too. It is not something "earlier", this is
+very recent LWN article.
 
-That takes read_hpet() out of the waiter path, so the queue head or pending
-waiter can no longer block on hpet.lock.
+> While the patch set is manually written, the original motivation came
+> from isolating LLM agents
 
-local_clock() does not work for this, since with an unstable TSC it is clam=
-ped
-to one tick past the last tick, so it stops advancing while IRQs are off. T=
-he
-clock ticking with IRQs off is mandatory.
+LLM agents are too strong for Linux containers. They should be isolated
+using VMs or using some Linux reimplementation, such as gVisor.
 
-Other architectures keep can ktime_get_mono_fast_ns(). x86 also keeps it wh=
-en
-the TSC frequency is unknown, because sched_clock() is then based on jiffie=
-s,
-and would stop advancing. I don't think we can do better than that, even if=
- that
-still falls back to hpet.
+Bacik said that he tested his patchset in Anthropic. But I think it
+was tested not for agents themselves, but for something else.
 
-Untested pseudocode:
+Anyway, I suggest to drop this phrase from your cover letter and think
+about some other use case.
 
-/* arch/x86/include/asm/rqspinlock.h */
-#define res_clock_ns() (__use_tsc ? sched_clock() : ktime_get_mono_fast_ns(=
-))
-
-/* kernel/bpf/rqspinlock.c */
-#ifndef res_clock_ns
-#define res_clock_ns()  ktime_get_mono_fast_ns()
-#endif
-
-with check_timeout() calling res_clock_ns().
-
-> [...]
+-- 
+Askar Safin
