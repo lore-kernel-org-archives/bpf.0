@@ -1,86 +1,86 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.54
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795872750;
-	b=WiEATIN8YY1HSvDfik5fHy0kEv1cgfEiHqYQcqWpWIu3rauAu1RwCL4GKnZng4igwNWS
-	 Z1YG8qYMHdBC2f8D2/C3XS+zXEzb/2ne60Z8DKQQAaqe+VwlCMCBqF2Ev6iIht0W6iSPr
-	 SOoGr+p0tBkj9QuV4JWQXgPzRsTEuJgNGkjvXbNzy5vhq3VhaW+G1XaH1xdnhclyOoPqB
-	 waRWxRbQ5Geyf1IbXD3Nht3J8+N9h4V0X/RTOimC/r6T8NpbmsTXWBvQbAb2pHPbZEM2i
-	 Z1tqfCvMjXHgbp3Rei/y09sOxpCA5l+q7RzqwWFPXgQf5vaEiEGCcXFqGmLbhDapEZg==
+	t=1795872998;
+	b=q/0BAxFS20WyW9PYo6zUNhmKcM1m4YoJSh4sUXU6BcT941xY5phXI1PFKyUPy6K0SETT
+	 V3ucm8EAr6f7tDg0yauUIySUbU+Xt5sW6bBavjzcsJMSGRuQCqoOLwmjRtEkzqR6/v9x6
+	 lRWmeor3Txf17K1zeWWc95PD6YKaPpRggKAPg+MY1DOQ/dAu9NLuNyiLa39Xv5stwAEuJ
+	 k/FzkG5UafTcbIF5Bz8rRmO15I4iBQYA6RqyDySQ4RjzD8C/HhhUtRs8EHpmzPzdIEBeV
+	 zjJbay63G+omcFTQ+goZMZdgSPH/DoLCkSSWX0UZ8VplfnHqh3LVwzX+XS4vg1SXasw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795872750;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795872998;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
 	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=4V2a+V6fQG2NiQXAdRuUPTgWpRpo/WBcKKqghb1iDS8=;
-	b=DzOr6k4ftERG/d+aFLgV+ArQQJbfbl0a3wsUXCAEDXylAhOQRLMbus7sVUvKALRxtXuT
-	 JpxlGtGmldFW+voFKWrtg3Bx3bkXTFnLJsV4vxIclyZONMX2s09dq5OZ7j0JXRZO9Dl2o
-	 KVxnJPoXw+h+1leFkqxjSX0rQczwIxov5nBbgrJ7HZUoEVYKfBe3vBAfWp2Xa2MW65X5/
-	 oTntPgewpRgtR8vdnCJgveW6gWQSVxwfBOiwxB6wnhepcG+PSRQ9dIgWNM/B+VGCIH4M5
-	 rk7R0q8FO8zJoAfD9i1llLJw9ewE3w+TazerDu2dc5MDdNIKvOILShl7//YoeIga7Eg==
+	bh=a5WxxRcYdBHgsweyummlp7eYA7vC+58yNVZbC9L/D58=;
+	b=fZrTaYu4wax+qOqMs3spEQUyfCDva0+f+y3DPst+SPMR3XHvjdMxJsjV8+k+pf3pSlVK
+	 1pJjKCRgjeU4W5ZVZD34MrTYBFpgKZwvqtqNbrkxSSSNmNVBUI5sZyuoi/D6IuwrlKDIc
+	 99bQimqtHhxnrDm5rkP/mZ1Hvz1m5+TesQeLqk/sVSfViLUxb9KmvHVvWwMA0JikI4mK6
+	 A54kBUa6+S3yaJ0W/lTltT2y1nYhmDS9/mHgefJBIPEEWul6rxeoU0TYWWYc/0PBXsPnO
+	 KPLskK6xTOX/XnnCXIdHPIw94SoUbpe+oDCLWZLdfAxUBX9wPKD4376U9bCfBPkYUyg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=TMFbXXy3;
-	arc=none smtp.remote-ip=209.85.128.47
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="kp/deqQ9";
+	arc=none smtp.remote-ip=209.85.221.54
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AB33606A321
-	for <bpf@vger.kernel.org>; Sat, 28 Nov 2026 13:32:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4AB33606A321
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FAD3606A31C
+	for <bpf@vger.kernel.org>; Sat, 28 Nov 2026 13:36:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8FAD3606A31C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=TMFbXXy3
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4a2d6d01ecbso47511365e9.0
-        for <bpf@vger.kernel.org>; Sat, 28 Nov 2026 05:32:29 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=kp/deqQ9
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-4a7b8abe209so6980186f8f.0
+        for <bpf@vger.kernel.org>; Sat, 28 Nov 2026 05:36:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795872748; x=1796477548; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1795872997; x=1796477797; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=4V2a+V6fQG2NiQXAdRuUPTgWpRpo/WBcKKqghb1iDS8=;
-        b=TMFbXXy3VkgZTK+h4ARTANj0bd2OJWcSuDzdl4CAQt389Lpai+AVfRc4XA/gYyacly
-         R879Dgv0XBK8CYbhAZ65Kc2El88wpAV7RM+wotXPg60QlWi7LV6TpyZIbr8Um0C23an6
-         u8TQHz1N77s+FngyeyQ1L9xezzYMnq3z1q5gZyPlEmGptbiiGxR+FxenDTbXlJBq90e9
-         mWsGq3acSFGPFShfLOaefOfjfSYazcTTWM+chxcEoBBQ9QljloO9eXgUQTZEX7eoBpeK
-         bbiItkLRT3BRPAdlFbxhWj+dtp56eg+NcFz0UNzFKiLv8c1LTAHMzmFtQU8SlAwAy5pU
-         W14w==
+        bh=a5WxxRcYdBHgsweyummlp7eYA7vC+58yNVZbC9L/D58=;
+        b=kp/deqQ9IVh4qK8O0NDOHe7xQOIWdZ4nMx5bHaOb10okIw0aUCzCFBujPy9iUIEqzs
+         sCZ/nWvycqf4/xC+0TaYXn+HUlLCPpvKf3pF6SZknBVO02qRgjbqkIPiEVYMN0K/2Tsm
+         VNqWmPh7DpUsOzylXrV+yNFHfYwA63e1u00wFZW8HYj0XF2Ru45lgYQ/eDKgPapphx1x
+         NSwM+3PP1qjAnACQGbGdK65NisXXmyLaiQ8uDMV/W7GAeCS57ZeHCJ3ro9hnVVR0k/n3
+         Uhge6yisrtubcJB7cMzN6RDaIyD4cg7onO0u7xUytLj2DU2tjDepqxeL8rrGZ2Bq+OZD
+         KRvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795872748; x=1796477548;
+        d=1e100.net; s=20260707; t=1795872997; x=1796477797;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=4V2a+V6fQG2NiQXAdRuUPTgWpRpo/WBcKKqghb1iDS8=;
-        b=imbuFl4ioCGNTXmbJcb3rozqRxdjiuQCSvW7lARNkSTSLzOYeGYv+80yFNWbiYkRd9
-         UUD2X8vXYcnWnAgie2HmUBYHYh0OHzCcnWRyOhgRuFH7KHbLpaTlc7/zm+Pl0DdOcCia
-         pNPSbB5Fjf1FMLPcJLTEx17mlQV9A3FPlJQiS1bmltLItm70e3HUNzOF2pMVzcnys3uY
-         u1IhzGZP4OChnBAxEdhJoMQqKEeavRGwNZ6NuPieEarrFMbc3N94CtlGdTly0uMb1p/W
-         HQQUnLzYS9dcX3Z3HQI0jT9caUz1//7EFmX9jCWbOidaUYUQptCJPBtZqpdNGQJDYF3a
-         MIjg==
-X-Forwarded-Encrypted: i=1; AL+hErGAWLiO6p47+ijiuR9FEwlhGnEIXdztdFZBY9mvjAL3NPQsr9a4efbMWmJ05mpP+7vmzSU=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/eCLUaznw7W84yPUqyugvL8/trxzlc1n2MWNA4No/0+qrBvokE
-	v/HnHeiCaEupOKtUt/zCHGh8JJX9p9uPZchfyWn+1bu8qJi3Dcs7dWgu
-X-Gm-Gg: AZFdTZcSbGUcUkklVFsCjySzQeDUHwVNjOoXPeM3wfsqtvC+RaoFavQsmiOvqRU4fbe
-	x6I0ZKHEKl6mRvPeU9K1dQ7y+LIUCXGXQVaIR0ip+dtQdrZ4it05mV/FT7qcoaeuLFMXARnl+s0
-	6IIQ/UGly4al+KYLWDigQCywy+olLt+CSvB/ePiqkEtKT1o9A9UXWpo+NeReDjcpdmsJwRgJR59
-	vLTX68e2NvKZizUYu6/OeWJoCVQmr17E1TVpSX64ZSz5SGj15Yw8wHd5lVE1mmOMhb21It39pHD
-	aLzx1bqmrn+9RcB1l4RSozCpEb0dJaDs4YwvWQII999MQiHZYVaC5u6NMwaZyz4PGjmafyZ7FlP
-	KURQQSPpAXMLf3NPo9HDz2t2D+yb1HQBsXLUFpNpuQdoR58Vunq3zvlxhIE/7MYVU1CGXayhOZL
-	Am2ecwXXtUolqcA3X7JJ8w2Q8eoVnKWg/f2SSVoxldMBN8VOm6Ds85hWVi/EXU+4mJtE3V5AzDH
-	3Y6Cx6mmzwRGhFqHr0cs0QuwhR4ey/K4QQ+KJ/V/ylqtCd2pemjwXj6kG1V62HDUnHne0KllWk2
-	wUhC36GPw5LqYs0ndzznpB2L08zEOf02YiJY2DW1TVMDzeB9yNdfyDA/3DK7u081rTr5h7vMZg8
-	ps0iT1JlgZ+OOg5SiMeKiggIAo+SfoNvQ9qCP
-X-Received: by 2002:a05:600c:1d2a:b0:4b7:6942:39bf with SMTP id 5b1f17b1804b1-4bb88814031mr666559775e9.28.1795872748317;
-        Sat, 28 Nov 2026 05:32:28 -0800 (PST)
+        bh=a5WxxRcYdBHgsweyummlp7eYA7vC+58yNVZbC9L/D58=;
+        b=cB3Y+AqaxgPrct/uZi8OqNBSr1+eZf3/mS8Ta6pJ8qBWac3TqmSt8ox439ckpGLVQ8
+         X2gsaZbOd4ar7caZYWnkf3GgMf/UIMqp2zUUMFnX1sFcEL2w0Xf1iKMlgXK2DKd0NhYJ
+         2nTnku2AKcY2MMG8tRzAulrv1ItLew9QJUDOwfi+sq+yKuLWKwxnVGvk/2uY2Y8Elr/T
+         crqBjs5V1rwFxFYuSnue7jftvmvum34I7naBxXbqo/bQiOQ9pPpHUgAgROQJ8kfT4M3s
+         82uSrro9VdzEXdkPsYZ6xoGBQ5wSEOPlo2i6VCAhTTXU/wp2SSg7k8lI8ZEHXLVYT294
+         TNSw==
+X-Forwarded-Encrypted: i=1; AL+hErGpXF+y6X6NRMqh6LI5r3k+kDApzMgqrB+qrwU3ZTY0dcnw9g2YU/LAsJcKNHorCykygD0=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/QoTp0jWg/Tr3cvRA3OAgge+kXi7JWh0GK9joDRsg0qhN1Cm1H
+	z/UvV3xGKOUT4O8sFU8J8NSbBhTlYIgmaYeJOk0JL21QTs+fFE+oAIKL
+X-Gm-Gg: AZFdTZf35ZgMs6h0y/cOZeJDQYEANqCpl4oURN3DPC/JhZY7RcHexLj6GZx5sNVnIvQ
+	JWeOb2mVHFEjXYpWkWwSHGHA+oCu+51h9AWsrs3RVkxQeEXcS2xPlWkaMbiO9WKcjFOt2Da9hXi
+	NnnkzF2lyYAOXHxP4Q1fmlriRpcOY4NdIoe8FgbdlRprfW4LMpgF9j1rxw+WdQoQTLnJX0uh45F
+	SLMaowR7dZrRtjY9Km34Qvq1FTlU2UiITh96meFjczl4VBM6kz0DjYFa/OlmwG6q06j0KPb75MO
+	5apP9XVuuRxTiAnxp2fP8959iqxlyZ0D14SWSa1lo5rLdV+dMs9cCwwz4CaSPLJLaaUeQynYIsJ
+	Te7/W45VY/o1qBQZvD1CewOMxKMKCW1Pz0IbwVlsaXjTLC08C/abMQwx2sFHoZ9wBTKYsvz/nh7
+	QfdK2H7mudZiPi01UqbUbKI+R518A8/atrHqrjJocWVePjwgxWkSmr4NjmXlUyYC01k4h8zq9p8
+	lfkyr/JAmeVuvtm/E3pdeATCTcqAND8CG4MRBN3J8SsNz5NtFEyrnC6ap0s+/bKPxYvRPY+MQbF
+	rGzGLBU+eiJVuivXaOPVpL95mIVkHOAoz193ivXMPhYFc69Z4E4MQqY5dmqTgJkSJg4TOkN7IV/
+	cOX24qajKwrJFwWZrP+BKDNmhcXfKG1mTxBw=
+X-Received: by 2002:a5d:64c9:0:b0:4a6:bc53:2478 with SMTP id ffacd0b85a97d-4abb0d5256fmr54313922f8f.13.1795872996813;
+        Sat, 28 Nov 2026 05:36:36 -0800 (PST)
 Received: from pc.tail250202.ts.net ([87.110.86.243])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb884865b1sm790112755e9.5.2026.11.28.05.32.24
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4ab6c61f558sm54895678f8f.58.2026.11.28.05.36.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 28 Nov 2026 05:32:26 -0800 (PST)
-Date: Sat, 28 Nov 2026 15:32:23 +0200
+        Sat, 28 Nov 2026 05:36:36 -0800 (PST)
+Date: Sat, 28 Nov 2026 15:36:33 +0200
 From: Janis Edvarts Lacis <janislacis06@gmail.com>
 To: Antonio Quartulli <antonio@mandelbit.com>
 Cc: intel-wired-lan@lists.osuosl.org, 
@@ -91,12 +91,13 @@ Cc: intel-wired-lan@lists.osuosl.org,
 	Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, 
 	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
 	Sriram Yagnaraman <sriram.yagnaraman@ericsson.com>, Kurt Kanzenbach <kurt@linutronix.de>, 
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Heiner Kallweit <hkallweit1@gmail.com>, Joe Damato <joe@dama.to>, 
-	Sven Auhagen <sven.auhagen@voleatech.de>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org
-Subject: Re: [PATCH net v5 0/6] igb: fix runtime PM resume issues
-Message-ID: <5k4igk5etdbmaweimm5ams44kwe3vzcqjmnck6a2w2iyhsfsvd@ianca2g23kva>
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH net v5 1/6] igb: don't touch rings that don't exist when
+ disabling an XSK pool
+Message-ID: <qyifvivvv45lstdhummsoji6jdlgxzkfcai5uet53w2spppj6g@amdcea4m54w5>
 References: <20261124235723.1135808-1-antonio@mandelbit.com>
+ <20261124235723.1135808-2-antonio@mandelbit.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -108,85 +109,123 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20261124235723.1135808-1-antonio@mandelbit.com>
+In-Reply-To: <20261124235723.1135808-2-antonio@mandelbit.com>
 
 On 25 Nov 00:57, Antonio Quartulli wrote:
->igb can be runtime suspended when the link goes down (with
->power/control set to auto). Resuming it calls functions that need RTNL
->without holding it (patches 2 and 4), XDP and XSK changes race with a
->resume (patch 5), and devices that can't signal a wake-up are suspended
->anyway, so their port stays down when the link comes back (patch 6).
+>xsk_get_pool_from_qid() checks the queue id against the stack's real
+>queue counts, which can be higher than the number of rings the device
+>has: on 82576, enabling VFs leaves a single Tx queue while keeping two
+>Rx queues, and igb can fall back from MSI-X to MSI with a single queue
+>on resume. Disabling the pool of such a queue, e.g. one bound to queue 1
+>before enabling VFs, then passes a NULL Tx ring to
+>igb_txrx_ring_disable().
 >
->Patch 1 fixes the XSK pool disable path when the device has fewer rings
->than the stack has queues: a NULL dereference with VFs (a single Tx
->queue on 82576), or after a fallback from MSI-X to MSI on resume. Patch
->3 keeps such queues while they still have an XSK pool, so that the pool
->can still be disabled.
+>Only disable and re-enable the rings the device has: skip the queue if
+>it has no Rx ring, and only the Tx part if it has no Tx ring, so that
+>an Rx ring using the pool still stops using it. This also stops a NULL
+>dereference when the socket is closed while the device is runtime
+>suspended, which frees its rings.
 >
->Tested with the 82576 emulated by QEMU, including, with test-only hooks,
->a runtime resume and a simulated system sleep (the suspend/resume
->callbacks called directly, as the test kernel has no CONFIG_SUSPEND)
->with the device forced to come back with MSI and a single queue.
->Patches 1 and 3 were tested with a zero-copy AF_XDP socket: closing it
->after enabling a VF oopses (queue 1, stock igb and v3) or warns and
->leaks (queue 2, v4), and warns after a resume forced to use MSI (v4);
->patch 5 by closing a socket and attaching an XDP program while runtime
->suspended. Not tested: real hardware and PME wake-up, a real system
->sleep, the MSI-X allocation failure itself, the window before the work
->item runs, SR-IOV with runtime PM, and a device that can wake up. Not
->run under KASAN.
+>Tested with the 82576 emulated by QEMU and a zero-copy AF_XDP socket on
+>queue 1: closing it after enabling a VF no longer oopses and the Rx ring
+>no longer references the pool afterwards (checked with a debug print, as
+>QEMU doesn't spread traffic over the PF queues with VFs), and without
+>VFs queue 1 keeps receiving after the close. Not run under KASAN.
 >
->Sashiko also found two pre-existing issues in the XSK queue disable/
->enable paths (the Tx NAPI isn't stopped when Rx and Tx don't share a
->vector; a failed buffer reallocation leaves the queue half torn down);
->they will be fixed separately.
+>Fixes: 80f6ccf9f116 ("igb: Introduce XSK data structures and helpers")
+>Cc: stable@vger.kernel.org # 6.14+
+>Link: https://lore.kernel.org/netdev/20261116153041.3002666-2-antonio@mandelbit.com/
+>Signed-off-by: Antonio Quartulli <antonio@mandelbit.com>
+>---
+>v5: the message also mentions the runtime suspended case (no code
+>changes)
+>v4: also handle queues with an Rx but no Tx ring, as with VFs (Sashiko):
+>tear down the Rx ring and skip only the Tx part; tested with a
+>zero-copy AF_XDP socket; subject was "don't disable rings that don't exist
+>..."
+>v3: new patch.
 >
->igc has the same issues (see the notes); Joe Damato offered to test on
->igc, so its fix will be sent separately.
+> drivers/net/ethernet/intel/igb/igb_xsk.c | 37 +++++++++++++++++-------
+> 1 file changed, 26 insertions(+), 11 deletions(-)
 >
->Changes in v5:
->- new patch 3: keep the stack's Rx queues that still have an XSK pool
->  (Janis)
->- patch 4: cancel the work item before a suspend (Sashiko)
->- new patch 5: resume the device before changing XDP or XSK settings
->  (Sashiko)
->- patch 6: check pci_dev_run_wake() when scheduling the suspend
->  (Sashiko)
+>diff --git a/drivers/net/ethernet/intel/igb/igb_xsk.c b/drivers/net/ethernet/intel/igb/igb_xsk.c
+>index ce4a7b5..3b4212a 100644
+>--- a/drivers/net/ethernet/intel/igb/igb_xsk.c
+>+++ b/drivers/net/ethernet/intel/igb/igb_xsk.c
+>@@ -31,15 +31,22 @@ static int igb_realloc_rx_buffer_info(struct igb_ring *ring, bool pool_present)
+> 	return 0;
+> }
 >
->Changes in v4:
->- patch 1: also handle queues with an Rx but no Tx ring, as with VFs:
->  tear down the Rx ring and skip only the Tx part (Sashiko); subject
->  changed from "don't disable rings ..." to "don't touch rings ..."
+>+/* With VFs, the device has a single Tx queue but can have more Rx queues */
+>+static struct igb_ring *igb_xsk_tx_ring(struct igb_adapter *adapter, u16 qid)
+>+{
+>+	return qid < adapter->num_tx_queues ? adapter->tx_ring[qid] : NULL;
+>+}
+>+
+> static void igb_txrx_ring_disable(struct igb_adapter *adapter, u16 qid)
+> {
+>-	struct igb_ring *tx_ring = adapter->tx_ring[qid];
+>+	struct igb_ring *tx_ring = igb_xsk_tx_ring(adapter, qid);
+> 	struct igb_ring *rx_ring = adapter->rx_ring[qid];
+> 	struct e1000_hw *hw = &adapter->hw;
 >
->Changes in v3:
->- new patch 1
->- patch 2: set the real queue counts on system sleep resume and from a
->  work item on runtime resume, and drop packets for queues the device
->  doesn't have until then (Janis, Sashiko)
->- patch 3 (now 4): link the NAPIs from the same work item
+>-	set_bit(IGB_RING_FLAG_TX_DISABLED, &tx_ring->flags);
+>-
+>-	wr32(E1000_TXDCTL(tx_ring->reg_idx), 0);
+>+	if (tx_ring) {
+>+		set_bit(IGB_RING_FLAG_TX_DISABLED, &tx_ring->flags);
+>+		wr32(E1000_TXDCTL(tx_ring->reg_idx), 0);
+>+	}
+> 	wr32(E1000_RXDCTL(rx_ring->reg_idx), 0);
 >
->Changes in v2:
->- patch 2 (v2 patch 1): keep setting the queue counts in __igb_open(),
->  only skipping them on resume (Sashiko)
->- mention the tested hardware in the commit messages
+> 	synchronize_net();
+>@@ -47,24 +54,27 @@ static void igb_txrx_ring_disable(struct igb_adapter *adapter, u16 qid)
+> 	/* Rx/Tx share the same napi context. */
+> 	napi_disable(&rx_ring->q_vector->napi);
 >
->v4: https://lore.kernel.org/netdev/20261120210134.133238-1-antonio@mandelbit.com/
->v3: https://lore.kernel.org/netdev/20261119140412.163202-1-antonio@mandelbit.com/
->v2: https://lore.kernel.org/netdev/20261116153041.3002666-1-antonio@mandelbit.com/
->v1: https://lore.kernel.org/netdev/20261113105835.3821433-1-antonio@mandelbit.com/
+>-	igb_clean_tx_ring(tx_ring);
+>+	if (tx_ring) {
+>+		igb_clean_tx_ring(tx_ring);
+>+		memset(&tx_ring->tx_stats, 0, sizeof(tx_ring->tx_stats));
+>+	}
+> 	igb_clean_rx_ring(rx_ring);
+>-
+> 	memset(&rx_ring->rx_stats, 0, sizeof(rx_ring->rx_stats));
+>-	memset(&tx_ring->tx_stats, 0, sizeof(tx_ring->tx_stats));
+> }
 >
->Antonio Quartulli (6):
->  igb: don't touch rings that don't exist when disabling an XSK pool
->  igb: fix RTNL assertion when resuming from runtime suspend
->  igb: keep the stack's Rx queues that still have an XSK pool
->  igb: link queues to NAPIs under RTNL after runtime resume
->  igb: resume the device before changing XDP or XSK settings
->  igb: only allow runtime PM if the device can wake up
+> static void igb_txrx_ring_enable(struct igb_adapter *adapter, u16 qid)
+> {
+>-	struct igb_ring *tx_ring = adapter->tx_ring[qid];
+>+	struct igb_ring *tx_ring = igb_xsk_tx_ring(adapter, qid);
+> 	struct igb_ring *rx_ring = adapter->rx_ring[qid];
 >
-> drivers/net/ethernet/intel/igb/igb.h      |   1 +
-> drivers/net/ethernet/intel/igb/igb_main.c | 144 +++++++++++++++++-----
-> drivers/net/ethernet/intel/igb/igb_xsk.c  |  37 ++++--
-> 3 files changed, 143 insertions(+), 39 deletions(-)
+>-	igb_configure_tx_ring(adapter, tx_ring);
+>+	if (tx_ring)
+>+		igb_configure_tx_ring(adapter, tx_ring);
+> 	igb_configure_rx_ring(adapter, rx_ring);
+>
+> 	synchronize_net();
+>
+>-	clear_bit(IGB_RING_FLAG_TX_DISABLED, &tx_ring->flags);
+>+	if (tx_ring)
+>+		clear_bit(IGB_RING_FLAG_TX_DISABLED, &tx_ring->flags);
+>
+> 	/* call igb_desc_unused which always leaves
+> 	 * at least 1 descriptor unused to make sure
+>@@ -148,7 +158,12 @@ static int igb_xsk_pool_disable(struct igb_adapter *adapter, u16 qid)
+> 		return -EINVAL;
+>
+> 	rx_ring = adapter->rx_ring[qid];
+>-	if_running = netif_running(adapter->netdev) && igb_xdp_is_enabled(adapter);
+>+	/* The stack can know more queues than the device has, e.g. after a
+>+	 * fallback to fewer queues on resume: skip the rings it doesn't have.
+>+	 */
+>+	if_running = netif_running(adapter->netdev) &&
+>+		     igb_xdp_is_enabled(adapter) &&
+>+		     qid < adapter->num_rx_queues;
+> 	if (if_running)
+> 		igb_txrx_ring_disable(adapter, qid);
 >
 >-- 
 >2.56.1
