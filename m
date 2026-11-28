@@ -1,61 +1,58 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.171.202.116
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795866447;
-	b=b4d6tDscoEIXEl7TYS0fUoNsk3nQ/GZ1ge/4lk69LaxEfhR7njOFYBtS61rdMhRHIJLM
-	 ocxVD5RBDK7ZDV3IBRBCWTT7j1wnXiccEI0lZdwaoJAJWWwpziGifzJSfqcdUc5wwhQxO
-	 E+9L6lVcU7sLr2h0nXU0heF1S15P6qPV5vHfwiLOoWUj378QYFWrCIpt9lG7f2xCWuw63
-	 p2St9I3IKWRmbLjGBmPvY+wl2tDdlU0T5ZFQyKl4Gry2WBgndKoY+x2G+W2xc2KNNPE79
-	 bNKdPUT/moxGHw6zYAyuzRim7J+L88dztofDsk9X40ToEnoPKhCRNa3FVbRXJT2pHYQ==
+	t=1795867723;
+	b=TxP3Yj0Fg2MYMoqPw9TddPlVS1vqm7zQraDTH/GDZ8DPUhWE3xWgUhtUwLPcnq42EhPG
+	 5QLO9mP9UFr2T5eqOAbg6Rf6MdCy0614EvX8wYr/c8oHJGhazsi6Kg6ziRH345A6SUs4v
+	 yFVOgxyvySSbmAA8RD0UE3jy/gFRaW4ofVqOq94+weNJwyh23Dj3p2O9JHwZulLnjOMUz
+	 Ab1ZYOmQDDfG7APGpRqxrX6tlIkRqNmsvnW8c9sYTZU8p7F37jfo/WbLA5Da0tMNTOtW+
+	 IWbsITaI/GaxqSLLSIVeceGW+hRYiO1bl8E9JXFTsnirPilJrpb/2jW3V6YzoWKJqJQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795866447;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=6JF9EI2l94MzBVRIwSaYP0GqXCFWuq3VNcdzQFYVjwk=;
-	b=RyFeh0nIyKNipPIKU/2wa52QoHd9UGieQ2LoEyUTxIbZ5EsKOIXRYAMsMtWgciQ11QxW
-	 aCOYaJU8QKzw7uPsgNwEBoOCPZhaCaATWMiSd/GjS5hGxbLnToz8Kj8e7fzlTgVUCPEKK
-	 Zg54sTQK9rW1czBPyzaSMAfiT6/a8HDg8v3Nx9+PQqsE4Iuqfn7BG4R7HFIs7923HMeGg
-	 rw5grwt+62vvt9IKUw6DXUkZ26hYBuAw3dnvbQMSJJaBtTn3R3lRH3tGRtWgVy2VLEKpe
-	 HrEG3Ph93fqMdXqffP0sozk6lo17qG/uGJltXesG6cwGT5TcMZThueAiQmIgu4LfteA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795867723;
+	h=DMARC-Filter:Received:Received:Received:DKIM-Signature:Message-ID:
+	 Date:MIME-Version:User-Agent:Subject:To:Cc:References:From:
+	 Content-Language:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+	 X-Last-TLS-Session-Version;
+	bh=HWejl6zJpWtGF041tCBPfR2Vw3JgFlWVRWMLwc48CVs=;
+	b=qVR1hhNqqXH+dN8KMF1qIuV8BcLnHBYvb7dAAyluCQtG7aa/hBClzf3YFxuv+OjInG7y
+	 /xKZks6KB+tNFb17o6PQvWI7+/YLWHEa+uR8Ru/6/koSP5g/WgwbcpiQ1SIfSEHlYZjv1
+	 C0F/1hcIZJp3OoZQjx6HYkmX3eqUiUE4GAmx8OIor/bGwbjVEJuHehK8CdTL9o/I29i9v
+	 IlR4ceScxiK2diWxychePlXdkkGcU4V4ceKRPilucsRwZXQ408yH1GnOa7nFel56gZPfy
+	 F2lUj2c5hclqIWq4D1l0ZFMhMCCdq+sgjW2sGKsHFk/TidQVAQHE+MsO+II63OAcgMg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=gyLG54eB;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=bootlin.com;
+	spf=pass smtp.mailfrom=bootlin.com;
+	dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=DixK9Tgb;
+	arc=none smtp.remote-ip=185.171.202.116
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66E20606A31C;
-	Sat, 28 Nov 2026 11:47:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 916C4606A321
+	for <bpf@vger.kernel.org>; Sat, 28 Nov 2026 12:08:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 916C4606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=gyLG54eB
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC2911F00898;
-	Sat, 28 Nov 2026 11:47:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795866446;
-	bh=6JF9EI2l94MzBVRIwSaYP0GqXCFWuq3VNcdzQFYVjwk=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=gyLG54eBFFztDDBy7wmc8dT0ca5//QrPTMqntJ/FMo/M8LrR5/QQtIsbDZohHqshH
-	 /z4tjAq/dczbKRv65oGb8EY7mTmU8VGNicvaIW9Tn9unpUSyxC9mBKLc+7WRtaLXbN
-	 10RiuADeszXmqnBH9CCNh6Lm02raG763QqiWMRpPAUTMYPPdTsR5wbVMtXe3bjn5FN
-	 qcPC1+odjl3uiJLkmvCki+AeNqmqsqGt2TQK8UnnQ3J29FMfGPw3Cd2hgxx44plabG
-	 4XryQg6+owup3mP2r96G+bRUrZMTO4TnbaPAy7psFfyVrvsC78TN9J0G0vpQan3fOI
-	 7ipjYN19X1t9A==
-Subject:
- Re: [PATCH net v2 2/2] xsk: fill in header offsets for TX checksum offload
-From: netdev-bot+sashiko@kernel.org
-To: kerneljasonxing@gmail.com
-Cc: willemb@google.com, magnus.karlsson@intel.com,
- maciej.fijalkowski@intel.com, sdf@fomichev.me, bjorn@kernel.org,
- davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
- horms@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
- stable@vger.kernel.org
-Date: Sat, 28 Nov 2026 11:47:25 +0000
-Message-ID: <179586644541.3135.15029891543705593854@kernel.org>
-In-Reply-To: <20261127105347.72997-3-kerneljasonxing@gmail.com>
-References: <20261127105347.72997-3-kerneljasonxing@gmail.com>
-X-sashiko-severity: High
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256 header.s=dkim header.b=DixK9Tgb
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-04.galae.net (Postfix) with ESMTPS id 7D706C2AC54;
+	Sat, 28 Nov 2026 12:08:42 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 3EF7C604C0;
+	Sat, 28 Nov 2026 12:08:33 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 0943811E9010B;
+	Sat, 28 Nov 2026 13:08:14 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1795867711; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:content-language:in-reply-to:references;
+	bh=HWejl6zJpWtGF041tCBPfR2Vw3JgFlWVRWMLwc48CVs=;
+	b=DixK9TgbU8go4vs4W5Pd3SFRUWNhXb74ginYNAi4hau0r97KDK7wpXLVLGfP8WYpuSkgeU
+	0sTX95JC+tzXTPY8JHteP121zFH4qu8XhHrWJyrGU9otcvGZhK7VFbAuXLnwgJowQyAdq0
+	YY4xQ65HkNP0pxPmLD6Ya0Opn7nY/VO1u+3Qkm3Jn33VW7OU5VfBQZ7kPBN6RIhm6xh0TK
+	XF4VwafG6/u0ajbd1kbMMUlB3TP93lnS5Fz5X/XFqxAo8dGq4D6/wk7vkY9ox606CEjkz6
+	Gg5qc+XJc+MTxNLkXzPBTfVdOqg+sAIiphXY/f0HHMTgy476ZGh5ahI0t8Zqcg==
+Message-ID: <464270f3-6054-4de7-ac77-97a07f6a52d0@bootlin.com>
+Date: Sat, 28 Nov 2026 13:08:13 +0100
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -65,296 +62,301 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v13 2/5] net: stmmac: remove software VLAN tag
+ stripping
+To: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>,
+ Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+ Alexandre Torgue <alexandre.torgue@foss.st.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, Jose Abreu <Jose.Abreu@synopsys.com>,
+ Ong Boon Leong <boon.leong.ong@intel.com>, Simon Horman <horms@kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>,
+ Matthew Gerlach <matthew.gerlach@altera.com>,
+ Boon Khai Ng <boon.khai.ng@altera.com>
+Cc: netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ bpf@vger.kernel.org, Peilin He <he.peilin@zte.com.cn>
+References: <20261125-stmmac-rx-mb-v13-0-0f6bac53e8d5@oss.qualcomm.com>
+ <20261125-stmmac-rx-mb-v13-2-0f6bac53e8d5@oss.qualcomm.com>
+From: Maxime Chevallier <maxime.chevallier@bootlin.com>
+Content-Language: en-US
+In-Reply-To: <20261125-stmmac-rx-mb-v13-2-0f6bac53e8d5@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Last-TLS-Session-Version: TLSv1.3
 
-Thank you for your contribution! Sashiko AI review found 4 potential
-issue(s) to consider.
 
-Critical: 0 · High: 1 · Medium: 3 · Low: 0
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+On 11/25/26 15:48, Lorenzo Bianconi wrote:
+> The software VLAN stripping logic in stmmac_rx_vlan() was originally
+> introduced in 2014 by commit b93819854d6e ("stmmac: Add vlan rx for
+> better GRO performance.") as a workaround to improve GRO performance,
+> since at that time GRO could not handle frames with VLAN tags. However,
+> this limitation was resolved in 2015 by commit 66e5133f19e9 ("vlan: Add
+> GRO support for non hardware accelerated vlan"), which added GRO support
+> for non-hardware-accelerated VLAN frames. Keeping a software fallback
+> path for VLAN stripping is no longer necessary and only adds complexity.
+> 
+> After removing it, VLAN tags remain in the packet, so
+> stmmac_has_ip_ethertype() has to keep recognising IPv4/IPv6 behind a
+> single in-payload VLAN tag. On RX the helper runs after eth_type_trans(),
+> which has already pulled the Ethernet header, so walk the tag chain with
+> skb_mac_offset() instead of __vlan_get_protocol(), which assumes the MAC
+> header still sits at skb->data. On TX the helper still runs before the
+> header is pulled.
+> 
+> Make the tolerated L2 depth explicit:
+> - on RX allow a single in-payload C-tag while the MAC is not stripping
+>   tags (VLAN_ETH_HLEN); when HW stripping is active the payload must be
+>   tag-free, so keep the ETH_HLEN limit and reject any tag that is still
+>   there;
+> - in-payload S-tags are always rejected, as only an S-tag that the
+>   hardware stripped (and whose type is reported through
+>   get_rx_vlan_proto) is known to have been parsed by the checksum engine;
+> - on TX keep the old ETH_HLEN limit, so DSA-tagged frames that the
+>   checksum engine ignores (see commit c2945c435c99 ("net: stmmac:
+>   Prevent DSA tags from breaking COE")) remain excluded from hardware
+>   checksum and TSO.
+> 
+> This intentionally changes the advertised features:
+> - dwmac100/dwmac1000 no longer advertise NETIF_F_HW_VLAN_CTAG_RX;
+>   they have no hardware VLAN stripping.
+> - On xmac cores NETIF_F_HW_VLAN_CTAG_RX is advertised only when the
+>   VLAN ops provide .set_hw_vlan_mode and .rx_hw_vlan, so DWXLGMAC no
+>   longer falsely advertises RX VLAN offload.
+> - NETIF_F_HW_VLAN_STAG_RX is advertised only on cores that provide
+>   hardware RX VLAN offload and whose descriptor ops report the stripped
+>   tag protocol (get_rx_vlan_proto), i.e. DWXGMAC. DWXLGMAC loses it
+>   because it has no RX VLAN offload, while cores without
+>   get_rx_vlan_proto report stripped S-tags as C-tags.
+> 
+> The DWXLGMAC mis-advertisement was introduced when the RX VLAN offload
+> gate was widened to all xmac cores, so tag the fix accordingly.
+> 
+> With NETIF_F_VLAN_FEATURES possibly empty, EEE RX clock stop may be
+> enabled on some platforms; the preceding selftests patch blocks RX
+> clock stop while the ethtool selftests run.
+> 
+> This depends on the preceding selftests fix.
+> 
+> Fixes: 534df0c1724b ("net: stmmac: dwxgmac2: Add support for HW-accelerated VLAN stripping")
+> Suggested-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
+> Co-developed-by: Peilin He <he.peilin@zte.com.cn>
+> Signed-off-by: Peilin He <he.peilin@zte.com.cn>
+> Signed-off-by: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
 
-- [High] This patch adds `skb_checksum_help()` calls in
-  `xsk_skb_sw_csum()` (net/xdp/xsk.c) that run even when…
-- [Medium] When `pool->tx_sw_csum` is false, `xsk_skb_sw_csum()` now
-  checksums on the CPU every Ethernet CHECKSUM_PARTIAL frame it cannot…
-- [Medium] `xsk_skb_sw_csum()` now sets skb->protocol, network_header and
-  transport_header from a frame fully controlled by user space.
-- [Medium] `xsk_skb_sw_csum()` now passes AF_XDP copy-mode
-  CHECKSUM_PARTIAL frames to protocol-aware or unit-constrained hardware…
+Thanks for taking care of that,
 
---
+Reviewed-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
 
-xsk: fill in header offsets for TX checksum offload
+Maxime
 
-This patch makes xsk_skb_sw_csum() parse the Ethernet and VLAN headers of
-CHECKSUM_PARTIAL AF_XDP copy-mode frames. It then sets skb->protocol and
-the network and transport headers so the checksum request can be offloaded
-to hardware. Frames whose L2 header can't be parsed, that aren't IPv4/IPv6,
-or whose csum_start leaves no room for an L3 header fall back to
-skb_checksum_help().
-
-> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-> index 18cbd50047d80..3827d8e4b642a 100644
-> --- a/net/xdp/xsk.c
-> +++ b/net/xdp/xsk.c
-
-[ ... ]
-
-> @@ -1028,9 +1032,48 @@ static int xsk_skb_metadata(struct sk_buff *skb, void *buffer,
+> ---
+>  drivers/net/ethernet/stmicro/stmmac/stmmac.h      | 12 +++
+>  drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 89 ++++++++---------------
+>  2 files changed, 44 insertions(+), 57 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac.h b/drivers/net/ethernet/stmicro/stmmac/stmmac.h
+> index fcc395321816..fa9ef4212982 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac.h
+> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac.h
+> @@ -478,4 +478,16 @@ static inline int stmmac_selftest_get_count(struct stmmac_priv *priv)
+>  }
+>  #endif /* CONFIG_STMMAC_SELFTESTS */
 >  
->  static int xsk_skb_sw_csum(struct sk_buff *skb, struct xsk_buff_pool *pool)
+> +static inline bool stmmac_rx_8021q_offload(struct stmmac_priv *priv)
+> +{
+> +	return priv->hw->vlan && priv->hw->vlan->set_hw_vlan_mode &&
+> +	       priv->hw->vlan->rx_hw_vlan;
+> +}
+> +
+> +static inline bool stmmac_rx_8021ad_offload(struct stmmac_priv *priv)
+> +{
+> +	return stmmac_rx_8021q_offload(priv) &&
+> +	       priv->hw->desc->get_rx_vlan_proto;
+> +}
+> +
+>  #endif /* __STMMAC_H__ */
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> index ca4c7fb11b73..7896364c43e9 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> @@ -4879,7 +4879,9 @@ static netdev_tx_t stmmac_tso_xmit(struct sk_buff *skb, struct net_device *dev)
+>  
+>  /**
+>   * stmmac_has_ip_ethertype() - Check if packet has IP ethertype
+> + * @priv: driver private structure
+>   * @skb: socket buffer to check
+> + * @xmit: transmit path
+>   *
+>   * Check if a packet has an ethertype that will trigger the IP header checks
+>   * and IP/TCP checksum engine of the stmmac core.
+> @@ -4887,16 +4889,25 @@ static netdev_tx_t stmmac_tso_xmit(struct sk_buff *skb, struct net_device *dev)
+>   * Return: true if the ethertype can trigger the checksum engine, false
+>   * otherwise
+>   */
+> -static bool stmmac_has_ip_ethertype(struct sk_buff *skb)
+> +static bool stmmac_has_ip_ethertype(struct stmmac_priv *priv,
+> +				    struct sk_buff *skb, bool xmit)
 >  {
-> -	if (unlikely(pool->tx_sw_csum &&
-> -		     skb->ip_summed == CHECKSUM_PARTIAL))
-> +	struct ethhdr eth_buf, *eth;
-> +	int nhoff = ETH_HLEN;
-> +	unsigned int l3_min;
-> +	__be16 proto;
+> -	int depth = 0;
+> -	__be16 proto;
+> +	__be16 proto, h_proto = eth_header_parse_protocol(skb);
+> +	int max_l2_hlen, depth = 0;
 > +
-> +	if (unlikely(skb->ip_summed != CHECKSUM_PARTIAL))
-> +		return 0;
+> +	/* An S-tag still in the payload may not have been parsed by the
+> +	 * checksum engine; only trust it when the hardware stripped it, in
+> +	 * which case h_proto is no longer ETH_P_8021AD.
+> +	 */
+> +	if (h_proto == htons(ETH_P_8021AD))
+> +		return false;
+>  
+> -	proto = __vlan_get_protocol(skb, eth_header_parse_protocol(skb),
+> -				    &depth);
+> +	proto = vlan_get_protocol_offset_inline(skb, h_proto,
+> +						skb_mac_offset(skb), &depth);
+>  
+> -	return (depth <= ETH_HLEN) &&
+> -		(proto == htons(ETH_P_IP) || proto == htons(ETH_P_IPV6));
+> +	max_l2_hlen = xmit || priv->hw->hw_vlan_en ? ETH_HLEN : VLAN_ETH_HLEN;
+> +	return depth <= max_l2_hlen &&
+> +	       (proto == htons(ETH_P_IP) || proto == htons(ETH_P_IPV6));
+>  }
+>  
+>  /**
+> @@ -5153,7 +5164,7 @@ static netdev_features_t stmmac_features_check(struct sk_buff *skb,
+>  	 * harmonize_features() in net/core/dev.c
+>  	 */
+>  	if (priv->plat->tx_queues_cfg[queue].coe_unsupported ||
+> -	    !stmmac_has_ip_ethertype(skb))
+> +	    !stmmac_has_ip_ethertype(priv, skb, true))
+>  		features &= ~(NETIF_F_IP_CSUM | NETIF_F_IPV6_CSUM);
+>  
+>  	if (skb_is_gso(skb)) {
+> @@ -5175,37 +5186,6 @@ static netdev_features_t stmmac_features_check(struct sk_buff *skb,
+>  	return vlan_features_check(skb, features);
+>  }
+>  
+> -static int stmmac_rx_vlan(struct net_device *dev, struct sk_buff *skb)
+> -{
+> -	struct vlan_ethhdr *veth;
+> -
+> -	if (!pskb_may_pull(skb, ETH_HLEN))
+> -		return -EINVAL;
+> -
+> -	veth = skb_vlan_eth_hdr(skb);
+> -	if ((veth->h_vlan_proto == htons(ETH_P_8021Q) &&
+> -	     dev->features & NETIF_F_HW_VLAN_CTAG_RX) ||
+> -	    (veth->h_vlan_proto == htons(ETH_P_8021AD) &&
+> -	     dev->features & NETIF_F_HW_VLAN_STAG_RX)) {
+> -		__be16 vlan_proto = veth->h_vlan_proto;
+> -		u8 meta_len = skb_metadata_len(skb);
+> -		u16 vlanid;
+> -
+> -		/* pop the vlan tag */
+> -		if (!pskb_may_pull(skb, VLAN_ETH_HLEN))
+> -			return -EINVAL;
+> -
+> -		veth = skb_vlan_eth_hdr(skb);
+> -		vlanid = ntohs(veth->h_vlan_TCI);
+> -		memmove(skb->data - meta_len + VLAN_HLEN,
+> -			skb->data - meta_len, meta_len + ETH_ALEN * 2);
+> -		skb_pull(skb, VLAN_HLEN);
+> -		__vlan_hwaccel_put_tag(skb, vlan_proto, vlanid);
+> -	}
+> -
+> -	return 0;
+> -}
+> -
+>  static bool stmmac_rx_need_ic(struct stmmac_priv *priv,
+>  			      struct stmmac_rx_queue *rx_q, u32 queue)
+>  {
+> @@ -5626,15 +5606,11 @@ static void stmmac_dispatch_skb_zc(struct stmmac_priv *priv, u32 queue,
+>  	if (priv->hw->hw_vlan_en) {
+>  		/* MAC level stripping. */
+>  		stmmac_rx_hw_vlan(priv, priv->hw, p, skb);
+> -	} else if (stmmac_rx_vlan(priv->dev, skb)) {
+> -		dev_kfree_skb_any(skb);
+> -		priv->xstats.rx_dropped++;
+> -		return;
+>  	}
+>  
+>  	skb->protocol = eth_type_trans(skb, priv->dev);
+>  
+> -	if (unlikely(!coe) || !stmmac_has_ip_ethertype(skb) ||
+> +	if (unlikely(!coe) || !stmmac_has_ip_ethertype(priv, skb, false) ||
+>  	    (status & csum_none))
+>  		skb_checksum_none_assert(skb);
+>  	else
+> @@ -6142,15 +6118,12 @@ static int stmmac_rx(struct stmmac_priv *priv, int limit, u32 queue)
+>  		if (priv->hw->hw_vlan_en) {
+>  			/* MAC level stripping. */
+>  			stmmac_rx_hw_vlan(priv, priv->hw, p, skb);
+> -		} else if (stmmac_rx_vlan(priv->dev, skb)) {
+> -			dev_kfree_skb_any(skb);
+> -			rx_dropped++;
+> -			goto next;
+>  		}
+>  
+>  		skb->protocol = eth_type_trans(skb, priv->dev);
+>  
+> -		if (unlikely(!coe) || !stmmac_has_ip_ethertype(skb) ||
+> +		if (unlikely(!coe) ||
+> +		    !stmmac_has_ip_ethertype(priv, skb, false) ||
+>  		    (status & csum_none))
+>  			skb_checksum_none_assert(skb);
+>  		else
+> @@ -6429,7 +6402,7 @@ static netdev_features_t stmmac_fix_features(struct net_device *dev,
+>  	if (priv->plat->bugged_jumbo && (dev->mtu > ETH_DATA_LEN))
+>  		features &= ~NETIF_F_CSUM_MASK;
+>  
+> -	if (priv->plat->core_type == DWMAC_CORE_XGMAC) {
+> +	if (stmmac_rx_8021ad_offload(priv)) {
+>  		if (features & NETIF_F_HW_VLAN_CTAG_RX)
+>  			features |= NETIF_F_HW_VLAN_STAG_RX;
+>  		else
+> @@ -6462,7 +6435,7 @@ static int stmmac_set_features(struct net_device *netdev,
+>  			stmmac_enable_sph(priv, priv->ioaddr, sph_en, chan);
+>  	}
+>  
+> -	if (features & NETIF_F_HW_VLAN_CTAG_RX)
+> +	if (features & (NETIF_F_HW_VLAN_CTAG_RX | NETIF_F_HW_VLAN_STAG_RX))
+>  		priv->hw->hw_vlan_en = true;
+>  	else
+>  		priv->hw->hw_vlan_en = false;
+> @@ -8275,15 +8248,17 @@ static int __stmmac_dvr_probe(struct device *device,
+>  	ndev->features |= ndev->hw_features | NETIF_F_HIGHDMA;
+>  	ndev->watchdog_timeo = msecs_to_jiffies(watchdog);
+>  #ifdef STMMAC_VLAN_TAG_USED
+> -	/* Both mac100 and gmac support receive VLAN tag detection */
+> -	ndev->features |= NETIF_F_HW_VLAN_CTAG_RX;
+> -	if (priv->plat->core_type == DWMAC_CORE_XGMAC)
+> -		ndev->features |= NETIF_F_HW_VLAN_STAG_RX;
+> -
+> -	if (dwmac_is_xmac(priv->plat->core_type)) {
+> +	if (stmmac_rx_8021q_offload(priv)) {
+> +		ndev->features |= NETIF_F_HW_VLAN_CTAG_RX;
+>  		ndev->hw_features |= NETIF_F_HW_VLAN_CTAG_RX;
+>  		priv->hw->hw_vlan_en = true;
+>  	}
 > +
-> +	if (unlikely(pool->tx_sw_csum))
-> +		return skb_checksum_help(skb);
-> +
-> +	if (unlikely(skb->dev->type != ARPHRD_ETHER))
-> +		return 0;
-> +
-> +	eth = skb_header_pointer(skb, 0, sizeof(*eth), &eth_buf);
-> +	if (unlikely(!eth))
-> +		return skb_checksum_help(skb);
-
-[Severity: High]
-Can this fallback, and the other new skb_checksum_help() fallbacks below,
-break copy-mode transmit on IFF_TX_SKB_NO_LINEAR devices such as
-virtio_net?
-
-On those devices xsk_build_skb() goes through xsk_build_skb_zerocopy(),
-which only reserves headroom in the linear area:
-
-net/xdp/xsk.c:xsk_build_skb_zerocopy() {
-    ...
-		skb = sock_alloc_send_skb(&xs->sk, hr, 1, &err);
-		...
-		skb_reserve(skb, hr);
-    ...
-}
-
-That leaves skb_headlen() at 0. All of the payload sits in page frags
-attached with skb_fill_page_desc(), which doesn't set SKBFL_SHARED_FRAG.
-So skb_checksum_help() doesn't linearize, and it hits this check:
-
-net/core/dev.c:skb_checksum_help() {
-    ...
-	if (unlikely(offset >= skb_headlen(skb))) {
-		DO_ONCE_LITE(skb_dump, KERN_ERR, skb, false);
-		WARN_ONCE(true, "offset (%d) >= skb_headlen() (%u)\n",
-    ...
-}
-
-It then returns -EINVAL, so __xsk_generic_xmit() drops the frame and
-sendmsg() fails:
-
-		err = xsk_skb_sw_csum(skb, xs->pool);
-		if (unlikely(err)) {
-			xsk_drop_skb(skb);
-			goto out;
-		}
-
-User space can reach every one of these fallbacks, because
-xsk_skb_metadata() only checks csum_start + csum_offset + 2 <= desc->len.
-Any of these frames will do:
-
-- a frame shorter than ETH_HLEN
-- an unparsable VLAN stack
-- a non-IPv4/IPv6 ethertype
-- a csum_start below nhoff + 20 (IPv4) or nhoff + 40 (IPv6)
-
-Before this patch, these frames returned 0 here when tx_sw_csum was off.
-xp_assign_dev() also refuses tx_sw_csum on these devices, precisely so
-that skb_checksum_help() is never reached for them:
-
-	if (pool->tx_sw_csum && (netdev->priv_flags & IFF_TX_SKB_NO_LINEAR))
-		return -EOPNOTSUPP;
-
-virtio_net advertises NETIF_F_HW_CSUM, so the device computed the
-checksum. With this patch the frame is dropped instead, and the user can
-trigger a WARN_ONCE plus skb_dump. On panic_on_warn systems that is a
-panic.
-
-The commit message says these frames "keep being checksummed in software
-exactly as before". Would returning 0 in the fallback cases work better?
-That would leave the decision to validate_xmit_skb() as it was before.
-
-> +
-> +	proto = eth->h_proto;
-> +	if (eth_type_vlan(proto)) {
-> +		proto = __vlan_get_protocol(skb, proto, &nhoff);
-> +		if (unlikely(!proto))
-> +			return skb_checksum_help(skb);
+> +	if (stmmac_rx_8021ad_offload(priv)) {
+> +		ndev->features |= NETIF_F_HW_VLAN_STAG_RX;
+> +		ndev->hw_features |= NETIF_F_HW_VLAN_STAG_RX;
 > +	}
 > +
-> +	switch (proto) {
-> +	case htons(ETH_P_IP):
-> +		l3_min = sizeof(struct iphdr);
-> +		break;
-> +	case htons(ETH_P_IPV6):
-> +		l3_min = sizeof(struct ipv6hdr);
-> +		break;
-> +	default:
->  		return skb_checksum_help(skb);
+>  	if (priv->dma_cap.vlhash) {
+>  		ndev->features |= NETIF_F_HW_VLAN_CTAG_FILTER;
+>  		if (priv->plat->core_type == DWMAC_CORE_XGMAC)
+> 
 
-[Severity: Medium]
-Leaving the non-linear case aside, does this take checksum offload away
-from frames that were offloaded before this patch?
-
-Even with skb->protocol == 0, a NETIF_F_HW_CSUM device still offloaded
-the frame:
-
-include/linux/netdevice.h:can_checksum_protocol() {
-    ...
-	if (features & NETIF_F_HW_CSUM) {
-		/* Can checksum everything */
-		return true;
-	}
-    ...
-}
-
-skb_csum_hwoffload_help() also returns 0 for NETIF_F_HW_CSUM. On
-virtio_net, veth and other HW_CSUM devices, non-IP or unparsable frames
-are now checksummed on the CPU instead.
-
-The policy also looks inconsistent. Non-ARPHRD_ETHER devices return 0
-and keep offload, but Ethernet devices with an unknown L3 type are forced
-into software.
-
-Documentation/networking/xsk-tx-metadata.rst says XDP_TXMD_FLAGS_CHECKSUM
-asks the device to compute the checksum. It describes CPU checksumming as
-the XDP_UMEM_TX_SW_CSUM option.
-
-For HW_CSUM devices the commit message doesn't match this behaviour
-either:
-
-  However skb->protocol stays 0, the offload never actually reaches
-  the hardware and checksum ends up being computed in software every time
-
-and:
-
-  ... cannot be described to the hardware, so it keeps being checksummed
-  in software exactly as before.
-
-Since this is tagged for stable, could the commit message describe the
-behaviour change accurately? Alternatively, could these fallbacks return
-0 so the core path keeps making the decision?
-
-> +	}
-> +
-> +	if (unlikely(skb_checksum_start_offset(skb) < nhoff + l3_min))
-> +		return skb_checksum_help(skb);
-
-[Severity: Medium]
-Is checking only the minimal L3 header size enough before handing the
-frame to protocol-aware driver checksum paths?
-
-xsk_skb_metadata() only guarantees csum_start + csum_offset + 2 <=
-desc->len. Nothing guarantees that a full L4 header exists at
-csum_start.
-
-Before this patch, harmonize_features() or ice_features_check() kept
-these frames away from the driver offload path. Now take ice E810, which
-has IP_CSUM|IPV6_CSUM but no HW_CSUM. ice_tx_csum() takes the L4 protocol
-from the user-controlled ip.v4->protocol, and for TCP it reads:
-
-drivers/net/ethernet/intel/ice/ice_txrx.c:ice_tx_csum() {
-    ...
-	case IPPROTO_TCP:
-		/* enable checksum offloads */
-		cmd |= ICE_TX_DESC_CMD_L4T_EOFT_TCP;
-		l4_len = l4.tcp->doff;
-    ...
-}
-
-For example, take eth(14) + IPv4 with protocol=TCP, csum_start=34,
-csum_offset=6 and desc->len=42:
-
-- skb_csum_hwoffload_help() accepts it, since csum_offset 6 equals
-  offsetof(struct udphdr, check)
-- ice_features_check() accepts MACLEN 14 and IPLEN 20
-
-doff is then read at transport_header + 12, up to 5 bytes past
-skb->tail. The read stays inside the skb head allocation, but that memory
-is uninitialized and KMSAN would flag it.
-
-The value read is programmed into the descriptor's L4LEN field. Whether
-a bogus L4LEN can trigger NIC malicious driver detection or TX hangs
-hasn't been verified.
-
-AF_PACKET with vnet_hdr has a similar weakness, but this patch newly
-exposes the AF_XDP path to it.
-
-Should this require a full TCP/UDP header past csum_start, consistent
-with csum_offset, before setting the transport header and skipping the
-software checksum?
-
-> +
-> +	skb->protocol = eth->h_proto;
-> +	skb_set_network_header(skb, nhoff);
-> +	skb_set_transport_header(skb, skb_checksum_start_offset(skb));
-
-[Severity: Medium]
-Can the hardware end up writing the checksum somewhere other than the
-requested csum_start/csum_offset?
-
-Only the ethertype and csum_start >= nhoff + l3_min are checked here.
-Drivers, though, program these offsets in coarser units or take the L4
-type from the packet itself. Three cases on ice show this.
-
-First, the legacy path (E810) programs IPLEN in dwords:
-
-	l3_len = l4.hdr - ip.hdr;
-	offset |= (l3_len / 4) << ICE_TX_DESC_LEN_IPLEN_S;
-
-ice_features_check() only rejects odd or oversized lengths:
-
-	len = skb_network_header_len(skb);
-	if (len > ICE_TXD_IPLEN_MAX || len & 0x1)
-		goto out_rm_features;
-
-An L3 length of 22 therefore becomes 5 dwords, and the L4 checksum starts
-2 bytes before csum_start.
-
-Second, the L4 type comes from ip.v4->protocol or the IPv6 nexthdr, not
-from csum_offset. skb_csum_hwoffload_help() only requires csum_offset to
-be 16 or 6.
-
-With protocol=TCP and csum_offset=6, the device writes the TCP checksum
-at L4+16 rather than L4+6. With protocol=SCTP (csum_not_inet is 0), it
-writes a CRC32c at L4+8 rather than a 16-bit Internet checksum.
-
-Third, the GCS path (E830, HW_CSUM) uses:
-
-		u16 csum_offset = skb->csum_offset / 2;
-
-That rounds an odd csum_offset down, so the result lands one byte early.
-
-Before this patch, skb_checksum_help() computed all of these at exactly
-csum_start/csum_offset. With this patch, other bytes of the transmitted
-frame get overwritten. So the commit message's "exactly as before" claim
-doesn't hold for these frames either.
-
-Would it make sense to add these checks, or else leave the decision to
-the core path?
-
-- IPv4 ihl * 4 (or the IPv6 header plus extension headers) equals
-  csum_start - nhoff
-- the L4 protocol is TCP or UDP with a matching csum_offset (16 or 6)
-- the offsets are even
-
-[ ... ]
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261127105347.72997-1-kerneljasonxing%40gmail.com
