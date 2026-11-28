@@ -1,53 +1,71 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795857021;
-	b=zdiMlF3FSgA/IWHgU6irVurwmt+tb451JJBVylYwv6bXAqgAlmaYVVSaY3qv83Kt6vuZ
-	 XMAEtk/VS5jeU3NveuFaASEzlc57dJR6rbGFD8ph19OKVYC2szR1263kp0LdbMHPEqNZC
-	 TKgxR+kl6KJGgCsHgPTwhPGsTm9MDe5Pz1cdHWKiA8mC0NIsxhtOPeJ60PLHevXUwSvci
-	 dfxYDom3Ix4SZhZm235wHrpXc+FkzBGjecy9bwHPqDty4oABZghG0XhZvwJVIf8eQ7pVG
-	 SQH47wGjaiPyXT3jtAxnBVmcKw26+nqCMCAS/0ljnMgw0wIeO8kq1dtH3EdPRQ1vNIA==
+	t=1795859587;
+	b=yHFpHWECK2Zxlks6JvSxg7dRkEbRPzm0KP5iz6/jliVnYkIzIBgu0f/LDNGqW7yo12kb
+	 1N1mJqdDqajUHQslxZkeREQlGL7SB2f9atPgMsENaghLNPoF9+WlDjjjqlg/NBnN3TCV8
+	 dRmdBVkaWlJPNtfWUXBhqg0ANqFKbE+7hdZ6z9JA96A8MQf8vNaC3niWR4wrEHmPjAUET
+	 3Mjazqz6sMc0Nhu+4R78x5E1AxuBvJvE5Bf2Ms7daj/luV2n7nQYQ6OMRIEC8xOpfm2H/
+	 bIb8K2i1Watxju7icV21/Hv/Oew+1gdswkCcs3uYmVbKOJR1/b4+9r/oA9HFyNBgz7w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795857021;
-	h=DMARC-Filter:Received:Received:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding:X-CM-TRANSID:X-CM-SenderInfo:
-	 X-Coremail-Antispam;
-	bh=TRjhuNso5HcsJNHM/Yrs9ASTdOEKrDBmRimAlXk+gRM=;
-	b=f83QQbSWgJblf2GV7tDtOj30fyOeCf9Xxyqr1bOFu0I8gHq99hcSTMpbuchksgx50PdI
-	 eGhdDVFul35w+vPl16zKEjbWna60uUa5v8X08ef93sT38ftFc8I/yM62FEP1IKN2ZMAa3
-	 HZSVubL0VnHaSWBFtjQ67dPU09Me7DoNJB1JQI/8/g93ACWI7DPUm/GKI0ljy/qQV1Pbc
-	 cBUYvLNygZS1NLk9X6OXuzYv7MZ6n9pVQnK74H1L3APHOLKdCAXVu8+q756riwoCoisPX
-	 f/MqnNSPbjfbpdq4EM5a9EQ7uwAS1lBAW7c/zKmBohNaHiVmjVe+qfGQGt8tN7rlIrA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795859587;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:
+	 Content-Transfer-Encoding:In-Reply-To;
+	bh=uuCJfxu+5v/s3T9HZYDDO4PQ78T7+CAZAP1vnBBAvlk=;
+	b=DKnV45xERraCS/3urkMRt6Fi66FZeNubL110mp0L1rL8UJNLS3/RFwX8hDJgZE/XcZrG
+	 3ZuDyOJ4F5gskYKDyyz9JHgby8VEvIF238dlGvc0Z7mSq/4WQ5JR+rjgVS14knc63WnWT
+	 P2wLQ5nQ1+MQTo070Lm/niWvcWti7EOBL0z0p1RGnbMTOLqECCQAvqMW763stbk+AtPXr
+	 j2xWVADX5AvFihCLFnUFbdrWRWbDOifggkipwJrq1XJL0m0yNEgqKs2mGj/X9+glO4OH2
+	 AJgq7zhRe/qSKVfX36naVGNJp/TwjMrtFAdq8vezRV9glSEW0HSAdBIaYQg5DTHZLSw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=loongson.cn;
-	spf=pass smtp.mailfrom=loongson.cn;
-	arc=none smtp.remote-ip=114.242.206.163
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66A84606A31F;
-	Sat, 28 Nov 2026 09:10:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 66A84606A31F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [123.138.236.242])
-	by gateway (Coremail) with SMTP id _____8CxyLVzmgprCsMjAA--.7735S3;
-	Sat, 28 Nov 2026 17:10:11 +0800 (CST)
-Received: from linux.localdomain (unknown [123.138.236.242])
-	by front1 (Coremail) with SMTP id qMiowJAx1cxxmgprh_I3AA--.16824S4;
-	Sat, 28 Nov 2026 17:10:11 +0800 (CST)
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v2 2/2] selftests/bpf: Define FUNC_REG_ARG_CNT for LoongArch
-Date: Sat, 28 Nov 2026 17:10:07 +0800
-Message-ID: <20261128091007.25084-3-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20261128091007.25084-1-yangtiezhu@loongson.cn>
-References: <20261128091007.25084-1-yangtiezhu@loongson.cn>
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=O90bpdZJ;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id EBDA2606A332;
+	Sat, 28 Nov 2026 09:53:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=O90bpdZJ
+Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 6485B1F00898;
+	Sat, 28 Nov 2026 09:53:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795859586;
+	bh=uuCJfxu+5v/s3T9HZYDDO4PQ78T7+CAZAP1vnBBAvlk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=O90bpdZJYUF4YtVEHRhxLIqAQcGy50tt88f4anF0VE/73UpKeNhLHD68p2I+WORMK
+	 rah82jxUIvM05z0HQJ/7Gqht46duwVcWBAA4Oly/9mfXmO+FtP3AerdVZuhwSDsTND
+	 qM0CwtmBy7HUavbGOi/u6v2oO6ryFERhYnwndigZHNCMKVkkArcGDjH2cQyn7u/Yxo
+	 ch06xXxQT+3tv/6rc/cH79zuTzT4aXGnW4UDzq/DNhpOjsNAQ3DeH1WZiEw6CYGr70
+	 9+Za9L+aD1Tujgq7wvwmbeuoir2+LQrCzVjdS4n48dDUNG4J7VG+DZVSNmaxFXrDCA
+	 BIidWv+0lMYcA==
+Date: Sat, 28 Nov 2026 11:53:02 +0200
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: Askar Safin <safinaskar@gmail.com>
+Cc: aleksa@amutable.com, alex@amutable.com, alexei.starovoitov@gmail.com,
+	arnd@arndb.de, bpf@vger.kernel.org, brauner@kernel.org,
+	containers@lists.linux.dev, corbet@lwn.net, dhowells@redhat.com,
+	ebiggers@kernel.org, giuseppe@scrivano.org, hughd@google.com,
+	jack@suse.cz, jlayton@kernel.org, josef@toxicpanda.com,
+	kees@kernel.org, kpsingh@kernel.org, lennart@poettering.net,
+	linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org, linux-security-module@vger.kernel.org,
+	luto@amacapital.net, neal@gompa.dev, oleg@redhat.com,
+	paul@paul-moore.com, ptikhomirov@virtuozzo.com, sergeh@kernel.org,
+	skhan@linuxfoundation.org, viro@zeniv.linux.org.uk,
+	zygmunt.krynicki@canonical.com
+Subject: Re: [RFC PATCH v7 00/26] userland: Userland containers
+Message-ID: <awqkft-e6Tbj7dbJ@kernel.org>
+References: <awOQDOel_72Xwjm7@kernel.org>
+ <20261127214103.542291-1-safinaskar@gmail.com>
+ <awn-ioAuksHNV-Rc@kernel.org>
+ <awn_Y7oI4ckfsjSv@kernel.org>
+ <awoHex4LVst2JwkO@kernel.org>
+ <awoO9R7YF_5_6dHA@kernel.org>
+ <CAPnZJGBnFyrmr88OsYkMwtLiR93z4g0NAuoMurcnhcYFXz51jg@mail.gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -57,75 +75,50 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJAx1cxxmgprh_I3AA--.16824S4
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoW7tFWDuFy8GF47KFW5Cw4Dtrc_yoW8Cw13pa
-	97ZFyakF90q3y3ZFyUCayUWr4SqrnFqr1DAr9Fy34fZF15Gw4ktwn7Jr43KwnxJrsYqr45
-	Zwnrt348XFykAFgCm3ZEXasCq-sJn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-	Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I
-	8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q6rW5McIj6I8E87Iv67AK
-	xVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2Ij64
-	vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8G
-	jcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2I
-	x0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK
-	8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I
-	0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUcCD7UUUUU
+In-Reply-To: <CAPnZJGBnFyrmr88OsYkMwtLiR93z4g0NAuoMurcnhcYFXz51jg@mail.gmail.com>
 
-According to the Procedure Call Standard for the LoongArch Architecture,
-LoongArch uses 8 general-purpose argument registers ($a0 - $a7) to pass
-function arguments on both 32-bit and 64-bit ABIs.
+On Sat, Nov 28, 2026 at 04:50:42AM +0300, Askar Safin wrote:
+> On Sat, Nov 28, 2026 at 2:15 AM Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> > thinking more sequencing than data structures. I.e. I have a game where
+> > I need to end up to process creation without embryonic state, and add
+> > just enough weight to kernel to support that outcome, and that leads
+> > to ~2K'ish LOC of extra kernel complexity.
+> 
+> So you don't have embryonic state? I don't like this.
+> 
+> Let's assume the following situation. Userland's PID 1 is already running.
+> Our container manager attempts to spawn yet another process into userland.
+> As well as I understand, it should do clone3 with CLONE_INTO_USERLAND,
+> and then execve.
+> This creates time hole when there is process, which already runs inside
+> userland (i. e. its PID namespace and other namespaces), but runs
+> container manager's binary and have container manager's mm.
+> This invites for bugs. Other processes, which already run inside userland,
+> may somehow take advantage of this.
+> For example, see section "CVE-2019-5736 Is a Very Very Very Bad
+> Privilege Escalation to Host Root"
+> of https://brauner.io/2019/02/12/privileged-containers.html .
+> So, here I like embryos.
 
-Define FUNC_REG_ARG_CNT as 8 for LoongArch in bpf_arch_regs.h instead
-of falling back to the default value of 5, so that uprobe_autoattach
-can test all 8 register arguments ($a0 - $a7) on LoongArch.
+We all have things that I like but let's talk about facts instead.
 
-Before:
-  $ sudo ./test_progs -v -t uprobe_autoattach
-  ...
-  test_uprobe_autoattach:PASS:arg1 0 nsec
-  test_uprobe_autoattach:PASS:arg2 0 nsec
-  test_uprobe_autoattach:PASS:arg3 0 nsec
-  test_uprobe_autoattach:PASS:arg4 0 nsec
-  test_uprobe_autoattach:PASS:arg5 0 nsec
-  #659     uprobe_autoattach:OK
+CVE-2019-5736 was also not a sibling process racing the pre-execve
+window: it happened inside execve() itself via binfmt_script resolving
+container-controlled #!/proc/self/exe.
 
-After:
-  $ sudo ./test_progs -v -t uprobe_autoattach
-  ...
-  test_uprobe_autoattach:PASS:arg1 0 nsec
-  test_uprobe_autoattach:PASS:arg2 0 nsec
-  test_uprobe_autoattach:PASS:arg3 0 nsec
-  test_uprobe_autoattach:PASS:arg4 0 nsec
-  test_uprobe_autoattach:PASS:arg5 0 nsec
-  test_uprobe_autoattach:PASS:arg6 0 nsec
-  test_uprobe_autoattach:PASS:arg7 0 nsec
-  test_uprobe_autoattach:PASS:arg8 0 nsec
-  #659     uprobe_autoattach:OK
+CLONE_INTO_USERLAND rejects CLONE_VM, CLONE_FILES, CLONE_FS, and
+CLONE_SIGHAND, keeps exec_state->user_ns in the caller's outer user
+namespace, and resets exec_state->dumpable to suid_dumpable (0) when
+installing userland->user_ns. Until execve(), ptrace_may_access() checks
+CAP_SYS_PTRACE against the outer user_ns, so processes inside the
+userland cannot ptrace the child or access /proc/<pid>/{exe,mem,fd}.
 
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- tools/testing/selftests/bpf/bpf_arch_regs.h | 2 ++
- 1 file changed, 2 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/bpf_arch_regs.h b/tools/testing/selftests/bpf/bpf_arch_regs.h
-index 4b5744f941bd..a49686323e8f 100644
---- a/tools/testing/selftests/bpf/bpf_arch_regs.h
-+++ b/tools/testing/selftests/bpf/bpf_arch_regs.h
-@@ -21,6 +21,8 @@
- #define FUNC_REG_ARG_CNT 6
- #elif defined(__TARGET_ARCH_riscv) || defined(__riscv__)
- #define FUNC_REG_ARG_CNT 8
-+#elif defined(__TARGET_ARCH_loongarch) || defined(__loongarch__)
-+#define FUNC_REG_ARG_CNT 8
- #else
- /* default to 5 for others */
- #define FUNC_REG_ARG_CNT 5
--- 
-2.42.0
+> 
+> -- 
+> Askar Safin
 
+Br, Jarkko
