@@ -1,98 +1,53 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.210.173
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795848712;
-	b=RAVMfqI0FlJXuPs4fUfT33CfupBs5H17+taUQup2euxlbCZzT9xK6KzUTTDa1DWWXI1U
-	 49xsqaUtU4JCbS19oSezuJxagOajfT2XBlhnZaBie0osh5oZUfb14N5+0GGdPbEDNnRio
-	 9bI5KszwjVkGYq+FqwS6DdD1+GM8w2X8AVEH//fUTy/qr35y7UcWtxr+2/V+UEyhT8i2W
-	 Lby3B6IL+SuOZpMbv9eoKivcbgSWSY3oGV93/KNgYofiXkD/qeypAAuFrXHXY0EednSxX
-	 cPTgU6xbpNCVom0WO9eCMl1UkXuSVzPeqOa04yhrJ2ilBUElYjaT+yOJaDdMpHadsdQ==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795848712;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:
-	 Content-Type;
-	bh=5fkBnBJw16iOwc8lo9gOdGyRkiJlq6Ez/w9c3KR1+bw=;
-	b=Vaqny+G73Ja9yYVu23tPflM3tPxYhx/NUQpbRLRtsEczVn8fi76HHlaJ53FWyzmJ5DNv
-	 Bl1swyCJIY8uX3C1TfQRUe0IgvGxOv1M0GVZ1djhRvpWRBFfwCf9XDzAwM8NwRO3pt9Q5
-	 DW44rOeHTjvMrpcKM7bNC8dsm6cRGO8Uyqbvh+8T/W0UIn2T4r3VSLeBZM2fpGNc2z0KM
-	 W2mh6eeD1WG4IkrH5OmjN5cm47uWDs9Ne8K/Nns2aXpahEzLVwDW+4VR5teu89KWxD/um
-	 TwkzcKltzGmFZcnthROxhZnSn9HggK9OFPUJBhmLveLWrCYbTAoVy/dDso9PZnizugQ==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=stkmnyeX;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.210.173
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C8D7606A332
-	for <bpf@vger.kernel.org>; Sat, 28 Nov 2026 06:51:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5C8D7606A332
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=stkmnyeX
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-8b4c8b51b58so5177528b3a.1
-        for <bpf@vger.kernel.org>; Fri, 27 Nov 2026 22:51:52 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795848712; cv=none;
-        d=google.com; s=arc-20260327;
-        b=Arpi9NLsIkCi0MDHq9Ky7DWNffpZm8D28+eweYGbWi/PZN6l5SI4MHaYCDsoXK0qtG
-         /iuND8QNx4J+WEcEbtpSvrN7NRARwZ/Ue+1onV0QeAgETbVCCEctDXgx4Ki0cIs8np0O
-         BYjTGDIwKISjPJdvZ/spc6My4EagJ7uTkpOEt5frJwGokt6KUu6OQHh42g/cLPMConGq
-         xfqb0+pf5dCHug7ZYnnZNWwj7OmXtNY35hTmBcYRNxvYCq/7E+FQnJJIIrZYUkgh4Vfw
-         BkRiEy8YUzZA2TpgGrxcRlEF5S4IUXaMqoPDZU2OafwzgDk9QD8u9lp0nXRRvCpBCdKW
-         kmTA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:mime-version:dkim-signature;
-        bh=5fkBnBJw16iOwc8lo9gOdGyRkiJlq6Ez/w9c3KR1+bw=;
-        fh=Tnamzv19bwT2wge85uQsLDY40PKPSXM59ROzq7fzRi0=;
-        b=chSAxrjjmuBH8Cwv0QQ4HuNg2WWeoffYEC63xP6wWgLL7TUXIwgNNh/KjARoVXqad5
-         4tAGtGVFVGfGnPC2PgQ0lnl36sEMhkVH6+bz+KQs8kHSWY7oa/8GJL1RuGPgcmVmxWO9
-         XVVbDboctgxnJG98kmkfHTw2Cqqt3jUVQaTpr547jxbiSSAKBFsD76/KP6bBT5MotBvp
-         DipXtJKfUgRQjuEE2Dyr0IQN/oDt34j85t8dxqzsBKUBYe61RXtfve+1HBP8oJqCpVnO
-         Jlb8veLycs0UXc2+H69cdIr1yAkUjSli08XQE1GkkXOJu0hkzOMZdJSNvxe4xSR6LYj5
-         P+EQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795848712; x=1796453512; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:mime-version:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=5fkBnBJw16iOwc8lo9gOdGyRkiJlq6Ez/w9c3KR1+bw=;
-        b=stkmnyeXjXrGO8ucfQh5p3r2ucwellPf1M8PDcbW5zkWf2pVteUPNRDWiVLkWb1zcb
-         XpQki5J1T71HXR8TgxpWzBkSMvbsf+7RRpfg3iPuOYsVDQKoNQiJiqeJxpcPQHV6V6pJ
-         euR/x1DYOzLSyUlsz4HtEnnqNMofisZmhVrJu/n/1LKzXUrpz0pNXh8zZWRHfESvQ8Zl
-         Jq6v8fCKpCKYBOndAWvtIca1h0BMZ5IB2BJfyJzIqsJCBGT2b6BJJtblUIC/bOjTocIk
-         PLOhgfuNlQHxmiOC/Ef+vgaxlcT8gVeid0VPgobExn9zilYuZbdQVa7IxtOLitWe0eRd
-         ad7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795848712; x=1796453512;
-        h=content-type:cc:to:subject:message-id:date:from:mime-version
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=5fkBnBJw16iOwc8lo9gOdGyRkiJlq6Ez/w9c3KR1+bw=;
-        b=sXaC6lhm+fTAedPRr3cV44twfh/6K2OMMhp+fQllOwFSVReQFMsSdgHI8AvwvhTm6a
-         rUbLyAlPkwpf4VI9wlUnpseBNhnZv8DBOVwjG4VhIXz+SYBMMjvn9ErxYbbk4UpKWAmK
-         Cqmih2LviPm8FmuCeCI79+snedRVrsLApiePHy49nE8ulvZplhhvP3uYUcfuIsFn3mPs
-         UgCC49GOnhDroV6k7URDg0shImdnmgHs60t8bPd2fdmSgsebALam58BG01/GKBpovYzO
-         5LBU5AzKDkSbREfmMiG2TQscC0+C1va2Wd7kfXqwhc3M7UDeXVaJH52z5ZLwvXfsK4Zp
-         5d7Q==
-X-Forwarded-Encrypted: i=1; AL+hErFJISefhavqajMU6Ui0W1O93pPiHFEa2ilDJWtOBdQ20CVNXIQaCXS3QFgWEvImnZ+lDQA=@vger.kernel.org
-X-Gm-Message-State: APuU4Z9KKXiRF5BB3IwF1Ax4G+GMq5NP5xKFIwz55UUka61zlcoDCf+0
-	ljrSKTDGfq2dq+SRTgEDrztPpTD1RMcmIiCwWytR1UKhAivh8/bMyQIaX9SYHHli4QN6XcnPoEx
-	usoGvgOBQWSL18re2Gtuocnr4yZjmcL4=
-X-Gm-Gg: AZFdTZfyLV++y03uEgpGtf5KT4Btrp3qwpUCY1Rw6V/gzWGu7rq3Qtui5DPs1WbfvZm
-	5SgaSgr3T4s4Mwh29GTZlIxF7nxPZ6qd+qyPZ9FeovugTf15QWGFxErqOssWTndJ8AYC7INLn5R
-	+X5MkllDUjfT3EAnBz/eKEqe8qhIdm1tOxxDLzFnXVqxGVc8rlIc5WB9mx/DL7gHn8u2dzIG9kM
-	IiaA6UFYU5bwRIAcYalpj8cGz3UwPmbrMA5i+Nl1KrrZQ7g6gq5S+hKW2iSMbZA/E2xMDJ9W8Qs
-	8hQeU7pZ7RLi/8kGPSm8UxVEuiJmRRlF7EgqOZtzzSzWA5K5//FwViN+HDLmuTJU1Q1uFAV2yr+
-	ntULhRRvuGcWzFfH/I0lnYk2JZ8CX50wqDFE6wB3YgbzgES2z7BCnzO/blPHGUvyOt5aUjB4Fy2
-	uz/Xo4Iy+xIvxmN9NHQVDQiWeFvTA50xc82A+Of5LvBlGProaoEpM=
-X-Received: by 2002:a05:6a00:10d0:b0:8a0:1c79:b442 with SMTP id
- d2e1a72fcca58-8c876736f60mr28100627b3a.0.1795848711653; Fri, 27 Nov 2026
- 22:51:51 -0800 (PST)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=114.242.206.163
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795857021;
+	b=4k8h4ELM4+jJM6CTlUo2ti9HnI3y56DJ9Eu3dytJ6cNxx+QWIiv+4EMyhE2LGAfsdynA
+	 Pv1xRmGwE2qM85k0Onxx2FwPRMrd2jH+PWznFG7CrslI62P2WSmXfDtl6T20ICZbO1V2M
+	 VhCEZUkl0LCMA+TcH+KksgvvbTYWu+EAb1Lukr2irHeSnwPgVGjC8ujV8iASfEIWsEPHo
+	 XNxnaWJEY23+cq6OZICGlNRJeqq2RJi3+R+sS5zKLV0T+s3NI45i6WQI7fH8fbo26eROo
+	 ISbdEaFT5qgmv1U8FlKuYxbVgIv5U1PENpva7pobjpkr7mgQ5zWvgnKB6VYVSqLLK5Q==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795857021;
+	h=DMARC-Filter:Received:Received:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding:X-CM-TRANSID:X-CM-SenderInfo:
+	 X-Coremail-Antispam;
+	bh=Dn1o2p1B906bMdX25e4ikW0wW9m9BYWb6ODM95VCJTM=;
+	b=GlPB5VlZ4w7jPeQT9ETa6KN+cgEcAc+aHYewDfIPtWmWkk04XbYuzg6Qfbbo5jzfITbv
+	 cefiOlSrIX/p3OtlApxme0WPVqPNSaxKigU4dTG8Ap2ALDKFh9pm6vtWlZGdQiRkak/im
+	 cA958+bTjy5aS5Yjj2KUvNd7J3ErwDHdRwiTRgY/7p7U+Yne6bUMbt7CsD6zMsatVi9cR
+	 CjoAPAxEACy8yJEaQ/G6F1hQGektBAtCzxpMNFOeZcuMaHnJHqERogMZD4TijprBmDg7J
+	 xtXHesP50TT4usgXx++AV+49ymNJPyWCiYg2Z4XXBE5cbWcH6TAan0JCbr7bt86vxYg==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=none header.from=loongson.cn;
+	spf=pass smtp.mailfrom=loongson.cn;
+	arc=none smtp.remote-ip=114.242.206.163
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66A99606A321;
+	Sat, 28 Nov 2026 09:10:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 66A99606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [123.138.236.242])
+	by gateway (Coremail) with SMTP id _____8Dxl7VzmgprBsMjAA--.7855S3;
+	Sat, 28 Nov 2026 17:10:11 +0800 (CST)
+Received: from linux.localdomain (unknown [123.138.236.242])
+	by front1 (Coremail) with SMTP id qMiowJAx1cxxmgprh_I3AA--.16824S3;
+	Sat, 28 Nov 2026 17:10:10 +0800 (CST)
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v2 1/2] selftests/bpf: Move FUNC_REG_ARG_CNT to bpf_arch_regs.h
+Date: Sat, 28 Nov 2026 17:10:06 +0800
+Message-ID: <20261128091007.25084-2-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.42.0
+In-Reply-To: <20261128091007.25084-1-yangtiezhu@loongson.cn>
+References: <20261128091007.25084-1-yangtiezhu@loongson.cn>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -102,85 +57,181 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-From: Seke Kazuru <kazuruuni@gmail.com>
-Date: Sat, 28 Nov 2026 08:51:14 +0200
-X-Gm-Features: Aa3M54pZRibgmL1LzEnhMVNXmlmV3PoNLAziDiqM8EwF269XopiVH8PkrMvy8O8
-Message-ID: <CAJATrkz6CgsaAFjeGT_1TuUTxrpVYEo=9rGuobnhpU-LPxv_dA@mail.gmail.com>
-Subject: objtool/klp: ___bpf_prog_run jumptable is correlated to the original,
- fix never runs
-To: live-patching@vger.kernel.org
-Cc: jpoimboe@kernel.org, mbenes@suse.cz, "pmladek@suse.com" <pmladek@suse.com>, 
-	"joe.lawrence@redhat.com" <joe.lawrence@redhat.com>, "song@kernel.org" <song@kernel.org>, peterz@infradead.org, 
-	bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowJAx1cxxmgprh_I3AA--.16824S3
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoW3Ar4DZr4kKrW8Gr1UtFWUGFX_yoWxAFW8pa
+	ykZFWYkr9aqF4ava4fGFWUWF4Sgr4vqr48AF92qrW7AF17J3yxJrn2gr45tr9IgrZYvrW5
+	Aw17Kwn3XFWxZagCm3ZEXasCq-sJn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+	Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I
+	8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E87Iv67AK
+	xVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2Ij64
+	vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8G
+	jcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2I
+	x0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK
+	8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I
+	0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07j83kZUUUUU=
 
-Hello,
+Commit bc72742bebec ("selftests/bpf: Validate arch-specific argument
+registers limits") originally included the header "progs/bpf_misc.h"
+in prog_tests/uprobe_autoattach.c so that FUNC_REG_ARG_CNT is defined
+when checking argument assertions (arg4 through arg8).
 
-A livepatch module built by klp-build for a fix to ___bpf_prog_run()
-loads, reports "patching complete", and lists ___bpf_prog_run as
-patched, but the fixed instruction handlers never run. The replaced
-function dispatches through vmlinux's copy of its static jumptable,
-whose entries point into the original function body.
+Commit 8c2b5e90505e ("selftests/bpf: add bpf_for_each(), bpf_for(),
+and bpf_repeat() macros") removed this include, causing the macro
+FUNC_REG_ARG_CNT to evaluate to 0 in the preprocessor and silently
+skipping all assertions beyond arg3 on every architecture.
 
-Setup: Linux 6.19, x86_64, gcc 13, a config without BPF JIT (so every
-program runs in the interpreter), klp-build from the same tree:
+Move the definitions of FUNC_REG_ARG_CNT into a new shared header
+bpf_arch_regs.h, also add the new bpf_arch_regs.h as a dependency
+of test_uprobe_autoattach.bpf.o in Makefile.skel to ensure it is
+properly rebuilt when this header changes, and then include it in
+prog_tests/uprobe_autoattach.c and progs/test_uprobe_autoattach.c
+to fix silent assertion skips.
 
-  ./scripts/livepatch/klp-build -T --no-replace -o lp.ko fix.patch
+Here are the test results on LoongArch (default FUNC_REG_ARG_CNT
+is 5).
 
-The fix is c77b30bd1dcb ("bpf: Fix undefined behavior in interpreter
-sdiv/smod for INT_MIN"), which changes the signed DIV and MOD handlers
-inside ___bpf_prog_run(). Those handlers are reached only through the
-computed-goto table:
+Before:
+  $ sudo ./test_progs -v -t uprobe_autoattach
+  ...
+  test_uprobe_autoattach:PASS:arg1 0 nsec
+  test_uprobe_autoattach:PASS:arg2 0 nsec
+  test_uprobe_autoattach:PASS:arg3 0 nsec
+  #659     uprobe_autoattach:OK
 
-  static const void * const jumptable[256] = { ... &&label ... };
+After:
+  $ sudo ./test_progs -v -t uprobe_autoattach
+  ...
+  test_uprobe_autoattach:PASS:arg1 0 nsec
+  test_uprobe_autoattach:PASS:arg2 0 nsec
+  test_uprobe_autoattach:PASS:arg3 0 nsec
+  test_uprobe_autoattach:PASS:arg4 0 nsec
+  test_uprobe_autoattach:PASS:arg5 0 nsec
+  #659     uprobe_autoattach:OK
 
-klp diff refers every static local of a changed function to the
-original kernel's copy unless is_uncorrelated_static_local() exempts its
-name. "jumptable" is not on that list (6.19, and still not in
-7.4-rc4). The module's ___bpf_prog_run therefore carries a relocation
-to .klp.sym.vmlinux.jumptable.12 (R_X86_64_32S at +0x40), and every
-dispatch lands in the original handlers.
+Fixes: 8c2b5e90505e ("selftests/bpf: add bpf_for_each(), bpf_for(), and bpf_repeat() macros")
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
+ tools/testing/selftests/bpf/Makefile.skel     |  2 ++
+ tools/testing/selftests/bpf/bpf_arch_regs.h   | 29 +++++++++++++++++++
+ .../bpf/prog_tests/uprobe_autoattach.c        |  1 +
+ tools/testing/selftests/bpf/progs/bpf_misc.h  | 24 ---------------
+ .../bpf/progs/test_uprobe_autoattach.c        |  2 +-
+ 5 files changed, 33 insertions(+), 25 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/bpf_arch_regs.h
 
-Test, under KVM: a small helper module runs a three-instruction
-program through the interpreter (r0 = S32_MIN; r0 s/= 2 as ALU32 DIV K
-with off 1; exit) and prints r0. Unfixed code returns 0x40000000,
-fixed code 0xc0000000.
+diff --git a/tools/testing/selftests/bpf/Makefile.skel b/tools/testing/selftests/bpf/Makefile.skel
+index 45e4ce5dca4d..ccd9565b90cf 100644
+--- a/tools/testing/selftests/bpf/Makefile.skel
++++ b/tools/testing/selftests/bpf/Makefile.skel
+@@ -149,4 +149,6 @@ $(CXX_OBJS): $(RDIR)/%.bpf.o: progs/%.cpp | $(RDIR)
+ 		$(BPF_CC_FLAGS) -c $< -o $@ $(call skip_on_fail,BPF)
+ endif
+ 
++$(RDIR)/test_uprobe_autoattach.bpf.o: bpf_arch_regs.h
++
+ endif # BPF_CC
+diff --git a/tools/testing/selftests/bpf/bpf_arch_regs.h b/tools/testing/selftests/bpf/bpf_arch_regs.h
+new file mode 100644
+index 000000000000..4b5744f941bd
+--- /dev/null
++++ b/tools/testing/selftests/bpf/bpf_arch_regs.h
+@@ -0,0 +1,29 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef __BPF_ARCH_REGS_H
++#define __BPF_ARCH_REGS_H
++
++/* How many arguments are passed to function in register */
++#if defined(__TARGET_ARCH_x86) || defined(__x86_64__)
++#define FUNC_REG_ARG_CNT 6
++#elif defined(__i386__)
++#define FUNC_REG_ARG_CNT 3
++#elif defined(__TARGET_ARCH_s390) || defined(__s390x__)
++#define FUNC_REG_ARG_CNT 5
++#elif defined(__TARGET_ARCH_arm) || defined(__arm__)
++#define FUNC_REG_ARG_CNT 4
++#elif defined(__TARGET_ARCH_arm64) || defined(__aarch64__)
++#define FUNC_REG_ARG_CNT 8
++#elif defined(__TARGET_ARCH_mips) || defined(__mips__)
++#define FUNC_REG_ARG_CNT 8
++#elif defined(__TARGET_ARCH_powerpc) || defined(__powerpc__) || defined(__powerpc64__)
++#define FUNC_REG_ARG_CNT 8
++#elif defined(__TARGET_ARCH_sparc) || defined(__sparc__)
++#define FUNC_REG_ARG_CNT 6
++#elif defined(__TARGET_ARCH_riscv) || defined(__riscv__)
++#define FUNC_REG_ARG_CNT 8
++#else
++/* default to 5 for others */
++#define FUNC_REG_ARG_CNT 5
++#endif
++
++#endif /* __BPF_ARCH_REGS_H */
+diff --git a/tools/testing/selftests/bpf/prog_tests/uprobe_autoattach.c b/tools/testing/selftests/bpf/prog_tests/uprobe_autoattach.c
+index d5b3377aa33c..b5ea9b18ccc6 100644
+--- a/tools/testing/selftests/bpf/prog_tests/uprobe_autoattach.c
++++ b/tools/testing/selftests/bpf/prog_tests/uprobe_autoattach.c
+@@ -2,6 +2,7 @@
+ /* Copyright (c) 2022, Oracle and/or its affiliates. */
+ 
+ #include <test_progs.h>
++#include "bpf_arch_regs.h"
+ #include "test_uprobe_autoattach.skel.h"
+ 
+ /* uprobe attach point */
+diff --git a/tools/testing/selftests/bpf/progs/bpf_misc.h b/tools/testing/selftests/bpf/progs/bpf_misc.h
+index 6b930cb48f8d..28668ecf7e83 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_misc.h
++++ b/tools/testing/selftests/bpf/progs/bpf_misc.h
+@@ -251,30 +251,6 @@
+ #define SYS_PREFIX "__se_"
+ #endif
+ 
+-/* How many arguments are passed to function in register */
+-#if defined(__TARGET_ARCH_x86) || defined(__x86_64__)
+-#define FUNC_REG_ARG_CNT 6
+-#elif defined(__i386__)
+-#define FUNC_REG_ARG_CNT 3
+-#elif defined(__TARGET_ARCH_s390) || defined(__s390x__)
+-#define FUNC_REG_ARG_CNT 5
+-#elif defined(__TARGET_ARCH_arm) || defined(__arm__)
+-#define FUNC_REG_ARG_CNT 4
+-#elif defined(__TARGET_ARCH_arm64) || defined(__aarch64__)
+-#define FUNC_REG_ARG_CNT 8
+-#elif defined(__TARGET_ARCH_mips) || defined(__mips__)
+-#define FUNC_REG_ARG_CNT 8
+-#elif defined(__TARGET_ARCH_powerpc) || defined(__powerpc__) || defined(__powerpc64__)
+-#define FUNC_REG_ARG_CNT 8
+-#elif defined(__TARGET_ARCH_sparc) || defined(__sparc__)
+-#define FUNC_REG_ARG_CNT 6
+-#elif defined(__TARGET_ARCH_riscv) || defined(__riscv__)
+-#define FUNC_REG_ARG_CNT 8
+-#else
+-/* default to 5 for others */
+-#define FUNC_REG_ARG_CNT 5
+-#endif
+-
+ /* make it look to compiler like value is read and written */
+ #define __sink(expr) asm volatile("" : "+g"(expr))
+ 
+diff --git a/tools/testing/selftests/bpf/progs/test_uprobe_autoattach.c b/tools/testing/selftests/bpf/progs/test_uprobe_autoattach.c
+index da4bf89d004c..b953f18b6b7d 100644
+--- a/tools/testing/selftests/bpf/progs/test_uprobe_autoattach.c
++++ b/tools/testing/selftests/bpf/progs/test_uprobe_autoattach.c
+@@ -6,7 +6,7 @@
+ #include <bpf/bpf_core_read.h>
+ #include <bpf/bpf_helpers.h>
+ #include <bpf/bpf_tracing.h>
+-#include "bpf_misc.h"
++#include "bpf_arch_regs.h"
+ 
+ int uprobe_byname_parm1 = 0;
+ int uprobe_byname_ran = 0;
+-- 
+2.42.0
 
-  boot 1, klp-build module as built:
-    before load:              0x40000000 (6 of 6 runs)
-    after load, enabled=1, transition=0, "patching complete",
-    /sys/kernel/livepatch/<mod>/vmlinux/___bpf_prog_run,1 present:
-                              0x40000000 (6 of 6 runs)
-
-  boot 2, same command and same fix, with "jumptable." added to the
-  list in is_uncorrelated_static_local():
-    before load:              0x40000000 (6 of 6)
-    after load:               0xc0000000 (6 of 6)
-
-The build prints no warning, and every kernel signal reports success.
-Any klp-build fix to ___bpf_prog_run has this effect on kernels that run
-the interpreter, that is without CONFIG_BPF_JIT_ALWAYS_ON when the JIT
-is off or unavailable.
-
-Two possible fixes:
-
-1. Add "jumptable" to is_uncorrelated_static_local(). This is the change
-   tested in boot 2. It covers this function only.
-
-2. More generally, do not correlate a static local whose relocations
-   point into the changed function's own text (label addresses). Such a
-   table describes the code, not shared state, so it has to follow the
-   new function. This would also cover any other computed-goto table.
-
-I can send the helper module, the program, the kernel config and the
-two klp-build logs. I am glad to test a patch on the same setup.
-
-This came up in a study of live-patch module fidelity. Of 70 klp-build
-modules built from real stable fixes on 6.19, this is the only one in
-which a changed function's new code does not run.
-
-Thank you for your time.
-
-Regards,
-Seke Kazuru
-Independent researcher
