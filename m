@@ -1,85 +1,144 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.46
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795873178;
-	b=qw7K0HTogHwqIqdE7WfGWuGcdL7LfdmyYLozgTqmYSI5UBSRRu8ltjxwz/GkXBxMSDVA
-	 Nz7nvPTndy37uIgKdqauGnk8WNvS/8HIe+uC0PRkfsFMZxGOdZPR3Y2safv2UdCXvfrmr
-	 tRSIbx4i3AALTDYptoQHjU8QJz3kjLCONrxStCoZfkJas2mzZvetsdNIi9Yg3wI3nrJ9F
-	 sM4EqIz6er/iccub5fzSIu64EAXDqAwVDiYCaEi6ACen8kLDjCbNxAFovk9AKU3ToBZzB
-	 E2fFtsypoxqkNH3rj1uJkhUuHhm7J+/vxp8DCR6rdHrNJems8Dn8Vr4Oq80+29gEA9w==
+	t=1795874857;
+	b=B/6NeHsmzHwDJFKozn6Elh6Dox52YFYoLv1oyJHDpRUjwWufVZFxETfF7ZKlRlOzULVh
+	 CbB1Eh2QauZaXrvGfZb01XlVIdmssT0DLCYfu9/e3xPZ4Uel1edpV8wza1hyGWznYyTKh
+	 o420VgRUr0WvhGN3sMMHYOxBwng9wXqW1xvbRfNh4rvQaDafjfdH3tMIjU79vOar2op5Q
+	 T3H/27zM8C/0Hjy4FKZjdjq+ls0xwI/C++/OBJX5JvmDAJj8dseMpSB/jimFrQ8S9LvF/
+	 9Zynu+e7/IYoqMvV4OopMnoMIWeSgm4/LXTbHRkRDi0LJNrZgHicL7FujucHyn1/gHA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795873178;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795874857;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:Date:Subject:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding:To:Cc:Message-ID;
-	bh=Awy0tRu3t0kyoLdxhJm5Hbi5mwa0nPUbVP2OZ/Txoes=;
-	b=f407sCcHCaKT948LhetbmHqcj2V+yLXLiFjNMC4bLfCxZgOvrP5DXvCrV33yjbZVFHFV
-	 B7Bz7+CvRyk7C/ita0p31A/l0SK2EcTCuGqATemgBnJjv1U9Oz7XjHbfE8WvwmL2nGpMj
-	 vrYDLYzf2qmTweDtfFkHUrCZ72fbrvv11hFJlK6IPom3MIEjwFOa2iQX2n36GOY8ZYBUv
-	 PPGefdxDGp5sdxXG5xGtoidWPHiIjldMX2D8zOOYj8mK9DskUEciVqCyAL+qPUndfsHTh
-	 cfi3rVb+Z1T0OCD+HR7Jfc1GQmYQDVAGpLaZFx7k0kizSzaPfTKvLVLSyWeEvTixsFQ==
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=f/d1btkvZcevrnOhkA8/ZTJd8q2ZFvpCiI2Vo3YPdjY=;
+	b=OBiKmYTum9dbk/jRiL76tcFMF/ODryMQbn7BXd8rJtM2lnaMhqOPSHKYl9YZ7Cs0ptdX
+	 7053TEMhKn/mPybx3FgNWIyKz77wiBnSk66TOZIquMTHzDlYi5NRkng0g7x3u5T2POKAG
+	 uepTC+/DDWFffwKTq8w529xBhiP3Z1zn6/ZUe4CeHkAMIm6FBJodTWKsbiHQ8Wlz4CKmI
+	 wiv0r61/BpbzArOLZh1fRYgj/TDUQkuikHvH6Gv6JnhZ8jIWLPTLcR66kooDDZxo0wcH8
+	 PfFsxedkx/Fk4D3PeaK/sq1fE+wqRoElpaxgB6XKQn1dX4moSR7g1wOa41HBLrwF6lQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=aFT4mr1w;
-	arc=none smtp.remote-ip=209.85.214.179
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	dmarc=pass header.from=bairaktaris.de;
+	spf=pass smtp.mailfrom=bairaktaris.de;
+	dkim=pass header.d=bairaktaris.de header.i=@bairaktaris.de header.a=rsa-sha256 header.s=google header.b=gmjyyqag;
+	arc=none smtp.remote-ip=209.85.218.46
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B4D9606A31C
-	for <bpf@vger.kernel.org>; Sat, 28 Nov 2026 13:39:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7B4D9606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C00E6606A689
+	for <bpf@vger.kernel.org>; Sat, 28 Nov 2026 14:07:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C00E6606A689
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bairaktaris.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bairaktaris.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=aFT4mr1w
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2f066274caeso42964975ad.2
-        for <bpf@vger.kernel.org>; Sat, 28 Nov 2026 05:39:37 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=bairaktaris.de header.i=@bairaktaris.de header.a=rsa-sha256 header.s=google header.b=gmjyyqag
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-c51d158acc6so282622366b.0
+        for <bpf@vger.kernel.org>; Sat, 28 Nov 2026 06:07:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795873177; x=1796477977; darn=vger.kernel.org;
-        h=message-id:cc:to:content-transfer-encoding:content-type
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=Awy0tRu3t0kyoLdxhJm5Hbi5mwa0nPUbVP2OZ/Txoes=;
-        b=aFT4mr1wEg7thFRwI3Kvj/FHlOSuZ1e4mKoeS3EGiHxU9uYsqy2JvclzTPOkb3+mMM
-         FuryOeNiTZsL7bisJCqJ01HTBi40XO1ttZnzQ7GkeMfyUvEXV2ItjVrHruLUJxaj7k6m
-         fuRSxuBpZuzGQDLvZwxT/RS3qdXWGljjCsTh3w9PdoQaTEUcjNL4/Wz8GtQUKqTr8V4X
-         spBWC6hT1czlt2xay3AkvjOUgv/3dxNFXWM7O3K6ldyATtOYd/jaoqk4dEFXSF6TT5BS
-         xo63lNukVXZzeeQSb3xXMC4Z2+v4zHSoJzNIvWBxdBy0stIRh6jKpjqYdrRhCPygbakH
-         pf6g==
+        d=bairaktaris.de; s=google; t=1795874855; x=1796479655; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=f/d1btkvZcevrnOhkA8/ZTJd8q2ZFvpCiI2Vo3YPdjY=;
+        b=gmjyyqagDNUDUma+oTBWJ12m+2GcALMG2fZNV/rZt8Az3XgYaZoad6Xn2L5EVLLRfw
+         0huvtE81L3NWNuRv57z9wgY2PkAXmuTNaqVjbOeaeq7XgkPqJbAmgAE8UJlRI6stZXeZ
+         8Wg1kusbDcv3bvf4z4Dz0Z6PfKSWa1mHYTW/7AXJaovFrfqI84SYAzmpawueDe9B2Can
+         GPI1gyrMetfHtaO6KXY/vZMFxasq1U5ld1KQyacQNvL0RYQx/hvgZyZmCejek/tKCCXI
+         hSxwpfMXGLsNCPevMwr9Nlb6/Wyc7Gz+48WoraQm110Pv6yyGP5p2T7NomECnn9bB7em
+         ahdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795873177; x=1796477977;
-        h=message-id:cc:to:content-transfer-encoding:content-type
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=Awy0tRu3t0kyoLdxhJm5Hbi5mwa0nPUbVP2OZ/Txoes=;
-        b=yYh/o2yHeNCJr3lV5xbs2YsMgYT0pflLh3iY485E9X+4t72jzFBeo/uzw+U3U+3s0B
-         WxrJ4sPpP21TllNRS7VV/iCZ8Z8fqUUWgBFtF+0un9Y5GEyUCZdJBTaptHUJr+kYIAHS
-         UBTAbHk1xBKfOhJi8bRW8cHqdO+FCbLKatRU9KKYdskwrVskkTSrFynE0dMYFfF5EJbA
-         K21Oik6vOuKswPleEVJAsobmJ/JSJIDfGjZ+HNv117v1GbLpTUFnrYp5Re2ZwAyz4BG6
-         +U9xdhh6rUDG/gHJc9v790NpvkbMoTqpDRPSZQVboqon6Gn53vsAJrprfQRiVADxzayg
-         MMIA==
-X-Gm-Message-State: APuU4Z+RmbdGnuSpUEjeWAhDfqExIjYvBdiqGZ5Hyk4ZTqWxhCYu/jbN
-	HsTQfk1Rc5XE0ZqBVZ+X1upv4BEY2QluZqycEp8YNeUBXhjcP7PUUO9BxuX4EA1a
-X-Gm-Gg: AZFdTZcMi1UD2K4NJnuyH8RRvOXoZZjxPRF0Fy+JAnthEtz+OLdAeHD39DmBm+DbXON
-	P5zF9FXY4No0FqQOSGmmeQGPXzFjfTjnRdJS+eCKfNeyxKrLDTc2jCXbOW/EpX0SjDcijgdTUEF
-	d8TuC/HTCs57E2XbXyOQcr8I/zCnAGoloQXO/M2o9VUkx3T6FGpYQvxdnga+Fg54LvH7/rZbGfx
-	2I3IH3DwlH4+6ujnphuW8qtewUASUQ8tehylo39o5YmmJpmejkknEEiCeE5XZkHmG1l1FHWLjrZ
-	aXRpT3pxj6GCN4s3WlrK7DYxENa+bRrhh3w4vlsc762Vns8uvtOTyBXq6g0kOSFO3XwegWTBrIG
-	ZC0bBN8D4M21pINBH0VdLfjOwxYFdy9XHw4uVbhdchawqVYH/qGyCx0FPBk46KwtwIcIJctRxie
-	10NpjyjE3gPdVd9QPYuVKZ4ZdYVVpM8EiuFchi02Rg/sLjje6Gbv5I6IRbU9+bgM3F58zKUvMT7
-	y0zKSlF3huUUUzcutRjoOUSc+NJVmUSBzjt6uVu7sPvmLpB59ASauulndylKs4KhV/I16QNnn9r
-	wqnQP3J6RgeAt4+U0H0lDaRFX9ZFnsSGqSgZoVrzn1Oq+Okn
-X-Received: by 2002:a17:90b:1a90:b0:3b0:9941:8d42 with SMTP id 98e67ed59e1d1-3b41c92a1c0mr26039197a91.33.1795873176574;
-        Sat, 28 Nov 2026 05:39:36 -0800 (PST)
-Received: from [169.254.42.106] ([113.200.174.37])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b44b217a5bsm20688694a91.0.2026.11.28.05.39.29
+        d=1e100.net; s=20260707; t=1795874855; x=1796479655;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=f/d1btkvZcevrnOhkA8/ZTJd8q2ZFvpCiI2Vo3YPdjY=;
+        b=G5ZNHK5MxVdCdl5tFtd5gS8DofiHdhk0tplIsQko1BKJwInP/f36KXmQf6dlumxFBZ
+         DO6+yZsYpyt+sTD5Z5tfcXN5pTywdJrLpkJd7KFetXQTLHVCI+jcnLL2k2pXHw9aB6f8
+         3CJKzf1RggS7Owe1E2p3HSjg3wnmex3TiZWPHSPzjdy1yZujru6BhmuAf1hVSQ9MqZ0o
+         Ks5/mGWwahRixdyCuEc2JRJDwcc6n35qsiCkESE3oITZ/IMg0G4G9/e+5YLnavL2InXx
+         2ZfmPsD+vs9HdVTeZFfiq1poXQon14MPVDALkEp6U/aNtmI2Mzue4ewQ793jt5IcLRNM
+         jnPw==
+X-Forwarded-Encrypted: i=1; AL+hErFOEJEeGjZ+dKeBbFEPAeoBtX58iSEvsK1GGhE483XS+LHlS8MjWAX0UTUltJyB5xgYePI=@vger.kernel.org
+X-Gm-Message-State: APuU4Z/TeP+7uNq4dD6MOM5TOPtLz2mpnAmJFJvG5YSIzlsTCA4Rv7ot
+	z0ZVMvcl32LzkStr6Xra8yT99gH4D2FeKPChLib7SgTfnecO10tFbzqgPgjwVIeghg==
+X-Gm-Gg: AZFdTZdQ3h3KhKW+K+IYFLt/a1Bc48X6HSlq6nDEHq0Z93ImuRly5ixMiBQVNgK+7dC
+	rTA+j8OmGxirwWWaEyc60743TZRdu2pN2TlI6agrTMmdAVpWai47dXFAJI0JW+G7iVczNwEkhX3
+	W3spot5sEIgPWJByV7tlbFveCChntXcLAAmf4FDLqbSTI69TI/H3jmZxPcgfqYAa4pL+/4ktk0o
+	iXOaG8Fz8Y7EqcjwpyF6J9W4smhK3yCf3iVsfshXylKvGjzhC6xWQsyq9CPpzTnkINVWVoSXlYy
+	r0Q/P7UJiVHizV99GT4L0xfSdQzZQ7O82AlZ4rcep15i6AFo3xaxneVrpZHre1qMsO8MFZsdGpw
+	Z7m8dUdIkzze8c0hIP2FYsXIW4UbVh2rd/NwKNdsDmFNN2LV82hneZjRBk+9ZAOxe0yKVcq+1DT
+	KgW/whwSF08C7+dkZfmSJqHLpN5HQgWEgSJbwd1ryWa1bysIjjwx7Fd3f5q7JOUBVBX2IHpMTjB
+	5ePuVOLrRVYK8KdnfRXRzhdip2pgyWMaeKZxOlGF+HtsGXlcq62EzxEBJKUj4bUUOEg8qmYlEvu
+	cyWKA7Eo5kvMvsfk9xXU1qAqU2u9kaupM8v0xvRRNPTaRpMLKdJg4tE9HHlXg2s8PsqpCO6roOa
+	X1LpFUzqMeHz86V5TebVjHkBiMQNVnFKAeBn48K795LSpPPww56+zTVVQMMXRtaCn1lWs2EbgA3
+	XZpzGufIE6Gl6Pu3nCm+c3i0XDgUNAaX2CMFGupJO8x/64E+L1C/ayIgokYDdzMGtthGSjAk1oU
+	HbQWpq9UprQ6MQOZt4zjU1qVpT7UyVbsllsaqqUCektJFLgiEjnrGVDT5G80AEx0aqQzmQVDhGx
+	AmgEjzf4cCrkJdZCh36a7VsQULhdVlfQakXEAzfAxd2+6+RoNMGKSzOCovc0bSuOuWbbR7W4dQ=
+	=
+X-Received: by 2002:a17:906:2419:b0:c50:750a:6a1b with SMTP id a640c23a62f3a-c513a878473mr1785421166b.29.1795874854588;
+        Sat, 28 Nov 2026 06:07:34 -0800 (PST)
+Received: from Desktop.tail070c67.ts.net (p200300f247083200a8c3fd0ab7d20fde.dip0.t-ipconnect.de. [2003:f2:4708:3200:a8c3:fd0a:b7d2:fde])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c513ad010a6sm990714266b.7.2026.11.28.06.07.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 28 Nov 2026 05:39:36 -0800 (PST)
-From: Zheng Shuhao <viennaoffh@gmail.com>
-Date: Sat, 28 Nov 2026 21:39:24 +0800
-Subject:
- [PATCH] bpf: defer reuse of LRU hash elements until after an RCU grace period
+        Sat, 28 Nov 2026 06:07:34 -0800 (PST)
+From: Julius Bairaktaris <julius@bairaktaris.de>
+To: netdev@vger.kernel.org
+Cc: davem@davemloft.net,
+	edumazet@kernel.org,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	willemb@google.com,
+	horms@kernel.org,
+	andrew+netdev@lunn.ch,
+	dsahern@kernel.org,
+	idosch@nvidia.com,
+	ncardwell@google.com,
+	kuniyu@google.com,
+	steffen.klassert@secunet.com,
+	herbert@gondor.apana.org.au,
+	richardbgobert@gmail.com,
+	ecree.xilinx@gmail.com,
+	andy.moreton@amd.com,
+	alex.austin@amd.com,
+	linux-net-drivers@amd.com,
+	saeedm@nvidia.com,
+	tariqt@nvidia.com,
+	mbloch@nvidia.com,
+	leon@kernel.org,
+	linux-rdma@vger.kernel.org,
+	alexei.starovoitov@gmail.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	ihor.solodrai@linux.dev,
+	john.fastabend@gmail.com,
+	sdf@fomichev.me,
+	izaiahsun@gmail.com,
+	zirajs7@gmail.com,
+	corbet@lwn.net,
+	skhan@linuxfoundation.org,
+	rdunlap@infradead.org,
+	shuah@kernel.org,
+	bpf@vger.kernel.org,
+	ipsec@lists.linux.dev,
+	linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH net-next v4 1/2] net: keep the TCP fixed-ID flags on the header they describe
+Date: Sat, 28 Nov 2026 15:07:33 +0100
+Message-ID: <c9ec995833aac63f552441e4a60bf420a0a52275.1795869698.git.julius@bairaktaris.de>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <cover.1795869698.git.julius@bairaktaris.de>
+References: <cover.1795869698.git.julius@bairaktaris.de>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -89,700 +148,411 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
- memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
- ihor.solodrai@linux.dev, john.fastabend@gmail.com,
- syzbot+542d2bc50fc9545a27d6@syzkaller.appspotmail.com
-Message-ID: <179587316462.32208.2314387285324230199@gmail.com>
 
-syzbot reported a KCSAN data race between bcmp() in
-htab_lru_map_update_elem() and a concurrent LRU hash update:
+Commit 3271f19bf7b9 ("net: gso: restore ids of outer ip headers
+correctly") made SKB_GSO_TCP_FIXEDID describe the outermost IPv4 header
+and added SKB_GSO_TCP_FIXEDID_INNER for the inner header of an
+encapsulated packet. Every path that adds or removes a header then has to
+move the flags, and none does. A TCP stream that GRO merged with fixed
+IDs and that is forwarded into an IPIP tunnel, or into an ESP tunnel mode
+SA with crypto offload, is segmented with one outer ID for all segments
+and with incrementing inner IDs. A tunnel that decapsulates such a packet
+in iptunnel_pull_offloads() leaves the state of the removed outer header
+on the new outer one, and the inner header of a GRE or UDP tunnel, which
+segmentation reads at encap_level 0, gets the state of the outer header.
 
-The lookup path compares an element's key while holding an RCU read-side
-critical section. After hlist_nulls_del_rcu() removes an old element, an
-RCU reader may still hold a pointer to it. The LRU path can return that
-element to the free pool immediately, allowing prealloc_lru_pop() to
-overwrite its key while the reader is still comparing it. The report
-records a 280-byte key write racing with an 8-byte read in bcmp().
+Let SKB_GSO_TCP_FIXEDID describe the innermost IPv4 header again, as it
+did before that commit, and replace SKB_GSO_TCP_FIXEDID_INNER with
+SKB_GSO_TCP_FIXEDID_OUTER for the outermost header of an encapsulated
+packet. Where a header is added in front of a GSO packet, in
+iptunnel_handle_offloads() and in the BPF LWT encapsulation, clear the
+outer flag, so that the new header gets incrementing IDs as it does on a
+packet that was not encapsulated before. Clear it as well where
+iptunnel_pull_offloads() and bpf_skb_net_shrink() remove the outer
+header. ESP transport and BEET mode with crypto offload set
+skb->encapsulation but keep the IPv4 header and its ID, so xfrm_output()
+copies the inner flag to the outer one for them. Convert mlx5 and sfc,
+the two drivers that use the inner flag.
 
-The report does not include a syz or C reproducer. My local C stress
-reproducer is not identical: it issues repeated BPF_MAP_UPDATE_ELEM calls
-from a writer thread, while the writer in the syzbot report goes through
-generic_map_update_batch() (BPF_MAP_UPDATE_BATCH). Both exercise concurrent
-LRU hash updates and lookups, but through different update paths. I can
-provide my local reproducer if it would be useful.
+GRO of an IPv6 TCP stream in an IPv4 tunnel (SIT, or VXLAN over IPv4)
+records fixed outer IDs as it does for an IPv4 stream, but
+tcp6_gro_complete() never turned that into a flag: set
+SKB_GSO_TCP_FIXEDID_OUTER there as tcp4_gro_complete() does. As for an
+IPv4 stream, a device without NETIF_F_TSO_MANGLEID then leaves such a
+packet to software segmentation.
 
-This patch defers returning a removed element to the LRU free pool until
-after an RCU grace period. It queues pending elements on the LRU, marks
-them reclaimable from the RCU callback, and lets the shrink path reuse
-only elements whose grace period has completed. The syscall map-update
-path waits and retries if it gets -ENOMEM while deferred elements are
-pending. BPF program helper updates do not use that syscall retry path
-and may still see a transient -ENOMEM.
+xfrm_output() segments a GSO packet for a tunnel mode SA with crypto
+offload before ESP when skb->inner_protocol is set, as an encapsulated
+packet, but a tunnel that decapsulated the packet leaves inner_protocol
+set, and segmentation then reads the outer flag for its only IPv4
+header. Take that path only for a packet that is still encapsulated.
 
-Testing:
-- CONFIG_KCSAN=y, x86_64 QEMU with 2 vCPUs:
-  tools/testing/selftests/bpf/test_lru_map passed with exit status 0.
-- A 30-second local stress run with max_entries=32 and a 64-key
-  working set completed 15,343,746 lookups and 5,351 updates, with no
-  mismatches, update errors, or -ENOMEM returns. This checked regression
-  behavior but did not reproduce the exact syzbot report.
-- In the same synthetic workload, two baseline runs completed 19,819
-  and 20,092 updates in 30 seconds. The patched run completed 5,351,
-  about 73% fewer than the baseline average. This is one patched run,
-  not a production benchmark, but it indicates a substantial
-  performance cost.
+Two flags cannot describe a header between the outermost and the
+innermost one of a packet with three IPv4 headers: software segmentation
+uses SKB_GSO_TCP_FIXEDID for it, as it used SKB_GSO_TCP_FIXEDID_INNER
+before.
 
-I do not think this is a good final approach: it adds per-LRU RCU
-queues and callback machinery, and syscall updates can block and retry
-while BPF helper updates may still fail temporarily. Is there a simpler
-or more appropriate way to keep an LRU element's key stable until
-existing RCU readers have finished? I would appreciate suggestions on
-how to improve this patch.
-
-Reported-by: syzbot+542d2bc50fc9545a27d6@syzkaller.appspotmail.com
-Link: https://syzkaller.appspot.com/bug?extid=542d2bc50fc9545a27d6
-Signed-off-by: Zheng Shuhao <viennaoffh@gmail.com>
-
+Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Signed-off-by: Julius Bairaktaris <julius@bairaktaris.de>
 ---
- include/linux/bpf.h       |   1 +
- kernel/bpf/bpf_lru_list.c | 245 ++++++++++++++++++++++++++++++++++++++--------
- kernel/bpf/bpf_lru_list.h |  23 +++-
- kernel/bpf/hashtab.c      |  47 ++++++---
- kernel/bpf/syscall.c      |  10 +-
- 5 files changed, 264 insertions(+), 62 deletions(-)
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 4e9a4d15a..c68aed7e1 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -779,6 +779,7 @@ static inline void *bpf_arena_alloc_pages_sleepable(void *p__map, void *addr__ig
- #endif
+v4:
+- Set the outer flag in tcp6_gro_complete() for an IPv4 outer header
+  with fixed IDs in front of an IPv6 TCP stream (Sashiko).
+- Take xfrm_output_gso() for a tunnel mode SA only for a packet that is
+  still encapsulated; a decapsulated one kept inner_protocol (Sashiko).
+- Target net-next (Paolo), Fixes: tag dropped.
+v3:
+- Clear SKB_GSO_TCP_FIXEDID_OUTER in iptunnel_handle_offloads() and in
+  the BPF LWT encapsulation, where a header goes in front of an
+  encapsulated packet (Sashiko).
+- Copy the inner flag to the outer one in xfrm_output() for ESP transport
+  and BEET mode with crypto offload (Sashiko).
+- Name the paths that change the outer flag and the middle-header limit
+  in skbuff.h, segmentation-offloads.rst and the message; list the outer
+  flag in the bpf_skb_adjust_room() decap flags of the uAPI header
+  (Sashiko).
+- Wrap lines at 80 columns (NIPA).
+v2: https://lore.kernel.org/netdev/f7d096c63c6a0b7a23a4dcea9a3de0915a48ac56.1794139176.git.julius@bairaktaris.de/
+v3: https://lore.kernel.org/netdev/7c74b2076dc7dee1d481d39a135e0946d5e04145.1795284858.git.julius@bairaktaris.de/
+
+ .../networking/segmentation-offloads.rst       |  8 +++++---
+ .../net/ethernet/mellanox/mlx5/core/en_rx.c    |  8 ++------
+ drivers/net/ethernet/sfc/ef100_tx.c            | 12 +++---------
+ include/linux/netdevice.h                      |  2 +-
+ include/linux/skbuff.h                         | 12 +++++++++++-
+ include/net/ip_tunnels.h                       |  1 +
+ include/uapi/linux/bpf.h                       | 16 +++++++++-------
+ net/core/filter.c                              |  1 +
+ net/core/lwt_bpf.c                             |  2 ++
+ net/ipv4/af_inet.c                             |  9 ++++++---
+ net/ipv4/ip_tunnel_core.c                      |  2 ++
+ net/ipv4/tcp_offload.c                         |  7 +++++--
+ net/ipv6/tcpv6_offload.c                       |  5 ++++-
+ net/xfrm/xfrm_output.c                         | 18 +++++++++++++++++-
+ tools/include/uapi/linux/bpf.h                 | 16 +++++++++-------
+ 15 files changed, 78 insertions(+), 41 deletions(-)
+
+diff --git a/Documentation/networking/segmentation-offloads.rst b/Documentation/networking/segmentation-offloads.rst
+index 25a8b7eca847..45c1703d68b8 100644
+--- a/Documentation/networking/segmentation-offloads.rst
++++ b/Documentation/networking/segmentation-offloads.rst
+@@ -49,9 +49,11 @@ The default behavior is to increment the IP ID with every segment.  If the
+ GSO type SKB_GSO_TCP_FIXEDID is specified then we will not increment the IP
+ ID and all segments will use the same IP ID.
  
- extern const struct bpf_map_ops bpf_map_offload_ops;
-+bool bpf_lru_hash_wait_for_rcu(struct bpf_map *map);
+-For encapsulated packets, SKB_GSO_TCP_FIXEDID refers only to the outer header.
+-SKB_GSO_TCP_FIXEDID_INNER can be used to specify the same for the inner header.
+-Any combination of these two GSO types is allowed.
++For encapsulated packets, SKB_GSO_TCP_FIXEDID describes the innermost header
++and SKB_GSO_TCP_FIXEDID_OUTER the outermost header. Any combination of these
++two GSO types is allowed. A header added in front of a packet gets incrementing
++IDs. A header between the outermost and the innermost one has no flag of its
++own; software segmentation uses SKB_GSO_TCP_FIXEDID for it.
  
- /* bpf_type_flag contains a set of flags that are applicable to the values of
-  * arg_type, ret_type and reg_type. For example, a pointer value may be null,
-diff --git a/kernel/bpf/bpf_lru_list.c b/kernel/bpf/bpf_lru_list.c
-index 3858886b0..b8a9a39f4 100644
---- a/kernel/bpf/bpf_lru_list.c
-+++ b/kernel/bpf/bpf_lru_list.c
-@@ -2,6 +2,7 @@
- /* Copyright (c) 2016 Facebook
-  */
- #include <linux/cpumask.h>
-+#include <linux/rcupdate.h>
- #include <linux/spinlock.h>
- #include <linux/percpu.h>
- 
-@@ -26,6 +27,77 @@ static void bpf_lru_node_clear_ref(struct bpf_lru_node *node)
- 	WRITE_ONCE(node->ref, 0);
- }
- 
-+static u8 bpf_lru_node_pending_free(const struct bpf_lru_node *node)
-+{
-+	/* Pair with the release store after the RCU grace period. */
-+	return smp_load_acquire(&node->pending_free);
-+}
-+
-+static void bpf_lru_node_set_free_ready(struct bpf_lru_node *node)
-+{
-+	/* Publish readiness only after the RCU grace period has elapsed. */
-+	smp_store_release(&node->pending_free, BPF_LRU_FREE_READY);
-+}
-+
-+static void bpf_lru_rcu_done(struct rcu_head *rcu)
-+{
-+	struct bpf_lru *lru = container_of(rcu, struct bpf_lru, rcu);
-+	struct llist_node *node, *next;
-+
-+	node = llist_del_all(&lru->rcu_waiting);
-+	while (node) {
-+		struct bpf_lru_node *lru_node;
-+
-+		next = node->next;
-+		lru_node = container_of(node, struct bpf_lru_node, rcu_node);
-+		bpf_lru_node_set_free_ready(lru_node);
-+		node = next;
-+	}
-+
-+	atomic_set(&lru->rcu_in_progress, 0);
-+	wake_up_all(&lru->rcu_wait);
-+	if (!llist_empty(&lru->rcu_pending))
-+		irq_work_queue(&lru->rcu_work);
-+}
-+
-+static void bpf_lru_rcu_work(struct irq_work *work)
-+{
-+	struct bpf_lru *lru = container_of(work, struct bpf_lru, rcu_work);
-+	struct llist_node *node, *next;
-+
-+	if (atomic_xchg(&lru->rcu_in_progress, 1))
-+		return;
-+
-+	node = llist_del_all(&lru->rcu_pending);
-+	if (!node) {
-+		atomic_set(&lru->rcu_in_progress, 0);
-+		wake_up_all(&lru->rcu_wait);
-+		return;
-+	}
-+
-+	next = node->next;
-+	while (node) {
-+		struct llist_node *current_node = node;
-+
-+		node = next;
-+		next = node ? node->next : NULL;
-+		llist_add(current_node, &lru->rcu_waiting);
-+	}
-+
-+	call_rcu_hurry(&lru->rcu, bpf_lru_rcu_done);
-+}
-+
-+static void bpf_lru_node_defer_free(struct bpf_lru *lru,
-+				    struct bpf_lru_node *node)
-+{
-+	if (cmpxchg(&node->pending_free, BPF_LRU_FREE_NONE,
-+		    BPF_LRU_FREE_PENDING) != BPF_LRU_FREE_NONE)
-+		return;
-+
-+	llist_add(&node->rcu_node, &lru->rcu_pending);
-+	irq_work_queue(&lru->rcu_work);
-+}
-+
- static void bpf_lru_list_count_inc(struct bpf_lru_list *l,
- 				   enum bpf_lru_list_type type)
- {
-@@ -57,7 +129,7 @@ static void __bpf_lru_node_move_to_free(struct bpf_lru_list *l,
- 	bpf_lru_list_count_dec(l, node->type);
- 
- 	node->type = tgt_free_type;
--	WRITE_ONCE(node->pending_free, 0);
-+	WRITE_ONCE(node->pending_free, BPF_LRU_FREE_NONE);
- 	list_move(&node->list, free_list);
- }
- 
-@@ -75,7 +147,7 @@ static void __bpf_lru_node_move_in(struct bpf_lru_list *l,
- 	bpf_lru_node_clear_ref(node);
- 	/* Reset pending_free only when moving to the free list */
- 	if (tgt_type == BPF_LRU_LIST_T_FREE)
--		WRITE_ONCE(node->pending_free, 0);
-+		WRITE_ONCE(node->pending_free, BPF_LRU_FREE_NONE);
- 	list_move(&node->list, &l->lists[tgt_type]);
- }
- 
-@@ -107,6 +179,50 @@ static void __bpf_lru_node_move(struct bpf_lru_list *l,
- 	list_move(&node->list, &l->lists[tgt_type]);
- }
- 
-+static unsigned int
-+__bpf_lru_list_reclaim_ready(struct bpf_lru_list *l,
-+			     unsigned int tgt_nshrink,
-+			     struct list_head *free_list,
-+			     enum bpf_lru_list_type tgt_free_type,
-+			     bool *has_pending)
-+{
-+	struct bpf_lru_node *node, *tmp_node;
-+	unsigned int nshrinked = 0;
-+	int type;
-+
-+	*has_pending = false;
-+	for (type = BPF_LRU_LIST_T_ACTIVE; type <= BPF_LRU_LIST_T_INACTIVE;
-+	     type++) {
-+		list_for_each_entry_safe_reverse(node, tmp_node,
-+						 &l->lists[type], list) {
-+			u8 pending_free = bpf_lru_node_pending_free(node);
-+
-+			if (pending_free != BPF_LRU_FREE_READY)
-+				continue;
-+
-+			__bpf_lru_node_move_to_free(l, node, free_list,
-+						    tgt_free_type);
-+			if (++nshrinked == tgt_nshrink)
-+				return nshrinked;
-+		}
-+	}
-+
-+	if (!nshrinked) {
-+		for (type = BPF_LRU_LIST_T_ACTIVE;
-+		     type <= BPF_LRU_LIST_T_INACTIVE; type++) {
-+			list_for_each_entry(node, &l->lists[type], list) {
-+				if (bpf_lru_node_pending_free(node) ==
-+				    BPF_LRU_FREE_PENDING) {
-+					*has_pending = true;
-+					return 0;
-+				}
-+			}
-+		}
-+	}
-+
-+	return nshrinked;
-+}
-+
- static bool bpf_lru_list_inactive_low(const struct bpf_lru_list *l)
- {
- 	return l->counts[BPF_LRU_LIST_T_INACTIVE] <
-@@ -201,15 +317,21 @@ __bpf_lru_list_shrink_inactive(struct bpf_lru *lru,
- 	unsigned int i = 0;
- 
- 	list_for_each_entry_safe_reverse(node, tmp_node, inactive, list) {
--		if (bpf_lru_node_is_ref(node) &&
--		    !READ_ONCE(node->pending_free)) {
--			__bpf_lru_node_move(l, node, BPF_LRU_LIST_T_ACTIVE);
--		} else if (READ_ONCE(node->pending_free) ||
--			   lru->del_from_htab(lru->del_arg, node)) {
-+		u8 pending_free = bpf_lru_node_pending_free(node);
-+
-+		if (pending_free == BPF_LRU_FREE_PENDING) {
-+			return nshrinked + 1;
-+		} else if (pending_free == BPF_LRU_FREE_READY) {
- 			__bpf_lru_node_move_to_free(l, node, free_list,
- 						    tgt_free_type);
- 			if (++nshrinked == tgt_nshrink)
- 				break;
-+		} else if (bpf_lru_node_is_ref(node)) {
-+			__bpf_lru_node_move(l, node, BPF_LRU_LIST_T_ACTIVE);
-+		} else if (lru->del_from_htab(lru->del_arg, node)) {
-+			bpf_lru_node_defer_free(lru, node);
-+			if (++nshrinked == tgt_nshrink)
-+				break;
- 		}
- 
- 		if (++i == lru->nr_scans)
-@@ -250,6 +372,12 @@ static unsigned int __bpf_lru_list_shrink(struct bpf_lru *lru,
- 	struct bpf_lru_node *node, *tmp_node;
- 	struct list_head *force_shrink_list;
- 	unsigned int nshrinked;
-+	bool has_pending;
-+
-+	nshrinked = __bpf_lru_list_reclaim_ready(l, tgt_nshrink, free_list,
-+						 tgt_free_type, &has_pending);
-+	if (nshrinked || has_pending)
-+		return nshrinked ? nshrinked : 1;
- 
- 	nshrinked = __bpf_lru_list_shrink_inactive(lru, l, tgt_nshrink,
- 						   free_list, tgt_free_type);
-@@ -264,11 +392,17 @@ static unsigned int __bpf_lru_list_shrink(struct bpf_lru *lru,
- 
- 	list_for_each_entry_safe_reverse(node, tmp_node, force_shrink_list,
- 					 list) {
--		if (READ_ONCE(node->pending_free) ||
--		    lru->del_from_htab(lru->del_arg, node)) {
-+		u8 pending_free = bpf_lru_node_pending_free(node);
-+
-+		if (pending_free == BPF_LRU_FREE_PENDING) {
-+			return 1;
-+		} else if (pending_free == BPF_LRU_FREE_READY) {
- 			__bpf_lru_node_move_to_free(l, node, free_list,
- 						    tgt_free_type);
- 			return 1;
-+		} else if (lru->del_from_htab(lru->del_arg, node)) {
-+			bpf_lru_node_defer_free(lru, node);
-+			return 1;
- 		}
- 	}
- 
-@@ -283,7 +417,9 @@ static void __local_list_flush(struct bpf_lru_list *l,
- 
- 	list_for_each_entry_safe_reverse(node, tmp_node,
- 					 &loc_l->pending_list, list) {
--		if (READ_ONCE(node->pending_free))
-+		if (bpf_lru_node_pending_free(node) == BPF_LRU_FREE_PENDING)
-+			continue;
-+		else if (bpf_lru_node_pending_free(node) == BPF_LRU_FREE_READY)
- 			__bpf_lru_node_move_in(l, node, BPF_LRU_LIST_T_FREE);
- 		else if (bpf_lru_node_is_ref(node))
- 			__bpf_lru_node_move_in(l, node, BPF_LRU_LIST_T_ACTIVE);
-@@ -293,19 +429,6 @@ static void __local_list_flush(struct bpf_lru_list *l,
- 	}
- }
- 
--static void bpf_lru_list_push_free(struct bpf_lru_list *l,
--				   struct bpf_lru_node *node)
--{
--	unsigned long flags;
+ If a device has NETIF_F_TSO_MANGLEID set then the IP ID can be ignored when
+ performing TSO and we will either increment the IP ID for all frames, or leave
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c b/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
+index 1586cb2404c0..e47b1232130c 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
+@@ -1175,12 +1175,8 @@ static void mlx5e_shampo_update_ipv4_tcp_hdr(struct mlx5e_rq *rq, struct iphdr *
+ 	tcp->check = ~tcp_v4_check(skb->len - tcp_off, ipv4->saddr,
+ 				   ipv4->daddr, 0);
+ 	skb_shinfo(skb)->gso_type |= SKB_GSO_TCPV4;
+-	if (ntohs(ipv4->id) == rq->hw_gro_data->second_ip_id) {
+-		bool encap = rq->hw_gro_data->fk.control.flags & FLOW_DIS_ENCAPSULATION;
 -
--	if (raw_res_spin_lock_irqsave(&l->lock, flags)) {
--		WRITE_ONCE(node->pending_free, 1);
--		return;
+-		skb_shinfo(skb)->gso_type |= encap ? SKB_GSO_TCP_FIXEDID_INNER :
+-						     SKB_GSO_TCP_FIXEDID;
 -	}
--	__bpf_lru_node_move(l, node, BPF_LRU_LIST_T_FREE);
--	raw_res_spin_unlock_irqrestore(&l->lock, flags);
--}
--
- static void bpf_lru_list_pop_free_to_local(struct bpf_lru *lru,
- 					   struct bpf_lru_locallist *loc_l)
++	if (ntohs(ipv4->id) == rq->hw_gro_data->second_ip_id)
++		skb_shinfo(skb)->gso_type |= SKB_GSO_TCP_FIXEDID;
+ 
+ 	skb->csum_start = (unsigned char *)tcp - skb->head;
+ 	skb->csum_offset = offsetof(struct tcphdr, check);
+diff --git a/drivers/net/ethernet/sfc/ef100_tx.c b/drivers/net/ethernet/sfc/ef100_tx.c
+index 03005757c060..162cfa54f2d0 100644
+--- a/drivers/net/ethernet/sfc/ef100_tx.c
++++ b/drivers/net/ethernet/sfc/ef100_tx.c
+@@ -201,16 +201,10 @@ static void ef100_make_tso_desc(struct efx_nic *efx,
+ 	bool outer_csum;
+ 	u32 paylen;
+ 
+-	if (encap) {
+-		if (skb_shinfo(skb)->gso_type & SKB_GSO_TCP_FIXEDID_INNER)
+-			mangleid = ESE_GZ_TX_DESC_IP4_ID_NO_OP;
+-		if (skb_shinfo(skb)->gso_type & SKB_GSO_TCP_FIXEDID)
+-			mangleid_outer = ESE_GZ_TX_DESC_IP4_ID_NO_OP;
+-	} else {
+-		if (skb_shinfo(skb)->gso_type & SKB_GSO_TCP_FIXEDID)
+-			mangleid = ESE_GZ_TX_DESC_IP4_ID_NO_OP;
++	if (skb_shinfo(skb)->gso_type & SKB_GSO_TCP_FIXEDID)
++		mangleid = ESE_GZ_TX_DESC_IP4_ID_NO_OP;
++	if (!encap || (skb_shinfo(skb)->gso_type & SKB_GSO_TCP_FIXEDID_OUTER))
+ 		mangleid_outer = ESE_GZ_TX_DESC_IP4_ID_NO_OP;
+-	}
+ 
+ 	if (efx->net_dev->features & NETIF_F_HW_VLAN_CTAG_TX)
+ 		vlan_enable = skb_vlan_tag_present(skb);
+diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+index 694b6d29f680..9e0992afbbed 100644
+--- a/include/linux/netdevice.h
++++ b/include/linux/netdevice.h
+@@ -5545,7 +5545,7 @@ static inline bool net_gso_ok(netdev_features_t features, int gso_type)
  {
-@@ -355,7 +478,7 @@ static void __local_list_add_pending(struct bpf_lru *lru,
- 	*(u32 *)((void *)node + lru->hash_offset) = hash;
- 	node->cpu = cpu;
- 	node->type = BPF_LRU_LOCAL_LIST_T_PENDING;
--	WRITE_ONCE(node->pending_free, 0);
-+	WRITE_ONCE(node->pending_free, BPF_LRU_FREE_NONE);
- 	bpf_lru_node_clear_ref(node);
- 	list_add(&node->list, &loc_l->pending_list);
- }
-@@ -381,12 +504,20 @@ __local_list_pop_pending(struct bpf_lru *lru, struct bpf_lru_locallist *loc_l)
- ignore_ref:
- 	/* Get from the tail (i.e. older element) of the pending list. */
- 	list_for_each_entry_reverse(node, &loc_l->pending_list, list) {
-+		if (bpf_lru_node_pending_free(node) == BPF_LRU_FREE_PENDING)
-+			continue;
-+
- 		if ((!bpf_lru_node_is_ref(node) || force) &&
--		    (READ_ONCE(node->pending_free) ||
--		     lru->del_from_htab(lru->del_arg, node))) {
-+		    bpf_lru_node_pending_free(node) == BPF_LRU_FREE_READY) {
- 			list_del(&node->list);
- 			return node;
- 		}
-+
-+		if ((!bpf_lru_node_is_ref(node) || force) &&
-+		    lru->del_from_htab(lru->del_arg, node)) {
-+			bpf_lru_node_defer_free(lru, node);
-+			return NULL;
-+		}
- 	}
+ 	netdev_features_t feature;
  
- 	if (!force) {
-@@ -501,7 +632,7 @@ static struct bpf_lru_node *bpf_common_lru_pop_free(struct bpf_lru *lru,
- 		 */
- 		node->type = BPF_LRU_LOCAL_LIST_T_FREE;
- 		bpf_lru_node_clear_ref(node);
--		WRITE_ONCE(node->pending_free, 0);
-+		WRITE_ONCE(node->pending_free, BPF_LRU_FREE_NONE);
- 		llist_add(&node->llist, &loc_l->free_llist);
- 		return NULL;
- 	}
-@@ -533,30 +664,30 @@ static void bpf_common_lru_push_free(struct bpf_lru *lru,
- 		struct bpf_lru_locallist *loc_l;
+-	if (gso_type & (SKB_GSO_TCP_FIXEDID | SKB_GSO_TCP_FIXEDID_INNER))
++	if (gso_type & (SKB_GSO_TCP_FIXEDID | SKB_GSO_TCP_FIXEDID_OUTER))
+ 		gso_type |= __SKB_GSO_TCP_FIXEDID;
  
- 		loc_l = per_cpu_ptr(lru->common_lru.local_list, node->cpu);
--
- 		if (raw_res_spin_lock_irqsave(&loc_l->lock, flags)) {
--			WRITE_ONCE(node->pending_free, 1);
-+			WRITE_ONCE(node->pending_free, BPF_LRU_FREE_READY);
- 			return;
- 		}
--
- 		if (unlikely(READ_ONCE(node->type) != BPF_LRU_LOCAL_LIST_T_PENDING)) {
--			raw_res_spin_unlock_irqrestore(&loc_l->lock,
--						       flags);
-+			raw_res_spin_unlock_irqrestore(&loc_l->lock, flags);
- 			goto check_lru_list;
- 		}
--
- 		node->type = BPF_LRU_LOCAL_LIST_T_FREE;
- 		bpf_lru_node_clear_ref(node);
- 		list_del(&node->list);
--
- 		raw_res_spin_unlock_irqrestore(&loc_l->lock, flags);
--
- 		llist_add(&node->llist, &loc_l->free_llist);
- 		return;
- 	}
+ 	feature = ((netdev_features_t)gso_type << NETIF_F_GSO_SHIFT) & NETIF_F_GSO_MASK;
+diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+index c609cafc7a14..caf374b452ca 100644
+--- a/include/linux/skbuff.h
++++ b/include/linux/skbuff.h
+@@ -724,9 +724,19 @@ enum {
  
- check_lru_list:
--	bpf_lru_list_push_free(&lru->common_lru.lru_list, node);
-+	if (raw_res_spin_lock_irqsave(&lru->common_lru.lru_list.lock, flags)) {
-+		WRITE_ONCE(node->pending_free, BPF_LRU_FREE_READY);
-+		return;
-+	}
-+	__bpf_lru_node_move(&lru->common_lru.lru_list, node,
-+			    BPF_LRU_LIST_T_FREE);
-+	raw_res_spin_unlock_irqrestore(&lru->common_lru.lru_list.lock, flags);
- }
- 
- static void bpf_percpu_lru_push_free(struct bpf_lru *lru,
-@@ -566,14 +697,11 @@ static void bpf_percpu_lru_push_free(struct bpf_lru *lru,
- 	unsigned long flags;
- 
- 	l = per_cpu_ptr(lru->percpu_lru, node->cpu);
--
- 	if (raw_res_spin_lock_irqsave(&l->lock, flags)) {
--		WRITE_ONCE(node->pending_free, 1);
-+		WRITE_ONCE(node->pending_free, BPF_LRU_FREE_READY);
- 		return;
- 	}
--
- 	__bpf_lru_node_move(l, node, BPF_LRU_LIST_T_FREE);
--
- 	raw_res_spin_unlock_irqrestore(&l->lock, flags);
- }
- 
-@@ -585,6 +713,25 @@ void bpf_lru_push_free(struct bpf_lru *lru, struct bpf_lru_node *node)
- 		bpf_common_lru_push_free(lru, node);
- }
- 
-+void bpf_lru_defer_free(struct bpf_lru *lru, struct bpf_lru_node *node)
-+{
-+	bpf_lru_node_defer_free(lru, node);
-+}
-+
-+bool bpf_lru_wait_for_rcu(struct bpf_lru *lru)
-+{
-+	if (!atomic_read(&lru->rcu_in_progress) &&
-+	    llist_empty(&lru->rcu_pending) &&
-+	    llist_empty(&lru->rcu_waiting))
-+		return false;
-+
-+	wait_event(lru->rcu_wait,
-+		   !atomic_read(&lru->rcu_in_progress) &&
-+		   llist_empty(&lru->rcu_pending) &&
-+		   llist_empty(&lru->rcu_waiting));
-+	return true;
-+}
-+
- static void bpf_common_lru_populate(struct bpf_lru *lru, void *buf,
- 				    u32 node_offset, u32 elem_size,
- 				    u32 nr_elems)
-@@ -597,7 +744,7 @@ static void bpf_common_lru_populate(struct bpf_lru *lru, void *buf,
- 
- 		node = (struct bpf_lru_node *)(buf + node_offset);
- 		node->type = BPF_LRU_LIST_T_FREE;
--		node->pending_free = 0;
-+		node->pending_free = BPF_LRU_FREE_NONE;
- 		bpf_lru_node_clear_ref(node);
- 		list_add(&node->list, &l->lists[BPF_LRU_LIST_T_FREE]);
- 		buf += elem_size;
-@@ -627,7 +774,7 @@ static void bpf_percpu_lru_populate(struct bpf_lru *lru, void *buf,
- 		node = (struct bpf_lru_node *)(buf + node_offset);
- 		node->cpu = cpu;
- 		node->type = BPF_LRU_LIST_T_FREE;
--		node->pending_free = 0;
-+		node->pending_free = BPF_LRU_FREE_NONE;
- 		bpf_lru_node_clear_ref(node);
- 		list_add(&node->list, &l->lists[BPF_LRU_LIST_T_FREE]);
- 		i++;
-@@ -680,6 +827,12 @@ int bpf_lru_init(struct bpf_lru *lru, bool percpu, u32 hash_offset,
- {
- 	int cpu;
- 
-+	init_llist_head(&lru->rcu_pending);
-+	init_llist_head(&lru->rcu_waiting);
-+	init_irq_work(&lru->rcu_work, bpf_lru_rcu_work);
-+	atomic_set(&lru->rcu_in_progress, 0);
-+	init_waitqueue_head(&lru->rcu_wait);
-+
- 	if (percpu) {
- 		lru->percpu_lru = alloc_percpu(struct bpf_lru_list);
- 		if (!lru->percpu_lru)
-@@ -720,6 +873,14 @@ int bpf_lru_init(struct bpf_lru *lru, bool percpu, u32 hash_offset,
- 
- void bpf_lru_destroy(struct bpf_lru *lru)
- {
-+	do {
-+		irq_work_sync(&lru->rcu_work);
-+		rcu_barrier();
-+		irq_work_sync(&lru->rcu_work);
-+	} while (atomic_read(&lru->rcu_in_progress) ||
-+		 !llist_empty(&lru->rcu_pending) ||
-+		 !llist_empty(&lru->rcu_waiting));
-+
- 	if (lru->percpu)
- 		free_percpu(lru->percpu_lru);
- 	else
-diff --git a/kernel/bpf/bpf_lru_list.h b/kernel/bpf/bpf_lru_list.h
-index 8d0ee6162..a0f36a8c5 100644
---- a/kernel/bpf/bpf_lru_list.h
-+++ b/kernel/bpf/bpf_lru_list.h
-@@ -5,8 +5,11 @@
- #define __BPF_LRU_LIST_H_
- 
- #include <linux/cache.h>
-+#include <linux/irq_work.h>
- #include <linux/list.h>
- #include <linux/llist.h>
-+#include <linux/rcupdate.h>
-+#include <linux/wait.h>
- #include <asm/rqspinlock.h>
- 
- #define NR_BPF_LRU_LIST_T	(3)
-@@ -33,11 +36,15 @@ struct bpf_lru_node {
- 	u16 cpu;
- 	u8 type;
- 	u8 ref;
--	/*
--	 * Marks nodes whose *_push_free() lock acquire failed; reclaimed
--	 * by flush/shrink which honor the flag instead of del_from_htab().
--	 */
-+	/* Tracks whether this node is waiting for, or ready after, an RCU grace period. */
- 	u8 pending_free;
-+	struct llist_node rcu_node;
-+};
-+
-+enum bpf_lru_free_state {
-+	BPF_LRU_FREE_NONE,
-+	BPF_LRU_FREE_PENDING,
-+	BPF_LRU_FREE_READY,
+ 	/* These indirectly map onto the same netdev feature.
+ 	 * If NETIF_F_TSO_MANGLEID is set it may mangle both inner and outer IDs.
++	 * SKB_GSO_TCP_FIXEDID describes the innermost IPv4 header and
++	 * SKB_GSO_TCP_FIXEDID_OUTER the outermost one. Adding a header in
++	 * iptunnel_handle_offloads() or with BPF LWT clears the outer flag, and
++	 * so does removing one in iptunnel_pull_offloads() or in
++	 * bpf_skb_adjust_room() with a BPF_F_ADJ_ROOM_DECAP_L4_* or
++	 * BPF_F_ADJ_ROOM_DECAP_IPXIP* flag. xfrm_output() sets it from the
++	 * inner flag for ESP transport and BEET mode offload, which keep the
++	 * header.
++	 * Software segmentation uses SKB_GSO_TCP_FIXEDID for any header in
++	 * between.
+ 	 */
+ 	SKB_GSO_TCP_FIXEDID = 1 << 30,
+-	SKB_GSO_TCP_FIXEDID_INNER = 1 << 31,
++	SKB_GSO_TCP_FIXEDID_OUTER = 1 << 31,
  };
  
- struct bpf_lru_list {
-@@ -74,6 +81,12 @@ struct bpf_lru {
- 	unsigned int target_free;
- 	unsigned int nr_scans;
- 	bool percpu;
-+	struct llist_head rcu_pending;
-+	struct llist_head rcu_waiting;
-+	struct irq_work rcu_work;
-+	struct rcu_head rcu;
-+	atomic_t rcu_in_progress;
-+	wait_queue_head_t rcu_wait;
- };
+ #if BITS_PER_LONG > 32
+diff --git a/include/net/ip_tunnels.h b/include/net/ip_tunnels.h
+index 5cccf4c0e691..a8e1cd7021fc 100644
+--- a/include/net/ip_tunnels.h
++++ b/include/net/ip_tunnels.h
+@@ -667,6 +667,7 @@ static inline int iptunnel_pull_offloads(struct sk_buff *skb)
+ 			return err;
+ 		skb_shinfo(skb)->gso_type &= ~(NETIF_F_GSO_ENCAP_ALL >>
+ 					       NETIF_F_GSO_SHIFT);
++		skb_shinfo(skb)->gso_type &= ~SKB_GSO_TCP_FIXEDID_OUTER;
+ 	}
  
- static inline void bpf_lru_node_set_ref(struct bpf_lru_node *node)
-@@ -87,7 +100,9 @@ int bpf_lru_init(struct bpf_lru *lru, bool percpu, u32 hash_offset,
- void bpf_lru_populate(struct bpf_lru *lru, void *buf, u32 node_offset,
- 		      u32 elem_size, u32 nr_elems);
- void bpf_lru_destroy(struct bpf_lru *lru);
-+bool bpf_lru_wait_for_rcu(struct bpf_lru *lru);
- struct bpf_lru_node *bpf_lru_pop_free(struct bpf_lru *lru, u32 hash);
- void bpf_lru_push_free(struct bpf_lru *lru, struct bpf_lru_node *node);
-+void bpf_lru_defer_free(struct bpf_lru *lru, struct bpf_lru_node *node);
+ 	skb->encapsulation = 0;
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 8d7228834305..e5aae5320af9 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -3097,20 +3097,22 @@ union bpf_attr {
+  *
+  *		* **BPF_F_ADJ_ROOM_DECAP_L4_GRE**:
+  *		  Clear GRE tunnel GSO flags (SKB_GSO_GRE and SKB_GSO_GRE_CSUM)
+- *		  when decapsulating a GRE tunnel.
++ *		  and SKB_GSO_TCP_FIXEDID_OUTER when decapsulating a GRE tunnel.
+  *
+  *		* **BPF_F_ADJ_ROOM_DECAP_L4_UDP**:
+  *		  Clear UDP tunnel GSO flags (SKB_GSO_UDP_TUNNEL and
+- *		  SKB_GSO_UDP_TUNNEL_CSUM) when decapsulating a UDP tunnel.
++ *		  SKB_GSO_UDP_TUNNEL_CSUM) and SKB_GSO_TCP_FIXEDID_OUTER when
++ *		  decapsulating a UDP tunnel.
+  *
+  *		* **BPF_F_ADJ_ROOM_DECAP_IPXIP4**:
+- *		  Clear IPIP/SIT tunnel GSO flag (SKB_GSO_IPXIP4) when decapsulating
+- *		  a tunnel with an outer IPv4 header (IPv4-in-IPv4 or IPv6-in-IPv4).
++ *		  Clear IPIP/SIT tunnel GSO flag (SKB_GSO_IPXIP4) and
++ *		  SKB_GSO_TCP_FIXEDID_OUTER when decapsulating a tunnel with an
++ *		  outer IPv4 header (IPv4-in-IPv4 or IPv6-in-IPv4).
+  *
+  *		* **BPF_F_ADJ_ROOM_DECAP_IPXIP6**:
+- *		  Clear IPv6 encapsulation tunnel GSO flag (SKB_GSO_IPXIP6) when
+- *		  decapsulating a tunnel with an outer IPv6 header (IPv6-in-IPv6
+- *		  or IPv4-in-IPv6).
++ *		  Clear IPv6 encapsulation tunnel GSO flag (SKB_GSO_IPXIP6) and
++ *		  SKB_GSO_TCP_FIXEDID_OUTER when decapsulating a tunnel with an
++ *		  outer IPv6 header (IPv6-in-IPv6 or IPv4-in-IPv6).
+  *
+  *		When using the decapsulation flags above, the skb->encapsulation
+  *		flag is automatically cleared if all tunnel-specific GSO flags
+diff --git a/net/core/filter.c b/net/core/filter.c
+index d6a6dd9c9547..5a7957c21d17 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -3856,6 +3856,7 @@ static int bpf_skb_net_shrink(struct sk_buff *skb, u32 off, u32 len_diff,
+ 		/* Clear encapsulation flag only when no tunnel GSO flags remain */
+ 		if (flags & (BPF_F_ADJ_ROOM_DECAP_L4_MASK |
+ 			     BPF_F_ADJ_ROOM_DECAP_IPXIP_MASK)) {
++			shinfo->gso_type &= ~SKB_GSO_TCP_FIXEDID_OUTER;
+ 			if (!(shinfo->gso_type & (SKB_GSO_UDP_TUNNEL |
+ 						  SKB_GSO_UDP_TUNNEL_CSUM |
+ 						  SKB_GSO_GRE |
+diff --git a/net/core/lwt_bpf.c b/net/core/lwt_bpf.c
+index 484cd3b53dea..a7d6fda69f60 100644
+--- a/net/core/lwt_bpf.c
++++ b/net/core/lwt_bpf.c
+@@ -585,6 +585,8 @@ static int handle_gso_type(struct sk_buff *skb, unsigned int gso_type,
+ 	struct skb_shared_info *shinfo = skb_shinfo(skb);
  
- #endif
-diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-index a2d0bfd4c..d46f962d9 100644
---- a/kernel/bpf/hashtab.c
-+++ b/kernel/bpf/hashtab.c
-@@ -207,6 +207,18 @@ static bool htab_is_lru(const struct bpf_htab *htab)
- 	return htab_map_is_lru(&htab->map);
- }
+ 	gso_type |= SKB_GSO_DODGY;
++	/* The outer flag described the header below the new one. */
++	shinfo->gso_type &= ~SKB_GSO_TCP_FIXEDID_OUTER;
+ 	shinfo->gso_type |= gso_type;
+ 	skb_decrease_gso_size(shinfo, encap_len);
+ 	shinfo->gso_segs = 0;
+diff --git a/net/ipv4/af_inet.c b/net/ipv4/af_inet.c
+index 5d03a9149b40..c4541c924aaf 100644
+--- a/net/ipv4/af_inet.c
++++ b/net/ipv4/af_inet.c
+@@ -1404,10 +1404,13 @@ struct sk_buff *inet_gso_segment(struct sk_buff *skb,
  
-+bool bpf_lru_hash_wait_for_rcu(struct bpf_map *map)
-+{
-+	struct bpf_htab *htab;
-+
-+	if (map->map_type != BPF_MAP_TYPE_LRU_HASH &&
-+	    map->map_type != BPF_MAP_TYPE_LRU_PERCPU_HASH)
-+		return false;
-+
-+	htab = container_of(map, struct bpf_htab, map);
-+	return bpf_lru_wait_for_rcu(&htab->lru);
-+}
-+
- static bool htab_is_percpu(const struct bpf_htab *htab)
- {
- 	return htab->map.map_type == BPF_MAP_TYPE_PERCPU_HASH ||
-@@ -484,12 +496,13 @@ static int prealloc_init(struct bpf_htab *htab)
+ 	segs = ERR_PTR(-EPROTONOSUPPORT);
  
- static void prealloc_destroy(struct bpf_htab *htab)
- {
--	htab_free_elems(htab);
+-	fixedid = !!(skb_shinfo(skb)->gso_type & (SKB_GSO_TCP_FIXEDID << encap));
 -
--	if (htab_is_lru(htab))
-+	if (htab_is_lru(htab)) {
- 		bpf_lru_destroy(&htab->lru);
--	else
-+		htab_free_elems(htab);
+-	if (!skb->encapsulation || encap)
++	if (!skb->encapsulation || encap) {
+ 		udpfrag = !!(skb_shinfo(skb)->gso_type & SKB_GSO_UDP);
++		fixedid = !!(skb_shinfo(skb)->gso_type & SKB_GSO_TCP_FIXEDID);
 +	} else {
-+		htab_free_elems(htab);
- 		pcpu_freelist_destroy(&htab->freelist);
++		fixedid = !!(skb_shinfo(skb)->gso_type &
++			     SKB_GSO_TCP_FIXEDID_OUTER);
 +	}
- }
  
- static int alloc_extra_elems(struct bpf_htab *htab)
-@@ -1505,11 +1518,15 @@ static long htab_map_update_elem(struct bpf_map *map, void *key, void *value,
- 	return ret;
- }
- 
--static void htab_lru_push_free(struct bpf_htab *htab, struct htab_elem *elem)
-+static void htab_lru_free_elem(struct bpf_htab *htab, struct htab_elem *elem,
-+			       bool defer)
+ 	ops = rcu_dereference(inet_offloads[proto]);
+ 	if (likely(ops && ops->callbacks.gso_segment)) {
+diff --git a/net/ipv4/ip_tunnel_core.c b/net/ipv4/ip_tunnel_core.c
+index 6c2855adff28..dbf6bbf25114 100644
+--- a/net/ipv4/ip_tunnel_core.c
++++ b/net/ipv4/ip_tunnel_core.c
+@@ -193,6 +193,8 @@ int iptunnel_handle_offloads(struct sk_buff *skb,
+ 		err = skb_header_unclone(skb, GFP_ATOMIC);
+ 		if (unlikely(err))
+ 			return err;
++		/* The outer flag described the header below the new one. */
++		skb_shinfo(skb)->gso_type &= ~SKB_GSO_TCP_FIXEDID_OUTER;
+ 		skb_shinfo(skb)->gso_type |= gso_type_mask;
+ 		return 0;
+ 	}
+diff --git a/net/ipv4/tcp_offload.c b/net/ipv4/tcp_offload.c
+index 7691be01da4d..93ea20b90550 100644
+--- a/net/ipv4/tcp_offload.c
++++ b/net/ipv4/tcp_offload.c
+@@ -463,6 +463,8 @@ INDIRECT_CALLABLE_SCOPE int tcp4_gro_complete(struct sk_buff *skb, int thoff)
  {
- 	check_and_cancel_fields(htab, elem);
- 	bpf_map_dec_elem_count(&htab->map);
--	bpf_lru_push_free(&htab->lru, htab_elem_lru_node(elem));
-+	if (defer)
-+		bpf_lru_defer_free(&htab->lru, htab_elem_lru_node(elem));
-+	else
-+		bpf_lru_push_free(&htab->lru, htab_elem_lru_node(elem));
- }
+ 	const u16 offset = NAPI_GRO_CB(skb)->network_offsets[skb->encapsulation];
+ 	const struct iphdr *iph = (struct iphdr *)(skb->data + offset);
++	const u8 fixedid = NAPI_GRO_CB(skb)->ip_fixedid;
++	const u8 encap = skb->encapsulation;
+ 	struct tcphdr *th = tcp_hdr(skb);
  
- static long htab_lru_map_update_elem(struct bpf_map *map, void *key, void *value,
-@@ -1572,9 +1589,9 @@ static long htab_lru_map_update_elem(struct bpf_map *map, void *key, void *value
+ 	if (unlikely(NAPI_GRO_CB(skb)->is_flist)) {
+@@ -477,9 +479,10 @@ INDIRECT_CALLABLE_SCOPE int tcp4_gro_complete(struct sk_buff *skb, int thoff)
+ 	th->check = ~tcp_v4_check(skb->len - thoff, iph->saddr,
+ 				  iph->daddr, 0);
  
- err_lock_bucket:
- 	if (ret)
--		htab_lru_push_free(htab, &l_new->elem);
-+		htab_lru_free_elem(htab, &l_new->elem, false);
- 	else if (l_old)
--		htab_lru_push_free(htab, l_old);
-+		htab_lru_free_elem(htab, l_old, true);
+-	BUILD_BUG_ON(SKB_GSO_TCP_FIXEDID << 1 != SKB_GSO_TCP_FIXEDID_INNER);
++	/* Bit 0 of ip_fixedid is the outermost header, bit 1 the inner one. */
+ 	skb_shinfo(skb)->gso_type |= SKB_GSO_TCPV4 |
+-			(NAPI_GRO_CB(skb)->ip_fixedid * SKB_GSO_TCP_FIXEDID);
++		(((fixedid >> encap) & 1) * SKB_GSO_TCP_FIXEDID) |
++		((fixedid & encap) * SKB_GSO_TCP_FIXEDID_OUTER);
  
- 	return ret;
- }
-@@ -1803,7 +1820,7 @@ static long htab_lru_map_delete_elem(struct bpf_map *map, void *key)
+ 	tcp_gro_complete(skb);
+ 	return 0;
+diff --git a/net/ipv6/tcpv6_offload.c b/net/ipv6/tcpv6_offload.c
+index 71feb92aeac2..f232d5b38bbf 100644
+--- a/net/ipv6/tcpv6_offload.c
++++ b/net/ipv6/tcpv6_offload.c
+@@ -96,7 +96,10 @@ static __always_inline int tcp6_gro_complete(struct sk_buff *skb, int thoff)
  
- 	htab_unlock_bucket(b, flags);
- 	if (l)
--		htab_lru_push_free(htab, l);
-+		htab_lru_free_elem(htab, l, true);
- 	return ret;
- }
+ 	th->check = ~tcp_v6_check(skb->len - thoff, &iph->saddr,
+ 				  &iph->daddr, 0);
+-	skb_shinfo(skb)->gso_type |= SKB_GSO_TCPV6;
++	/* Only an IPv4 outer header sets bit 0 of ip_fixedid. */
++	skb_shinfo(skb)->gso_type |= SKB_GSO_TCPV6 |
++		((NAPI_GRO_CB(skb)->ip_fixedid & skb->encapsulation) *
++		 SKB_GSO_TCP_FIXEDID_OUTER);
  
-@@ -1967,7 +1984,7 @@ static int __htab_map_lookup_and_delete_elem(struct bpf_map *map, void *key,
+ 	tcp_gro_complete(skb);
+ 	return 0;
+diff --git a/net/xfrm/xfrm_output.c b/net/xfrm/xfrm_output.c
+index f1f612cd7b43..e5bcb845e9ac 100644
+--- a/net/xfrm/xfrm_output.c
++++ b/net/xfrm/xfrm_output.c
+@@ -791,6 +791,7 @@ int xfrm_output(struct sock *sk, struct sk_buff *skb)
+ 	secpath_reset(skb);
  
- 	if (l) {
- 		if (is_lru_map)
--			htab_lru_push_free(htab, l);
-+			htab_lru_free_elem(htab, l, true);
- 		else
- 			free_htab_elem(htab, l);
- 	}
-@@ -2181,10 +2198,10 @@ __htab_map_lookup_and_delete_batch(struct bpf_map *map,
- 		if (do_delete) {
- 			hlist_nulls_del_rcu(&l->hash_node);
+ 	if (xfrm_dev_offload_ok(skb, x)) {
++		bool encap = skb->encapsulation;
+ 		struct sec_path *sp;
  
--			/* bpf_lru_push_free() will acquire lru_lock, which
--			 * may cause deadlock. See comments in function
--			 * prealloc_lru_pop(). Let us do bpf_lru_push_free()
--			 * after releasing the bucket lock.
-+			/* Keep LRU element cleanup outside the bucket lock.
-+			 * The immediate-free path takes lru_lock, and special-field
-+			 * cleanup may synchronize with other contexts. See the lock
-+			 * ordering documented above prealloc_lru_pop().
- 			 *
- 			 * For htab of maps, htab_put_fd_value() in
- 			 * free_htab_elem() may acquire a spinlock with bucket
-@@ -2205,7 +2222,7 @@ __htab_map_lookup_and_delete_batch(struct bpf_map *map,
- 		l = node_to_free;
- 		node_to_free = node_to_free->batch_flink;
- 		if (is_lru_map)
--			htab_lru_push_free(htab, l);
-+			htab_lru_free_elem(htab, l, true);
- 		else
- 			free_htab_elem(htab, l);
- 	}
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index ec8e78792..4ef40b333 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -267,7 +267,7 @@ static int bpf_map_update_value(struct bpf_map *map, struct file *map_file,
- 		return bpf_fd_array_map_update_elem(map, map_file, key, value,
- 						    flags);
- 	}
--
-+retry_update:
- 	bpf_disable_instrumentation();
- 	if (map->map_type == BPF_MAP_TYPE_PERCPU_HASH ||
- 	    map->map_type == BPF_MAP_TYPE_LRU_PERCPU_HASH) {
-@@ -303,6 +303,14 @@ static int bpf_map_update_value(struct bpf_map *map, struct file *map_file,
- 	}
- 	bpf_enable_instrumentation();
+ 		sp = secpath_set(skb);
+@@ -805,10 +806,25 @@ int xfrm_output(struct sock *sk, struct sk_buff *skb)
+ 		xfrm_state_hold(x);
  
-+	if (err == -ENOMEM &&
-+	    (map->map_type == BPF_MAP_TYPE_LRU_HASH ||
-+	     map->map_type == BPF_MAP_TYPE_LRU_PERCPU_HASH) &&
-+	    bpf_lru_hash_wait_for_rcu(map)) {
-+		cond_resched();
-+		goto retry_update;
-+	}
-+
- 	return err;
- }
+ 		xfrm_get_inner_ipproto(skb, x);
++		/*
++		 * Transport and BEET mode keep the IPv4 header and its ID, so
++		 * the header that SKB_GSO_TCP_FIXEDID describes is the outer
++		 * one as well.
++		 */
++		if (!encap &&
++		    (x->props.mode == XFRM_MODE_TRANSPORT ||
++		     x->props.mode == XFRM_MODE_BEET) &&
++		    (skb_shinfo(skb)->gso_type & SKB_GSO_TCP_FIXEDID))
++			skb_shinfo(skb)->gso_type |= SKB_GSO_TCP_FIXEDID_OUTER;
+ 		skb->encapsulation = 1;
  
+ 		if (skb_is_gso(skb)) {
+-			if (skb->inner_protocol && x->props.mode == XFRM_MODE_TUNNEL)
++			/*
++			 * inner_protocol is only valid on an encapsulated skb:
++			 * a tunnel that decapsulated the packet leaves it set.
++			 */
++			if (encap && skb->inner_protocol &&
++			    x->props.mode == XFRM_MODE_TUNNEL)
+ 				return xfrm_output_gso(net, sk, skb);
+ 
+ 			skb_shinfo(skb)->gso_type |= SKB_GSO_ESP;
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 8d7228834305..e5aae5320af9 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -3097,20 +3097,22 @@ union bpf_attr {
+  *
+  *		* **BPF_F_ADJ_ROOM_DECAP_L4_GRE**:
+  *		  Clear GRE tunnel GSO flags (SKB_GSO_GRE and SKB_GSO_GRE_CSUM)
+- *		  when decapsulating a GRE tunnel.
++ *		  and SKB_GSO_TCP_FIXEDID_OUTER when decapsulating a GRE tunnel.
+  *
+  *		* **BPF_F_ADJ_ROOM_DECAP_L4_UDP**:
+  *		  Clear UDP tunnel GSO flags (SKB_GSO_UDP_TUNNEL and
+- *		  SKB_GSO_UDP_TUNNEL_CSUM) when decapsulating a UDP tunnel.
++ *		  SKB_GSO_UDP_TUNNEL_CSUM) and SKB_GSO_TCP_FIXEDID_OUTER when
++ *		  decapsulating a UDP tunnel.
+  *
+  *		* **BPF_F_ADJ_ROOM_DECAP_IPXIP4**:
+- *		  Clear IPIP/SIT tunnel GSO flag (SKB_GSO_IPXIP4) when decapsulating
+- *		  a tunnel with an outer IPv4 header (IPv4-in-IPv4 or IPv6-in-IPv4).
++ *		  Clear IPIP/SIT tunnel GSO flag (SKB_GSO_IPXIP4) and
++ *		  SKB_GSO_TCP_FIXEDID_OUTER when decapsulating a tunnel with an
++ *		  outer IPv4 header (IPv4-in-IPv4 or IPv6-in-IPv4).
+  *
+  *		* **BPF_F_ADJ_ROOM_DECAP_IPXIP6**:
+- *		  Clear IPv6 encapsulation tunnel GSO flag (SKB_GSO_IPXIP6) when
+- *		  decapsulating a tunnel with an outer IPv6 header (IPv6-in-IPv6
+- *		  or IPv4-in-IPv6).
++ *		  Clear IPv6 encapsulation tunnel GSO flag (SKB_GSO_IPXIP6) and
++ *		  SKB_GSO_TCP_FIXEDID_OUTER when decapsulating a tunnel with an
++ *		  outer IPv6 header (IPv6-in-IPv6 or IPv4-in-IPv6).
+  *
+  *		When using the decapsulation flags above, the skb->encapsulation
+  *		flag is automatically cleared if all tunnel-specific GSO flags
+-- 
+2.53.0
+
