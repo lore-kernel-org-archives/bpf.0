@@ -1,84 +1,105 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.231.136
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.231.134
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795832210;
-	b=13c4r9U2Rd/CrDOtfLlWsXmK6YlYPfu0Y0GuffIT75F8jYQh+4zYAEIi0Kl4B/9kVNb/
-	 5q9PRj9eAhk1Q6emK0u1FuLA4O9rn7GLgRtZ0F+0WSFLykmKt0ePcx2wd4fBF9ditO/RZ
-	 EEGA/oACAgF428N66c8YkTuu0In8JgEQSrsM12Pwas1JJaMkJndcPLop0E9gGngUmcXjh
-	 ql69qVBxqM8ZYSl3FjbMC8LkAoF5/ij7/w+JB9IKDoWLhmsVnNB85p78ZbMXI5ng5TXQc
-	 ImsIfjN1TRqJso78YRhVh0V6NNDn1Tv17i95wH8v/avfTVd3oQHBI7jdGNZGunpP3qg==
+	t=1795834402;
+	b=OrG+UXzrdNBE6VixKW8mp0ridblSIr0ZsIlUQIMaeWfOwQMVkr01W38tiD9CdQSa6YSx
+	 1+QyBrHDmlVfBPe9dsQZ+XXfDF9zM3XtD3q3iHv5urb59RtGfd9Oi6jcNHcEtiohah8tT
+	 JWbTlAfXnhmHdi21XEHAHKXX4L4GwyuY4WGLuzxozNr+1iS36N/mxjNNB3jMHKdX2F6TN
+	 o73q61G22tX175WcXfiMHsMkHqxCZojtQV82nrIkle3eQm2BG5Sdw7TilgqNSe0dYmgXU
+	 +qsp3qCm/yb28/Fqx1RjpbedWKgxHw/zJKIupWeKJXhNDd5EZ7fhYisJpFQ1u8bGVzA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795832210;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795834402;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Message-Id:
-	 Subject:From:To:X-Mailer:References:In-Reply-To;
-	bh=yiliGXm3f+G64tFZg1ZTzyN0pIV3IaS5Gv94kJDg6uc=;
-	b=lUvNXm+zAX/niJSSL/7wHFjVriOzu9aI11Ah5rcbrmmpMNJf5OadZDUuvnLtgRIu6XAP
-	 k7ysPnXwlg9LEVBqNPl+x0njNS2s7+/N6gSIsOspPgSylcpgdhoMMlP2cq7ayxSKRFI/j
-	 o227eU6EdsBusyITruaF5q9n8hj/r62FyBj2koewDAPDgzZMMOhVuSqdSA0iuF+4UkICo
-	 X758j0ljd4RX+QufvMGl5duoFuOMfQFQ+nQxlXwngN8BsQuf77F+vs0WfFeqbmaYScynp
-	 ooph7n2WFfTxqIEDtsYtpxOVVqhf0ngHMx5yYD8oI8nS+79tAcQJFgiWIyEQUueYVnQ==
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:MIME-Version:X-Developer-Signature:
+	 X-Developer-Key:Content-Transfer-Encoding;
+	bh=R0kCwO2dA78O9IErWGqjxytV2TbDnWKV61Iue3IYRdw=;
+	b=J6AIu1j1JNxZeaZ8aB0sPQAIcD+iBrElXfJgRHdIOw1OI0NpRudhYIg6YgMYcaCUfl+v
+	 BgRzf+w3dhJuMk6Gulp+lD0SrwL4dvgnC4sdHfYE36DbhdnWq+pAt46g2m6ZSpA4tI4tc
+	 NWtqqDxCAhJ2hyNKD8Ysbnnbkop0vc9DR995Zu0Y4FZaeZYXs8eWmWRxTvbnxbudbe96c
+	 makVeVEGXYA2+1IPTqFHvHwrPfvEJvhDNkUW/AqIcPGAX6WaP4a2IRR/8O+w/FEx4KX/g
+	 L/ItIxjUeeuwrSUcYX1Mppd+Zw7Vov2/qWLKT6NYG7YLBDWu40lOu3WEMAFv9zyWzUA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=FeXVHrlw;
-	arc=none smtp.remote-ip=74.125.231.136
-Received: from mail-oo2-f8.google.com (mail-oo2-f8.google.com [74.125.231.136])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Xz8iIQwP;
+	arc=none smtp.remote-ip=74.125.231.134
+Received: from mail-oo2-f6.google.com (mail-oo2-f6.google.com [74.125.231.134])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F657606A69F
-	for <bpf@vger.kernel.org>; Sat, 28 Nov 2026 02:16:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3F657606A69F
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4DAC606A31C
+	for <bpf@vger.kernel.org>; Sat, 28 Nov 2026 02:53:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E4DAC606A31C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=FeXVHrlw
-Received: by mail-oo2-f8.google.com with SMTP id 006d021491bc7-718facffeffso813189eaf.0
-        for <bpf@vger.kernel.org>; Fri, 27 Nov 2026 18:16:47 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Xz8iIQwP
+Received: by mail-oo2-f6.google.com with SMTP id 46e09a7af769-862990b7bbbso2705216a34.0
+        for <bpf@vger.kernel.org>; Fri, 27 Nov 2026 18:53:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795832206; x=1796437006; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:message-id:date:content-type
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=yiliGXm3f+G64tFZg1ZTzyN0pIV3IaS5Gv94kJDg6uc=;
-        b=FeXVHrlwlU89nBzMm2vEo903Zl+YGQwovls0PjXBvidkAz/jEv3EdQ8T6t/zxzXDIM
-         6eu1Tm2B3fg+3Nx4L/eVZY/9m8yQcewvd2c0BUEHgvhpf8S3vhPUK0up8Bg6RUjP/2CE
-         JFyMNzKcmESc2/y97mqn3tnDR1tt1IHRr8VzxrLczPjbqAxixvC47c3vwuq8hi4oYUo/
-         KoQuE6q4X72VhzVimlMgoGblWoN+oA3HRH2RN+G6ULAZB07o+mse9PiaMxS5Np4IZetQ
-         2L9boS6BfoQZU6QE+MYJtfkvnwNZ01EGxmzEnyaZ57ghUIYoCjwSP9b3LDlAqpuFPODn
-         N/3A==
+        d=gmail.com; s=20260707; t=1795834401; x=1796439201; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=R0kCwO2dA78O9IErWGqjxytV2TbDnWKV61Iue3IYRdw=;
+        b=Xz8iIQwPrz3UXXC7kRWAAxzvKVj/HU7EAdERFZunkGhTxzrDkFsAWIqJM0+E4/k7Vu
+         yjDrWroAYQ+pKfzA17gl6LuEHH0huBIide5ecTQEc9tu7W592QR6Rvvob7UcoGVFV1VS
+         Jhz/HjFsmHeRgwzHzhK5JhZYOwWY0nPw+HWcMxff7G+L/OLkc9bjJ4XmUwiHYoWlndUs
+         ehplCIK6cWT7AUo/TyY2ADJLkg0dhxfcKQFxfas9/pK0aQHCiL4UU1FQ1Zs4ILwJLdU3
+         aMkWa3w/krHXD9qsSFnX+fY636idLG1l11mf4Ymm1C3E0EdUhHJysCvBGuVw9zKT6f5m
+         XQ6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795832206; x=1796437006;
-        h=in-reply-to:references:to:from:subject:message-id:date:content-type
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=yiliGXm3f+G64tFZg1ZTzyN0pIV3IaS5Gv94kJDg6uc=;
-        b=mY2Btskn0GFuqXD4T730zFTPTEtu9PhLyEKYQxKpMnN3AiHmBiFYaUR8L4lfvRcKd3
-         arxYpxUeEm0fL/CnVW+VRbvLaGEdwyThQsQn2YNUR6WbxCZfbVVY/1J9lxb2N4FMrq59
-         eWc64/u9QHXnAmsSQQK11QRkr9q/rJuWuMta8m0Wm3s4WgPzrCJJOcZFAU6xAMQiM4mf
-         vBnOyKBmW1clsRkQd1BvojreXp1ZRuO7RktxR6dKPv0rBB5U6NJYD2PdD1gMrRyAzFCl
-         /wJN5+NEwRrCxrdRQSzQbGPkrd/znx1WGlEj9/E46agqXTE4G87seAbjHQssYqPc1m5v
-         I4Sg==
-X-Forwarded-Encrypted: i=1; AL+hErF6RwYHqlVib7szrFIn1lVwd3XB71sbWVAiNqa14E1cjOojp0ea0Iz33CqtYDX0B9rNvvk=@vger.kernel.org
-X-Gm-Message-State: APuU4Z/kp1ybhZ6Jp9RPDQdeE5BvUBe2qYbIZ8lbAFcA0GzNTauSU4X4
-	ff3R4mMLhEIqgfsDLX3j8fbLFACjpZiO8GE0Ihw+vhEXiqWljiRXqndi7J2ZZeBcmOE=
-X-Gm-Gg: AZFdTZcEeCrdSQO0oJVA1L+saUaMcnSglnmG6Doe23zZ6EDsvWbCBHXgcpKT8ReQNhN
-	apce0oFJjq6zj1rmuX/f6FOx9/sA/Pdue6VlmdC5Q60eCqCCxQZslPxqT566dIDjit6cg6qf49D
-	PjoUwGRmDLpDmhoFYPCzvDLRjTHqViJjQQrb5TUX5dFCY0PbCKKty91xjyA9WIxEbLbXNdA102m
-	tVdGeYDG4OyjqPb5bhhdMosCbUbWWPQtKOB586YO8DjCuZ50d+Kx5rvNXroMeegPRXG/m8ESzAh
-	j27ZfQ9l2fX3JDynJafImwRyvFZBSbGD6kxSGQPlJ+j1QWMBj4aVIfLcjL7Ce1yHy/lrJuL4A6e
-	wh71vJ3PCOHmlF9mGNJUA+wlUnFI555j7jfmf2/WGHjSMCoXfBUzNr/K4DzN3INWfDVKIcbHEnc
-	otzwuFt43c1VOZBGVgogDs/5dgt37kpWsKuk5GrX0mxjNAzZjwCmrlgbcpE9IVIbjDFWyBNTbix
-	ZLXsE25EA8D0+1VbkRlFCf5/2uNJE2wX2niEmWMWj3J59uGEzQMjY3s03QoV0vA2PB7zt+ECs3P
-	TpJ/sK1VwlMqWRiz4orltVudWBGFUgrcT2CbL0bz8WVHCRAe2jFD6V1pkvC+aT6yfkaAd0Y+ZAL
-	4IqkTzexxbQQbFmrktIvF95D5QhXD3XFjIngM2w==
-X-Received: by 2002:a05:6820:c5c6:20b0:71a:fb34:af74 with SMTP id 006d021491bc7-71b39438914mr13911055eaf.27.1795832206071;
-        Fri, 27 Nov 2026 18:16:46 -0800 (PST)
-Received: from localhost ([2a03:2880:10ff:5b::])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4bc60891cf6sm24863163fac.13.2026.11.27.18.16.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Nov 2026 18:16:44 -0800 (PST)
+        d=1e100.net; s=20260707; t=1795834401; x=1796439201;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=R0kCwO2dA78O9IErWGqjxytV2TbDnWKV61Iue3IYRdw=;
+        b=GDFFNl38nutfyVsbVxtdrpbcXmNlFada+Fh/oHUTITSSUcVX77bKsgCaffDUgfkL2n
+         HZFGdrCTnWkx5cSNmlcBbHxLqQVMXkjPlmtqzSm81UE/7C3ClNiK0eHEN5g8sTDujXPc
+         kpaglvTNFTickdpMN+PEEsaUVgtyoL1z8Y3Y+mRpo9sesrymfPMUwVcnDA3q7llO7WAZ
+         /ZeY0W57qfM1avivJfRoVNd9zo6C4IKhYKgU8DZ+CNqSs2SylXUI8dKZGAlrSa6IFX1d
+         W8HIF9s0YSpxcOksL2kqX8uUQsGcGywE0FcMppZdGlsUDbtRpJS4mdU+W0WcY0tAbHLW
+         PSDg==
+X-Gm-Message-State: APuU4Z+WopeT7K2fRpWxYRwifIRh1/BOXjmlqhY/5A5hFgd/4LAbC0qE
+	q/sGYjT7pBNDQIs+66xY8rdTHosGqwMfad7/9aMXd6VBoSG9xfHoFl09pXtpDr9i+Ho=
+X-Gm-Gg: AZFdTZf6IaK6O0gYHsxQaiDllTc6lZhDQwOc2PPqUtTPbE8tRevj1RTBbS3Whz1fqNM
+	ystCi4QnifXo37Bt1JsFB9GCmo5RH/T1Zx2WtMAy3GtbIWMYBcAC5KT3moCQZtQIdpgUAEHyPI+
+	IgaUsV8O583rvlZvZwbms0DIkX3H2PlB+31yU1/ASlGdkpmcEi/fiGa52nr6d/ZNrl1cFkiWsgl
+	0VoRVoJ2FG45SIg80slZkXh79mgco3+zz1Vf9BWPJ/ZhXau93vuXw5a7DMjHXtaU785TMLUDTm2
+	MpuYe1JYVUb+HBgq5J8ctQAkIeCzWQx6QBufrrhI7v7fRx2S/YIrLR0SBKqxVfHh/P/b5W3pwCA
+	Rr6ik8lRc1tWqMe4SSvN5uKNnOfcgSCOco9fZXjFcLyLRKqs+WckXyAgLxgqpKhMIKDFf7+GwAN
+	ZhwSaw5Lf4yhUjmC7vsMvMgImJnY28Nr2I4ExIRxFQGJj3gddP/iQ5U9wzE6bxq6LfxDnRV5DAz
+	WVWUvBDunYm0/PpLOTp8jDDh/b/vW57L1EpOeVWGKk5SuQIDkAkoPoGD2rmD/tmhP6NJqISYAXM
+	c8/5SGN67WJJE1LQDuCUU02TFIi+ZkobE3ey4OY9fiS3cMu4xH2moTEVgW1ZvTvh1JZFEqC03nj
+	KqIEVuPWXd1j/+JmDC7bWRvh9QgIQgCzWXJxy
+X-Received: by 2002:a05:6808:c3ee:b0:54f:c850:fa53 with SMTP id 5614622812f47-57a0891786amr30906094b6e.17.1795834400878;
+        Fri, 27 Nov 2026 18:53:20 -0800 (PST)
+Received: from localhost ([2a03:2880:10ff:44::])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4bc55895b9csm21381575fac.0.2026.11.27.18.53.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Nov 2026 18:53:19 -0800 (PST)
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	kkd@meta.com,
+	kernel-team@meta.com,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Puranjay Mohan <puranjay@kernel.org>,
+	x86@kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v1 0/3] bpf: Do not follow __iomem pointers
+Date: Sat, 28 Nov 2026 03:53:14 +0100
+Message-ID: <cover.1795834380.git.memxor@gmail.com>
+X-Mailer: git-send-email 2.53.1
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -87,80 +108,39 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sat, 28 Nov 2026 03:16:43 +0100
-Message-Id: <DN6HDX0GXICR.JK53Y1GEJOTT@gmail.com>
-Subject: Re: [PATCH bpf-next v2 2/3] bpf, x86: Skip the PROBE_MEM address
- range check under SMAP
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: <sashiko-reviews@lists.linux.dev>, <bpf@vger.kernel.org>
-X-Mailer: aerc 0.22.0
-References: <cover.1795829324.git.memxor@gmail.com>
- <f2beca95aa1eb81f00c6baf408c681063e13ce83.1795829324.git.memxor@gmail.com>
- <sashiko-outbox-238410@kernel.org>
-In-Reply-To: <sashiko-outbox-238410@kernel.org>
+MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1373; h=from:subject:message-id; bh=7KRdKeGEPtd7wqWnWHL9bmdrZHoQfk3ywZxqsxMmWK4=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIZvLiWflNaM5dXPXfZC1q0sP3/x98X674yvORjz5+tF/8vaF M3mkO0pZGMS4GGTFFFlK/u9jMj5R+TvQdhk3zBxWJpAhDFycAjCR9bkM/2N3/EmqMNwWHGQjc0ry2B cRz+kb3t+ZFGjTrcCqd8nqSC4jw4ZZWiJe8d2zfTZ3as9+KFbY8p6PteTrY02n6E+/u1o7OAA=
+X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
+Content-Transfer-Encoding: 8bit
 
-On Sat Nov 28, 2026 at 2:41 AM CET, sashiko-bot wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential
-> issue to consider:
-> - [Medium] bpf, x86: skipping PROBE_MEM range check breaks
->   flex_array_far_join() test
-> --
->
-> commit 519a06c0e9f33f01690a25837946e3048111ee57
-> Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
->
-> bpf, x86: Skip the PROBE_MEM address range check under SMAP
->
-> This commit omits the x86-64 JIT runtime address range check before
-> BPF_PROBE_MEM and BPF_PROBE_MEMSX loads when SMAP is enabled and the
-> program was loaded with CAP_BPF, relying on SMAP and the page fault
-> handler's exception table lookup instead.
->
->> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
->> index d51ae52fef719..019e5da72136d 100644
->> --- a/arch/x86/net/bpf_jit_comp.c
->> +++ b/arch/x86/net/bpf_jit_comp.c
-> [ ... ]
->> @@ -4862,6 +4870,15 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_v=
-erifier_env *env, struct bpf_pr
->>  		addrs[i] =3D proglen;
->>  	}
->>  	ctx.cleanup_addr =3D proglen;
->> +	/*
->> +	 * With SMAP enabled, a PROBE_MEM load of a user address faults (#PF, =
-or
->> +	 * #GP with LASS) and the fault handler resolves the exception table
->> +	 * entry of the program, as for an unmapped kernel address. That looku=
-p
->> +	 * only finds programs in the BPF ksym tree, so programs loaded withou=
-t
->> +	 * CAP_BPF keep the address range check, as do kernels without SMAP.
->> +	 */
->> +	ctx.probe_mem_check =3D !cpu_feature_enabled(X86_FEATURE_SMAP) ||
->> +			      !bpf_prog_kallsyms_allowed(prog);
->>  skip_init_addrs:
->
-> [Severity: Medium]
-> Does skipping the range check break the flex_array_far_join() BPF selftes=
-t
-> on x86-64 systems with SMAP enabled?
->
-> tools/testing/selftests/bpf/progs/verifier_btf_array_access.c:flex_array_=
-far_join() {
-> 	SEC("tp_btf/exit_mmap")
-> 	__success __arch_x86_64
-> 	__jited("	leaq	0xa00000(%rbx), %r11")
-> 	__naked void flex_array_far_join(void)
-> }
->
-> That test is loaded with CAP_BPF and matches the "leaq 0xa00000(%rbx), %r=
-11"
-> instruction from the PROBE_MEM range check to verify that the load was
-> converted to BPF_PROBE_MEM, so its __jited() check fails when
-> ctx.probe_mem_check is false.
+A BPF tracing program can read a device register with a plain field walk,
+for example mdev->common->device_status through a
+struct virtio_pci_common_cfg __iomem *. The load is a PROBE_MEM load of a
+mapped address, so it does not fault and reads the register. Such a read
+can have side effects. This came up in the discussion of [1].
 
-Yes, this was an oversight on my part. Will fix in v3 respin (after some ti=
-me).
+Patch 1 gives __iomem a BTF type tag, as __user, __percpu and __rcu have.
+Patch 2 makes the verifier hand out a scalar for a struct member, function
+argument or return value with that tag, so a program cannot load through
+it. Patch 3 adds selftests.
+
+  [1]: https://lore.kernel.org/bpf/DN6GS9V7A3HS.1COD0JUQQDHQ@gmail.com/
+
+Kumar Kartikeya Dwivedi (3):
+  compiler_types: Emit a BTF type tag for __iomem
+  bpf: Treat __iomem pointers as scalars
+  selftests/bpf: Test loads through __iomem pointers
+
+ include/linux/compiler_types.h                |  2 +-
+ kernel/bpf/btf.c                              | 15 +++++
+ .../selftests/bpf/prog_tests/btf_tag.c        | 55 +++++++++++++++++++
+ .../selftests/bpf/progs/btf_type_tag_iomem.c  | 49 +++++++++++++++++
+ .../selftests/bpf/test_kmods/bpf_testmod.c    | 15 +++++
+ 5 files changed, 135 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/btf_type_tag_iomem.c
+
+
+base-commit: 71ad211eb086d0f8fc7ae595a37943bed58cad6f
+-- 
+2.53.1-Meta
+
