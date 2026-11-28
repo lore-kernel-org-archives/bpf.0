@@ -1,108 +1,102 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.231.75
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.50
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795829350;
-	b=ZQ0l/PT69GWpg63aGWPGO01J5arVGj6l4PM1lJWgfVrcEbUxoHfYVIiyzSBYFSY7doRb
-	 k0pMrcEMZ3D2f5nXiAtNIKmX9OLmOByFKfSX8wdeF0uGT3u0EiKXjNmopdDY9DcvsxBVl
-	 2YdG55jcPwQ2RnNeRvXwpmz3s4I4YPQ3fWaJRY8rbEVruv19GEW9Zo3MchPSiG3TrNW5g
-	 MtGjVHm1K1kyAqejzHnhZAGS/m+YMSj9KOPiiLJr2ljZ/XRmjtzpRCFxVdkYeiURbctlF
-	 f6FKImKIpFEU+bLzQDqBYi/j7UkBUQd4K0eUffmJOSOf/HoWuPQtj3aAwOStWM0A37Q==
+	t=1795830019;
+	b=tyal2WuR23g/kljnZqOYje8b9dZzeWaqRzLtyVk+jnyhXuqjzqxho+V3sTvtot29b8kJ
+	 f/XWszwXLqNhUORnOR92mrChteFnPGn96ZdPgXD0XG/kmLnVBR6VZ+ZH0Yfby4F+wS1sz
+	 l5LqV56UwzVE3ytdMWOKujdpVV57ZwNallX3hHQr12Zala2udN5bwRa3iG/Q/7NhiTcDT
+	 VV0H/zQtWwXcpgOgfV/N1QKLRl1lsz7BqJYy4ff9Xu+yAxh/tzhiFR88wIWkPTi4EguQr
+	 jiN6CNWRdhh/kmDTybq0I0uBg2wZcrKctt2yQX1wzbYWse5SPRN43bWzb2hmhGbpb+w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795829350;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795830019;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 X-Developer-Signature:X-Developer-Key:Content-Transfer-Encoding;
-	bh=6ADaLE8jYm8rNT2IAQKAXJepPjBkKDtxdmKU8mc9rGM=;
-	b=VkSnhzwyGMCzaPrlDivkMD5yM09pgPIn1ihjxHcCFGP9HHuoyFUkMSnl8xlJ3BfB+7HX
-	 IiLWsLXj5rdwwVojsqycDib8XRImPxftZ18LWb1GScudiy2jNy0iHz6X1X8VaxYBk6KKU
-	 MLF7MZ93I5xCJXEepXh6bY0L+jKtlKtM/3VpzgGvajErDTvnOT42F9nNf5BSD8SSkBzH4
-	 stjxjMiutddSG5FABBNgIyw2A93PVyLwPoGe1W3+a9B9/LlSs9l1/6sJ0kZy6rbrylVzN
-	 FXPCHDswNMLhNVQQZNaxGimVJCx1UkB7j0ign4EY5syJWUNibe7SeUxQ7tk1s1Ir+Aw==
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Content-Type:Date:
+	 Message-Id:From:To:Cc:Subject:In-Reply-To:References:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=nHzuwXTeUvCdPppRHxMn98Th6DR4G6YORPkOyi+dvbo=;
+	b=VtlKaupUDX92P8YOsvyGF1w/AzAUES8yvOuqfULR6vNTC8N4c9tktaX0AVle79PXprW4
+	 ek0koi3EDdNoYPtzzCjKdwz4r/x92PWm8WA18OrUMChdckmSQnNiaT/8EqjeU8YUa1uSq
+	 1o4LTf8VQdEfzLLVtex0HeNnZXF5+0kqVj3O+ryZPVxEewn7+fS2wcRWJlNFXQ2/cuk/V
+	 2ugHqRXmBAMAtUivJTDaYwYhL8cpngKXQqCQnzJ1K1SbAk5ARPWIvx5XNg3hLjS3GIzBr
+	 xPMDBEDqsfHaWM07dXgisdV8RTZU4RQFvkwD7WtqbFRcUDAKYqq5/guSsMUZ3lG1ETA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=DxuxtukL;
-	arc=none smtp.remote-ip=74.125.231.75
-Received: from mail-oa2-f11.google.com (mail-oa2-f11.google.com [74.125.231.75])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=q+j29iSJ;
+	arc=none smtp.remote-ip=209.85.216.50
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24D99606A31F
-	for <bpf@vger.kernel.org>; Sat, 28 Nov 2026 01:29:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 24D99606A31F
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50E88606A31E
+	for <bpf@vger.kernel.org>; Sat, 28 Nov 2026 01:40:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 50E88606A31E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=DxuxtukL
-Received: by mail-oa2-f11.google.com with SMTP id 586e51a60fabf-49e2cb73ba3so2882878fac.1
-        for <bpf@vger.kernel.org>; Fri, 27 Nov 2026 17:29:10 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=q+j29iSJ
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-3b413d04c93so4982889a91.1
+        for <bpf@vger.kernel.org>; Fri, 27 Nov 2026 17:40:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795829349; x=1796434149; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=6ADaLE8jYm8rNT2IAQKAXJepPjBkKDtxdmKU8mc9rGM=;
-        b=DxuxtukLMYwGSh2bMf6A98RlQh8RlguNUqhI0J+brd7HS8PimUS5ixuyEXK57yG03B
-         T2PisPzRBcUMYtesQR7NamrxSfLkRXyyCH0O5sGxOIwQT4BqcUGmiKp/qgfjVGVZJ1ol
-         4Vl7BYQ8QfD9f84ORFhMsMWOSmvSZg1Ahv7uPBXSxaAMUzov+ulcSJWio4G8pUJXYoiB
-         fuTwqJxC2OrDO5HXyyX3IrHUOajE6eMphhMUf2fQBhKMTUpFDsxsgVMw3Uu0Esg/Qxnq
-         rUhbrPJEm0C2g3utr7J/9FEwXNDgGK/x3DevhAB48MQ11GE62xrK1b83298LvAt1/78p
-         6tRQ==
+        d=gmail.com; s=20260707; t=1795830019; x=1796434819; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to
+         :subject:cc:to:from:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=nHzuwXTeUvCdPppRHxMn98Th6DR4G6YORPkOyi+dvbo=;
+        b=q+j29iSJxxoGRSE7F1BSeZcwvPI2mVgZdsm7x/iBZmNEPXFEggoUPsany6GgqPf49N
+         /WCfN6WWWcsv78zTqQFJw+6S4CNLeaGaCBRB9fJpCLiXasH2KydEsCWgbxRG0xLDDxp6
+         R0abfDF6sPKD1k3vrcfRenL3is4HryeHnzsb+0WNeuw5ybnn5mJOkxw/Z+xZpNvmkOXx
+         a2MWyrzJxnQqJjEbJ83Z7fgtgGTnx7iclNLHAevNJwBwt+jzKKWRSQZ2RChsV9JzzBXV
+         APdCwTcI4b06cCuyG5Yz3gEXqd64yFqH8/jRVSK3u1ny8aOBh6wF07CNuf8cZMVpFbwb
+         UGhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795829349; x=1796434149;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=6ADaLE8jYm8rNT2IAQKAXJepPjBkKDtxdmKU8mc9rGM=;
-        b=cYjdEFjNb9O0HtCm+dxvStOINe4R96FyRqzzUYrEv1l2Pxk8TqZninvuw0X+RvTjmp
-         xuaFYLnCZ9u4tI5IVuMblbWyQ60lwkmZ276f+XRWTo3tpd0hCTEGUV2grmI5BTUnwnTT
-         as/lxOK/jQ9tvYJwrCgsjUI1wwkveAMWF6bd7iXgxaZPqhIPTQDXnxZg9cCdS0wxD0/a
-         RXTX+KsYZldRNkOdDtL3cyWgKHbE6H7hR7Dh9+nmhvt9W57HaawVNuaSB/sfREz4Qbbs
-         Krr4Tvmbl7wXBaWubAGjmB6OECfMlgI0bcV0WRKxR3piMSVik1uvxVIPkH0ImgD0n7aK
-         B6NQ==
-X-Gm-Message-State: APuU4Z/2NQ6u6InOxqB/8UJMXKIx2++VbWiapf1rc/zTkXjwskFLbKT6
-	13sEPuQ29Vp9/k8XSvaoKyxTP2wfmb2eFcfFOuTJc0EaJdCjPIllOCST154uvQlJBk8=
-X-Gm-Gg: AZFdTZfQY1dAXKC6rVjtHMm0qICWri1xZHW2RZA65J8qGZpwY8+sZ/LP15T32FhfGXO
-	mxowL/PYpC0q6RUllNMbmb2SR3PYsY/WAp2KYhA5IjunBqZTMXFo4q4pv5tSx6iS6Wp/98yiZaT
-	lot7Rlv90IwhVbkF4GzRYjR84teCqwUOByprzgSBgedEirnvlc0J+tVZg3hpwpa+1nluSiFXxdq
-	PvvIVidEcg3LXdso920xJE3/CHeotL4gcvPJt5Lo6d4wuU5nQA0aFpZv0r+EdZGmyQxAbQ1+815
-	noVTcyY4gmdMI3/WMnmVCKT2qxZagJbxBN9qPMyQiYVgGfI/yg4cJ/caci4/pPB6kFFNeBUFyZo
-	d/wqLmebjHTrO5JYKkwjPMR2uQGDZQngl1/0pl+T6luUgmsFxl0Se4Uth99RzqvK51qMMLp0csQ
-	T3Y/ErC7grPLxPNgYsmUo5rQbnnUK2UcVibUZk7qh9wMbL5okv9wo619aqJ+tnCezlIy3zO29V9
-	9WuG3onkYwjdJvsR4tjY9aJwjB9bdoiHaSHMYCrqes2JpgZrjd1N/coZ41rEOnmpAKei9wbparx
-	Ws/HJjYj7UCDgVS/1SdcLhmnaU0Uo7Mr/oVxdNJt+qduWqOkKnryxXVbkZsSnygpDHiys/zBGW0
-	xAtMWahEJISzfj02qLUkT+hjwxP2YRYR+w339EfkbxzCJ73asTWYJig==
-X-Received: by 2002:a05:6870:2c8a:b0:4b7:3a4e:e66a with SMTP id 586e51a60fabf-4bc8386b8demr24157788fac.34.1795829349065;
-        Fri, 27 Nov 2026 17:29:09 -0800 (PST)
-Received: from localhost ([2a03:2880:10ff::])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4bc5b07d57csm22307521fac.1.2026.11.27.17.29.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Nov 2026 17:29:07 -0800 (PST)
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	kkd@meta.com,
-	kernel-team@meta.com,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Thomas Gleixner <tglx@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Puranjay Mohan <puranjay@kernel.org>,
-	x86@kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v2 3/3] selftests/bpf: Test PROBE_MEM loads from invalid addresses
-Date: Sat, 28 Nov 2026 02:28:56 +0100
-Message-ID: <44a6c33e241845271afd6f9cd5eb16276003f082.1795829324.git.memxor@gmail.com>
-X-Mailer: git-send-email 2.53.1
-In-Reply-To: <cover.1795829324.git.memxor@gmail.com>
-References: <cover.1795829324.git.memxor@gmail.com>
+        d=1e100.net; s=20260707; t=1795830019; x=1796434819;
+        h=mime-version:content-transfer-encoding:references:in-reply-to
+         :subject:cc:to:from:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=nHzuwXTeUvCdPppRHxMn98Th6DR4G6YORPkOyi+dvbo=;
+        b=1MjlCOQjJc7w1hxITt3TNI7JI5wNieojiwnsEGQ9RJMCkCpwC6c3TbLt3ijVS8OOQP
+         +R9XRDsK2iYEkR5uczyl0wrVK475B87OTAgScP3Iq02eqEjgTVpdPe0Cv6o8E+IL8fyG
+         SwJkbSSCYJv/0OiALZjCF/McIcRa37sfaENHZk0s9Bx7G0z2cxPIqyWAQQ3ucG+Etycx
+         lDM6eWWpthhR5z+/Sk2rMHJXasYg8HhkJtRpt8DqL4LGXR08wya87lnZ9Nj0NF974Ybk
+         dm7MyQ9Phr3PmWDqOLkdvIq4jS59vCq1rp61kebRlrDMgOMg1InubPsd2VVtXLSjJ/p8
+         SjFA==
+X-Gm-Message-State: APuU4Z+EbT3v0zt6LGfYUzaaoVZgQqStYaP5NnHCoU4+Ae10Qx6iAJxC
+	btomY1ChIQ4mp6esTJjCDpdACfsqXkNwD7aQ8ugyCXHFKyVUadxYWRAw
+X-Gm-Gg: AZFdTZfXwZaO0MsYAtPF1VQYL1DQraBxNRUaYGfaP8SG3afow9FMIZEOzkufVJjHSXn
+	G+mk4v6Qj8/TvVLe7F9Wwsj/C1+WG1RcUOruYqANGguU6BS60bA3hhepSgy/i4o3rM+iHo8fUTe
+	n3nU57pr1ybxxO9To9NeUVStnKfY7VKPJJfK1N6C8BGk9eyxeszYtwkqzdP7FO3en19wKBXnf04
+	U8s2yX6VIa0bq0CPlil/5JgEXho9p7LsM35QBpY3suKz0ni7CyKOJyVnKasmQ4PmjeYptZLUudC
+	l+Fdv2h4q60UsRNVdkpwuMr1McgLX0ZdR+QSA3K0XrzXWGb1TO/ZA/DvwiRg4ZOxhqQqReLOKaC
+	NCuZtOgEeBgvsZM2sqMKqDsMM8pvNoc+0fa+TnL2bWmq6DMtgdi603pM8U7k/NpP4jVxvn++y9w
+	A7zB0yhrsAOHw7H/wHvWVHaNdrYvhdqUZbsdPcTFIVYBqrhf92poFLV8f/gnisWeuYmulc9LiqU
+	F/Gbq9Bk4U4h8WhpLPZmd5RtlPXOkKG/TZDFVbPVxAtkxXDAuwjAOSchNVIRKH4exiJTxGwe3fw
+	3KMlWfK3AzSwlHdCs5St5hToBEw+esn0fWld07PN5cSWTD1w9cAO+qgkVO16ieKxrwwRg8cyS6i
+	EtqaZiLHTjiBP5mNNGAxEHamhoYuMGeQrFQ==
+X-Received: by 2002:a17:90b:3ecd:b0:3a4:adea:50ad with SMTP id 98e67ed59e1d1-3b41c9e46c6mr27425363a91.27.1795830018596;
+        Fri, 27 Nov 2026 17:40:18 -0800 (PST)
+Received: from localhost ([153.61.198.241])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b41ad0b2c4sm40440119a91.4.2026.11.27.17.40.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 Nov 2026 17:40:18 -0800 (PST)
+Content-Type: text/plain; charset=UTF-8
+Date: Sat, 28 Nov 2026 01:40:17 +0000
+Message-Id: <DN6GM0YTCXII.2LIEDQV0KFDM1@gmail.com>
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: =?utf-8?b?UmljYXJkbyBCLiBNYXJsacOocmUgKFNVU0Up?= <ricardo@marliere.net>,
+ "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko"
+ <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar
+ Kartikeya Dwivedi" <memxor@gmail.com>, "Martin KaFai Lau"
+ <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong Song"
+ <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
+ Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
+ <ihor.solodrai@linux.dev>, "Shuah Khan" <shuah@kernel.org>
+Cc: <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH] selftests/bpf: Drop conflicting DWARF choice from
+ config.x86_64
+In-Reply-To: <20261127-selftests-bpf-config_dwarf-v1-1-46ef5b492f41@marliere.net>
+References: <20261127-selftests-bpf-config_dwarf-v1-1-46ef5b492f41@marliere.net>
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -112,161 +106,22 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5118; h=from:subject:message-id; bh=lBEd9gswYQp8x9IxA02i2vKePHOg/na7EqogNIBgb3g=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIZtLz/fd5cJa5/j7IZKn3wRzez67lZyRtuEVx5/X8pqu13+n 9jzpKGVhEONikBVTZCn5v4/J+ETl70DbZdwwc1iZQIYwcHEKwEQ0WBn+J4U6Pdv9LuHv7UU8HpzC2T oHmTMe7nXsWS9/eNEB9dVTZjL8z7f9tS55w3w2da29PKeXB75YuF3r6r27DMyajXbf5JZ/ZQQA
-X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
-Content-Transfer-Encoding: 8bit
 
-Add a test that performs PROBE_MEM loads of three sizes through a
-bpf_core_cast() pointer whose value is chosen by userspace: NULL, a low
-user address, the last user page and the guard page of both the four and
-five level paging layouts, a non-canonical address and, on x86-64, the
-vsyscall page and an offset into it. Each load must read zero and the
-kernel must survive. A load through the current task pointer checks that
-the same loads read real values when the address is valid. NULL and the low
-user address are left out on s390x, which has its lowcore there.
+On Fri, Nov 27, 2026 at 10:03 AM Ricardo B. Marlière (SUSE) <ricardo@marliere.net> wrote:
+>  CONFIG_DEBUG_ATOMIC_SLEEP=y
+> -CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
 
-The test passes on kernels that reject the addresses with the JIT's range
-check and on kernels that rely on the fault handler. With only the JIT
-change applied, the first subtest oopses.
+gcc 11+ and clang 14+ default to DWARF5.
+This moves x86-64 from DWARF5 to DWARF4:
 
-Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
----
- .../bpf/prog_tests/probe_mem_fault.c          | 77 +++++++++++++++++++
- .../selftests/bpf/progs/probe_mem_fault.c     | 41 ++++++++++
- 2 files changed, 118 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/probe_mem_fault.c
- create mode 100644 tools/testing/selftests/bpf/progs/probe_mem_fault.c
+  arch                              today              with the patch
+  --------------------------------  -----------------  --------------
+  x86_64                            toolchain default  DWARF4
+  aarch64, s390x, riscv64, ppc64el  DWARF4             DWARF4
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/probe_mem_fault.c b/tools/testing/selftests/bpf/prog_tests/probe_mem_fault.c
-new file mode 100644
-index 000000000000..9b89864b9ac2
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/probe_mem_fault.c
-@@ -0,0 +1,77 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+#include <test_progs.h>
-+#include "probe_mem_fault.skel.h"
-+
-+#if defined(__x86_64__)
-+#include <asm/vsyscall.h>
-+#endif
-+
-+/*
-+ * Addresses a PROBE_MEM load has to survive. Either the JIT's address check
-+ * or the fault handler must turn each load into a zero result. The user and
-+ * guard page addresses are those of x86-64 with four and five paging levels;
-+ * on other kernels they are merely unmapped.
-+ */
-+static const struct {
-+	const char *name;
-+	__u64 addr;
-+} bad_addrs[] = {
-+#if !defined(__s390x__)
-+	/* s390x has its lowcore at these addresses, so the loads read it. */
-+	{ "null", 0 },
-+	{ "low_user", 4096 },
-+#endif
-+	{ "last_user_page_4l", (1ULL << 47) - 2 * 4096 },
-+	{ "guard_page_4l", (1ULL << 47) - 4096 },
-+	{ "last_user_page_5l", (1ULL << 56) - 2 * 4096 },
-+	{ "guard_page_5l", (1ULL << 56) - 4096 },
-+	{ "non_canonical", 1ULL << 63 },
-+#if defined(__x86_64__)
-+	{ "vsyscall", VSYSCALL_ADDR },
-+	{ "vsyscall_tail", VSYSCALL_ADDR + 0x800 },
-+#endif
-+};
-+
-+static void trigger(struct probe_mem_fault *skel, int *runs)
-+{
-+	skel->bss->val_dw = ~0ULL;
-+	skel->bss->val_w = ~0U;
-+	skel->bss->val_b = ~0;
-+	usleep(1);
-+	ASSERT_EQ(skel->bss->runs, ++*runs, "runs");
-+}
-+
-+void test_probe_mem_fault(void)
-+{
-+	struct probe_mem_fault *skel;
-+	int runs = 0, i;
-+
-+	skel = probe_mem_fault__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-+		return;
-+
-+	skel->bss->target_pid = getpid();
-+	if (!ASSERT_OK(probe_mem_fault__attach(skel), "attach"))
-+		goto out;
-+
-+	/* A valid kernel address is read for real. */
-+	skel->bss->use_current_task = true;
-+	trigger(skel, &runs);
-+	ASSERT_EQ(skel->bss->val_w, getpid(), "pid");
-+	ASSERT_NEQ(skel->bss->val_dw, 0, "start_time");
-+	ASSERT_NEQ(skel->bss->val_b, 0, "comm");
-+
-+	skel->bss->use_current_task = false;
-+	for (i = 0; i < ARRAY_SIZE(bad_addrs); i++) {
-+		if (!test__start_subtest(bad_addrs[i].name))
-+			continue;
-+		skel->bss->addr = bad_addrs[i].addr;
-+		trigger(skel, &runs);
-+		ASSERT_EQ(skel->bss->val_dw, 0, "start_time");
-+		ASSERT_EQ(skel->bss->val_w, 0, "pid");
-+		ASSERT_EQ(skel->bss->val_b, 0, "comm");
-+	}
-+out:
-+	probe_mem_fault__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/probe_mem_fault.c b/tools/testing/selftests/bpf/progs/probe_mem_fault.c
-new file mode 100644
-index 000000000000..f95db455722e
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/probe_mem_fault.c
-@@ -0,0 +1,41 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include <bpf/bpf_core_read.h>
-+#include "bpf_misc.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+int target_pid;
-+bool use_current_task;
-+__u64 addr;
-+int runs;
-+__u64 val_dw;
-+__u32 val_w;
-+__u8 val_b;
-+
-+SEC("fentry/" SYS_PREFIX "sys_nanosleep")
-+int probe_mem_fault(void *ctx)
-+{
-+	struct task_struct *task;
-+	__u64 p = addr;
-+
-+	if ((bpf_get_current_pid_tgid() >> 32) != target_pid)
-+		return 0;
-+
-+	if (use_current_task)
-+		p = (__u64)bpf_get_current_task_btf();
-+	/*
-+	 * bpf_core_cast() yields an untrusted pointer, so every load through it
-+	 * is a PROBE_MEM load. Whatever the address is, the load must either
-+	 * read the field or produce zero; the kernel must not oops.
-+	 */
-+	task = bpf_core_cast((void *)p, struct task_struct);
-+	val_dw = task->start_time;
-+	val_w = task->pid;
-+	val_b = task->comm[0];
-+	runs++;
-+	return 0;
-+}
--- 
-2.53.1-Meta
 
+If you care about cleaning up configs then drop
+CONFIG_DEBUG_INFO_DWARF4=y
+instead.
+
+pw-bot: cr
