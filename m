@@ -1,107 +1,102 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.177
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.176
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795825874;
-	b=STrAdP4VZz/Tme1svBw67NW1YG6HOTNkRPRNJbcjT6NM8V4FYb+np7KaKynPz3VsLx6Y
-	 6ZLNKNmg4csalWjUz8ekZKdGRuaG8h9m2T/ZsLaVpebdHjhiSQkPOzasutDAYJSOWsE6O
-	 v5VaefTDDs01Ft30x5zokUjQduse1JkFtjlIWiGNnJ+qJbS+VU1vemNfuRra0MAjLsYdP
-	 keDKBBytHPDezeeZauCyJneqvqb3RjGfB+pt8jjL1k2Y61uGKx9Fwj/B9BcH7eUuV0bUu
-	 QdTf3EAgH2uhgktFk+kgtBtrylKrUST5KOyQXin3zMvKZ0EM2UyusEZoTCOcLmEfHjw==
+	t=1795826017;
+	b=4gaPhYlzkjFNIt4zna3fLuTOV9SSYz9UjogsRXqdw9RoRBwmsxNABxsHKfdtI1m5qyzE
+	 HVMS9vSyjZf6hmVprbD6kwh5T19dY8PSuYVP4N414jsr+Dlr4s+qvpYNOlrqEQf0dw62/
+	 wJ6LZhwQxqEwX6DAy2rwBKaigPt+D3SK0yl0BQTlPQ5N4fS+jTu5NGBTPRKDqR6j4LV0w
+	 TyyH+tydafora/KcMnTM2MFLE0PI48t4zjNKD5qCdoCKhdSBh5YLqt1owwg3tk1zY0AgI
+	 dlXNUGL36yyjS/NJ5XADJqVFzg9HHZqWtFGqxT0Gy7fAF0eiNw0BfsMLfUNGSAE98jg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795825874;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795826017;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Content-Type:Date:
-	 Message-Id:Subject:From:To:Cc:In-Reply-To:References:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=81YL22Y23CJWcBybUvGyAQqGzodpMZQhGel6a2MiDuI=;
-	b=YR3GwmwgBObCKuDGt2YJrjEvm0teaNYbfKjF5Gvxv6SAGhKz8A+jQzrvUgWa0XyU1Wpr
-	 lrBSGiSLY4MaRJGvdwqiGOwPxTAlQZnBgYtbwcvwQrwQYr5uY7ExIheWtO7leP8fLXN74
-	 KzbVNy0e9o5YV+V01TGusIFHxX17vSOtny3f49mIJ0lsEx4cWz6GVdA2Pu35RKBJKQwe2
-	 TkOmSpKeO3BnnIA8juTreS+xgsBdR49LnFtWbzE0QHMi9cM4hhhZZa/5kGAMUXfNrBTld
-	 CeKhwtVig7IuCcf87JztNnSAp3zwdsEyR/iH+j111XYGjesnpp5Hz46RlN9UHAiK4Dg==
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
+	 References:Content-Transfer-Encoding:MIME-Version;
+	bh=Mu5WLrjeCPu8S4oqgwQ27bq4kiYqk+zhWBIQ00PCvk8=;
+	b=QsLiQGYsD/zxHaf3L5xHT/y8Bdhw9y/yhiBplCD3Gr5PlHdLdi/Mt+enOFAnniKWS+SS
+	 oSlbEFjZWyKEFyuKEfMwNf4hXa7zp5ZALTJb4mG8cCcjr9oVNXX1Er0ncCoPjMA8KerA7
+	 0U4P9HbU1p9njQu6YBY6GvJB7o2nRXwHKV7kg/8/p5I/4U4k3qNkLEY4Usw9P8aUriii6
+	 8UqaTEFfRpizJeqgnQCwORyx4qdsJiTO+IuPe7eQjNfMChQ0f6j2wpFeU1bnZlMgPUA9X
+	 z5GFW1Pl/srpJwqNsaaepFoy/BQZOy+nkXWL4NMgKAqyFyUarIWdKHzFK2G24N/4VFQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=aNjW0tJ0;
-	arc=none smtp.remote-ip=209.85.210.177
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=VtEfMRUf;
+	arc=none smtp.remote-ip=209.85.210.176
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 017DC606A31C
-	for <bpf@vger.kernel.org>; Sat, 28 Nov 2026 00:31:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 017DC606A31C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1284B606A31C
+	for <bpf@vger.kernel.org>; Sat, 28 Nov 2026 00:33:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1284B606A31C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=aNjW0tJ0
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-8a594d313a3so5622231b3a.1
-        for <bpf@vger.kernel.org>; Fri, 27 Nov 2026 16:31:13 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=VtEfMRUf
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-8b5c3288e6cso3464610b3a.3
+        for <bpf@vger.kernel.org>; Fri, 27 Nov 2026 16:33:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795825873; x=1796430673; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
-         :from:subject:message-id:date:content-type:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=81YL22Y23CJWcBybUvGyAQqGzodpMZQhGel6a2MiDuI=;
-        b=aNjW0tJ0BAuRPl+EDlmMczZaANVoX0nyry2zcMGDgCGYm7z7g92SLNdPlJLn6XlJIz
-         XY6fVJfkv8jEc5LSLjoc3Kx8ZPrXhUxw+BD4gMM7VRtafZTPjymVsRmWZQmckQsvdknI
-         h0DUZtRb9CjaUFtyl2TPmMJ0tAhGAgE4cec8Z+RhE38qxIwjC9bKX3Ezu8XOBKqm/G2O
-         C87iegPJzCJT+vSaqFdlGdfUmHZmtyqhLuWjVIOQ9fzIPFZ9NUUqVEyKlbh3LnLu2uLg
-         5OhPtVpS9GAqKr5WdZXTIxbjUCpkAfFo0wG9WnmfQYEGim6Lcv9ncbCKobH5CPZtbKVj
-         HEUA==
+        d=gmail.com; s=20260707; t=1795826016; x=1796430816; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=Mu5WLrjeCPu8S4oqgwQ27bq4kiYqk+zhWBIQ00PCvk8=;
+        b=VtEfMRUfZ3zyteX9vboA7JB9ZusTTGvzZOPMC/5Zmc5unjfrfu1V+L9VEVEdpbLwwm
+         +pH3uXa35kaCWPzE4JrKggHljzEp5AKNSP0EWh2laOQZ91sB1pFNt1rAH+CwrZpzhuqU
+         Kz4Yv+dgt/w/cahpmYsq9vgnZgcCuqTU/we5LM1IYaT2PqzE0NCasYG0QurDtaguHiiQ
+         HNsHiqpCOkedaEj4y3PfBloCVIuAhjA/qv/S7hHqOrH6KRZG7IC/OIWrKVXyIGeyzv53
+         ZWM8Du6OSmMvh3h18mCQ2AM5367yKk5sLJv4e8+DYrWAnMLRvrmH44wJXi8+qQT/8J92
+         neyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795825873; x=1796430673;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
-         :from:subject:message-id:date:content-type:x-gm-gg
+        d=1e100.net; s=20260707; t=1795826016; x=1796430816;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=81YL22Y23CJWcBybUvGyAQqGzodpMZQhGel6a2MiDuI=;
-        b=sZ4tGGsajyUI9sFFaw3NJqs50Pfd0ZTWDf0AZrLzSZ01Qqrwv7yXNeEhLH+Mfu701m
-         Wjt3XhFNKqvhlOJ37q3K3QXwLk7XnTE3eYflha2IDzro9cYd5dAot851zb25vE5ZaLyJ
-         /MvCxXbi4TwiDLptutpG1qNKusyXbYu7YGRv0tYiyR8Pc2JH8ZhIqvl6PYXG4n2Bvi6d
-         cqeXPIPQ+rA+pedsIdB+J8dHhByho5zKrjjR8+uzqS2CD1KtkK2qI+fwPFJtHhAXUYvy
-         SXm05fXxqe/FA2k2io4jjr2fSMrBOhbueH3xYEvmV/6aU2UmHpZrZcKUT9Gidgj2Ajvc
-         hkXQ==
-X-Gm-Message-State: APuU4Z8EhJt9O8q+6rvkYOxpnkVjzekYns7lvkFuGN+HY18jbQFgFNOz
-	G+ER8dbHedbq9WHfY++4t6RYObE81MQsMxC3MIpd2iU6VX3mPBOg86QV
-X-Gm-Gg: AZFdTZc3IqE+6dhonD5yADgetFWfbMegHt941DLKZDSPedGouNpOx5dQWofF9Tx9C44
-	bmQvvLBUvmNnqdFLG46TzcWmrVXmzpQE3DpIHann30Fq5WZlALyl1BtZjistyVvY/xNmheEyKXC
-	kAyaUNHJLOARz7nMVa8EUDkjXOBQJ/gr8cy8FqQrj2yn2wc7TX2dDAl4VpJDEvoOFZqYG3yl0e7
-	dHtyH0BHmYJ9dj9wImgApDlFl1/gA+m+nr+3x/abzg258gLqEBfwh6rGEZ7r+NBiHvsSV4cPHnO
-	Ssr0856MpzIbyyQajvjFO1eYW2aEPOdaMufQh73a5Mfu4UaYhGYBNYesrn1X+0XPa7JmABVmccy
-	q5HGqSz7zQeSLM7YXm/cEUg6PFnZ5K4l587mN63EWsqnOQSDv6mGtfdLH2kBzX/UuJ9IqmrH1Ta
-	bbStgZArVrkjNqdlxQrmTJXCaNl42iEZeGuL2LaKt9ULTlgslr7zEKAsjWE8867b0/EWVPaWYer
-	abcl9gfCtShafwLTipSnwHgfO/bfjIsdMkGkdbv6uJ3ru/d+rfhKqPhON7AiqA2e5+OXyUJ6roh
-	uBpwJTiQrkvEdOogEr9PbO10eRwwKZuLbFXC644mh5sHcye/d2ozM5ApXHraA9rXDK+BRfFcadJ
-	vhhlx3BTrm18Vm1WcSKuVCk8AN9+exzYwhg==
-X-Received: by 2002:a05:6a00:2d0b:b0:881:4b47:f305 with SMTP id d2e1a72fcca58-8c8794b9136mr25471832b3a.5.1795825872876;
-        Fri, 27 Nov 2026 16:31:12 -0800 (PST)
-Received: from localhost ([153.61.198.253])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8c87285c228sm13235924b3a.10.2026.11.27.16.31.12
+        bh=Mu5WLrjeCPu8S4oqgwQ27bq4kiYqk+zhWBIQ00PCvk8=;
+        b=UOVO1ub0DqrI2RVpjbwWjjvKRHKMnJ4Aw1KI6IFJHwxpdjKCjVKUOP7AKHpve/P4gB
+         Head1boq399d7gD9UNu5eqpY9cziS1gsVsCAttYq/AK/x7b4xFPdDrPLT1XL7FcaZhLB
+         eiSX7FhLcfpcar8TdXQkITvAuRYS7Wdb85vMvd8q0xgHJXK+5k++JAmYCnaPpHb6v7vY
+         MmGncKPFLtCMfMkHARj3myIeruIEfPiZi0F5YQDxF3wiiyG8iuiqMOUAgQOwKVwPVMxF
+         cjFkUpphkkXt9sDf5pcquELyh0excsv5PCgvVUcKHZicPtfQsj8mQgqKGJeIZWktATsy
+         q0Nw==
+X-Forwarded-Encrypted: i=1; AL+hErHh3CkHrm9ecJE0tngJ0bDVhZUpBnFgKWwbG9TvUjvWLTjFtxmtG/zDiV71I7o4GNF9K1M=@vger.kernel.org
+X-Gm-Message-State: APuU4Z+/9wwW48GK3d+vD3D5Z67JP6CTsyNcxFfYWW/cmqa265yH2SoQ
+	OdhAZsEl9op2ZPqy+9lQZiBu2DTYO0O9g/dkvvALCdAun1Jy0tedw4SH
+X-Gm-Gg: AZFdTZdS399snv7K79L5K1eUbxVVpFZlMCMJa2LBCwATI0YMtDMqD0c/d2EeMlveckR
+	x7W9Ms3xE8JDGLdFr39awG50sc/5qKgsQx9GTg+O5lnX9YegGV0f8vSPXkEfjg5cPpy/VNQ43MM
+	eNSSvLGpil0Okls13UMopCIsUUI41irV49g2FWMaYrQaSFmmhMhv7lzSWaHlClRNPENGma6wpTT
+	8K0EXHXWahWOEtwzW/NWtlM6ONU/tIbi1fTpAZzdXNsc+8VlBw5kv0nIXBumvPhBecZqnPGwwWK
+	B6MMPVuIrou8PFnLpT4M1SMgsXAjtF+TZrzSz4tx6ZMER3rFtkMsPuWWcEkmcbObkKZ2lkUz9Pr
+	0j8z5PVmmqI6fJVW3CPeRjin3qxMuQxONmW4duaOads8rkysxuxJFkeijNLeP/1d50Oph8+lsWw
+	LoTF3YgJGugfk+fftrAnlEAkQn6riIZs5k6PPLOv48jOB+Hx1YpP+9umHMD71IRD8UZnS7uXz5M
+	ktKnoqHMYQqLS2b01zJw1jumvXEuQe4GFm3opUeN/JNKffVtxwpBGIGDRwFGN+mcDGxBoB6liEY
+	Aws6ppvrDM6Fq8Cx651l1kjGc/C22IG8BVO8nmpqJ+rGveacbivNln7vDuIwWDGJzLtuGYQ0uQn
+	IdlDSfuB5MOw+AGFW6DIy8MeINeNRQia3qA==
+X-Received: by 2002:a17:90b:4b85:b0:3b0:96b4:ceb7 with SMTP id 98e67ed59e1d1-3b41c7c2384mr26668854a91.8.1795826016052;
+        Fri, 27 Nov 2026 16:33:36 -0800 (PST)
+Received: from localhost ([153.61.198.244])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b48b41928esm30793634a91.9.2026.11.27.16.33.35
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Nov 2026 16:31:12 -0800 (PST)
+        Fri, 27 Nov 2026 16:33:35 -0800 (PST)
 Content-Type: text/plain; charset=UTF-8
-Date: Sat, 28 Nov 2026 00:31:11 +0000
-Message-Id: <DN6F54C8AZSE.3QLYZS0114Q5L@gmail.com>
-Subject: Re: [PATCH bpf v2 1/2] bpf, lsm: fix bpf_setsockopt() on a half set
- up child in inet_csk_clone
+Date: Sat, 28 Nov 2026 00:33:35 +0000
+Message-Id: <DN6F6Y9I0QD7.1B49UETL2EKDJ@gmail.com>
+Cc: "Kees Cook" <kees@kernel.org>, "Andy Lutomirski" <luto@amacapital.net>,
+ "Will Drewry" <wad@chromium.org>, "Daniel Borkmann" <daniel@iogearbox.net>,
+ "Stanislav Fomichev" <sdf@fomichev.me>, "David S . Miller"
+ <davem@davemloft.net>, "Eric Dumazet" <edumazet@kernel.org>, "Jakub
+ Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>, "Jens
+ Axboe" <axboe@kernel.dk>
+Subject: Re: [RFC PATCH 0/3] Introduce a classic BPF filter cache for
+ seccomp
 From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Stanislav Fomichev" <sdf.kernel@gmail.com>, "Jiayuan Chen"
- <jiayuan.chen@linux.dev>
-Cc: <bpf@vger.kernel.org>, <kpsingh@kernel.org>, <matt@bobrowski.net>,
- "Daniel Borkmann" <daniel@iogearbox.net>, "John Fastabend"
- <john.fastabend@gmail.com>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
- Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu"
- <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa"
- <jolsa@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>, "Ihor
- Solodrai" <ihor.solodrai@linux.dev>, "Stanislav Fomichev"
- <sdf@fomichev.me>, "David S. Miller" <davem@davemloft.net>, "Eric Dumazet"
- <edumazet@kernel.org>, "Jakub Kicinski" <kuba@kernel.org>, "Paolo Abeni"
- <pabeni@redhat.com>, "Simon Horman" <horms@kernel.org>, "Shuah Khan"
- <shuah@kernel.org>, "Xu Kuohai" <xukuohai@huawei.com>,
- <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-In-Reply-To: <awcUm4PvuYb3nGxM@devvm16445.scu0.facebook.com>
-References: <20261125070330.16625-1-jiayuan.chen@linux.dev> <awcUm4PvuYb3nGxM@devvm16445.scu0.facebook.com>
+To: "Xu Kuohai" <xukuohai@huaweicloud.com>, <bpf@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <io-uring@vger.kernel.org>,
+ <netdev@vger.kernel.org>
+In-Reply-To: <5b1c03a4-f910-4f97-af3e-1b8c328dd1ba@huaweicloud.com>
+References: <cover.1795139109.git.xukuohai@huaweicloud.com> <DN0AIFQ82CFP.34SDTH6ZFZC1G@gmail.com> <309b8e49-2f9c-4a2f-9b40-8e7e7cce3455@huaweicloud.com> <DN5F4EBDNESC.3UOJRTCXCL4HI@gmail.com> <5b1c03a4-f910-4f97-af3e-1b8c328dd1ba@huaweicloud.com>
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -113,109 +108,24 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-On Wed, Nov 25, 2026 at 09:04 AM Stanislav Fomichev <sdf.kernel@gmail.com> wrote:
-> On 11/25, Jiayuan Chen wrote:
->>  2. Make these options work. This needs the child set up before the
->>     hook, too much for a fix.
->
-> What is too much? Moving security_inet_csk_clone to happen at the end of
-> tcp_create_openreq_child? Or is it more involved?
+On Fri, Nov 27, 2026 at 07:15 AM Xu Kuohai <xukuohai@huaweicloud.com> wrote:
+> The free path is dominated by bpf_arch_text_invalidate(), which sends IPIs
+> to all CPUs and waits for completion. The wait happens after put_cpu(), so
+> the task is preemptible. If the task is preempted, other lock waiters remain
+> blocked until it is scheduled back and releases the lock. This can extend
+> the lock hold time to seconds.
 
-Here is what my bot thinks about moving the hook.
+> After moving bpf_arch_text_invalidate() out of pack_mutex, the p99 VM
+> startup latency drops from 2.79 s to 170 ms under the same workload.
 
-That spot fixes the timers only.
-The callers set up the rest:
+Awesome!
 
-  call chain                                 option works after it
-  -----------------------------------------  ----------------------------
-  subflow_syn_recv_sock()
-    tcp_v6_syn_recv_sock()
-      tcp_create_openreq_child()
-        inet_csk_clone_lock()                <- the hook is here today
-        tcp_init_xmit_timers()               SO_KEEPALIVE, TCP_KEEPIDLE
-      newinet->pinet6 = tcp_inet6_sk(newsk)
-      memcpy(newnp, np)                      IPV6_TCLASS
-      tcp_ca_openreq_child()                 TCP_CONGESTION
-      __inet_inherit_port()
-      inet_ehash_nolisten()
-    ctx->conn = mptcp_sk_clone_init()        SO_SNDBUF, TCP_NOTSENT_LOWAT
+btw every free still sends these IPIs.
+We can probably remove them.
 
-There are two callers, v4 and v6. Let's call the hook right before
-__inet_inherit_port() in both. Then there is no need for
-bpf_sk_clone_setsockopt() and bpf_lsm_clone_sockopt_hooks.
-SELinux and Smack shouldn't care. They copy labels from req.
-The v4 route lookup in between takes secid from req too.
+aarch64_insn_set() can do caches_clean_inval_pou() only
+like aarch64_insn_patch_text_nosync().
+bpf_arch_text_invalidate() is its only caller and nothing runs in
+the freed chunks.
 
-mptcp sets ctx->conn after inet_ehash_nolisten(). That's too late for
-the hook. subflow_write_space() needs a NULL check instead.
-bpf CC hits the same NULL and the patch doesn't cover it:
-
-  tcp_ca_openreq_child()
-    tcp_set_ca_state(sk, TCP_CA_Open)
-      set_state prog: bpf_setsockopt(sk, SOL_SOCKET, SO_SNDBUF)
-        subflow_write_space(sk)
-          mptcp_write_space(NULL)
-
-With the move SO_MARK and IP_TOS drop the cached dst of the child.
-tcp_init_transfer() looks it up again.
-Backports need more. dccp and chtls need their own call.
-IPV6=m needs an export.
-
-This replaces patch 1 and goes on top of bpf/master 14f6b10422d6.
-
-diff --git a/net/ipv4/inet_connection_sock.c b/net/ipv4/inet_connection_sock.c
-index 9a3b05e..759f826 100644
---- a/net/ipv4/inet_connection_sock.c
-+++ b/net/ipv4/inet_connection_sock.c
-@@ -1276,8 +1276,6 @@ struct sock *inet_csk_clone_lock(const struct sock *sk,
- 
- 	inet_clone_ulp(req, newsk, priority);
- 
--	security_inet_csk_clone(newsk, req);
--
- 	return newsk;
- }
- 
-diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c
-index 2fc92a7..d03b50b 100644
---- a/net/ipv4/tcp_ipv4.c
-+++ b/net/ipv4/tcp_ipv4.c
-@@ -1761,6 +1761,9 @@ struct sock *tcp_v4_syn_recv_sock(const struct sock *sk, struct sk_buff *skb,
- 		goto put_and_exit; /* OOM, release back memory */
- #endif
- 
-+	/* The child is set up, but is not in bhash and ehash yet. */
-+	security_inet_csk_clone(newsk, req);
-+
- 	if (__inet_inherit_port(sk, newsk) < 0)
- 		goto put_and_exit;
- 	*own_req = inet_ehash_nolisten(newsk, req_to_sk(req_unhash),
-diff --git a/net/ipv6/tcp_ipv6.c b/net/ipv6/tcp_ipv6.c
-index 5c7ed38..d704d98 100644
---- a/net/ipv6/tcp_ipv6.c
-+++ b/net/ipv6/tcp_ipv6.c
-@@ -1516,6 +1516,9 @@ static struct sock *tcp_v6_syn_recv_sock(const struct sock *sk, struct sk_buff *
- 		goto put_and_exit; /* OOM */
- #endif
- 
-+	/* The child is set up, but is not in bhash and ehash yet. */
-+	security_inet_csk_clone(newsk, req);
-+
- 	if (__inet_inherit_port(sk, newsk) < 0)
- 		goto put_and_exit;
- 	*own_req = inet_ehash_nolisten(newsk, req_to_sk(req_unhash),
-diff --git a/net/mptcp/subflow.c b/net/mptcp/subflow.c
-index 00677fb..a0fd3ce 100644
---- a/net/mptcp/subflow.c
-+++ b/net/mptcp/subflow.c
-@@ -1602,6 +1602,10 @@ static void subflow_write_space(struct sock *ssk)
- {
- 	struct sock *sk = mptcp_subflow_ctx(ssk)->conn;
- 
-+	/* bpf_setsockopt() on a passive subflow that has no msk yet */
-+	if (!sk)
-+		return;
-+
- 	mptcp_propagate_sndbuf(sk, ssk);
- 	mptcp_write_space(sk);
- }
+It can be a separate patch, of course.
